@@ -11,18 +11,20 @@
     <meta name="viewport" content="width=device-width" />
     <title>Geosite Framework</title>
     <style>
-        html, body { height: 100%; padding: 0; margin: 0; background-color: gray; font:13px sans-serif; color: white}
+        html, body { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
         #container { position: relative; height: 100%; margin: 0 50px;}
         #header { height:70px; padding: 28px; }
-        #sidebar { position:absolute; left:0; width:100px; top:70px; bottom:10px; background-color:black; }
-        #map { position:absolute; left:100px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#b6ff00; }
+        #sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
+        #map { position:absolute; left:107px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#b6ff00; }
         #tools { }
-        #sidebar-links { position:absolute; bottom:0; }
+        #sidebar-links { position:absolute; bottom:0; width:100%; }
+        #split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         #top-links { float:right; }
+        #top-links a { color: white; text-decoration:none; }
         div.title { font-size:1.4em; font-weight:bold;}
-        a.top-link { color: white; text-decoration:none; }
         div.tool-label { border-bottom: 1px solid white; text-align: center;}
-        div.sidebar-link { border-top: 1px solid white; text-align: center}
+        div.sidebar-link { padding: 8px 0; border-top: 1px solid white; background-color: #333; text-align: center}
+        div.sidebar-link a { color: white; text-decoration:none; font-size: 11px;}
     </style>
 </head>
 <body>
@@ -31,7 +33,7 @@
             <div id="top-links">
 
                 @foreach (var link in Model.headerLinks) {
-                    if (link != Model.headerLinks.First()) {
+                    if (link != Model.headerLinks.First()) { // Show separator between links
                         @:&nbsp;&nbsp;|&nbsp;&nbsp;
                     }
                     <a class="top-link" href="@link.url">@link.text</a>
@@ -47,11 +49,15 @@
                 <div class="tool-label">Restoration</div>
             </div>
             <div id="sidebar-links">
-                <div>Split | Switch</div>
-                <div class="sidebar-link">Print This Page</div>
+                <div id="split-controls">Split | Switch</div>
+                <div class="sidebar-link">
+                    <a href="#">Print this Page</a>
+                </div>
 
                 @foreach (var link in Model.sidebarLinks) {
-                    <div class="sidebar-link">@link.text</div>
+                    <div class="sidebar-link">
+                        <a href="@link.url">@link.text</a>
+                    </div>
                 }
 
             </div>
