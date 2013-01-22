@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -20,7 +21,14 @@ namespace GeositeFramework
                 if (geositeData == null)
                 {
                     string path = HostingEnvironment.MapPath("~/App_Data/geosite.json");
-                    geositeData = Geosite.LoadFromJson(path);
+                    if (File.Exists(path))
+                    {
+                        geositeData = Geosite.LoadFromJson(path);
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("File not found: " + path);
+                    }
                 }
                 return geositeData;
             }

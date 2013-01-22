@@ -20,8 +20,15 @@ namespace GeositeFramework.Models
         {
             using (var sr = new StreamReader(path))
             {
-                var geositeData = JsonConvert.DeserializeObject<Geosite>(sr.ReadToEnd());
-                return geositeData;
+                try
+                {
+                    var geositeData = JsonConvert.DeserializeObject<Geosite>(sr.ReadToEnd());
+                    return geositeData;
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Exception loading geosite JSON: " + ex.Message);
+                }
             }
         }
     }
