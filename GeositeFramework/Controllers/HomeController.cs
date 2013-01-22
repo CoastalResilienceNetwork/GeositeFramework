@@ -13,7 +13,8 @@ namespace GeositeFramework.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var app = HttpContext.ApplicationInstance as MvcApplication;
+            return View(app.GeositeData);
         }
 
     }

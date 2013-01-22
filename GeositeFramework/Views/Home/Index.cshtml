@@ -2,6 +2,8 @@
     Layout = null;
 }
 
+@model GeositeFramework.Models.Geosite
+
 <!DOCTYPE html>
 
 <html>
@@ -27,10 +29,16 @@
     <div id="container">
         <div id="header">
             <div id="top-links">
-                <a class="top-link" href="#">The Nature Conservancy</a> |
-                <a class="top-link" href="#">Coastal Resilience</a>
+
+                @foreach (var link in Model.headerLinks) {
+                    if (link != Model.headerLinks.First()) {
+                        @:&nbsp;&nbsp;|&nbsp;&nbsp;
+                    }
+                    <a class="top-link" href="@link.url">@link.text</a>
+                }
+
             </div>
-            <div class="title">Coastal Resilience: Gulf of Mexico</div>
+            <div class="title">@Model.title</div>
         </div>
         <div id="sidebar">
             <div id="tools">
@@ -40,10 +48,12 @@
             </div>
             <div id="sidebar-links">
                 <div>Split | Switch</div>
-                <div class="sidebar-link">Print this Page</div>
-                <div class="sidebar-link">Save &amp; Share</div>
-                <div class="sidebar-link">Help &amp; Support</div>
-                <div class="sidebar-link">Legal Disclosure</div>
+                <div class="sidebar-link">Print This Page</div>
+
+                @foreach (var link in Model.sidebarLinks) {
+                    <div class="sidebar-link">@link.text</div>
+                }
+
             </div>
         </div>
         <div id="map">MAP</div>
