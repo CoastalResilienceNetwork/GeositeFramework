@@ -8,10 +8,45 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Geosite Framework</title>
+    <style>
+        html, body { height: 100%; padding: 0; margin: 0; background-color: gray; font:13px sans-serif; color: white}
+        #container { position: relative; height: 100%; margin: 0 50px;}
+        #header { height:70px; padding: 28px; }
+        #sidebar { position:absolute; left:0; width:100px; top:70px; bottom:10px; background-color:black; }
+        #map { position:absolute; left:100px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#b6ff00; }
+        #tools { }
+        #sidebar-links { position:absolute; bottom:0; }
+        #top-links { float:right; }
+        div.title { font-size:1.4em; font-weight:bold;}
+        a.top-link { color: white; text-decoration:none; }
+        div.tool-label { border-bottom: 1px solid white; text-align: center;}
+        div.sidebar-link { border-top: 1px solid white; text-align: center}
+    </style>
 </head>
 <body>
-    <div>
-        Hello, world!
+    <div id="container">
+        <div id="header">
+            <div id="top-links">
+                <a class="top-link" href="#">The Nature Conservancy</a> |
+                <a class="top-link" href="#">Coastal Resilience</a>
+            </div>
+            <div class="title">Coastal Resilience: Gulf of Mexico</div>
+        </div>
+        <div id="sidebar">
+            <div id="tools">
+                <div class="tool-label">Map Layers</div>
+                <div class="tool-label">Scenarios</div>
+                <div class="tool-label">Restoration</div>
+            </div>
+            <div id="sidebar-links">
+                <div>Split | Switch</div>
+                <div class="sidebar-link">Print this Page</div>
+                <div class="sidebar-link">Save &amp; Share</div>
+                <div class="sidebar-link">Help &amp; Support</div>
+                <div class="sidebar-link">Legal Disclosure</div>
+            </div>
+        </div>
+        <div id="map">MAP</div>
     </div>
 </body>
 </html>
