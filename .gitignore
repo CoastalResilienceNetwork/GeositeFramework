@@ -1,0 +1,26 @@
+# Visual Studio left-overs
+*.suo        # 'user' settings like 'which file is open in Visual Studio'
+*.v11.suo
+*.ncb        # Used for debugging
+*.user
+*.ccscc      # Used for versioning
+*.cache
+
+# Editor left-overs
+*~           # (x)emacs
+*.bak        # Windows related
+\#*\#        # (x)emacs
+
+# Compiled files
+*/bin/
+*/obj/
+*/Obj/       # git is case sensitive
+*/Generated_Code/
+PrecompiledWeb
+*/ClientBin
+
+# NuGet
+packages
+
+# Windows left-overs
+Thumbs.db    # Having images in the source tree generates those files in Explorer
