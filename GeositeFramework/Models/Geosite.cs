@@ -9,6 +9,18 @@ namespace GeositeFramework.Models
 {
     public class Geosite
     {
+        public class Link
+        {
+            public string text;
+            public string url;
+        }
+
+        public class MapSource
+        {
+            public string name;
+            public string url;
+        }
+
         public string title;
         public List<Link> headerLinks;
         public List<Link> sidebarLinks;
@@ -31,17 +43,5 @@ namespace GeositeFramework.Models
                 }
             }
         }
-    }
-
-    public class Link
-    {
-        public string text;
-        public string url;
-    }
-
-    public class MapSource
-    {
-        public string name;
-        public string url;
     }
 }
