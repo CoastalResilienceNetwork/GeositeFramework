@@ -1,0 +1,23 @@
+{
+    "title": "Geosite Framework Sample",
+    "headerLinks": [
+        { "text": "Azavea", "url": "http://www.azavea.com/" },
+        { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" }
+    ],
+    "sidebarLinks": [
+        { "text": "Help & Support", "url": "https://github.com/azavea/GeositeFramework" },
+        { "text": "Terms of Use", "url": "http://en.wikipedia.org/wiki/Software_license" }
+    ],
+    "initialExtent": [ -98.61328125, 17.392579271057766, -79.716796875,31.653381399664 ],
+    "basemaps": [
+        {
+            "name": "Topological",
+            "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+        },
+        {
+            "name": "Ocean",
+            "url": "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer"
+        }
+    ],
+    "pluginOrder": [ "layer_selector", "measure" ]
+}
