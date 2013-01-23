@@ -11,8 +11,9 @@
     <meta name="viewport" content="width=device-width" />
     <title>Geosite Framework</title>
     <style>
+        /* CSS is temporarily in this file for convenience*/
         html, body { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
-        #container { position: relative; height: 100%; margin: 0 50px;}
+        #page { position: relative; height: 100%; margin: 0 50px;}
         #header { height:70px; padding: 28px; }
         #sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
         #map { position:absolute; left:107px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#b6ff00; }
@@ -22,13 +23,15 @@
         #top-links { float:right; }
         #top-links a { color: white; text-decoration:none; }
         div.title { font-size:1.4em; font-weight:bold;}
-        div.tool-label { border-bottom: 1px solid white; text-align: center;}
-        div.sidebar-link { padding: 8px 0; border-top: 1px solid white; background-color: #333; text-align: center}
+        div.tool { border-bottom: 1px solid white; text-align: center;}
+        div.tool img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
+        div.tool div { padding: 8px 0 12px 0;}
+        div.sidebar-link { padding: 8px 0 10px 0; border-top: 1px solid white; background-color: #333; text-align: center}
         div.sidebar-link a { color: white; text-decoration:none; font-size: 11px;}
     </style>
 </head>
 <body>
-    <div id="container">
+    <div id="page">
         <div id="header">
             <div id="top-links">
 
@@ -44,9 +47,14 @@
         </div>
         <div id="sidebar">
             <div id="tools">
-                <div class="tool-label">Map Layers</div>
-                <div class="tool-label">Scenarios</div>
-                <div class="tool-label">Restoration</div>
+
+                @foreach (var pluginName in Model.pluginOrder) {
+                    <div class="tool">
+                        <img src="/plugins/@pluginName/icon.png">
+                        <div>@pluginName</div>
+                    </div>
+                }
+
             </div>
             <div id="sidebar-links">
                 <div id="split-controls">Split | Switch</div>
