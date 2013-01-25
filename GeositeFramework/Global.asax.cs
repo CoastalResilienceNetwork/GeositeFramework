@@ -20,7 +20,7 @@ namespace GeositeFramework
             {
                 if (geositeData == null)
                 {
-                    string path = HostingEnvironment.MapPath("~/App_Data/geosite.json");
+                    string path = HostingEnvironment.MapPath("~/App_Data/region.json");
                     if (File.Exists(path))
                     {
                         geositeData = Geosite.LoadFromJson(path);
