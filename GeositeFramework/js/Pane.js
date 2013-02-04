@@ -6,41 +6,42 @@
 (function (N) {
     'use strict';
     N.models = N.models || {};
-    N.models.Pane = Backbone.Model.extend({
-        initialize: function initializePane() {
-            var regionData = this.get('regionData');
-            // Initialize nested models
-            var sidebar = new N.models.Sidebar({
-                links: regionData.sidebarLinks,
-                pluginFolderNames: regionData.pluginOrder
-            });
-            this.set('sidebar', sidebar);
-            var map = new N.models.Map({
-                name: regionData.basemaps[0].name,
-                url: regionData.basemaps[0].url
-            });
-            this.set('map', map);
-        }
-    });
+    N.models.Pane = Backbone.Model.extend();
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        initialize: function initializePaneView() {
-            this.sidebar = new N.views.Sidebar({
-                model: this.model.get('sidebar'),
-                el: this.$('.sidebar')
-            });
-            this.map = new N.views.Map({
-                model: this.model.get('map'),
-                el: this.$('.map')
+
+        render: function renderPane() {
+            this.renderPlugins();
+            this.renderSidebarLinks();
+            this.renderMap();
+            return this;
+        },
+
+        renderPlugins: function renderPlugins() {
+            var regionData = this.model.get('regionData'),
+                toolTemplate = N.app.templates['template-sidebar-tool'],
+                $tools = this.$('.tools');
+            _.each(regionData.pluginOrder, function (pluginFolderName) {
+                var html = toolTemplate({ pluginFolderName: pluginFolderName });
+                $tools.append(html);
             });
         },
 
-        render: function renderPane() {
-            this.sidebar.render();
-            this.map.render();
+        renderSidebarLinks: function renderSidebarLinks() {
+            var regionData = this.model.get('regionData'),
+                linkTemplate = N.app.templates['template-sidebar-link'],
+                $links = this.$('.sidebar-links');
+            _.each(regionData.sidebarLinks, function (link) {
+                var html = linkTemplate({ link: link });
+                $links.append(html);
+            });
+        },
+
+        renderMap: function renderMap() {
             return this;
         }
+
     });
 
 }(Geosite));

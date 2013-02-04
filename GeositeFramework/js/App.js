@@ -8,8 +8,12 @@
         models: {},
         views: {},
         templates: {},
-        
+
         init: function initializeApp(regionData) {
+            initializePane(regionData);
+        },
+        
+        initializePane: function initializePane(regionData) {
             var pane = new N.models.Pane({
                 regionData: regionData
             });
