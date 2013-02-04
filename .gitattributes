@@ -1,0 +1,12 @@
+# default behavior
+*		text=auto
+
+# Force text
+*.cs		text
+*.cshtml	text
+
+# Force CRLF
+*.sln 		text eol=crlf
+
+# Prevent conversion
+*.exe 		binary
