@@ -15,13 +15,14 @@
         html, body { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
         #page { position: relative; height: 100%; margin: 0 50px;}
         #header { height:70px; padding: 28px; }
-        #sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
-        #map { position:absolute; left:107px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#a98989; padding-top:200px }
-        #tools { }
-        #sidebar-links { position:absolute; bottom:0; width:100%; }
-        #split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         #top-links { float:right; }
         #top-links a { color: white; text-decoration:none; }
+        .pane { position:relative; }
+        .sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
+        .map { position:absolute; left:107px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#a98989; padding-top:200px }
+        .tools { }
+        .sidebar-links { position:absolute; bottom:0; width:100%; }
+        .split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         div.title { font-size:1.4em; font-weight:bold;}
         div.tool { border-bottom: 1px solid white; text-align: center;}
         div.tool img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
@@ -35,42 +36,61 @@
         <div id="header">
             <div id="top-links">
 
-                @foreach (var link in Model.headerLinks) {
-                    if (link != Model.headerLinks.First()) { // Show separator between links
+                @foreach (var link in Model.HeaderLinks) {
+                    if (link != Model.HeaderLinks.First()) { // Show separator between links
                         @:&nbsp;&nbsp;|&nbsp;&nbsp;
                     }
-                    <a class="top-link" href="@link.url">@link.text</a>
+                    <a class="top-link" href="@link.Url">@link.Text</a>
                 }
 
             </div>
-            <div class="title">@Model.title</div>
+            <div class="title">@Model.Title</div>
         </div>
-        <div id="sidebar">
-            <div id="tools">
-
-                @foreach (var pluginName in Model.pluginOrder) {
-                    <div class="tool">
-                        <img src="/plugins/@pluginName/icon.png">
-                        <div>@pluginName</div>
-                    </div>
-                }
-
-            </div>
-            <div id="sidebar-links">
-                <div id="split-controls">Split | Switch</div>
-                <div class="sidebar-link">
-                    <a href="#">Print this Page</a>
+        <div id="pane">
+            <div class="sidebar">
+                <div class="tools">
                 </div>
-
-                @foreach (var link in Model.sidebarLinks) {
+                <div class="sidebar-links">
+                    <div class="split-controls">Split | Switch</div>
                     <div class="sidebar-link">
-                        <a href="@link.url">@link.text</a>
+                        <a href="#">Print this Page</a>
                     </div>
-                }
-
+                </div>
             </div>
+            <div class="map">MAP</div>
         </div>
-        <div id="map">MAP</div>
     </div>
+
+    <script type="text/template" id="template-sidebar-tool">
+        <div class="tool">
+            <img src="/plugins/<%- pluginFolderName %>/icon.png">
+            <div><%- pluginFolderName %></div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-sidebar-link">
+        <div class="sidebar-link">
+            <a href="<%= link.url %>"><%- link.text %></a>
+        </div>
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/lib/jquery-1.9.0.min.js"><\/script>')</script>
+    <script src="js/lib/underscore-1.4.3.min.js"></script>
+    <script src="js/lib/backbone-0.9.10.min.js"></script>
+    <script src="js/Geosite.js"></script>
+    <script src="js/Map.js"></script>
+    <script src="js/Pane.js"></script>
+    <script src="js/Sidebar.js"></script>
+    <script src="js/TemplateLoader.js"></script>
+    <script src="js/App.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var regionData = @Html.Raw(Model.RegionDataJson);
+            Geosite.app.init(regionData);
+        });
+    </script>
+
 </body>
 </html>
