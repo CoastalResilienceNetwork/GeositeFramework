@@ -11,22 +11,22 @@
 
         init: function initializeApp(regionData) {
             initializePane(regionData);
-        },
-        
-        initializePane: function initializePane(regionData) {
-            var pane = new N.models.Pane({
-                regionData: regionData
-            });
-            N.app.models.pane = pane;
-
-            var paneView = new N.views.Pane({
-                model: pane,
-                el: $('#pane')
-            });
-            N.app.views.pane = paneView;
-
-            paneView.render();
         }
+    };
+        
+    function initializePane(regionData) {
+        var pane = new N.models.Pane({
+            regionData: regionData
+        });
+        N.app.models.pane = pane;
+
+        var paneView = new N.views.Pane({
+            model: pane,
+            el: $('#pane')
+        });
+        N.app.views.pane = paneView;
+
+        paneView.render();
     }
 
     new N.TemplateLoader().load(N.app.templates);
