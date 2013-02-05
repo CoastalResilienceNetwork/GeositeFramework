@@ -12,10 +12,17 @@
     N.views.Pane = Backbone.View.extend({
 
         render: function renderPane() {
+            this.renderSelf();
             this.renderPlugins();
             this.renderSidebarLinks();
             this.renderMap();
             return this;
+        },
+
+        renderSelf: function renderSelf() {
+            var paneTemplate = N.app.templates['template-pane'],
+                html = paneTemplate();
+            this.$el.append(html);
         },
 
         renderPlugins: function renderPlugins() {
