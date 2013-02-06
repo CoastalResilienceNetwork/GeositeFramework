@@ -22,7 +22,7 @@
             var regionData = this.model.get('regionData'),
                 toolTemplate = N.app.templates['template-sidebar-tool'],
                 $tools = this.$('.tools');
-            _.each(regionData.pluginOrder, function (pluginFolderName) {
+            _.each(regionData.pluginFolderNames, function (pluginFolderName) {
                 var html = toolTemplate({ pluginFolderName: pluginFolderName });
                 $tools.append(html);
             });

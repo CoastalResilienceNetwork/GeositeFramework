@@ -20,15 +20,19 @@ namespace GeositeFramework
             {
                 if (geositeData == null)
                 {
-                    string path = HostingEnvironment.MapPath("~/App_Data/region.json");
-                    if (File.Exists(path))
+                    string configFilePath = HostingEnvironment.MapPath("~/region.json");
+                    string pluginsFolderPath = HostingEnvironment.MapPath("~/plugins");
+                    if (!File.Exists(configFilePath))
                     {
-                        geositeData = Geosite.LoadFromJson(path);
+                        // TODO: log it
+                        throw new FileNotFoundException("Site configuration file not found: " + configFilePath);
                     }
-                    else
+                    if (!Directory.Exists(pluginsFolderPath))
                     {
-                        throw new FileNotFoundException("File not found: " + path);
+                        // TODO: log it
+                        throw new FileNotFoundException("Plugins folder not found: " + pluginsFolderPath);
                     }
+                    geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath);
                 }
                 return geositeData;
             }
