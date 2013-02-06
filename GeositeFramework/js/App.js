@@ -8,8 +8,10 @@
         models: {},
         views: {},
         templates: {},
+        plugins: [],
 
-        init: function initializeApp(regionData) {
+        init: function initializeApp(regionData, plugins) {
+            this.plugins = plugins;
             initializePanes(regionData);
         }
     };

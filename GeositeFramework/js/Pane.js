@@ -27,10 +27,11 @@
 
         renderPlugins: function renderPlugins() {
             var regionData = this.model.get('regionData'),
+                plugins = N.app.plugins,
                 toolTemplate = N.app.templates['template-sidebar-tool'],
                 $tools = this.$('.tools');
-            _.each(regionData.pluginFolderNames, function (pluginFolderName) {
-                var html = toolTemplate({ pluginFolderName: pluginFolderName });
+            _.each(plugins, function (plugin) {
+                var html = toolTemplate({ toolbarName: plugin.toolbarName });
                 $tools.append(html);
             });
         },
