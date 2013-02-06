@@ -18,12 +18,13 @@ namespace GeositeFramework.Models
             public string Url;
         }
 
-        public string RegionDataJson;
-        public string Title;
-        public List<Link> HeaderLinks;
+        // Properties used in View rendering
+        public string RegionDataJson { get; private set; }
+        public string Title { get; private set; }
+        public List<Link> HeaderLinks { get; private set; }
 
         /// <summary>
-        /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins using the specified paths.
+        /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
         /// </summary>
         public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath)
         {
@@ -31,18 +32,9 @@ namespace GeositeFramework.Models
             {
                 using (var sr = new StreamReader(regionJsonFilePath))
                 {
-                    var json = JObject.Parse(sr.ReadToEnd());
-
-                    // Get plugin folder names
-                    var existingFolderNames = Directory.EnumerateDirectories(pluginsFolderPath).Select(p => Path.GetFileName(p)).ToList();
-                    var specifiedFolderNames = json["pluginOrder"].Select(t => (string)t).ToList();
-                    var folderNames = GetPluginFolderNames(existingFolderNames, specifiedFolderNames);
-                    json.Add("pluginFolderNames", new JArray(folderNames.ToArray()));
-
-                    // Create view model for main page 
-                    var geosite = ExtractServerSideConfigData(json);
-                    geosite.RegionDataJson = json.ToString();
-                    return geosite;
+                    var regionJson = sr.ReadToEnd();
+                    var pluginFolderNames = Directory.EnumerateDirectories(pluginsFolderPath).Select(p => Path.GetFileName(p)).ToList();
+                    return new Geosite(regionJson, pluginFolderNames);
                 }
             }
             catch (Exception ex)
@@ -52,18 +44,48 @@ namespace GeositeFramework.Models
             }
         }
 
-        private static List<string> GetPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
+        private Geosite() {}  // The compiler wants this for some reason
+
+        /// <summary>
+        /// Make a Geosite object given the specified configuration info.
+        /// </summary>
+        /// <param name="regionJson">A JSON configuration string (e.g. contents of the "region.json" configuration file)</param>
+        /// <param name="existingPluginFolderNames">A list of plugin folder names (not full paths -- relative to the site "plugins" folder)</param>
+        public Geosite(string regionJson, List<string> existingPluginFolderNames)
+        {
+            var jsonObj = JObject.Parse(regionJson);
+
+            // Get plugin folder names, in the specified order
+            var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
+            var folderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
+
+            // Augment the JSON so the client will have the full list of folder names
+            jsonObj.Add("pluginFolderNames", new JArray(folderNames.ToArray()));
+
+            // Set public properties needed for View rendering
+            Title = (string)jsonObj["title"];
+            HeaderLinks = jsonObj["headerLinks"]
+                .Select(j => new Link
+                {
+                    Text = (string)j["text"],
+                    Url = (string)j["url"]
+                }).ToList();
+            RegionDataJson = jsonObj.ToString();
+        }
+
+        private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
         {
             var retVal = new List<string>();
+            var existingNames = new List<string>(existingFolderNames); // copy input argument so we don't modify it
 
-            // The specified folder names are in the desired order. 
+            // The "specified" folder names are in the desired order. 
             // Make sure each exists and remove it from the list of existing folder names.
             foreach (var folderName in specifiedFolderNames)
             {
                 if (existingFolderNames.Contains(folderName))
                 {
                     retVal.Add(folderName);
-                    existingFolderNames.Remove(folderName);
+                    existingNames.Remove(folderName);
                 }
                 else
                 {
@@ -72,24 +94,8 @@ namespace GeositeFramework.Models
                 }
             }
             // Append any existing folder names that weren't specified
-            retVal.AddRange(existingFolderNames);
+            retVal.AddRange(existingNames);
             return retVal;
-        }
-
-        private static Geosite ExtractServerSideConfigData(JObject json)
-        {
-            // Create Geosite object, containing just the JSON elements that can be rendered server-side. 
-            var geositeData = new Geosite
-            {
-                Title = (string)json["title"],
-                HeaderLinks = json["headerLinks"]
-                    .Select(j => new Link
-                    {
-                        Text = (string)j["text"],
-                        Url = (string)j["url"]
-                    }).ToList()
-            };
-            return geositeData;
         }
 
     }
