@@ -66,8 +66,8 @@
 
     <script type="text/template" id="template-sidebar-tool">
         <div class="tool">
-            <img src="/plugins/<%- pluginFolderName %>/icon.png">
-            <div><%- pluginFolderName %></div>
+            <img src="/plugins/<%- toolbarName %>/icon.png">
+            <div><%- toolbarName %></div>
         </div>
     </script>
 
@@ -90,8 +90,18 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            var regionData = @Html.Raw(Model.RegionDataJson);
-            Geosite.app.init(regionData);
+            var regionData = @Html.Raw(Model.RegionDataJson),
+                plugins = [
+                {
+                    toolbarName: "HelloWorld1",
+                    fullName: "The first hello world."
+                },
+                {
+                    toolbarName: "HelloWorld2",
+                    fullName: "The second hello world."
+                }
+            ];
+            Geosite.app.init(regionData, plugins);
         });
     </script>
 
