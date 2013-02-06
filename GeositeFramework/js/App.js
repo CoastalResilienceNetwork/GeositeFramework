@@ -10,21 +10,25 @@
         templates: {},
 
         init: function initializeApp(regionData) {
-            initializePane(regionData);
+            initializePanes(regionData);
         }
     };
-        
-    function initializePane(regionData) {
+
+    function initializePanes(regionData) {
+        _.each([1, 2], function (i) {
+            initializePane(regionData, i);
+        });
+    }
+
+    function initializePane(regionData, i) {
         var pane = new N.models.Pane({
             regionData: regionData
         });
-        N.app.models.pane = pane;
 
         var paneView = new N.views.Pane({
             model: pane,
-            el: $('#pane')
+            el: $('#pane' + i)
         });
-        N.app.views.pane = paneView;
 
         paneView.render();
     }
