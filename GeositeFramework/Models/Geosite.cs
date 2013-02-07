@@ -19,32 +19,37 @@ namespace GeositeFramework.Models
         }
 
         // Properties used in View rendering
-        public string RegionDataJson { get; private set; }
         public string Title { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
+        public string RegionDataJson { get; private set; }
+        public string PluginModuleIdentifiers { get; private set; }
+        public string PluginVariableNames { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
         /// </summary>
         public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath)
         {
-            try
+            using (var sr = new StreamReader(regionJsonFilePath))
             {
-                using (var sr = new StreamReader(regionJsonFilePath))
-                {
-                    var regionJson = sr.ReadToEnd();
-                    var pluginFolderNames = Directory.EnumerateDirectories(pluginsFolderPath).Select(p => Path.GetFileName(p)).ToList();
-                    return new Geosite(regionJson, pluginFolderNames);
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: log it using log4net
-                throw new ApplicationException("Exception loading geosite JSON: " + ex.Message);
+                string regionJson = sr.ReadToEnd();
+                var pluginFolderPaths = Directory.EnumerateDirectories(pluginsFolderPath);
+                ValidatePlugins(pluginFolderPaths);
+                var pluginFolderNames = pluginFolderPaths.Select(p => Path.GetFileName(p)).ToList();
+                return new Geosite(regionJson, pluginFolderNames);
             }
         }
 
-        private Geosite() {}  // The compiler wants this for some reason
+        private static void ValidatePlugins(IEnumerable<string> pluginFolderPaths)
+        {
+            foreach (var path in pluginFolderPaths)
+            {
+                if (!File.Exists(Path.Combine(path, "main.js")))
+                {
+                    throw new ApplicationException("Missing 'main.js' file in plugin folder: " + path);
+                }
+            }
+        }
 
         /// <summary>
         /// Make a Geosite object given the specified configuration info.
@@ -57,10 +62,10 @@ namespace GeositeFramework.Models
 
             // Get plugin folder names, in the specified order
             var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
-            var folderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
+            var pluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
 
             // Augment the JSON so the client will have the full list of folder names
-            jsonObj.Add("pluginFolderNames", new JArray(folderNames.ToArray()));
+            jsonObj.Add("pluginFolderNames", new JArray(pluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
             Title = (string)jsonObj["title"];
@@ -70,7 +75,17 @@ namespace GeositeFramework.Models
                     Text = (string)j["text"],
                     Url = (string)j["url"]
                 }).ToList();
+
+            // JSON to be inserted in generated JavaScript code
             RegionDataJson = jsonObj.ToString();
+
+            // Create plugin module identifiers, to be inserted in generated JavaScript code. Example:
+            //     "'plugins/layer_selector/main', 'plugins/measure/main'"
+            PluginModuleIdentifiers = string.Join(", ", pluginFolderNames.Select(name => string.Format("'plugins/{0}/main'", name)));
+
+            // Create plugin variable names, to be inserted in generated JavaScript code. Example:
+            //     "p0, p1"
+            PluginVariableNames = string.Join(", ", pluginFolderNames.Select((name, i) => string.Format("p{0}", i)));
         }
 
         private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
