@@ -24,9 +24,9 @@
         .sidebar-links { position:absolute; bottom:0; width:100%; }
         .split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         div.title { font-size:1.4em; font-weight:bold;}
-        div.tool { border-bottom: 1px solid white; text-align: center;}
-        div.tool img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
-        div.tool div { padding: 8px 0 12px 0;}
+        div.plugin { border-bottom: 1px solid white; text-align: center;}
+        div.plugin img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
+        div.plugin div { padding: 8px 0 12px 0;}
         div.sidebar-link { padding: 8px 0 10px 0; border-top: 1px solid white; background-color: #333; text-align: center}
         div.sidebar-link a { color: white; text-decoration:none; font-size: 11px;}
     </style>
@@ -52,7 +52,7 @@
 
     <script type="text/template" id="template-pane">
         <div class="sidebar">
-            <div class="tools">
+            <div class="plugins">
             </div>
             <div class="sidebar-links">
                 <div class="split-controls">Split | Switch</div>
@@ -64,8 +64,8 @@
         <div class="map">MAP</div>
     </script>
 
-    <script type="text/template" id="template-sidebar-tool">
-        <div class="tool">
+    <script type="text/template" id="template-sidebar-plugin">
+        <div class="plugin">
             <img src="/plugins/<%- toolbarName %>/icon.png">
             <div><%- toolbarName %></div>
         </div>

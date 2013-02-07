@@ -9,9 +9,10 @@
     "use strict";
     N.Geosite = _.clone(Backbone.Events);
 
-    // Model and View "class" objects (see App.js for instances)
+    // Class objects (see App.js for instances)
     N.Geosite.models = {};
     N.Geosite.views = {};
+    N.Geosite.plugins = [];
 
     N.Geosite.on('error', function handleError(model, error) {
         console.log("Geosite error: " + error);
