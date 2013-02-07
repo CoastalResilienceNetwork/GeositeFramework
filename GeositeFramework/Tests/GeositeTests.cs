@@ -31,6 +31,8 @@ namespace GeositeFramework.Tests
             Assert.AreEqual(geosite.HeaderLinks.Count, 2);
             Assert.AreEqual(geosite.HeaderLinks[0].Url, "http://www.azavea.com/");
             Assert.AreEqual(geosite.HeaderLinks[1].Text, "GIS");
+            Assert.AreEqual(geosite.PluginModuleIdentifiers, "'plugins/layer_selector/main', 'plugins/measure/main', 'plugins/nearshore_waves/main', 'plugins/explode/main'");
+            Assert.AreEqual(geosite.PluginVariableNames, "p0, p1, p2, p3");
 
             var jsonObj = JObject.Parse(geosite.RegionDataJson);
             var orderedFolderNames = jsonObj["pluginFolderNames"].Select(t => (string)t).ToList();

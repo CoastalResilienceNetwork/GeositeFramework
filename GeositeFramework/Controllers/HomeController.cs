@@ -14,7 +14,16 @@ namespace GeositeFramework.Controllers
         public ActionResult Index()
         {
             var app = HttpContext.ApplicationInstance as MvcApplication;
-            return View(app.GeositeData);
+            try
+            {
+                return View(app.GeositeData);
+            }
+            catch (Exception)
+            {
+                // TODO: log exception using log4net
+                // TODO: return a nice "500" error page
+                throw;
+            }
         }
 
     }
