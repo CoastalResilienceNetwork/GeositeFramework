@@ -5,14 +5,12 @@
 
 (function (N) {
     'use strict';
-    var model = null;
 
-    function initializePane(paneModel) {
-        model = paneModel;
-        createPlugins();
+    function initializePane(model) {
+        createPlugins(model);
     }
 
-    function createPlugins() {
+    function createPlugins(model) {
         model.set('plugins', []);
 
         _.each(N.plugins, function (pluginClass) {
@@ -25,7 +23,7 @@
     //     - We need to create plugin objects before rendering (so we can render their toolbar names).
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
-    function initPlugins(wrappedMap) {
+    function initPlugins(model, wrappedMap) {
         _.each(model.get('plugins'), function (plugin) {
             plugin.constructor({
                 map: wrappedMap
@@ -35,37 +33,31 @@
 
     N.models = N.models || {};
     N.models.Pane = Backbone.Model.extend({
-        initialize: function () {
-            initializePane(this);
-        },
-        initPlugins: initPlugins
+        initialize: function () { initializePane(this); },
+        initPlugins: function (wrappedMap) { initPlugins(this, wrappedMap); }
     });
 
 }(Geosite));
 
 (function (N) {
     'use strict';
-    var view = null;
-    var model = null;
 
-    function renderPane(paneView) {
-        view = paneView;
-        model = view.model;
-        renderSelf();
-        renderPlugins();
-        renderSidebarLinks();
+    function renderPane(view) {
+        renderSelf(view);
+        renderPlugins(view);
+        renderSidebarLinks(view);
         return view;
     }
 
-    function renderSelf() {
+    function renderSelf(view) {
         var paneTemplate = N.app.templates['template-pane'],
             html = paneTemplate();
         view.$el.append(html);
     }
 
-    function renderPlugins() {
-        var regionData = model.get('regionData'),
-            plugins = model.get('plugins'),
+    function renderPlugins(view) {
+        var regionData = view.model.get('regionData'),
+            plugins = view.model.get('plugins'),
             toolTemplate = N.app.templates['template-sidebar-plugin'],
             $tools = view.$('.plugins');
         _.each(plugins, function (plugin) {
@@ -74,8 +66,8 @@
         });
     }
 
-    function renderSidebarLinks() {
-        var regionData = model.get('regionData'),
+    function renderSidebarLinks(view) {
+        var regionData = view.model.get('regionData'),
             linkTemplate = N.app.templates['template-sidebar-link'],
             $links = view.$('.sidebar-links');
         _.each(regionData.sidebarLinks, function (link) {
@@ -84,8 +76,8 @@
         });
     }
 
-    function createMap() {
-        var paneNumber = model.get('paneNumber'),
+    function createMap(view) {
+        var paneNumber = view.model.get('paneNumber'),
             $map = view.$('.map'),
             domId = "map" + paneNumber;
         $map.attr("id", domId);
@@ -99,10 +91,8 @@
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        render: function () {
-            renderPane(this);
-        },
-        createMap: createMap
+        render: function () { renderPane(this); },
+        createMap: function () { createMap(this); }
     });
 
 }(Geosite));
