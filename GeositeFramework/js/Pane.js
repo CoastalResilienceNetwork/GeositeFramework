@@ -5,66 +5,84 @@
 
 (function (N) {
     'use strict';
-    N.models = N.models || {};
-    N.models.Pane = Backbone.Model.extend({
+    (function () {
+        var model = null;
 
-        initialize: function initializePane() {
-            this.initPlugins();
-        },
+        function initializePane(paneModel) {
+            model = paneModel;
+            initPlugins();
+        }
 
-        initPlugins: function initPlugins() {
-            var model = this;
+        function initPlugins() {
             model.set('plugins', []);
+
             _.each(N.plugins, function (pluginClass) {
                 var pluginInstance = new pluginClass();
                 pluginInstance.constructor({});
                 model.get('plugins').push(pluginInstance);
             });
         }
-    });
 
-    N.views = N.views || {};
-    N.views.Pane = Backbone.View.extend({
+        N.models = N.models || {};
+        N.models.Pane = Backbone.Model.extend({
+            initialize: function () {
+                initializePane(this);
+            }
+        });
 
-        render: function renderPane() {
-            this.renderSelf();
-            this.renderPlugins();
-            this.renderSidebarLinks();
-            this.renderMap();
-            return this;
-        },
+    }());
 
-        renderSelf: function renderSelf() {
+    (function () {
+        var view = null;
+        var model = null;
+
+        function renderPane(paneView) {
+            view = paneView;
+            model = view.model;
+            renderSelf();
+            renderPlugins();
+            renderSidebarLinks();
+            renderMap();
+            return view;
+        }
+
+        function renderSelf() {
             var paneTemplate = N.app.templates['template-pane'],
                 html = paneTemplate();
-            this.$el.append(html);
-        },
+            view.$el.append(html);
+        }
 
-        renderPlugins: function renderPlugins() {
-            var regionData = this.model.get('regionData'),
-                plugins = this.model.get('plugins'),
-                pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                $plugins = this.$('.plugins');
+        function renderPlugins() {
+            var regionData = model.get('regionData'),
+                plugins = model.get('plugins'),
+                toolTemplate = N.app.templates['template-sidebar-plugin'],
+                $plugins = view.$('.plugins');
             _.each(plugins, function (plugin) {
-                var html = pluginTemplate({ toolbarName: plugin.toolbarName });
+                var html = toolTemplate({ toolbarName: plugin.toolbarName });
                 $plugins.append(html);
             });
-        },
+        }
 
-        renderSidebarLinks: function renderSidebarLinks() {
-            var regionData = this.model.get('regionData'),
+        function renderSidebarLinks() {
+            var regionData = model.get('regionData'),
                 linkTemplate = N.app.templates['template-sidebar-link'],
-                $links = this.$('.sidebar-links');
+                $links = view.$('.sidebar-links');
             _.each(regionData.sidebarLinks, function (link) {
                 var html = linkTemplate({ link: link });
                 $links.append(html);
             });
-        },
-
-        renderMap: function renderMap() {
-            return this;
         }
 
-    });
+        function renderMap() {
+        }
+
+        N.views = N.views || {};
+        N.views.Pane = Backbone.View.extend({
+            render: function () {
+                renderPane(this);
+            }
+        });
+
+    }())
 
 }(Geosite));
