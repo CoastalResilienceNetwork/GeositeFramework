@@ -25,18 +25,12 @@
     //     - We need to create plugin objects before rendering (so we can render their toolbar names).
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
-    function initPlugins(esriMap) {
-        var mapWrapper = getMapWrapper(esriMap);
+    function initPlugins(wrappedMap) {
         _.each(model.get('plugins'), function (plugin) {
             plugin.constructor({
-                map: mapWrapper
+                map: wrappedMap
             });
         });
-    }
-
-    function getMapWrapper(esriMap) {
-        var wrapper = _.extend({}, esriMap);
-        return wrapper;
     }
 
     N.models = N.models || {};

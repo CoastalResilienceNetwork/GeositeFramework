@@ -38,7 +38,8 @@
         // Wait for the map to load, then initialize the plugins. 
         // (Otherwise some map properties aren't available, e.g. extent)
         dojo.connect(esriMap, "onLoad", function () {
-            pane.initPlugins(esriMap);
+            var wrappedMap = N.createMapWrapper(esriMap);
+            pane.initPlugins(wrappedMap);
         });
 
     }
