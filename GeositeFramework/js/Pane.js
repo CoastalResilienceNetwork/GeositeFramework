@@ -10,24 +10,42 @@
 
         function initializePane(paneModel) {
             model = paneModel;
-            initPlugins();
+            createPlugins();
         }
 
-        function initPlugins() {
+        function createPlugins() {
             model.set('plugins', []);
 
             _.each(N.plugins, function (pluginClass) {
-                var pluginInstance = new pluginClass();
-                pluginInstance.constructor({});
-                model.get('plugins').push(pluginInstance);
+                var plugin = new pluginClass();
+                model.get('plugins').push(plugin);
             });
+        }
+
+        // initPlugins() is separate from createPlugins() because:
+        //     - We need to create plugin objects before rendering (so we can render their toolbar names).
+        //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
+
+        function initPlugins(esriMap) {
+            var mapWrapper = getMapWrapper(esriMap);
+            _.each(model.get('plugins'), function (plugin) {
+                plugin.constructor({
+                    map: mapWrapper
+                });
+            });
+        }
+
+        function getMapWrapper(esriMap) {
+            var wrapper = _.extend({}, esriMap);
+            return wrapper;
         }
 
         N.models = N.models || {};
         N.models.Pane = Backbone.Model.extend({
             initialize: function () {
                 initializePane(this);
-            }
+            },
+            initPlugins: initPlugins
         });
 
     }());
@@ -42,7 +60,6 @@
             renderSelf();
             renderPlugins();
             renderSidebarLinks();
-            renderMap();
             return view;
         }
 
@@ -56,10 +73,10 @@
             var regionData = model.get('regionData'),
                 plugins = model.get('plugins'),
                 toolTemplate = N.app.templates['template-sidebar-plugin'],
-                $plugins = view.$('.plugins');
+                $tools = view.$('.plugins');
             _.each(plugins, function (plugin) {
                 var html = toolTemplate({ toolbarName: plugin.toolbarName });
-                $plugins.append(html);
+                $tools.append(html);
             });
         }
 
@@ -73,14 +90,25 @@
             });
         }
 
-        function renderMap() {
+        function createMap() {
+            var paneNumber = model.get('paneNumber'),
+                $map = view.$('.map'),
+                domId = "map" + paneNumber;
+            $map.attr("id", domId);
+            var esriMap = new esri.Map(domId, {
+                // center: [-56.049, 38.485],
+                zoom: 4,
+                basemap: "streets"
+            });
+            return esriMap;
         }
-
+        
         N.views = N.views || {};
         N.views.Pane = Backbone.View.extend({
             render: function () {
                 renderPane(this);
-            }
+            },
+            createMap: createMap
         });
 
     }())
