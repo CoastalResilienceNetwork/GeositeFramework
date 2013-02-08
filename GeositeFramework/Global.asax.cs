@@ -24,12 +24,10 @@ namespace GeositeFramework
                     string pluginsFolderPath = HostingEnvironment.MapPath("~/plugins");
                     if (!File.Exists(configFilePath))
                     {
-                        // TODO: log it
                         throw new FileNotFoundException("Site configuration file not found: " + configFilePath);
                     }
                     if (!Directory.Exists(pluginsFolderPath))
                     {
-                        // TODO: log it
                         throw new FileNotFoundException("Plugins folder not found: " + pluginsFolderPath);
                     }
                     geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath);

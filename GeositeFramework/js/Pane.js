@@ -6,7 +6,22 @@
 (function (N) {
     'use strict';
     N.models = N.models || {};
-    N.models.Pane = Backbone.Model.extend();
+    N.models.Pane = Backbone.Model.extend({
+
+        initialize: function initializePane() {
+            this.initPlugins();
+        },
+
+        initPlugins: function initPlugins() {
+            var model = this;
+            model.set('plugins', []);
+            _.each(N.plugins, function (pluginClass) {
+                var pluginInstance = new pluginClass();
+                pluginInstance.constructor({});
+                model.get('plugins').push(pluginInstance);
+            });
+        }
+    });
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
@@ -27,12 +42,12 @@
 
         renderPlugins: function renderPlugins() {
             var regionData = this.model.get('regionData'),
-                plugins = N.app.plugins,
-                toolTemplate = N.app.templates['template-sidebar-tool'],
-                $tools = this.$('.tools');
+                plugins = this.model.get('plugins'),
+                pluginTemplate = N.app.templates['template-sidebar-plugin'],
+                $plugins = this.$('.plugins');
             _.each(plugins, function (plugin) {
-                var html = toolTemplate({ toolbarName: plugin.toolbarName });
-                $tools.append(html);
+                var html = pluginTemplate({ toolbarName: plugin.toolbarName });
+                $plugins.append(html);
             });
         },
 

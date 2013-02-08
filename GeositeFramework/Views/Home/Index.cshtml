@@ -24,9 +24,9 @@
         .sidebar-links { position:absolute; bottom:0; width:100%; }
         .split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         div.title { font-size:1.4em; font-weight:bold;}
-        div.tool { border-bottom: 1px solid white; text-align: center;}
-        div.tool img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
-        div.tool div { padding: 8px 0 12px 0;}
+        div.plugin { border-bottom: 1px solid white; text-align: center;}
+        div.plugin img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
+        div.plugin div { padding: 8px 0 12px 0;}
         div.sidebar-link { padding: 8px 0 10px 0; border-top: 1px solid white; background-color: #333; text-align: center}
         div.sidebar-link a { color: white; text-decoration:none; font-size: 11px;}
     </style>
@@ -52,7 +52,7 @@
 
     <script type="text/template" id="template-pane">
         <div class="sidebar">
-            <div class="tools">
+            <div class="plugins">
             </div>
             <div class="sidebar-links">
                 <div class="split-controls">Split | Switch</div>
@@ -64,8 +64,8 @@
         <div class="map">MAP</div>
     </script>
 
-    <script type="text/template" id="template-sidebar-tool">
-        <div class="tool">
+    <script type="text/template" id="template-sidebar-plugin">
+        <div class="plugin">
             <img src="/plugins/<%- toolbarName %>/icon.png">
             <div><%- toolbarName %></div>
         </div>
@@ -77,31 +77,56 @@
         </div>
     </script>
 
+    <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3compact"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/lib/jquery-1.9.0.min.js"><\/script>')</script>
     <script src="js/lib/underscore-1.4.3.min.js"></script>
     <script src="js/lib/backbone-0.9.10.min.js"></script>
     <script src="js/Geosite.js"></script>
-    <script src="js/Map.js"></script>
     <script src="js/Pane.js"></script>
-    <script src="js/Sidebar.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/App.js"></script>
     
     <script type="text/javascript">
-        $(document).ready(function () {
-            var regionData = @Html.Raw(Model.RegionDataJson),
-                plugins = [
-                {
-                    toolbarName: "HelloWorld1",
-                    fullName: "The first hello world."
-                },
-                {
-                    toolbarName: "HelloWorld2",
-                    fullName: "The second hello world."
-                }
-            ];
-            Geosite.app.init(regionData, plugins);
+        // Configure the Dojo module loader so that module identifiers starting with "plugins/" 
+        // will be loaded from the site's root "plugins" folder
+        require({
+            async: true,
+            packages: [{
+                name: "plugins",
+                location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
+            }]
+        });
+
+        // Our require() call below for loading plugins shouldn't fail, since:
+        //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
+        //     * require() succeeds even if main.js has errors. (It passes an empty object for that module.)
+        // But just in case:
+        require.on('error', function(error) {
+            alert('Site configuration error.');
+        });
+
+        // Load the plugins and launch the app.
+        // We're using server-generated data to build this JavaScript block. Example result:
+        // 
+        //     require(['plugins/layer_selector/main', 'plugins/measure/main'], function(p0, p1) {
+        //         return $(document).ready(function() {
+        //             var regionData = {
+        //                                  "title": "Geosite Framework Sample",
+        //                                       // ... (omitting middle of region.json) ...
+        //                                  "pluginOrder": [ "layer_selector", "measure" ]
+        //                              },
+        //                 plugins = [p0, p1]; // loaded plugin objects
+        //             Geosite.app.init(regionData, plugins);
+        //         });
+        //     });
+
+        require([@Html.Raw(Model.PluginModuleIdentifiers)], function(@Html.Raw(Model.PluginVariableNames)) {
+            return $(document).ready(function() {
+                var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
+                    plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
+                Geosite.app.init(regionData, plugins);
+            });
         });
     </script>
 
