@@ -11,11 +11,26 @@
     }
 
     function createPlugins(model) {
-        model.set('plugins', []);
+        // Iterate over plugin objects in top-level namespace
+        // and add them to an array in the pane model.
+        // also instantiate a backbone model and view to wrap
+        // around these plugin objects and add them to
+        // arrays in the pane model as well.
+
+        model.set({
+            plugins: [],
+            pluginTools: [],
+            pluginToolViews: []
+        });
 
         _.each(N.plugins, function (pluginClass) {
             var plugin = new pluginClass();
+            var pluginTool = new N.models.PluginTool({ pluginObject: plugin });
+            var pluginToolView = new N.views.PluginTool({ model: pluginTool });
+
             model.get('plugins').push(plugin);
+            model.get('pluginTools').push(pluginTool);
+            model.get('pluginToolViews').push(pluginToolView);
         });
     }
 
@@ -33,6 +48,11 @@
 
     N.models = N.models || {};
     N.models.Pane = Backbone.Model.extend({
+        defaults: {
+            plugins: null,
+            pluginTools: null,
+            pluginToolViews: null
+        },
         initialize: function () { initializePane(this); },
         initPlugins: function (wrappedMap) { initPlugins(this, wrappedMap); }
     });
@@ -56,14 +76,14 @@
     }
 
     function renderPlugins(view) {
-        var regionData = view.model.get('regionData'),
-            plugins = view.model.get('plugins'),
-            toolTemplate = N.app.templates['template-sidebar-plugin'],
-            $tools = view.$('.plugins');
-        _.each(plugins, function (plugin) {
-            var html = toolTemplate({ toolbarName: plugin.toolbarName });
-            $tools.append(html);
-        });
+        // for each model that wraps a plugin object:
+        // render its view and add them to the sidebar
+        // section for plugin icons
+        var $tools = view.$('.plugins');
+        _.each(view.model.get('pluginToolViews'),
+            function (pluginToolView) {
+                $tools.append(pluginToolView.render().$el);
+            });
     }
 
     function renderSidebarLinks(view) {
