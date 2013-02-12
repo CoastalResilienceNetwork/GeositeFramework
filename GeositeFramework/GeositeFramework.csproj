@@ -129,6 +129,7 @@
     <Content Include="Global.asax" />
     <Content Include="js\App.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="js\MapWrapper.js" />
     <Content Include="js\Pane.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="plugins\layer_selector\main.js" />
