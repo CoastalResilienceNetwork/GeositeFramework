@@ -36,7 +36,7 @@
                 return loadFolder(folderName, function (entries) {
                     console.log("Folder " + folderName + " has " + entries.services.length + " services");
                     // Folder has loaded -- make its node and add its services to "serviceSpecs"
-                    var node = makeContainerNode(folderName, "folder", parentNode);
+                    var node = makeContainerNode(folderName, "pluginLayerSelector-folder", parentNode);
                     addParentNodeToServiceSpecs(node, entries.services);
                     $.merge(serviceSpecs, entries.services);
                 });
@@ -63,21 +63,8 @@
             var deferreds = _.map(serviceSpecs, loadService);
             // When all services have loaded, we're done!
             $.when.apply($, deferreds).then(function () {
-                sortFolders([rootNode]);
                 console.log("All done!");
-            });
-        }
-
-        function sortFolders(nodes) {
-            // Sort folder entries at this level
-            nodes.sort(function (node1, node2) {
-                return node1.text.toLowerCase() > node2.text.toLowerCase() ? 1 : -1;
-            });
-            // Recurse to sort subfolders
-            _.each(nodes, function (node) {
-                if (!node.leaf && node.children.length > 0) {
-                    sortFolders(node.children);
-                }
+                renderTree();
             });
         }
 
@@ -92,7 +79,7 @@
                         // Service has loaded -- make its node and load its layers
                         console.log("Service " + serviceSpec.name + " has " + serviceData.layers.length + " layers");
                         var serviceName = getServiceName(serviceSpec.name);
-                        var node = makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                        var node = makeContainerNode(serviceName, "pluginLayerSelector-service", serviceSpec.parentNode);
                         loadLayers(serviceData.layers, node, serviceUrl);
                     },
                     error: handleAjaxError
@@ -115,7 +102,7 @@
                     makeLeafNode(layerSpec, serviceUrl, parentNode);
                 } else {
                     // This is a layer group; remember its node so its children can attach themselves
-                    layerNodes[layerSpec.id] = makeContainerNode(layerSpec.name, "layer-group", parentNode);
+                    layerNodes[layerSpec.id] = makeContainerNode(layerSpec.name, "pluginLayerSelector-layer-group", parentNode);
                 }
             }, this);
         }
@@ -133,8 +120,8 @@
 
         function makeLeafNode(layerSpec, serviceUrl, parentNode) {
             var node = {
-                cls: "layer", // When the tree is displayed the node's associated DOM element will have this CSS class
-                text: layerSpec.name,
+                cls: "pluginLayerSelector-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
+                text: layerSpec.name.replace(/_/g, " "),
                 leaf: true,
                 checked: false,
                 url: serviceUrl,
@@ -147,6 +134,43 @@
         function handleAjaxError(jqXHR, textStatus, errorThrown) {
             // TODO: do something better
             alert('AJAX error: ' + errorThrown);
+        }
+
+        function renderTree() {
+            sortFolders([rootNode]);
+            var store = Ext.create('Ext.data.TreeStore', {
+                root: rootNode,
+                fields: ['text', 'leaf', 'cls', 'url', 'layerId']
+            });
+            var tree = Ext.create('Ext.tree.Panel', {
+                store: store,
+                rootVisible: false,
+                height: 2000,
+                autoScroll: true,
+                title: 'Map Layers',
+                x: 100,
+                y: 100,
+                renderTo: 'pane1',
+                width: 300,
+                height: 240,
+                resizable: true,
+                collapsible: true,
+                autoScroll: true,
+            });
+            tree.show();
+        }
+
+        function sortFolders(nodes) {
+            // Sort folder entries at this level
+            nodes.sort(function (node1, node2) {
+                return node1.text.toLowerCase() > node2.text.toLowerCase() ? 1 : -1;
+            });
+            // Recurse to sort subfolders
+            _.each(nodes, function (node) {
+                if (!node.leaf && node.children.length > 0) {
+                    sortFolders(node.children);
+                }
+            });
         }
 
         return declare(null, {

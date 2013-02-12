@@ -12,9 +12,12 @@
     <title>Geosite Framework</title>
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
+    <!-- Temporarily hard-code css loading for plugins -->
+    <link rel="stylesheet" type="text/css" href="/plugins/layer_selector/ext-4.1.1a/resources/css/ext-all-scoped.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/layer_selector/main.css">
     <style>
         /* CSS is temporarily in this file for convenience*/
-        html, body { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
+        html, body, #page { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
         #page { position: relative; height: 100%; margin: 0 50px;}
         #header { height:70px; padding: 28px; }
         #top-links { float:right; }
@@ -89,6 +92,8 @@
     <script src="js/MapWrapper.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/App.js"></script>
+    <!-- Temporarily hard-code js loading for plugins -->
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.1-gpl/ext-all.js"></script>
     
     <script type="text/javascript">
         // Configure the Dojo module loader so that module identifiers starting with "plugins/" 

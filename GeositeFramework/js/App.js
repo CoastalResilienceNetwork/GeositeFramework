@@ -16,7 +16,7 @@
     };
 
     function initializePanes(regionData) {
-        _.each([1, 2], function (i) {
+        _.each([1/*, 2*/], function (i) {
             initializePane(regionData, i);
         });
     }
