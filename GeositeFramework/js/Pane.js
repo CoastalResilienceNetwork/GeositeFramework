@@ -11,12 +11,12 @@
     }
 
     function createPlugins(model) {
-        model.set('plugins', []);
-
+        var plugins = [];
         _.each(N.plugins, function (pluginClass) {
             var plugin = new pluginClass();
-            model.get('plugins').push(plugin);
+            plugins.push(plugin);
         });
+        model.set('plugins', plugins);
     }
 
     // initPlugins() is separate from createPlugins() because:

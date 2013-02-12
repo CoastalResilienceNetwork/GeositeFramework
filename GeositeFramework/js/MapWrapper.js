@@ -7,49 +7,50 @@
     N.createMapWrapper = function (esriMap) {
         var _esriMap = esriMap,
             _wrapper = _.extend({}, esriMap),
-            _myLayerIds = [];
+            _myLayers = [];
 
-        function rememberLayer(layerId) {
-            if (!_.contains(_myLayerIds, layerId)) {
-                _myLayerIds.push(layerId);
+        function isMyLayer(layer) {
+            return _.any(_myLayers, function (l) { return l.id === layer.id; });
+        }
+
+        function rememberLayer(layer) {
+            if (!isMyLayer(layer)) {
+                _myLayers.push(layer);
             }
         }
 
-        function forgetLayer(layerId) {
-            _myLayerIds = _.reject(_myLayerIds, function (id) { return id === layerId; });
+        function forgetLayer(layer) {
+            _myLayers = _.reject(_myLayers, function(l) { return l.id === layer.id; });
         }
 
         _wrapper.addLayer = function (layer, index) {
             // Add layer, and remember it
             _esriMap.addLayer(layer, index);
-            rememberLayer(layer.id);
+            rememberLayer(layer);
         };
 
         _wrapper.addLayers = function (layers) {
             // Add layers, and remember them
             _esriMap.addLayers(layers);
             _.each(layers, function (layer) {
-                rememberLayer(layer.id);
+                rememberLayer(layer);
             });
         };
 
         _wrapper.removeLayer = function (layer) {
-            if (_.contains(_myLayerIds, layer.id)) {
+            if (isMyLayer(layer)) {
                 // This is my layer; forget it and remove it
-                forgetLayer(layer.id);
+                forgetLayer(layer);
                 _esriMap.removeLayer(layer);
             }
         };
 
         _wrapper.removeAllLayers = function () {
-            // Forget and remove all remembered layers
-            _each(_myLayerIds, function (id) {
-                forgetLayer(id);
-                var layer = _esriMap.getLayer(id);
-                if (layer !== undefined) {
-                    _esriMap.removeLayer();
-                }
+            // Remove all remembered layers
+            _.each(_myLayers, function (layer) {
+                _esriMap.removeLayer(layer);
             });
+            _myLayers = [];
         };
 
         return _wrapper;
