@@ -1,7 +1,7 @@
 ﻿/*jslint nomen:true, devel:true */
 /*global Backbone, _, $, Geosite*/
 
-// A plugin tool wraps around a plugin object and manages it in backbone
+// A plugin wraps around a plugin object and manages it in backbone
 
 (function (N) {
     "use strict";
@@ -28,7 +28,7 @@
         }
 
         N.models = N.models || {};
-        N.models.PluginTool = Backbone.Model.extend({
+        N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
                 currentlyActive: false,
@@ -44,14 +44,14 @@
     (function () {
 
         function renderSelf(view) {
-            var pluginToolTemplate = N.app.templates['template-sidebar-plugin'];
-            var html = pluginToolTemplate({ toolbarName: view.model.get('pluginObject').toolbarName });
+            var pluginTemplate = N.app.templates['template-sidebar-plugin'];
+            var html = pluginTemplate({ toolbarName: view.model.get('pluginObject').toolbarName });
             view.$el.append(html);
             return view;
         }
 
         N.views = N.views || {};
-        N.views.PluginTool = Backbone.View.extend({
+        N.views.Plugin = Backbone.View.extend({
             className: 'plugin',
             events: {
                 // currently just a proof of concept

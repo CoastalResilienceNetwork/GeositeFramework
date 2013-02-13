@@ -19,18 +19,17 @@
 
         model.set({
             plugins: [],
-            pluginTools: [],
-            pluginToolViews: []
+            pluginViews: []
         });
 
         _.each(N.plugins, function (pluginClass) {
-            var plugin = new pluginClass();
-            var pluginTool = new N.models.PluginTool({ pluginObject: plugin });
-            var pluginToolView = new N.views.PluginTool({ model: pluginTool });
+            var pluginObject = new pluginClass();
+            var plugin = new N.models.Plugin({ pluginObject: pluginObject });
+            var pluginView = new N.views.Plugin({ model: plugin });
 
             model.get('plugins').push(plugin);
-            model.get('pluginTools').push(pluginTool);
-            model.get('pluginToolViews').push(pluginToolView);
+            //TODO : should we manually trigger an event here
+            model.get('pluginViews').push(pluginView);
         });
     }
 
@@ -50,8 +49,7 @@
     N.models.Pane = Backbone.Model.extend({
         defaults: {
             plugins: null,
-            pluginTools: null,
-            pluginToolViews: null
+            pluginViews: null
         },
         initialize: function () { initializePane(this); },
         initPlugins: function (wrappedMap) { initPlugins(this, wrappedMap); }
@@ -80,9 +78,9 @@
         // render its view and add them to the sidebar
         // section for plugin icons
         var $tools = view.$('.plugins');
-        _.each(view.model.get('pluginToolViews'),
-            function (pluginToolView) {
-                $tools.append(pluginToolView.render().$el);
+        _.each(view.model.get('pluginViews'),
+            function (pluginView) {
+                $tools.append(pluginView.render().$el);
             });
     }
 
