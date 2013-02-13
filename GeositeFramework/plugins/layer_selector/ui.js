@@ -3,7 +3,7 @@
 define([], //"./ext-4.1.1a_full/ext-all"],
     function () {
 
-        function renderTree(rootNode) {
+        function renderTree(rootNode, domElement) {
             var store = Ext.create('Ext.data.TreeStore', {
                 root: rootNode,
                 fields: ['text', 'leaf', 'cls', 'url', 'layerId']
@@ -16,7 +16,7 @@ define([], //"./ext-4.1.1a_full/ext-all"],
                 title: 'Map Layers',
                 x: 100,
                 y: 100,
-                renderTo: 'pane1',
+                renderTo: domElement,
                 width: 300,
                 height: 240,
                 resizable: true,
@@ -40,9 +40,9 @@ define([], //"./ext-4.1.1a_full/ext-all"],
         }
 
         var ui = {
-            render: function (rootNode) {
+            render: function (rootNode, domElement) {
                 sortFolders([rootNode]);
-                renderTree(rootNode);
+                renderTree(rootNode, domElement);
             }
         }
 

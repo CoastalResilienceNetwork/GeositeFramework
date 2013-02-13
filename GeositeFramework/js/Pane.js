@@ -38,9 +38,12 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, wrappedMap) {
-        _.each(model.get('plugins'), function (plugin) {
-            plugin.constructor({
-                map: wrappedMap
+        _.each(model.get('plugins'), function (pluginModel) {
+            var pluginObject = pluginModel.get('pluginObject');
+            pluginObject.constructor({
+                app: null,
+                map: wrappedMap,
+                container: $('#pane1')[0]  // TODO: use plugin-specific DOM element
             });
         });
     }
@@ -51,8 +54,8 @@
             plugins: null,
             pluginViews: null
         },
-        initialize: function () { initializePane(this); },
-        initPlugins: function (wrappedMap) { initPlugins(this, wrappedMap); }
+        initialize: function () { return initializePane(this); },
+        initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
     });
 
 }(Geosite));
@@ -109,8 +112,8 @@
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        render: function () { renderPane(this); },
-        createMap: function () { createMap(this); }
+        render: function () { return renderPane(this); },
+        createMap: function () { return createMap(this); }
     });
 
 }(Geosite));

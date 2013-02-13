@@ -20,7 +20,7 @@
 
             activate: function () {
                 if (this._agsLoader.isLoaded()) {
-                    ui.render(this._layerTree);
+                    ui.render(this._layerTree, this.container);
                 } else {
                     // TODO: something better
                     alert("Layers have not finished loading, please try again soon");
