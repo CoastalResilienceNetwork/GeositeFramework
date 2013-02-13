@@ -11,10 +11,24 @@
     }
 
     function createPlugins(model) {
-        var plugins = [];
+        // Iterate over plugin classes in top-level namespace,
+        // instantiate them, and wrap them in backbone objects
+
+        var plugins = [],
+            pluginViews = [];
+
         _.each(N.plugins, function (pluginClass) {
-            var plugin = new pluginClass();
+            var pluginObject = new pluginClass();
+            var plugin = new N.models.Plugin({ pluginObject: pluginObject });
+            var pluginView = new N.views.Plugin({ model: plugin });
+
             plugins.push(plugin);
+            pluginViews.push(pluginView);
+        });
+
+        model.set({
+            plugins: plugins,
+            pluginViews: pluginViews
         });
         model.set('plugins', plugins);
     }
@@ -33,6 +47,10 @@
 
     N.models = N.models || {};
     N.models.Pane = Backbone.Model.extend({
+        defaults: {
+            plugins: null,
+            pluginViews: null
+        },
         initialize: function () { initializePane(this); },
         initPlugins: function (wrappedMap) { initPlugins(this, wrappedMap); }
     });
@@ -56,14 +74,14 @@
     }
 
     function renderPlugins(view) {
-        var regionData = view.model.get('regionData'),
-            plugins = view.model.get('plugins'),
-            toolTemplate = N.app.templates['template-sidebar-plugin'],
-            $tools = view.$('.plugins');
-        _.each(plugins, function (plugin) {
-            var html = toolTemplate({ toolbarName: plugin.toolbarName });
-            $tools.append(html);
-        });
+        // for each model that wraps a plugin object:
+        // render its view and add them to the sidebar
+        // section for plugin icons
+        var $tools = view.$('.plugins');
+        _.each(view.model.get('pluginViews'),
+            function (pluginView) {
+                $tools.append(pluginView.render().$el);
+            });
     }
 
     function renderSidebarLinks(view) {

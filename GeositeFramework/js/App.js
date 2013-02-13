@@ -26,10 +26,12 @@
             paneNumber: i,
             regionData: regionData
         });
+        N.app.models[i] = pane;
         var paneView = new N.views.Pane({
             model: pane,
             el: $('#pane' + i)
         });
+        N.app.views[i] = paneView;
 
         // Render the pane, then create the map (which needs a DOM element to live in)
         paneView.render();
