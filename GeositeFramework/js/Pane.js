@@ -14,15 +14,15 @@
         // Iterate over plugin classes in top-level namespace,
         // instantiate them, and wrap them in backbone objects
 
-        var plugins = [],
+        var plugins = new N.collections.Plugins,
             pluginViews = [];
 
         _.each(N.plugins, function (pluginClass) {
             var pluginObject = new pluginClass();
             var plugin = new N.models.Plugin({ pluginObject: pluginObject });
-            var pluginView = new N.views.Plugin({ model: plugin });
+            var pluginView = new N.views.Plugin({ model: plugin, collection: plugins });
 
-            plugins.push(plugin);
+            plugins.add(plugin);
             pluginViews.push(pluginView);
         });
 
@@ -30,7 +30,6 @@
             plugins: plugins,
             pluginViews: pluginViews
         });
-        model.set('plugins', plugins);
     }
 
     // initPlugins() is separate from createPlugins() because:

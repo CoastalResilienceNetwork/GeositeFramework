@@ -20,6 +20,11 @@
             }
         }
 
+        function initialize(model) {
+            var selectable = new Backbone.Picky.Selectable(model);
+            _.extend(model, selectable);
+        }
+
         // not currently used, not likely to still be
         // in this class when we implement the feature
         // TODO: remove
@@ -35,7 +40,8 @@
                 showingUI: false
             },
             toggleActive: function () { toggleActive(this) },
-            toggleUI: function () { toggleUI(this) }
+            toggleUI: function () { toggleUI(this) },
+            initialize: function () { initialize(this) }
 
         });
 
@@ -43,10 +49,39 @@
 
     (function () {
 
+        function initialize(collection) {
+            var singleSelect = new Backbone.Picky.SingleSelect(collection);
+            _.extend(collection, singleSelect);
+        }
+
+        N.collections.Plugins = Backbone.Collection.extend({
+            model: N.models.Plugin,
+
+            initialize: function () { initialize(this); }
+        });
+
+    }());
+
+
+    (function () {
+
+        function initialize(view) {
+            view.model.on("selected deselected", function () { view.render() });
+            //view.model.on("change:test", function () { alert("modelchange"); });
+            //view.model.on("deselect", view.render, view);
+        }
+            
+
         function renderSelf(view) {
+            view.$el.empty();
             var pluginTemplate = N.app.templates['template-sidebar-plugin'];
             var html = pluginTemplate({ toolbarName: view.model.get('pluginObject').toolbarName });
             view.$el.append(html);
+            if (view.model.selected == true) {
+                view.$el.addClass("selected-plugin");
+            } else {
+                view.$el.removeClass("selected-plugin");
+            }
             return view;
         }
 
@@ -55,9 +90,16 @@
             className: 'plugin',
             events: {
                 // currently just a proof of concept
-                'click' : function () { alert("clicked!") }
+                'click': function () {
+                    //alert("click");
+                    //alert(this.model.selected);
+                    this.model.toggleSelected();
+                    //alert(this.model.selected);
+                    //this.model.set({ test: "test" });
+                }
             },
-            render: function () { return renderSelf(this); }
+            render: function () { return renderSelf(this); },
+            initialize: function () { initialize(this); }
         });
     }());
 
