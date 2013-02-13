@@ -24,11 +24,7 @@
         // in this class when we implement the feature
         // TODO: remove
         function toggleUI(model) {
-            if (model.showingUI) {
-                model.set({ showingUI: false });
-            } else {
-                model.set({ showingUI: true });
-            }
+            model.set('showingUI', !model.get('showingUI'));
         }
 
         N.models = N.models || {};
