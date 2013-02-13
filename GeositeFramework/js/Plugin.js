@@ -7,19 +7,6 @@
     "use strict";
     (function () {
 
-        // this functionality might get swallowed up
-        // by the Pane model. not yet sure which will
-        // be responsible for tracking who is currently
-        // active.
-        function toggleActive(model) {
-            if (model.get('currentlyActive')) {
-                model.set({ currentlyActive: false });
-                model.set({ showingUI: false });
-            } else {
-                model.set({ currentlyActive: true });
-            }
-        }
-
         function initialize(model) {
             var selectable = new Backbone.Picky.Selectable(model);
             _.extend(model, selectable);
@@ -36,10 +23,8 @@
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
-                currentlyActive: false,
                 showingUI: false
             },
-            toggleActive: function () { toggleActive(this) },
             toggleUI: function () { toggleUI(this) },
             initialize: function () { initialize(this) }
 
@@ -67,16 +52,24 @@
 
         function initialize(view) {
             view.model.on("selected deselected", function () { view.render() });
-            //view.model.on("change:test", function () { alert("modelchange"); });
-            //view.model.on("deselect", view.render, view);
         }
             
+        function handleClick(view) {
+            view.model.toggleSelected();
+        }
 
-        function renderSelf(view) {
+        function render(view) {
             view.$el.empty();
+
+            var toolbarName = view.model.get('pluginObject').toolbarName;
             var pluginTemplate = N.app.templates['template-sidebar-plugin'];
-            var html = pluginTemplate({ toolbarName: view.model.get('pluginObject').toolbarName });
+            var html = pluginTemplate({ toolbarName: toolbarName });
+
             view.$el.append(html);
+
+            // TODO: this code might grow.
+            // If so, make it a method that
+            // operates on the el/$el
             if (view.model.selected == true) {
                 view.$el.addClass("selected-plugin");
             } else {
@@ -89,16 +82,9 @@
         N.views.Plugin = Backbone.View.extend({
             className: 'plugin',
             events: {
-                // currently just a proof of concept
-                'click': function () {
-                    //alert("click");
-                    //alert(this.model.selected);
-                    this.model.toggleSelected();
-                    //alert(this.model.selected);
-                    //this.model.set({ test: "test" });
-                }
+                'click': function () { handleClick(this); }
             },
-            render: function () { return renderSelf(this); },
+            render: function () { return render(this); },
             initialize: function () { initialize(this); }
         });
     }());
