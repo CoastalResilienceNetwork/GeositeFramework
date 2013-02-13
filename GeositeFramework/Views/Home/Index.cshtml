@@ -10,6 +10,8 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Geosite Framework</title>
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <style>
         /* CSS is temporarily in this file for convenience*/
         html, body { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
@@ -19,8 +21,8 @@
         #top-links a { color: white; text-decoration:none; }
         .pane { position:relative; }
         .sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
-        .map { position:absolute; left:107px; right:0; top:70px; bottom:10px; font-size:100px; text-align:center; background-color:#a98989; padding-top:200px }
-        .tools { }
+        .map { position:absolute; left:107px; right:0; top:70px; bottom:10px; }
+        .plugins { }
         .sidebar-links { position:absolute; bottom:0; width:100%; }
         .split-controls { text-align: center; padding-bottom: 10px; width:100%; }
         div.title { font-size:1.4em; font-weight:bold;}
@@ -47,7 +49,7 @@
             <div class="title">@Model.Title</div>
         </div>
         <div id="pane1"></div>
-        <div id="pane2"></div>
+        <div id="pane2" style="display:none"></div>
     </div>
 
     <script type="text/template" id="template-pane">
@@ -61,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="map">MAP</div>
+        <div class="map"></div>
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
@@ -84,6 +86,7 @@
     <script src="js/lib/backbone-0.9.10.min.js"></script>
     <script src="js/Geosite.js"></script>
     <script src="js/Pane.js"></script>
+    <script src="js/MapWrapper.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/App.js"></script>
     
