@@ -11,25 +11,24 @@
     }
 
     function createPlugins(model) {
-        // Iterate over plugin objects in top-level namespace
-        // and add them to an array in the pane model.
-        // also instantiate a backbone model and view to wrap
-        // around these plugin objects and add them to
-        // arrays in the pane model as well.
+        // Iterate over plugin classes in top-level namespace,
+        // instantiate them, and wrap them in backbone objects
 
-        model.set({
-            plugins: [],
-            pluginViews: []
-        });
+        var plugins = [],
+            pluginViews = [];
 
         _.each(N.plugins, function (pluginClass) {
             var pluginObject = new pluginClass();
             var plugin = new N.models.Plugin({ pluginObject: pluginObject });
             var pluginView = new N.views.Plugin({ model: plugin });
 
-            model.get('plugins').push(plugin);
-            //TODO : should we manually trigger an event here
-            model.get('pluginViews').push(pluginView);
+            plugins.push(plugin);
+            pluginViews.push(pluginView);
+        });
+
+        model.set({
+            plugins: plugins,
+            pluginViews: pluginViews
         });
     }
 
