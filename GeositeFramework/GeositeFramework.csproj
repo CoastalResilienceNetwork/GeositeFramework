@@ -132,8 +132,10 @@
     <Content Include="js\MapWrapper.js" />
     <Content Include="js\Pane.js" />
     <Content Include="js\TemplateLoader.js" />
+    <Content Include="plugins\layer_selector\AgsLoader.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
+    <Content Include="plugins\layer_selector\ui.js" />
     <Content Include="plugins\measure\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
