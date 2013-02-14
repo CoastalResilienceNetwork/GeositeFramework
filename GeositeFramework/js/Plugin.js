@@ -7,21 +7,9 @@
     "use strict";
     (function () {
 
-        // this functionality might get swallowed up
-        // by the Pane model. not yet sure which will
-        // be responsible for tracking who is currently
-        // active.
-        function toggleActive(model) {
-            if (model.get('currentlyActive')) {
-                model.set({ currentlyActive: false });
-                model.set({ showingUI: false });
-            } else {
-                model.set({ currentlyActive: true });
-                var pluginObject = model.get('pluginObject');
-                if (_.isFunction(pluginObject.activate)) {
-                    pluginObject.activate();
-                }
-            }
+        function initialize(model) {
+            var selectable = new Backbone.Picky.Selectable(model);
+            _.extend(model, selectable);
         }
 
         // not currently used, not likely to still be
@@ -29,17 +17,23 @@
         // TODO: remove
         function toggleUI(model) {
             model.set('showingUI', !model.get('showingUI'));
+            model.toggleSelected();
+            if (model.selected) {
+                var pluginObject = model.get('pluginObject');
+                if (_.isFunction(pluginObject.activate)) {
+                    pluginObject.activate();
+                }
+            }
         }
 
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
-                currentlyActive: false,
                 showingUI: false
             },
-            toggleActive: function () { toggleActive(this) },
-            toggleUI: function () { toggleUI(this) }
+            toggleUI: function () { toggleUI(this); },
+            initialize: function () { initialize(this); }
 
         });
 
@@ -47,10 +41,46 @@
 
     (function () {
 
-        function renderSelf(view) {
-            var pluginTemplate = N.app.templates['template-sidebar-plugin'];
-            var html = pluginTemplate({ toolbarName: view.model.get('pluginObject').toolbarName });
+        function initialize(collection) {
+            var singleSelect = new Backbone.Picky.SingleSelect(collection);
+            _.extend(collection, singleSelect);
+        }
+
+        N.collections.Plugins = Backbone.Collection.extend({
+            model: N.models.Plugin,
+
+            initialize: function () { initialize(this); }
+        });
+
+    }());
+
+
+    (function () {
+
+        function initialize(view) {
+            view.model.on("selected deselected", function () { view.render(); });
+        }
+
+        function handleClick(view) {
+            view.model.toggleUI();
+        }
+
+        function render(view) {
+            var toolbarName = view.model.get('pluginObject').toolbarName,
+                pluginTemplate = N.app.templates['template-sidebar-plugin'],
+                html = pluginTemplate({ toolbarName: toolbarName });
+
+            view.$el.empty();
             view.$el.append(html);
+
+            // TODO: this code might grow.
+            // If so, make it a method that
+            // operates on the el/$el
+            if (view.model.selected === true) {
+                view.$el.addClass("selected-plugin");
+            } else {
+                view.$el.removeClass("selected-plugin");
+            }
             return view;
         }
 
@@ -58,10 +88,10 @@
         N.views.Plugin = Backbone.View.extend({
             className: 'plugin',
             events: {
-                // currently just a proof of concept
-                'click': function () { this.model.toggleActive(); }
+                'click': function () { handleClick(this); }
             },
-            render: function () { return renderSelf(this); }
+            render: function () { return render(this); },
+            initialize: function () { initialize(this); }
         });
     }());
 

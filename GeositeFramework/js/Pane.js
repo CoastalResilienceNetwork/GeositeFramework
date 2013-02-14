@@ -14,22 +14,15 @@
         // Iterate over plugin classes in top-level namespace,
         // instantiate them, and wrap them in backbone objects
 
-        var plugins = [],
-            pluginViews = [];
+        var plugins = new N.collections.Plugins();
 
-        _.each(N.plugins, function (pluginClass) {
-            var pluginObject = new pluginClass();
-            var plugin = new N.models.Plugin({ pluginObject: pluginObject });
-            var pluginView = new N.views.Plugin({ model: plugin });
+        _.each(N.plugins, function (PluginClass) {
+            var pluginObject = new PluginClass(),
+                plugin = new N.models.Plugin({ pluginObject: pluginObject });
 
-            plugins.push(plugin);
-            pluginViews.push(pluginView);
+            plugins.add(plugin);
         });
 
-        model.set({
-            plugins: plugins,
-            pluginViews: pluginViews
-        });
         model.set('plugins', plugins);
     }
 
@@ -38,7 +31,7 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, wrappedMap) {
-        _.each(model.get('plugins'), function (pluginModel) {
+        model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
             if (_.isFunction(pluginObject.initialize)) {
                 pluginObject.initialize({
@@ -79,14 +72,14 @@
     }
 
     function renderPlugins(view) {
-        // for each model that wraps a plugin object:
-        // render its view and add them to the sidebar
-        // section for plugin icons
+        // for each model, render its view and add them
+        // to the sidebar section for plugin icons
         var $tools = view.$('.plugins');
-        _.each(view.model.get('pluginViews'),
-            function (pluginView) {
-                $tools.append(pluginView.render().$el);
-            });
+
+        view.model.get('plugins').each(function (plugin) {
+            var pluginView = new N.views.Plugin({ model: plugin });
+            $tools.append(pluginView.render().$el);
+        });
     }
 
     function renderSidebarLinks(view) {

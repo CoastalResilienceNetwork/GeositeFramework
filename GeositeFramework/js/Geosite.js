@@ -11,6 +11,7 @@
 
     // Class objects (see App.js for instances)
     N.Geosite.models = {};
+    N.Geosite.collections = {};
     N.Geosite.views = {};
     N.Geosite.plugins = [];
 
