@@ -14,11 +14,11 @@
         // Iterate over plugin classes in top-level namespace,
         // instantiate them, and wrap them in backbone objects
 
-        var plugins = new N.collections.Plugins;
+        var plugins = new N.collections.Plugins();
 
-        _.each(N.plugins, function (pluginClass) {
-            var pluginObject = new pluginClass();
-            var plugin = new N.models.Plugin({ pluginObject: pluginObject });
+        _.each(N.plugins, function (PluginClass) {
+            var pluginObject = new PluginClass(),
+                plugin = new N.models.Plugin({ pluginObject: pluginObject });
 
             plugins.add(plugin);
         });

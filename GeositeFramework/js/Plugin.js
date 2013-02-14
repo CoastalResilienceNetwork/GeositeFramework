@@ -25,8 +25,8 @@
                 pluginObject: null,
                 showingUI: false
             },
-            toggleUI: function () { toggleUI(this) },
-            initialize: function () { initialize(this) }
+            toggleUI: function () { toggleUI(this); },
+            initialize: function () { initialize(this); }
 
         });
 
@@ -51,26 +51,25 @@
     (function () {
 
         function initialize(view) {
-            view.model.on("selected deselected", function () { view.render() });
+            view.model.on("selected deselected", function () { view.render(); });
         }
-            
+
         function handleClick(view) {
             view.model.toggleSelected();
         }
 
         function render(view) {
+            var toolbarName = view.model.get('pluginObject').toolbarName,
+                pluginTemplate = N.app.templates['template-sidebar-plugin'],
+                html = pluginTemplate({ toolbarName: toolbarName });
+
             view.$el.empty();
-
-            var toolbarName = view.model.get('pluginObject').toolbarName;
-            var pluginTemplate = N.app.templates['template-sidebar-plugin'];
-            var html = pluginTemplate({ toolbarName: toolbarName });
-
             view.$el.append(html);
 
             // TODO: this code might grow.
             // If so, make it a method that
             // operates on the el/$el
-            if (view.model.selected == true) {
+            if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
             } else {
                 view.$el.removeClass("selected-plugin");
