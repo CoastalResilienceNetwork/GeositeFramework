@@ -17,7 +17,10 @@
                 model.set({ showingUI: false });
             } else {
                 model.set({ currentlyActive: true });
-                model.get('pluginObject').activate();
+                var pluginObject = model.get('pluginObject');
+                if (_.isFunction(pluginObject.activate)) {
+                    pluginObject.activate();
+                }
             }
         }
 

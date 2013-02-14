@@ -14,7 +14,8 @@
 
                 var baseUrl = 'http://dev.gulfmex.coastalresilience.org/arcgis/rest/services';
                 this._layerTree = { expanded: true, children: [] };
-                this._agsLoader = new AgsLoader(baseUrl).load(this._layerTree);
+                this._agsLoader = new AgsLoader(baseUrl);
+                this._agsLoader.load(this._layerTree);
             },
 
             activate: function () {

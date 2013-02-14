@@ -40,11 +40,13 @@
     function initPlugins(model, wrappedMap) {
         _.each(model.get('plugins'), function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
-            pluginObject.initialize({
-                app: null,
-                map: wrappedMap,
-                container: $('#pane1')[0]  // TODO: use plugin-specific DOM element
-            });
+            if (_.isFunction(pluginObject.initialize)) {
+                pluginObject.initialize({
+                    app: null,
+                    map: wrappedMap,
+                    container: $('#pane1')[0]  // TODO: use plugin-specific DOM element
+                });
+            }
         });
     }
 

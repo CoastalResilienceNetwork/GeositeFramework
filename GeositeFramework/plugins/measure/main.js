@@ -5,7 +5,7 @@
             toolbarName: "Scenarios",
             fullName: "Try out different scenarios.",
 
-            constructor: function (args) {
+            initialize: function (args) {
                 declare.safeMixin(this, args);
             }
         });
