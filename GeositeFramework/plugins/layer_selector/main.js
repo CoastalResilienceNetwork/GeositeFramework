@@ -2,6 +2,32 @@
     ["dojo/_base/declare", "./AgsLoader", "./ui"], 
     function (declare, AgsLoader, ui) {
 
+        function loadConfig(self)
+        {
+            return $.ajax({
+                dataType: 'json',
+                contentType: "application/json",
+                url: 'plugins/layer_selector/layers.json',
+                success: function (layerData) { loadLayerData(self, layerData); },
+                error: handleAjaxError
+            });
+        }
+
+        function loadLayerData(self, layerData) {
+            self._layerTree = { expanded: true, children: [] };
+            if (layerData.agsSources !== undefined) {
+                _.each(layerData.agsSources, function (baseUrl) {
+                    self._agsLoader = new AgsLoader(baseUrl);
+                    self._agsLoader.load(self._layerTree);
+                });
+            }
+        }
+
+        function handleAjaxError(jqXHR, textStatus, errorThrown) {
+            // TODO: do something better
+            alert('AJAX error: ' + errorThrown);
+        }
+
         return declare(null, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
@@ -11,11 +37,7 @@
 
             initialize: function (args) {
                 declare.safeMixin(this, args);
-
-                var baseUrl = 'http://dev.gulfmex.coastalresilience.org/arcgis/rest/services';
-                this._layerTree = { expanded: true, children: [] };
-                this._agsLoader = new AgsLoader(baseUrl);
-                this._agsLoader.load(this._layerTree);
+                loadConfig(this);
             },
 
             activate: function () {
