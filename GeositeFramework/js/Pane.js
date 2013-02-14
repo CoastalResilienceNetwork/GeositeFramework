@@ -71,7 +71,7 @@
         // to the sidebar section for plugin icons
         var $tools = view.$('.plugins');
 
-        view.model.get('plugins').forEach(function (plugin) {
+        view.model.get('plugins').each(function (plugin) {
             var pluginView = new N.views.Plugin({ model: plugin });
             $tools.append(pluginView.render().$el);
         });
