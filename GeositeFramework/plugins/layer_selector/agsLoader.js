@@ -1,10 +1,9 @@
 ﻿// Module AgsLoader.js
-var _baseUrl; // use this global to temporarily work around Heisenbug
 
 define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
     function () {   //($, _) {
         var AgsLoader = function (baseUrl) {
-            _baseUrl = baseUrl;
+            var _baseUrl = baseUrl;
             var _loaded = false;
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
@@ -77,7 +76,7 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
             function loadService(serviceSpec) {
                 if (serviceSpec.type === "MapServer") {
                     console.log("Loading service " + serviceSpec.name);
-                    var serviceUrl = this._baseUrl + "/" + serviceSpec.name + "/MapServer";
+                    var serviceUrl = _baseUrl + "/" + serviceSpec.name + "/MapServer";
                     return $.ajax({
                         dataType: 'jsonp',
                         url: serviceUrl + "?f=json",

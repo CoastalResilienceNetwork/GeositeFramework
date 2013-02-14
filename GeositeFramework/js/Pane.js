@@ -40,7 +40,7 @@
     function initPlugins(model, wrappedMap) {
         _.each(model.get('plugins'), function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
-            pluginObject.constructor({
+            pluginObject.initialize({
                 app: null,
                 map: wrappedMap,
                 container: $('#pane1')[0]  // TODO: use plugin-specific DOM element

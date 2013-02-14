@@ -9,13 +9,12 @@
             _layerTree: null,
             _agsLoader: null,
 
-            constructor: function (args) {
+            initialize: function (args) {
                 declare.safeMixin(this, args);
 
-                this._layerTree = { expanded: true, children: [] };
                 var baseUrl = 'http://dev.gulfmex.coastalresilience.org/arcgis/rest/services';
-                this._agsLoader = new AgsLoader(baseUrl);
-                this._agsLoader.load(this._layerTree);
+                this._layerTree = { expanded: true, children: [] };
+                this._agsLoader = new AgsLoader(baseUrl).load(this._layerTree);
             },
 
             activate: function () {
