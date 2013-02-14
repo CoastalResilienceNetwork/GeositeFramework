@@ -17,6 +17,10 @@
                 model.set({ showingUI: false });
             } else {
                 model.set({ currentlyActive: true });
+                var pluginObject = model.get('pluginObject');
+                if (_.isFunction(pluginObject.activate)) {
+                    pluginObject.activate();
+                }
             }
         }
 
@@ -55,7 +59,7 @@
             className: 'plugin',
             events: {
                 // currently just a proof of concept
-                'click' : function () { alert("clicked!") }
+                'click': function () { this.model.toggleActive(); }
             },
             render: function () { return renderSelf(this); }
         });
