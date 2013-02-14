@@ -131,6 +131,7 @@
     <Content Include="js\Geosite.js" />
     <Content Include="js\MapWrapper.js" />
     <Content Include="js\Pane.js" />
+    <Content Include="js\Plugin.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="plugins\layer_selector\main.js" />
     <Content Include="plugins\measure\main.js" />
