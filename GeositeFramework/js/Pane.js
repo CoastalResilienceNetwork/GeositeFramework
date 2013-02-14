@@ -14,22 +14,16 @@
         // Iterate over plugin classes in top-level namespace,
         // instantiate them, and wrap them in backbone objects
 
-        var plugins = new N.collections.Plugins,
-            pluginViews = [];
+        var plugins = new N.collections.Plugins;
 
         _.each(N.plugins, function (pluginClass) {
             var pluginObject = new pluginClass();
             var plugin = new N.models.Plugin({ pluginObject: pluginObject });
-            var pluginView = new N.views.Plugin({ model: plugin, collection: plugins });
 
             plugins.add(plugin);
-            pluginViews.push(pluginView);
         });
 
-        model.set({
-            plugins: plugins,
-            pluginViews: pluginViews
-        });
+        model.set('plugins', plugins);
     }
 
     // initPlugins() is separate from createPlugins() because:
@@ -73,14 +67,14 @@
     }
 
     function renderPlugins(view) {
-        // for each model that wraps a plugin object:
-        // render its view and add them to the sidebar
-        // section for plugin icons
+        // for each model, render its view and add them
+        // to the sidebar section for plugin icons
         var $tools = view.$('.plugins');
-        _.each(view.model.get('pluginViews'),
-            function (pluginView) {
-                $tools.append(pluginView.render().$el);
-            });
+
+        view.model.get('plugins').forEach(function (plugin) {
+            var pluginView = new N.views.Plugin({ model: plugin });
+            $tools.append(pluginView.render().$el);
+        });
     }
 
     function renderSidebarLinks(view) {
