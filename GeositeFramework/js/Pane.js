@@ -31,13 +31,14 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, wrappedMap) {
+        var paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
             if (_.isFunction(pluginObject.initialize)) {
                 pluginObject.initialize({
                     app: null,
                     map: wrappedMap,
-                    container: $('#pane1')[0]  // TODO: use plugin-specific DOM element
+                    container: N.app.views.panes[paneNumber].el  // TODO: use plugin-specific DOM element
                 });
             }
         });
@@ -67,7 +68,7 @@
 
     function renderSelf(view) {
         var paneTemplate = N.app.templates['template-pane'],
-            html = paneTemplate();
+            html = paneTemplate({index: view.model.get('paneNumber')});
         view.$el.append(html);
     }
 
