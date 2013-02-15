@@ -71,7 +71,10 @@
 
     function renderSelf(view) {
         var paneTemplate = N.app.templates['template-pane'],
-            html = paneTemplate({index: view.model.get('paneNumber')});
+            html = paneTemplate({
+                index: view.model.get('paneNumber'),
+                isMain: view.model.get('isMain')
+            });
         view.$el.append(html);
     }
 
