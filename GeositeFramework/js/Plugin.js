@@ -85,8 +85,8 @@
         }
 
         N.views = N.views || {};
-        N.views.Plugin = Backbone.View.extend({
-            className: 'plugin',
+        N.views.SidebarPlugin = Backbone.View.extend({
+            className: 'sidebar-plugin',
             events: {
                 'click': function () { handleClick(this); }
             },

@@ -74,11 +74,13 @@
     function renderPlugins(view) {
         // for each model, render its view and add them
         // to the sidebar section for plugin icons
-        var $tools = view.$('.plugins');
+        var $sidebar = view.$('.plugins');
 
         view.model.get('plugins').each(function (plugin) {
-            var pluginView = new N.views.Plugin({ model: plugin });
-            $tools.append(pluginView.render().$el);
+            if (plugin.get('pluginObject').toolbarType === 'sidebar') {
+                var pluginView = new N.views.SidebarPlugin({ model: plugin });
+                $sidebar.append(pluginView.render().$el);
+            }
         });
     }
 
