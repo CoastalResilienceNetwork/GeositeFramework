@@ -1,4 +1,4 @@
-﻿/*jslint nomen:true, devel:true */
+/*jslint nomen:true, devel:true */
 /*global Backbone, _, $, Geosite*/
 
 // A pane represents the app work area and contains a sidebar and a map
