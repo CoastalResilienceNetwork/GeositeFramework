@@ -55,7 +55,7 @@
     }());
 
 
-    (function () {
+    (function basePluginView() {
 
         function initialize(view) {
             view.model.on("selected deselected", function () { view.render(); });
@@ -65,13 +65,23 @@
             view.model.toggleUI();
         }
 
+        N.views = N.views || {};
+        N.views.BasePlugin = Backbone.View.extend({
+            events: {
+                'click': function () { handleClick(this); }
+            },
+            initialize: function () { initialize(this); }
+        });
+    }());
+
+    (function sidebarPlugin() {
+
         function render(view) {
             var toolbarName = view.model.get('pluginObject').toolbarName,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
                 html = pluginTemplate({ toolbarName: toolbarName });
 
-            view.$el.empty();
-            view.$el.append(html);
+            view.$el.empty().append(html);
 
             // TODO: this code might grow.
             // If so, make it a method that
@@ -85,13 +95,9 @@
         }
 
         N.views = N.views || {};
-        N.views.SidebarPlugin = Backbone.View.extend({
+        N.views.SidebarPlugin = N.views.BasePlugin.extend({
             className: 'sidebar-plugin',
-            events: {
-                'click': function () { handleClick(this); }
-            },
             render: function () { return render(this); },
-            initialize: function () { initialize(this); }
         });
     }());
 
