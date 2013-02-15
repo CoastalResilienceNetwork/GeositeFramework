@@ -78,8 +78,12 @@
 
         function render(view) {
             var toolbarName = view.model.get('pluginObject').toolbarName,
+                pluginFolder = view.model.get('pluginSrcFolder'),
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                html = pluginTemplate({ toolbarName: toolbarName });
+                html = pluginTemplate({
+                    toolbarName: toolbarName,
+                    pluginSrcFolder: pluginFolder
+                });
 
             view.$el.empty().append(html);
 

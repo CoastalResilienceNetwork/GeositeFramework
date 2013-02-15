@@ -16,9 +16,12 @@
 
         var plugins = new N.collections.Plugins();
 
-        _.each(N.plugins, function (PluginClass) {
+        _.each(N.plugins, function (PluginClass, i) {
             var pluginObject = new PluginClass(),
-                plugin = new N.models.Plugin({ pluginObject: pluginObject });
+                plugin = new N.models.Plugin({
+                    pluginObject: pluginObject,
+                    pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                });
 
             plugins.add(plugin);
         });
