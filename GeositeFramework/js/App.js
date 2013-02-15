@@ -5,8 +5,12 @@
     "use strict";
     N.app = {
         // Model and View instances (see Geosite.js for "class" objects)
-        models: {},
-        views: {},
+        models: {
+            panes: []
+        },
+        views: {
+            panes: []
+        },
         templates: {},
 
         init: function initializeApp(regionData, pluginClasses) {
@@ -16,22 +20,27 @@
     };
 
     function initializePanes(regionData) {
-        _.each([1/*, 2*/], function (i) {
-            initializePane(regionData, i);
+        var panes = [
+            { selector: "#left-pane", index: 0 },
+            { selector: "#right-pane", index: 1 }
+        ];
+
+        _.each(panes, function (pane) {
+            initializePane(regionData, pane);
         });
     }
 
-    function initializePane(regionData, i) {
+    function initializePane(regionData, paneConfig) {
         var pane = new N.models.Pane({
-            paneNumber: i,
+            paneNumber: paneConfig.index,
             regionData: regionData
         });
-        N.app.models[i] = pane;
+        N.app.models.panes[pane.index] = pane;
         var paneView = new N.views.Pane({
             model: pane,
-            el: $('#pane' + i)
+            el: $(paneConfig.selector)
         });
-        N.app.views[i] = paneView;
+        N.app.views.panes[paneConfig.index] = paneView;
 
         // Render the pane, then create the map (which needs a DOM element to live in)
         paneView.render();
@@ -43,7 +52,6 @@
             var wrappedMap = N.createMapWrapper(esriMap);
             pane.initPlugins(wrappedMap);
         });
-
     }
 
     new N.TemplateLoader().load(N.app.templates);
