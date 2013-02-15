@@ -101,4 +101,27 @@
         });
     }());
 
+    (function topbarPluginView() {
+
+        function render() {
+            // Topbar plugins don't render into any predefined context,
+            // simply provide a div and let the plugin implement it's 
+            // launcher layout
+            var view = this,
+                pluginObject = this.model.get('pluginObject');
+
+            if (pluginObject.renderLauncher
+                    && _.isFunction(pluginObject.renderLauncher)) {
+                view.$el.html(pluginObject.renderLauncher());
+            }
+
+            return view;
+        }
+
+        N.views = N.views || {};
+        N.views.TopbarPlugin = N.views.BasePlugin.extend({
+            className: 'topbar-plugin',
+            render: render
+        });
+    }());
 }(Geosite));
