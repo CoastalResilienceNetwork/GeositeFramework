@@ -110,6 +110,14 @@
             zoom: 4,
             basemap: "streets"
         });
+
+        function resizeMap() {
+            esriMap.resize();
+            esriMap.reposition();
+        }
+        resizeMap();
+        $(window).on('resize', resizeMap);
+
         return esriMap;
     }
 
