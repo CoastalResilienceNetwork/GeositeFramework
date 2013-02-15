@@ -20,9 +20,10 @@
     };
 
     function initializePanes(regionData) {
+        // The main pane will contain the app tool buttons
         var panes = [
-            { selector: "#left-pane", index: 0 },
-            { selector: "#right-pane", index: 1 }
+            { selector: "#left-pane", index: 0, main: true },
+            { selector: "#right-pane", index: 1, main: false}
         ];
 
         _.each(panes, function (pane) {
@@ -33,6 +34,7 @@
     function initializePane(regionData, paneConfig) {
         var pane = new N.models.Pane({
             paneNumber: paneConfig.index,
+            isMain: paneConfig.main,
             regionData: regionData
         });
         N.app.models.panes[pane.index] = pane;
