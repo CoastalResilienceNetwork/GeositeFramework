@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8" /> 
+  <title>Test Runner</title>
+  <link rel="stylesheet" type="text/css" href="../../../../tools/JsTestTools/lib/jasmine/jasmine.css">
+
+  <!-- load framework code and libraries -->
+  <script type="text/javascript" src="../lib/jquery-1.9.0.min.js"></script>
+  <script type="text/javascript" src="../lib/underscore-1.4.3.min.js"></script>
+  <script type="text/javascript" src="../lib/backbone-0.9.10.min.js"></script>
+  <script type="text/javascript" src="../lib/backbone.picky.min.js"></script>
+  <!-- load test tools -->
+  <script type="text/javascript" src="../../../../tools/JsTestTools/lib/jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="../../../../tools/JsTestTools/lib/jasmine/jasmine-html.js"></script>
+  <script type="text/javascript" src="../../../../tools/JsTestTools/lib/jasmine-jquery/jasmine-jquery-1.2.0.js"></script>
+  <script type="text/javascript" src="../../../../tools/JsTestTools/lib/jasmine-reporters/jasmine.junit_reporter.js"></script>
+  <script type="text/javascript" src="../../../../tools/JsTestTools/lib/azavea-jasmine/azavea.jasmine.matchers.js"></script>
+
+  <!-- load application source files -->
+  
+  <script type="text/javascript" src="../Geosite.js"></script>
+  <script type="text/javascript" src="../Plugin.js"></script>
+  <script type="text/javascript" src="../Pane.js"></script>
+  <script type="text/javascript" src="../MapWrapper.js"></script>
+  <script type="text/javascript" src="../TemplateLoader.js"></script>
+  <script type="text/javascript" src="../App.js"></script>
+
+
+    <!-- load test spec files -->
+  <script type="text/javascript" src="./spec/PluginSpec.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+  jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+  // The test output, by default, is created in the same directory as phantomjs-testrunner.js
+  // unless a path is passed into the JUnitXmlReport 'constructor'
+  jasmine.getEnv().addReporter(new jasmine.JUnitXmlReporter('output/'));
+  jasmine.getEnv().execute();
+</script>
+
+</body>
+</html>
