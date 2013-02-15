@@ -73,12 +73,19 @@
 
     function renderPlugins(view) {
         // for each model, render its view and add them
-        // to the sidebar section for plugin icons
-        var $tools = view.$('.plugins');
+        // to the appropriate plugin section
+        var $sidebar = view.$('.plugins'),
+            $topbar = view.$('.tools');
 
         view.model.get('plugins').each(function (plugin) {
-            var pluginView = new N.views.Plugin({ model: plugin });
-            $tools.append(pluginView.render().$el);
+            var toolbarType = plugin.get('pluginObject').toolbarType;
+            if (toolbarType === 'sidebar') {
+                var pluginView = new N.views.SidebarPlugin({ model: plugin });
+                $sidebar.append(pluginView.render().$el);
+            } else if (toolbarType === 'map') {
+                var pluginView = new N.views.TopbarPlugin({ model: plugin });
+                $topbar.append(pluginView.render().$el);
+            }
         });
     }
 
