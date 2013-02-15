@@ -100,6 +100,7 @@
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
+            tagName: 'li',
             className: 'sidebar-plugin',
             render: function () { return render(this); },
         });
