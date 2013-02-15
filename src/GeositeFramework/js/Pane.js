@@ -122,7 +122,7 @@
             esriMap.reposition();
         }
         resizeMap();
-        $(window).on('resize', resizeMap);
+        $(window).on('resize', _.debounce(resizeMap, 300));
 
         return esriMap;
     }

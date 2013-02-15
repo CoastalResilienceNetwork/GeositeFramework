@@ -16,8 +16,23 @@
         init: function initializeApp(regionData, pluginClasses) {
             N.plugins = pluginClasses;
             initializePanes(regionData);
+            initializeMaps();
         }
     };
+
+    function initializeMaps() {
+        function resizeMap() {
+            var sideWid = $('.sidebar').width(),
+                fullWid = $('.content').width(),
+                mapWid = fullWid - sideWid;
+
+            $('.map').width(mapWid);
+        }
+
+        resizeMap();
+        $(window).resize(_.debounce(resizeMap, 300));
+
+    }
 
     function initializePanes(regionData) {
         // The main pane will contain the app tool buttons
