@@ -17,6 +17,11 @@
   <script type="text/javascript" src="../../../../tools/JsTestTools/lib/jasmine-reporters/jasmine.junit_reporter.js"></script>
   <script type="text/javascript" src="../../../../tools/JsTestTools/lib/azavea-jasmine/azavea.jasmine.matchers.js"></script>
 
+  <script>
+    if (location.hash === '#testem')
+      document.write('<script src="/testem.js"></' + 'script>');
+  </script>
+
   <!-- load application source files -->
   
   <script type="text/javascript" src="../Geosite.js"></script>
