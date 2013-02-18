@@ -50,8 +50,11 @@
     N.models = N.models || {};
     N.models.Pane = Backbone.Model.extend({
         defaults: {
-            plugins: null,
-            pluginViews: null
+            paneNumber: 0,
+            isMain: false,
+            regionData: null,
+            basemapSelector: null,
+            plugins: null
         },
         initialize: function () { return initializePane(this); },
         initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
