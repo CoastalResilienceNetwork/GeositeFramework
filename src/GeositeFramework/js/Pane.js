@@ -23,7 +23,14 @@
                     pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
                 });
 
-            plugins.add(plugin);
+            // Load plugin only if it passes a compliance check
+            if (plugin.isCompliant()) {
+                plugins.add(plugin);
+            } else {
+                console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' + 
+                    pluginObject.toolbarName +
+                    ' is not loaded due to improper interface');
+            }
         });
 
         model.set('plugins', plugins);
