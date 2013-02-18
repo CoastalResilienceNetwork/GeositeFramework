@@ -78,8 +78,12 @@
 
         function render(view) {
             var toolbarName = view.model.get('pluginObject').toolbarName,
+                pluginFolder = view.model.get('pluginSrcFolder'),
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                html = pluginTemplate({ toolbarName: toolbarName });
+                html = pluginTemplate({
+                    toolbarName: toolbarName,
+                    pluginSrcFolder: pluginFolder
+                });
 
             view.$el.empty().append(html);
 
@@ -96,6 +100,7 @@
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
+            tagName: 'li',
             className: 'sidebar-plugin',
             render: function () { return render(this); },
         });
