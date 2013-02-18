@@ -110,7 +110,8 @@
     }
 
     function createMap(view) {
-        var paneNumber = view.model.get('paneNumber'),
+        var regionData = view.model.get('regionData'),
+            paneNumber = view.model.get('paneNumber'),
             $map = view.$('.map'),
             domId = "map" + paneNumber;
         $map.attr("id", domId);
