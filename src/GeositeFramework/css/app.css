@@ -8,17 +8,6 @@
 :: Media Queries
 */
 
-/*-----------------------------
-    HACK!  EXTJS mega div needs to be absolute until the element is
-    sitting in a provided div container.  Currently it's just floating
-    in a pane.  // REMOVE
--------------------------------*/
-.content div.x-panel
-{
-    position: absolute;
-}
-
-
 /* -----------------------------------------
    Shared Styles
 ----------------------------------------- */
