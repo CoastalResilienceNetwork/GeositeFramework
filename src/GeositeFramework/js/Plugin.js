@@ -100,8 +100,9 @@
     (function sidebarPlugin() {
 
         function render(view) {
-            var toolbarName = view.model.get('pluginObject').toolbarName,
-                pluginFolder = view.model.get('pluginSrcFolder'),
+            var model = view.model,
+                toolbarName = model.get('pluginObject').toolbarName,
+                pluginFolder = model.get('pluginSrcFolder'),
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
                 html = pluginTemplate({
                     toolbarName: toolbarName,
@@ -110,10 +111,7 @@
 
             view.$el.empty().append(html);
 
-            // TODO: this code might grow.
-            // If so, make it a method that
-            // operates on the el/$el
-            if (view.model.selected === true) {
+            if (model.selected === true) {
                 view.$el.addClass("selected-plugin");
                 if (view.$displayContainer) { view.$displayContainer.show(); }
             } else {
