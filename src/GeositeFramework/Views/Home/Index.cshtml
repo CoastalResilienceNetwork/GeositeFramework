@@ -51,8 +51,8 @@
 
     <script type="text/template" id="template-sidebar-plugin">
             <a href="#">
-                <img src="/plugins/<%- pluginSrcFolder %>/icon.png">
-                <div><%- toolbarName %></div>
+                <img src="/plugins/<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
+                <div><%- pluginObject.toolbarName %></div>
             </a>
     </script>
 
