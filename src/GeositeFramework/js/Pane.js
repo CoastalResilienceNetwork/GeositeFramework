@@ -79,16 +79,18 @@
     }
 
     function renderPlugins(view) {
-        // for each model, render its view and add them
+        // For each model, render its view and add them
         // to the appropriate plugin section
         var $sidebar = view.$('.plugins'),
             $topbar = view.$('.tools');
 
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
+
             if (toolbarType === 'sidebar') {
                 var pluginView = new N.views.SidebarPlugin({ model: plugin });
                 $sidebar.append(pluginView.render().$el);
+
             } else if (toolbarType === 'map') {
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.render().$el);
@@ -96,6 +98,7 @@
         });
     }
 
+    // TODO: Sidebar links aren't in the prototype - do we have anything for them?
     function renderSidebarLinks(view) {
         var regionData = view.model.get('regionData'),
             linkTemplate = N.app.templates['template-sidebar-link'],
