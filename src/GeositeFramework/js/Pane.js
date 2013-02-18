@@ -7,7 +7,16 @@
     'use strict';
 
     function initializePane(model) {
+        initBasemapSelector(model);
         createPlugins(model);
+    }
+
+    function initBasemapSelector(model) {
+        var basemaps = model.get('regionData').basemaps;
+        model.set('basemapSelector', new N.models.BasemapSelector({
+            basemaps: basemaps,
+            selectedBasemapName: basemaps[0].name
+        }));
     }
 
     function createPlugins(model) {
@@ -65,10 +74,23 @@
 (function (N) {
     'use strict';
 
+    function initialize(view) {
+        renderPane(view);
+        initializeBasemapSelector(view)
+    }
+
+    function initializeBasemapSelector(view) {
+        new Geosite.views.BasemapSelector({
+            model: view.model.get('basemapSelector'),
+            el: view.$('.basemap-selector')
+        });
+    }
+
     function renderPane(view) {
         renderSelf(view);
         renderPlugins(view);
         renderSidebarLinks(view);
+        renderBasemapSelector(view);
         return view;
     }
 
@@ -109,6 +131,9 @@
         });
     }
 
+    function renderBasemapSelector(view) {
+    }
+
     function createMap(view) {
         var regionData = view.model.get('regionData'),
             paneNumber = view.model.get('paneNumber'),
@@ -131,6 +156,7 @@
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
+        initialize: function (view) { initialize(this); },
         render: function () { return renderPane(this); },
         createMap: function () { return createMap(this); }
     });
