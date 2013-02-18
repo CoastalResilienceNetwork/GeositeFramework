@@ -124,10 +124,10 @@
         function attachContainer() {
             var view = this,
                 calculatePosition = function ($el) {
-                    var offset = view.$el.offset(),
+                    var pos = view.$el.position(),
                         gutterWidth = 20,
-                        yCenter = offset.top + $el.height() / 2,
-                        xEdgeWithBuffer = offset.left + $el.width() + gutterWidth;
+                        yCenter = pos.top + $el.height() / 2,
+                        xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
 
                     return {
                         top: yCenter,
