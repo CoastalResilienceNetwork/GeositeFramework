@@ -46,6 +46,15 @@
         </div>
         <div id="map-<%= index %>" class="map">
             <div class="tools"></div>
+			<div class="basemap-selector">
+				<div class="basemap-selector-title">Esri Ocean</div>
+				<div class="basemap-selector-list">
+					<ul>
+						<li>Esri Ocean</li>
+						<li>Esri Terrain</li>
+					</ul>
+				</div>
+			</div>
         </div>
     </script>
 
@@ -102,10 +111,12 @@
     <script src="js/lib/underscore-1.4.3.min.js"></script>
     <script src="js/lib/backbone-0.9.10.min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
+
     <script src="js/Geosite.js"></script>
-    <script src="js/Plugin.js"></script>
-    <script src="js/Pane.js"></script>
+    <script src="js/BasemapSelector.js"></script>
     <script src="js/MapWrapper.js"></script>
+    <script src="js/Pane.js"></script>
+    <script src="js/Plugin.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/App.js"></script>
     <!-- Temporarily hard-code js loading for plugins -->
