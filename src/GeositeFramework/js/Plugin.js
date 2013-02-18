@@ -115,8 +115,10 @@
             // operates on the el/$el
             if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.show(); }
             } else {
                 view.$el.removeClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.hide(); }
             }
             return view;
         }
@@ -125,8 +127,21 @@
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
+            $displayContainer: null,
 
             render: function () { return render(this); },
+            initialize: function sidebarPluginInit() {
+                this.model.on('change:$displayContainer', function attachContainer () {
+                    // The sidebar plugin will attach the plugin display container
+                    // to the pane, from which it's visibility can be toggled on 
+                    // activation/deactivation
+                    this.$displayContainer = this.model.get('$displayContainer');
+                    this.$el.parents('.content').append(this.$displayContainer.hide());
+                    console.log('attached plugin');
+                }, this);
+
+                N.views.BasePlugin.prototype.initialize.call(this);
+            },
 
             handleClick: function handleClick() {
                 
