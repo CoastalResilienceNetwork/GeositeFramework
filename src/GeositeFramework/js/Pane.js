@@ -115,11 +115,9 @@
             $map = view.$('.map'),
             domId = "map" + paneNumber;
         $map.attr("id", domId);
-        var esriMap = new esri.Map(domId, {
-            // center: [-56.049, 38.485],
-            zoom: 4,
-            basemap: "streets"
-        });
+        var esriMap = new esri.Map(domId);
+        var baseMapLayer = new esri.layers.ArcGISTiledMapServiceLayer(regionData.basemaps[0].url);
+        esriMap.addLayer(baseMapLayer);
 
         function resizeMap() {
             esriMap.resize();
