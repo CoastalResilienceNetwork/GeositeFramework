@@ -61,16 +61,23 @@
             view.model.on("selected deselected", function () { view.render(); });
         }
 
-        function handleClick(view) {
-            view.model.toggleUI();
-        }
-
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
             events: {
-                'click': function () { handleClick(this); }
+                'click': 'handleClick'
             },
-            initialize: function () { initialize(this); }
+
+            initialize: function () { initialize(this); },
+
+            /*
+                handleClick is exposed so that it can be overridden by
+                extending classes, which should call the prototype to handle
+                common plugin view click handling
+            */
+            handleClick: function handleClick() {
+                var view = this;
+                view.model.toggleUI();
+            }
         });
     }());
 
@@ -102,7 +109,13 @@
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
+
             render: function () { return render(this); },
+
+            handleClick: function handleClick() {
+                
+                N.views.BasePlugin.prototype.handleClick.call(this);
+            }
         });
     }());
 
