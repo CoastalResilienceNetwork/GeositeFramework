@@ -18,7 +18,9 @@
         */
         function checkPluginCompliance(model) { 
             var pluginObject = model.get('pluginObject');
-            return (_.isFunction(pluginObject.activate) &&
+            return (
+                _.isFunction(pluginObject.initialize) &&
+                _.isFunction(pluginObject.activate) &&
                 _.isFunction(pluginObject.deactivate) &&
                 _.isFunction(pluginObject.getState) &&
                 _.isFunction(pluginObject.destroy))
