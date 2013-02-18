@@ -12,17 +12,30 @@
             _.extend(model, selectable);
         }
 
+        /*
+        Check that the plugin implements the minimal viable interface.
+        Plugin code can just assume the plugin is valid if it has been loaded
+        */
+        function checkPluginCompliance(model) { 
+            var pluginObject = model.get('pluginObject');
+            return (_.isFunction(pluginObject.activate) &&
+                _.isFunction(pluginObject.deactivate) &&
+                _.isFunction(pluginObject.getState) &&
+                _.isFunction(pluginObject.destroy))
+        }
+
         // not currently used, not likely to still be
         // in this class when we implement the feature
         // TODO: remove
         function toggleUI(model) {
             model.set('showingUI', !model.get('showingUI'));
             model.toggleSelected();
-            if (model.selected) {
-                var pluginObject = model.get('pluginObject');
-                if (_.isFunction(pluginObject.activate)) {
-                    pluginObject.activate();
-                }
+
+            var pluginObject = model.get('pluginObject');
+            if (model.selected) {    
+                pluginObject.activate();
+            } else {
+                pluginObject.deactivate();
             }
         }
 
@@ -33,7 +46,8 @@
                 showingUI: false
             },
             toggleUI: function () { toggleUI(this); },
-            initialize: function () { initialize(this); }
+            initialize: function () { initialize(this); },
+            isCompliant: function () { return checkPluginCompliance(this); }
 
         });
 
