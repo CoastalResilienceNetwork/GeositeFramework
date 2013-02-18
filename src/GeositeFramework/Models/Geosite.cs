@@ -19,6 +19,7 @@ namespace GeositeFramework.Models
         }
 
         // Properties used in View rendering
+        public string Organization { get; private set; }
         public string Title { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
         public string RegionDataJson { get; private set; }
@@ -68,7 +69,9 @@ namespace GeositeFramework.Models
             jsonObj.Add("pluginFolderNames", new JArray(pluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
+            Organization = (string)jsonObj["title"];
             Title = (string)jsonObj["title"];
+            
             HeaderLinks = jsonObj["headerLinks"]
                 .Select(j => new Link
                 {

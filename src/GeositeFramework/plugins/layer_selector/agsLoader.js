@@ -39,7 +39,6 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                 // Start loading all folders, keeping "deferred" objects so we know when they're done
                 var deferreds = _.map(folderNames, function (folderName) {
                     return loadFolder(folderName, function (entries) {
-                        console.log("Folder " + folderName + " has " + entries.services.length + " services");
                         // Folder has loaded -- make its node and add its services to "serviceSpecs"
                         var node = makeContainerNode(folderName, "pluginLayerSelector-folder", parentNode);
                         addParentNodeToServiceSpecs(node, entries.services);
@@ -53,7 +52,6 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
             }
 
             function loadFolder(folderName, success) {
-                console.log("Loading folder '" + folderName + "'");
                 return $.ajax({
                     dataType: 'jsonp',
                     url: _baseUrl + (folderName === "" ? "" : "/" + folderName) + '?f=json',
@@ -64,25 +62,21 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
 
             function loadServices(serviceSpecs) {
                 // Start loading all services, keeping "deferred" objects so we know when they're done
-                console.log("Loading " + serviceSpecs.length + " services");
                 var deferreds = _.map(serviceSpecs, loadService);
                 // When all services have loaded, we're done!
                 $.when.apply($, deferreds).then(function () {
-                    console.log("Finished loading layers from " + _baseUrl);
                     _loaded = true;
                 });
             }
 
             function loadService(serviceSpec) {
                 if (serviceSpec.type === "MapServer") {
-                    console.log("Loading service " + serviceSpec.name);
                     var serviceUrl = _baseUrl + "/" + serviceSpec.name + "/MapServer";
                     return $.ajax({
                         dataType: 'jsonp',
                         url: serviceUrl + "?f=json",
                         success: function (serviceData) {
                             // Service has loaded -- make its node and load its layers
-                            console.log("Service " + serviceSpec.name + " has " + serviceData.layers.length + " layers");
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = makeContainerNode(serviceName, "pluginLayerSelector-service", serviceSpec.parentNode);
                             loadLayers(serviceData.layers, node, serviceUrl);

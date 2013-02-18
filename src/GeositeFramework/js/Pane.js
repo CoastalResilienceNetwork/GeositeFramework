@@ -1,4 +1,4 @@
-﻿/*jslint nomen:true, devel:true */
+/*jslint nomen:true, devel:true */
 /*global Backbone, _, $, Geosite*/
 
 // A pane represents the app work area and contains a sidebar and a map
@@ -16,9 +16,12 @@
 
         var plugins = new N.collections.Plugins();
 
-        _.each(N.plugins, function (PluginClass) {
+        _.each(N.plugins, function (PluginClass, i) {
             var pluginObject = new PluginClass(),
-                plugin = new N.models.Plugin({ pluginObject: pluginObject });
+                plugin = new N.models.Plugin({
+                    pluginObject: pluginObject,
+                    pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                });
 
             plugins.add(plugin);
         });
@@ -31,13 +34,14 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, wrappedMap) {
+        var paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
             if (_.isFunction(pluginObject.initialize)) {
                 pluginObject.initialize({
                     app: null,
                     map: wrappedMap,
-                    container: $('#pane1')[0]  // TODO: use plugin-specific DOM element
+                    container: N.app.views.panes[paneNumber].el  // TODO: use plugin-specific DOM element
                 });
             }
         });
@@ -67,7 +71,10 @@
 
     function renderSelf(view) {
         var paneTemplate = N.app.templates['template-pane'],
-            html = paneTemplate();
+            html = paneTemplate({
+                index: view.model.get('paneNumber'),
+                isMain: view.model.get('isMain')
+            });
         view.$el.append(html);
     }
 
@@ -109,6 +116,14 @@
             zoom: 4,
             basemap: "streets"
         });
+
+        function resizeMap() {
+            esriMap.resize();
+            esriMap.reposition();
+        }
+        resizeMap();
+        $(window).on('resize', _.debounce(resizeMap, 300));
+
         return esriMap;
     }
 

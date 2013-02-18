@@ -4,97 +4,56 @@
 
 @model GeositeFramework.Models.Geosite
 
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<!--[if IE 8]>    		<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-    <meta name="viewport" content="width=device-width" />
+	<meta charset="utf-8" />
+	
     <title>Geosite Framework</title>
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <!-- Temporarily hard-code css loading for plugins -->
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/main.css">
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/lib/ext-4.1.1a/resources/css/ext-all.css">
-    <style>
-        /* CSS is temporarily in this file for convenience*/
-        html, body, #page { height: 100%; padding: 0; margin: 0; background-color: #666; font:14px sans-serif; color: white}
-        #page { position: relative; height: 100%; margin: 0 50px;}
-        #header { height:70px; padding: 28px; }
-        #top-links { float:right; }
-        #top-links a { color: white; text-decoration:none; }
-        .pane { position:relative; }
-        .sidebar { position:absolute; left:0; width:107px; top:70px; bottom:10px; background-color:black; }
-        .map { position:absolute; left:107px; right:0; top:70px; bottom:10px; }
-        .plugins { }
-        .sidebar-links { position:absolute; bottom:0; width:100%; }
-        .split-controls { text-align: center; padding-bottom: 10px; width:100%; }
-        div.title { font-size:1.4em; font-weight:bold;}
-        div.sidebar-plugin { border-bottom: 1px solid white; text-align: center;}
-        div.selected-plugin { background-color: gray;}
-        div.sidebar-plugin img { width:42px; height:42px; margin-top: 18px; background-color:gray; }
-        div.sidebar-plugin div { padding: 8px 0 12px 0;}
-        div.sidebar-link { padding: 8px 0 10px 0; border-top: 1px solid white; background-color: #333; text-align: center}
-        div.sidebar-link a { color: white; text-decoration:none; font-size: 11px;}
-        
-        .map .tools {
-            position: absolute;
-            top: 16px;
-            left: 50px;
-        }
-
-        .map .tools .topbar-plugin > div {
-            width: 32px;
-            height: 32px;
-            background-color: white;
-            background-repeat: no-repeat;
-            background-position: 8px 8px;
-            overflow: hidden;
-            border-radius: 4px;
-            float: left;
-            opacity: .65;
-            cursor: pointer;
-            box-shadow: 0 0 12px rgba(0,0,0,.25);
-        }
-    </style>
+      
+	<link rel="stylesheet" href="css/foundation.css">
+	<link rel="stylesheet" href="css/app.css">
+	<script src="js/lib/foundation/modernizr.foundation.js"></script>
 </head>
-<body>
-    <div id="page">
-        <div id="header">
-            <div id="top-links">
 
-                @foreach (var link in Model.HeaderLinks) {
-                    if (link != Model.HeaderLinks.First()) { // Show separator between links
-                        @:&nbsp;&nbsp;|&nbsp;&nbsp;
-                    }
-                    <a class="top-link" href="@link.Url">@link.Text</a>
-                }
 
-            </div>
-            <div class="title">@Model.Title</div>
-        </div>
-        <div id="pane1"></div>
-        <div id="pane2" style="display:none"></div>
-    </div>
+<!-- EX.: view-split, view-left, view-right -->
+<body class="view-split" style="zoom: 0 !important;">
 
     <script type="text/template" id="template-pane">
         <div class="sidebar">
-            <div class="plugins">
-            </div>
-            <div class="sidebar-links">
-                <div class="split-controls">Split | Switch</div>
-                <div class="sidebar-link">
-                    <a href="#">Print this Page</a>
-                </div>
-            </div>
+            <ul class="plugins side-nav twelve top"></ul>
+
+            <ul class="side-nav twelve bottom">
+                <% if (isMain) { %>
+        		    <li><a href="#"><img class="icon" src="img/icons/icon_switch-2_up.png">Switch Maps</a>
+			        <li><a href="#"><img class="icon" src="img/icons/icon_split_up.png">Split View</a>
+                    <li class="divider"></li>
+				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png">Save &amp; Share</a>
+				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png">Print Page</a>
+				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png">Help/Support</a>
+                <% } else { %>
+                    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_unlink-views_up.png">Unlink Maps</a></li>
+                <% } %>
+            </ul>
         </div>
-        <div class="map">
+        <div id="map-<%= index %>" class="map">
             <div class="tools"></div>
         </div>
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-        <img src="/plugins/<%- toolbarName %>/icon.png">
-        <div><%- toolbarName %></div>
+            <a href="#">
+                <img src="/plugins/<%- pluginSrcFolder %>/icon.png">
+                <div><%- toolbarName %></div>
+            </a>
     </script>
 
     <script type="text/template" id="template-sidebar-link">
@@ -102,6 +61,40 @@
             <a href="<%= link.url %>"><%- link.text %></a>
         </div>
     </script>
+
+
+	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
+	<div class="fixed">
+		<nav class="top-bar">
+			<ul>
+				<li class="name">
+					<h1><a href="#">@Model.Organization</a></h1>
+					<h2>@Model.Title</h2>
+				</li>
+				<!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
+				<li class="toggle-topbar"><a href="#"></a></li>
+			</ul>
+			<section>
+				<ul class="right">
+                    @foreach (var link in Model.HeaderLinks) {
+                        if (link != Model.HeaderLinks.First()) { 
+                            <li class="divider"></li>
+                        }
+					    <li><a href="@link.Url">@link.Text</a></li>
+                    }
+				</ul>
+			</section>
+		</nav>
+	</div>
+	
+	<!-- LEFT CONTENT AREA -->
+	<div id="left-pane" class="content"></div>
+	
+	<!-- RIGHT CONTENT AREA -->
+	<div id="right-pane" class="content"></div>
+	
+	<script src="js/lib/foundation/foundation.min.js"></script>
+	<script src="js/lib/foundation/app.js"></script>
 
     <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3compact"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -159,7 +152,7 @@
                 Geosite.app.init(regionData, plugins);
             });
         });
-    </script>
 
+    </script>
 </body>
 </html>

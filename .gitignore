@@ -12,8 +12,8 @@
 \#*\#        # (x)emacs
 
 # Compiled files
-*/bin/
-*/obj/
+src/GeositeFramework/bin/
+src/GeositeFramework/obj/
 */Obj/       # git is case sensitive
 */Generated_Code/
 PrecompiledWeb
