@@ -52,7 +52,8 @@
             isMain: paneConfig.main,
             regionData: regionData
         });
-        N.app.models.panes[pane.index] = pane;
+        N.app.models.panes[paneConfig.index] = pane;
+
         var paneView = new N.views.Pane({
             model: pane,
             el: $(paneConfig.selector)
