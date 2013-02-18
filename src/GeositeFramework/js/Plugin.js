@@ -118,12 +118,12 @@
         function render(view) {
             var model = view.model,
                 toolbarName = model.get('pluginObject').toolbarName,
-                pluginFolder = model.get('pluginSrcFolder'),
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                html = pluginTemplate({
-                    toolbarName: toolbarName,
-                    pluginSrcFolder: pluginFolder
-                });
+                // The plugin icon looks active if the plugin is selected or
+                // active (aka, running but not focused)
+                html = pluginTemplate(_.extend(model.toJSON(), {
+                    selected: model.selected || model.get('active')
+                }));
 
             view.$el.empty().append(html);
 
@@ -156,8 +156,20 @@
             // activation/deactivation
             view.$displayContainer = this.model.get('$displayContainer');
 
-            // Position the dialog next to the sidebar button which shows it
-            view.$displayContainer.css(calculatePosition(this.$el));
+            view.$displayContainer
+                // Position the dialog next to the sidebar button which shows it.
+                .css(calculatePosition(this.$el))
+
+                // Listen for events to turn the plug-in completely off
+                .find('.plugin-off').on('click', function () {
+                    view.model.turnOff()
+                }).end()
+
+                // Unselect the plugin, but keep active
+                .find('.plugin-close').on('click', function () {
+                    view.model.deselect();
+                });
+
             view.$el.parents('.content').append(this.$displayContainer.hide());
         }
 
@@ -174,12 +186,7 @@
                 N.views.BasePlugin.prototype.initialize.call(this);
             },
 
-            render: function renderSidbarPlugin() { return render(this); },
-
-            handleClick: function handleClick() {
-                
-                N.views.BasePlugin.prototype.handleClick.call(this);
-            }
+            render: function renderSidbarPlugin() { return render(this); }
         });
     }());
 
