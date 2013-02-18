@@ -17,13 +17,16 @@
         Plugin code can just assume the plugin is valid if it has been loaded
         */
         function checkPluginCompliance(model) { 
-            var pluginObject = model.get('pluginObject');
-            return (
-                _.isFunction(pluginObject.initialize) &&
-                _.isFunction(pluginObject.activate) &&
-                _.isFunction(pluginObject.deactivate) &&
-                _.isFunction(pluginObject.getState) &&
-                _.isFunction(pluginObject.destroy))
+            var pluginObject = model.get('pluginObject'),
+                noOp = function noOp() { };
+
+            // Ensure that the framework will not fail if a plugin
+            // is missing an optional interface method
+            _.each(['activate', 'deactivate', 'getState', 'destroy'], function (fn) {
+                pluginObject[fn] = pluginObject[fn] || noOp;
+            });
+            
+            return (_.isFunction(pluginObject.initialize));
         }
 
         // not currently used, not likely to still be
