@@ -31,6 +31,7 @@
                 mapWid = fullWid - sideWid - 1;
 
             $('.map').width(mapWid);
+            $(N).trigger('resize');
         }
 
         resizeMap();

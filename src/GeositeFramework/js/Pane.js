@@ -133,11 +133,13 @@
         });
 
         function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified
             esriMap.resize();
             esriMap.reposition();
         }
         resizeMap();
-        $(window).on('resize', _.debounce(resizeMap, 300));
+        $(N).on('resize', resizeMap);
 
         return esriMap;
     }
