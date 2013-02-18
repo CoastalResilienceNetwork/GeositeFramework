@@ -48,7 +48,13 @@
                     // TODO: something better
                     alert("Layers have not finished loading, please try again soon");
                 }
-            }
+            },
+
+            deactivate: function () { },
+
+            getState: function () { },
+
+            destroy: function () { }
 
         });
     }
