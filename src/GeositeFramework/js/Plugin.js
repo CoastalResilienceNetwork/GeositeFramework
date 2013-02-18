@@ -123,25 +123,44 @@
             return view;
         }
 
+        function attachContainer() {
+            var view = this,
+                calculatePosition = function ($el) {
+                    var offset = view.$el.offset(),
+                        gutterWidth = 20,
+                        yCenter = offset.top + $el.height() / 2,
+                        xEdgeWithBuffer = offset.left + $el.width() + gutterWidth;
+
+                    return {
+                        top: yCenter,
+                        left: xEdgeWithBuffer
+                    }
+                };
+
+            // The sidebar plugin will attach the plugin display container
+            // to the pane, from which it's visibility can be toggled on 
+            // activation/deactivation
+            view.$displayContainer = this.model.get('$displayContainer');
+
+            // Position the dialog next to the sidebar button which shows it
+            view.$displayContainer.css(calculatePosition(this.$el));
+            view.$el.parents('.content').append(this.$displayContainer.hide());
+        }
+
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
             $displayContainer: null,
 
-            render: function () { return render(this); },
             initialize: function sidebarPluginInit() {
-                this.model.on('change:$displayContainer', function attachContainer () {
-                    // The sidebar plugin will attach the plugin display container
-                    // to the pane, from which it's visibility can be toggled on 
-                    // activation/deactivation
-                    this.$displayContainer = this.model.get('$displayContainer');
-                    this.$el.parents('.content').append(this.$displayContainer.hide());
-                    console.log('attached plugin');
-                }, this);
+                // Attach the plugin rendering container to the pane
+                this.model.on('change:$displayContainer', attachContainer, this);
 
                 N.views.BasePlugin.prototype.initialize.call(this);
             },
+
+            render: function renderSidbarPlugin() { return render(this); },
 
             handleClick: function handleClick() {
                 
