@@ -39,6 +39,7 @@
             var pluginObject = model.get('pluginObject');
             if (model.selected) {    
                 pluginObject.activate();
+                model.set('active', true);
             } else {
                 pluginObject.deactivate();
             }
@@ -51,8 +52,20 @@
                 showingUI: false
             },
             toggleUI: function () { toggleUI(this); },
+
             initialize: function () { initialize(this); },
-            isCompliant: function () { return checkPluginCompliance(this); }
+
+            isCompliant: function () { return checkPluginCompliance(this); },
+
+            turnOff: function () {
+                var pluginObject = this.get('pluginObject');
+                pluginObject.destroy();
+                this.set({
+                    'showingUI': false,
+                    'active': false
+                });
+                this.deselect();
+            }
 
         });
 
