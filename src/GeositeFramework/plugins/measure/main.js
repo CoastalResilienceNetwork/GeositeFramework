@@ -10,14 +10,6 @@
                 declare.safeMixin(this, args);
             },
 
-            activate: function () { },
-
-            deactivate: function () { },
-
-            getState: function () { },
-
-            destroy: function () { },
-
             renderLauncher: function renderLauncher() {
                 // TODO: Provide as a template when arbitrary config linker
                 // is available.

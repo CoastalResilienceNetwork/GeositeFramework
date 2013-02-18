@@ -7,14 +7,7 @@
             toolbarType: "sidebar",
             initialize: function (args) {
                 declare.safeMixin(this, args);
-            },
-            activate: function () { },
-
-            deactivate: function () { },
-
-            getState: function () { },
-
-            destroy: function () { }
+            }
 
         });
     }
