@@ -90,6 +90,7 @@
 
         function initialize(view) {
             view.model.on("selected deselected", function () { view.render(); });
+            view.render();
         }
 
         N.views = N.views || {};

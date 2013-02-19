@@ -58,22 +58,11 @@
             isMain: paneConfig.main,
             regionData: regionData
         });
-        N.app.models.panes[pane.get('paneNumber')] = pane;
-        var paneView = new N.views.Pane({
+
+        N.app.models.panes[paneConfig.index] = pane;
+        N.app.views.panes[paneConfig.index] = new N.views.Pane({
             model: pane,
             el: $(paneConfig.selector)
-        });
-        N.app.views.panes[paneConfig.index] = paneView;
-
-        // Render the pane, then create the map (which needs a DOM element to live in)
-        paneView.render();
-        var esriMap = paneView.createMap();
-
-        // Wait for the map to load, then initialize the plugins. 
-        // (Otherwise some map properties aren't available, e.g. extent)
-        dojo.connect(esriMap, "onLoad", function () {
-            var wrappedMap = N.createMapWrapper(esriMap);
-            pane.initPlugins(wrappedMap);
         });
     }
 
