@@ -83,18 +83,25 @@
 
     function renderSelf(view) {
         var paneTemplate = N.app.templates['template-pane'],
-            html = paneTemplate({
-                index: view.model.get('paneNumber'),
-                isMain: view.model.get('isMain')
-            });
+            html = paneTemplate(view.model.toJSON());
         view.$el.append(html);
+    }
+
+    function renderSidebar(view) {
+        var sidebarTemplate = N.app.templates['template-sidebar'],
+            html = sidebarTemplate(view.model.toJSON());
+
+        view.$el.find('.side-nav').empty().append(html);
+
+        renderPlugins(view);
+        renderSidebarLinks(view);
     }
 
     function renderPlugins(view) {
         // For each model, render its view and add them
         // to the appropriate plugin section
-        var $sidebar = view.$('.plugins'),
-            $topbar = view.$('.tools');
+        var $sidebar = view.$('.plugins').empty(),
+            $topbar = view.$('.tools').empty();
 
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
