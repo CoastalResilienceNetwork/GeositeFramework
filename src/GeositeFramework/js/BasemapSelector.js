@@ -15,9 +15,11 @@
 (function (N) {
     'use strict';
     function render(view) {
-        _.each(view.model.get('basemaps'), function (basemap) {
-            var $item = $('<li>').append(basemap.name);
-            view.$('.basemap-selector-list ul').add($item);
+        var $container = view.$('.basemap-selector-list ul');
+        var template = N.app.templates['template-basemap-selector-item'];
+        _.each(view.model.get('basemaps'), function (basemap, index) {
+            var data = _.extend({ index: index }, basemap);
+            $container.append(template(data));
         });
         return view;
     }
