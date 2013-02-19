@@ -6,8 +6,17 @@
 (function (N) {
     'use strict';
 
-    function initializePane(model) {
+    function initialize(model) {
+        initMap(model);
         createPlugins(model);
+    }
+
+    function initMap(model) {
+        var regionData = model.get('regionData');
+        model.set('map', new N.models.Map({
+            basemaps: regionData.basemaps,
+            initialExtent: regionData.initialExtent
+        }));
     }
 
     function createPlugins(model) {
@@ -40,9 +49,9 @@
     //     - We need to create plugin objects before rendering (so we can render their toolbar names).
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
-    function initPlugins(model, wrappedMap) {
-        var paneNumber = model.get('paneNumber');
-
+    function initPlugins(model, esriMap) {
+        var wrappedMap = N.createMapWrapper(esriMap),
+            paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject'),
                 // The display container used in the model view will be created
@@ -62,11 +71,14 @@
     N.models = N.models || {};
     N.models.Pane = Backbone.Model.extend({
         defaults: {
-            plugins: null,
-            pluginViews: null
+            paneNumber: 0,
+            isMain: false,
+            regionData: null,
+            map: null,
+            plugins: null
         },
-        initialize: function () { return initializePane(this); },
-        initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
+        initialize: function () { return initialize(this); },
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
     });
 
 }(Geosite));
@@ -74,40 +86,23 @@
 (function (N) {
     'use strict';
 
-    function renderPane(view) {
-        renderSelf(view);
-        renderPlugins(view);
-        renderSidebarLinks(view);
-        return view;
+    function initialize(view) {
+        render(view);
+        initBasemapSelector(view);
+        initMapView(view);
+        initPluginViews(view);
     }
 
-    function renderSelf(view) {
+    function render(view) {
         var paneTemplate = N.app.templates['template-pane'],
             html = paneTemplate({
                 index: view.model.get('paneNumber'),
                 isMain: view.model.get('isMain')
             });
         view.$el.append(html);
-    }
 
-    function renderPlugins(view) {
-        // For each model, render its view and add them
-        // to the appropriate plugin section
-        var $sidebar = view.$('.plugins'),
-            $topbar = view.$('.tools');
-
-        view.model.get('plugins').each(function (plugin) {
-            var toolbarType = plugin.get('pluginObject').toolbarType;
-
-            if (toolbarType === 'sidebar') {
-                var pluginView = new N.views.SidebarPlugin({ model: plugin });
-                $sidebar.append(pluginView.render().$el);
-
-            } else if (toolbarType === 'map') {
-                var pluginView = new N.views.TopbarPlugin({ model: plugin });
-                $topbar.append(pluginView.render().$el);
-            }
-        });
+        renderSidebarLinks(view);
+        return view;
     }
 
     // TODO: Sidebar links aren't in the prototype - do we have anything for them?
@@ -121,33 +116,49 @@
         });
     }
 
-    function createMap(view) {
-        var paneNumber = view.model.get('paneNumber'),
-            $map = view.$('.map'),
-            domId = "map" + paneNumber;
-        $map.attr("id", domId);
-        var esriMap = new esri.Map(domId, {
-            // center: [-56.049, 38.485],
-            zoom: 4,
-            basemap: "streets"
+    function initBasemapSelector(view) {
+        new Geosite.views.BasemapSelector({
+            model: view.model.get('map'),
+            el: view.$('.basemap-selector')
+        });
+    }
+
+    function initMapView(view) {
+        var mapView = new Geosite.views.Map({
+            model: view.model.get('map'),
+            el: view.$('.map'),
+            paneNumber: view.model.get('paneNumber')
         });
 
-        function resizeMap() {
-            // When the element containing the map resizes, the 
-            // map needs to be notified
-            esriMap.resize();
-            esriMap.reposition();
-        }
-        resizeMap();
-        $(N).on('resize', resizeMap);
+        // Wait for the map to load, then initialize the plugins. 
+        // (Otherwise some map properties aren't available, e.g. extent)
+        var esriMap = mapView.esriMap;
+        dojo.connect(esriMap, "onLoad", function () {
+            view.model.initPlugins(esriMap);
+        });
+    }
 
-        return esriMap;
+    function initPluginViews(view) {
+        // create a view for each plugin model (it will render), and add its element
+        // to the appropriate plugin section
+        var $sidebar = view.$('.plugins'),
+            $topbar = view.$('.tools');
+
+        view.model.get('plugins').each(function (plugin) {
+            var toolbarType = plugin.get('pluginObject').toolbarType;
+            if (toolbarType === 'sidebar') {
+                var pluginView = new N.views.SidebarPlugin({ model: plugin });
+                $sidebar.append(pluginView.$el);
+            } else if (toolbarType === 'map') {
+                var pluginView = new N.views.TopbarPlugin({ model: plugin });
+                $topbar.append(pluginView.$el);
+            }
+        });
     }
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        render: function () { return renderPane(this); },
-        createMap: function () { return createMap(this); }
+        initialize: function (view) { initialize(this); }
     });
 
 }(Geosite));
