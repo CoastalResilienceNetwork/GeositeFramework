@@ -77,9 +77,9 @@
 
     function initialize(view) {
         render(view);
+        initBasemapSelector(view);
         initMapView(view);
         initPluginViews(view);
-        initBasemapSelector(view);
     }
 
     function render(view) {
@@ -101,6 +101,13 @@
         _.each(regionData.sidebarLinks, function (link) {
             var html = linkTemplate({ link: link });
             $links.append(html);
+        });
+    }
+
+    function initBasemapSelector(view) {
+        new Geosite.views.BasemapSelector({
+            model: view.model.get('map'),
+            el: view.$('.basemap-selector')
         });
     }
 
@@ -134,13 +141,6 @@
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.$el);
             }
-        });
-    }
-
-    function initBasemapSelector(view) {
-        new Geosite.views.BasemapSelector({
-            model: view.model.get('map'),
-            el: view.$('.basemap-selector')
         });
     }
 
