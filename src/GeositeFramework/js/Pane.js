@@ -67,7 +67,7 @@
             plugins: null
         },
         initialize: function () { return initialize(this); },
-        initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
     });
 
 }(Geosite));
