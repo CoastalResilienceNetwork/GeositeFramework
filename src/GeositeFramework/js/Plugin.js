@@ -59,6 +59,7 @@
 
         function initialize(view) {
             view.model.on("selected deselected", function () { view.render(); });
+            view.render();
         }
 
         function handleClick(view) {

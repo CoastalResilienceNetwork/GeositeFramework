@@ -6,16 +6,16 @@
 (function (N) {
     'use strict';
 
-    function initializePane(model) {
-        initBasemapSelector(model);
+    function initialize(model) {
+        initMap(model);
         createPlugins(model);
     }
 
-    function initBasemapSelector(model) {
-        var basemaps = model.get('regionData').basemaps;
-        model.set('basemapSelector', new N.models.BasemapSelector({
-            basemaps: basemaps,
-            selectedBasemapName: basemaps[0].name
+    function initMap(model) {
+        var regionData = model.get('regionData');
+        model.set('map', new N.models.Map({
+            basemaps: regionData.basemaps,
+            initialExtent: regionData.initialExtent
         }));
     }
 
@@ -42,8 +42,9 @@
     //     - We need to create plugin objects before rendering (so we can render their toolbar names).
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
-    function initPlugins(model, wrappedMap) {
-        var paneNumber = model.get('paneNumber');
+    function initPlugins(model, esriMap) {
+        var wrappedMap = N.createMapWrapper(esriMap),
+            paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject');
             if (_.isFunction(pluginObject.initialize)) {
@@ -62,10 +63,10 @@
             paneNumber: 0,
             isMain: false,
             regionData: null,
-            basemapSelector: null,
+            map: null,
             plugins: null
         },
-        initialize: function () { return initializePane(this); },
+        initialize: function () { return initialize(this); },
         initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
     });
 
@@ -75,50 +76,22 @@
     'use strict';
 
     function initialize(view) {
-        renderPane(view);
-        initializeBasemapSelector(view)
+        render(view);
+        initMapView(view);
+        initPluginViews(view);
+        initBasemapSelector(view);
     }
 
-    function initializeBasemapSelector(view) {
-        new Geosite.views.BasemapSelector({
-            model: view.model.get('basemapSelector'),
-            el: view.$('.basemap-selector')
-        });
-    }
-
-    function renderPane(view) {
-        renderSelf(view);
-        renderPlugins(view);
-        renderSidebarLinks(view);
-        renderBasemapSelector(view);
-        return view;
-    }
-
-    function renderSelf(view) {
+    function render(view) {
         var paneTemplate = N.app.templates['template-pane'],
             html = paneTemplate({
                 index: view.model.get('paneNumber'),
                 isMain: view.model.get('isMain')
             });
         view.$el.append(html);
-    }
 
-    function renderPlugins(view) {
-        // for each model, render its view and add them
-        // to the appropriate plugin section
-        var $sidebar = view.$('.plugins'),
-            $topbar = view.$('.tools');
-
-        view.model.get('plugins').each(function (plugin) {
-            var toolbarType = plugin.get('pluginObject').toolbarType;
-            if (toolbarType === 'sidebar') {
-                var pluginView = new N.views.SidebarPlugin({ model: plugin });
-                $sidebar.append(pluginView.render().$el);
-            } else if (toolbarType === 'map') {
-                var pluginView = new N.views.TopbarPlugin({ model: plugin });
-                $topbar.append(pluginView.render().$el);
-            }
-        });
+        renderSidebarLinks(view);
+        return view;
     }
 
     function renderSidebarLinks(view) {
@@ -131,34 +104,49 @@
         });
     }
 
-    function renderBasemapSelector(view) {
+    function initMapView(view) {
+        var mapView = new Geosite.views.Map({
+            model: view.model.get('map'),
+            el: view.$('.map'),
+            paneNumber: view.model.get('paneNumber')
+        });
+
+        // Wait for the map to load, then initialize the plugins. 
+        // (Otherwise some map properties aren't available, e.g. extent)
+        var esriMap = mapView.esriMap;
+        dojo.connect(esriMap, "onLoad", function () {
+            view.model.initPlugins(esriMap);
+        });
     }
 
-    function createMap(view) {
-        var regionData = view.model.get('regionData'),
-            paneNumber = view.model.get('paneNumber'),
-            $map = view.$('.map'),
-            domId = "map" + paneNumber;
-        $map.attr("id", domId);
-        var esriMap = new esri.Map(domId);
-        var baseMapLayer = new esri.layers.ArcGISTiledMapServiceLayer(regionData.basemaps[0].url);
-        esriMap.addLayer(baseMapLayer);
+    function initPluginViews(view) {
+        // create a view for each plugin model (it will render), and add its element
+        // to the appropriate plugin section
+        var $sidebar = view.$('.plugins'),
+            $topbar = view.$('.tools');
 
-        function resizeMap() {
-            esriMap.resize();
-            esriMap.reposition();
-        }
-        resizeMap();
-        $(window).on('resize', _.debounce(resizeMap, 300));
+        view.model.get('plugins').each(function (plugin) {
+            var toolbarType = plugin.get('pluginObject').toolbarType;
+            if (toolbarType === 'sidebar') {
+                var pluginView = new N.views.SidebarPlugin({ model: plugin });
+                $sidebar.append(pluginView.$el);
+            } else if (toolbarType === 'map') {
+                var pluginView = new N.views.TopbarPlugin({ model: plugin });
+                $topbar.append(pluginView.$el);
+            }
+        });
+    }
 
-        return esriMap;
+    function initBasemapSelector(view) {
+        new Geosite.views.BasemapSelector({
+            model: view.model.get('map'),
+            el: view.$('.basemap-selector')
+        });
     }
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        initialize: function (view) { initialize(this); },
-        render: function () { return renderPane(this); },
-        createMap: function () { return createMap(this); }
+        initialize: function (view) { initialize(this); }
     });
 
 }(Geosite));
