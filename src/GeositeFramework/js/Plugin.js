@@ -12,17 +12,36 @@
             _.extend(model, selectable);
         }
 
+        /*
+        Check that the plugin implements the minimal viable interface.
+        Plugin code can just assume the plugin is valid if it has been loaded
+        */
+        function checkPluginCompliance(model) { 
+            var pluginObject = model.get('pluginObject'),
+                noOp = function noOp() { };
+
+            // Ensure that the framework will not fail if a plugin
+            // is missing an optional interface method
+            _.each(['activate', 'deactivate', 'getState', 'destroy'], function (fn) {
+                pluginObject[fn] = pluginObject[fn] || noOp;
+            });
+            
+            return (_.isFunction(pluginObject.initialize));
+        }
+
         // not currently used, not likely to still be
         // in this class when we implement the feature
         // TODO: remove
         function toggleUI(model) {
             model.set('showingUI', !model.get('showingUI'));
             model.toggleSelected();
-            if (model.selected) {
-                var pluginObject = model.get('pluginObject');
-                if (_.isFunction(pluginObject.activate)) {
-                    pluginObject.activate();
-                }
+
+            var pluginObject = model.get('pluginObject');
+            if (model.selected) {    
+                pluginObject.activate();
+                model.set('active', true);
+            } else {
+                pluginObject.deactivate();
             }
         }
 
@@ -33,8 +52,20 @@
                 showingUI: false
             },
             toggleUI: function () { toggleUI(this); },
-            initialize: function () { initialize(this); }
 
+            initialize: function () { initialize(this); },
+
+            isCompliant: function () { return checkPluginCompliance(this); },
+
+            turnOff: function () {
+                var pluginObject = this.get('pluginObject');
+                pluginObject.destroy();
+                this.set({
+                    'showingUI': false,
+                    'active': false
+                });
+                this.deselect();
+            }
         });
 
     }());
@@ -61,48 +92,100 @@
             view.model.on("selected deselected", function () { view.render(); });
         }
 
-        function handleClick(view) {
-            view.model.toggleUI();
-        }
-
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
             events: {
-                'click': function () { handleClick(this); }
+                'click': 'handleClick'
             },
-            initialize: function () { initialize(this); }
+
+            initialize: function () { initialize(this); },
+
+            /*
+                handleClick is exposed so that it can be overridden by
+                extending classes, which should call the prototype to handle
+                common plugin view click handling
+            */
+            handleClick: function handleClick() {
+                var view = this;
+                view.model.toggleUI();
+            }
         });
     }());
 
     (function sidebarPlugin() {
 
         function render(view) {
-            var toolbarName = view.model.get('pluginObject').toolbarName,
-                pluginFolder = view.model.get('pluginSrcFolder'),
+            var model = view.model,
+                toolbarName = model.get('pluginObject').toolbarName,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                html = pluginTemplate({
-                    toolbarName: toolbarName,
-                    pluginSrcFolder: pluginFolder
-                });
+                // The plugin icon looks active if the plugin is selected or
+                // active (aka, running but not focused)
+                html = pluginTemplate(_.extend(model.toJSON(), {
+                    selected: model.selected || model.get('active')
+                }));
 
             view.$el.empty().append(html);
 
-            // TODO: this code might grow.
-            // If so, make it a method that
-            // operates on the el/$el
-            if (view.model.selected === true) {
+            if (model.selected === true) {
                 view.$el.addClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.show(); }
             } else {
                 view.$el.removeClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.hide(); }
             }
             return view;
+        }
+
+        function attachContainer() {
+            var view = this,
+                calculatePosition = function ($el) {
+                    var pos = view.$el.position(),
+                        gutterWidth = 20,
+                        yCenter = pos.top + $el.height() / 2,
+                        xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
+
+                    return {
+                        top: yCenter,
+                        left: xEdgeWithBuffer
+                    }
+                };
+
+            // The sidebar plugin will attach the plugin display container
+            // to the pane, from which it's visibility can be toggled on 
+            // activation/deactivation
+            view.$displayContainer = this.model.get('$displayContainer');
+
+            view.$displayContainer
+                // Position the dialog next to the sidebar button which shows it.
+                .css(calculatePosition(this.$el))
+
+                // Listen for events to turn the plug-in completely off
+                .find('.plugin-off').on('click', function () {
+                    view.model.turnOff()
+                }).end()
+
+                // Unselect the plugin, but keep active
+                .find('.plugin-close').on('click', function () {
+                    view.model.deselect();
+                });
+
+            view.$el.parents('.content').append(this.$displayContainer.hide());
         }
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
-            render: function () { return render(this); },
+            $displayContainer: null,
+
+            initialize: function sidebarPluginInit() {
+                // Attach the plugin rendering container to the pane
+                this.model.on('change:$displayContainer', attachContainer, this);
+
+                N.views.BasePlugin.prototype.initialize.call(this);
+            },
+
+            render: function renderSidbarPlugin() { return render(this); }
         });
     }());
 
