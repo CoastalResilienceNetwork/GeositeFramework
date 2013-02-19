@@ -63,7 +63,9 @@
     N.models.Pane = Backbone.Model.extend({
         defaults: {
             plugins: null,
-            pluginViews: null
+            pluginViews: null,
+            isMain: false,
+            splitView: false
         },
         initialize: function () { return initializePane(this); },
         initPlugins: function (wrappedMap) { return initPlugins(this, wrappedMap); }
@@ -76,8 +78,7 @@
 
     function renderPane(view) {
         renderSelf(view);
-        renderPlugins(view);
-        renderSidebarLinks(view);
+        renderSidebar(view);
         return view;
     }
 
@@ -153,8 +154,46 @@
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
+        $body: $('body'),
+
+        initialize: function initPaneView() {
+            this.model.on('change:isMain, change:splitView', this.renderSidebar, this);
+        },
+
         render: function () { return renderPane(this); },
-        createMap: function () { return createMap(this); }
+
+        renderSidebar: function() {return renderSidebar(this);}, 
+
+        createMap: function () { return createMap(this); },
+
+        events: {
+            'click .split-screen': 'splitScreen',
+            'click .switch-screen': 'switchScreenFocus'
+        },
+
+        switchScreenFocus: function switchScreen() {
+
+        },
+
+        splitScreen: function splitScreen() {
+            // Align the body classes to be in split-screen mode
+            this.$body.addClass('view-split')
+                .removeClass('view-left view-right');
+
+            _.each(N.app.models.panes, function (pane) {
+                var isMainPane = false;
+                if (pane.get('paneNumber') === 0) {
+                    isMainPane = true;
+                }
+                pane.set({
+                    'splitView': true,
+                    'isMain': isMainPane
+                });
+            });
+
+            // The maps need to adjust to the new layout size
+            $(window).trigger('resize');
+        }
     });
 
 }(Geosite));
