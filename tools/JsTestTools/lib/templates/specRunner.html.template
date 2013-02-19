@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Test Runner</title>
+  <link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
+
+  <!-- load framework code and libraries -->
+  <script type="text/javascript" src="lib/jquery/jquery-1.6.1.min.js"></script>
+
+  <!-- load test tools -->
+  <script type="text/javascript" src="lib/jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine/jasmine-html.js"></script>
+  <script type="text/javascript" src="lib/jasmine-jquery/jasmine-jquery-1.2.0.js"></script>
+  <script type="text/javascript" src="lib/jasmine-reporters/jasmine.junit_reporter.js"></script>
+  <script type="text/javascript" src="lib/azavea-jasmine/azavea.jasmine.matchers.js"></script>
+  <script>
+    if (location.hash === '#testem')
+      document.write('<script src="/testem.js"></'+'script>')
+  </script>
+  <!-- load application source files -->
+
+  <!-- load test spec files -->
+
+</head>
+<body>
+
+<script type="text/javascript">
+  jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+  // The test output, by default, is created in the same directory as phantomjs-testrunner.js
+  // unless a path is passed into the JUnitXmlReport 'constructor'
+  jasmine.getEnv().addReporter(new jasmine.JUnitXmlReporter('output/'));
+  jasmine.getEnv().execute();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+#!/bin/sh
+ORIGINAL_PATH="$(pwd)"
+cd "$(dirname $0)"
+# Absolute Path to the bin Dir
+BIN_PATH="$(pwd)"
+
+cd "${BIN_PATH}"
+
+/usr/bin/env python runPhantom.py ..
+cd "${ORIGINAL_PATH}"
