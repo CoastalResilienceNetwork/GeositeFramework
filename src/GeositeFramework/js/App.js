@@ -23,6 +23,9 @@
         init: function initializeApp(regionData, pluginClasses) {
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
+
+            // Only create the first visible pane at startup.  The
+            // additional pane will be created when it is requested
             this.createPane(0);
             initializeMaps();
         },
