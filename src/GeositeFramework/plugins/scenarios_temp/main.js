@@ -8,6 +8,7 @@
             initialize: function (args) {
                 declare.safeMixin(this, args);
             }
+
         });
     }
 );

@@ -32,7 +32,14 @@
                     pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
                 });
 
-            plugins.add(plugin);
+            // Load plugin only if it passes a compliance check
+            if (plugin.isCompliant()) {
+                plugins.add(plugin);
+            } else {
+                console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' + 
+                    pluginObject.toolbarName +
+                    ' is not loaded due to improper interface');
+            }
         });
 
         model.set('plugins', plugins);
@@ -46,14 +53,18 @@
         var wrappedMap = N.createMapWrapper(esriMap),
             paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
-            var pluginObject = pluginModel.get('pluginObject');
-            if (_.isFunction(pluginObject.initialize)) {
-                pluginObject.initialize({
-                    app: null,
-                    map: wrappedMap,
-                    container: N.app.views.panes[paneNumber].el  // TODO: use plugin-specific DOM element
-                });
-            }
+            var pluginObject = pluginModel.get('pluginObject'),
+                // The display container used in the model view will be created
+                // here so the plugin object can be constructed with a reference
+                // to it.
+                $displayContainer = $(N.app.templates['template-plugin-container']().trim());
+
+            pluginModel.set('$displayContainer', $displayContainer);
+            pluginObject.initialize({
+                app: null,
+                map: wrappedMap,
+                container: $displayContainer[0]  
+            });
         });
     }
 
@@ -92,8 +103,11 @@
 
         renderSidebarLinks(view);
         return view;
+
+
     }
 
+    // TODO: Sidebar links aren't in the prototype - do we have anything for them?
     function renderSidebarLinks(view) {
         var regionData = view.model.get('regionData'),
             linkTemplate = N.app.templates['template-sidebar-link'],

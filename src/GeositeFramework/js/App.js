@@ -22,11 +22,16 @@
 
     function initializeMaps() {
         function resizeMap() {
+            // Calculate the new width of the map, which is the size of the
+            // container - the size of the sidebar.  Take 1 pixel off that 
+            // result to make sure there isn't a rounding problem which pushes
+            // the map off the container by being 1 pixel to wide
             var sideWid = $('.sidebar').width(),
                 fullWid = $('.content').width(),
-                mapWid = fullWid - sideWid;
+                mapWid = fullWid - sideWid - 1;
 
             $('.map').width(mapWid);
+            $(N).trigger('resize');
         }
 
         resizeMap();

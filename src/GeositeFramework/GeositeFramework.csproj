@@ -126,7 +126,30 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\app.css" />
+    <Content Include="css\foundation.css" />
+    <Content Include="css\foundation.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="img\foundation\orbit\bullets.jpg" />
+    <Content Include="img\foundation\orbit\left-arrow-small.png" />
+    <Content Include="img\foundation\orbit\left-arrow.png" />
+    <Content Include="img\foundation\orbit\loading.gif" />
+    <Content Include="img\foundation\orbit\mask-black.png" />
+    <Content Include="img\foundation\orbit\pause-black.png" />
+    <Content Include="img\foundation\orbit\right-arrow-small.png" />
+    <Content Include="img\foundation\orbit\right-arrow.png" />
+    <Content Include="img\foundation\orbit\rotator-black.png" />
+    <Content Include="img\foundation\orbit\timer-black.png" />
+    <Content Include="img\icons\icon_help-support_up.png" />
+    <Content Include="img\icons\icon_link-views_up.png" />
+    <Content Include="img\icons\icon_print_up.png" />
+    <Content Include="img\icons\icon_share_up.png" />
+    <Content Include="img\icons\icon_split_up.png" />
+    <Content Include="img\icons\icon_switch-1_up.png" />
+    <Content Include="img\icons\icon_switch-2_up.png" />
+    <Content Include="img\icons\icon_unlink-views_up.png" />
+    <Content Include="img\tools_measure.png" />
+    <Content Include="img\tools_search.png" />
     <Content Include="js\App.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
@@ -159,6 +182,11 @@
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="img\foundation\orbit\Thumbs.db" />
+    <Content Include="img\icons\Thumbs.db" />
+    <Content Include="img\Thumbs.db" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -188,6 +216,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
