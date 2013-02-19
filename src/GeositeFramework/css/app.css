@@ -99,8 +99,8 @@ h1, h2, h3, h4, h5, h6 {
    Content Area - Helpers
 ----------------------------------------- */
 	
-.view-left .content.left-pane,
-.view-right .content.right-pane,
+.view-left #left-pane,
+.view-right #right-pane,
 .view-split .content {
 	display: block;
 }
