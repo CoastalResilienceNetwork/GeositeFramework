@@ -42,15 +42,20 @@
 
     function initPlugins(model, wrappedMap) {
         var paneNumber = model.get('paneNumber');
+
         model.get('plugins').each(function (pluginModel) {
-            var pluginObject = pluginModel.get('pluginObject');
-            if (_.isFunction(pluginObject.initialize)) {
-                pluginObject.initialize({
-                    app: null,
-                    map: wrappedMap,
-                    container: N.app.views.panes[paneNumber].el  // TODO: use plugin-specific DOM element
-                });
-            }
+            var pluginObject = pluginModel.get('pluginObject'),
+                // The display container used in the model view will be created
+                // here so the plugin object can be constructed with a reference
+                // to it.
+                $displayContainer = $(N.app.templates['template-plugin-container']().trim());
+
+            pluginModel.set('$displayContainer', $displayContainer);
+            pluginObject.initialize({
+                app: null,
+                map: wrappedMap,
+                container: $displayContainer[0]  
+            });
         });
     }
 
@@ -128,11 +133,13 @@
         });
 
         function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified
             esriMap.resize();
             esriMap.reposition();
         }
         resizeMap();
-        $(window).on('resize', _.debounce(resizeMap, 300));
+        $(N).on('resize', resizeMap);
 
         return esriMap;
     }

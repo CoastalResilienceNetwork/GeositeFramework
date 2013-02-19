@@ -8,17 +8,6 @@
 :: Media Queries
 */
 
-/*-----------------------------
-    HACK!  EXTJS mega div needs to be absolute until the element is
-    sitting in a provided div container.  Currently it's just floating
-    in a pane.  // REMOVE
--------------------------------*/
-.content div.x-panel
-{
-    position: absolute;
-}
-
-
 /* -----------------------------------------
    Shared Styles
 ----------------------------------------- */
@@ -35,6 +24,13 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
 }
 
+/*------------------------------------------
+    EXT Style "adjustements"
+------------------------------------------*/
+.x-grid-cell
+{
+    padding: 0px;
+}
 
 /* -----------------------------------------
    Top Bar Styling
@@ -114,6 +110,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content {
+    position: relative;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
@@ -185,6 +182,24 @@ h1, h2, h3, h4, h5, h6 {
 			color: transparent;
 		}
 
+    .content .plugin-container
+    {
+        position: absolute;
+        border: 5px gray solid;
+        border-radius: 5px;
+        width: 300px;
+        height: 400px;
+        overflow: auto;
+        background: #FFFFFF;
+    }
+        .content .plugin-container-header
+        {
+            float: right;
+        }
+            .content .plugin-container-header a
+            {
+                padding: 5px;
+            }
 
 /* -----------------------------------------
    Content Area - Map

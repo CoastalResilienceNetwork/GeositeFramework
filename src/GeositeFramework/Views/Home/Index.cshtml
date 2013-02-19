@@ -51,8 +51,8 @@
 
     <script type="text/template" id="template-sidebar-plugin">
             <a href="#">
-                <img src="plugins/<%- pluginSrcFolder %>/icon.png">
-                <div><%- toolbarName %></div>
+                <img src="/plugins/<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
+                <div><%- pluginObject.toolbarName %></div>
             </a>
     </script>
 
@@ -62,6 +62,13 @@
         </div>
     </script>
 
+    <script type="text/template" id="template-plugin-container">
+        <div class="plugin-container">
+            <div class="plugin-container-header">
+                <a class="plugin-close" href="#">Close</a><a class="plugin-off" href="#">Turn Off</a>
+            </div>
+        </div>
+    </script>
 
 	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
 	<div class="fixed">

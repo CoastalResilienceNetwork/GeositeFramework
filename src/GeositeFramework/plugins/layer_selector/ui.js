@@ -11,17 +11,13 @@ define([], //"./ext-4.1.1a_full/ext-all"],
             var tree = Ext.create('Ext.tree.Panel', {
                 store: store,
                 rootVisible: false,
-                height: 2000,
                 autoScroll: true,
-                title: 'Map Layers',
-                x: 100,
-                y: 100,
                 renderTo: domElement,
-                width: 300,
-                height: 240,
-                resizable: true,
-                collapsible: true,
+                resizable: false,
+                collapsible: false,
                 autoScroll: true,
+                height: '100%',
+                width: '100%'
             });
             tree.show();
         }

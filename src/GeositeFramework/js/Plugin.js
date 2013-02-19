@@ -17,11 +17,16 @@
         Plugin code can just assume the plugin is valid if it has been loaded
         */
         function checkPluginCompliance(model) { 
-            var pluginObject = model.get('pluginObject');
-            return (_.isFunction(pluginObject.activate) &&
-                _.isFunction(pluginObject.deactivate) &&
-                _.isFunction(pluginObject.getState) &&
-                _.isFunction(pluginObject.destroy))
+            var pluginObject = model.get('pluginObject'),
+                noOp = function noOp() { };
+
+            // Ensure that the framework will not fail if a plugin
+            // is missing an optional interface method
+            _.each(['activate', 'deactivate', 'getState', 'destroy'], function (fn) {
+                pluginObject[fn] = pluginObject[fn] || noOp;
+            });
+            
+            return (_.isFunction(pluginObject.initialize));
         }
 
         // not currently used, not likely to still be
@@ -34,6 +39,7 @@
             var pluginObject = model.get('pluginObject');
             if (model.selected) {    
                 pluginObject.activate();
+                model.set('active', true);
             } else {
                 pluginObject.deactivate();
             }
@@ -46,9 +52,20 @@
                 showingUI: false
             },
             toggleUI: function () { toggleUI(this); },
-            initialize: function () { initialize(this); },
-            isCompliant: function () { return checkPluginCompliance(this); }
 
+            initialize: function () { initialize(this); },
+
+            isCompliant: function () { return checkPluginCompliance(this); },
+
+            turnOff: function () {
+                var pluginObject = this.get('pluginObject');
+                pluginObject.destroy();
+                this.set({
+                    'showingUI': false,
+                    'active': false
+                });
+                this.deselect();
+            }
         });
 
     }());
@@ -98,38 +115,77 @@
     (function sidebarPlugin() {
 
         function render(view) {
-            var toolbarName = view.model.get('pluginObject').toolbarName,
-                pluginFolder = view.model.get('pluginSrcFolder'),
+            var model = view.model,
+                toolbarName = model.get('pluginObject').toolbarName,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
-                html = pluginTemplate({
-                    toolbarName: toolbarName,
-                    pluginSrcFolder: pluginFolder
-                });
+                // The plugin icon looks active if the plugin is selected or
+                // active (aka, running but not focused)
+                html = pluginTemplate(_.extend(model.toJSON(), {
+                    selected: model.selected || model.get('active')
+                }));
 
             view.$el.empty().append(html);
 
-            // TODO: this code might grow.
-            // If so, make it a method that
-            // operates on the el/$el
-            if (view.model.selected === true) {
+            if (model.selected === true) {
                 view.$el.addClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.show(); }
             } else {
                 view.$el.removeClass("selected-plugin");
+                if (view.$displayContainer) { view.$displayContainer.hide(); }
             }
             return view;
+        }
+
+        function attachContainer() {
+            var view = this,
+                calculatePosition = function ($el) {
+                    var pos = view.$el.position(),
+                        gutterWidth = 20,
+                        yCenter = pos.top + $el.height() / 2,
+                        xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
+
+                    return {
+                        top: yCenter,
+                        left: xEdgeWithBuffer
+                    }
+                };
+
+            // The sidebar plugin will attach the plugin display container
+            // to the pane, from which it's visibility can be toggled on 
+            // activation/deactivation
+            view.$displayContainer = this.model.get('$displayContainer');
+
+            view.$displayContainer
+                // Position the dialog next to the sidebar button which shows it.
+                .css(calculatePosition(this.$el))
+
+                // Listen for events to turn the plug-in completely off
+                .find('.plugin-off').on('click', function () {
+                    view.model.turnOff()
+                }).end()
+
+                // Unselect the plugin, but keep active
+                .find('.plugin-close').on('click', function () {
+                    view.model.deselect();
+                });
+
+            view.$el.parents('.content').append(this.$displayContainer.hide());
         }
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
+            $displayContainer: null,
 
-            render: function () { return render(this); },
+            initialize: function sidebarPluginInit() {
+                // Attach the plugin rendering container to the pane
+                this.model.on('change:$displayContainer', attachContainer, this);
 
-            handleClick: function handleClick() {
-                
-                N.views.BasePlugin.prototype.handleClick.call(this);
-            }
+                N.views.BasePlugin.prototype.initialize.call(this);
+            },
+
+            render: function renderSidbarPlugin() { return render(this); }
         });
     }());
 
