@@ -6,6 +6,7 @@
 (function (N) {
     'use strict';
     function initialize(view) {
+        // When the map's selected basemap changes, update the title element in the DOM
         view.model.on('change:selectedBasemapIndex', function () {
             var name = view.model.getSelectedBasemapName();
             view.$('.basemap-selector-title').text(name);
@@ -17,6 +18,7 @@
         var $container = view.$('.basemap-selector-list ul');
         var template = N.app.templates['template-basemap-selector-item'];
         _.each(view.model.get('basemaps'), function (basemap, index) {
+            // Augment basemap data with 'index' to feed the DOM item's data-index attribute
             var data = _.extend({ index: index }, basemap);
             $container.append(template(data));
         });
@@ -24,6 +26,7 @@
     }
 
     function onItemClicked(view, e) {
+        // DOM element's 'data-index' attribute tells us which item was clicked
         var index = $(e.currentTarget).data("index");
         view.model.set('selectedBasemapIndex', index);
     }

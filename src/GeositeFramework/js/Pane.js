@@ -103,8 +103,6 @@
 
         renderSidebarLinks(view);
         return view;
-
-
     }
 
     // TODO: Sidebar links aren't in the prototype - do we have anything for them?

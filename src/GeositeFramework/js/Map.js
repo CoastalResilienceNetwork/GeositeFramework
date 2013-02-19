@@ -5,9 +5,10 @@
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
+        // Return an ESRI layer object for the currently-selected basemap spec
         var basemap = getSelectedBasemap(model);
         if (basemap.layer === undefined) {
-            // basemap has no layer yet, so make one and cache it
+            // This basemap has no layer yet, so make one and cache it
             basemap.layer = new esri.layers.ArcGISTiledMapServiceLayer(basemap.url);
             esriMap.addLayer(basemap.layer);
         }
@@ -15,6 +16,7 @@
     }
 
     function getSelectedBasemap(model) {
+        // Return the selected basemap spec, after validation
         var basemaps = model.get('basemaps'),
         selectedBasemapIndex = model.get('selectedBasemapIndex'),
         valid = basemaps !== null &&
@@ -53,10 +55,11 @@
     }
 
     function createMap(view) {
+        // To make an ESRI map object we need a unique DOM id.
+        // Construct the id using my pane's number
         var domId = "map" + view.options.paneNumber;
         view.$el.attr("id", domId);
         var esriMap = new esri.Map(domId);
-        N.map = esriMap;
 
         var x = view.model.get('initialExtent');
         esriMap.setExtent(new esri.geometry.Extent(x[0], x[1], x[2], x[3], new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })));
@@ -73,9 +76,11 @@
     }
 
     function selectBasemap(view) {
+        // Hide the current basemap layer
         if (view.currentBasemapLayer !== undefined) {
             view.currentBasemapLayer.hide();
         }
+        // Show the new basemap layer (at index 0)
         view.currentBasemapLayer = view.model.getSelectedBasemapLayer(view.esriMap);
         view.currentBasemapLayer.show();
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
