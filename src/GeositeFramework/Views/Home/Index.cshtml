@@ -50,8 +50,6 @@
 				<div class="basemap-selector-title">Esri Ocean</div>
 				<div class="basemap-selector-list">
 					<ul>
-						<li>Esri Ocean</li>
-						<li>Esri Terrain</li>
 					</ul>
 				</div>
 			</div>
@@ -69,6 +67,10 @@
         <div class="sidebar-link">
             <a href="<%= link.url %>"><%- link.text %></a>
         </div>
+    </script>
+
+    <script type="text/template" id="template-basemap-selector-item">
+        <li data-index="<%- index %>"><%- name %></li>
     </script>
 
 
