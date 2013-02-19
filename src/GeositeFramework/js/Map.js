@@ -3,12 +3,29 @@
 
 (function (N) {
     'use strict';
+
+    function getSelectedBasemap(model) {
+        var basemaps = model.get('basemaps'),
+            selectedBasemapIndex = model.get('selectedBasemapIndex'),
+            valid = basemaps !== null &&
+                    selectedBasemapIndex !== null &&
+                    selectedBasemapIndex < basemaps.length;
+        if (valid) {
+            return basemaps[selectedBasemapIndex];
+        } else {
+            // TODO: log error to console
+            return { name: "", url: "" };
+        }
+    }
+
     N.models = N.models || {};
     N.models.Map = Backbone.Model.extend({
         defaults: {
             basemaps: null,
             selectedBasemapIndex: null
         },
+        getSelectedBasemapName: function () { return getSelectedBasemap(this).name; },
+        getSelectedBasemapUrl:  function () { return getSelectedBasemap(this).url; }
     });
 }(Geosite));
 
@@ -30,7 +47,7 @@
         esriMap.setExtent(new esri.geometry.Extent(x[0], x[1], x[2], x[3], new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })));
 
         view.esriMap = esriMap;
-        view.model.set('selectedBasemapIndex', 0);
+        view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()Sybil
 
         function resizeMap() {
             esriMap.resize();
@@ -41,9 +58,8 @@
     }
 
     function selectBasemap(view) {
-        var index = view.model.get('selectedBasemapIndex'),
-            basemaps = view.model.get('basemaps'),
-            baseMapLayer = new esri.layers.ArcGISTiledMapServiceLayer(basemaps[index].url);
+        var url = view.model.getSelectedBasemapUrl(),
+            baseMapLayer = new esri.layers.ArcGISTiledMapServiceLayer(url);
         view.esriMap.addLayer(baseMapLayer);
     }
 
