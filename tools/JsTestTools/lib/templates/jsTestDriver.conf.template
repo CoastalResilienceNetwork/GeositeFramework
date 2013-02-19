@@ -1,0 +1,17 @@
+server: http://localhost:9876
+
+load:
+  # load library files
+  - lib/jquery/jquery-1.6.1.min.js
+
+  # load test tools
+  - lib/jasmine/jasmine.js
+  - lib/jasmine/jasmine-html.js
+  - lib/jasmine-jstd-adapter/JasmineAdapter.js
+  - lib/jasmine-jquery/jasmine-jquery-1.2.0.js
+  - lib/jasmine-reporters/jasmine.junit_reporter.js
+  - lib/azavea-jasmine/azavea.jasmine.matchers.js
+
+  # load application source files
+
+  # load test spec files

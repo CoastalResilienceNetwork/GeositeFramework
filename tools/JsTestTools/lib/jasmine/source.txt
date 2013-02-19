@@ -1,0 +1,4 @@
+http://pivotal.github.com/jasmine/download.html
+
+http://pivotal.github.com/jasmine/
+https://github.com/pivotal/jasmine
