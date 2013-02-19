@@ -90,7 +90,9 @@
 
     function renderSidebar(view) {
         var sidebarTemplate = N.app.templates['template-sidebar'],
-            html = sidebarTemplate(view.model.toJSON());
+            html = sidebarTemplate(_.extend(view.model.toJSON(), {
+                alternatePaneNumber: view.model.get('paneNumber') == 0 ? 1 : 0
+            }));
 
         view.$el.find('.side-nav').empty().append(html);
 
@@ -129,12 +131,29 @@
         });
     }
 
+    function changeScreenModeOnPanes(mainPainIndex, splitView) {
+        if (N.app.models.panes.length < 2) {
+            N.app.createPane(1);
+        }
+
+        _.each(N.app.models.panes, function (pane) {
+            var isMainPane = false;
+            if (pane.get('paneNumber') === mainPainIndex) {
+                isMainPane = true;
+            }
+            pane.set({
+                'splitView': splitView,
+                'isMain': isMainPane
+            });
+        });
+    }
+
     function createMap(view) {
         var paneNumber = view.model.get('paneNumber'),
             $map = view.$('.map'),
             domId = "map" + paneNumber;
         $map.attr("id", domId);
-        var esriMap = new esri.Map(domId, {
+        view.esriMap = new esri.Map(domId, {
             // center: [-56.049, 38.485],
             zoom: 4,
             basemap: "streets"
@@ -143,21 +162,33 @@
         function resizeMap() {
             // When the element containing the map resizes, the 
             // map needs to be notified
-            esriMap.resize();
-            esriMap.reposition();
+            _.delay(function () {
+                if (view.$el.find('.map').is(':visible')) {
+                    view.esriMap.reposition();
+                    view.esriMap.resize(true);
+                } 
+            }, 150);
+            
         }
         resizeMap();
         $(N).on('resize', resizeMap);
 
-        return esriMap;
+        return view.esriMap;
     }
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
+        esriMap: null,
+        screen: {
+            split: 'view-split',
+            left: 'view-left',
+            right: 'view-right'
+        },
+
         $body: $('body'),
 
         initialize: function initPaneView() {
-            this.model.on('change:isMain, change:splitView', this.renderSidebar, this);
+            this.model.on('change:isMain change:splitView', this.renderSidebar, this);
         },
 
         render: function () { return renderPane(this); },
@@ -171,25 +202,24 @@
             'click .switch-screen': 'switchScreenFocus'
         },
 
-        switchScreenFocus: function switchScreen() {
+        switchScreenFocus: function switchScreen(evt) {
+            var screenToShow = $(evt.currentTarget).data('screen'),
+                screenClass = screenToShow === 0 ? this.screen.left : this.screen.right;
 
+            this.$body.removeClass(_(this.screen).values().join(' '))
+                .addClass(screenClass)
+
+            changeScreenModeOnPanes(screenToShow, false);
+            $(window).trigger('resize');
         },
 
         splitScreen: function splitScreen() {
             // Align the body classes to be in split-screen mode
-            this.$body.addClass('view-split')
-                .removeClass('view-left view-right');
+            this.$body.removeClass(_(this.screen).values().join(' '))
+                .addClass(this.screen.split);
 
-            _.each(N.app.models.panes, function (pane) {
-                var isMainPane = false;
-                if (pane.get('paneNumber') === 0) {
-                    isMainPane = true;
-                }
-                pane.set({
-                    'splitView': true,
-                    'isMain': isMainPane
-                });
-            });
+            // Main screen is always id-0 when in split view mode
+            changeScreenModeOnPanes(0, true);
 
             // The maps need to adjust to the new layout size
             $(window).trigger('resize');
