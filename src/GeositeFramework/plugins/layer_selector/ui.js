@@ -44,7 +44,7 @@ define([], //"./ext-4.1.1a/ext-all"],
 
             function onCheckboxChanged(node, checked, eOpts) {
                 var layerData = node.raw;
-                layerData.onCheckboxChanged(layerData, checked, _map);
+                layerData.showOrHideLayer(layerData, checked, _map);
             }
         }
 

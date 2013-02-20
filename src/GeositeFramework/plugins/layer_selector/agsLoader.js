@@ -128,7 +128,7 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                     checked: false,
                     layerId: layerSpec.id,
                     parent: parentNode,
-                    onCheckboxChanged: onCheckboxChanged
+                    showOrHideLayer: showOrHideLayer
                 };
                 parentNode.children.push(node);
                 return node;
@@ -139,7 +139,11 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                 alert('AJAX error: ' + errorThrown);
             }
 
-            function onCheckboxChanged(layerNode, checked, map) {
+            // The only API method I see to show/hide layers is ArcGISDynamicMapServiceLayer.SetVisibleLayers(), 
+            // so to show/hide an individual layer we have to give it all the visible layers. 
+            // So we keep track of the visible layer ids on the service-level data node.
+
+            function showOrHideLayer(layerNode, shouldShow, map) {
                 var serviceNode = getServiceNode(layerNode),
                     esriLayer = serviceNode.esriLayer,
                     layerIds = serviceNode.layerIds;
@@ -150,9 +154,9 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                     serviceNode.esriLayer = esriLayer;
                     layerIds = [];
                 }
-                if (checked) {
+                if (shouldShow) {
                     layerIds = _.union(layerIds, [layerNode.layerId]);
-                } else {
+                } else { // hide
                     layerIds = _.without(layerIds, layerNode.layerId);
                 }
                 if (layerIds.length === 0) {
