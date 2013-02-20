@@ -1,6 +1,6 @@
 ﻿// Module ui.js
 
-define([], //"./ext-4.1.1a_full/ext-all"],
+define([], //"./ext-4.1.1a/ext-all"],
     function () {
         var Ui = function (map) {
             var _map = map;
@@ -43,36 +43,8 @@ define([], //"./ext-4.1.1a_full/ext-all"],
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
-                var layerData = node.raw,
-                    serviceData = getServiceData(layerData),
-                    esriLayer = serviceData.esriLayer,
-                    layerIds = serviceData.layerIds;
-                if (esriLayer === undefined) {
-                    // This node's service has no layer object yet, so make one and cache it
-                    esriLayer = new esri.layers.ArcGISDynamicMapServiceLayer(serviceData.url, { opacity: 0.7 });
-                    _map.addLayer(esriLayer);
-                    serviceData.esriLayer = esriLayer;
-                    layerIds = [];
-                }
-                if (checked) {
-                    layerIds = _.union(layerIds, [layerData.layerId]);
-                } else {
-                    layerIds = _.without(layerIds, layerData.layerId);
-                }
-                if (layerIds.length === 0) {
-                    esriLayer.setVisibleLayers([-1]); // clear visible layers
-                } else {
-                    esriLayer.setVisibleLayers(layerIds);
-                }
-                serviceData.layerIds = layerIds;
-            }
-        }
-
-        function getServiceData(layerData) {
-            if (layerData.parent.type == "service") {
-                return layerData.parent;
-            } else {
-                return layerData.parent.parent;
+                var layerData = node.raw;
+                layerData.onCheckboxChanged(layerData, checked, _map);
             }
         }
 

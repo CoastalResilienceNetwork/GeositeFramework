@@ -14,7 +14,10 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
 
             // Use the catalog data to build a node tree for Ext.data.TreeStore and Ext.tree.Panel
 
-            this.load = function loadCatalog(rootNode) {
+            this.load = loadCatalog;
+            this.isLoaded = function () { return _loaded; }
+
+            function loadCatalog(rootNode) {
                 // Load root catalog entries
                 loadFolder("", function (entries) {
                     console.log("Catalog has " + entries.folders.length + " folders");
@@ -22,10 +25,6 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                     addParentNodeToServiceSpecs(rootNode, entries.services);
                     loadFolders(entries.folders, entries.services, rootNode);
                 });
-            }
-
-            this.isLoaded = function () {
-                return _loaded;
             }
 
             function addParentNodeToServiceSpecs(parentNode, serviceSpecs) {
@@ -128,7 +127,8 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                     leaf: true,
                     checked: false,
                     layerId: layerSpec.id,
-                    parent: parentNode
+                    parent: parentNode,
+                    onCheckboxChanged: onCheckboxChanged
                 };
                 parentNode.children.push(node);
                 return node;
@@ -137,6 +137,38 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
             function handleAjaxError(jqXHR, textStatus, errorThrown) {
                 // TODO: do something better
                 alert('AJAX error: ' + errorThrown);
+            }
+
+            function onCheckboxChanged(layerNode, checked, map) {
+                var serviceNode = getServiceNode(layerNode),
+                    esriLayer = serviceNode.esriLayer,
+                    layerIds = serviceNode.layerIds;
+                if (esriLayer === undefined) {
+                    // This node's service has no layer object yet, so make one and cache it
+                    esriLayer = new esri.layers.ArcGISDynamicMapServiceLayer(serviceNode.url, { opacity: 0.7 });
+                    map.addLayer(esriLayer);
+                    serviceNode.esriLayer = esriLayer;
+                    layerIds = [];
+                }
+                if (checked) {
+                    layerIds = _.union(layerIds, [layerNode.layerId]);
+                } else {
+                    layerIds = _.without(layerIds, layerNode.layerId);
+                }
+                if (layerIds.length === 0) {
+                    esriLayer.setVisibleLayers([-1]); // clear visible layers
+                } else {
+                    esriLayer.setVisibleLayers(layerIds);
+                }
+                serviceNode.layerIds = layerIds;
+            }
+
+            function getServiceNode(layerNode) {
+                if (layerNode.parent.type === "service") {
+                    return layerNode.parent;
+                } else {
+                    return layerNode.parent.parent;
+                }
             }
         }
 
