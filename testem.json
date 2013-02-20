@@ -1,0 +1,4 @@
+{
+    "framework": "jasmine",
+    "test_page": "src/GeositeFramework/js/tests/specRunner.html"
+}
