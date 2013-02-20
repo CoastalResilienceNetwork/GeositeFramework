@@ -40,7 +40,7 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                 var deferreds = _.map(folderNames, function (folderName) {
                     return loadFolder(folderName, function (entries) {
                         // Folder has loaded -- make its node and add its services to "serviceSpecs"
-                        var node = makeContainerNode(folderName, "pluginLayerSelector-folder", parentNode);
+                        var node = makeContainerNode(folderName, "folder", parentNode);
                         addParentNodeToServiceSpecs(node, entries.services);
                         $.merge(serviceSpecs, entries.services);
                     });
@@ -78,8 +78,9 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                         success: function (serviceData) {
                             // Service has loaded -- make its node and load its layers
                             var serviceName = getServiceName(serviceSpec.name);
-                            var node = makeContainerNode(serviceName, "pluginLayerSelector-service", serviceSpec.parentNode);
-                            loadLayers(serviceData.layers, node, serviceUrl);
+                            var node = makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                            node.url = serviceUrl;
+                            loadLayers(serviceData.layers, node);
                         },
                         error: handleAjaxError
                     });
@@ -91,40 +92,43 @@ define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
                 return (name.indexOf('/') == -1 ? name : name.split('/')[1]);
             }
 
-            function loadLayers(layerSpecs, serviceNode, serviceUrl) {
+            function loadLayers(layerSpecs, serviceNode) {
                 var layerNodes = {};
                 _.each(layerSpecs, function (layerSpec) {
                     // A layer might specify a parent layer; otherwise it hangs off the service
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
-                        makeLeafNode(layerSpec, serviceUrl, parentNode);
+                        makeLeafNode(layerSpec, parentNode);
                     } else {
                         // This is a layer group; remember its node so its children can attach themselves
-                        layerNodes[layerSpec.id] = makeContainerNode(layerSpec.name, "pluginLayerSelector-layer-group", parentNode);
+                        layerNodes[layerSpec.id] = makeContainerNode(layerSpec.name, "layer-group", parentNode);
                     }
                 }, this);
             }
 
-            function makeContainerNode(name, className, parentNode) {
+            function makeContainerNode(name, type, parentNode) {
                 var node = {
-                    cls: className, // When the tree is displayed the node's associated DOM element will have this CSS class
+                    type: type,
+                    cls: "pluginLayerSelector-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: name.replace(/_/g, " "),
                     leaf: false,
-                    children: []
+                    children: [],
+                    parent: parentNode
                 };
                 parentNode.children.push(node);
                 return node;
             }
 
-            function makeLeafNode(layerSpec, serviceUrl, parentNode) {
+            function makeLeafNode(layerSpec, parentNode) {
                 var node = {
+                    type: "layer",
                     cls: "pluginLayerSelector-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: layerSpec.name.replace(/_/g, " "),
                     leaf: true,
                     checked: false,
-                    url: serviceUrl,
                     layerId: layerSpec.id,
+                    parent: parentNode
                 };
                 parentNode.children.push(node);
                 return node;
