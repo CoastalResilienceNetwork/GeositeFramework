@@ -136,10 +136,8 @@
         // Update the pane models with the correct state for main pane and 
         // split screen status
         _.each(N.app.models.panes, function (pane) {
-            var isMainPane = false;
-            if (pane.get('paneNumber') === mainPainIndex) {
-                isMainPane = true;
-            }
+            var isMainPane = pane.get('paneNumber') === mainPainIndex;
+
             pane.set({
                 'splitView': splitView,
                 'isMain': isMainPane
