@@ -69,7 +69,8 @@
 
         function resizeMap() {
             // When the element containing the map resizes, the 
-            // map needs to be notified
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
             _.delay(function () {
                 if (view.$el.find('.map').is(':visible')) {
                     view.esriMap.reposition();
