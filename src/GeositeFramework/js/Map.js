@@ -68,11 +68,19 @@
         view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()
 
         function resizeMap() {
-            esriMap.resize();
-            esriMap.reposition();
+            // When the element containing the map resizes, the 
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
+            _.delay(function () {
+                if (view.$el.find('.map').is(':visible')) {
+                    view.esriMap.reposition();
+                    view.esriMap.resize(true);
+                }
+            }, 150);
+
         }
         resizeMap();
-        $(window).on('resize', _.debounce(resizeMap, 300));
+        $(N).on('resize', resizeMap);
     }
 
     function selectBasemap(view) {

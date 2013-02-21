@@ -12,15 +12,31 @@
             panes: []
         },
         templates: {},
+        data: {},
+        config: {
+            paneDefinitions: [
+                { selector: "#left-pane", index: 0, main: true },
+                { selector: "#right-pane", index: 1, main: false }
+            ]
+        },
 
         init: function initializeApp(regionData, pluginClasses) {
+            N.app.data.region = regionData;
             N.plugins = pluginClasses;
-            initializePanes(regionData);
+
+            // Only create the first visible pane at startup.  The
+            // additional pane will be created when it is requested
+            this.createPane(0);
             initializeMaps();
+        },
+
+        createPane: function createPane(paneIndex) {
+            initializePane(N.app.data.region, N.app.config.paneDefinitions[paneIndex]);
         }
     };
 
     function initializeMaps() {
+
         function resizeMap() {
             // Calculate the new width of the map, which is the size of the
             // container - the size of the sidebar.  Take 1 pixel off that 
@@ -39,26 +55,14 @@
 
     }
 
-    function initializePanes(regionData) {
-        // The main pane will contain the app tool buttons
-        var panes = [
-            { selector: "#left-pane", index: 0, main: true },
-            { selector: "#right-pane", index: 1, main: false}
-        ];
-
-        _.each(panes, function (pane) {
-            initializePane(regionData, pane);
-        });
-    }
-
     function initializePane(regionData, paneConfig) {
         var pane = new N.models.Pane({
             paneNumber: paneConfig.index,
             isMain: paneConfig.main,
             regionData: regionData
         });
-        N.app.models.panes[paneConfig.index] = pane;
 
+        N.app.models.panes[paneConfig.index] = pane;
         N.app.views.panes[paneConfig.index] = new N.views.Pane({
             model: pane,
             el: $(paneConfig.selector)

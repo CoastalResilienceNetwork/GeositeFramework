@@ -25,26 +25,14 @@
 
 
 <!-- EX.: view-split, view-left, view-right -->
-<body class="view-split" style="zoom: 0 !important;">
+<body class="view-left" style="zoom: 0 !important;">
 
     <script type="text/template" id="template-pane">
         <div class="sidebar">
             <ul class="plugins side-nav twelve top"></ul>
-
-            <ul class="side-nav twelve bottom">
-                <% if (isMain) { %>
-        		    <li><a href="#"><img class="icon" src="img/icons/icon_switch-2_up.png">Switch Maps</a>
-			        <li><a href="#"><img class="icon" src="img/icons/icon_split_up.png">Split View</a>
-                    <li class="divider"></li>
-				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png">Save &amp; Share</a>
-				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png">Print Page</a>
-				    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png">Help/Support</a>
-                <% } else { %>
-                    <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_unlink-views_up.png">Unlink Maps</a></li>
-                <% } %>
-            </ul>
+            <ul class="side-nav twelve bottom"></ul>
         </div>
-        <div id="map-<%= index %>" class="map">
+        <div id="map-<%= paneNumber %>" class="map">
             <div class="tools"></div>
 			<div class="basemap-selector">
 				<div class="basemap-selector-title"></div>
@@ -54,6 +42,26 @@
 				</div>
 			</div>
         </div>
+    </script>
+
+    <script type="text/template" id="template-sidebar">
+        <% if (isMain) { %>
+			<% if (splitView) { %>
+                <li><a class="switch-screen" data-screen="0" href="#"><img class="icon" src="img/icons/icon_switch-0_up.png"/>Full Map</a></li>
+                <li><a class="switch-screen" data-screen="1" href="#"><img class="icon" src="img/icons/icon_switch-1_up.png"/>Full Map</a></li>
+            <% } else { %>
+                <li><a class="switch-screen" data-screen="<%= alternatePaneNumber %>" href="#">
+                    <img class="icon" src="img/icons/icon_switch-<%= alternatePaneNumber %>_up.png"/>Switch Map
+                </a></li>
+                <li><a class="split-screen" href="#"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
+            <% } %>
+            <li class="divider"></li>
+			<li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
+			<li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Print Page</a></li>
+			<li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
+        <% } else { %>
+            <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_unlink-views_up.png"/>Unlink Maps</a></li>
+        <% } %>
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">

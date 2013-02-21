@@ -145,8 +145,8 @@
     <Content Include="img\icons\icon_print_up.png" />
     <Content Include="img\icons\icon_share_up.png" />
     <Content Include="img\icons\icon_split_up.png" />
+    <Content Include="img\icons\icon_switch-0_up.png" />
     <Content Include="img\icons\icon_switch-1_up.png" />
-    <Content Include="img\icons\icon_switch-2_up.png" />
     <Content Include="img\icons\icon_unlink-views_up.png" />
     <Content Include="img\tools_measure.png" />
     <Content Include="img\tools_search.png" />
