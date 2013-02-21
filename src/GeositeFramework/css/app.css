@@ -18,14 +18,14 @@ html, body {
 	height: 100%;
 	min-height: 100%;
 	overflow: hidden;
-	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif !important;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
 }
 
 /*------------------------------------------
-    EXT Style "adjustements"
+    EXT Style "adjustments"
 ------------------------------------------*/
 .x-grid-cell
 {
@@ -99,8 +99,8 @@ h1, h2, h3, h4, h5, h6 {
    Content Area - Helpers
 ----------------------------------------- */
 	
-.view-left .content.left-pane,
-.view-right .content.right-pane,
+.view-left #left-pane,
+.view-right #right-pane,
 .view-split .content {
 	display: block;
 }
