@@ -142,7 +142,13 @@
     
     <script type="text/javascript">
         // Configure the Dojo module loader so that module identifiers starting with "plugins/" 
-        // will be loaded from the site's root "plugins" folder
+        // will be loaded from the site's root "plugins" folder.
+        // (This usage of require() is mentioned in http://dojotoolkit.org/documentation/tutorials/1.7/modules)
+        //
+        // The calls to location.pathname.replace() below prepend the app's root path to library locations. 
+        // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
+        // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
+
         require({
             async: true,
             packages: [{
@@ -150,6 +156,7 @@
                 location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
             }]
         });
+
         // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
         define.amd.jQuery = true;
 
