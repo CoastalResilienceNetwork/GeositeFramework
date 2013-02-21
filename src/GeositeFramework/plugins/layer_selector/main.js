@@ -1,6 +1,6 @@
 ﻿define(
-    ["dojo/_base/declare", "./AgsLoader", "./ui"], 
-    function (declare, AgsLoader, ui) {
+    ["dojo/_base/declare", "./AgsLoader", "./Ui"], 
+    function (declare, AgsLoader, Ui) {
 
         function loadConfig(self)
         {
@@ -43,6 +43,7 @@
 
             activate: function () {
                 if (this._agsLoader.isLoaded()) {
+                    var ui = new Ui(this.map);
                     ui.render(this._layerTree, this.container);
                 } else {
                     // TODO: something better

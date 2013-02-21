@@ -2,12 +2,12 @@
  * Icons for different levels of the "Map Layers" tree 
  */
 
-.pluginLayerSelector-service .x-tree-icon {
-	background-image:url(images/gear.png);
+.pluginLayerSelector-service .x-tree-icon-parent {
+	background-image:url(images/gear.png) !important;
 }
 
-.pluginLayerSelector-layer-group .x-tree-icon {
-	background-image:url(images/layers.png);
+.pluginLayerSelector-layer-group .x-tree-icon-parent {
+	background-image:url(images/layers.png) !important;
 }
 	
 .pluginLayerSelector-layer .x-tree-icon {

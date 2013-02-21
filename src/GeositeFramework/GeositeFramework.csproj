@@ -161,7 +161,7 @@
     <Content Include="plugins\layer_selector\AgsLoader.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
-    <Content Include="plugins\layer_selector\ui.js" />
+    <Content Include="plugins\layer_selector\Ui.js" />
     <Content Include="plugins\measure\main.js" />
     <Content Include="plugins\scenarios_temp\main.js" />
     <Content Include="Web.config" />
