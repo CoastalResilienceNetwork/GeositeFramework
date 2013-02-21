@@ -1,6 +1,6 @@
 ﻿// Module AgsLoader.js
 
-define(["jquery", "underscore"],
+define(["jquery", "use!underscore"],
     function ($, _) {
         var AgsLoader = function (baseUrl) {
             var _baseUrl = baseUrl;

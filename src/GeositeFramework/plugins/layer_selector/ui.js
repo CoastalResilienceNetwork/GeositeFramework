@@ -1,7 +1,7 @@
 ﻿// Module Ui.js
 
-define(["underscore"],
-    function (_) {
+define(["use!underscore", "use!extjs"],
+    function (_, Ext) {
         var Ui = function (map) {
             var _map = map;
 
