@@ -1,8 +1,39 @@
-﻿define(
-    ["dojo/_base/declare", "./AgsLoader", "./Ui"], 
-    function (declare, AgsLoader, Ui) {
+﻿// Main module for GeositeFramework plugin "layer_selector"
 
-        function loadConfig(self)
+// Plugins should contain local versions of any libraries used even if those libraries are used 
+// by the GeositeFramework, in case a future framework version switches to a different library version. 
+//
+// Specify library locations.
+//
+// The calls to location.pathname.replace() below prepend the app's root path to library locations. 
+// Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
+// (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
+
+require({
+    packages: [
+        {
+            name: "jquery",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
+            main: "jquery-1.9.0.min"
+        },
+        {
+            name: "underscore",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
+            main: "underscore-1.4.4-amd.min" // AMD-compliant version from https://github.com/amdjs/underscore
+        }
+    ]
+});
+
+define([
+        "dojo/_base/declare",
+        "jquery",
+        "underscore",
+        "./AgsLoader",
+        "./Ui"
+    ],
+    function (declare, $, _, AgsLoader, Ui) {
+
+        function loadLayersConfig(self)
         {
             return $.ajax({
                 dataType: 'json',
@@ -38,7 +69,7 @@
 
             initialize: function (args) {
                 declare.safeMixin(this, args);
-                loadConfig(this);
+                loadLayersConfig(this);
             },
 
             activate: function () {

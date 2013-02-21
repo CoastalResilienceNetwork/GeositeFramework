@@ -1,7 +1,7 @@
-﻿// Module ui.js
+﻿// Module Ui.js
 
-define([], //"./ext-4.1.1a/ext-all"],
-    function () {
+define(["underscore"],
+    function (_) {
         var Ui = function (map) {
             var _map = map;
 

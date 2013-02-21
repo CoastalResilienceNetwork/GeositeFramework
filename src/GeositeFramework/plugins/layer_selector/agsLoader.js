@@ -1,7 +1,7 @@
 ﻿// Module AgsLoader.js
 
-define([],   //["./lib/jquery-1.9.0.min", "./lib/underscore-1.4.3.min"],
-    function () {   //($, _) {
+define(["jquery", "underscore"],
+    function ($, _) {
         var AgsLoader = function (baseUrl) {
             var _baseUrl = baseUrl;
             var _loaded = false;
