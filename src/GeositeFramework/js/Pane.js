@@ -111,7 +111,7 @@
                 alternatePaneNumber: view.model.get('paneNumber') == 0 ? 1 : 0
             }));
 
-        view.$el.find('.bottom.side-nav').empty().append(html);
+        view.$('.bottom.side-nav').empty().append(html);
         renderSidebarLinks(view);
     }
 
