@@ -1,4 +1,6 @@
-﻿define(
+﻿// Main module for GeositeFramework plugin "measure"
+
+define(
     ["dojo/_base/declare"],
     function (declare) {
         return declare(null, {

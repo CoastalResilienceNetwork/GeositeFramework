@@ -153,6 +153,13 @@
     <Content Include="js\App.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="js\lib\backbone-0.9.10.min.js" />
+    <Content Include="js\lib\backbone.picky.js" />
+    <Content Include="js\lib\backbone.picky.min.js" />
+    <Content Include="js\lib\jquery-1.9.0.min.js" />
+    <Content Include="js\lib\jquery.placeholder.js" />
+    <Content Include="js\lib\prototype.js" />
+    <Content Include="js\lib\underscore-1.4.3.min.js" />
     <Content Include="js\Map.js" />
     <Content Include="js\MapWrapper.js" />
     <Content Include="js\Pane.js" />
