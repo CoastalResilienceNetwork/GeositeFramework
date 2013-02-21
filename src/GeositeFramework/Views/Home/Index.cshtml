@@ -154,9 +154,19 @@
         // Our require() call below for loading plugins shouldn't fail, since:
         //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
         //     * require() succeeds even if main.js has errors. (It passes an empty object for that module.)
-        // But just in case:
+        // 
+        // However, plugins can trigger a Dojo module loading error by mis-configuring their define() calls.
+        // Do our best to report a useful message.
+
         require.on('error', function(error) {
-            alert('Site configuration error.');
+            // TODO: replace alert() with send to server log
+            var message = "(unknown)";
+            if (error.info !== undefined && error.info.length > 0) {
+                message = "Unable to load module " + error.info[0];
+            } else if (error.message !== undefined) {
+                message = error.message;
+            }
+            alert('Dojo module loader error: ' + message);
         });
 
         // Load the plugins and launch the app.
