@@ -200,8 +200,6 @@
 
         render: function () { return renderPane(this); },
 
-        createMap: function () { return createMap(this); },
-
         events: {
             'click .split-screen': 'splitScreen',
             'click .switch-screen': 'switchScreenFocus'
