@@ -72,6 +72,14 @@ define([
             alert('AJAX error: ' + errorThrown);
         }
 
+        function addSpinner(self) {
+            $(self.container).append("<div class='pluginLayerSelector-spinner'></div>");
+        }
+
+        function removeSpinner(self) {
+            $(self.container).children().last().remove();
+        }
+
         return declare(null, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
@@ -82,6 +90,7 @@ define([
 
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
+                addSpinner(this);
                 loadLayerSourcesConfig(this);
             },
 
@@ -90,6 +99,7 @@ define([
                 this._urls = _.without(this._urls, url);
                 if (this._urls.length == 0) {
                     // All URLs are loaded; render UI
+                    removeSpinner(this);
                     var ui = new Ui(this.map);
                     ui.render(this._layerTree, this.container);
                 }
