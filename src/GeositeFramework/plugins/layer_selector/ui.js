@@ -1,7 +1,7 @@
 ﻿// Module Ui.js
 
-define(["use!underscore", "use!extjs"],
-    function (_, Ext) {
+define(["jquery", "use!underscore", "use!extjs"],
+    function (jquery, _, Ext) {
         var Ui = function (container, map) {
             var _map = map,
                 _container = container,
@@ -9,7 +9,8 @@ define(["use!underscore", "use!extjs"],
 
             this.render = function (rootNode) {
                 sortFolders([rootNode]);
-                _tree = createTree(rootNode);
+                removeSpinner();
+                _tree = createTree(rootNode, _container);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.show();
             }
@@ -19,6 +20,14 @@ define(["use!underscore", "use!extjs"],
                     _tree.hide();
                     _tree.show();
                 }
+            }
+
+            function addSpinner(self) {
+                $(_container).append("<div class='pluginLayerSelector-spinner'></div>");
+            }
+
+            function removeSpinner(self) {
+                $(_container).children().last().remove();
             }
 
             function sortFolders(nodes) {
@@ -34,7 +43,7 @@ define(["use!underscore", "use!extjs"],
                 });
             }
 
-            function createTree(rootNode) {
+            function createTree(rootNode, container) {
                 var store = Ext.create('Ext.data.TreeStore', {
                     root: rootNode,
                     fields: ['text', 'leaf', 'cls', 'url', 'layerId']
@@ -42,7 +51,7 @@ define(["use!underscore", "use!extjs"],
                 var tree = Ext.create('Ext.tree.Panel', {
                     store: store,
                     rootVisible: false,
-                    renderTo: _container,
+                    renderTo: container,
                     resizable: false,
                     collapsible: false,
                     autoScroll: false,
@@ -56,6 +65,8 @@ define(["use!underscore", "use!extjs"],
                 var layerData = node.raw;
                 layerData.showOrHideLayer(layerData, checked, _map);
             }
+
+            addSpinner();
         }
 
         return Ui;
