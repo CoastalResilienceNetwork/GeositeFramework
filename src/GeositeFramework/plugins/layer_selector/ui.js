@@ -17,6 +17,8 @@ define(["jquery", "use!underscore", "use!extjs"],
 
             this.display = function () {
                 if (_tree !== null) {
+                    // If container was invisible when render() called show(), the tree is not visible.
+                    // Revover here by calling both hide() and show().
                     _tree.hide();
                     _tree.show();
                 }
