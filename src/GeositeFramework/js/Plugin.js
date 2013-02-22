@@ -96,7 +96,7 @@
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
             events: {
-                'click': 'handleClick'
+                'click a': 'handleClick'
             },
 
             initialize: function () { initialize(this); },
@@ -194,14 +194,20 @@
 
         function render() {
             // Topbar plugins don't render into any predefined context,
-            // simply provide a div and let the plugin implement it's 
+            // simply provide a div, render a template containg an anchor
+            // tag into this div, and let the plugin implement its
             // launcher layout
+
             var view = this,
-                pluginObject = this.model.get('pluginObject');
+                pluginObject = this.model.get('pluginObject'),
+                pluginTemplate = N.app.templates['template-topbar-plugin'],
+                $container = $(pluginTemplate().trim());
 
             if (pluginObject.renderLauncher
                     && _.isFunction(pluginObject.renderLauncher)) {
-                view.$el.html(pluginObject.renderLauncher());
+                view.$el
+                    .empty()
+                    .append($container.append(pluginObject.renderLauncher()));
             }
 
             return view;
