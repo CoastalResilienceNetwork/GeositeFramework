@@ -45,8 +45,9 @@ define([
     ],
     function (declare, $, _, AgsLoader, Ui) {
 
-        function loadLayersConfig(self)
+        function loadLayerSourcesConfig(self)
         {
+            // Get URLs for layer sources from local config
             return $.ajax({
                 dataType: 'json',
                 contentType: "application/json",
@@ -57,11 +58,11 @@ define([
         }
 
         function loadLayerData(self, layerData) {
-            self._layerTree = { expanded: true, children: [] };
             if (layerData.agsSources !== undefined) {
-                _.each(layerData.agsSources, function (baseUrl) {
-                    self._agsLoader = new AgsLoader(baseUrl);
-                    self._agsLoader.load(self._layerTree);
+                _.each(layerData.agsSources, function (url) {
+                    var loader = new AgsLoader(url);
+                    loader.load(self._layerTree, self);
+                    self._urls.push(url);
                 });
             }
         }
@@ -76,22 +77,25 @@ define([
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
 
-            _layerTree: null,
-            _agsLoader: null,
+            _layerTree: { expanded: true, children: [] },
+            _urls: [],
 
-            initialize: function (args) {
-                declare.safeMixin(this, args);
-                loadLayersConfig(this);
+            initialize: function (frameworkParameters) {
+                declare.safeMixin(this, frameworkParameters);
+                loadLayerSourcesConfig(this);
+            },
+
+            onLayerSourceLoaded: function (url) {
+                // Specified URL is loaded; remove it from the list
+                this._urls = _.without(this._urls, url);
+                if (this._urls.length == 0) {
+                    // All URLs are loaded; render UI
+                    var ui = new Ui(this.map);
+                    ui.render(this._layerTree, this.container);
+                }
             },
 
             activate: function () {
-                if (this._agsLoader.isLoaded()) {
-                    var ui = new Ui(this.map);
-                    ui.render(this._layerTree, this.container);
-                } else {
-                    // TODO: something better
-                    alert("Layers have not finished loading, please try again soon");
-                }
             }
 
         });
