@@ -87,9 +87,11 @@ define([
 
             _layerTree: { expanded: true, children: [] },
             _urls: [],
+            _ui: null,
 
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
+                _ui = new Ui(this.container, this.map);
                 addSpinner(this);
                 loadLayerSourcesConfig(this);
             },
@@ -100,12 +102,12 @@ define([
                 if (this._urls.length == 0) {
                     // All URLs are loaded; render UI
                     removeSpinner(this);
-                    var ui = new Ui(this.map);
-                    ui.render(this._layerTree, this.container);
+                    _ui.render(this._layerTree);
                 }
             },
 
             activate: function () {
+                _ui.display();
             }
 
         });

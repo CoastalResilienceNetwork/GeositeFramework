@@ -2,31 +2,23 @@
 
 define(["use!underscore", "use!extjs"],
     function (_, Ext) {
-        var Ui = function (map) {
-            var _map = map;
+        var Ui = function (container, map) {
+            var _map = map,
+                _container = container,
+                _tree = null;
 
-            this.render = function (rootNode, domElement) {
+            this.render = function (rootNode) {
                 sortFolders([rootNode]);
-                renderTree(rootNode, domElement);
+                _tree = createTree(rootNode);
+                _tree.on("checkchange", onCheckboxChanged, this);
+                _tree.show();
             }
 
-            function renderTree(rootNode, domElement) {
-                var store = Ext.create('Ext.data.TreeStore', {
-                    root: rootNode,
-                    fields: ['text', 'leaf', 'cls', 'url', 'layerId']
-                });
-                var tree = Ext.create('Ext.tree.Panel', {
-                    store: store,
-                    rootVisible: false,
-                    renderTo: domElement,
-                    resizable: false,
-                    collapsible: false,
-                    autoScroll: false,
-                    height: '100%',
-                    width: '100%'
-                });
-                tree.show();
-                tree.on("checkchange", onCheckboxChanged, this)
+            this.display = function () {
+                if (_tree !== null) {
+                    _tree.hide();
+                    _tree.show();
+                }
             }
 
             function sortFolders(nodes) {
@@ -40,6 +32,24 @@ define(["use!underscore", "use!extjs"],
                         sortFolders(node.children);
                     }
                 });
+            }
+
+            function createTree(rootNode) {
+                var store = Ext.create('Ext.data.TreeStore', {
+                    root: rootNode,
+                    fields: ['text', 'leaf', 'cls', 'url', 'layerId']
+                });
+                var tree = Ext.create('Ext.tree.Panel', {
+                    store: store,
+                    rootVisible: false,
+                    renderTo: _container,
+                    resizable: false,
+                    collapsible: false,
+                    autoScroll: false,
+                    height: '100%',
+                    width: '100%'
+                });
+                return tree;
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
