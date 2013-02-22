@@ -1,7 +1,7 @@
 ﻿// Module Ui.js
 
 define(["jquery", "use!underscore", "use!extjs"],
-    function (jquery, _, Ext) {
+    function ($, _, Ext) {
         var Ui = function (container, map) {
             var _map = map,
                 _container = container,
@@ -24,11 +24,11 @@ define(["jquery", "use!underscore", "use!extjs"],
                 }
             }
 
-            function addSpinner(self) {
+            function addSpinner() {
                 $(_container).append("<div class='pluginLayerSelector-spinner'></div>");
             }
 
-            function removeSpinner(self) {
+            function removeSpinner() {
                 $(_container).children().last().remove();
             }
 
