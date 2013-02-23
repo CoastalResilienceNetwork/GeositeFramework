@@ -214,9 +214,16 @@
         }
 
         N.views = N.views || {};
+        // TODO: it's a little hacky to have TopbarPlugin inherit
+        // from BasePlugin and need to clobber the events. This
+        // is a temporary workaround to stop the click event from
+        // rerendering. we should probably fix the baseplugin 
+        // not to have this event and then have it get added
+        // for the sidebar plugin.
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            render: render
+            render: render,
+            events: {}
         });
     }());
 }(Geosite));
