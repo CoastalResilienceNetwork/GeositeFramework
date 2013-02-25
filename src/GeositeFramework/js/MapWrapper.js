@@ -10,7 +10,13 @@
             _myLayers = [];
 
         function isMyLayer(layer) {
-            return _.any(_myLayers, function (l) { return l.id === layer.id; });
+            return isMyLayerId(layer.id);
+        }
+
+        function isMyLayerId(layerId) {
+            return _.any(_myLayers, function (l) {
+                return l.id === layerId;
+            });
         }
 
         function rememberLayer(layer) {
@@ -20,8 +26,22 @@
         }
 
         function forgetLayer(layer) {
-            _myLayers = _.reject(_myLayers, function(l) { return l.id === layer.id; });
+            _myLayers = _.reject(_myLayers, function (l) {
+                return l.id === layer.id;
+            });
         }
+
+        _wrapper.getLayer = function (layerId) {
+            // Get a layer if it's mine
+            return (isMyLayerId(layerId) ? _esriMap.getLayer(layerId) : null);
+        };
+
+        _wrapper.getLayersVisibleAtScaleRange = function (scale) {
+            // Get whichever visible layers are mine
+            var layers = _esriMap.getLayersVisibleAtScaleRange(scale);
+            layers = _.filter(layers, isMyLayer);
+            return layers;
+        };
 
         _wrapper.addLayer = function (layer, index) {
             // Add layer, and remember it
