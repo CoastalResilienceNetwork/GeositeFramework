@@ -48,6 +48,7 @@ define([
     function (declare, JSON, $, _, AgsLoader, Ui, layerSourcesJson) {
 
         function loadLayerData(self) {
+            // Parse config file to get URLs of layer sources
             var layerData;
             try {
                 layerData = JSON.parse(layerSourcesJson);
@@ -55,12 +56,24 @@ define([
                 // TODO: log server-side
                 alert("Error in layer_selector plugin config file layers.json: " + e.message);
             }
+            // Load layer info from each source
             if (layerData.agsSources !== undefined) {
                 _.each(layerData.agsSources, function (url) {
-                    var loader = new AgsLoader(url);
-                    loader.load(self._layerTree, self);
                     self._urls.push(url);
+                    var loader = new AgsLoader(url);
+                    loader.load(self._layerTree, function (url) {
+                        onLayerSourceLoaded(self, url);
+                    });
                 });
+            }
+        }
+        
+        function onLayerSourceLoaded(self, url) {
+            // Specified URL is loaded; remove it from the list
+            self._urls = _.without(self._urls, url);
+            if (self._urls.length == 0) {
+                // All URLs are loaded; render UI
+                self._ui.render(self._layerTree);
             }
         }
 
@@ -74,18 +87,10 @@ define([
             _ui: null,
 
             initialize: function (frameworkParameters) {
-                declare.safeMixin(this, frameworkParameters);
-                this._ui = new Ui(this.container, this.map);
-                loadLayerData(this);
-            },
-
-            onLayerSourceLoaded: function (url) {
-                // Specified URL is loaded; remove it from the list
-                this._urls = _.without(this._urls, url);
-                if (this._urls.length == 0) {
-                    // All URLs are loaded; render UI
-                    this._ui.render(this._layerTree);
-                }
+                var self = this;
+                declare.safeMixin(self, frameworkParameters);
+                self._ui = new Ui(self.container, self.map);
+                loadLayerData(self);
             },
 
             activate: function () {
