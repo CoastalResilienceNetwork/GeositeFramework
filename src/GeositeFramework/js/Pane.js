@@ -157,12 +157,28 @@
             model: view.model.get('map'),
             el: view.$('.map'),
             paneNumber: view.model.get('paneNumber')
-        });
+        }), 
+
+        resizeMap = function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
+            _.delay(function () {
+                if (view.$('.map').is(':visible')) {
+                    esriMap.reposition();
+                    esriMap.resize(true);
+                }
+            }, 150);
+
+        }
 
         // Wait for the map to load, then initialize the plugins. 
         // (Otherwise some map properties aren't available, e.g. extent)
         var esriMap = mapView.esriMap;
         dojo.connect(esriMap, "onLoad", function () {
+            resizeMap();
+            $(N).on('resize', resizeMap);
+
             view.model.initPlugins(esriMap);
         });
     }
