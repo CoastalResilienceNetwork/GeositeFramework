@@ -80,7 +80,19 @@
 
         },
         initialize: function () { return initialize(this); },
-        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
+
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
+
+        toggleMapSync: function (forceSyncTo) {
+            // Toggle the value of the sync property, or if forceSyncTo is set, 
+            // to the value provided
+            var map = this.get('map'),
+                sync = forceSyncTo === undefined
+                    ? !map.get('sync')
+                    : forceSyncTo
+
+            map.set('sync', sync);
+        }
     });
 
 }(Geosite));
@@ -114,7 +126,6 @@
         view.$('.bottom.side-nav').empty().append(html);
         renderSidebarLinks(view);
     }
-
 
     // TODO: Sidebar links aren't in the prototype - do we have anything for them?
     function renderSidebarLinks(view) {
@@ -153,13 +164,15 @@
     }
 
     function initMapView(view) {
-        var mapView = new Geosite.views.Map({
+        view.mapView = new Geosite.views.Map({
             model: view.model.get('map'),
             el: view.$('.map'),
             paneNumber: view.model.get('paneNumber')
-        }), 
+        });
 
-        resizeMap = function resizeMap() {
+        var esriMap = view.mapView.esriMap,
+            resizeMap = function resizeMap() {
+
             // When the element containing the map resizes, the 
             // map needs to be notified.  Do a slight delay so that
             // the browser has time to actually make the element visible.
@@ -169,17 +182,25 @@
                     esriMap.resize(true);
                 }
             }, 150);
-
         }
 
         // Wait for the map to load, then initialize the plugins. 
         // (Otherwise some map properties aren't available, e.g. extent)
-        var esriMap = mapView.esriMap;
         dojo.connect(esriMap, "onLoad", function () {
             resizeMap();
             $(N).on('resize', resizeMap);
 
+            // Add this map to the list of maps to sync when in sync mode
+            N.app.syncedMapView.addMapView(view.mapView);
+
             view.model.initPlugins(esriMap);
+        });
+    }
+
+    function toggleMapSyncProperty(toggle) {
+        // Map sync is two way, so all pane maps need to be de/activated
+        _.each(N.app.models.panes, function (pane) {
+            pane.toggleMapSync(toggle);
         });
     }
 
@@ -203,7 +224,7 @@
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
-        esriMap: null,
+        mapView: null,
         screen: {
             split: 'view-split',
             left: 'view-left',
@@ -218,7 +239,12 @@
 
         events: {
             'click .split-screen': 'splitScreen',
-            'click .switch-screen': 'switchScreenFocus'
+            'click .switch-screen': 'switchScreenFocus',
+            'click .map-sync': 'toggleMapSync'
+        },
+
+        toggleMapSync: function toggleSync() {
+            toggleMapSyncProperty();
         },
 
         switchScreenFocus: function switchScreen(evt) {
@@ -229,6 +255,10 @@
                 .addClass(screenClass)
 
             changeScreenModeOnPanes(screenToShow, false);
+
+            // Force the map to stop syncing when going to a full screen view
+            toggleMapSyncProperty(false);
+
             $(window).trigger('resize');
         },
 
