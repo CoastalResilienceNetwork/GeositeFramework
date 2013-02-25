@@ -38,26 +38,23 @@ require({
 
 define([
         "dojo/_base/declare",
+        "dojo/json",
         "jquery",
         "use!underscore",
         "./AgsLoader",
-        "./Ui"
+        "./Ui",
+        "dojo/text!plugins/layer_selector/layers.json"
     ],
-    function (declare, $, _, AgsLoader, Ui) {
+    function (declare, JSON, $, _, AgsLoader, Ui, layerSourcesJson) {
 
-        function loadLayerSourcesConfig(self)
-        {
-            // Get URLs for layer sources from local config
-            return $.ajax({
-                dataType: 'json',
-                contentType: "application/json",
-                url: 'plugins/layer_selector/layers.json',
-                success: function (layerData) { loadLayerData(self, layerData); },
-                error: handleAjaxError
-            });
-        }
-
-        function loadLayerData(self, layerData) {
+        function loadLayerData(self) {
+            var layerData;
+            try {
+                layerData = JSON.parse(layerSourcesJson);
+            } catch (e) {
+                // TODO: log server-side
+                alert("Error in layer_selector plugin config file layers.json: " + e.message);
+            }
             if (layerData.agsSources !== undefined) {
                 _.each(layerData.agsSources, function (url) {
                     var loader = new AgsLoader(url);
@@ -65,11 +62,6 @@ define([
                     self._urls.push(url);
                 });
             }
-        }
-
-        function handleAjaxError(jqXHR, textStatus, errorThrown) {
-            // TODO: do something better
-            alert('AJAX error: ' + errorThrown);
         }
 
         return declare(null, {
@@ -84,7 +76,7 @@ define([
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
                 this._ui = new Ui(this.container, this.map);
-                loadLayerSourcesConfig(this);
+                loadLayerData(this);
             },
 
             onLayerSourceLoaded: function (url) {
