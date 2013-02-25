@@ -4,7 +4,7 @@ define(["jquery", "use!underscore"],
     function ($, _) {
         var AgsLoader = function (baseUrl) {
             var _baseUrl = baseUrl;
-            var _pluginMain = null;
+            var _onLoadingComplete = null;
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
             // The catalog root contains folders and/or services.
@@ -16,9 +16,9 @@ define(["jquery", "use!underscore"],
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, pluginMain) {
+            function loadCatalog(rootNode, onLoadingComplete) {
                 // Load root catalog entries
-                _pluginMain = pluginMain;
+                _onLoadingComplete = onLoadingComplete;
                 loadFolder("", function (entries) {
                     console.log("Catalog has " + entries.folders.length + " folders");
                     // Root of catalog has loaded -- load child folders and services
@@ -64,7 +64,7 @@ define(["jquery", "use!underscore"],
                 var deferreds = _.map(serviceSpecs, loadService);
                 $.when.apply($, deferreds).then(function () {
                     // All services have loaded, so report that we're done loading this base URL
-                    _pluginMain.onLayerSourceLoaded(_baseUrl);
+                    _onLoadingComplete(_baseUrl);
                 });
             }
 
