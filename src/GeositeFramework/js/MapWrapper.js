@@ -5,6 +5,10 @@
 
 (function (N) {
     N.createMapWrapper = function (esriMap) {
+
+        // ------------------------------------------------------------------------
+        // Private variables and functions
+
         var _esriMap = esriMap,
             _wrapper = _.extend({}, esriMap),
             _myLayers = [];
@@ -30,6 +34,9 @@
                 return l.id === layer.id;
             });
         }
+
+        // ------------------------------------------------------------------------
+        // Method overrides
 
         _wrapper.getLayer = function (layerId) {
             // Get a layer if it's mine
@@ -72,6 +79,72 @@
             });
             _myLayers = [];
         };
+
+        // ------------------------------------------------------------------------
+        // Event overrides
+
+        var _handlers = {
+
+            // Re-raise event if it involves my layers
+
+            onLayerAdd: function (layer) {
+                if (isMyLayer(layer)) {
+                    _wrapper.onLayerAdd(layer);
+                }
+            },
+
+            onLayerAddResult: function (layer, error) {
+                if (isMyLayer(layer)) {
+                    _wrapper.onLayerAddResult(layer, error);
+                }
+            },
+
+            onLayerReorder: function (layer, index) {
+                if (isMyLayer(layer)) {
+                    _wrapper.onLayerReorder(layer, index);
+                }
+            },
+
+            onLayerResume: function (layer) {
+                if (isMyLayer(layer)) {
+                    _wrapper.onLayerResume(layer);
+                }
+            },
+
+            onLayerSuspend: function (layer) {
+                if (isMyLayer(layer)) {
+                    _wrapper.onLayerSuspend(layer);
+                }
+            },
+
+            onLayersAddResult: function (results) {
+                results = _.filter(results, function (result) {
+                    return isMyLayer(result.layer);
+                });
+                if (results.length > 0) {
+                    _wrapper.onLayersAddResult(layer);
+                }
+            },
+
+            onLayersReordered: function (layerIds) {
+                layerIds = _.filter(layerIds, function (layerId) {
+                    return isMyLayerId(layerId);
+                });
+                if (layerIds.length > 0) {
+                    _wrapper.onLayersReordered(layerIds);
+                }
+            }
+
+        };
+
+        _.each(_handlers, function (handler, eventName) {
+            // Create an empty function for this event, so plugins have something to bind to
+            // when they call e.g. dojo.connect(mapWrapper, 'onLayerAdd', ...)
+            _wrapper[eventName] = function () { };
+
+            // When this event is raised on the ESRI map object, call our handler
+            dojo.connect(esriMap, eventName, handler);
+        });
 
         return _wrapper;
     }
