@@ -10,17 +10,14 @@ define(["jquery", "use!underscore", "use!extjs"],
             this.render = function (rootNode) {
                 sortFolders([rootNode]);
                 removeSpinner();
-                _tree = createTree(rootNode, _container);
+                _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
-                _tree.show();
+                this.display();
             }
 
             this.display = function () {
-                if (_tree !== null) {
-                    // If container was invisible when render() called show(), the tree is not visible.
-                    // Revover here by calling both hide() and show().
-                    _tree.hide();
-                    _tree.show();
+                if (_tree !== null && $(_container).is(":visible")) {
+                    _tree.render(_container);
                 }
             }
 
@@ -29,7 +26,7 @@ define(["jquery", "use!underscore", "use!extjs"],
             }
 
             function removeSpinner() {
-                $(_container).children().last().remove();
+                $(_container).empty();
             }
 
             function sortFolders(nodes) {
@@ -45,7 +42,7 @@ define(["jquery", "use!underscore", "use!extjs"],
                 });
             }
 
-            function createTree(rootNode, container) {
+            function createTree(rootNode) {
                 var store = Ext.create('Ext.data.TreeStore', {
                     root: rootNode,
                     fields: ['text', 'leaf', 'cls', 'url', 'layerId']
@@ -53,11 +50,6 @@ define(["jquery", "use!underscore", "use!extjs"],
                 var tree = Ext.create('Ext.tree.Panel', {
                     store: store,
                     rootVisible: false,
-                    renderTo: container,
-                    resizable: false,
-                    collapsible: false,
-                    autoScroll: false,
-                    height: '100%',
                     width: '100%'
                 });
                 return tree;
