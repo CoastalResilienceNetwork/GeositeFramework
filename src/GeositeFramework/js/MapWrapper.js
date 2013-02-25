@@ -9,8 +9,7 @@
         // ------------------------------------------------------------------------
         // Private variables and functions
 
-        var _esriMap = esriMap,
-            _wrapper = _.extend({}, esriMap),
+        var _wrapper = _.extend({}, esriMap),
             _myLayers = [];
 
         function isMyLayer(layer) {
@@ -40,25 +39,25 @@
 
         _wrapper.getLayer = function (layerId) {
             // Get a layer if it's mine
-            return (isMyLayerId(layerId) ? _esriMap.getLayer(layerId) : null);
+            return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : null);
         };
 
         _wrapper.getLayersVisibleAtScaleRange = function (scale) {
             // Get whichever visible layers are mine
-            var layers = _esriMap.getLayersVisibleAtScaleRange(scale);
+            var layers = esriMap.getLayersVisibleAtScaleRange(scale);
             layers = _.filter(layers, isMyLayer);
             return layers;
         };
 
         _wrapper.addLayer = function (layer, index) {
             // Add layer, and remember it
-            _esriMap.addLayer(layer, index);
+            esriMap.addLayer(layer, index);
             rememberLayer(layer);
         };
 
         _wrapper.addLayers = function (layers) {
             // Add layers, and remember them
-            _esriMap.addLayers(layers);
+            esriMap.addLayers(layers);
             _.each(layers, function (layer) {
                 rememberLayer(layer);
             });
@@ -68,14 +67,14 @@
             if (isMyLayer(layer)) {
                 // This is my layer; forget it and remove it
                 forgetLayer(layer);
-                _esriMap.removeLayer(layer);
+                esriMap.removeLayer(layer);
             }
         };
 
         _wrapper.removeAllLayers = function () {
             // Remove all remembered layers
             _.each(_myLayers, function (layer) {
-                _esriMap.removeLayer(layer);
+                esriMap.removeLayer(layer);
             });
             _myLayers = [];
         };
