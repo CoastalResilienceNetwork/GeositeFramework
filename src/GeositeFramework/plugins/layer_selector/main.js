@@ -61,9 +61,15 @@ define([
                 _.each(layerData.agsSources, function (url) {
                     self._urls.push(url);
                     var loader = new AgsLoader(url);
-                    loader.load(self._layerTree, function (url) {
-                        onLayerSourceLoaded(self, url);
-                    });
+                    loader.load(self._layerTree,
+                        function () {
+                            onLayerSourceLoaded(self, url);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            // TODO: log server side
+                            alert('AJAX error: ' + errorThrown);
+                        }
+                    );
                 });
             }
         }
