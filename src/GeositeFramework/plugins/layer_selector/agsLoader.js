@@ -3,8 +3,9 @@
 define(["jquery", "use!underscore"],
     function ($, _) {
         var AgsLoader = function (baseUrl) {
-            var _baseUrl = baseUrl;
-            var _loaded = false;
+            var _baseUrl = baseUrl,
+                _onLoadingComplete = null,
+                _onLoadingError = null;
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
             // The catalog root contains folders and/or services.
@@ -15,10 +16,11 @@ define(["jquery", "use!underscore"],
             // Use the catalog data to build a node tree for Ext.data.TreeStore and Ext.tree.Panel
 
             this.load = loadCatalog;
-            this.isLoaded = function () { return _loaded; }
 
-            function loadCatalog(rootNode) {
+            function loadCatalog(rootNode, onLoadingComplete, onLoadingError) {
                 // Load root catalog entries
+                _onLoadingComplete = onLoadingComplete;
+                _onLoadingError = onLoadingError;
                 loadFolder("", function (entries) {
                     console.log("Catalog has " + entries.folders.length + " folders");
                     // Root of catalog has loaded -- load child folders and services
@@ -55,16 +57,16 @@ define(["jquery", "use!underscore"],
                     dataType: 'jsonp',
                     url: _baseUrl + (folderName === "" ? "" : "/" + folderName) + '?f=json',
                     success: success,
-                    error: handleAjaxError
+                    error: _onLoadingError
                 });
             }
 
             function loadServices(serviceSpecs) {
                 // Start loading all services, keeping "deferred" objects so we know when they're done
                 var deferreds = _.map(serviceSpecs, loadService);
-                // When all services have loaded, we're done!
                 $.when.apply($, deferreds).then(function () {
-                    _loaded = true;
+                    // All services have loaded, so report that we're done loading this base URL
+                    _onLoadingComplete();
                 });
             }
 
@@ -81,7 +83,7 @@ define(["jquery", "use!underscore"],
                             node.url = serviceUrl;
                             loadLayers(serviceData.layers, node);
                         },
-                        error: handleAjaxError
+                        error: _onLoadingError
                     });
                 }
             }
@@ -132,11 +134,6 @@ define(["jquery", "use!underscore"],
                 };
                 parentNode.children.push(node);
                 return node;
-            }
-
-            function handleAjaxError(jqXHR, textStatus, errorThrown) {
-                // TODO: do something better
-                alert('AJAX error: ' + errorThrown);
             }
 
             // The only API method I see to show/hide layers is ArcGISDynamicMapServiceLayer.SetVisibleLayers(), 

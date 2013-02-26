@@ -1,4 +1,11 @@
-﻿/* 
+﻿.pluginLayerSelector-spinner
+{
+    width: 100%;
+    height: 100%;
+    background: url(images/spinner.gif) no-repeat center center;
+}
+
+/* 
  * Icons for different levels of the "Map Layers" tree 
  */
 

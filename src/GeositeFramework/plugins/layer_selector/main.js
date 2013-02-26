@@ -38,37 +38,49 @@ require({
 
 define([
         "dojo/_base/declare",
+        "dojo/json",
         "jquery",
         "use!underscore",
         "./AgsLoader",
-        "./Ui"
+        "./Ui",
+        "dojo/text!plugins/layer_selector/layers.json"
     ],
-    function (declare, $, _, AgsLoader, Ui) {
+    function (declare, JSON, $, _, AgsLoader, Ui, layerSourcesJson) {
 
-        function loadLayersConfig(self)
-        {
-            return $.ajax({
-                dataType: 'json',
-                contentType: "application/json",
-                url: 'plugins/layer_selector/layers.json',
-                success: function (layerData) { loadLayerData(self, layerData); },
-                error: handleAjaxError
-            });
-        }
-
-        function loadLayerData(self, layerData) {
-            self._layerTree = { expanded: true, children: [] };
+        function loadLayerData(self) {
+            // Parse config file to get URLs of layer sources
+            var layerData;
+            try {
+                layerData = JSON.parse(layerSourcesJson);
+            } catch (e) {
+                // TODO: log server-side
+                alert("Error in layer_selector plugin config file layers.json: " + e.message);
+            }
+            // Load layer info from each source
             if (layerData.agsSources !== undefined) {
-                _.each(layerData.agsSources, function (baseUrl) {
-                    self._agsLoader = new AgsLoader(baseUrl);
-                    self._agsLoader.load(self._layerTree);
+                _.each(layerData.agsSources, function (url) {
+                    self._urls.push(url);
+                    var loader = new AgsLoader(url);
+                    loader.load(self._layerTree,
+                        function () {
+                            onLayerSourceLoaded(self, url);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            // TODO: log server side
+                            alert('AJAX error: ' + errorThrown);
+                        }
+                    );
                 });
             }
         }
-
-        function handleAjaxError(jqXHR, textStatus, errorThrown) {
-            // TODO: do something better
-            alert('AJAX error: ' + errorThrown);
+        
+        function onLayerSourceLoaded(self, url) {
+            // Specified URL is loaded; remove it from the list
+            self._urls = _.without(self._urls, url);
+            if (self._urls.length == 0) {
+                // All URLs are loaded; render UI
+                self._ui.render(self._layerTree);
+            }
         }
 
         return declare(null, {
@@ -76,22 +88,19 @@ define([
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
 
-            _layerTree: null,
-            _agsLoader: null,
+            _layerTree: { expanded: true, children: [] },
+            _urls: [],
+            _ui: null,
 
-            initialize: function (args) {
-                declare.safeMixin(this, args);
-                loadLayersConfig(this);
+            initialize: function (frameworkParameters) {
+                var self = this;
+                declare.safeMixin(self, frameworkParameters);
+                self._ui = new Ui(self.container, self.map);
+                loadLayerData(self);
             },
 
             activate: function () {
-                if (this._agsLoader.isLoaded()) {
-                    var ui = new Ui(this.map);
-                    ui.render(this._layerTree, this.container);
-                } else {
-                    // TODO: something better
-                    alert("Layers have not finished loading, please try again soon");
-                }
+                this._ui.display();
             }
 
         });

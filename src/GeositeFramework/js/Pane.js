@@ -63,7 +63,7 @@
             pluginObject.initialize({
                 app: null,
                 map: wrappedMap,
-                container: $displayContainer[0]  
+                container: $displayContainer.find('.plugin-container-inner')[0]
             });
         });
     }
