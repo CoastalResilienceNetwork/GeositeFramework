@@ -76,9 +76,10 @@
             regionData: null,
             map: null,
             plugins: null,
-            splitView: false
-
+            splitView: false,
+            sync: false
         },
+
         initialize: function () { return initialize(this); },
 
         initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
@@ -197,11 +198,12 @@
         });
     }
 
-    function toggleMapSyncProperty(toggle) {
+    function toggleMapSyncProperty(view, toggle) {
         // Map sync is two way, so all pane maps need to be de/activated
         _.each(N.app.models.panes, function (pane) {
             pane.toggleMapSync(toggle);
         });
+        renderSidebar(view);
     }
 
     function initPluginViews(view) {
@@ -235,8 +237,6 @@
 
         initialize: function (view) { initialize(this); },
 
-        render: function () { return renderPane(this); },
-
         events: {
             'click .split-screen': 'splitScreen',
             'click .switch-screen': 'switchScreenFocus',
@@ -244,20 +244,21 @@
         },
 
         toggleMapSync: function toggleSync() {
-            toggleMapSyncProperty();
+            toggleMapSyncProperty(this);
         },
 
         switchScreenFocus: function switchScreen(evt) {
-            var screenToShow = $(evt.currentTarget).data('screen'),
-                screenClass = screenToShow === 0 ? this.screen.left : this.screen.right;
+            var view = this,
+                screenToShow = $(evt.currentTarget).data('screen'),
+                screenClass = screenToShow === 0 ? view.screen.left : view.screen.right;
 
-            this.$body.removeClass(_(this.screen).values().join(' '))
+            view.$body.removeClass(_(view.screen).values().join(' '))
                 .addClass(screenClass)
 
             changeScreenModeOnPanes(screenToShow, false);
 
             // Force the map to stop syncing when going to a full screen view
-            toggleMapSyncProperty(false);
+            toggleMapSyncProperty(view, false);
 
             $(window).trigger('resize');
         },
