@@ -34,7 +34,8 @@
     N.models.Map = Backbone.Model.extend({
         defaults: {
             basemaps: null,
-            selectedBasemapIndex: null   // Both the map view and the basemap selector listen for changes to this attribute
+            selectedBasemapIndex: null,   // Both the map view and the basemap selector listen for changes to this attribute
+            sync: false
         },
         initialize: function () {
             // deep-copy 'basemaps' because we're going to modify its elements by adding 'layer' properties
@@ -51,6 +52,7 @@
         view.model.on('change:selectedBasemapIndex', function () {
             selectBasemap(view);
         });
+
         createMap(view);
     }
 
@@ -59,12 +61,12 @@
         // Construct the id using my pane's number
         var domId = "map" + view.options.paneNumber;
         view.$el.attr("id", domId);
-        var esriMap = new esri.Map(domId);
+        view.esriMap = new esri.Map(domId);
 
         var x = view.model.get('initialExtent');
-        esriMap.setExtent(new esri.geometry.Extent(x[0], x[1], x[2], x[3], new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })));
+        view.esriMap.setExtent(new esri.geometry.Extent(x[0], x[1], x[2], x[3],
+            new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })));
 
-        view.esriMap = esriMap;
         view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()
     }
 

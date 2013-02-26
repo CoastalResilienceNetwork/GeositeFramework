@@ -60,7 +60,12 @@
 			<li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Print Page</a></li>
 			<li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
         <% } else { %>
-            <li><a href="#" class="hide-for-tablet"><img class="icon" src="img/icons/icon_unlink-views_up.png"/>Unlink Maps</a></li>
+            <li>
+                <a href="#" class="hide-for-tablet map-sync">
+                    <img class="icon" src="img/icons/icon_<%= map.get('sync') ? '' : 'un' %>link-views_up.png"/>
+                    <%= map.get('sync') ? 'Unlink' : 'Link' %> Maps
+                </a>
+            </li>
         <% } %>
     </script>
 
@@ -137,6 +142,7 @@
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>
     <script src="js/TemplateLoader.js"></script>
+    <script src="js/SyncedMapManager.js"></script>
     <script src="js/App.js"></script>
     
     <script type="text/javascript">
