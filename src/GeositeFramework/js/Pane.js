@@ -192,7 +192,7 @@
             $(N).on('resize', resizeMap);
 
             // Add this map to the list of maps to sync when in sync mode
-            N.app.syncedMapView.addMapView(view.mapView);
+            N.app.syncedMapManager.addMapView(view.mapView);
 
             view.model.initPlugins(esriMap);
         });

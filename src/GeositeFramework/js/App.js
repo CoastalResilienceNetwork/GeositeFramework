@@ -31,7 +31,7 @@
 
             // Setup a manager for synced maps.  As maps are created, 
             // they will be added to it.
-            N.app.syncedMapView = new N.SyncedMapManager();
+            N.app.syncedMapManager = new N.SyncedMapManager();
         },
 
         createPane: function createPane(paneIndex) {

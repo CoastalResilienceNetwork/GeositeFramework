@@ -54,13 +54,13 @@
         }
 
         function toggleMapSync() {
-            var view = this;
-            if (view.model.get('sync')) {
+            var mapView = this;
+            if (mapView.model.get('sync')) {
                 // Register for map extent change event
-                registerMapExtentListener(view);
+                registerMapExtentListener(mapView);
             } else {
                 // When sync is off, do not listen for map events
-                unregisterMapExtentListener(view);
+                unregisterMapExtentListener(mapView);
             }
 
         }
