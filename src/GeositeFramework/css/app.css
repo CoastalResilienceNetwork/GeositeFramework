@@ -200,6 +200,11 @@ h1, h2, h3, h4, h5, h6 {
             {
                 padding: 5px;
             }
+        .content .plugin-container-inner
+        {
+            /* Needs height = containerHeight - headerHeight */
+            height: 376px; 
+        }
 
 /* -----------------------------------------
    Content Area - Map
