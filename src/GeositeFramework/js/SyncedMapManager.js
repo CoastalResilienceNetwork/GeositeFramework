@@ -19,7 +19,7 @@
     */
     N.SyncedMapManager = function syncedMapManager() {
         var esriMapListeners = {},
-            syncedMaps = [];
+            syncedMapViews = [];
 
         function registerMapExtentListener(view) {
             // Before registering for this event, make sure all other events
@@ -28,15 +28,15 @@
             esriMapListeners[view.cid] =
                 dojo.connect(view.esriMap, 'onExtentChange', function (newExtent) {
                     // Get all the synced maps that aren't the ones who've changed
-                    var maps = _.reject(syncedMaps, function (syncedMap) {
+                    var mapViews = _.reject(syncedMapViews, function (syncedMap) {
                         return syncedMap.cid === view.cid
                     });
 
                     // Update the other maps' extent
-                    _.each(maps, function (map) {
-                        unregisterMapExtentListener(map.view);
-                        map.view.esriMap.setExtent(newExtent);
-                        registerUpdateEndListener(map.view)
+                    _.each(mapViews, function (mapView) {
+                        unregisterMapExtentListener(mapView);
+                        mapView.esriMap.setExtent(newExtent);
+                        registerUpdateEndListener(mapView)
                     });
                 });
         }
@@ -67,12 +67,12 @@
 
         function addMapView(mapView) {
             // Track which maps are meant to be synced
-            syncedMaps.push({ cid: mapView.cid, view: mapView });
+            syncedMapViews.push(mapView);
             mapView.model.on('change:sync', toggleMapSync, mapView);
         };
 
         return {
-            view: syncedMaps,
+            views: syncedMapViews,
             addMapView: addMapView
         };
     }
