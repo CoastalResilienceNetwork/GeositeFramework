@@ -28,6 +28,10 @@
             // additional pane will be created when it is requested
             this.createPane(0);
             initializeMaps();
+
+            // Setup a manager for synced maps.  As maps are created, 
+            // they will be added to it.
+            N.app.syncedMapManager = new N.SyncedMapManager();
         },
 
         createPane: function createPane(paneIndex) {
