@@ -83,6 +83,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     store: store,
                     rootVisible: false,
                     width: '200%',
+                    animate: false,
                     scroll: false
                 });
                 return tree;

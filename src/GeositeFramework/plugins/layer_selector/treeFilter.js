@@ -4,7 +4,7 @@
  *      treeFilter: 'layer_selector.lib.TreeFilter'
  *  }
  *
- * Source: https://gist.github.com/colinramsay/1789536
+ * Slightly modified version of https://gist.github.com/colinramsay/1789536
  */
 define(["use!extjs"],
     function (Ext) {
@@ -22,6 +22,7 @@ define(["use!extjs"],
              */
             filterBy: function (text, by) {
 
+                Ext.suspendLayouts();
                 this.clearFilter();
 
                 var view = this.getView(),
@@ -50,6 +51,8 @@ define(["use!extjs"],
                         Ext.get(uiNode).setDisplayed('none');
                     }
                 }, null, [me, view]);
+
+                Ext.resumeLayouts(true);
             },
 
 
