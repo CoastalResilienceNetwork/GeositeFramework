@@ -50,7 +50,8 @@ define(["jquery", "use!underscore", "use!extjs"],
                 var tree = Ext.create('Ext.tree.Panel', {
                     store: store,
                     rootVisible: false,
-                    width: '100%'
+                    width: '200%',
+                    scroll: false
                 });
                 return tree;
             }
