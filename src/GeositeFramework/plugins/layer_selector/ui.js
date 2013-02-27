@@ -86,24 +86,26 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 var tree = Ext.create('FilteredTreePanel', {
                     store: store,
                     rootVisible: false,
-                    width: '200%',
+                    width: 'auto',
                     animate: false,
                     scroll: false,
+                    border: false,
                     listeners: {
-                        load:         resetHeight,
-                        itemexpand:   resetHeight,
-                        itemcollapse: resetHeight
+                        load: resize,
+                        itemexpand: resize,
+                        itemcollapse: resize
                     }
                 });
                 return tree;
             }
 
-            function resetHeight() {
+            function resize() {
+                // Hack from http://stackoverflow.com/questions/8362022/ext-tree-panel-automatic-height-in-extjs-4
                 setTimeout(function () {
                     var innerElement = _tree.getEl().down('table.x-grid-table');
                     if (innerElement) {
-                        var height = innerElement.getHeight();
-                        _tree.setHeight(height);
+                        _tree.setHeight(innerElement.getHeight());
+                        _tree.setWidth(innerElement.getWidth());
                     }
                 }, 1);
             }
@@ -120,7 +122,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 } else {
                     _tree.filterByText(text);
                 }
-                resetHeight();
+                resize();
             }
 
             addSpinner();
