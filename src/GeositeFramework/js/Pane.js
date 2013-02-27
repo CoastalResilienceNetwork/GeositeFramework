@@ -50,8 +50,6 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, esriMap) {
-        var wrappedMap = N.createMapWrapper(esriMap),
-            paneNumber = model.get('paneNumber');
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject'),
                 // The display container used in the model view will be created
@@ -62,7 +60,7 @@
             pluginModel.set('$displayContainer', $displayContainer);
             pluginObject.initialize({
                 app: null,
-                map: wrappedMap,
+                map: N.createMapWrapper(esriMap),
                 container: $displayContainer.find('.plugin-container-inner')[0]
             });
         });
