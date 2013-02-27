@@ -88,9 +88,24 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     rootVisible: false,
                     width: '200%',
                     animate: false,
-                    scroll: false
+                    scroll: false,
+                    listeners: {
+                        load:         resetHeight,
+                        itemexpand:   resetHeight,
+                        itemcollapse: resetHeight
+                    }
                 });
                 return tree;
+            }
+
+            function resetHeight() {
+                setTimeout(function () {
+                    var innerElement = _tree.getEl().down('table.x-grid-table');
+                    if (innerElement) {
+                        var height = innerElement.getHeight();
+                        _tree.setHeight(height);
+                    }
+                }, 1);
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
@@ -105,6 +120,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 } else {
                     _tree.filterByText(text);
                 }
+                resetHeight();
             }
 
             addSpinner();
