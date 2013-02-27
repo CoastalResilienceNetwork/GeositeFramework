@@ -39,7 +39,7 @@
 
         _wrapper.getLayer = function (layerId) {
             // Get a layer if it's mine
-            return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : null);
+            return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : undefined);
         };
 
         _wrapper.getLayersVisibleAtScaleRange = function (scale) {
