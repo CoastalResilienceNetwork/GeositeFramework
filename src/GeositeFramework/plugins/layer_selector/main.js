@@ -17,7 +17,7 @@ require({
         {
             name: "jquery.placeholder",
             location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "jquery.placeholder.min"
+            main: "jquery.placeholder.amd.min"
         },
         {
             name: "underscore",
@@ -44,14 +44,12 @@ require({
 define([
         "dojo/_base/declare",
         "dojo/json",
-        "jquery",
         "use!underscore",
         "./AgsLoader",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json"
     ],
-    function (declare, JSON, $, _, AgsLoader, Ui, layerSourcesJson) {
-        require(["jquery.placeholder"]);
+    function (declare, JSON, _, AgsLoader, Ui, layerSourcesJson) {
 
         function loadLayerData(self) {
             // Parse config file to get URLs of layer sources

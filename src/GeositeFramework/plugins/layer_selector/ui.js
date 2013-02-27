@@ -1,7 +1,10 @@
 ﻿// Module Ui.js
 
+require(["jquery.placeholder"]);
 define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
     function ($, _, Ext, treeFilter) {
+        $('input, textarea').placeholder(); // initialize jquery.placeholder
+
         var Ui = function (container, map) {
             var _map = map,
                 _container = container,
@@ -39,9 +42,10 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             function renderUi() {
                 _$filterInput = $('<input>', {
                     type: 'text',
-                    placeholder: 'Search layers',
                     keyup: onFilterBoxKeyup
-                });
+                })
+                    .attr('placeholder', 'Filter Map Layers');
+
                 _$treeContainer = $('<div>', {
                     'class': 'pluginLayerSelector-tree-container'
                 });
