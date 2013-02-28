@@ -14,7 +14,8 @@ define(["jquery", "use!underscore"],
             // Each "MapServer" service exposes a number of layers.
             // A layer entry may actually be a group, containing other layers in the same collection.
 
-            // Use the catalog data to build a node tree for Ext.data.TreeStore and Ext.tree.Panel
+            // Use the catalog data to build a node tree. The node schema targets Ext.data.TreeStore 
+            // and Ext.tree.Panel, but should be generic enough for other UI frameworks.
 
             this.load = loadCatalog;
 

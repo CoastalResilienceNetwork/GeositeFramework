@@ -46,10 +46,11 @@ define([
         "dojo/json",
         "use!underscore",
         "./AgsLoader",
+        "./WmsLoader",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json"
     ],
-    function (declare, JSON, _, AgsLoader, Ui, layerSourcesJson) {
+    function (declare, JSON, _, AgsLoader, WmsLoader, Ui, layerSourcesJson) {
 
         function loadLayerData(self) {
             // Parse config file to get URLs of layer sources
@@ -64,21 +65,31 @@ define([
             // Load layer info from each source
             if (layerData.agsSources !== undefined) {
                 _.each(layerData.agsSources, function (url) {
-                    self._urls.push(url);
                     var loader = new AgsLoader(url, cssClassPrefix);
-                    loader.load(self._layerTree,
-                        function () {
-                            onLayerSourceLoaded(self, url);
-                        },
-                        function (jqXHR, textStatus, errorThrown) {
-                            // TODO: log server side
-                            alert('AJAX error: ' + errorThrown);
-                        }
-                    );
+                    loadLayerSource(self, loader, url);
+                });
+            }
+            if (layerData.wmsSources !== undefined) {
+                _.each(layerData.wmsSources, function (spec) {
+                    var loader = new WmsLoader(spec.url, spec.folderName);
+                    loadLayerSource(self, loader, spec.url);
                 });
             }
         }
-        
+
+        function loadLayerSource(self, loader, url) {
+            self._urls.push(url);
+            loader.load(self._layerTree,
+                function () {
+                    onLayerSourceLoaded(self, url);
+                },
+                function (jqXHR, textStatus, errorThrown) {
+                    // TODO: log server side
+                    alert('AJAX error: ' + errorThrown);
+                }
+            );
+        }
+
         function onLayerSourceLoaded(self, url) {
             // Specified URL is loaded; remove it from the list
             self._urls = _.without(self._urls, url);
