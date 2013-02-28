@@ -167,6 +167,7 @@
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="plugins\layer_selector\AgsLoader.js" />
+    <Content Include="plugins\layer_selector\treeFilter.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
     <Content Include="plugins\layer_selector\Ui.js" />
