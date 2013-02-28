@@ -53,7 +53,8 @@ define([
 
         function loadLayerData(self) {
             // Parse config file to get URLs of layer sources
-            var layerData;
+            var layerData,
+                cssClassPrefix = 'pluginLayerSelector';
             try {
                 layerData = JSON.parse(layerSourcesJson);
             } catch (e) {
@@ -64,7 +65,7 @@ define([
             if (layerData.agsSources !== undefined) {
                 _.each(layerData.agsSources, function (url) {
                     self._urls.push(url);
-                    var loader = new AgsLoader(url);
+                    var loader = new AgsLoader(url, cssClassPrefix);
                     loader.load(self._layerTree,
                         function () {
                             onLayerSourceLoaded(self, url);

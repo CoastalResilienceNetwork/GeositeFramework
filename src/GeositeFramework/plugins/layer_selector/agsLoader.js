@@ -2,8 +2,9 @@
 
 define(["jquery", "use!underscore"],
     function ($, _) {
-        var AgsLoader = function (baseUrl) {
+        var AgsLoader = function (baseUrl, cssClassPrefix) {
             var _baseUrl = baseUrl,
+                _cssClassPrefix = cssClassPrefix,
                 _onLoadingComplete = null,
                 _onLoadingError = null;
 
@@ -111,7 +112,7 @@ define(["jquery", "use!underscore"],
             function makeContainerNode(name, type, parentNode) {
                 var node = {
                     type: type,
-                    cls: "pluginLayerSelector-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
+                    cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: name.replace(/_/g, " "),
                     leaf: false,
                     children: [],
@@ -124,7 +125,7 @@ define(["jquery", "use!underscore"],
             function makeLeafNode(layerSpec, parentNode) {
                 var node = {
                     type: "layer",
-                    cls: "pluginLayerSelector-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
+                    cls: _cssClassPrefix + "-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: layerSpec.name.replace(/_/g, " "),
                     leaf: true,
                     checked: false,
