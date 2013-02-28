@@ -16,7 +16,7 @@ define(["use!extjs"],
 
 
             /**
-             * Filter the tree on a string, hiding all nodes expect those which match and their parents.
+             * Filter the tree on a string, hiding all nodes except those which match and their parents.
              * @param The term to filter on.
              * @param The field to filter on (i.e. 'text').
              */
