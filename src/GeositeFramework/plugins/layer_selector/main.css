@@ -1,9 +1,29 @@
-﻿.pluginLayerSelector-spinner
-{
+﻿.pluginLayerSelector-spinner {
     width: 100%;
     height: 100%;
     background: url(images/spinner.gif) no-repeat center center;
 }
+
+.pluginLayerSelector-search {
+    height: 32px;
+    position: absolute;
+    width: 100%;
+    }
+    .pluginLayerSelector-search input[type="text"] {
+        margin: 0;
+    }
+
+.pluginLayerSelector-rest {
+    height: 100%;
+    padding-top: 32px;
+    }
+    .pluginLayerSelector-tree-container {
+        height: 100%;
+        overflow: auto;
+        }
+        .pluginLayerSelector-tree-container table {
+            border-width: 0; /* Otherwise there's a light gray border from Foundation*/
+        }
 
 /* 
  * Icons for different levels of the "Map Layers" tree 
