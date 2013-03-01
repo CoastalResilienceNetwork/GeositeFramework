@@ -71,7 +71,7 @@ define([
             }
             if (layerData.wmsSources !== undefined) {
                 _.each(layerData.wmsSources, function (spec) {
-                    var loader = new WmsLoader(spec.url, spec.folderName);
+                    var loader = new WmsLoader(spec.url, spec.folderName, cssClassPrefix);
                     loadLayerSource(self, loader, spec.url);
                 });
             }
