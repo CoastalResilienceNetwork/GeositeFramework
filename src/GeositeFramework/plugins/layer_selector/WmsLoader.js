@@ -58,6 +58,9 @@ define(["jquery", "use!underscore"],
                 return node;
             }
 
+            // To show/hide an individual layer we have to specify all visible layers for the service. 
+            // So we keep track of the visible layer ids on the folder node.
+
             function showOrHideLayer(layerNode, shouldShow, map) {
                 var folderNode = layerNode.parent,
                     wmsLayer = folderNode.wmsLayer,

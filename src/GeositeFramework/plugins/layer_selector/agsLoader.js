@@ -138,8 +138,7 @@ define(["jquery", "use!underscore"],
                 return node;
             }
 
-            // The only API method I see to show/hide layers is ArcGISDynamicMapServiceLayer.SetVisibleLayers(), 
-            // so to show/hide an individual layer we have to give it all the visible layers. 
+            // To show/hide an individual layer we have to specify all visible layers for the service. 
             // So we keep track of the visible layer ids on the service-level data node.
 
             function showOrHideLayer(layerNode, shouldShow, map) {
