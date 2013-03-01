@@ -53,7 +53,11 @@
             selectBasemap(view);
         });
 
+        // Configure the esri proxy, for (at least) 2 cases:
+        // 1) For WMS "GetCapabilities" requests
+        // 2) When it needs to make an HTTP GET with a URL longer than 2000 chars
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
+
         createMap(view);
     }
 

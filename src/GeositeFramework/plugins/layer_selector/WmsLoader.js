@@ -15,12 +15,14 @@ define(["jquery", "use!underscore"],
             this.load = loadCatalog;
 
             function loadCatalog(rootNode, onLoadingComplete, onLoadingError) {
-                // Load catalog entries
+                // Create a WMSLayer object and wait for it to load.
+                // (Internally it's doing "GetCapabilities" on the WMS service.)
                 var wmsLayer = new esri.layers.WMSLayer(_url);
                 dojo.connect(wmsLayer, "onError", onLoadingError);
                 dojo.connect(wmsLayer, "onLoad", function () {
                     var folderNode = makeContainerNode(_folderName, "folder", rootNode);
                     folderNode.wmsLayer = wmsLayer;
+                    // Make a tree node for each layer exposed by the WMS service
                     _.each(wmsLayer.layerInfos, function (layerInfo, index) {
                         makeLeafNode(layerInfo.title, index, folderNode);
                     });
@@ -61,6 +63,7 @@ define(["jquery", "use!underscore"],
                     wmsLayer = folderNode.wmsLayer,
                     layerIds = folderNode.layerIds;
                 if (layerIds === undefined) {
+                    // This is the first event for a layer in this folder
                     wmsLayer.setOpacity(.7);
                     map.addLayer(wmsLayer);
                     layerIds = [];
