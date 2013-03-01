@@ -53,6 +53,7 @@
             selectBasemap(view);
         });
 
+        esri.config.defaults.io.proxyUrl = "proxy.ashx";
         createMap(view);
     }
 

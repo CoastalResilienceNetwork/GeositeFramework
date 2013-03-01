@@ -200,6 +200,10 @@
   <ItemGroup>
     <Content Include="plugins\layer_selector\layers.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="proxy.ashx" />
+    <Content Include="proxy.config" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
