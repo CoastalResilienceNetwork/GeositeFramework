@@ -1,0 +1,5 @@
+{
+    "locatorServiceUrl": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Places_World/GeocodeServer/findAddressCandidates?",
+    "addressServiceUrl": "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Address_NA_10/GeocodeServer/findAddressCandidates?",
+    "defaultZoomLevel": 7
+}

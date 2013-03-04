@@ -1,0 +1,53 @@
+﻿
+#search-box-choices {
+    /* display: none; */
+    /* position: absolute; */
+    width: 180px;
+    height: 358px;
+    overflow: auto;
+    /* top: 88px; */
+    /* left: 240px; */
+    /* right: 454px; */
+    /* z-index: 2000; */
+    background: #434F46;
+    background: rgba(0,0,0,0.6);
+    color: #ffffff;
+    padding: 5px;
+
+}
+
+.content .map .tools .topbar-plugin .search-box-showing-input {
+    width: 180px;
+    opacity: 1;
+}
+
+.content .map .tools .topbar-plugin .search-box-with-choices {
+    height: 400px;
+}
+
+.content .map .tools .topbar-plugin .search-box:hover {
+    width: 180px;
+}
+
+/* Why don't we have to put toolbar plugin for this to work? */
+.content .map .search-box {
+	
+	background-image: url(../../img/tools_search.png);
+	transition: width 1s;
+	-moz-transition: width 1s;
+	-webkit-transition: width 1s;
+	-o-transition: width 1s;
+}
+
+.content .map .topbar-plugin .search-box input {
+	margin-left: 34px;
+	width: 146px;
+	border: none;
+	background-color: #FAFAFA;
+	outline-color: transparent;
+}
+.content .map .topbar-plugin .search-box input:focus {
+    box-shadow: none;
+	border-color: none;
+	background: #FFF;
+}
