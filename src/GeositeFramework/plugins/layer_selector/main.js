@@ -43,76 +43,27 @@ require({
 
 define([
         "dojo/_base/declare",
-        "dojo/json",
-        "use!underscore",
-        "./AgsLoader",
-        "./WmsLoader",
+        "./LayerLoader",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json"
     ],
-    function (declare, JSON, _, AgsLoader, WmsLoader, Ui, layerSourcesJson) {
-
-        function loadLayerData(self) {
-            // Parse config file to get URLs of layer sources
-            var layerData,
-                cssClassPrefix = 'pluginLayerSelector';
-            try {
-                layerData = JSON.parse(layerSourcesJson);
-            } catch (e) {
-                // TODO: log server-side
-                alert("Error in layer_selector plugin config file layers.json: " + e.message);
-            }
-            // Load layer info from each source
-            if (layerData.agsSources !== undefined) {
-                _.each(layerData.agsSources, function (url) {
-                    var loader = new AgsLoader(url, cssClassPrefix);
-                    loadLayerSource(self, loader, url);
-                });
-            }
-            if (layerData.wmsSources !== undefined) {
-                _.each(layerData.wmsSources, function (spec) {
-                    var loader = new WmsLoader(spec.url, spec.folderName, cssClassPrefix);
-                    loadLayerSource(self, loader, spec.url);
-                });
-            }
-        }
-
-        function loadLayerSource(self, loader, url) {
-            self._urls.push(url);
-            loader.load(self._layerTree,
-                function () {
-                    onLayerSourceLoaded(self, url);
-                },
-                function (jqXHR, textStatus, errorThrown) {
-                    // TODO: log server side
-                    alert('AJAX error: ' + errorThrown);
-                }
-            );
-        }
-
-        function onLayerSourceLoaded(self, url) {
-            // Specified URL is loaded; remove it from the list
-            self._urls = _.without(self._urls, url);
-            if (self._urls.length == 0) {
-                // All URLs are loaded; render UI
-                self._ui.render(self._layerTree);
-            }
-        }
+    function (declare, LayerLoader, Ui, layerSourcesJson) {
 
         return declare(null, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
 
-            _layerTree: { expanded: true, children: [] },
-            _urls: [],
             _ui: null,
 
             initialize: function (frameworkParameters) {
+                declare.safeMixin(this, frameworkParameters);
+                this._ui = new Ui(this.container, this.map);
+                // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                declare.safeMixin(self, frameworkParameters);
-                self._ui = new Ui(self.container, self.map);
-                loadLayerData(self);
+                new LayerLoader().load(layerSourcesJson, function (tree) {
+                    self._ui.render(tree);
+                });
             },
 
             activate: function () {

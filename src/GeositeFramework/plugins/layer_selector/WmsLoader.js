@@ -4,58 +4,26 @@ define(["jquery", "use!underscore"],
     function ($, _) {
         dojo.require("esri.layers.wms");
 
-        var WmsLoader = function (url, folderName, cssClassPrefix) {
+        var WmsLoader = function (url, folderName) {
             var _url = url,
-                _cssClassPrefix = cssClassPrefix,
                 _folderName = folderName;
-
-            // Use the catalog data to build a node tree. The node schema targets Ext.data.TreeStore 
-            // and Ext.tree.Panel, but should be generic enough for other UI frameworks.
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, onLoadingComplete, onLoadingError) {
+            function loadCatalog(rootNode, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
                 // Create a WMSLayer object and wait for it to load.
                 // (Internally it's doing "GetCapabilities" on the WMS service.)
                 var wmsLayer = new esri.layers.WMSLayer(_url);
-                dojo.connect(wmsLayer, "onError", onLoadingError);
+                dojo.connect(wmsLayer, "onError", onLayerSourceLoadError);
                 dojo.connect(wmsLayer, "onLoad", function () {
                     var folderNode = makeContainerNode(_folderName, "folder", rootNode);
                     folderNode.wmsLayer = wmsLayer;
                     // Make a tree node for each layer exposed by the WMS service
                     _.each(wmsLayer.layerInfos, function (layerInfo, index) {
-                        makeLeafNode(layerInfo.title, index, folderNode);
+                        makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
                     });
-                    onLoadingComplete(_url);
+                    onLayerSourceLoaded(_url);
                 });
-            }
-            
-            function makeContainerNode(name, type, parentNode) {
-                var node = {
-                    type: type,
-                    cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: name.replace(/_/g, " "),
-                    leaf: false,
-                    children: [],
-                    parent: parentNode
-                };
-                parentNode.children.push(node);
-                return node;
-            }
-
-            function makeLeafNode(title, layerId, parentNode) {
-                var node = {
-                    type: "layer",
-                    cls: _cssClassPrefix + "-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: title.replace(/_/g, " "),
-                    leaf: true,
-                    checked: false,
-                    layerId: layerId,
-                    parent: parentNode,
-                    showOrHideLayer: showOrHideLayer
-                };
-                parentNode.children.push(node);
-                return node;
             }
 
             // To show/hide an individual layer we have to specify all visible layers for the service. 
