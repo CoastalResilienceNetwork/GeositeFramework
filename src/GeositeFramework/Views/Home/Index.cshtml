@@ -15,9 +15,10 @@
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <!-- Temporarily hard-code css loading for plugins -->
+    <link rel="stylesheet" type="text/css" href="plugins/zoom_to/main.css">
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/main.css">
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/lib/ext-4.1.1a/resources/css/ext-all.css">
-      
+
 	<link rel="stylesheet" href="css/foundation.css">
 	<link rel="stylesheet" href="css/app.css">
 	<script src="js/lib/foundation/modernizr.foundation.js"></script>
@@ -69,6 +70,10 @@
                 <img src="plugins/<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
                 <div><%- pluginObject.toolbarName %></div>
             </a>
+    </script>
+
+    <script type="text/template" id="template-topbar-plugin">
+            <a href="#"></a>
     </script>
 
     <script type="text/template" id="template-sidebar-link">
