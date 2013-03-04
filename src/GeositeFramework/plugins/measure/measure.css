@@ -1,0 +1,45 @@
+﻿.measure-tooltip {
+    background-color: white;
+    border: 1px solid #7EABCD;
+    border-radius: 4px;
+    font-size: 9pt;
+    padding: 5px;
+    position: absolute;
+    width: 200px;
+    z-index: 9999;
+}
+
+    .measure-tooltip > div
+    {
+        padding: 5px;
+    }
+
+    .measure-tooltip .measure-label, .measure-bubble .measure-label
+    {
+        display: inline-block;
+        font-weight: bold;
+        width: 100px;
+    }
+
+    .simpleInfoWindow .content
+    {
+        display: block;
+        width: 100% !important;
+    }
+
+    .simpleInfoWindow .close
+    {
+        display: none;
+    }
+
+    .measure-info-window
+    {
+        background-color: #808080;
+        color: #fff;
+        height: 60px !important;
+    }
+
+    .measure-info-window .title
+    {
+        border: none;
+    }
