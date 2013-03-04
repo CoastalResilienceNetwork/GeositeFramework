@@ -1,6 +1,6 @@
 ﻿
 define(["jquery", "use!underscore"],
-    function ($, _, InfoWindow) {
+    function ($, _) {
         var AgsMeasure = function (opts) {
 
             var options = _.extend({
