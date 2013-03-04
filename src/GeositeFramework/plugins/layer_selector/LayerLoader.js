@@ -19,7 +19,7 @@ define([
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
 
-                // Parse config file to get URLs of layer sources
+                // Parse config data to get URLs of layer sources
                 var layerData;
                 try {
                     layerData = JSON.parse(layerSourcesJson);
@@ -38,15 +38,15 @@ define([
                 }
                 if (layerData.wmsSources !== undefined) {
                     _.each(layerData.wmsSources, function (spec) {
-                        var loader = new WmsLoader(spec.url, spec.folderName);
-                        loadLayerSource(loader, spec.url);
+                        var loader = new WmsLoader(spec.url, spec.folderTitle);
+                        loadLayerSource(loader, spec.url, spec.layerIds);
                     });
                 }
             }
 
-            function loadLayerSource(loader, url) {
+            function loadLayerSource(loader, url, layerIdWhitelist) {
                 _urls.push(url);
-                loader.load(_rootNode, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError)
+                loader.load(_rootNode, layerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError)
             }
 
             function onLayerSourceLoaded(url) {

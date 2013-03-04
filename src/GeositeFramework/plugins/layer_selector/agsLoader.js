@@ -17,7 +17,7 @@ define(["jquery", "use!underscore"],
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
+            function loadCatalog(rootNode, layerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
                 // Load root catalog entries
                 _makeContainerNode = makeContainerNode;
                 _makeLeafNode = makeLeafNode;

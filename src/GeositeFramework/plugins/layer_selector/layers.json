@@ -3,8 +3,11 @@
     "wmsSources": [
         {
             "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
-            "folderName": "Risks",
-            "layerNames": [
+            "folderTitle": "Risks",
+            "layerIds": [
+                "preview:cy_risk",
+                "preview:cy_buffers",
+                "preview:cs_frequency"
             ]
         }
     ]
