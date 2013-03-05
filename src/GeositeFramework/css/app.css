@@ -243,37 +243,6 @@ h1, h2, h3, h4, h5, h6 {
 					opacity: 1;
 				}
 
-                .content .map .tools .topbar-plugin .search-box-expanded {
-                    width: 180px;
-                    opacity: 1;
-                }
-				.content .map .tools .topbar-plugin .search-box:hover {
-                    width: 180px;
-				}
-			
-             /* Why don't we have to put toolbar plugin for this to work? */
-			.content .map .search-box {
-				
-				background-image: url(../img/tools_search.png);
-				transition: width 1s;
-				-moz-transition: width 1s;
-				-webkit-transition: width 1s;
-				-o-transition: width 1s;
-				}
-
-				.content .map .topbar-plugin .search-box input {
-					margin-left: 34px;
-					width: 146px;
-					border: none;
-					background-color: #FAFAFA;
-					outline-color: transparent;
-					}
-					.content .map .topbar-plugin .search-box input:focus {
-                        box-shadow: none;
-						border-color: none;
-						background: #FFF;
-					}
-
 			.content .map .measure {		
 				background-image: url(../img/tools_measure.png);
 			}

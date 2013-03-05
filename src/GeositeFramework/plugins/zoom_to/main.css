@@ -1,53 +1,51 @@
 ﻿
-#search-box-choices {
-    /* display: none; */
-    /* position: absolute; */
-    width: 180px;
-    height: 358px;
-    overflow: auto;
-    /* top: 88px; */
-    /* left: 240px; */
-    /* right: 454px; */
-    /* z-index: 2000; */
-    background: #434F46;
-    background: rgba(0,0,0,0.6);
-    color: #ffffff;
-    padding: 5px;
+#pluginZoomTo-choices {
+    width: 180px !important;
+    height: 358px !important;
+    overflow: auto !important;
+    background: #434F46 !important;
+    background: rgba(0,0,0,0.6) !important;
+    color: #ffffff !important;
+    padding: 5px !important;
 
 }
 
-.content .map .tools .topbar-plugin .search-box-showing-input {
-    width: 180px;
-    opacity: 1;
+.pluginZoomTo-showing-input {
+    width: 180px !important;
+    opacity: 1 !important;
 }
 
-.content .map .tools .topbar-plugin .search-box-with-choices {
-    height: 400px;
+.pluginZoomTo-with-choices {
+    height: 400px !important;
 }
 
-.content .map .tools .topbar-plugin .search-box:hover {
-    width: 180px;
+.pluginZoomTo:hover {
+    width: 180px !important;
 }
 
-/* Why don't we have to put toolbar plugin for this to work? */
-.content .map .search-box {
-	
-	background-image: url(../../img/tools_search.png);
-	transition: width 1s;
-	-moz-transition: width 1s;
-	-webkit-transition: width 1s;
-	-o-transition: width 1s;
+.pluginZoomTo {
+	background-image: url(../../img/tools_search.png) !important;
+	transition: width 1s !important;
+	-moz-transition: width 1s !important;
+	-webkit-transition: width 1s !important;
+	-o-transition: width 1s !important;
 }
 
-.content .map .topbar-plugin .search-box input {
-	margin-left: 34px;
-	width: 146px;
-	border: none;
-	background-color: #FAFAFA;
-	outline-color: transparent;
+.pluginZoomTo input {
+	margin-left: 34px !important;
+	width: 146px !important;
+	border: none !important;
+	background-color: #FAFAFA !important;
+	outline-color: transparent !important;
 }
-.content .map .topbar-plugin .search-box input:focus {
-    box-shadow: none;
-	border-color: none;
-	background: #FFF;
+
+.pluginZoomTo input:focus {
+    box-shadow: none !important;
+	border-color: none !important;
+	background: #FFF !important;
+}
+
+.pluginZoomTo-expanded {
+    width: 180px !important;
+    opacity: 1 !important;
 }

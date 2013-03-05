@@ -7,7 +7,7 @@ define([],
         ////////////////////////////////
 
         var inputTemplate = ['<input type="text" placeholder="Search by Address" value="<%= inputValue %>" />',
-                             '<div id="search-box-choices"></div>'
+                             '<div id="pluginZoomTo-choices"></div>'
                              ].join("");
             locationTemplate = '<a href="#"><%= address %></a> (<%= x %>, <%= y %>)<br>';
 
@@ -100,7 +100,7 @@ define([],
 
         var UiInputView = Backbone.View.extend({
 
-            className: "search-box",
+            className: "pluginZoomTo",
 
             events: {
                 "mouseenter": function () { this.model.set('hasMouse', true); },
@@ -114,7 +114,7 @@ define([],
 
                 var candidates = this.model.get("addressCandidates"),
                     view = this,
-                    $domElement = view.$("#search-box-choices"),
+                    $domElement = view.$("#pluginZoomTo-choices"),
                     $wrapHtml = function (candidate) {
                         // take a location candidate and build a dom fragment
                         // and click event to center and zoom over the candidate's
@@ -146,7 +146,7 @@ define([],
 
                 var point = new esri.geometry.Point(x, y, this.model.locator.spatialReference);
                 this.model.locator.map.centerAndZoom(point, this.model.locator.zoomLevel);
-                this.$("#search-box-choices").empty();
+                this.$("#pluginZoomTo-choices").empty();
                 this.$('input').val("");
                 this.model.set('inputValue', "");
             },
@@ -165,17 +165,17 @@ define([],
 
                 this.listenTo(this.model, "change:showingInput change:showingLocationBox", function () {
                     if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') == true) {
-                        view.$el.addClass("search-box-showing-input");
-                        view.$el.addClass("search-box-with-choices");
+                        view.$el.addClass("pluginZoomTo-showing-input");
+                        view.$el.addClass("pluginZoomTo-with-choices");
                     } else if (view.model.get('showingInput') === true) {
-                        view.$el.addClass("search-box-showing-input");
-                        view.$el.removeClass("search-box-with-choices");
+                        view.$el.addClass("pluginZoomTo-showing-input");
+                        view.$el.removeClass("pluginZoomTo-with-choices");
                     } else if (view.model.get('showingInput') == true && view.model.get('showingLocationBox') === false) {
                         alert("Error. Can't show location box without input");
                     } else {
                         view.$('input').val("");
-                        view.$el.removeClass("search-box-showing-input");
-                        view.$el.removeClass("search-box-with-choices");
+                        view.$el.removeClass("pluginZoomTo-showing-input");
+                        view.$el.removeClass("pluginZoomTo-with-choices");
                     }
                 });
 
