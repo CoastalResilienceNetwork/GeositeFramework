@@ -14,8 +14,6 @@
             },
 
             renderLauncher: function renderLauncher() {
-                // TODO: Provide as a template when arbitrary config linker
-                // is available.
                 this.input = this.input || new ui.UiInput();
                 this.inputView = this.inputView || new ui.UiInputView({ model: this.input });
                 return this.inputView.render().$el;

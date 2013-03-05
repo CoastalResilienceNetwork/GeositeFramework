@@ -37,23 +37,23 @@ define([],
                 // and the other managed based on the state of the model
                 // at the time of change.
 
-                var that = this;
+                var model = this;
                 this.on("change:inputValue", function () {
-                    if (that.get('inputValue') === "") {
-                        that.set('showingInput', false);
-                        that.set('showingLocationBox', false);
+                    if (model.get('inputValue') === "") {
+                        model.set('showingInput', false);
+                        model.set('showingLocationBox', false);
                     } else {
-                        that.set('showingInput', true);
-                        that.set('showingLocationBox', true);
-                        that.geocodeAddress();
+                        model.set('showingInput', true);
+                        model.set('showingLocationBox', true);
+                        model.geocodeAddress();
                     }
                 });
 
                 this.on("change:hasMouse change:hasFocus", function () {
-                    if (that.get('hasMouse') || that.get('hasFocus') || that.get('inputValue')) {
-                        that.set('showingInput', true);
+                    if (model.get('hasMouse') || model.get('hasFocus') || model.get('inputValue')) {
+                        model.set('showingInput', true);
                     } else {
-                        that.set('showingInput', false);
+                        model.set('showingInput', false);
                     }
                 });
             },
@@ -76,7 +76,7 @@ define([],
                 // the plugin conf. Returns an array of candidates with
                 // latlng values on sucess, an error on fealure.
 
-                var that = this;
+                var model = this;
                     singleLine =  this.get('inputValue'),
                     url = [this.locator.url, "SingleLine=",
                            singleLine, "&outFields=&outSR=&f=pjson"
@@ -84,11 +84,11 @@ define([],
                 
                 $.ajax({ dataType: "jsonp", url: url })
                     .done(function (results) {
-                        that.set('addressCandidates', results.candidates);
+                        model.set('addressCandidates', results.candidates);
                         })
                     .error(function (error) {
                         // TODO: handle this error.
-                        that.set('addressError', true);
+                        model.set('addressError', true);
                     });
             }
         });
@@ -113,8 +113,8 @@ define([],
             renderLocationBox: function () {
 
                 var candidates = this.model.get("addressCandidates"),
-                    that = this,
-                    $domElement = that.$("#search-box-choices"),
+                    view = this,
+                    $domElement = view.$("#search-box-choices"),
                     $wrapHtml = function (candidate) {
                         // take a location candidate and build a dom fragment
                         // and click event to center and zoom over the candidate's
@@ -127,7 +127,7 @@ define([],
                                 x: x,
                                 y: y
                             }));
-                        $fragment.click(function () { that.centerAndZoom(x, y); });
+                        $fragment.click(function () { view.centerAndZoom(x, y); });
                         return $fragment
                     };
 
@@ -161,32 +161,32 @@ define([],
             },
 
             initialize: function () {
-                var that = this;
+                var view = this;
 
                 this.listenTo(this.model, "change:showingInput change:showingLocationBox", function () {
-                    if (that.model.get('showingInput') === true && that.model.get('showingLocationBox') == true) {
-                        that.$el.addClass("search-box-showing-input");
-                        that.$el.addClass("search-box-with-choices");
-                    } else if (that.model.get('showingInput') === true) {
-                        that.$el.addClass("search-box-showing-input");
-                        that.$el.removeClass("search-box-with-choices");
-                    } else if (that.model.get('showingInput') == true && that.model.get('showingLocationBox') === false) {
+                    if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') == true) {
+                        view.$el.addClass("search-box-showing-input");
+                        view.$el.addClass("search-box-with-choices");
+                    } else if (view.model.get('showingInput') === true) {
+                        view.$el.addClass("search-box-showing-input");
+                        view.$el.removeClass("search-box-with-choices");
+                    } else if (view.model.get('showingInput') == true && view.model.get('showingLocationBox') === false) {
                         alert("Error. Can't show location box without input");
                     } else {
-                        that.$('input').val("");
-                        that.$el.removeClass("search-box-showing-input");
-                        that.$el.removeClass("search-box-with-choices");
+                        view.$('input').val("");
+                        view.$el.removeClass("search-box-showing-input");
+                        view.$el.removeClass("search-box-with-choices");
                     }
                 });
 
                 this.listenTo(this.model, "change:addressCandidates change:addressError", function () {
-                    if (that.model.get('addressError')) {
+                    if (view.model.get('addressError')) {
                         // TODO: add error handling.
                         // Unfortunately, errors never seem to happen
                         // because the request doesn't timeout for bad
                         // data, it just never returns.
                     } else {
-                        that.renderLocationBox();
+                        view.renderLocationBox();
                     }
                 });
             },
