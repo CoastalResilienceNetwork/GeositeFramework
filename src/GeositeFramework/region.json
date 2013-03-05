@@ -1,5 +1,5 @@
 {
-	"organization": "Sample Org",
+    "organization": "Sample Org",
     "title": "Geosite Framework Sample",
     "headerLinks": [
         { "text": "Azavea", "url": "http://www.azavea.com/" },

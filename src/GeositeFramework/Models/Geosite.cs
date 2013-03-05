@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
+using log4net;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace GeositeFramework.Models
 {
@@ -29,7 +32,7 @@ namespace GeositeFramework.Models
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
         /// </summary>
-        public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath)
+        public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath, string appDataFolderPath)
         {
             using (var sr = new StreamReader(regionJsonFilePath))
             {
@@ -37,7 +40,15 @@ namespace GeositeFramework.Models
                 var pluginFolderPaths = Directory.EnumerateDirectories(pluginsFolderPath);
                 ValidatePlugins(pluginFolderPaths);
                 var pluginFolderNames = pluginFolderPaths.Select(p => Path.GetFileName(p)).ToList();
-                return new Geosite(regionJson, pluginFolderNames);
+                try
+                {
+                    return new Geosite(regionJson, pluginFolderNames, appDataFolderPath);
+                }
+                catch (GeositeJsonParseException ex)
+                {
+                    // Add file path to message and re-throw
+                    throw new GeositeJsonParseException(ex.ParseMessages, "Error(s) in configuration file '{0}':", regionJsonFilePath);
+                }
             }
         }
 
@@ -53,13 +64,16 @@ namespace GeositeFramework.Models
         }
 
         /// <summary>
-        /// Make a Geosite object given the specified configuration info.
+        /// Make a Geosite object given the specified configuration info. 
+        /// Note this is public only for testing purposes.
         /// </summary>
         /// <param name="regionJson">A JSON configuration string (e.g. contents of the "region.json" configuration file)</param>
         /// <param name="existingPluginFolderNames">A list of plugin folder names (not full paths -- relative to the site "plugins" folder)</param>
-        public Geosite(string regionJson, List<string> existingPluginFolderNames)
+        /// <param name="appDataFolderPath">Path to the "App_Data" folder</param>
+        public Geosite(string regionJson, List<string> existingPluginFolderNames, string appDataFolderPath)
         {
-            var jsonObj = JObject.Parse(regionJson);
+            // Validate the configuration data
+            var jsonObj = ValidateRegionJson(regionJson, appDataFolderPath);
 
             // Get plugin folder names, in the specified order
             var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
@@ -69,7 +83,7 @@ namespace GeositeFramework.Models
             jsonObj.Add("pluginFolderNames", new JArray(pluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
-            Organization = (string)jsonObj["title"];
+            Organization = (string)jsonObj["organization"];
             Title = (string)jsonObj["title"];
             
             HeaderLinks = jsonObj["headerLinks"]
@@ -91,6 +105,41 @@ namespace GeositeFramework.Models
             PluginVariableNames = string.Join(", ", pluginFolderNames.Select((name, i) => string.Format("p{0}", i)));
         }
 
+        private static JObject ValidateRegionJson(string regionJson, string appDataFolderPath)
+        {
+            IList<string> parseMessages;
+            try
+            {
+                var jsonObj = JObject.Parse(regionJson);
+                var regionDataSchema = GetRegionDataSchema(appDataFolderPath);
+                if (jsonObj.IsValid(GetRegionDataSchema(appDataFolderPath), out parseMessages))
+                {
+                    return jsonObj;
+                }
+            }
+            catch (Exception ex)
+            {
+                parseMessages = new List<string> { ex.Message };
+            }
+            throw new GeositeJsonParseException(parseMessages, "Error(s) in site configuration JSON");
+        }
+
+        private static JsonSchema _regionDataSchema = null;
+
+        private static JsonSchema GetRegionDataSchema(string appDataFolderPath)
+        {
+            if (_regionDataSchema == null)
+            {
+                // Load schema for validating "region.json" file (see http://json-schema.org)
+                string regionSchemaPath = Path.Combine(appDataFolderPath, "regionSchema.json");
+                using (var sr = new StreamReader(regionSchemaPath))
+                {
+                    _regionDataSchema = JsonSchema.Parse(sr.ReadToEnd());
+                }
+            }
+            return _regionDataSchema;
+        }
+
         private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
         {
             var retVal = new List<string>();
@@ -107,7 +156,6 @@ namespace GeositeFramework.Models
                 }
                 else
                 {
-                    //TODO: log it using log4net
                     throw new ApplicationException("Specified plugin folder not found: " + folderName);
                 }
             }
