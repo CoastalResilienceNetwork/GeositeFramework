@@ -1,5 +1,5 @@
 ﻿define(
-    ["dojo/_base/declare", "./ui", "dojo/text!plugins/zoom_to/zoom_to.json", "esri/tasks/locator"],
+    ["dojo/_base/declare", "./ui", "dojo/text!plugins/zoom_to/zoom_to.json"],
     function (declare, ui, configString) {
         return declare(null, {
             toolbarName: "Zoom To",

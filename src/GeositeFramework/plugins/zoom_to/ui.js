@@ -74,7 +74,7 @@ define([],
             geocodeAddress: function () {
                 // Make an ajax request to the geocoder URL provided by 
                 // the plugin conf. Returns an array of candidates with
-                // latlng values on sucess, an error on fealure.
+                // latlng values on success, an error on failure.
 
                 var model = this;
                     singleLine =  this.get('inputValue'),
