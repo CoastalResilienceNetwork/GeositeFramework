@@ -1,4 +1,14 @@
 {
     "agsSources": ["http://dev.gulfmex.coastalresilience.org/arcgis/rest/services"],
-    "wmsSources": []
+    "wmsSources": [
+        {
+            "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
+            "folderTitle": "Risks",
+            "layerIds": [
+                "preview:cy_risk",
+                "preview:cy_buffers",
+                "preview:cs_frequency"
+            ]
+        }
+    ]
 }
