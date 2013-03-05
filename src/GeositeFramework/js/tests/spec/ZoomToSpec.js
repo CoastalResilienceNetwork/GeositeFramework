@@ -21,7 +21,6 @@ describe('ZoomTo', function() {
             spyOn(uiInput, 'geocodeAddress');
         });
 
-        // spy on ajax and make send back some dummy response.
         it('Calls geocodeAddress after the input is set', function () {
             expect(uiInput.geocodeAddress).not.toHaveBeenCalled();
             uiInput.set('inputValue', "Philadelphia");
@@ -64,6 +63,60 @@ describe('ZoomTo', function() {
         //     expect(uiInput.get('addressError')).toEqual(true);
         // });
 
+
+    });
+
+    describe("UiInputView view instance", function() {
+        beforeEach(function() {
+
+
+            uiInput = new modules.ui.UiInput;
+            uiInput.setupLocator("", "", "", "");
+            uiInput.locator.map = { centerAndZoom: function () { } };
+
+            uiInputView = new modules.ui.UiInputView({ model: uiInput });
+            uiInputView.render();
+            input = uiInputView.$('input');
+
+            enterPress = $.Event("keyup", { keyCode: 13 }),
+            otherPress = $.Event("keyup", { keyCode: 10 }),
+
+            spyOn(uiInput, "geocodeAddress");
+            spyOn(uiInput.locator.map, "centerAndZoom");
+
+            esri.geometry = { Point: function(x, y, sr) { } };
+
+        });
+
+        it('sets the inputValue attribute iff enter is pressed', function () {
+            expect(uiInputView.model.get('inputValue')).toBe("");
+            
+            input.val("test");
+            input.trigger(enterPress);
+
+            expect(uiInputView.model.get('inputValue')).toBe("test");
+        });
+
+        it("doesn't set the inputValue attribute if a non-enter key is pressed", function () {
+            expect(uiInputView.model.get('inputValue')).toBe("");
+            
+            input.val("test");
+            input.trigger(otherPress);
+
+            expect(uiInputView.model.get('inputValue')).not.toBe("test");
+        });
+
+        it('Changes state correctly when centerAndZoom is called.', function() {
+            uiInputView.centerAndZoom();
+            expect(input.val()).toBe("");
+            expect(uiInputView.model.get('inputValue')).toBe("");
+            expect(uiInputView.model.get('showingInput')).toBe(false);
+            expect(uiInputView.model.get('showingLocationBox')).toBe(false);
+        });
+
+        // TODO: Test renderLocationBox
+        // TODO: Test listens events
+        // TODO: Test renders
 
     });
 });
