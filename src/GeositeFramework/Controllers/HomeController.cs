@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using log4net;
 
 namespace GeositeFramework.Controllers
 {
     public class HomeController : Controller
     {
+        private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         //
         // GET: /Home/
 
@@ -18,11 +21,19 @@ namespace GeositeFramework.Controllers
             {
                 return View(app.GeositeData);
             }
-            catch (Exception)
+            catch (GeositeJsonParseException ex)
             {
-                // TODO: log exception using log4net
-                // TODO: return a nice "500" error page
-                throw;
+                _log.Error(ex.Message);
+                foreach (var message in ex.ParseMessages)
+                {
+                    _log.Error(message);
+                }
+                throw;   // Will display /Error.html
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.Message);
+                throw;   // Will display /Error.html
             }
         }
 
