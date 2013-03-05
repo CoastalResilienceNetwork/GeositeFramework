@@ -92,8 +92,9 @@ describe('ZoomTo', function() {
             expect(uiInputView.model.get('inputValue')).toBe("");
             
             input.val("test");
-            input.trigger(enterPress);
+            expect(uiInputView.model.get('inputValue')).not.toBe("test");
 
+            input.trigger(enterPress);
             expect(uiInputView.model.get('inputValue')).toBe("test");
         });
 
