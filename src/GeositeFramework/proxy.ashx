@@ -134,7 +134,7 @@ public class proxy : IHttpHandler {
         catch (Exception e)
         {
             if (e is ApplicationException)
-                throw e;
+                throw;
             
             // just return an empty string at this point
             // -- may want to throw an exception, or add to a log file
