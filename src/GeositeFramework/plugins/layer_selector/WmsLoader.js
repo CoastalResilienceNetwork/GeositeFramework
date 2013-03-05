@@ -1,8 +1,7 @@
 ﻿// Module WmsLoader.js
 
-define(["jquery", "use!underscore"],
-    function ($, _) {
-        dojo.require("esri.layers.wms");
+define(["use!underscore", "esri.layers.wms"],
+    function (_) {
 
         var WmsLoader = function (url, folderName) {
             var _url = url,
