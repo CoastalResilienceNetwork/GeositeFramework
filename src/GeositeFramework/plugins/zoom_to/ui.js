@@ -50,7 +50,9 @@ define([],
                 });
 
                 this.on("change:hasMouse change:hasFocus", function () {
-                    if (model.get('hasMouse') || model.get('hasFocus') || model.get('inputValue')) {
+                    if (model.get('hasMouse') === true || 
+                        model.get('hasFocus') === true || 
+                        model.get('inputValue') === true) {
                         model.set('showingInput', true);
                     } else {
                         model.set('showingInput', false);
@@ -155,7 +157,7 @@ define([],
                 // Set the input value only when enter is pressed
 
                 var keycode = (event.keyCode ? event.keyCode : null);
-                if (keycode == '13') {
+                if (keycode === '13') {
                     this.model.set("inputValue", this.$("input").val());
                 }
             },
@@ -164,13 +166,13 @@ define([],
                 var view = this;
 
                 this.listenTo(this.model, "change:showingInput change:showingLocationBox", function () {
-                    if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') == true) {
+                    if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') === true) {
                         view.$el.addClass("pluginZoomTo-showing-input");
                         view.$el.addClass("pluginZoomTo-with-choices");
                     } else if (view.model.get('showingInput') === true) {
                         view.$el.addClass("pluginZoomTo-showing-input");
                         view.$el.removeClass("pluginZoomTo-with-choices");
-                    } else if (view.model.get('showingInput') == true && view.model.get('showingLocationBox') === false) {
+                    } else if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') === false) {
                         alert("Error. Can't show location box without input");
                     } else {
                         view.$('input').val("");
@@ -180,7 +182,7 @@ define([],
                 });
 
                 this.listenTo(this.model, "change:addressCandidates change:addressError", function () {
-                    if (view.model.get('addressError')) {
+                    if (view.model.get('addressError') === true) {
                         // TODO: add error handling.
                         // Unfortunately, errors never seem to happen
                         // because the request doesn't timeout for bad
