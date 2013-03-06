@@ -157,7 +157,7 @@ define([],
                 // Set the input value only when enter is pressed
 
                 var keycode = (event.keyCode ? event.keyCode : null);
-                if (keycode === '13') {
+                if (keycode === 13) {
                     this.model.set("inputValue", this.$("input").val());
                 }
             },
