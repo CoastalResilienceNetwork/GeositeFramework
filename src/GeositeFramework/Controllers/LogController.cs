@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using log4net;
@@ -39,23 +38,17 @@ namespace GeositeFramework.Controllers
             {
                 sb.Append(Environment.NewLine).Append(" - While attempting to ").Append(data.TriedTo);
             }
-            if (IsNonBlank(data.Url))
+            var level = (IsNonBlank(data.Level) ? data.Level.ToUpper() : "INFO");
+            if (level != "DEBUG" && level != "INFO")
             {
-                sb.Append(Environment.NewLine).Append(" - URL: ").Append(data.Url);
-            }
-            var userAgent = ControllerContext.HttpContext.Request.UserAgent;
-            if (IsNonBlank(userAgent))
-            {
+                // Add user agent for more severe messages
+                var userAgent = ControllerContext.HttpContext.Request.UserAgent;
                 sb.Append(Environment.NewLine).Append(" - UserAgent: ").Append(userAgent);
             }
 
             // Now log it at the appropriate level.
-            if (!IsNonBlank(data.Level))
-            {
-                data.Level = "INFO";
-            }
             var message = sb.ToString();
-            switch (data.Level.ToUpper())
+            switch (level)
             {
                 case "DEBUG": logger.Debug(message); break;
                 case "INFO" : logger.Info(message); break;
