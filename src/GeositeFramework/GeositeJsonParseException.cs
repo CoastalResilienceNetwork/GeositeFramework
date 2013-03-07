@@ -14,5 +14,11 @@ namespace GeositeFramework
         {
             ParseMessages = parseMessages;
         }
+
+        public GeositeJsonParseException(IList<string> parseMessages, Exception innerException, string message, params object[] arguments)
+            : base(String.Format(message, arguments), innerException)
+        {
+            ParseMessages = parseMessages;
+        }
     }
 }

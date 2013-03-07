@@ -47,7 +47,7 @@ namespace GeositeFramework.Models
                 catch (GeositeJsonParseException ex)
                 {
                     // Add file path to message and re-throw
-                    throw new GeositeJsonParseException(ex.ParseMessages, "Error(s) in configuration file '{0}':", regionJsonFilePath);
+                    throw new GeositeJsonParseException(ex.ParseMessages, ex, "Error(s) in configuration file '{0}':", regionJsonFilePath);
                 }
             }
         }
