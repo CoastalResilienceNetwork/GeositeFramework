@@ -24,7 +24,6 @@ define(["jquery", "use!underscore"],
                 _onLayerSourceLoaded = onLayerSourceLoaded;
                 _onLayerSourceLoadError = onLayerSourceLoadError;
                 loadFolder("", function (entries) {
-                    console.log("Catalog has " + entries.folders.length + " folders");
                     // Root of catalog has loaded -- load child folders and services
                     addParentNodeToServiceSpecs(rootNode, entries.services);
                     loadFolders(entries.folders, entries.services, rootNode);
