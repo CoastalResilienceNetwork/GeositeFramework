@@ -1,15 +1,17 @@
-﻿// Module WmsLoader.js
+﻿// Module LayerLoader.js
 
 define([
         "dojo/json",
+        "use!tv4",
         "use!underscore",
         "./AgsLoader",
         "./WmsLoader",
     ],
-    function (JSON, _, AgsLoader, WmsLoader) {
+    function (JSON, tv4, _, AgsLoader, WmsLoader) {
 
-        var LayerLoader = function () {
-            var _urls = [],
+        var LayerLoader = function (app) {
+            var _app = app,
+                _urls = [],
                 _rootNode = null,
                 _cssClassPrefix = 'pluginLayerSelector',
                 _onLoadingComplete;
@@ -18,29 +20,72 @@ define([
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
+                var layerData = parseLayerConfigData(layerSourcesJson);
+                if (layerData) {
+                    // Load layer info from each source
+                    _rootNode = makeRootNode();
+                    if (layerData.agsSources !== undefined) {
+                        _.each(layerData.agsSources, function (url) {
+                            var loader = new AgsLoader(url);
+                            loadLayerSource(loader, url);
+                        });
+                    }
+                    if (layerData.wmsSources !== undefined) {
+                        _.each(layerData.wmsSources, function (spec) {
+                            var loader = new WmsLoader(spec.url, spec.folderTitle);
+                            loadLayerSource(loader, spec.url, spec.layerIds);
+                        });
+                    }
+                }
+            }
 
-                // Parse config data to get URLs of layer sources
-                var layerData;
+            function parseLayerConfigData(layerSourcesJson) {
+                // Parse and validate config data to get URLs of layer sources
+                var errorMessage;
                 try {
-                    layerData = JSON.parse(layerSourcesJson);
+                    var data = JSON.parse(layerSourcesJson),
+                        schema = layerConfigSchema,
+                        valid = tv4.validate(data, schema);
+                    if (valid) {
+                        return data;
+                    } else {
+                        errorMessage = tv4.error.message + " (data path: " + tv4.error.dataPath + ")";
+                    }
                 } catch (e) {
-                    // TODO: log server-side
-                    alert("Error in layer_selector plugin config file layers.json: " + e.message);
+                    errorMessage = e.message;
                 }
+                _app.error("", "Error in config file layers.json: " + errorMessage);
+                return null;
+            }
 
-                // Load layer info from each source
-                _rootNode = makeRootNode();
-                if (layerData.agsSources !== undefined) {
-                    _.each(layerData.agsSources, function (url) {
-                        var loader = new AgsLoader(url);
-                        loadLayerSource(loader, url);
-                    });
-                }
-                if (layerData.wmsSources !== undefined) {
-                    _.each(layerData.wmsSources, function (spec) {
-                        var loader = new WmsLoader(spec.url, spec.folderTitle);
-                        loadLayerSource(loader, spec.url, spec.layerIds);
-                    });
+            // Schema for validating layers.config file (see http://json-schema.org)
+
+            var layerConfigSchema = {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                title: 'layer_selector plugin: layer sources specification',
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    agsSources: {
+                        type: 'array',
+                        items: { type: 'string' }
+                    },
+                    wmsSources: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                url: { type: 'string' },
+                                folderTitle: { type: 'string' },
+                                layerIds: {
+                                    type: 'array',
+                                    items: { type: 'string' }
+                                }
+                            },
+                            required: ['url', 'folderTitle'],
+                            additionalProperties: false
+                        }
+                    }
                 }
             }
 
@@ -59,8 +104,7 @@ define([
             }
 
             function onLayerSourceLoadError(jqXHR, textStatus, errorThrown) {
-                // TODO: log server side
-                alert('AJAX error: ' + errorThrown);
+                _app.error("AJAX call failed");
             }
 
             // Functions to build a node tree of map layers. The node schema targets Ext.data.TreeStore 

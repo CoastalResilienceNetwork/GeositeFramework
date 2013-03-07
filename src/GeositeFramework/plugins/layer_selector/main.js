@@ -25,6 +25,11 @@ require({
             main: "underscore-1.4.3.min"
         },
         {
+            name: "tv4",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
+            main: "tv4.min"
+        },
+        {
             name: "extjs",
             location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib/ext-4.1.1a",
             main: "ext-all"
@@ -37,6 +42,7 @@ require({
     },
     use: {
         "underscore": { attach: "_" },
+        "tv4": { attach: "tv4" },
         "extjs": { attach: "Ext" }
     }
 });
@@ -61,7 +67,7 @@ define([
                 this._ui = new Ui(this.container, this.map);
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                new LayerLoader().load(layerSourcesJson, function (tree) {
+                new LayerLoader(this.app).load(layerSourcesJson, function (tree) {
                     self._ui.render(tree);
                 });
             },
