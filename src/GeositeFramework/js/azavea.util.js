@@ -553,6 +553,29 @@ var Azavea = {};
         }
     };
 
+    az.logMessage = function (message, logger, level) {
+        /// <summary>Logs a message to a server-side log, using specified level and logger name.
+        ///          In order for this to work, Azavea.logHandlerUrl must be set.</summary>
+        if (!az.logUrl) {
+            return;
+        }
+        $.ajax({
+            url: az.logUrl,
+            type: 'POST',
+            data: {
+                message: message,
+                url: window.location.href,
+                logger: logger,
+                level: level
+            },
+            dataType: 'text',
+            error: function (resp) {
+                az.log("Unable to log message to server (" + az.logUrl + "), original message '" +
+                    message + "'.  Handler response: '" + resp.responseText + "'.");
+            }
+        });
+    };
+
     az.inputOnFocus = function(defaultText, defaultTextStyle) {
         /// <summary>Returns a function to use in the jquery .focus(...) method.
         ///          Default text is the text to show if the user hasn't input anything.

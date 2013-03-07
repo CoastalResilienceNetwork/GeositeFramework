@@ -52,6 +52,7 @@
     function initPlugins(model, esriMap) {
         model.get('plugins').each(function (pluginModel) {
             var pluginObject = pluginModel.get('pluginObject'),
+                pluginName = pluginModel.get('pluginSrcFolder'),
                 // The display container used in the model view will be created
                 // here so the plugin object can be constructed with a reference
                 // to it.
@@ -59,11 +60,34 @@
 
             pluginModel.set('$displayContainer', $displayContainer);
             pluginObject.initialize({
-                app: null,
+                app: {
+                    version: N.app.version,
+                    info: makeLogger(pluginName, "INFO"),
+                    warn: makeLogger(pluginName, "WARN"),
+                    error: makeLogger(pluginName, "ERROR"),
+                    _unsafeMap: esriMap
+                },
                 map: N.createMapWrapper(esriMap),
                 container: $displayContainer.find('.plugin-container-inner')[0]
             });
         });
+    }
+
+    function makeLogger(pluginName, level) {
+        return function (userMessage, developerMessage) {
+            if (developerMessage) {
+                // Log to server-side plugin-specific log file
+                Azavea.logMessage(developerMessage, pluginName, level);
+                if (level === "ERROR") {
+                    // Errors also get logged to server-side main log file
+                    Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
+                }
+            }
+            if (userMessage) {
+                // TODO: create a panel
+                alert(userMessage);
+            }
+        }
     }
 
     N.models = N.models || {};
