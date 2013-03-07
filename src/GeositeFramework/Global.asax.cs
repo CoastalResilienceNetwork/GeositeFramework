@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using GeositeFramework.Models;
+using log4net;
 
 namespace GeositeFramework
 {
@@ -22,6 +23,7 @@ namespace GeositeFramework
                 {
                     string configFilePath = HostingEnvironment.MapPath("~/region.json");
                     string pluginsFolderPath = HostingEnvironment.MapPath("~/plugins");
+                    string appDataFolderPath = HostingEnvironment.MapPath("~/App_Data");
                     if (!File.Exists(configFilePath))
                     {
                         throw new FileNotFoundException("Site configuration file not found: " + configFilePath);
@@ -30,7 +32,11 @@ namespace GeositeFramework
                     {
                         throw new FileNotFoundException("Plugins folder not found: " + pluginsFolderPath);
                     }
-                    geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath);
+                    if (!Directory.Exists(appDataFolderPath))
+                    {
+                        throw new FileNotFoundException("App_Data folder not found: " + appDataFolderPath);
+                    }
+                    geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath, appDataFolderPath);
                 }
                 return geositeData;
             }
@@ -44,7 +50,8 @@ namespace GeositeFramework
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-
+            // Configure log4net from the info in Web.config
+            log4net.Config.XmlConfigurator.Configure();
         }
     }
 }
