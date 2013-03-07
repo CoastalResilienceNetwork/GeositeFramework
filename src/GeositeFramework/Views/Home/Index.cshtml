@@ -205,7 +205,7 @@
             return $(document).ready(function() {
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
-                Geosite.app.init(regionData, plugins);
+                Geosite.app.init('@Html.Raw(Model.GeositeFrameworkVersion)', regionData, plugins);
             });
         });
 

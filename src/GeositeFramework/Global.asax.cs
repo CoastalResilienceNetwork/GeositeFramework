@@ -14,6 +14,8 @@ namespace GeositeFramework
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private string geositeFrameworkVersion = "1.0.0";
+
         private Geosite geositeData;
         public Geosite GeositeData
         {
@@ -37,6 +39,7 @@ namespace GeositeFramework
                         throw new FileNotFoundException("App_Data folder not found: " + appDataFolderPath);
                     }
                     geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath, appDataFolderPath);
+                    geositeData.GeositeFrameworkVersion = geositeFrameworkVersion;
                 }
                 return geositeData;
             }
