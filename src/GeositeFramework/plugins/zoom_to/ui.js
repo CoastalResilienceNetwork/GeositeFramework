@@ -7,9 +7,11 @@ define([],
         ////////////////////////////////
 
         var inputTemplate = ['<input type="text" placeholder="Search by Address" value="<%= inputValue %>" />',
+                             '<div id="pluginZoomTo-clearSearch"></div>',
                              '<div id="pluginZoomTo-choices"></div>'
                              ].join("");
-            locationTemplate = '<a href="#"><%= address %></a> (<%= x %>, <%= y %>)<br>';
+            locationTemplate = '<a href="#"><%= address %></a> (<%= x %>, <%= y %>)<br>',
+            searchErrorText = "There was an error completing your request.";
 
 
         ////////////////////////////////
@@ -20,7 +22,7 @@ define([],
 
             defaults: {
                 // set by view, listened internally
-                inputValue: "", // changed only when enter is pressed
+                inputValue: "",
                 hasMouse: false,
                 hasFocus: false,
 
@@ -29,6 +31,7 @@ define([],
                 showingLocationBox: false,
                 addressCandidates: [],
                 addressError: false,
+
             },
 
             initialize: function () {
@@ -38,21 +41,30 @@ define([],
                 // at the time of change.
 
                 var model = this;
+
+                // a private member used to access ajax requests
+                // that are in progress.
+                model._activeRequest = null;
+
+
                 this.on("change:inputValue", function () {
+                    model.set('addressCandidates', []);
+                    model.set('addressError', false);
+                    model.abortGeocodeRequest();
+
                     if (model.get('inputValue') === "") {
                         model.set('showingInput', false);
                         model.set('showingLocationBox', false);
                     } else {
                         model.set('showingInput', true);
-                        model.set('showingLocationBox', true);
-                        model.geocodeAddress();
+
                     }
                 });
 
                 this.on("change:hasMouse change:hasFocus", function () {
                     if (model.get('hasMouse') === true || 
                         model.get('hasFocus') === true || 
-                        model.get('inputValue') === true) {
+                        model.get('inputValue') !== "") {
                         model.set('showingInput', true);
                     } else {
                         model.set('showingInput', false);
@@ -60,7 +72,7 @@ define([],
                 });
             },
 
-            setupLocator: function (url, map, zoomLevel) {
+            setupLocator: function (url, map, zoomLevel, pointConstructor) {
                 // After the map is finished loading, the plugin will
                 // call this method and provide these values. This
                 // object is needed to geocode and to plot points.
@@ -69,9 +81,24 @@ define([],
                     url: url,
                     map: map,
                     zoomLevel: zoomLevel,
-                    spatialReference: new esri.SpatialReference({ wkid: 4326 /* lat-lng */ })
+                    point: pointConstructor
                 }
             },
+
+            abortGeocodeRequest: function () {
+                // helper method to abort any active ajax requests
+                // to make sure that there is only one in the pipeline.
+                // This is a separate method because it can be called:
+                // 1) When a new request is made.
+                // 2) When the input box is cleared.
+                
+                if (this._activeRequest !== null) {
+                    this._activeRequest.abort();
+                } else {
+                    this._activeRequest = null;
+                }
+            },
+
 
             geocodeAddress: function () {
                 // Make an ajax request to the geocoder URL provided by 
@@ -81,17 +108,25 @@ define([],
                 var model = this;
                     singleLine =  this.get('inputValue'),
                     url = [this.locator.url, "SingleLine=",
-                           singleLine, "&outFields=&outSR=&f=pjson"
+                           singleLine, "&outFields=&outSR=&f=pjson&callback=?"
                            ].join("");
-                
-                $.ajax({ dataType: "jsonp", url: url })
-                    .done(function (results) {
-                        model.set('addressCandidates', results.candidates);
-                        })
-                    .error(function (error) {
-                        // TODO: handle this error.
-                        model.set('addressError', true);
-                    });
+
+                model.abortGeocodeRequest();
+
+                model.set('showingLocationBox', true);
+
+                model._activeRequest = $.jsonp({ 
+                    url: url,
+                    timeout: 7000,
+                    success: function (results) { 
+                        if (results.candidates.length > 0) {
+                            model.set('addressCandidates', results.candidates); 
+                        } else {
+                            model.set('addressError', true);
+                        }
+                    },
+                    error: function (error) { model.set('addressError', true); }
+                });
             }
         });
 
@@ -105,6 +140,7 @@ define([],
             className: "pluginZoomTo",
 
             events: {
+                "click div#pluginZoomTo-clearSearch": function () { this.model.set('inputValue', ""); },
                 "mouseenter": function () { this.model.set('hasMouse', true); },
                 "mouseleave": function () { this.model.set('hasMouse', false); },
                 "blur input": function () { this.model.set('hasFocus', false); },
@@ -112,11 +148,10 @@ define([],
                 "keyup input": function (event) { this.handleKeyPress(event); }
             },
 
-            renderLocationBox: function () {
+            buildCandidateEvents: function () {
 
                 var candidates = this.model.get("addressCandidates"),
                     view = this,
-                    $domElement = view.$("#pluginZoomTo-choices"),
                     $wrapHtml = function (candidate) {
                         // take a location candidate and build a dom fragment
                         // and click event to center and zoom over the candidate's
@@ -132,11 +167,14 @@ define([],
                         $fragment.click(function () { view.centerAndZoom(x, y); });
                         return $fragment
                     };
+                
+                    return _.map(candidates, $wrapHtml);
+            },
 
-                // TODO: append a "Clear Results" link.
-                $domElement
+            renderLocationBox: function (content) {
+                this.$("#pluginZoomTo-choices")
                     .empty()
-                    .append(_.map(candidates, $wrapHtml));
+                    .append(content);
             },
 
             centerAndZoom: function (x, y) {
@@ -146,19 +184,19 @@ define([],
                 // thin wrapper around esri's map's center
                 // and zoom.
 
-                var point = new esri.geometry.Point(x, y, this.model.locator.spatialReference);
+                var point = this.model.locator.point(x, y);
                 this.model.locator.map.centerAndZoom(point, this.model.locator.zoomLevel);
                 this.$("#pluginZoomTo-choices").empty();
-                this.$('input').val("");
                 this.model.set('inputValue', "");
+                this.render();
             },
 
             handleKeyPress: function (event) {
-                // Set the input value only when enter is pressed
+                this.model.set("inputValue", this.$("input").val());
 
                 var keycode = (event.keyCode ? event.keyCode : null);
                 if (keycode === 13) {
-                    this.model.set("inputValue", this.$("input").val());
+                    this.model.geocodeAddress();
                 }
             },
 
@@ -169,11 +207,16 @@ define([],
                     if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') === true) {
                         view.$el.addClass("pluginZoomTo-showing-input");
                         view.$el.addClass("pluginZoomTo-with-choices");
+                        view.$('#pluginZoomTo-choices').empty();
+                        view.$('#pluginZoomTo-choices').append(
+                            '<div class="pluginZoomTo-progressIndicator"></div>');
                     } else if (view.model.get('showingInput') === true) {
                         view.$el.addClass("pluginZoomTo-showing-input");
                         view.$el.removeClass("pluginZoomTo-with-choices");
                     } else if (view.model.get('showingInput') === true && view.model.get('showingLocationBox') === false) {
-                        alert("Error. Can't show location box without input");
+                        // This is just a test embedded in the code.
+                        // TODO: move to unit tests or remove entirely
+                        console.log("Error. Can't show location box without input");
                     } else {
                         view.$('input').val("");
                         view.$el.removeClass("pluginZoomTo-showing-input");
@@ -183,12 +226,9 @@ define([],
 
                 this.listenTo(this.model, "change:addressCandidates change:addressError", function () {
                     if (view.model.get('addressError') === true) {
-                        // TODO: add error handling.
-                        // Unfortunately, errors never seem to happen
-                        // because the request doesn't timeout for bad
-                        // data, it just never returns.
-                    } else {
-                        view.renderLocationBox();
+                        view.renderLocationBox(searchErrorText);
+                    } else if (view.model.get('addressCandidates') !== []) {
+                        view.renderLocationBox(view.buildCandidateEvents());
                     }
                 });
             },

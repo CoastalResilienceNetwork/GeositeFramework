@@ -16,16 +16,16 @@ describe('ZoomTo', function() {
         beforeEach(function() {
             uiInput = new modules.ui.UiInput;
             uiInput.setupLocator("", "", "", "");
-            esri = {};
-            esri.SpatialReference = function () { return {} };
             spyOn(uiInput, 'geocodeAddress');
         });
 
-        it('Calls geocodeAddress after the input is set', function () {
-            expect(uiInput.geocodeAddress).not.toHaveBeenCalled();
-            uiInput.set('inputValue', "Philadelphia");
-            expect(uiInput.geocodeAddress).toHaveBeenCalled();
-        });
+        // This test is no longer valid because the behavior has changed.
+        // TODO: write a test to test the new behavior.
+        // it('Calls geocodeAddress after the input is set', function () {
+        //     expect(uiInput.geocodeAddress).not.toHaveBeenCalled();
+        //     uiInput.set('inputValue', "Philadelphia");
+        //     expect(uiInput.geocodeAddress).toHaveBeenCalled();
+        // });
 
         it('Forces the UI to stay expanded when there is an input value', function () {
             expect(uiInput.get('showingInput')).toBe(false);
@@ -34,7 +34,8 @@ describe('ZoomTo', function() {
             uiInput.set('inputValue', "search query");
 
             expect(uiInput.get('showingInput')).toBe(true);
-            expect(uiInput.get('showingLocationBox')).toBe(true);
+
+            expect(uiInput.get('showingLocationBox')).toBe(false);
         });
 
         it('forces the input box to be expanded when it has the mouse', function () {
@@ -62,17 +63,18 @@ describe('ZoomTo', function() {
         //     expect(uiInput.get('addressCandidates')).toEqual([]);
         //     expect(uiInput.get('addressError')).toEqual(true);
         // });
-
-
     });
 
     describe("UiInputView view instance", function() {
         beforeEach(function() {
-
-
             uiInput = new modules.ui.UiInput;
-            uiInput.setupLocator("", "", "", "");
-            uiInput.locator.map = { centerAndZoom: function () { } };
+            uiInput.setupLocator("",
+                                 // dummy map object
+                                 { centerAndZoom: function () { } },
+                                 "",
+                                 // dummy point function
+                                 function (x, y) { return [0, 0] }
+                                );
 
             uiInputView = new modules.ui.UiInputView({ model: uiInput });
             uiInputView.render();
@@ -83,9 +85,6 @@ describe('ZoomTo', function() {
 
             spyOn(uiInput, "geocodeAddress");
             spyOn(uiInput.locator.map, "centerAndZoom");
-
-            esri.geometry = { Point: function(x, y, sr) { } };
-
         });
 
         it('sets the inputValue attribute iff enter is pressed', function () {
@@ -98,13 +97,13 @@ describe('ZoomTo', function() {
             expect(uiInputView.model.get('inputValue')).toBe("test");
         });
 
-        it("doesn't set the inputValue attribute if a non-enter key is pressed", function () {
+        it("does set the inputValue attribute if a non-enter key is pressed", function () {
             expect(uiInputView.model.get('inputValue')).toBe("");
             
             input.val("test");
             input.trigger(otherPress);
 
-            expect(uiInputView.model.get('inputValue')).not.toBe("test");
+            expect(uiInputView.model.get('inputValue')).toBe("test");
         });
 
         it('Changes state correctly when centerAndZoom is called.', function() {

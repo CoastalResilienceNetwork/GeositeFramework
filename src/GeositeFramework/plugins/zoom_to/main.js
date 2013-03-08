@@ -37,10 +37,14 @@ define(
             toolbarType: "map",
 
             initialize: function (args) {
+                var spatialReference = new esri.SpatialReference({ wkid: 4326 /* lat-lng */ }),
+                    point = function (x, y) { return new esri.geometry.Point(x, y, spatialReference); };
+
                 declare.safeMixin(this, args);
                 this.config = JSON.parse(configString);
                 this.input.setupLocator(this.config.locatorServiceUrl,
-                                        this.map, this.config.defaultZoomLevel);
+                                        this.map, this.config.defaultZoomLevel,
+                                        point);
             },
 
             renderLauncher: function renderLauncher() {
