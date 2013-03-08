@@ -119,7 +119,7 @@ define(["jquery", "use!underscore"],
                     dojo.connect(_pointLayer, 'onClick', handleMarkerClick);
 
                 _eventHandles.graphicDoubleClick =
-                    dojo.connect(_pointLayer, 'onDblClick', handleMarkerClick);
+                    dojo.connect(_pointLayer, 'onDblClick', handleMarkerDblClick);
             },
 
             calculateDistance = function (points) {
@@ -258,7 +258,15 @@ define(["jquery", "use!underscore"],
                 }
             },
 
+            handleMarkerDblClick = function (evt) {
+                finishMeasureAsPolygon(evt);
+            },
+                
             handleMarkerClick = function (evt) {
+                finishMeasureAsPolygon(evt);
+            },
+                
+            finishMeasureAsPolygon = function(evt) {
                 // If the first measurement node was clicked, and there
                 // has already been a line drawn, close the line into a 
                 // polyon
