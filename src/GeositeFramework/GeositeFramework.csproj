@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -44,6 +44,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -115,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="GeositeJsonParseException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -126,6 +130,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Error.html" />
+    <Content Include="Error404.html" />
     <Content Include="css\app.css" />
     <Content Include="css\foundation.css" />
     <Content Include="css\foundation.min.css" />
@@ -153,6 +159,7 @@
     <Content Include="js\App.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="plugins\layer_selector\LayerLoader.js" />
     <Content Include="js\lib\backbone-0.9.10.min.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
@@ -172,6 +179,7 @@
     <Content Include="plugins\layer_selector\main.js" />
     <Content Include="plugins\layer_selector\Ui.js" />
     <Content Include="plugins\measure\AgsMeasure.js" />
+    <Content Include="plugins\layer_selector\WmsLoader.js" />
     <Content Include="plugins\measure\main.js" />
     <Content Include="plugins\measure\measure.css" />
     <Content Include="plugins\measure\templates.html" />
@@ -201,6 +209,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\layer_selector\layers.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="proxy.ashx" />
+    <Content Include="proxy.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

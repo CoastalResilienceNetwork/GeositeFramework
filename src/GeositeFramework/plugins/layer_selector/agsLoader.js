@@ -4,8 +4,10 @@ define(["jquery", "use!underscore"],
     function ($, _) {
         var AgsLoader = function (baseUrl) {
             var _baseUrl = baseUrl,
-                _onLoadingComplete = null,
-                _onLoadingError = null;
+                _makeContainerNode = null,
+                _makeLeafNode = null,
+                _onLayerSourceLoaded = null,
+                _onLayerSourceLoadError = null;
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
             // The catalog root contains folders and/or services.
@@ -13,14 +15,14 @@ define(["jquery", "use!underscore"],
             // Each "MapServer" service exposes a number of layers.
             // A layer entry may actually be a group, containing other layers in the same collection.
 
-            // Use the catalog data to build a node tree for Ext.data.TreeStore and Ext.tree.Panel
-
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, onLoadingComplete, onLoadingError) {
+            function loadCatalog(rootNode, layerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
                 // Load root catalog entries
-                _onLoadingComplete = onLoadingComplete;
-                _onLoadingError = onLoadingError;
+                _makeContainerNode = makeContainerNode;
+                _makeLeafNode = makeLeafNode;
+                _onLayerSourceLoaded = onLayerSourceLoaded;
+                _onLayerSourceLoadError = onLayerSourceLoadError;
                 loadFolder("", function (entries) {
                     console.log("Catalog has " + entries.folders.length + " folders");
                     // Root of catalog has loaded -- load child folders and services
@@ -41,7 +43,7 @@ define(["jquery", "use!underscore"],
                 var deferreds = _.map(folderNames, function (folderName) {
                     return loadFolder(folderName, function (entries) {
                         // Folder has loaded -- make its node and add its services to "serviceSpecs"
-                        var node = makeContainerNode(folderName, "folder", parentNode);
+                        var node = _makeContainerNode(folderName, "folder", parentNode);
                         addParentNodeToServiceSpecs(node, entries.services);
                         $.merge(serviceSpecs, entries.services);
                     });
@@ -57,7 +59,7 @@ define(["jquery", "use!underscore"],
                     dataType: 'jsonp',
                     url: _baseUrl + (folderName === "" ? "" : "/" + folderName) + '?f=json',
                     success: success,
-                    error: _onLoadingError
+                    error: _onLayerSourceLoadError
                 });
             }
 
@@ -66,7 +68,7 @@ define(["jquery", "use!underscore"],
                 var deferreds = _.map(serviceSpecs, loadService);
                 $.when.apply($, deferreds).then(function () {
                     // All services have loaded, so report that we're done loading this base URL
-                    _onLoadingComplete();
+                    _onLayerSourceLoaded(_baseUrl);
                 });
             }
 
@@ -79,11 +81,11 @@ define(["jquery", "use!underscore"],
                         success: function (serviceData) {
                             // Service has loaded -- make its node and load its layers
                             var serviceName = getServiceName(serviceSpec.name);
-                            var node = makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                            var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
                             node.url = serviceUrl;
                             loadLayers(serviceData.layers, node);
                         },
-                        error: _onLoadingError
+                        error: _onLayerSourceLoadError
                     });
                 }
             }
@@ -100,44 +102,15 @@ define(["jquery", "use!underscore"],
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
-                        makeLeafNode(layerSpec, parentNode);
+                        _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
                     } else {
                         // This is a layer group; remember its node so its children can attach themselves
-                        layerNodes[layerSpec.id] = makeContainerNode(layerSpec.name, "layer-group", parentNode);
+                        layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
                     }
                 }, this);
             }
 
-            function makeContainerNode(name, type, parentNode) {
-                var node = {
-                    type: type,
-                    cls: "pluginLayerSelector-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: name.replace(/_/g, " "),
-                    leaf: false,
-                    children: [],
-                    parent: parentNode
-                };
-                parentNode.children.push(node);
-                return node;
-            }
-
-            function makeLeafNode(layerSpec, parentNode) {
-                var node = {
-                    type: "layer",
-                    cls: "pluginLayerSelector-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: layerSpec.name.replace(/_/g, " "),
-                    leaf: true,
-                    checked: false,
-                    layerId: layerSpec.id,
-                    parent: parentNode,
-                    showOrHideLayer: showOrHideLayer
-                };
-                parentNode.children.push(node);
-                return node;
-            }
-
-            // The only API method I see to show/hide layers is ArcGISDynamicMapServiceLayer.SetVisibleLayers(), 
-            // so to show/hide an individual layer we have to give it all the visible layers. 
+            // To show/hide an individual layer we have to specify all visible layers for the service. 
             // So we keep track of the visible layer ids on the service-level data node.
 
             function showOrHideLayer(layerNode, shouldShow, map) {

@@ -28,3 +28,6 @@ packages
 
 # Windows left-overs
 Thumbs.db    # Having images in the source tree generates those files in Explorer
+
+# App folders
+src/GeositeFramework/logs
