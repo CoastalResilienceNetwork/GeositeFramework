@@ -1,0 +1,51 @@
+﻿
+#pluginZoomTo-choices {
+    width: 180px !important;
+    height: 358px !important;
+    overflow: auto !important;
+    background: #434F46 !important;
+    background: rgba(0,0,0,0.6) !important;
+    color: #ffffff !important;
+    padding: 5px !important;
+
+}
+
+.pluginZoomTo-showing-input {
+    width: 180px !important;
+    opacity: 1 !important;
+}
+
+.pluginZoomTo-with-choices {
+    height: 400px !important;
+}
+
+.pluginZoomTo:hover {
+    width: 180px !important;
+}
+
+.pluginZoomTo {
+	background-image: url(../../img/tools_search.png) !important;
+	transition: width 1s !important;
+	-moz-transition: width 1s !important;
+	-webkit-transition: width 1s !important;
+	-o-transition: width 1s !important;
+}
+
+.pluginZoomTo input {
+	margin-left: 34px !important;
+	width: 146px !important;
+	border: none !important;
+	background-color: #FAFAFA !important;
+	outline-color: transparent !important;
+}
+
+.pluginZoomTo input:focus {
+    box-shadow: none !important;
+	border-color: none !important;
+	background: #FFF !important;
+}
+
+.pluginZoomTo-expanded {
+    width: 180px !important;
+    opacity: 1 !important;
+}

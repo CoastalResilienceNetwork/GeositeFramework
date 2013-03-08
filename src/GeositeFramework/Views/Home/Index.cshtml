@@ -15,9 +15,10 @@
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <!-- Temporarily hard-code css loading for plugins -->
+    <link rel="stylesheet" type="text/css" href="plugins/zoom_to/main.css">
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/main.css">
     <link rel="stylesheet" type="text/css" href="plugins/layer_selector/lib/ext-4.1.1a/resources/css/ext-all.css">
-      
+
 	<link rel="stylesheet" href="css/foundation.css">
 	<link rel="stylesheet" href="css/app.css">
 	<script src="js/lib/foundation/modernizr.foundation.js"></script>
@@ -76,6 +77,10 @@
             </a>
     </script>
 
+    <script type="text/template" id="template-topbar-plugin">
+            <a href="#"></a>
+    </script>
+
     <script type="text/template" id="template-sidebar-link">
         <div class="sidebar-link">
             <a href="<%= link.url %>"><%- link.text %></a>
@@ -125,11 +130,12 @@
 	<!-- RIGHT CONTENT AREA -->
 	<div id="right-pane" class="content"></div>
 	
-	<script src="js/lib/foundation/foundation.min.js"></script>
-	<script src="js/lib/foundation/app.js"></script>
+
 
     <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3compact"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="js/lib/foundation/foundation.min.js"></script>
+	<script src="js/lib/foundation/app.js"></script>
     <script>window.jQuery || document.write('<script src="js/lib/jquery-1.9.0.min.js"><\/script>')</script>
     <script src="js/lib/underscore-1.4.3.min.js"></script>
     <script src="js/lib/backbone-0.9.10.min.js"></script>
@@ -200,6 +206,7 @@
 
         require([@Html.Raw(Model.PluginModuleIdentifiers)], function(@Html.Raw(Model.PluginVariableNames)) {
             return $(document).ready(function() {
+
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
                 Geosite.app.init(regionData, plugins);

@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../tools/JsTestTools/lib/jasmine/jasmine.css">
 
   <!-- load framework code and libraries -->
+  <script src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3compact"></script>
   <script type="text/javascript" src="../lib/jquery-1.9.0.min.js"></script>
   <script type="text/javascript" src="../lib/underscore-1.4.3.min.js"></script>
   <script type="text/javascript" src="../lib/backbone-0.9.10.min.js"></script>
@@ -23,7 +24,7 @@
   </script>
 
   <!-- load application source files -->
-  
+  <script type="text/javascript" src="../../plugins/zoom_to/ui.js"></script>
   <script type="text/javascript" src="../Geosite.js"></script>
   <script type="text/javascript" src="../Plugin.js"></script>
   <script type="text/javascript" src="../Pane.js"></script>
@@ -34,15 +35,25 @@
 
     <!-- load test spec files -->
   <script type="text/javascript" src="./spec/PluginSpec.js"></script>
+  <script type="text/javascript" src="./spec/ZoomToSpec.js"></script>
 </head>
 <body>
 
 <script type="text/javascript">
+modules = {};
+// When require was placed inside tests the specs were not being run
+// If you want to test another module, make sure you require it here,
+// add it to the modules global, and refer to it by modules.module_name
+// in the spec file.
+
+require(["../../plugins/zoom_to/ui.js"], function (ui) {
+  modules.ui = ui;
   jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
   // The test output, by default, is created in the same directory as phantomjs-testrunner.js
   // unless a path is passed into the JUnitXmlReport 'constructor'
   jasmine.getEnv().addReporter(new jasmine.JUnitXmlReporter('output/'));
   jasmine.getEnv().execute();
+});
 </script>
 
 </body>
