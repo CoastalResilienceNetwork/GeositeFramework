@@ -187,14 +187,9 @@ define(["jquery", "use!underscore"],
             },
 
             handleMapClick = function (evt) {
-                console.log('click');
                 // Track each point clicked to create a line segment for 
                 // measuring length
                 _points.push(evt.mapPoint);
-
-                // Cache a copy of the total line length so far, so we don't
-                // have to recalculate frequently on mouse move events
-                _renderedLength = calculateDistance(_points);
 
                 // Add the graphic of the line node to the map.  An index attribute
                 // is added to the graphic to enable querying of node-added order
@@ -225,6 +220,10 @@ define(["jquery", "use!underscore"],
                     var lineGraphic = new esri.Graphic(line, options.lineSymbol);
                     _outlineLayer.add(lineGraphic);
                 }
+                
+                // Cache a copy of the total line length so far, so we don't
+                // have to recalculate frequently on mouse move events
+                _renderedLength = calculateDistance(_points);
             },
 
             setDefaultPointSymbol = function (graphic) {
