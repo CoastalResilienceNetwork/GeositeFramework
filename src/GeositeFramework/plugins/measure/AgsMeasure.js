@@ -46,7 +46,7 @@ define(["jquery", "use!underscore"],
                 esriKilometers: "km",
                 esriSquareKilometers: "km"
             },
-                
+
             _points = [],
             _renderedLength = 0,
             _pointLayer = null,
@@ -147,7 +147,7 @@ define(["jquery", "use!underscore"],
             },
 
             formatTooltip = function (segment, line) {
-                
+
                 return _tooltipTemplate({
                     segmentLength: segment.toFixed(0),
                     totalLength: line.toFixed(0),
@@ -156,7 +156,7 @@ define(["jquery", "use!underscore"],
             },
 
             handleMapMouseMove = function (evt) {
-                // Use the last enetered point, and the hover point to 
+                // Use the last entered point, and the hover point to 
                 // create a temporary line which follows the mouse cursor
                 var path = _.last(_points, 1),
                     line = new esri.geometry.Polyline(),
@@ -190,7 +190,7 @@ define(["jquery", "use!underscore"],
                 console.log('click');
                 // Track each point clicked to create a line segment for 
                 // measuring length
-                _points.push(evt.mapPoint)
+                _points.push(evt.mapPoint);
 
                 // Cache a copy of the total line length so far, so we don't
                 // have to recalculate frequently on mouse move events
@@ -279,8 +279,8 @@ define(["jquery", "use!underscore"],
                     // Remove our lines for the outline layer and replace them
                     // with the new polygon area
                     _outlineLayer.clear();
-                    _outlineLayer.add(new esri.Graphic(_polygon, options.polygonSymbol));
-                    
+                    _outlineLayer.add(new esri.Graphic(polygon, options.polygonSymbol));
+
                     // Change the first node symbol to the default as we finish
                     setDefaultPointSymbol(evt.graphic);
 
@@ -289,7 +289,7 @@ define(["jquery", "use!underscore"],
                         length: calculateDistance(_points).toFixed(2)
                     });
                 }
-            }
+            };
 
             // Public methods
             return {
@@ -306,8 +306,8 @@ define(["jquery", "use!underscore"],
 
                     _popupTemplate = _.template(options.infoBubbleTemplate);
                     _tooltipTemplate = _.template(options.tooltipTemplate);
-                    
-                },  
+
+                },
 
                 deactivate: deactivate,
 
@@ -318,8 +318,8 @@ define(["jquery", "use!underscore"],
                     _eventHandles.click =
                         dojo.connect(options.map, "onClick", handleMapClick);
                 }
-            }
-        }
+            };
+        };
 
         return AgsMeasure;
     }
