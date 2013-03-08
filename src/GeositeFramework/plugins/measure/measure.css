@@ -37,6 +37,7 @@
         background-color: #808080;
         color: #fff;
         height: 60px !important;
+        box-shadow: 4px 3px 10px #000000;
     }
 
     .measure-info-window .title
