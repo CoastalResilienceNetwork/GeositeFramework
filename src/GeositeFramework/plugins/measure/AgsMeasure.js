@@ -269,10 +269,10 @@ define(["jquery", "use!underscore"],
                     // Make the last point be the same coordinates of the first point
                     // and create a polygon out of it
                     _points.push(_points[0]);
-                    _polygon = new esri.geometry.Polygon(options.map.spatialReference);
-                    _polygon.addRing(_points);
+                    var polygon = new esri.geometry.Polygon(options.map.spatialReference);
+                    polygon.addRing(_points);
 
-                    var geoPolygon = esri.geometry.webMercatorToGeographic(_polygon),
+                    var geoPolygon = esri.geometry.webMercatorToGeographic(polygon),
                         area = esri.geometry.geodesicAreas([geoPolygon],
                             options.esriAreaUnits)[0];
 
