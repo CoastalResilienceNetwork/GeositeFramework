@@ -1,0 +1,27 @@
+﻿<script type="text/template" id="template-measure-launcher">
+    <div class="measure"></div>
+</script>
+
+<script type="text/template" id="template-measure-tooltip">
+    <div class="measure-tooltip">
+        <div>
+            <div class="measure-label">Segment Length:</div><%= segmentLength %> <%= units%>
+        </div>
+        <div>
+            <div class="measure-label">Total Length:</div><%= totalLength %> <%= units%>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-measure-infobubble">
+    <div class="measure-bubble">
+        <% if (area) { %>
+            <div>
+                <div class="measure-label">Area:</div><%= area %> <%= areaUnits%><sup>2</sup>
+            </div>
+        <% } %>
+        <div>
+            <div class="measure-label">Length:</div><%= length %> <%= lengthUnits%>
+        </div>
+    </div>
+</script>

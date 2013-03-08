@@ -61,7 +61,9 @@
             pluginObject.initialize({
                 app: null,
                 map: N.createMapWrapper(esriMap),
-                container: $displayContainer.find('.plugin-container-inner')[0]
+                container: $displayContainer.find('.plugin-container-inner')[0],
+                _unsafeMap: esriMap
+
             });
         });
     }
