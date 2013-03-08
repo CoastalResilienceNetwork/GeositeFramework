@@ -10,6 +10,12 @@
 
 }
 
+#pluginZoomTo-clearSearch {
+    background-image: url(clear.png) !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
 .pluginZoomTo-showing-input {
     width: 180px !important;
     opacity: 1 !important;
@@ -24,11 +30,15 @@
 }
 
 .pluginZoomTo {
-	background-image: url(../../img/tools_search.png) !important;
+	background-image: url(tools_search.png) !important;
 	transition: width 1s !important;
 	-moz-transition: width 1s !important;
 	-webkit-transition: width 1s !important;
 	-o-transition: width 1s !important;
+}
+
+.pluginZoomTo-progressIndicator {
+	background-image: url(loading.gif) !important;
 }
 
 .pluginZoomTo input {
