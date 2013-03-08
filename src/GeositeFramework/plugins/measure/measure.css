@@ -21,13 +21,13 @@
         width: 100px;
     }
 
-    .simpleInfoWindow .content
+    .simpleInfoWindow.measure-info-window .content
     {
         display: block;
         width: 100% !important;
     }
 
-    .simpleInfoWindow .close
+    .simpleInfoWindow.measure-info-window .close
     {
         display: none;
     }
