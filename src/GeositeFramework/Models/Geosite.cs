@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Hosting;
-using log4net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
@@ -22,10 +19,12 @@ namespace GeositeFramework.Models
         }
 
         // Properties used in View rendering
+        public string GeositeFrameworkVersion { get; set; }
         public string Organization { get; private set; }
         public string Title { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
         public string RegionDataJson { get; private set; }
+        public List<string> PluginFolderNames { get; private set; }
         public string PluginModuleIdentifiers { get; private set; }
         public string PluginVariableNames { get; private set; }
 
@@ -77,10 +76,10 @@ namespace GeositeFramework.Models
 
             // Get plugin folder names, in the specified order
             var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
-            var pluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
+            PluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
 
             // Augment the JSON so the client will have the full list of folder names
-            jsonObj.Add("pluginFolderNames", new JArray(pluginFolderNames.ToArray()));
+            jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
             Organization = (string)jsonObj["organization"];
@@ -98,11 +97,11 @@ namespace GeositeFramework.Models
 
             // Create plugin module identifiers, to be inserted in generated JavaScript code. Example:
             //     "'plugins/layer_selector/main', 'plugins/measure/main'"
-            PluginModuleIdentifiers = string.Join(", ", pluginFolderNames.Select(name => string.Format("'plugins/{0}/main'", name)));
+            PluginModuleIdentifiers = string.Join(", ", PluginFolderNames.Select(name => string.Format("'plugins/{0}/main'", name)));
 
             // Create plugin variable names, to be inserted in generated JavaScript code. Example:
             //     "p0, p1"
-            PluginVariableNames = string.Join(", ", pluginFolderNames.Select((name, i) => string.Format("p{0}", i)));
+            PluginVariableNames = string.Join(", ", PluginFolderNames.Select((name, i) => string.Format("p{0}", i)));
         }
 
         private static JObject ValidateRegionJson(string regionJson, string appDataFolderPath)
