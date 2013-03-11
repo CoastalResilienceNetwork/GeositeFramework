@@ -104,7 +104,8 @@ define([
             }
 
             function onLayerSourceLoadError(jqXHR, textStatus, errorThrown) {
-                _app.error("AJAX call failed");
+                _app.error("AJAX request to load layer source failed. Result text: '" + jqXHR.resultText
+                    + "' Status: '" + textStatus + "' Error: '" + errorThrown + "'");
             }
 
             // Functions to build a node tree of map layers. The node schema targets Ext.data.TreeStore 
