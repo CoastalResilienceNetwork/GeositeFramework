@@ -20,7 +20,8 @@
             ]
         },
 
-        init: function initializeApp(regionData, pluginClasses) {
+        init: function initializeApp(version, regionData, pluginClasses) {
+            N.app.version = version;
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
 

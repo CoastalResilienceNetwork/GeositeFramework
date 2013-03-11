@@ -135,7 +135,8 @@
     <script src="js/lib/underscore-1.4.3.min.js"></script>
     <script src="js/lib/backbone-0.9.10.min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
-
+    
+    <script src="js/azavea.util.js"></script>
     <script src="js/Geosite.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/Map.js"></script>
@@ -166,6 +167,9 @@
         // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
         define.amd.jQuery = true;
 
+        // Initialize logging URL before we load any modules
+        Azavea.logUrl = "/Log";
+
         // Our require() call below for loading plugins shouldn't fail, since:
         //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
         //     * require() succeeds even if main.js has errors. (It passes an empty object for that module.)
@@ -174,14 +178,13 @@
         // Do our best to report a useful message.
 
         require.on('error', function(error) {
-            // TODO: replace alert() with send to server log
             var message = "(unknown)";
             if (error.info !== undefined && error.info.length > 0) {
                 message = "Unable to load module " + error.info[0];
             } else if (error.message !== undefined) {
                 message = error.message;
             }
-            alert('Dojo module loader error: ' + message);
+            Azavea.logError(message, "load Dojo module");
         });
 
         // Load the plugins and launch the app.
@@ -203,7 +206,7 @@
             return $(document).ready(function() {
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
-                Geosite.app.init(regionData, plugins);
+                Geosite.app.init('@Html.Raw(Model.GeositeFrameworkVersion)', regionData, plugins);
             });
         });
 

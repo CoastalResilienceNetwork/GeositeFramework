@@ -25,7 +25,7 @@
         if (valid) {
             return basemaps[selectedBasemapIndex];
         } else {
-            // TODO: log error to console
+            Azavea.logError("Internal error in basemap selector: no basemaps defined or invalid basemap index");
             return { name: "", url: "" };
         }
     }
