@@ -24,7 +24,7 @@
                 model: N.app.models.screen,
                 el: $('body')
             });
-            //this.hashModels.addModel(N.app.models.screen);
+            this.hashModels.addModel(N.app.models.screen);
 
             initializeMaps();
 
