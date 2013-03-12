@@ -46,7 +46,26 @@
 (function (N) {
     'use strict';
 
+    var paneSelectors = ["#left-pane", "#right-pane"],
+        paneViews = [null, null];
+
     function initialize(view) {
+        // Only create the first visible pane at startup.  The
+        // additional pane will be created when it is requested
+        createPane(0);
+        //view.model.on('change', 'something');
+    }
+
+    function createPane(paneNumber) {
+        var pane = new N.models.Pane({
+            paneNumber: paneNumber,
+            regionData: N.app.data.region
+        });
+
+        paneViews[paneNumber] = new N.views.Pane({
+            model: pane,
+            el: $(paneSelectors[paneNumber])
+        });
     }
 
     function render(view) {
@@ -61,9 +80,9 @@
 
     function adjustPanes(newClass) {
         // If only the first pane has been created, create the right-pane (id-1)
-        if (N.app.models.panes.length < 2) {
+        if (paneViews[1] === null) {
             setBodyClass(bodyClass.right);
-            N.app.createPane(1);
+            createPane(1);
         }
 
         setBodyClass(newClass);

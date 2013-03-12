@@ -5,20 +5,10 @@
     "use strict";
     N.app = {
         // Model and View instances (see Geosite.js for "class" objects)
-        models: {
-            panes: []
-        },
-        views: {
-            panes: []
-        },
+        models: [],
+        views: [],
         templates: {},
         data: {},
-        config: {
-            paneDefinitions: [
-                { selector: "#left-pane", index: 0 },
-                { selector: "#right-pane", index: 1 }
-            ]
-        },
         hashModels: null,
 
         init: function initializeApp(version, regionData, pluginClasses) {
@@ -36,9 +26,6 @@
             });
             //this.hashModels.addModel(N.app.models.screen);
 
-            // Only create the first visible pane at startup.  The
-            // additional pane will be created when it is requested
-            this.createPane(0);
             initializeMaps();
 
             // Setup a manager for synced maps.  As maps are created, 
@@ -69,19 +56,6 @@
         resizeMap();
         $(window).resize(_.debounce(resizeMap, 300));
 
-    }
-
-    function initializePane(regionData, paneConfig) {
-        var pane = new N.models.Pane({
-            paneNumber: paneConfig.index,
-            regionData: regionData
-        });
-
-        N.app.models.panes[paneConfig.index] = pane;
-        N.app.views.panes[paneConfig.index] = new N.views.Pane({
-            model: pane,
-            el: $(paneConfig.selector)
-        });
     }
 
     new N.TemplateLoader().load(N.app.templates);
