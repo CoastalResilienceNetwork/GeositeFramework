@@ -11,14 +11,14 @@
         defaults: {
             id: 'screen', // for saving state with backbone.hashmodels
             mainPaneNumber: 0,
-            splitView: false,
+            splitScreen: false,
             syncMaps: false
         },
 
         showPane: function switchScreen(mainPaneNumber) {
             this.set({
                 'mainPaneNumber': mainPaneNumber,
-                'splitView': false
+                'splitScreen': false
             });
 
             // Force the map to stop syncing when going to a full screen view
@@ -29,7 +29,7 @@
             // Main screen is always id-0 when in split screen mode
             this.set({
                 'mainPaneNumber': 0,
-                'splitView': true
+                'splitScreen': true
             });
         },
 
@@ -62,7 +62,7 @@
 
     function render(view) {
         var mainPaneNumber = view.model.get('mainPaneNumber'),
-            splitScreen = view.model.get('splitView'),
+            splitScreen = view.model.get('splitScreen'),
             bodyClass = getBodyClass(mainPaneNumber);
 
         ensurePane(mainPaneNumber);
