@@ -210,56 +210,11 @@
         });
     }
 
-    var $body = $('body'),
-        bodyClassLookup = {
-            split: 'view-split',
-            left: 'view-left',
-            right: 'view-right'
-        };
-
-    function adjustPanes(newClass) {
-        // If only the first pane has been created, create the right-pane (id-1)
-        if (N.app.models.panes.length < 2) {
-            setBodyClass(bodyClassLookup.right);
-            N.app.createPane(1);
-        }
-
-        setBodyClass(newClass);
-
-        // The maps need to adjust to the new layout size
-        $(window).trigger('resize');
-    }
-
-    function setBodyClass(newClass) {
-        $body.removeClass(_(bodyClassLookup).values().join(' '))
-            .addClass(newClass);
-    }
-
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
         mapView: null,
 
         initialize: function (view) { initialize(this); },
-
-        events: {
-            'click .switch-screen': 'switchScreen',
-            'click .split-screen': 'splitScreen',
-            'click .map-sync': function () { N.app.models.screen.toggleMapSync(); }
-        },
-
-        switchScreen: function switchScreen(evt) {
-            var screenToShow = $(evt.currentTarget).data('screen'),
-                 newClass = (screenToShow === 0 ? bodyClassLookup.left : bodyClassLookup.right);
-            adjustPanes(newClass);
-            N.app.models.screen.showPane(screenToShow);
-        },
-
-        splitScreen: function splitScreen() {
-            // Align the body classes to be in split-screen mode
-            adjustPanes(bodyClassLookup.split);
-            N.app.models.screen.split();
-        }
-
     });
 
 }(Geosite));
