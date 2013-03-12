@@ -117,7 +117,7 @@ define([],
 
                 model._activeRequest = $.jsonp({ 
                     url: url,
-                    timeout: 7000,
+                    timeout: 12000,
                     success: function (results) { 
                         if (results.candidates.length > 0) {
                             model.set('addressCandidates', results.candidates); 
