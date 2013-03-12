@@ -96,7 +96,7 @@
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
             events: {
-                'click': 'handleClick'
+                'click a': 'handleClick'
             },
 
             initialize: function () { initialize(this); },
@@ -194,23 +194,36 @@
 
         function render() {
             // Topbar plugins don't render into any predefined context,
-            // simply provide a div and let the plugin implement it's 
+            // simply provide a div, render a template containg an anchor
+            // tag into this div, and let the plugin implement its
             // launcher layout
+
             var view = this,
-                pluginObject = this.model.get('pluginObject');
+                pluginObject = this.model.get('pluginObject'),
+                pluginTemplate = N.app.templates['template-topbar-plugin'],
+                $container = $(pluginTemplate().trim());
 
             if (pluginObject.renderLauncher
                     && _.isFunction(pluginObject.renderLauncher)) {
-                view.$el.html(pluginObject.renderLauncher());
+                view.$el
+                    .empty()
+                    .append($container.append(pluginObject.renderLauncher()));
             }
 
             return view;
         }
 
         N.views = N.views || {};
+        // TODO: it's a little hacky to have TopbarPlugin inherit
+        // from BasePlugin and need to clobber the events. This
+        // is a temporary workaround to stop the click event from
+        // rerendering. we should probably fix the baseplugin 
+        // not to have this event and then have it get added
+        // for the sidebar plugin.
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            render: render
+            render: render,
+            events: {}
         });
     }());
 }(Geosite));

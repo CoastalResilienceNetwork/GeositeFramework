@@ -186,6 +186,8 @@
     <Content Include="plugins\measure\measure.css" />
     <Content Include="plugins\measure\templates.html" />
     <Content Include="plugins\scenarios_temp\main.js" />
+    <Content Include="plugins\zoom_to\main.js" />
+    <Content Include="plugins\zoom_to\ui.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

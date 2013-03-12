@@ -219,7 +219,11 @@ h1, h2, h3, h4, h5, h6 {
 			left: 50px;
             z-index: 1;
 			}
-			.content .map .tools .topbar-plugin > div {
+            .content .map .tools .topbar-plugin {
+                float: left;
+            }
+			.content .map .tools .topbar-plugin div {
+                margin-right: 12px;
 				width: 32px;
 				height: 32px;
 				background-color: white;
@@ -227,38 +231,13 @@ h1, h2, h3, h4, h5, h6 {
 				background-position: 8px 8px;
 				overflow: hidden;
 				border-radius: 4px;
-				float: left;
-				opacity: .65;
+				opacity: .85;
 				cursor: pointer;
 				box-shadow: 0 0 12px rgba(0,0,0,.25);
 				}
-				.content .map .tools > div:hover {
+				.content .map .tools .topbar-plugin div:hover {
 					opacity: 1;
 				}
-				
-			.content .map .search-box {
-				margin-right: 12px;
-				background-image: url(../img/tools_search.png);
-				transition: width 1s;
-				-moz-transition: width 1s;
-				-webkit-transition: width 1s;
-				-o-transition: width 1s;
-				}
-				.content .map .search-box:hover {
-					width: 180px;
-				}
-				.content .map .search-box input {
-					margin-left: 34px;
-					width: 146px;
-					border: none;
-					background-color: #FAFAFA;
-					outline-color: transparent;
-					}
-					.content .map .search-box input:focus {
-						box-shadow: none;
-						border-color: none;
-						background: #FFF;
-					}
 
 			.content .map .measure {		
 				background-image: url(../img/tools_measure.png);
