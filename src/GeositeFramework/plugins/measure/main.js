@@ -27,6 +27,7 @@ require({
     },
     use: {
         "underscore": { attach: "_" },
+        "tv4": { attach: "tv4" },
         "extjs": { attach: "Ext" }
     }
 });
