@@ -47,52 +47,60 @@
     'use strict';
 
     var paneSelectors = ["#left-pane", "#right-pane"],
-        paneViews = [null, null];
-
-    function initialize(view) {
-        // Only create the first visible pane at startup.  The
-        // additional pane will be created when it is requested
-        createPane(0);
-        //view.model.on('change', 'something');
-    }
-
-    function createPane(paneNumber) {
-        var pane = new N.models.Pane({
-            paneNumber: paneNumber,
-            regionData: N.app.data.region
-        });
-
-        paneViews[paneNumber] = new N.views.Pane({
-            model: pane,
-            el: $(paneSelectors[paneNumber])
-        });
-    }
-
-    function render(view) {
-    }
-
-    var $body = $('body'),
-        bodyClass = {
+        paneViews = [null, null],
+        $body = $('body'),
+        bodyClasses = {
             split: 'view-split',
             left: 'view-left',
             right: 'view-right'
         };
 
-    function adjustPanes(newClass) {
-        // If only the first pane has been created, create the right-pane (id-1)
-        if (paneViews[1] === null) {
-            setBodyClass(bodyClass.right);
-            createPane(1);
+    function initialize(view) {
+        render(view);
+        view.model.on('change', function () { render(view); });
+    }
+
+    function render(view) {
+        var mainPaneNumber = view.model.get('mainPaneNumber'),
+            splitScreen = view.model.get('splitView'),
+            bodyClass = getBodyClass(mainPaneNumber);
+
+        ensurePane(mainPaneNumber);
+
+        if (splitScreen) {
+            ensurePane(1);
+            bodyClass = bodyClasses.split;
         }
 
-        setBodyClass(newClass);
+        setBodyClass(bodyClass);
 
         // The maps need to adjust to the new layout size
         $(window).trigger('resize');
     }
 
+    function ensurePane(paneNumber) {
+        if (paneViews[paneNumber] === null) {
+            // Create pane model
+            var pane = new N.models.Pane({
+                paneNumber: paneNumber,
+                regionData: N.app.data.region
+            });
+
+            // Create pane view
+            setBodyClass(getBodyClass(paneNumber)); // ensure map will use full pane
+            paneViews[paneNumber] = new N.views.Pane({
+                model: pane,
+                el: $(paneSelectors[paneNumber])
+            });
+        }
+    }
+
+    function getBodyClass(paneNumber) {
+        return (paneNumber === 0 ? bodyClasses.left : bodyClasses.right);
+    }
+
     function setBodyClass(newClass) {
-        $body.removeClass(_(bodyClass).values().join(' '))
+        $body.removeClass(_(bodyClasses).values().join(' '))
             .addClass(newClass);
     }
 
@@ -103,28 +111,19 @@
 
         events: {
             'click .switch-screen': 'switchScreen',
-            'click .split-screen': 'splitScreen',
+            'click .split-screen': function () { this.model.split(); },
             'click .map-sync': function () { this.model.toggleMapSync(); },
             'click .permalink-button': 'makePermalink'
         },
 
-        switchScreen: function switchScreen(evt) {
-            var screenToShow = $(evt.currentTarget).data('screen'),
-                 newClass = (screenToShow === 0 ? bodyClass.left : bodyClass.right);
-            adjustPanes(newClass);
+        switchScreen: function switchScreen(event) {
+            var screenToShow = $(event.currentTarget).data('screen');
             this.model.showPane(screenToShow);
-        },
-
-        splitScreen: function splitScreen() {
-            // Align the body classes to be in split-screen mode
-            adjustPanes(bodyClass.split);
-            this.model.split();
         },
 
         makePermalink: function makePermalink() {
             Backbone.HashModels.update();
         }
-
 
     });
 
