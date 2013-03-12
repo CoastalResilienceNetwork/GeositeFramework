@@ -209,7 +209,7 @@
             }
         });
     }
-    
+
     var $body = $('body'),
         bodyClassLookup = {
             split: 'view-split',
@@ -217,12 +217,22 @@
             right: 'view-right'
         };
 
-    function setBodyClass(newClass) {
-        $body.removeClass(_(bodyClassLookup).values().join(' '))
-            .addClass(newClass);
+    function adjustPanes(newClass) {
+        // If only the first pane has been created, create the right-pane (id-1)
+        if (N.app.models.panes.length < 2) {
+            setBodyClass(bodyClassLookup.right);
+            N.app.createPane(1);
+        }
+
+        setBodyClass(newClass);
 
         // The maps need to adjust to the new layout size
         $(window).trigger('resize');
+    }
+
+    function setBodyClass(newClass) {
+        $body.removeClass(_(bodyClassLookup).values().join(' '))
+            .addClass(newClass);
     }
 
     N.views = N.views || {};
@@ -240,14 +250,14 @@
         switchScreen: function switchScreen(evt) {
             var screenToShow = $(evt.currentTarget).data('screen'),
                  newClass = (screenToShow === 0 ? bodyClassLookup.left : bodyClassLookup.right);
-            N.app.models.screen.switch(screenToShow);
-            setBodyClass(newClass);
+            adjustPanes(newClass);
+            N.app.models.screen.showPane(screenToShow);
         },
 
         splitScreen: function splitScreen() {
             // Align the body classes to be in split-screen mode
+            adjustPanes(bodyClassLookup.split);
             N.app.models.screen.split();
-            setBodyClass(bodyClassLookup.split);
         }
 
     });

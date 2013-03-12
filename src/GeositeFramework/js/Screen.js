@@ -5,18 +5,6 @@
 
 (function (N) {
     'use strict';
-    
-    function changeMode(model, mainPaneNumber, splitView) {
-        // If only the first pane has been created, create the right-pane (id-1)
-        if (N.app.models.panes.length < 2) {
-            N.app.createPane(1);
-        }
-
-        model.set({
-            'mainPaneNumber': mainPaneNumber,
-            'splitView': splitView
-        });
-    }
 
     N.models = N.models || {};
     N.models.Screen = Backbone.Model.extend({
@@ -26,8 +14,11 @@
             syncMaps: false
         },
 
-        'switch': function switchScreen(mainPaneNumber) {
-            changeMode(this, mainPaneNumber, false);
+        showPane: function switchScreen(mainPaneNumber) {
+            this.set({
+                'mainPaneNumber': mainPaneNumber,
+                'splitView': false
+            });
 
             // Force the map to stop syncing when going to a full screen view
             this.toggleMapSync(false);
@@ -35,7 +26,10 @@
 
         split: function splitScreen() {
             // Main screen is always id-0 when in split screen mode
-            changeMode(this, 0, true);
+            this.set({
+                'mainPaneNumber': 0,
+                'splitView': true
+            });
         },
 
         toggleMapSync: function (forceSyncTo) {
