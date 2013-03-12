@@ -1,7 +1,7 @@
 ﻿(function (N) {
     /*
         The SyncMapManager keeps the extents of any added map views in sync, provided
-        that the underlaying map model's 'sync' attribute is set.  To avoid visually 
+        that the screen model's 'syncMaps' attribute is set.  To avoid visually 
         appealling, but incorrect, behavior, the manager follows this event sequence:
 
         mapModel.sync::change -> True
@@ -17,7 +17,7 @@
         ...unregister onupdateend listener
         ...register extent listener
     */
-    N.SyncedMapManager = function syncedMapManager() {
+    N.SyncedMapManager = function syncedMapManager(screen) {
         var esriMapListeners = {},
             syncedMapViews = [];
 
@@ -54,22 +54,24 @@
         }
 
         function toggleMapSync() {
-            var mapView = this;
-            if (mapView.model.get('sync')) {
-                // Register for map extent change event
-                registerMapExtentListener(mapView);
-            } else {
-                // When sync is off, do not listen for map events
-                unregisterMapExtentListener(mapView);
-            }
-
+            var sync = screen.get('syncMaps');
+            _.each(syncedMapViews, function (mapView) {
+                if (sync) {
+                    // Register for map extent change event
+                    registerMapExtentListener(mapView);
+                } else {
+                    // When sync is off, do not listen for map events
+                    unregisterMapExtentListener(mapView);
+                }
+            });
         }
 
         function addMapView(mapView) {
             // Track which maps are meant to be synced
             syncedMapViews.push(mapView);
-            mapView.model.on('change:sync', toggleMapSync, mapView);
         };
+
+        screen.on('change:syncMaps', toggleMapSync);
 
         return {
             views: syncedMapViews,

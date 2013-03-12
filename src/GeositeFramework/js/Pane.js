@@ -96,28 +96,14 @@
     N.models.Pane = Backbone.Model.extend({
         defaults: {
             paneNumber: 0,
-            isMain: false,
             regionData: null,
             map: null,
             plugins: null,
-            splitView: false,
-            sync: false
         },
 
         initialize: function () { return initialize(this); },
 
         initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
-
-        toggleMapSync: function (forceSyncTo) {
-            // Toggle the value of the sync property, or if forceSyncTo is set, 
-            // to the value provided
-            var map = this.get('map'),
-                sync = forceSyncTo === undefined
-                    ? !map.get('sync')
-                    : forceSyncTo
-
-            map.set('sync', sync);
-        }
     });
 
 }(Geosite));
@@ -129,27 +115,29 @@
         render(view);
         initBasemapSelector(view);
         initMapView(view);
-        renderSidebar(view);
         initPluginViews(view);
 
-        view.model.on('change:isMain change:splitView', function () { renderSidebar(view); });
-
+        N.app.models.screen.on('change', function () { renderSidebar(view); });
     }
 
     function render(view) {
         var paneTemplate = N.app.templates['template-pane'],
             html = paneTemplate(view.model.toJSON());
         view.$el.append(html);
+        renderSidebar(view);
+        renderSidebarLinks(view);
     }
 
     function renderSidebar(view) {
         var sidebarTemplate = N.app.templates['template-sidebar'],
-            html = sidebarTemplate(_.extend(view.model.toJSON(), {
-                alternatePaneNumber: view.model.get('paneNumber') == 0 ? 1 : 0
-            }));
+            paneNumber = view.model.get('paneNumber'),
+            data = _.extend(N.app.models.screen.toJSON(), {
+                isMain: paneNumber === N.app.models.screen.get('mainPaneNumber'),
+                alternatePaneNumber: paneNumber === 0 ? 1 : 0
+            }),
+            html = sidebarTemplate(data);
 
         view.$('.bottom.side-nav').empty().append(html);
-        renderSidebarLinks(view);
     }
 
     // TODO: Sidebar links aren't in the prototype - do we have anything for them?
@@ -160,24 +148,6 @@
         _.each(regionData.sidebarLinks, function (link) {
             var html = linkTemplate({ link: link });
             $links.append(html);
-        });
-    }
-
-    function changeScreenModeOnPanes(mainPainIndex, splitView) {
-        // If only the first pane has been created, create the right-pane (id-1)
-        if (N.app.models.panes.length < 2) {
-            N.app.createPane(1);
-        }
-
-        // Update the pane models with the correct state for main pane and 
-        // split screen status
-        _.each(N.app.models.panes, function (pane) {
-            var isMainPane = pane.get('paneNumber') === mainPainIndex;
-
-            pane.set({
-                'splitView': splitView,
-                'isMain': isMainPane
-            });
         });
     }
 
@@ -198,16 +168,16 @@
         var esriMap = view.mapView.esriMap,
             resizeMap = function resizeMap() {
 
-            // When the element containing the map resizes, the 
-            // map needs to be notified.  Do a slight delay so that
-            // the browser has time to actually make the element visible.
-            _.delay(function () {
-                if (view.$('.map').is(':visible')) {
-                    esriMap.reposition();
-                    esriMap.resize(true);
-                }
-            }, 150);
-        }
+                // When the element containing the map resizes, the 
+                // map needs to be notified.  Do a slight delay so that
+                // the browser has time to actually make the element visible.
+                _.delay(function () {
+                    if (view.$('.map').is(':visible')) {
+                        esriMap.reposition();
+                        esriMap.resize(true);
+                    }
+                }, 150);
+            }
 
         // Wait for the map to load, then initialize the plugins. 
         // (Otherwise some map properties aren't available, e.g. extent)
@@ -220,14 +190,6 @@
 
             view.model.initPlugins(esriMap);
         });
-    }
-
-    function toggleMapSyncProperty(view, toggle) {
-        // Map sync is two way, so all pane maps need to be de/activated
-        _.each(N.app.models.panes, function (pane) {
-            pane.toggleMapSync(toggle);
-        });
-        renderSidebar(view);
     }
 
     function initPluginViews(view) {
@@ -247,57 +209,47 @@
             }
         });
     }
+    
+    var $body = $('body'),
+        bodyClassLookup = {
+            split: 'view-split',
+            left: 'view-left',
+            right: 'view-right'
+        };
+
+    function setBodyClass(newClass) {
+        $body.removeClass(_(bodyClassLookup).values().join(' '))
+            .addClass(newClass);
+
+        // The maps need to adjust to the new layout size
+        $(window).trigger('resize');
+    }
 
     N.views = N.views || {};
     N.views.Pane = Backbone.View.extend({
         mapView: null,
-        screen: {
-            split: 'view-split',
-            left: 'view-left',
-            right: 'view-right'
-        },
-
-        $body: $('body'),
 
         initialize: function (view) { initialize(this); },
 
         events: {
+            'click .switch-screen': 'switchScreen',
             'click .split-screen': 'splitScreen',
-            'click .switch-screen': 'switchScreenFocus',
-            'click .map-sync': 'toggleMapSync'
+            'click .map-sync': function () { N.app.models.screen.toggleMapSync(); }
         },
 
-        toggleMapSync: function toggleSync() {
-            toggleMapSyncProperty(this);
-        },
-
-        switchScreenFocus: function switchScreen(evt) {
-            var view = this,
-                screenToShow = $(evt.currentTarget).data('screen'),
-                screenClass = screenToShow === 0 ? view.screen.left : view.screen.right;
-
-            view.$body.removeClass(_(view.screen).values().join(' '))
-                .addClass(screenClass)
-
-            changeScreenModeOnPanes(screenToShow, false);
-
-            // Force the map to stop syncing when going to a full screen view
-            toggleMapSyncProperty(view, false);
-
-            $(window).trigger('resize');
+        switchScreen: function switchScreen(evt) {
+            var screenToShow = $(evt.currentTarget).data('screen'),
+                 newClass = (screenToShow === 0 ? bodyClassLookup.left : bodyClassLookup.right);
+            N.app.models.screen.switch(screenToShow);
+            setBodyClass(newClass);
         },
 
         splitScreen: function splitScreen() {
             // Align the body classes to be in split-screen mode
-            this.$body.removeClass(_(this.screen).values().join(' '))
-                .addClass(this.screen.split);
-
-            // Main screen is always id-0 when in split view mode
-            changeScreenModeOnPanes(0, true);
-
-            // The maps need to adjust to the new layout size
-            $(window).trigger('resize');
+            N.app.models.screen.split();
+            setBodyClass(bodyClassLookup.split);
         }
+
     });
 
 }(Geosite));
