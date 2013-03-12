@@ -15,20 +15,26 @@
         data: {},
         config: {
             paneDefinitions: [
-                { selector: "#left-pane", index: 0, main: true },
-                { selector: "#right-pane", index: 1, main: false }
-            ],
-        hashModels: Backbone.HashModels.init()
+                { selector: "#left-pane", index: 0 },
+                { selector: "#right-pane", index: 1 }
+            ]
         },
+        hashModels: null,
 
         init: function initializeApp(version, regionData, pluginClasses) {
             N.app.version = version;
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
 
-            Backbone.HashModels.init();
-
+            this.hashModels = Backbone.HashModels.init({
+                updateOnChange: false
+            });
             N.app.models.screen = new N.models.Screen();
+            N.app.views.screen = new N.views.Screen({
+                model: N.app.models.screen,
+                el: $('body')
+            });
+            //this.hashModels.addModel(N.app.models.screen);
 
             // Only create the first visible pane at startup.  The
             // additional pane will be created when it is requested
@@ -68,7 +74,6 @@
     function initializePane(regionData, paneConfig) {
         var pane = new N.models.Pane({
             paneNumber: paneConfig.index,
-            isMain: paneConfig.main,
             regionData: regionData
         });
 
