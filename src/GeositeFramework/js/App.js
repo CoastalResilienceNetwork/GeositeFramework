@@ -17,13 +17,16 @@
             paneDefinitions: [
                 { selector: "#left-pane", index: 0, main: true },
                 { selector: "#right-pane", index: 1, main: false }
-            ]
+            ],
+        hashModels: Backbone.HashModels.init()
         },
 
         init: function initializeApp(version, regionData, pluginClasses) {
             N.app.version = version;
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
+
+            Backbone.HashModels.init();
 
             // Only create the first visible pane at startup.  The
             // additional pane will be created when it is requested
