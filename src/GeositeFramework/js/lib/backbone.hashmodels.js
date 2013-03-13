@@ -384,7 +384,7 @@ Backbone.HashModels = (function(Backbone, _, $){
             initialModelStates[modelId] = initialState;
 
             if (modelOptions.attributes && modelOptions.attributes.length) {
-                watchedModelAttributes[modelId] = _.compact(modelOptions.attributes); // shallow-copy list
+                watchedModelAttributes[modelId] = _.extend([], modelOptions.attributes);
                 eventsToWatch = _.map(modelOptions.attributes, function(name) {
                     return 'change:' + name;
                 }).join(' ');
