@@ -179,8 +179,10 @@
                 // the browser has time to actually make the element visible.
                 _.delay(function () {
                     if (view.$('.map').is(':visible')) {
+                        var center = esriMap.extent.getCenter();
                         esriMap.reposition();
                         esriMap.resize(true);
+                        esriMap.centerAt(center);
                     }
                 }, 150);
             }
