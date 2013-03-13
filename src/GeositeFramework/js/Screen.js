@@ -122,6 +122,11 @@
         },
 
         makePermalink: function makePermalink() {
+            _.each(paneViews, function (paneView) {
+                if (paneView !== null) {
+                    paneView.mapView.saveState();
+                }
+            });
             Backbone.HashModels.update();
         }
 

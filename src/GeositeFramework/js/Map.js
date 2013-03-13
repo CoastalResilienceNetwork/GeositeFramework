@@ -49,9 +49,8 @@
 (function (N) {
     'use strict';
     function initialize(view) {
-        view.model.on('change:selectedBasemapIndex', function () {
-            selectBasemap(view);
-        });
+        view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
+        view.model.on('change:extent',               function () { loadExtent(view); });
 
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
@@ -67,12 +66,21 @@
         var domId = "map" + view.options.paneNumber;
         view.$el.attr("id", domId);
         view.esriMap = new esri.Map(domId);
-
-        var x = view.model.get('initialExtent');
-        view.esriMap.setExtent(new esri.geometry.Extent(x[0], x[1], x[2], x[3],
-            new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })));
-
+        loadExtent(view);
         view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()
+    }
+
+    function loadExtent(view) {
+        var x = view.model.get('extent'),
+            extent = new esri.geometry.Extent(
+                x.xmin, x.ymin, x.xmax, x.ymax,
+                new esri.SpatialReference({ wkid: x.spatialReference.wkid })
+            );
+        view.esriMap.setExtent(extent);
+    }
+
+    function saveExtent(view) {
+        view.model.set('extent', view.esriMap.extent);
     }
 
     function selectBasemap(view) {
@@ -88,7 +96,8 @@
 
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
-        initialize: function () { initialize(this); }
+        initialize: function () { initialize(this); },
+        saveState: function () { saveExtent(this); }
     });
 
 }(Geosite));

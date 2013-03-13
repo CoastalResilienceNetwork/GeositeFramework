@@ -12,11 +12,21 @@
     }
 
     function initMap(model) {
-        var regionData = model.get('regionData');
-        model.set('map', new N.models.Map({
-            basemaps: regionData.basemaps,
-            initialExtent: regionData.initialExtent
-        }));
+        var regionData = model.get('regionData'),
+            x = regionData.initialExtent,
+            extent = new esri.geometry.Extent(
+                x[0], x[1], x[2], x[3],
+                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+            ),
+            mapModel = new N.models.Map({
+                basemaps: regionData.basemaps,
+                extent: extent
+            });
+        model.set('map', mapModel);
+        N.app.hashModels.addModel(mapModel, {
+            id: 'map' + model.get('paneNumber'),
+            attributes: ['extent', 'selectedBasemapIndex']
+        });
     }
 
     function createPlugins(model) {
