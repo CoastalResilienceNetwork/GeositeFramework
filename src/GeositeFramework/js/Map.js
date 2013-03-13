@@ -68,6 +68,15 @@
         view.esriMap = new esri.Map(domId);
         loadExtent(view);
         view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()
+
+        // Use map model in permalinks. 
+        // Since adding the model might cause it to be initialized from a URL hash,
+        // we've waited to add it until all dependent views (like this one, and BasemapSelector) exist
+        var mapModel = view.model;
+        N.app.hashModels.addModel(mapModel, {
+            id: domId,
+            attributes: ['extent', 'selectedBasemapIndex']
+        });
     }
 
     function loadExtent(view) {

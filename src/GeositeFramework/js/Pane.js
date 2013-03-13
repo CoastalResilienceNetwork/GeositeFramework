@@ -23,10 +23,6 @@
                 extent: extent
             });
         model.set('map', mapModel);
-        N.app.hashModels.addModel(mapModel, {
-            id: 'map' + model.get('paneNumber'),
-            attributes: ['extent', 'selectedBasemapIndex']
-        });
     }
 
     function createPlugins(model) {
