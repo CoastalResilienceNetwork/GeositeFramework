@@ -223,8 +223,7 @@
     N.views.Pane = Backbone.View.extend({
         mapView: null,
 
-        initialize: function (view) { initialize(this); },
-
+        initialize: function (view) { initialize(this); }
     });
 
 }(Geosite));
