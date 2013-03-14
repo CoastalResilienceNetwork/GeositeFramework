@@ -70,11 +70,7 @@
     }
 
     function createMap(view) {
-        // To make an ESRI map object we need a unique DOM id.
-        // Construct the id using my pane's number
-        var domId = "map" + view.options.paneNumber;
-        view.$el.attr("id", domId);
-        view.esriMap = new esri.Map(domId);
+        view.esriMap = new esri.Map(view.$el.attr('id'));
         loadExtent(view);
         selectBasemap(view);
     }
