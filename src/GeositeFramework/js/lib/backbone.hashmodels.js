@@ -400,6 +400,10 @@ Backbone.HashModels = (function(Backbone, _, $){
                 } else {
                     model.set(state[modelId]);
                 }
+                if (!options.updateOnChange) {
+                    pendingState[modelId] = state[modelId];
+                    pendingStateString = encodeStateObject(pendingState);
+                }
             }
 
             model.on(eventsToWatch, handleModelChanged, model);
