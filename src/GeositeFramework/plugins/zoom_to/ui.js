@@ -82,7 +82,7 @@ define([],
                     map: map,
                     zoomLevel: zoomLevel,
                     point: pointConstructor
-                }
+                };
             },
 
             abortGeocodeRequest: function () {
@@ -105,7 +105,7 @@ define([],
                 // the plugin conf. Returns an array of candidates with
                 // latlng values on success, an error on failure.
 
-                var model = this;
+                var model = this,
                     singleLine =  this.get('inputValue'),
                     url = [this.locator.url, "SingleLine=",
                            singleLine, "&outFields=&outSR=&f=pjson&callback=?"
@@ -170,7 +170,7 @@ define([],
                                 y: y
                             }));
                         $fragment.click(function () { view.centerAndZoom(x, y); });
-                        return $fragment
+                        return $fragment;
                     };
                 
                     return _.map(candidates, $wrapHtml);

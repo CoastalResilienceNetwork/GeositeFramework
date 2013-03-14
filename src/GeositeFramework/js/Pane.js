@@ -76,7 +76,7 @@
     }
 
     function makeLogger(pluginName, level) {
-        return function (userMessage, developerMessage) {
+        return function(userMessage, developerMessage) {
             if (developerMessage) {
                 // Log to server-side plugin-specific log file
                 Azavea.logMessage(developerMessage, pluginName, level);
@@ -89,7 +89,7 @@
                 // TODO: create a panel
                 alert(userMessage);
             }
-        }
+        };
     }
 
     N.models = N.models || {};
@@ -277,7 +277,7 @@
                 screenClass = screenToShow === 0 ? view.screen.left : view.screen.right;
 
             view.$body.removeClass(_(view.screen).values().join(' '))
-                .addClass(screenClass)
+                .addClass(screenClass);
 
             changeScreenModeOnPanes(screenToShow, false);
 

@@ -121,7 +121,6 @@
 
         function render(view) {
             var model = view.model,
-                toolbarName = model.get('pluginObject').toolbarName,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
                 // The plugin icon looks active if the plugin is selected or
                 // active (aka, running but not focused)
@@ -166,7 +165,7 @@
 
                 // Listen for events to turn the plug-in completely off
                 .find('.plugin-off').on('click', function () {
-                    view.model.turnOff()
+                    view.model.turnOff();
                 }).end()
 
                 // Unselect the plugin, but keep active
