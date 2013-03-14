@@ -95,6 +95,10 @@
 
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
+            // If your plugin happens to have clickable elements
+            // inside of the 'a' tag of the button container, 
+            // you can reduce the scope of this target by
+            // doing a .stopPropagation() on your element
             events: {
                 'click a': 'handleClick'
             },
@@ -214,16 +218,9 @@
         }
 
         N.views = N.views || {};
-        // TODO: it's a little hacky to have TopbarPlugin inherit
-        // from BasePlugin and need to clobber the events. This
-        // is a temporary workaround to stop the click event from
-        // rerendering. we should probably fix the baseplugin 
-        // not to have this event and then have it get added
-        // for the sidebar plugin.
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            render: render,
-            events: {}
+            render: render
         });
     }());
 }(Geosite));

@@ -141,6 +141,11 @@ define([],
 
             events: {
                 "click div#pluginZoomTo-clearSearch": function () { this.model.set('inputValue', ""); },
+                "click input": function (e) {
+                    // When the text input is clicked on, don't activate the top
+                    // bar button click event.
+                     e.stopPropagation();
+                },
                 "mouseenter": function () { this.model.set('hasMouse', true); },
                 "mouseleave": function () { this.model.set('hasMouse', false); },
                 "blur input": function () { this.model.set('hasFocus', false); },
