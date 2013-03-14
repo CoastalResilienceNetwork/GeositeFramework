@@ -104,7 +104,7 @@ define([
             }
 
             function onLayerSourceLoadError(jqXHR, textStatus, errorThrown) {
-                _app.error("AJAX request to load layer source failed. Result text: '" + jqXHR.resultText
+                _app.error("", "AJAX request to load layer source failed. Result text: '" + jqXHR.resultText
                     + "' Status: '" + textStatus + "' Error: '" + errorThrown + "'");
             }
 
