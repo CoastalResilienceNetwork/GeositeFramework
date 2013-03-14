@@ -104,8 +104,7 @@ h1, h2, h3, h4, h5, h6 {
 .view-split .content {
 	display: block;
 }
-.view-split .content,
-.view-split .content .map {
+.view-split .content {
 	width: 50%;
 }
 
@@ -205,13 +204,18 @@ h1, h2, h3, h4, h5, h6 {
 /* -----------------------------------------
    Content Area - Map
 ----------------------------------------- */
-		
+
+    .content .map-outer {
+        width: 100%;
+		height: 100%;
+		margin-left: 85px;
+    }		
 	.content .map {
 		width: 100%;
 		height: 100%;
+        padding-right: 85px;
 		background: #EEE;
 		position: relative;
-		margin-left: 85px;
 		}
 		.content .map .tools {
 			position: absolute;
@@ -246,7 +250,7 @@ h1, h2, h3, h4, h5, h6 {
 		.content .map .basemap-selector {
 			position: absolute;
 			top: 16px;
-			right: 20px;
+			right: 105px;
 			width: 110px;
 			height: 33px;
 			background: white;
