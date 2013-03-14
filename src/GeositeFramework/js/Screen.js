@@ -62,17 +62,16 @@
 
     function render(view) {
         var mainPaneNumber = view.model.get('mainPaneNumber'),
-            splitScreen = view.model.get('splitScreen'),
-            bodyClass = getBodyClass(mainPaneNumber);
-
-        ensurePane(mainPaneNumber);
+            splitScreen = view.model.get('splitScreen');
 
         if (splitScreen) {
+            setBodyClass(bodyClasses.split);
+            ensurePane(0);
             ensurePane(1);
-            bodyClass = bodyClasses.split;
+        } else {
+            setBodyClass(getBodyClass(mainPaneNumber));
+            ensurePane(mainPaneNumber);
         }
-
-        setBodyClass(bodyClass);
 
         // The maps need to adjust to the new layout size
         $(window).trigger('resize');
@@ -87,7 +86,6 @@
             });
 
             // Create pane view
-            setBodyClass(getBodyClass(paneNumber)); // ensure map will use full pane
             paneViews[paneNumber] = new N.views.Pane({
                 model: pane,
                 el: $(paneSelectors[paneNumber])

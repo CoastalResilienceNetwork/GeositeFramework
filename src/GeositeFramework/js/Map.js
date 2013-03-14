@@ -33,14 +33,23 @@
     N.models = N.models || {};
     N.models.Map = Backbone.Model.extend({
         defaults: {
+            mapNumber: null,
             basemaps: null,
-            selectedBasemapIndex: null,   // Both the map view and the basemap selector listen for changes to this attribute
+            selectedBasemapIndex: 0,   // Both the map view and the basemap selector listen for changes to this attribute
             sync: false
         },
+
         initialize: function () {
             // deep-copy 'basemaps' because we're going to modify its elements by adding 'layer' properties
             this.set('basemaps', $.extend(true, [], this.get('basemaps')));
+
+            // Use map model in permalinks
+            N.app.hashModels.addModel(this, {
+                id: 'map' + this.get('mapNumber'),
+                attributes: ['extent', 'selectedBasemapIndex']
+            });
         },
+
         getSelectedBasemapName: function () { return getSelectedBasemap(this).name; },
         getSelectedBasemapLayer:  function (esriMap) { return getSelectedBasemapLayer(this, esriMap); }
     });
@@ -67,16 +76,7 @@
         view.$el.attr("id", domId);
         view.esriMap = new esri.Map(domId);
         loadExtent(view);
-        view.model.set('selectedBasemapIndex', 0); // triggers call to selectBasemap()
-
-        // Use map model in permalinks. 
-        // Since adding the model might cause it to be initialized from a URL hash,
-        // we've waited to add it until all dependent views (like this one, and BasemapSelector) exist
-        var mapModel = view.model;
-        N.app.hashModels.addModel(mapModel, {
-            id: domId,
-            attributes: ['extent', 'selectedBasemapIndex']
-        });
+        selectBasemap(view);
     }
 
     function loadExtent(view) {

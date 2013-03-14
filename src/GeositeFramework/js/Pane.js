@@ -20,7 +20,8 @@
             ),
             mapModel = new N.models.Map({
                 basemaps: regionData.basemaps,
-                extent: extent
+                extent: extent,
+                mapNumber: model.get('paneNumber')
             });
         model.set('map', mapModel);
     }
