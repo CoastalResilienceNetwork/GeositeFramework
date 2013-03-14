@@ -83,7 +83,7 @@
     }
 
     function makeLogger(pluginName, level) {
-        return function (userMessage, developerMessage) {
+        return function(userMessage, developerMessage) {
             if (developerMessage) {
                 // Log to server-side plugin-specific log file
                 Azavea.logMessage(developerMessage, pluginName, level);
@@ -96,7 +96,7 @@
                 // TODO: create a panel
                 alert(userMessage);
             }
-        }
+        };
     }
 
     N.models = N.models || {};
@@ -223,7 +223,7 @@
     N.views.Pane = Backbone.View.extend({
         mapView: null,
 
-        initialize: function (view) { initialize(this); },
+        initialize: function (view) { initialize(this); }
     });
 
 }(Geosite));

@@ -95,6 +95,10 @@
 
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
+            // If your plugin happens to have clickable elements
+            // inside of the 'a' tag of the button container, 
+            // you can reduce the scope of this target by
+            // doing a .stopPropagation() on your element
             events: {
                 'click a': 'handleClick'
             },
@@ -117,7 +121,6 @@
 
         function render(view) {
             var model = view.model,
-                toolbarName = model.get('pluginObject').toolbarName,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
                 // The plugin icon looks active if the plugin is selected or
                 // active (aka, running but not focused)
@@ -162,7 +165,7 @@
 
                 // Listen for events to turn the plug-in completely off
                 .find('.plugin-off').on('click', function () {
-                    view.model.turnOff()
+                    view.model.turnOff();
                 }).end()
 
                 // Unselect the plugin, but keep active
@@ -214,16 +217,9 @@
         }
 
         N.views = N.views || {};
-        // TODO: it's a little hacky to have TopbarPlugin inherit
-        // from BasePlugin and need to clobber the events. This
-        // is a temporary workaround to stop the click event from
-        // rerendering. we should probably fix the baseplugin 
-        // not to have this event and then have it get added
-        // for the sidebar plugin.
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            render: render,
-            events: {}
+            render: render
         });
     }());
 }(Geosite));
