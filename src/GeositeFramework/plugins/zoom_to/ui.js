@@ -82,7 +82,7 @@ define([],
                     map: map,
                     zoomLevel: zoomLevel,
                     point: pointConstructor
-                }
+                };
             },
 
             abortGeocodeRequest: function () {
@@ -105,7 +105,7 @@ define([],
                 // the plugin conf. Returns an array of candidates with
                 // latlng values on success, an error on failure.
 
-                var model = this;
+                var model = this,
                     singleLine =  this.get('inputValue'),
                     url = [this.locator.url, "SingleLine=",
                            singleLine, "&outFields=&outSR=&f=pjson&callback=?"
@@ -141,6 +141,11 @@ define([],
 
             events: {
                 "click div#pluginZoomTo-clearSearch": function () { this.model.set('inputValue', ""); },
+                "click input": function (e) {
+                    // When the text input is clicked on, don't activate the top
+                    // bar button click event.
+                     e.stopPropagation();
+                },
                 "mouseenter": function () { this.model.set('hasMouse', true); },
                 "mouseleave": function () { this.model.set('hasMouse', false); },
                 "blur input": function () { this.model.set('hasFocus', false); },
@@ -165,7 +170,7 @@ define([],
                                 y: y
                             }));
                         $fragment.click(function () { view.centerAndZoom(x, y); });
-                        return $fragment
+                        return $fragment;
                     };
                 
                     return _.map(candidates, $wrapHtml);
