@@ -6,23 +6,26 @@
 (function (N) {
     'use strict';
     function initialize(view) {
-        // When the map's selected basemap changes, update the title element in the DOM
-        view.model.on('change:selectedBasemapIndex', function () {
-            var name = view.model.getSelectedBasemapName();
-            view.$('.basemap-selector-title').text(name);
-        });
         render(view);
+        // When the map's selected basemap changes, update the title element in the DOM
+        view.model.on('change:selectedBasemapIndex', function () { renderSelectedBasemapName(view); });
     }
 
     function render(view) {
-        var $container = view.$('.basemap-selector-list ul');
-        var template = N.app.templates['template-basemap-selector-item'];
+        var $container = view.$('.basemap-selector-list ul'),
+            template = N.app.templates['template-basemap-selector-item'];
         _.each(view.model.get('basemaps'), function (basemap, index) {
             // Augment basemap data with 'index' to feed the DOM item's data-index attribute
             var data = _.extend({ index: index }, basemap);
             $container.append(template(data));
         });
+        renderSelectedBasemapName(view);
         return view;
+    }
+
+    function renderSelectedBasemapName(view) {
+        var name = view.model.getSelectedBasemapName();
+        view.$('.basemap-selector-title').text(name);
     }
 
     function onItemClicked(view, e) {

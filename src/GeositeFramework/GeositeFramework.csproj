@@ -161,6 +161,7 @@
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="js\Screen.js" />
     <Content Include="plugins\layer_selector\LayerLoader.js" />
     <Content Include="js\lib\backbone-0.9.10.min.js" />
     <Content Include="js\lib\backbone.picky.js" />
