@@ -1,6 +1,6 @@
-﻿// Main module for GeositeFramework plugin "layer_selector"
+﻿// "layer_selector" plugin, main module
 
-// Plugins should contain local versions of any libraries used even if those libraries are also used 
+// Plugins should load their own versions of any libraries used even if those libraries are also used 
 // by the GeositeFramework, in case a future framework version uses a different library version. 
 
 require({
@@ -11,8 +11,8 @@ require({
     packages: [
         {
             name: "jquery",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "jquery-1.9.0.min"
+            location: "//ajax.googleapis.com/ajax/libs/jquery/1.9.0",
+            main: "jquery.min"
         },
         {
             name: "jquery.placeholder",
@@ -21,8 +21,8 @@ require({
         },
         {
             name: "underscore",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "underscore-1.4.3.min"
+            location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4",
+            main: "underscore-min"
         },
         {
             name: "tv4",
@@ -31,7 +31,7 @@ require({
         },
         {
             name: "extjs",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib/ext-4.1.1a",
+            location: "//cdn.sencha.io/ext-4.1.1-gpl",
             main: "ext-all"
         }
     ],
