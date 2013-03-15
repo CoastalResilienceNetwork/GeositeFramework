@@ -172,6 +172,9 @@
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="plugins\layer_selector\AgsLoader.js" />
+    <Content Include="plugins\layer_selector\lib\jquery.placeholder.amd.min.js" />
+    <Content Include="plugins\layer_selector\lib\tv4.min.js" />
+    <Content Include="plugins\layer_selector\lib\use.js" />
     <Content Include="plugins\layer_selector\treeFilter.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
