@@ -242,10 +242,6 @@ h1, h2, h3, h4, h5, h6 {
 				.content .map .tools .topbar-plugin div:hover {
 					opacity: 1;
 				}
-
-			.content .map .measure {		
-				background-image: url(../img/tools_measure.png);
-			}
 			
 		.content .map .basemap-selector {
 			position: absolute;
