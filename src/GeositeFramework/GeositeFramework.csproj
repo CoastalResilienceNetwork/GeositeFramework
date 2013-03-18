@@ -155,7 +155,6 @@
     <Content Include="img\icons\icon_switch-0_up.png" />
     <Content Include="img\icons\icon_switch-1_up.png" />
     <Content Include="img\icons\icon_unlink-views_up.png" />
-    <Content Include="img\tools_measure.png" />
     <Content Include="img\tools_search.png" />
     <Content Include="js\App.js" />
     <Content Include="js\azavea.util.js" />
@@ -186,6 +185,7 @@
     <Content Include="plugins\measure\main.js" />
     <Content Include="plugins\measure\measure.css" />
     <Content Include="plugins\measure\templates.html" />
+    <Content Include="plugins\measure\icon.png" />
     <Content Include="plugins\scenarios_temp\main.js" />
     <Content Include="plugins\zoom_to\main.js" />
     <Content Include="plugins\zoom_to\ui.js" />
