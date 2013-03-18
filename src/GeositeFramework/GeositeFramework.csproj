@@ -162,13 +162,9 @@
     <Content Include="js\Geosite.js" />
     <Content Include="js\Screen.js" />
     <Content Include="plugins\layer_selector\LayerLoader.js" />
-    <Content Include="js\lib\backbone-0.9.10.min.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
-    <Content Include="js\lib\jquery-1.9.0.min.js" />
     <Content Include="js\lib\jquery.placeholder.js" />
-    <Content Include="js\lib\prototype.js" />
-    <Content Include="js\lib\underscore-1.4.3.min.js" />
     <Content Include="js\Map.js" />
     <Content Include="js\MapWrapper.js" />
     <Content Include="js\Pane.js" />
@@ -186,7 +182,6 @@
     <Content Include="plugins\measure\measure.css" />
     <Content Include="plugins\measure\templates.html" />
     <Content Include="plugins\measure\icon.png" />
-    <Content Include="plugins\scenarios_temp\main.js" />
     <Content Include="plugins\zoom_to\main.js" />
     <Content Include="plugins\zoom_to\ui.js" />
     <Content Include="Web.config" />

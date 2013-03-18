@@ -1,13 +1,12 @@
-﻿require({
+﻿// "zoom_to" plugin, main module
+
+require({
     // Specify library locations.
-    // The calls to location.pathname.replace() below prepend the app's root path to the specified library location. 
-    // Otherwise, since Dojo is loaded from a CDN, it will prepend the CDN server path and fail, as described in
-    // https://dojotoolkit.org/documentation/tutorials/1.7/cdn
     packages: [
         {
             name: "jquery",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/zoom_to/lib",
-            main: "jquery-1.9.0.min"
+            location: "//ajax.googleapis.com/ajax/libs/jquery/1.9.0",
+            main: "jquery.min"
         }
     ]
 });

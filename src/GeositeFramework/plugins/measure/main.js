@@ -1,23 +1,21 @@
-﻿// Main module for GeositeFramework plugin "measure"
+﻿// "measure" plugin, main module
 
-// Plugins should contain local versions of any libraries used even if those libraries are also used 
+
+// Plugins should load their own versions of any libraries used even if those libraries are also used 
 // by the GeositeFramework, in case a future framework version uses a different library version. 
 
 require({
     // Specify library locations.
-    // The calls to location.pathname.replace() below prepend the app's root path to the specified library location. 
-    // Otherwise, since Dojo is loaded from a CDN, it will prepend the CDN server path and fail, as described in
-    // https://dojotoolkit.org/documentation/tutorials/1.7/cdn
     packages: [
         {
             name: "jquery",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "jquery-1.9.0.min"
+            location: "//ajax.googleapis.com/ajax/libs/jquery/1.9.0",
+            main: "jquery.min"
         },
         {
             name: "underscore",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "underscore-1.4.3.min"
+            location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4",
+            main: "underscore-min"
         }
     ],
     // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
