@@ -10,17 +10,17 @@
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	
-    <title>Geosite Framework</title>
+    <title>@Model.Title</title>
+
+    <!-- Load CSS for plugins -->
+    @foreach (var url in Model.PluginCssUrls) {
+        <link rel="stylesheet" href="@url">
+    }
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
-    <!-- Temporarily hard-code css loading for plugins -->
-    <link rel="stylesheet" type="text/css" href="plugins/zoom_to/main.css">
-    <link rel="stylesheet" type="text/css" href="plugins/layer_selector/main.css">
-    <link rel="stylesheet" type="text/css" href="//cdn.sencha.io/ext-4.1.1-gpl/resources/css/ext-all.css">
-    <link rel="stylesheet" type="text/css" href="plugins/measure/measure.css">
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
+
     <script src="js/lib/foundation/modernizr.foundation.js"></script>
 </head>
 
@@ -115,8 +115,10 @@
 			</ul>
 			<section>
 				<ul class="right">
-                    @foreach (var link in Model.HeaderLinks) {
-                        if (link != Model.HeaderLinks.First()) { 
+                    @foreach (var link in Model.HeaderLinks)
+                    {
+                        if (link != Model.HeaderLinks.First())
+                        { 
                             <li class="divider"></li>
                         }
 					    <li><a href="@link.Url">@link.Text</a></li>
@@ -170,7 +172,13 @@
             packages: [{
                 name: "plugins",
                 location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
-            }]
+            }],
+            // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
+            // like Underscore and Ext JS. (Reference syntax in plugins is e.g. "use!underscore".)
+            paths: {
+                "use": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/use"
+            },
+            use: { @Html.Raw(Model.ConfigurationForUseJs) }
         });
 
         // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
@@ -200,11 +208,11 @@
         // We're using server-generated data to build this JavaScript block. Example result:
         // 
         //     require(['plugins/layer_selector/main', 'plugins/measure/main'], function(p0, p1) {
-        //         return $(document).ready(function() {
+        //         $(document).ready(function() {
         //             var regionData = {
-        //                                  "title": "Geosite Framework Sample",
+        //                                  title: "Geosite Framework Sample",
         //                                       // ... (omitting middle of region.json) ...
-        //                                  "pluginOrder": [ "layer_selector", "measure" ]
+        //                                  pluginOrder: [ "layer_selector", "measure" ]
         //                              },
         //                 plugins = [p0, p1]; // loaded plugin objects
         //             Geosite.app.init(regionData, plugins);
@@ -212,7 +220,7 @@
         //     });
 
         require([@Html.Raw(Model.PluginModuleIdentifiers)], function(@Html.Raw(Model.PluginVariableNames)) {
-            return $(document).ready(function() {
+            $(document).ready(function() {
 
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
