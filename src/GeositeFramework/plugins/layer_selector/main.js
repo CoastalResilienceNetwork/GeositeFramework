@@ -15,36 +15,26 @@ require({
             main: "jquery.min"
         },
         {
-            name: "jquery.placeholder",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "jquery.placeholder.amd.min"
-        },
-        {
             name: "underscore",
             location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4",
             main: "underscore-min"
         },
         {
-            name: "tv4",
-            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
-            main: "tv4.min"
-        },
-        {
             name: "extjs",
             location: "//cdn.sencha.io/ext-4.1.1-gpl",
             main: "ext-all"
+        },
+        {
+            name: "jquery.placeholder",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
+            main: "jquery.placeholder.amd.min"
+        },
+        {
+            name: "tv4",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib",
+            main: "tv4.min"
         }
-    ],
-    // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
-    // like Underscore and Ext JS. (Note the reference to "use!underscore" below.)
-    paths: {
-        "use": location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib/use"
-    },
-    use: {
-        "underscore": { attach: "_" },
-        "tv4": { attach: "tv4" },
-        "extjs": { attach: "Ext" }
-    }
+    ]
 });
 
 define([

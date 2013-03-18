@@ -17,17 +17,7 @@ require({
             location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4",
             main: "underscore-min"
         }
-    ],
-    // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
-    // like Underscore. (Note the reference to "use!underscore" below.)
-    paths: {
-        "use": location.pathname.replace(/\/[^/]+$/, "") + "plugins/layer_selector/lib/use"
-    },
-    use: {
-        "underscore": { attach: "_" },
-        "tv4": { attach: "tv4" },
-        "extjs": { attach: "Ext" }
-    }
+    ]
 });
 
 define(
