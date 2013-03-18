@@ -140,11 +140,21 @@ define([],
             className: "pluginZoomTo",
 
             events: {
-                "click div#pluginZoomTo-clearSearch": function () { this.model.set('inputValue', ""); },
+                // Because this plugin renders some extra UI features into
+                // the <a> tag used as the plugin icon, click events do not
+                // behave quite as expected. For example, A click event on 
+                // the plugin will try to take focus, but the subsequent
+                // click event that registers on the <a> tag will rerender
+                // the dom elements and lose focus. Therefore, for this plugin
+                // and plugins that behave similarly, ALL click events must
+                // manually stop event propation up to the <a> tag.
+
+                "click div#pluginZoomTo-clearSearch": function (e) {
+                    this.model.set('inputValue', "");
+                    e.stopPropagation(); // required for ALL click events
+                },
                 "click input": function (e) {
-                    // When the text input is clicked on, don't activate the top
-                    // bar button click event.
-                     e.stopPropagation();
+                     e.stopPropagation(); // required for ALL click events
                 },
                 "mouseenter": function () { this.model.set('hasMouse', true); },
                 "mouseleave": function () { this.model.set('hasMouse', false); },

@@ -97,8 +97,12 @@
         N.views.BasePlugin = Backbone.View.extend({
             // If your plugin happens to have clickable elements
             // inside of the 'a' tag of the button container, 
-            // you can reduce the scope of this target by
-            // doing a .stopPropagation() on your element
+            // you should reduce the scope of this target by
+            // doing a .stopPropagation() on your element.
+            // A better solution would be to not include clickable
+            // elements in the <a> tag that your plugin renders
+            // into. Make your UI separate from the button that
+            // launches it.
             events: {
                 'click a': 'handleClick'
             },
