@@ -163,6 +163,12 @@
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="plugins\layer_selector\icon.png" />
+    <Content Include="plugins\layer_selector\icon_active.png" />
+    <Content Include="plugins\layer_selector\images\gear.png" />
+    <Content Include="plugins\layer_selector\images\layer.png" />
+    <Content Include="plugins\layer_selector\images\layers.png" />
+    <Content Include="plugins\layer_selector\images\spinner.gif" />
     <Content Include="plugins\layer_selector\LayerLoader.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
@@ -219,9 +225,20 @@
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="App_Data\regionSchema.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\layer_selector\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\measure\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\zoom_to\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\zoom_to\zoom_to.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
