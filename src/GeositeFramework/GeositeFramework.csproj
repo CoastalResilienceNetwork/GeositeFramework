@@ -119,10 +119,12 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
-    <Compile Include="GeositeJsonParseException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\JsonDataPlugin.cs" />
+    <Compile Include="Helpers\JsonData.cs" />
+    <Compile Include="Helpers\JsonDataRegion.cs" />
     <Compile Include="Models\Geosite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\GeositeTests.cs" />
@@ -161,6 +163,12 @@
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="plugins\layer_selector\icon.png" />
+    <Content Include="plugins\layer_selector\icon_active.png" />
+    <Content Include="plugins\layer_selector\images\gear.png" />
+    <Content Include="plugins\layer_selector\images\layer.png" />
+    <Content Include="plugins\layer_selector\images\layers.png" />
+    <Content Include="plugins\layer_selector\images\spinner.gif" />
     <Content Include="plugins\layer_selector\LayerLoader.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
@@ -172,6 +180,9 @@
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="plugins\layer_selector\AgsLoader.js" />
+    <Content Include="plugins\layer_selector\lib\jquery.placeholder.amd.min.js" />
+    <Content Include="plugins\layer_selector\lib\tv4.min.js" />
+    <Content Include="js\lib\use.js" />
     <Content Include="plugins\layer_selector\treeFilter.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
@@ -214,9 +225,20 @@
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="App_Data\regionSchema.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\layer_selector\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\measure\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\zoom_to\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\zoom_to\zoom_to.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

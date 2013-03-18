@@ -1,0 +1,8 @@
+{
+    "css": [
+        "plugins/zoom_to/main.css"
+    ],
+    "use": {
+        "underscore": { "attach": "_" },
+    }
+}

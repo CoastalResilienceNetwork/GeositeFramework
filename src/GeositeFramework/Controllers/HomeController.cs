@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GeositeFramework.Helpers;
 using log4net;
 
 namespace GeositeFramework.Controllers
@@ -16,19 +17,9 @@ namespace GeositeFramework.Controllers
 
         public ActionResult Index()
         {
-            var app = HttpContext.ApplicationInstance as MvcApplication;
             try
             {
-                return View(app.GeositeData);
-            }
-            catch (GeositeJsonParseException ex)
-            {
-                _log.Error(ex.Message);
-                foreach (var message in ex.ParseMessages)
-                {
-                    _log.Error(message);
-                }
-                throw;   // Will display /Error.html
+                return View(MvcApplication.GeositeData);
             }
             catch (Exception ex)
             {
