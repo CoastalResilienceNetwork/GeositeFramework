@@ -119,10 +119,12 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
-    <Compile Include="GeositeJsonParseException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\JsonDataPlugin.cs" />
+    <Compile Include="Helpers\JsonData.cs" />
+    <Compile Include="Helpers\JsonDataRegion.cs" />
     <Compile Include="Models\Geosite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\GeositeTests.cs" />
@@ -174,7 +176,7 @@
     <Content Include="plugins\layer_selector\AgsLoader.js" />
     <Content Include="plugins\layer_selector\lib\jquery.placeholder.amd.min.js" />
     <Content Include="plugins\layer_selector\lib\tv4.min.js" />
-    <Content Include="plugins\layer_selector\lib\use.js" />
+    <Content Include="js\lib\use.js" />
     <Content Include="plugins\layer_selector\treeFilter.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
