@@ -1,56 +1,56 @@
 {
-    $schema: 'http://json-schema.org/draft-03/schema#',
-    title: 'Geosite configuration',
-    type: 'object',
-    properties: {
-        organization: {type: 'string', required: true},
-        title: {type: 'string', required: true},
-        headerLinks: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    text: {type: 'string', required: true},
-                    url: {type: 'string', required: true}
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Geosite configuration",
+    "type": "object",
+    "properties": {
+        "organization": {"type": "string", "required": true},
+        "title": {"type": "string", "required": true},
+        "headerLinks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "required": true},
+                    "url": {"type": "string", "required": true}
                 },
-                additionalProperties: false
+                "additionalProperties": false
             }
         },
-        sidebarLinks: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    text: {type: 'string', required: true},
-                    url: {type: 'string', required: true}
+        "sidebarLinks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "required": true},
+                    "url": {"type": "string", "required": true}
                 },
-                additionalProperties: false
+                "additionalProperties": false
             }
         },
-        initialExtent: {
-            type: 'array',
-            required: true,
-            minItems: 4,
-            maxItems: 4,
-            items: {type: 'number'}
+        "initialExtent": {
+            "type": "array",
+            "required": true,
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {"type": "number"}
         },
-        basemaps: {
-            type: 'array', 
-            required: true,
-            minItems: 1,
-            items: {
-                type: 'object',
-                properties: {
-                    name: {type: 'string', required: true},
-                    url: {type: 'string', required: true}
+        "basemaps": {
+            "type": "array", 
+            "required": true,
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "required": true},
+                    "url": {"type": "string", "required": true}
                 },
-                additionalProperties: false
+                "additionalProperties": false
             }
         },
-        pluginOrder: {
-            type: 'array',
-            items: {type: 'string'},
+        "pluginOrder": {
+            "type": "array",
+            "items": {"type": "string"},
         }
     },
-    additionalProperties: false
+    "additionalProperties": false
 }
