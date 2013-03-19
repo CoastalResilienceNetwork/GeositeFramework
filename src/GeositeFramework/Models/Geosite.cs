@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using GeositeFramework.Helpers;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 
 namespace GeositeFramework.Models
 {
@@ -27,56 +28,66 @@ namespace GeositeFramework.Models
         public List<string> PluginFolderNames { get; private set; }
         public string PluginModuleIdentifiers { get; private set; }
         public string PluginVariableNames { get; private set; }
+        public List<string> PluginCssUrls { get; private set; }
+        public string ConfigurationForUseJs { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
         /// </summary>
         public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath, string appDataFolderPath)
         {
-            using (var sr = new StreamReader(regionJsonFilePath))
-            {
-                string regionJson = sr.ReadToEnd();
-                var pluginFolderPaths = Directory.EnumerateDirectories(pluginsFolderPath);
-                ValidatePlugins(pluginFolderPaths);
-                var pluginFolderNames = pluginFolderPaths.Select(p => Path.GetFileName(p)).ToList();
-                try
-                {
-                    return new Geosite(regionJson, pluginFolderNames, appDataFolderPath);
-                }
-                catch (GeositeJsonParseException ex)
-                {
-                    // Add file path to message and re-throw
-                    throw new GeositeJsonParseException(ex.ParseMessages, ex, "Error(s) in configuration file '{0}':", regionJsonFilePath);
-                }
-            }
+            var jsonDataRegion = new JsonDataRegion(appDataFolderPath).LoadFile(regionJsonFilePath);
+            var pluginFolderPaths = Directory.EnumerateDirectories(pluginsFolderPath);
+            var pluginConfigData = GetPluginConfigurationData(pluginFolderPaths, appDataFolderPath);
+            var pluginFolderNames = pluginFolderPaths.Select(p => Path.GetFileName(p)).ToList();
+            var geosite = new Geosite(jsonDataRegion, pluginFolderNames, pluginConfigData);
+            return geosite;
         }
 
-        private static void ValidatePlugins(IEnumerable<string> pluginFolderPaths)
+        private static List<JsonData> GetPluginConfigurationData(IEnumerable<string> pluginFolderPaths, string appDataFolderPath)
         {
+            var pluginJsonFilename = "plugin.json";
+            var pluginConfigData = new List<JsonData>();
             foreach (var path in pluginFolderPaths)
             {
+                // Make sure main.js exists
                 if (!File.Exists(Path.Combine(path, "main.js")))
                 {
                     throw new ApplicationException("Missing 'main.js' file in plugin folder: " + path);
                 }
+
+                // Get plugin.json data if present
+                var pluginJsonPath = Path.Combine(path, pluginJsonFilename);
+                if (File.Exists(pluginJsonPath))
+                {
+                    var jsonData = new JsonDataPlugin(appDataFolderPath).LoadFile(pluginJsonPath);
+                    pluginConfigData.Add(jsonData);
+                }
             }
+            return pluginConfigData;
         }
 
         /// <summary>
         /// Make a Geosite object given the specified configuration info. 
         /// Note this is public only for testing purposes.
         /// </summary>
-        /// <param name="regionJson">A JSON configuration string (e.g. contents of the "region.json" configuration file)</param>
+        /// <param name="jsonDataRegion">JSON configuration data (e.g. from a "region.json" configuration file)</param>
         /// <param name="existingPluginFolderNames">A list of plugin folder names (not full paths -- relative to the site "plugins" folder)</param>
-        /// <param name="appDataFolderPath">Path to the "App_Data" folder</param>
-        public Geosite(string regionJson, List<string> existingPluginFolderNames, string appDataFolderPath)
+        public Geosite(JsonData jsonDataRegion, List<string> existingPluginFolderNames, List<JsonData> pluginConfigJsonData)
         {
-            // Validate the configuration data
-            var jsonObj = ValidateRegionJson(regionJson, appDataFolderPath);
+            // Validate the region configuration JSON
+            var jsonObj = jsonDataRegion.Validate();
 
             // Get plugin folder names, in the specified order
-            var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
-            PluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
+            if (jsonObj["pluginOrder"] == null)
+            {
+                PluginFolderNames = existingPluginFolderNames;
+            }
+            else
+            {
+                var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
+                PluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
+            }
 
             // Augment the JSON so the client will have the full list of folder names
             jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
@@ -84,13 +95,16 @@ namespace GeositeFramework.Models
             // Set public properties needed for View rendering
             Organization = (string)jsonObj["organization"];
             Title = (string)jsonObj["title"];
-            
-            HeaderLinks = jsonObj["headerLinks"]
-                .Select(j => new Link
-                {
-                    Text = (string)j["text"],
-                    Url = (string)j["url"]
-                }).ToList();
+
+            if (jsonObj["headerLinks"] != null)
+            {
+                HeaderLinks = jsonObj["headerLinks"]
+                    .Select(j => new Link
+                    {
+                        Text = (string)j["text"],
+                        Url = (string)j["url"]
+                    }).ToList();
+            }
 
             // JSON to be inserted in generated JavaScript code
             RegionDataJson = jsonObj.ToString();
@@ -102,41 +116,11 @@ namespace GeositeFramework.Models
             // Create plugin variable names, to be inserted in generated JavaScript code. Example:
             //     "p0, p1"
             PluginVariableNames = string.Join(", ", PluginFolderNames.Select((name, i) => string.Format("p{0}", i)));
-        }
 
-        private static JObject ValidateRegionJson(string regionJson, string appDataFolderPath)
-        {
-            IList<string> parseMessages;
-            try
+            if (pluginConfigJsonData != null)
             {
-                var jsonObj = JObject.Parse(regionJson);
-                var regionDataSchema = GetRegionDataSchema(appDataFolderPath);
-                if (jsonObj.IsValid(GetRegionDataSchema(appDataFolderPath), out parseMessages))
-                {
-                    return jsonObj;
-                }
+                MergePluginConfigurationData(this, pluginConfigJsonData);
             }
-            catch (Exception ex)
-            {
-                parseMessages = new List<string> { ex.Message };
-            }
-            throw new GeositeJsonParseException(parseMessages, "Error(s) in site configuration JSON");
-        }
-
-        private static JsonSchema _regionDataSchema = null;
-
-        private static JsonSchema GetRegionDataSchema(string appDataFolderPath)
-        {
-            if (_regionDataSchema == null)
-            {
-                // Load schema for validating "region.json" file (see http://json-schema.org)
-                string regionSchemaPath = Path.Combine(appDataFolderPath, "regionSchema.json");
-                using (var sr = new StreamReader(regionSchemaPath))
-                {
-                    _regionDataSchema = JsonSchema.Parse(sr.ReadToEnd());
-                }
-            }
-            return _regionDataSchema;
         }
 
         private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
@@ -161,6 +145,62 @@ namespace GeositeFramework.Models
             // Append any existing folder names that weren't specified
             retVal.AddRange(existingNames);
             return retVal;
+        }
+
+        // Example plugin.json file:
+        // {
+        //     css: [
+        //         "plugins/layer_selector/main.css",
+        //         "//cdn.sencha.io/ext-4.1.1-gpl/resources/css/ext-all.css"
+        //     ],
+        //     use: {
+        //         underscore: { attach: "_" },
+        //         extjs: { attach: "Ext" }
+        //     }
+        // }
+
+        private static void MergePluginConfigurationData(Geosite geosite, List<JsonData> pluginConfigData)
+        {
+            var cssUrls = new List<string>();
+            var useClauses = new List<string>();
+            var useClauseDict = new Dictionary<string, string>();
+            foreach (var jsonData in pluginConfigData)
+            {
+                // Parse and validate the plugin's JSON configuration data
+                var jsonObj = jsonData.Validate();
+
+                JToken token;
+                if (jsonObj.TryGetValue("css", out token))
+                {
+                    // This config has CSS urls - add them to the list
+                    cssUrls.AddRange(token.Values<string>());
+                }
+                if (jsonObj.TryGetValue("use", out token))
+                {
+                    // This config has "use" clauses - add unique ones to the list
+                    foreach (JProperty p in token.Children())
+                    {
+                        var value = Regex.Replace(p.Value.ToString(), @"\s", ""); // remove whitespace
+                        if (useClauseDict.ContainsKey(p.Name))
+                        {
+                            if (useClauseDict[p.Name] != value)
+                            {
+                                var message = string.Format(
+                                    "Plugins define 'use' clause '{0}' differently: '{1}' vs. '{2}'",
+                                    p.Name, value, useClauseDict[p.Name]);
+                                throw new ApplicationException(message);
+                            }
+                        }
+                        else
+                        {
+                            useClauseDict[p.Name] = value;
+                            useClauses.Add(p.ToString());
+                        }
+                    }
+                }
+            }
+            geosite.PluginCssUrls = cssUrls;
+            geosite.ConfigurationForUseJs = string.Join("," + Environment.NewLine, useClauses);
         }
 
     }
