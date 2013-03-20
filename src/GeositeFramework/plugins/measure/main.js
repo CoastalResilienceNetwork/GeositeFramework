@@ -33,7 +33,7 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.agsMeasure = new AgsMeasure({
-                    map: this._unsafeMap,
+                    map: this.map,
                     tooltipTemplate: this.$templates.find('#template-measure-tooltip').html(),
                     infoBubbleTemplate: this.$templates.find('#template-measure-infobubble').html()
                 });
@@ -53,7 +53,7 @@ define(
                 this.agsMeasure.deactivate();
             },
 
-            destroy: function () {
+            hibernate: function () {
                 this.deactivate();
                 this._pointLayer.clear();
                 this._lineLayer.clear();

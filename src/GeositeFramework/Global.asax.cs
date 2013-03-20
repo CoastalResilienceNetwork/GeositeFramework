@@ -19,7 +19,7 @@ namespace GeositeFramework
     {
         public static Geosite GeositeData { get; private set; }
 
-        private static readonly string _geositeFrameworkVersion = "1.0.0";
+        private static readonly string _geositeFrameworkVersion = "0.1.0";
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         protected void Application_Start()
