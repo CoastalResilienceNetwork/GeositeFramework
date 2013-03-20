@@ -74,10 +74,10 @@
                     error: makeLogger(pluginName, "ERROR"),
                     _unsafeMap: esriMap
                 },
-                map: N.createMapWrapper(esriMap),
-                container: $displayContainer.find('.plugin-container-inner')[0],
-                _unsafeMap: esriMap
-
+                // TODO: fix wrapped map and pass it to plugin.
+                //map: N.createMapWrapper(esriMap),
+                map: esriMap,
+                container: $displayContainer.find('.plugin-container-inner')[0]
             });
         });
     }
