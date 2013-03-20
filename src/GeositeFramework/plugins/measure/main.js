@@ -53,7 +53,7 @@ define(
                 this.agsMeasure.deactivate();
             },
 
-            destroy: function () {
+            hibernate: function () {
                 this.deactivate();
                 this._pointLayer.clear();
                 this._lineLayer.clear();

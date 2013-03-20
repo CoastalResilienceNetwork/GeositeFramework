@@ -64,6 +64,10 @@ define([
 
             activate: function () {
                 this._ui.display();
+            },
+            
+            hibernate: function () {
+                // TODO: hide displayed map layers
             }
 
         });

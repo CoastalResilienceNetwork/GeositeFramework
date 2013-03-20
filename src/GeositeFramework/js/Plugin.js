@@ -22,7 +22,7 @@
 
             // Ensure that the framework will not fail if a plugin
             // is missing an optional interface method
-            _.each(['activate', 'deactivate', 'getState', 'destroy'], function (fn) {
+            _.each(['activate', 'deactivate', 'getState', 'hibernate'], function (fn) {
                 pluginObject[fn] = pluginObject[fn] || noOp;
             });
             
@@ -59,7 +59,7 @@
 
             turnOff: function () {
                 var pluginObject = this.get('pluginObject');
-                pluginObject.destroy();
+                pluginObject.hibernate();
                 this.set({
                     'showingUI': false,
                     'active': false
