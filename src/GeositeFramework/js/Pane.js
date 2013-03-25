@@ -188,8 +188,7 @@
                 }, 150);
             }
 
-        // Wait for the map to load, then initialize the plugins. 
-        // (Otherwise some map properties aren't available, e.g. extent)
+        // Wait for the map to load
         dojo.connect(esriMap, "onLoad", function () {
             resizeMap();
             $(N).on('resize', resizeMap);
@@ -197,7 +196,14 @@
             // Add this map to the list of maps to sync when in sync mode
             N.app.syncedMapManager.addMapView(view.mapView);
 
+            // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
+
+            // Clicking the map means "Identify" contents at a point
+            dojo.connect(esriMap, "onClick", function (event) {
+                var pluginModels = view.model.get('plugins');
+                view.mapView.doIdentify(pluginModels, event);
+            });
         });
     }
 
