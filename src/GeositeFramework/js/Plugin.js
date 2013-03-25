@@ -21,7 +21,8 @@
                 noOp = function noOp() { };
 
             // Ensure that the framework will not fail if a plugin
-            // is missing an optional interface method
+            // is missing an optional interface method.
+            // (Note: excluding 'identify' so we can check for it explicitly)
             _.each(['activate', 'deactivate', 'getState', 'hibernate'], function (fn) {
                 pluginObject[fn] = pluginObject[fn] || noOp;
             });
@@ -29,9 +30,6 @@
             return (_.isFunction(pluginObject.initialize));
         }
 
-        // not currently used, not likely to still be
-        // in this class when we implement the feature
-        // TODO: remove
         function toggleUI(model) {
             model.set('showingUI', !model.get('showingUI'));
             model.toggleSelected();
@@ -65,6 +63,22 @@
                     'active': false
                 });
                 this.deselect();
+            },
+
+            identify: function (point, processResults) {
+                var active = this.get('active'),
+                    pluginObject = this.get('pluginObject'),
+                    pluginTitle = pluginObject.toolbarName,
+                    pluginIdentifyFn = pluginObject.identify;
+                if (active && _.isFunction(pluginIdentifyFn)) {
+                    // This plugin might have some results, so give it a chance to identify()
+                    pluginIdentifyFn(point, function (results) {
+                        processResults(pluginTitle, results);
+                    });
+                } else {
+                    // This plugin has no results
+                    processResults(pluginTitle, false);
+                }
             }
         });
 
