@@ -287,8 +287,44 @@ h1, h2, h3, h4, h5, h6 {
 				.content .map .basemap-selector:hover .basemap-selector-list {
 					display: block;
 				}
-			
-			
+
+/* -----------------------------------------
+   "Identify" result window
+----------------------------------------- */
+ 
+.identify-info-window {
+    position: absolute;
+    padding: 5px;
+    color: #666666;
+    background-color: #FFFFFF;
+    border: 1px solid #666666;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 0.5em #BBBBBB;
+    -webkit-box-shadow: 0 0 0.5em #BBBBBB;
+    box-sizing: content-box;    /* Cancel Foundation's "box-sizing" override, otherwise "X" is misplaced */
+    }
+
+    /* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
+    .identify-info-window .content {
+        display: block;
+    }
+    /* Fix conflict between esri InfoWindow's "hide" class and Foundation's "hide" class*/
+    .identify-info-window .hide {
+        display: block;
+    }
+
+.identify-section
+{
+    font-weight: bold;
+}
+
+.identify-result
+{
+}
+
 /* -----------------------------------------
    Media Queries
 ----------------------------------------- */
