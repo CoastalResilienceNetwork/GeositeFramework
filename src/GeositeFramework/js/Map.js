@@ -99,9 +99,45 @@
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
     }
 
+    function doIdentify(view, pluginModels, event) {
+        var map = view.esriMap,
+            shouldIdentify = pluginModels.every(function (pluginModel) {
+                return (false === pluginModel.get('showingUI'));
+            });
+        // Only "Identify" if no plugin is showing its UI (and therefore owns click events)
+        if (shouldIdentify) {
+            // Delete the current info window (after grabbing its parent DOM node)
+            var $parent = $(map.infoWindow.domNode).parent();
+            map.infoWindow.destroy();
+
+            // Create a new info window
+            var $infoWindow = $('<div>').appendTo($parent),
+                $resultsContainer = $('<div>').addClass('identify-results'),
+                infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
+            $infoWindow.removeClass().addClass('identify-info-window'); // replace ESRI styling with ours
+            infoWindow.startup(); // enables "close" button
+            infoWindow.resize(415, 200);
+            infoWindow.setTitle(""); // hides title div
+            infoWindow.setContent($resultsContainer.get(0));
+            infoWindow.show(event.mapPoint);
+            map.infoWindow = infoWindow;
+
+            pluginModels.each(function (pluginModel) {
+                pluginModel.identify(event.mapPoint, function (pluginTitle, result) {
+                    if (result) {
+                        var template = N.app.templates['template-result-of-identify'],
+                            html = template({pluginTitle: pluginTitle, result: result});
+                        $resultsContainer.append(html);
+                    }
+                });
+            });
+        }
+    }
+
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
         initialize: function () { initialize(this); },
+        doIdentify: function (pluginModels, event) { doIdentify(this, pluginModels, event); },
         saveState: function () { saveExtent(this); }
     });
 
