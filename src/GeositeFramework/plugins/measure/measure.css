@@ -25,26 +25,36 @@
         width: 100px;
     }
 
-    .simpleInfoWindow.measure-info-window .content
+    /* Fix conflict between our "content" class and esri InfoWindow's "content" class */
+    .measure-info-window .content
     {
         display: block;
-        width: 100% !important;
+        width: 100%;
     }
 
-    .simpleInfoWindow.measure-info-window .close
+    .measure-info-window .close
     {
         display: none;
     }
 
     .measure-info-window
     {
+        position: absolute;
+        padding: 5px;
+        /*color: #666666;*/
+        /*background-color: #FFFFFF;*/
+        border: 1px solid #666666;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -o-border-radius: 5px;
+        border-radius: 5px;
+        /*font-size: small;*/
+        /*font-family: Arial Unicode MS,Arial,sans-serif;*/
+        /*-moz-box-shadow: 0 0 0.5em #BBBBBB;
+        -webkit-box-shadow: 0 0 0.5em #BBBBBB;*/
+
         background-color: #808080;
         color: #fff;
-        height: 60px !important;
+        height: 45px;
         box-shadow: 4px 3px 10px #000000;
-    }
-
-    .measure-info-window .title
-    {
-        border: none;
     }
