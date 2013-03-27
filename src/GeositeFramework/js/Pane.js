@@ -211,10 +211,9 @@
         // create a view for each plugin model (it will render), and add its element
         // to the appropriate plugin section
         var $sidebar = view.$('.plugins'),
-            $topbar = view.$('.tools'),
-            pluginModels = view.model.get('plugins');
+            $topbar = view.$('.tools');
 
-        pluginModels.each(function (plugin) {
+        view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
             if (toolbarType === 'sidebar') {
                 var pluginView = new N.views.SidebarPlugin({ model: plugin });
@@ -224,11 +223,6 @@
                 $topbar.append(pluginView.$el);
             }
         });
-        pluginModels.on('selected', function () { onPluginSelected(view); });
-    }
-
-    function onPluginSelected(view) {
-        view.mapView.esriMap.infoWindow.hide();
     }
 
     N.views = N.views || {};
