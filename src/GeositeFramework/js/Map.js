@@ -100,14 +100,10 @@
     }
 
     function doIdentify(view, pluginModels, event) {
-        // Only "Identify" if no plugin is showing its UI (and therefore owns click events)
-        var map = view.esriMap,
-            shouldIdentify = pluginModels.every(function (pluginModel) {
-                return (false === pluginModel.get('showingUI'));
-            });
-        if (shouldIdentify) {
-            // Accumulate results (probably asynchronously), and show them when all are accumulated
-            var windowWidth = 300,
+        // Only "Identify" if no plugin is selected (and therefore owns click events)
+        if (!pluginModels.selected) {
+            var map = view.esriMap,
+                windowWidth = 300,
                 windowHeight = 100,
                 infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
                 $resultsContainer = $('<div>').addClass('identify-results'),
@@ -115,6 +111,7 @@
                     showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
                 });
 
+            // Accumulate results (probably asynchronously), and show them when all are accumulated
             pluginModels.each(function (pluginModel) {
                 pluginModel.identify(event.mapPoint, function (pluginTitle, result, width, height) {
                     if (result) {

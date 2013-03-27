@@ -30,38 +30,28 @@
             return (_.isFunction(pluginObject.initialize));
         }
 
-        function toggleUI(model) {
-            model.set('showingUI', !model.get('showingUI'));
-            model.toggleSelected();
-
-            var pluginObject = model.get('pluginObject');
-            if (model.selected) {    
-                pluginObject.activate();
-                model.set('active', true);
-            } else {
-                pluginObject.deactivate();
-            }
-        }
-
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
-                showingUI: false
+                active: false
             },
-            toggleUI: function () { toggleUI(this); },
-
             initialize: function () { initialize(this); },
 
             isCompliant: function () { return checkPluginCompliance(this); },
 
+            onSelectedChanged: function () {
+                if (this.selected) {
+                    this.get('pluginObject').activate();
+                    this.set('active', true);
+                } else {
+                    this.get('pluginObject').deactivate();
+                }
+            },
+
             turnOff: function () {
-                var pluginObject = this.get('pluginObject');
-                pluginObject.hibernate();
-                this.set({
-                    'showingUI': false,
-                    'active': false
-                });
+                this.get('pluginObject').hibernate();
+                this.set('active', false);
                 this.deselect();
             },
 
@@ -103,8 +93,12 @@
     (function basePluginView() {
 
         function initialize(view) {
-            view.model.on("selected deselected", function () { view.render(); });
+            var model = view.model
             view.render();
+            model.on('selected deselected', function () {
+                model.onSelectedChanged();
+                view.render();
+            });
         }
 
         N.views = N.views || {};
@@ -129,8 +123,7 @@
                 common plugin view click handling
             */
             handleClick: function handleClick() {
-                var view = this;
-                view.model.toggleUI();
+                this.model.toggleSelected();
             }
         });
     }());
