@@ -293,17 +293,6 @@ h1, h2, h3, h4, h5, h6 {
 ----------------------------------------- */
  
 .identify-info-window {
-    position: absolute;
-    padding: 5px;
-    color: #666666;
-    background-color: #FFFFFF;
-    border: 1px solid #666666;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
-    -moz-box-shadow: 0 0 0.5em #BBBBBB;
-    -webkit-box-shadow: 0 0 0.5em #BBBBBB;
     box-sizing: content-box;    /* Cancel Foundation's "box-sizing" override, otherwise "X" is misplaced */
     }
 

@@ -37,24 +37,11 @@
         display: none;
     }
 
-    .measure-info-window
+    .simpleInfoWindow.measure-info-window
     {
-        position: absolute;
-        padding: 5px;
-        /*color: #666666;*/
-        /*background-color: #FFFFFF;*/
-        border: 1px solid #666666;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -o-border-radius: 5px;
-        border-radius: 5px;
-        /*font-size: small;*/
-        /*font-family: Arial Unicode MS,Arial,sans-serif;*/
-        /*-moz-box-shadow: 0 0 0.5em #BBBBBB;
-        -webkit-box-shadow: 0 0 0.5em #BBBBBB;*/
-
         background-color: #808080;
         color: #fff;
-        height: 45px;
+        width: 250px;
+        height: 55px;
         box-shadow: 4px 3px 10px #000000;
     }

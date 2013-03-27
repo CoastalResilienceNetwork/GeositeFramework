@@ -66,7 +66,7 @@ define(["jquery", "use!underscore"],
                 // Create a new info window at the starting measure node
                 var $infoWindow = $('<div>').appendTo($parent);
                     infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
-                    $infoWindow.removeClass().addClass('measure-info-window'); // replace ESRI styling with ours
+                    $infoWindow.addClass('measure-info-window'); // style it ourselves
                 infoWindow.setContent(_popupTemplate(results));
                 infoWindow.setTitle(""); // hides title div
                 infoWindow.show(_points[0]);
