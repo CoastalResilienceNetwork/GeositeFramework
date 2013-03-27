@@ -222,7 +222,14 @@
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.$el);
             }
+            plugin.on('change:showingUI', function () { onPluginShowingUiChanged(view, plugin); });
         });
+    }
+
+    function onPluginShowingUiChanged(view, pluginModel) {
+        if (pluginModel.get('showingUI')) {
+            view.mapView.esriMap.infoWindow.hide();
+        }
     }
 
     N.views = N.views || {};
