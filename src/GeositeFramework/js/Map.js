@@ -147,7 +147,7 @@
 
     function showIdentifyResults(infoWindow, $resultsContainer, width, height) {
         if ($resultsContainer.children().length === 0) {
-            $resultsContainer.append($('<div>').text('No information is available for this location'));
+            $resultsContainer.append($('<div>').text('No information is available for this location.'));
         }
         infoWindow.resize(width, height);
         infoWindow.setContent($resultsContainer.get(0));
