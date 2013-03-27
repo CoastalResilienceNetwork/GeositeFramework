@@ -30,6 +30,16 @@
             return (_.isFunction(pluginObject.initialize));
         }
 
+        // The UI state of a plugin is represented by two booleans, "selected" and "active".
+        //   * Only one plugin can be "selected" -- showing its UI, and interpreting mouse events.
+        //     (This is implemented via a Backbone.Picky SingleSelect collection.)
+        //   * Several plugins may be "active" -- toolbar icon highlighted, and possibly showing map layers.
+        //     (This is represented by the plugin model's "active" attribute)
+        // 
+        // Note that our JavaScript plugin object method names don't match this terminology -- specifically,
+        // when a plugin is deselected it remains "active" in the UI sense, but we call the plugin deactivate()
+        // method.
+
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
