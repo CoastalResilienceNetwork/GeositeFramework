@@ -72,8 +72,8 @@
                     pluginIdentifyFn = pluginObject.identify;
                 if (active && _.isFunction(pluginIdentifyFn)) {
                     // This plugin might have some results, so give it a chance to identify()
-                    pluginIdentifyFn(point, function (results) {
-                        processResults(pluginTitle, results);
+                    pluginIdentifyFn(point, function (results, width, height) {
+                        processResults(pluginTitle, results, width, height);
                     });
                 } else {
                     // This plugin has no results

@@ -100,38 +100,61 @@
     }
 
     function doIdentify(view, pluginModels, event) {
+        // Only "Identify" if no plugin is showing its UI (and therefore owns click events)
         var map = view.esriMap,
             shouldIdentify = pluginModels.every(function (pluginModel) {
                 return (false === pluginModel.get('showingUI'));
             });
-        // Only "Identify" if no plugin is showing its UI (and therefore owns click events)
         if (shouldIdentify) {
-            // Delete the current info window (after grabbing its parent DOM node)
-            var $parent = $(map.infoWindow.domNode).parent();
-            map.infoWindow.destroy();
-
-            // Create a new info window
-            var $infoWindow = $('<div>').appendTo($parent),
+            // Accumulate results (probably asynchronously), and show them when all are accumulated
+            var windowWidth = 300,
+                windowHeight = 100,
+                infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
                 $resultsContainer = $('<div>').addClass('identify-results'),
-                infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
-            $infoWindow.removeClass().addClass('identify-info-window'); // replace ESRI styling with ours
-            infoWindow.startup(); // enables "close" button
-            infoWindow.resize(415, 200);
-            infoWindow.setTitle(""); // hides title div
-            infoWindow.setContent($resultsContainer.get(0));
-            infoWindow.show(event.mapPoint);
-            map.infoWindow = infoWindow;
+                showIfLast = _.after(pluginModels.length, function () {
+                    showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
+                });
 
             pluginModels.each(function (pluginModel) {
-                pluginModel.identify(event.mapPoint, function (pluginTitle, result) {
+                pluginModel.identify(event.mapPoint, function (pluginTitle, result, width, height) {
                     if (result) {
                         var template = N.app.templates['template-result-of-identify'],
                             html = template({pluginTitle: pluginTitle, result: result});
                         $resultsContainer.append(html);
+                        if (width)  { windowWidth  = Math.max(windowWidth,  width); }
+                        if (height) { windowHeight = Math.max(windowHeight, height); }
                     }
+                    showIfLast();
                 });
             });
         }
+    }
+
+    function createIdentifyWindow(map, event, width, height) {
+        // Delete the current info window (after grabbing its parent DOM node)
+        var $parent = $(map.infoWindow.domNode).parent();
+        map.infoWindow.destroy();
+
+        // Create a new info window
+        var $infoWindow = $('<div>').appendTo($parent),
+            infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
+        $infoWindow.addClass('identify-info-window');
+        infoWindow.startup(); // enables "close" button
+        infoWindow.resize(width, height);
+        infoWindow.setContent($('<div>', { 'class': 'spinner' }).get(0));
+        infoWindow.setTitle(""); // hides title div
+        infoWindow.show(event.mapPoint);
+        map.infoWindow = infoWindow;
+        return infoWindow;
+    }
+
+    function showIdentifyResults(infoWindow, $resultsContainer, width, height) {
+        if ($resultsContainer.children().length === 0) {
+            $resultsContainer.append($('<div>').text('No information is available for this location'));
+        }
+        infoWindow.resize(width, height);
+        infoWindow.setContent($resultsContainer.get(0));
+        infoWindow.setTitle(""); // hide title div (ESRI bug -- setting content reveals empty title)
     }
 
     N.views = N.views || {};
