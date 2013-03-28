@@ -99,9 +99,64 @@
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
     }
 
+    function doIdentify(view, pluginModels, event) {
+        // Only "Identify" if no plugin is selected (and therefore owns click events)
+        if (!pluginModels.selected) {
+            var map = view.esriMap,
+                windowWidth = 300,
+                windowHeight = 100,
+                infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
+                $resultsContainer = $('<div>').addClass('identify-results'),
+                showIfLast = _.after(pluginModels.length, function () {
+                    showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
+                });
+
+            // Accumulate results (probably asynchronously), and show them when all are accumulated
+            pluginModels.each(function (pluginModel) {
+                pluginModel.identify(event.mapPoint, function (pluginTitle, result, width, height) {
+                    if (result) {
+                        var template = N.app.templates['template-result-of-identify'],
+                            html = template({pluginTitle: pluginTitle, result: result});
+                        $resultsContainer.append(html);
+                        if (width)  { windowWidth  = Math.max(windowWidth,  width); }
+                        if (height) { windowHeight = Math.max(windowHeight, height); }
+                    }
+                    showIfLast();
+                });
+            });
+        }
+    }
+
+    dojo.require("esri.dijit.Popup");
+
+    function createIdentifyWindow(map, event, width, height) {
+        // Delete the current info window (after grabbing its parent DOM node)
+        var $parent = $(map.infoWindow.domNode).parent();
+        map.infoWindow.destroy();
+
+        // Create a new info window
+        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo($parent),
+            infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
+        map.infoWindow = infoWindow;
+        infoWindow.resize(width, height);
+        infoWindow.setContent($('<div>', { 'class': 'spinner' }).get(0));
+        infoWindow.show(event.mapPoint);
+        return infoWindow;
+    }
+
+    function showIdentifyResults(infoWindow, $resultsContainer, width, height) {
+        if ($resultsContainer.children().length === 0) {
+            $resultsContainer.append($('<div>').text('No information is available for this location.'));
+        }
+        infoWindow.resize(width, height);
+        infoWindow.setContent($resultsContainer.get(0));
+        infoWindow.setTitle(""); // without this call the title bar is hidden, along with its controls
+    }
+
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
         initialize: function () { initialize(this); },
+        doIdentify: function (pluginModels, event) { doIdentify(this, pluginModels, event); },
         saveState: function () { saveExtent(this); }
     });
 
