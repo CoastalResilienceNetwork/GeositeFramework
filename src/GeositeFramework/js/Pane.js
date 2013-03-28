@@ -12,18 +12,22 @@
     }
 
     function initMap(model) {
-        var regionData = model.get('regionData'),
-            x = regionData.initialExtent,
-            extent = new esri.geometry.Extent(
-                x[0], x[1], x[2], x[3],
-                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
-            ),
+        var extent = getHomeExtent(model),
             mapModel = new N.models.Map({
-                basemaps: regionData.basemaps,
+                basemaps: model.get('regionData').basemaps,
                 extent: extent,
                 mapNumber: model.get('paneNumber')
             });
         model.set('map', mapModel);
+    }
+
+    function getHomeExtent(model) {
+        var x = model.get('regionData').initialExtent,
+            extent = new esri.geometry.Extent(
+                x[0], x[1], x[2], x[3],
+                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+            );
+        return extent;
     }
 
     function createPlugins(model) {
@@ -111,6 +115,8 @@
         initialize: function () { return initialize(this); },
 
         initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
+
+        getHomeExtent: function () { return getHomeExtent(this); }
     });
 
 }(Geosite));
@@ -229,7 +235,13 @@
     N.views.Pane = Backbone.View.extend({
         mapView: null,
 
-        initialize: function (view) { initialize(this); }
+        initialize: function (view) { initialize(this); },
+
+        events: {
+            'click .home-button': function () {
+                this.mapView.esriMap.setExtent(this.model.getHomeExtent());
+            }
+        }
     });
 
 }(Geosite));
