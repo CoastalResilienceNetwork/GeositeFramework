@@ -52,17 +52,17 @@
 
             onSelectedChanged: function () {
                 if (this.selected) {
-                    this.get('pluginObject').activate();
                     this.set('active', true);
+                    this.get('pluginObject').activate();
                 } else {
                     this.get('pluginObject').deactivate();
                 }
             },
 
             turnOff: function () {
-                this.get('pluginObject').hibernate();
-                this.set('active', false);
                 this.deselect();
+                this.set('active', false);
+                this.get('pluginObject').hibernate();
             },
 
             identify: function (point, processResults) {
@@ -107,6 +107,9 @@
             view.render();
             model.on('selected deselected', function () {
                 model.onSelectedChanged();
+                view.render();
+            });
+            model.on('change:active', function () {
                 view.render();
             });
         }
