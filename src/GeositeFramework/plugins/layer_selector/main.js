@@ -71,7 +71,7 @@ define([
             },
 
             identify: function (point, processResults) {
-                var html = $('<div>').text('If TNC wants the "Map Layers" plugin to report identify() information, it will go here.').html();
+                var html = $('<div>').text('When the "Map Layers" plugin reports identify() information, it will go here.').html();
                 processResults(html, 400, 200);
             }
 

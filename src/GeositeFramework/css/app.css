@@ -291,10 +291,6 @@ h1, h2, h3, h4, h5, h6 {
 /* -----------------------------------------
    "Identify" result window
 ----------------------------------------- */
- 
-.identify-info-window {
-    box-sizing: content-box;    /* Cancel Foundation's "box-sizing" override, otherwise "X" is misplaced */
-    }
 
     /* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
     .identify-info-window .content {

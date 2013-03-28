@@ -127,21 +127,20 @@
         }
     }
 
+    dojo.require("esri.dijit.Popup");
+
     function createIdentifyWindow(map, event, width, height) {
         // Delete the current info window (after grabbing its parent DOM node)
         var $parent = $(map.infoWindow.domNode).parent();
         map.infoWindow.destroy();
 
         // Create a new info window
-        var $infoWindow = $('<div>').appendTo($parent),
-            infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
-        $infoWindow.addClass('identify-info-window');
-        infoWindow.startup(); // enables "close" button
+        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo($parent),
+            infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
+        map.infoWindow = infoWindow;
         infoWindow.resize(width, height);
         infoWindow.setContent($('<div>', { 'class': 'spinner' }).get(0));
-        infoWindow.setTitle(""); // hides title div
         infoWindow.show(event.mapPoint);
-        map.infoWindow = infoWindow;
         return infoWindow;
     }
 
@@ -151,7 +150,7 @@
         }
         infoWindow.resize(width, height);
         infoWindow.setContent($resultsContainer.get(0));
-        infoWindow.setTitle(""); // hide title div (ESRI bug -- setting content reveals empty title)
+        infoWindow.setTitle(""); // without this call the title bar is hidden, along with its controls
     }
 
     N.views = N.views || {};
