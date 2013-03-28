@@ -21,7 +21,8 @@
                 noOp = function noOp() { };
 
             // Ensure that the framework will not fail if a plugin
-            // is missing an optional interface method
+            // is missing an optional interface method.
+            // (Note: excluding 'identify' so we can check for it explicitly)
             _.each(['activate', 'deactivate', 'getState', 'hibernate'], function (fn) {
                 pluginObject[fn] = pluginObject[fn] || noOp;
             });
@@ -29,42 +30,55 @@
             return (_.isFunction(pluginObject.initialize));
         }
 
-        // not currently used, not likely to still be
-        // in this class when we implement the feature
-        // TODO: remove
-        function toggleUI(model) {
-            model.set('showingUI', !model.get('showingUI'));
-            model.toggleSelected();
-
-            var pluginObject = model.get('pluginObject');
-            if (model.selected) {    
-                pluginObject.activate();
-                model.set('active', true);
-            } else {
-                pluginObject.deactivate();
-            }
-        }
+        // The UI state of a plugin is represented by two booleans, "selected" and "active".
+        //   * Only one plugin can be "selected" -- showing its UI, and interpreting mouse events.
+        //     (This is implemented via a Backbone.Picky SingleSelect collection.)
+        //   * Several plugins may be "active" -- toolbar icon highlighted, and possibly showing map layers.
+        //     (This is represented by the plugin model's "active" attribute)
+        // 
+        // Note that our JavaScript plugin object method names don't match this terminology -- specifically,
+        // when a plugin is deselected it remains "active" in the UI sense, but we call the plugin deactivate()
+        // method.
 
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
-                showingUI: false
+                active: false
             },
-            toggleUI: function () { toggleUI(this); },
-
             initialize: function () { initialize(this); },
 
             isCompliant: function () { return checkPluginCompliance(this); },
 
+            onSelectedChanged: function () {
+                if (this.selected) {
+                    this.get('pluginObject').activate();
+                    this.set('active', true);
+                } else {
+                    this.get('pluginObject').deactivate();
+                }
+            },
+
             turnOff: function () {
-                var pluginObject = this.get('pluginObject');
-                pluginObject.hibernate();
-                this.set({
-                    'showingUI': false,
-                    'active': false
-                });
+                this.get('pluginObject').hibernate();
+                this.set('active', false);
                 this.deselect();
+            },
+
+            identify: function (point, processResults) {
+                var active = this.get('active'),
+                    pluginObject = this.get('pluginObject'),
+                    pluginTitle = pluginObject.toolbarName,
+                    pluginIdentifyFn = pluginObject.identify;
+                if (active && _.isFunction(pluginIdentifyFn)) {
+                    // This plugin might have some results, so give it a chance to identify()
+                    pluginIdentifyFn(point, function (results, width, height) {
+                        processResults(pluginTitle, results, width, height);
+                    });
+                } else {
+                    // This plugin has no results
+                    processResults(pluginTitle, false);
+                }
             }
         });
 
@@ -89,8 +103,12 @@
     (function basePluginView() {
 
         function initialize(view) {
-            view.model.on("selected deselected", function () { view.render(); });
+            var model = view.model
             view.render();
+            model.on('selected deselected', function () {
+                model.onSelectedChanged();
+                view.render();
+            });
         }
 
         N.views = N.views || {};
@@ -115,8 +133,7 @@
                 common plugin view click handling
             */
             handleClick: function handleClick() {
-                var view = this;
-                view.model.toggleUI();
+                this.model.toggleSelected();
             }
         });
     }());

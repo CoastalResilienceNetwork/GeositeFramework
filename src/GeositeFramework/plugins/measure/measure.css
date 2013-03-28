@@ -25,26 +25,23 @@
         width: 100px;
     }
 
-    .simpleInfoWindow.measure-info-window .content
+    /* Fix conflict between our "content" class and esri InfoWindow's "content" class */
+    .measure-info-window .content
     {
         display: block;
-        width: 100% !important;
+        width: 100%;
     }
 
-    .simpleInfoWindow.measure-info-window .close
+    .measure-info-window .close
     {
         display: none;
     }
 
-    .measure-info-window
+    .simpleInfoWindow.measure-info-window
     {
         background-color: #808080;
         color: #fff;
-        height: 60px !important;
+        width: 250px;
+        height: 55px;
         box-shadow: 4px 3px 10px #000000;
-    }
-
-    .measure-info-window .title
-    {
-        border: none;
     }

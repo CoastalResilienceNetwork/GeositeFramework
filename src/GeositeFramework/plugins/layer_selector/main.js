@@ -68,6 +68,11 @@ define([
             
             hibernate: function () {
                 // TODO: hide displayed map layers
+            },
+
+            identify: function (point, processResults) {
+                var html = $('<div>').text('When the "Map Layers" plugin reports identify() information, it will go here.').html();
+                processResults(html, 400, 200);
             }
 
         });

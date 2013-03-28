@@ -57,14 +57,20 @@ define(["jquery", "use!underscore"],
             _popupTemplate,
             _tooltipTemplate,
 
-            showResultPopup = function (infoWindow, results) {
-                // Show the popup at the starting measure node
-                infoWindow.setContent(_popupTemplate(results));
-                infoWindow.show(_points[0]);
+            showResultPopup = function (results) {
+                // Delete the current info window (after grabbing its parent DOM node)
+                var map = options.map,
+                    $parent = $(map.infoWindow.domNode).parent();
+                map.infoWindow.destroy();
 
-                // Add a custom class so we can style in a measure tool
-                // specific context
-                $(infoWindow.domNode).addClass('measure-info-window');
+                // Create a new info window at the starting measure node
+                var $infoWindow = $('<div>').appendTo($parent);
+                    infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
+                    $infoWindow.addClass('measure-info-window'); // style it ourselves
+                infoWindow.setContent(_popupTemplate(results));
+                infoWindow.setTitle(""); // hides title div
+                infoWindow.show(_points[0]);
+                map.infoWindow = infoWindow;
             },
 
             finish = function (results) {
@@ -73,7 +79,7 @@ define(["jquery", "use!underscore"],
                 results.lengthUnits = _unitsLookup[options.esriLengthUnits];
                 results.areaUnits = _unitsLookup[options.esriAreaUnits];
 
-                showResultPopup(options.map.infoWindow, results);
+                showResultPopup(results);
 
                 // Stop listening for events
                 deactivate();
