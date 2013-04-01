@@ -50,6 +50,7 @@ define([
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
+            allowIdentifyWhenActive: true,
 
             _layerManager: null,
             _ui: null,

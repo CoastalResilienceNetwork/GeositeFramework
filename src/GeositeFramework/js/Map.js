@@ -101,7 +101,7 @@
 
     function doIdentify(view, pluginModels, event) {
         // Only "Identify" if no plugin is selected (and therefore owns click events)
-        if (!pluginModels.selected) {
+        if (!pluginModels.selected || pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
             var map = view.esriMap,
                 windowWidth = 300,
                 windowHeight = 100,
