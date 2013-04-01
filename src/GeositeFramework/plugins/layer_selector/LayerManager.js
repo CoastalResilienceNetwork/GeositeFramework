@@ -156,7 +156,7 @@ define([
 
             function identify(map, point, resultTemplate, processResults) {
                 // Identify all active layers, collecting responses in "deferred" lists
-                var resultHtml = '',
+                var $result = $('<div>'),
                     pointFeatureDeferreds = [],
                     areaFeatureDeferreds = [];
                     identifyNode(_rootNode);
@@ -165,7 +165,7 @@ define([
                 new dojo.DeferredList(pointFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
                     formatFeatures(pointFeatureDeferreds, isPointFeature);
                     formatFeatures(areaFeatureDeferreds, isAreaFeature);
-                    processResults(resultHtml, 400);
+                    processResults($result.get(0), 400);
                 });
 
                 function identifyNode(node) {
@@ -195,15 +195,21 @@ define([
                         deferred.addCallback(function (features) {
                             _.each(features, function (feature) {
                                 if (filterFunction(feature.feature)) {
-                                    resultHtml = resultHtml + resultTemplate(feature);
+                                    var html = resultTemplate(feature).trim(),
+                                        $section = $(html).click(expandOrCollapseAttributeSection);
+                                    $result.append($section);
                                 }
                             });
                         });
                     });
                 }
 
+                function expandOrCollapseAttributeSection() {
+                    $(this).find('.attributes').toggle();
+                }
+
                 function isPointFeature(feature) { return feature.attributes.Shape === 'Point'; }
-                function isAreaFeature (feature) { return feature.attributes.Shape !== 'Point'; }
+                function isAreaFeature(feature) { return feature.attributes.Shape !== 'Point'; }
             }
         }
 
