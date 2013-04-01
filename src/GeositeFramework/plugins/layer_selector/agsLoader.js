@@ -82,6 +82,7 @@ define(["jquery", "use!underscore"],
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
                             node.url = serviceUrl;
+                            node.identify = identify;
                             loadLayers(serviceData.layers, node);
                         },
                         error: _onLayerSourceLoadError
@@ -143,6 +144,27 @@ define(["jquery", "use!underscore"],
                     return layerNode.parent.parent;
                 }
             }
+
+            dojo.require("esri.tasks.identify");
+
+            function identify(serviceNode, map, point) {
+                if (serviceNode.layerIds && serviceNode.layerIds.length > 0) {
+                    // This service node has some visible layers, so execute an "identify" task
+                    identifyParams = new esri.tasks.IdentifyParameters();
+                    identifyParams.tolerance = 0;
+                    identifyParams.layerIds = serviceNode.layerIds;
+                    identifyParams.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_VISIBLE;
+                    identifyParams.width = map.width;
+                    identifyParams.height = map.height;
+                    identifyParams.geometry = point;
+                    identifyParams.mapExtent = map.extent;
+
+                    var identifyTask = new esri.tasks.IdentifyTask(serviceNode.url);
+                    var  deferred = identifyTask.execute(identifyParams);
+                    return deferred;
+                }
+            }
+
         }
 
         return AgsLoader;
