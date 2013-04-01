@@ -1,4 +1,4 @@
-﻿// Module LayerLoader.js
+﻿// Module LayerManager.js
 
 define([
         "dojo/json",
@@ -9,7 +9,7 @@ define([
     ],
     function (JSON, tv4, _, AgsLoader, WmsLoader) {
 
-        var LayerLoader = function (app) {
+        var LayerManager = function (app) {
             var _app = app,
                 _urls = [],
                 _rootNode = null,
@@ -17,6 +17,7 @@ define([
                 _onLoadingComplete;
 
             this.load = loadLayerData;
+            this.identify = identify;
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
@@ -108,6 +109,7 @@ define([
                     + "' Status: '" + textStatus + "' Error: '" + errorThrown + "'");
             }
 
+            // ------------------------------------------------------------------------
             // Functions to build a node tree of map layers. The node schema targets Ext.data.TreeStore 
             // and Ext.tree.Panel, but should be generic enough for other UI frameworks.
 
@@ -147,8 +149,54 @@ define([
                 return node;
             }
 
+            // ------------------------------------------------------------------------
+            // Identify
+
+            dojo.require("dojo.DeferredList");
+
+            function identify(map, point, resultTemplate, processResults) {
+                // Identify all active layers, collecting responses in "deferred" list
+                var deferredList = [];
+                identifyNode(_rootNode);
+
+                // When all responses are available, format returned features
+                new dojo.DeferredList(deferredList).then(formatFeatures);
+
+                function identifyNode(node) {
+                    if (node.identify) {
+                        // This node can identify() its subtree
+                        var deferred = node.identify(node, map, point);
+                        if (deferred) {
+                            deferredList.push(deferred);
+                        }
+                    } else {
+                        // Continue searching subtree
+                        _.each(node.children, function (child) {
+                            identifyNode(child);
+                        });
+                    }
+                }
+
+                function formatFeatures() {
+                    var resultHtml = '';
+                    _.each(deferredList, function (deferred) {
+                        deferred.addCallback(function (features) {
+                            if (features.length > 0) {
+                                // This layer had something to report; format it
+                                resultHtml = resultHtml + 
+                                    resultTemplate({
+                                        layerName: features[0].layerName,
+                                        features: features
+                                    });
+                            }
+                        });
+                    });
+                    processResults(resultHtml, 400);
+                }
+            }
+
         }
 
-        return LayerLoader;
+        return LayerManager;
     }
 );
