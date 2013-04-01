@@ -181,10 +181,9 @@ define([
                     var resultHtml = '';
                     _.each(deferredList, function (deferred) {
                         deferred.addCallback(function (features) {
-                            if (features.length > 0) {
-                                // This layer had something to report; format it
-                                resultHtml = resultHtml + resultTemplate(features[0]);
-                            }
+                            _.each(features, function (feature) {
+                                resultHtml = resultHtml + resultTemplate(feature);
+                            });
                         });
                     });
                     processResults(resultHtml, 400);
