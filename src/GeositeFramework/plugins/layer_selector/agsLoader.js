@@ -147,13 +147,12 @@ define(["jquery", "use!underscore"],
 
             dojo.require("esri.tasks.identify");
 
-            function identify(serviceNode, map, point) {
+            function identify(serviceNode, map, point, tolerance) {
                 if (serviceNode.layerIds && serviceNode.layerIds.length > 0) {
                     // This service node has some visible layers, so execute an "identify" task
                     identifyParams = new esri.tasks.IdentifyParameters();
-                    identifyParams.tolerance = 0;
+                    identifyParams.tolerance = tolerance;
                     identifyParams.layerIds = serviceNode.layerIds;
-                    identifyParams.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_VISIBLE;
                     identifyParams.width = map.width;
                     identifyParams.height = map.height;
                     identifyParams.geometry = point;

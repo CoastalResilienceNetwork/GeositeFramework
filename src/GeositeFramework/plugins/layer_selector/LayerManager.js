@@ -155,41 +155,56 @@ define([
             dojo.require("dojo.DeferredList");
 
             function identify(map, point, resultTemplate, processResults) {
-                // Identify all active layers, collecting responses in "deferred" list
-                var deferredList = [];
-                identifyNode(_rootNode);
+                // Identify all active layers, collecting responses in "deferred" lists
+                var resultHtml = '',
+                    pointFeatureDeferreds = [],
+                    areaFeatureDeferreds = [];
+                    identifyNode(_rootNode);
 
                 // When all responses are available, format returned features
-                new dojo.DeferredList(deferredList).then(formatFeatures);
+                new dojo.DeferredList(pointFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
+                    formatFeatures(pointFeatureDeferreds, isPointFeature);
+                    formatFeatures(areaFeatureDeferreds, isAreaFeature);
+                    processResults(resultHtml, 400);
+                });
 
                 function identifyNode(node) {
                     if (node.identify) {
-                        // This node can identify() its subtree
-                        var deferred = node.identify(node, map, point);
-                        if (deferred) {
-                            deferredList.push(deferred);
-                        }
+                        // This node can identify() its subtree.  Ask twice -- 
+                        // once with loose tolerance to find point features, and
+                        // once with tight tolerance to find area features.
+                        identifyWithTolerance(10, pointFeatureDeferreds);
+                        identifyWithTolerance(0, areaFeatureDeferreds);
                     } else {
                         // Continue searching subtree
                         _.each(node.children, function (child) {
                             identifyNode(child);
                         });
                     }
+
+                    function identifyWithTolerance(tolerance, deferreds) {
+                        var deferred = node.identify(node, map, point, tolerance);
+                        if (deferred) {
+                            deferreds.push(deferred);
+                        }
+                    }
                 }
 
-                function formatFeatures() {
-                    var resultHtml = '';
-                    _.each(deferredList, function (deferred) {
+                function formatFeatures(deferreds, filterFunction) {
+                    _.each(deferreds, function (deferred) {
                         deferred.addCallback(function (features) {
                             _.each(features, function (feature) {
-                                resultHtml = resultHtml + resultTemplate(feature);
+                                if (filterFunction(feature.feature)) {
+                                    resultHtml = resultHtml + resultTemplate(feature);
+                                }
                             });
                         });
                     });
-                    processResults(resultHtml, 400);
                 }
-            }
 
+                function isPointFeature(feature) { return feature.attributes.Shape === 'Point'; }
+                function isAreaFeature (feature) { return feature.attributes.Shape !== 'Point'; }
+            }
         }
 
         return LayerManager;
