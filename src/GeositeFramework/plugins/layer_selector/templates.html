@@ -1,6 +1,6 @@
 ﻿<script type="text/template" id="template-layer-selector-result-of-identify">
     <div class="pluginLayerSelector-result-of-identify"><%= layerName %>
-        <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName %>: <%= value %>
+        <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
             <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
                 <% if (attributeName !== displayFieldName) { %>
                     <div class="pluginLayerSelector-result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
