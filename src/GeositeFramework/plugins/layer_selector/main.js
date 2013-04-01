@@ -39,7 +39,7 @@ require({
 
 define([
         "dojo/_base/declare",
-        "./LayerLoader",
+        "./LayerManager",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json",
         "dojo/text!plugins/layer_selector/templates.html"

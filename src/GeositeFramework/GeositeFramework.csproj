@@ -169,7 +169,7 @@
     <Content Include="plugins\layer_selector\images\layer.png" />
     <Content Include="plugins\layer_selector\images\layers.png" />
     <Content Include="plugins\layer_selector\images\spinner.gif" />
-    <Content Include="plugins\layer_selector\LayerLoader.js" />
+    <Content Include="plugins\layer_selector\LayerManager.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
     <Content Include="js\lib\jquery.placeholder.js" />
