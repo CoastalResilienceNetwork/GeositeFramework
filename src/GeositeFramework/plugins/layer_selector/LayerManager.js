@@ -157,13 +157,13 @@ define([
             function identify(map, point, resultTemplate, processResults) {
                 // Identify all active layers, collecting responses in "deferred" lists
                 var $result = $('<div>'),
-                    pointFeatureDeferreds = [],
+                    thinFeatureDeferreds = [],
                     areaFeatureDeferreds = [];
                     identifyNode(_rootNode);
 
                 // When all responses are available, format returned features
-                new dojo.DeferredList(pointFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
-                    formatFeatures(pointFeatureDeferreds, isPointFeature);
+                new dojo.DeferredList(thinFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
+                    formatFeatures(thinFeatureDeferreds, isThinFeature);
                     formatFeatures(areaFeatureDeferreds, isAreaFeature);
                     if ($result.children().length > 0) {
                         processResults($result.get(0), 400);
@@ -175,9 +175,9 @@ define([
                 function identifyNode(node) {
                     if (node.identify) {
                         // This node can identify() its subtree.  Ask twice -- 
-                        // once with loose tolerance to find point features, and
+                        // once with loose tolerance to find "thin" features, and
                         // once with tight tolerance to find area features.
-                        identifyWithTolerance(10, pointFeatureDeferreds);
+                        identifyWithTolerance(10, thinFeatureDeferreds);
                         identifyWithTolerance(0, areaFeatureDeferreds);
                     } else {
                         // Continue searching subtree
@@ -212,8 +212,8 @@ define([
                     $(this).find('.attributes').toggle();
                 }
 
-                function isPointFeature(feature) { return feature.attributes.Shape === 'Point'; }
-                function isAreaFeature(feature) { return feature.attributes.Shape !== 'Point'; }
+                function isThinFeature(feature) { return _.contains(['Point', 'Line', 'Polyline'], feature.attributes.Shape); }
+                function isAreaFeature(feature) { return !isThinFeature(feature); }
             }
         }
 
