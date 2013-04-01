@@ -183,11 +183,7 @@ define([
                         deferred.addCallback(function (features) {
                             if (features.length > 0) {
                                 // This layer had something to report; format it
-                                resultHtml = resultHtml + 
-                                    resultTemplate({
-                                        layerName: features[0].layerName,
-                                        features: features
-                                    });
+                                resultHtml = resultHtml + resultTemplate(features[0]);
                             }
                         });
                     });

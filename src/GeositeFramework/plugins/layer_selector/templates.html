@@ -1,6 +1,11 @@
 ﻿<script type="text/template" id="template-layer-selector-result-of-identify">
-    <div class="pluginLayerSelector-result-of-identify-layer-name"><%= layerName %></div>
-    <% _.each(features, function(feature) { %>
-        <div class="pluginLayerSelector-result-of-identify-value"><%= feature.value %></div>
-    <% }); %>
+    <div class="pluginLayerSelector-result-of-identify"><%= layerName %>
+        <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName %>: <%= value %>
+            <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
+                <% if (attributeName !== displayFieldName) { %>
+                    <div class="pluginLayerSelector-result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
+                <% } %>
+            <% }); %>
+        </div>
+    </div>
 </script>
