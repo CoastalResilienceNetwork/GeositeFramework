@@ -183,6 +183,7 @@
     <Content Include="plugins\layer_selector\lib\jquery.placeholder.amd.min.js" />
     <Content Include="plugins\layer_selector\lib\tv4.min.js" />
     <Content Include="js\lib\use.js" />
+    <Content Include="plugins\layer_selector\templates.html" />
     <Content Include="plugins\layer_selector\treeFilter.js" />
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
