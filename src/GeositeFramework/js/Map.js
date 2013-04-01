@@ -113,7 +113,7 @@
 
             // Accumulate results (probably asynchronously), and show them when all are accumulated
             pluginModels.each(function (pluginModel) {
-                pluginModel.identify(event.mapPoint, function (pluginTitle, result, width, height) {
+                pluginModel.identify(map, event.mapPoint, function (pluginTitle, result, width, height) {
                     if (result) {
                         var template = N.app.templates['template-result-of-identify'],
                             html = template({pluginTitle: pluginTitle, result: result});
@@ -139,18 +139,19 @@
             infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
         map.infoWindow = infoWindow;
         infoWindow.resize(width, height);
-        infoWindow.setContent($('<div>', { 'class': 'spinner' }).get(0));
+        infoWindow.setTitle(""); // without this call the title bar is hidden, along with its controls
+        $infoWindow.find('.spinner').removeClass('hidden');
         infoWindow.show(event.mapPoint);
         return infoWindow;
     }
 
     function showIdentifyResults(infoWindow, $resultsContainer, width, height) {
+        $(infoWindow.domNode).find('.spinner').addClass('hidden');
         if ($resultsContainer.children().length === 0) {
             $resultsContainer.append($('<div>').text('No information is available for this location.'));
         }
         infoWindow.resize(width, height);
         infoWindow.setContent($resultsContainer.get(0));
-        infoWindow.setTitle(""); // without this call the title bar is hidden, along with its controls
     }
 
     N.views = N.views || {};
