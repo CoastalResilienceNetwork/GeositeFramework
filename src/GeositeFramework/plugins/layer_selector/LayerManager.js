@@ -165,7 +165,11 @@ define([
                 new dojo.DeferredList(pointFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
                     formatFeatures(pointFeatureDeferreds, isPointFeature);
                     formatFeatures(areaFeatureDeferreds, isAreaFeature);
-                    processResults($result.get(0), 400);
+                    if ($result.children().length > 0) {
+                        processResults($result.get(0), 400);
+                    } else {
+                        processResults(false);
+                    }
                 });
 
                 function identifyNode(node) {
