@@ -83,6 +83,11 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     root: rootNode,
                     fields: ['text', 'leaf', 'cls', 'url', 'layerId']
                 });
+                // Each TreeStore node's "raw" property has a copy of the node it was created from,
+                // but without the "children" property. Restore "children" so LayerManager can 
+                // continue to traverse and modify the "raw" tree.
+                restoreChildren(store.tree.root);
+
                 var tree = Ext.create('FilteredTreePanel', {
                     store: store,
                     rootVisible: false,
@@ -97,6 +102,19 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     }
                 });
                 return tree;
+            }
+
+            function restoreChildren(cooked) {
+                // 'cooked' is a TreeStore node, and 'cooked.raw' is the node it was created from.
+                // Restore raw.children from cooked.ChildNodes, and recurse.
+                if (cooked.childNodes.length > 0) {
+                    cooked.raw.children = _.map(cooked.childNodes, function (cookedChild) {
+                        return cookedChild.raw;
+                    });
+                    _.each(cooked.childNodes, function (cookedChild) {
+                        restoreChildren(cookedChild);
+                    });
+                }
             }
 
             function resize() {
