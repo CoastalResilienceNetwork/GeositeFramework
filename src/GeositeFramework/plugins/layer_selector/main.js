@@ -41,23 +41,30 @@ define([
         "dojo/_base/declare",
         "./LayerLoader",
         "./Ui",
-        "dojo/text!plugins/layer_selector/layers.json"
+        "dojo/text!plugins/layer_selector/layers.json",
+        "dojo/text!plugins/layer_selector/templates.html"
     ],
-    function (declare, LayerLoader, Ui, layerSourcesJson) {
+    function (declare, LayerManager, Ui, layerSourcesJson, templates) {
 
         return declare(null, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
 
+            _layerManager: null,
             _ui: null,
+
+            // Load script templates into a dom fragment
+            _$templates: $('<div>').append($(templates.trim())),
 
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
+                this._layerManager = new LayerManager(this.app);
                 this._ui = new Ui(this.container, this.map);
+
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                new LayerLoader(this.app).load(layerSourcesJson, function (tree) {
+                this._layerManager.load(layerSourcesJson, function (tree) {
                     self._ui.render(tree);
                 });
             },
@@ -70,9 +77,9 @@ define([
                 // TODO: hide displayed map layers
             },
 
-            identify: function (point, processResults) {
-                var html = $('<div>').text('When the "Map Layers" plugin reports identify() information, it will go here.').html();
-                processResults(html, 400, 200);
+            identify: function (map, point, processResults) {
+                var template = _.template(this._$templates.find('#template-layer-selector-result-of-identify').html());
+                this._layerManager.identify(map, point, template, processResults);
             }
 
         });
