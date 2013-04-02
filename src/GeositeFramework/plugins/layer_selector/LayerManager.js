@@ -175,8 +175,8 @@ define([
                 function identifyNode(node) {
                     if (node.identify) {
                         // This node can identify() its subtree.  Ask twice -- 
-                        // once with loose tolerance to find "thin" features, and
-                        // once with tight tolerance to find area features.
+                        // once with loose tolerance to find "thin" features (point/line/polyline), and
+                        // once with tight tolerance to find "area" features (polygon/raster).
                         identifyWithTolerance(10, thinFeatureDeferreds);
                         identifyWithTolerance(0, areaFeatureDeferreds);
                     } else {
