@@ -40,3 +40,11 @@
 .pluginLayerSelector-layer .x-tree-icon {
 	background-image:url(images/layer.png);
 }
+
+/* 
+ * Results of "Identify"
+ */
+
+.pluginLayerSelector-result-of-identify {
+    padding-left: 20px;
+}
