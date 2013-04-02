@@ -5,12 +5,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
     function ($, _, Ext, treeFilter) {
         $('input, textarea').placeholder(); // initialize jquery.placeholder
 
-        var Ui = function (container, map) {
+        var Ui = function (container, map, templates) {
             var _map = map,
                 _container = container,
+                _$templates = $('<div>').append($(templates.trim())), // store templates in a utility div
                 _$filterInput = null,
                 _$treeContainer = null,
                 _tree = null;
+
+            // ------------------------------------------------------------------------
+            // Public methods
 
             this.render = function (rootNode) {
                 sortFolders([rootNode]);
@@ -28,6 +32,28 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     _$filterInput.focus();
                 }
             }
+
+            this.formatIdentifiedFeatures = function (features, processResults) {
+                if (features.length === 0) {
+                    processResults(false);
+                } else {
+                    var $result = $('<div>'),
+                        template = _.template(_$templates.find('#template-layer-selector-result-of-identify').html());
+                    _.each(features, function (feature) {
+                        var html = template(feature).trim(),
+                            $section = $(html).click(expandOrCollapseAttributeSection);
+                        $result.append($section);
+                    });
+                    processResults($result.get(0), 400);
+                }
+
+                function expandOrCollapseAttributeSection() {
+                    $(this).find('.attributes').slideToggle();
+                }
+            }
+
+            // ------------------------------------------------------------------------
+            // Private methods
 
             function addSpinner() {
                 $(_container).append(

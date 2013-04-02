@@ -154,22 +154,18 @@ define([
 
             dojo.require("dojo.DeferredList");
 
-            function identify(map, point, resultTemplate, processResults) {
+            function identify(map, point, processFeatures) {
                 // Identify all active layers, collecting responses in "deferred" lists
-                var $result = $('<div>'),
+                var identifiedFeatures = [],
                     thinFeatureDeferreds = [],
                     areaFeatureDeferreds = [];
-                    identifyNode(_rootNode);
+                identifyNode(_rootNode);
 
-                // When all responses are available, format returned features
+                // When all responses are available, filter and process identified features
                 new dojo.DeferredList(thinFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
-                    formatFeatures(thinFeatureDeferreds, isThinFeature);
-                    formatFeatures(areaFeatureDeferreds, isAreaFeature);
-                    if ($result.children().length > 0) {
-                        processResults($result.get(0), 400);
-                    } else {
-                        processResults(false);
-                    }
+                    var thinFeatures = getFeatures(thinFeatureDeferreds, isThinFeature),
+                        areaFeatures = getFeatures(areaFeatureDeferreds, isAreaFeature);
+                    processFeatures(thinFeatures.concat(areaFeatures));
                 });
 
                 function identifyNode(node) {
@@ -194,22 +190,18 @@ define([
                     }
                 }
 
-                function formatFeatures(deferreds, filterFunction) {
+                function getFeatures(deferreds, filterFunction) {
+                    var identifiedFeatures = [];
                     _.each(deferreds, function (deferred) {
                         deferred.addCallback(function (features) {
                             _.each(features, function (feature) {
                                 if (filterFunction(feature.feature)) {
-                                    var html = resultTemplate(feature).trim(),
-                                        $section = $(html).click(expandOrCollapseAttributeSection);
-                                    $result.append($section);
+                                    identifiedFeatures.push(feature);
                                 }
                             });
                         });
                     });
-                }
-
-                function expandOrCollapseAttributeSection() {
-                    $(this).find('.attributes').toggle();
+                    return identifiedFeatures;
                 }
 
                 function isThinFeature(feature) { return _.contains(['Point', 'Line', 'Polyline'], feature.attributes.Shape); }

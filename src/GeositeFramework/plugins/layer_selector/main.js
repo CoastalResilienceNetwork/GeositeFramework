@@ -55,13 +55,10 @@ define([
             _layerManager: null,
             _ui: null,
 
-            // Load script templates into a dom fragment
-            _$templates: $('<div>').append($(templates.trim())),
-
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
                 this._layerManager = new LayerManager(this.app);
-                this._ui = new Ui(this.container, this.map);
+                this._ui = new Ui(this.container, this.map, templates);
 
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
@@ -79,8 +76,10 @@ define([
             },
 
             identify: function (map, point, processResults) {
-                var template = _.template(this._$templates.find('#template-layer-selector-result-of-identify').html());
-                this._layerManager.identify(map, point, template, processResults);
+                var self = this;
+                this._layerManager.identify(map, point, function (features) {
+                    self._ui.formatIdentifiedFeatures(features, processResults);
+                });
             }
 
         });
