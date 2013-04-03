@@ -18,7 +18,7 @@
                 extent: extent,
                 mapNumber: model.get('paneNumber')
             });
-        model.set('map', mapModel);
+        model.set('mapModel', mapModel);
     }
 
     function getHomeExtent(model) {
@@ -108,8 +108,8 @@
         defaults: {
             paneNumber: 0,
             regionData: null,
-            map: null,
-            plugins: null,
+            mapModel: null,
+            plugins: null
         },
 
         initialize: function () { return initialize(this); },
@@ -166,14 +166,14 @@
 
     function initBasemapSelector(view) {
         new Geosite.views.BasemapSelector({
-            model: view.model.get('map'),
+            model: view.model.get('mapModel'),
             el: view.$('.basemap-selector')
         });
     }
 
     function initMapView(view) {
         view.mapView = new Geosite.views.Map({
-            model: view.model.get('map'),
+            model: view.model.get('mapModel'),
             el: view.$('.map'),
             paneNumber: view.model.get('paneNumber')
         });
