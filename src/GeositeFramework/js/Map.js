@@ -112,6 +112,22 @@
             // Add this map to the list of maps to sync when in sync mode
             N.app.syncedMapManager.addMapView(view);
 
+            // Legend
+            var legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, "legend");
+            legendDijit.startup();
+            dojo.connect(esriMap, 'onUpdateEnd', function () {
+                var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
+                    layerInfos = [];
+                _.each(services, function (service) {
+                    var serviceInfo = view.model.serviceInfos[service.id];
+                    if (serviceInfo) {
+                        layerInfos.push({
+                            layer: serviceInfo.service
+                        });
+                    }
+                });
+                legendDijit.refresh(layerInfos);
+            });
         });
     }
 
@@ -138,6 +154,8 @@
         view.currentBasemapLayer.show();
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
     }
+
+    dojo.require('esri.dijit.Legend');
 
     function doIdentify(view, pluginModels, event) {
         // Only "Identify" if no plugin is selected (and therefore owns click events)
