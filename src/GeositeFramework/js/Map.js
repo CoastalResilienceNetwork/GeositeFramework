@@ -85,9 +85,34 @@
     }
 
     function createMap(view) {
-        view.esriMap = new esri.Map(view.$el.attr('id'));
+        var esriMap = new esri.Map(view.$el.attr('id')),
+            resizeMap = function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
+            _.delay(function () {
+                if (view.$el.is(':visible')) {
+                    var center = esriMap.extent.getCenter();
+                    esriMap.reposition();
+                    esriMap.resize(true);
+                    esriMap.centerAt(center);
+                }
+            }, 150);
+        }
+
+        view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+
+        // Wait for the map to load
+        dojo.connect(esriMap, "onLoad", function () {
+            resizeMap();
+            $(N).on('resize', resizeMap);
+
+            // Add this map to the list of maps to sync when in sync mode
+            N.app.syncedMapManager.addMapView(view);
+
+        });
     }
 
     function loadExtent(view) {

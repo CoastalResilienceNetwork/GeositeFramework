@@ -178,29 +178,11 @@
             paneNumber: view.model.get('paneNumber')
         });
 
-        var esriMap = view.mapView.esriMap,
-            resizeMap = function resizeMap() {
-
-                // When the element containing the map resizes, the 
-                // map needs to be notified.  Do a slight delay so that
-                // the browser has time to actually make the element visible.
-                _.delay(function () {
-                    if (view.$('.map').is(':visible')) {
-                        var center = esriMap.extent.getCenter();
-                        esriMap.reposition();
-                        esriMap.resize(true);
-                        esriMap.centerAt(center);
-                    }
-                }, 150);
-            }
+        var esriMap = view.mapView.esriMap;
 
         // Wait for the map to load
+        // TODO: move to map object
         dojo.connect(esriMap, "onLoad", function () {
-            resizeMap();
-            $(N).on('resize', resizeMap);
-
-            // Add this map to the list of maps to sync when in sync mode
-            N.app.syncedMapManager.addMapView(view.mapView);
 
             // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
