@@ -48,10 +48,25 @@
                 id: 'map' + this.get('mapNumber'),
                 attributes: ['extent', 'selectedBasemapIndex']
             });
+
+            // Keep track of ArcGISDynamicMapServiceLayers added to the map
+            this.serviceInfos = {};
         },
 
         getSelectedBasemapName: function () { return getSelectedBasemap(this).name; },
-        getSelectedBasemapLayer:  function (esriMap) { return getSelectedBasemapLayer(this, esriMap); }
+        getSelectedBasemapLayer: function (esriMap) { return getSelectedBasemapLayer(this, esriMap); },
+
+        addService: function (service, plugin) {
+            this.serviceInfos[service.id] = {
+                service: service,
+                plugin: plugin
+            };
+        },
+
+        removeService: function (service, plugin) {
+            delete this.serviceInfos[service.id];
+        }
+
     });
 }(Geosite));
 

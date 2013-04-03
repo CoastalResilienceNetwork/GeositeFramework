@@ -79,8 +79,8 @@
                     _unsafeMap: esriMap
                 },
                 // TODO: fix wrapped map and pass it to plugin.
-                //map: N.createMapWrapper(esriMap),
-                map: esriMap,
+                map: N.createMapWrapper(esriMap, model.get('mapModel'), pluginObject),
+                //map: esriMap,
                 container: $displayContainer.find('.plugin-container-inner')[0]
             });
         });
