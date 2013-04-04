@@ -143,7 +143,8 @@
     dojo.require('esri.dijit.Legend');
 
     function initLegend(view, esriMap) {
-        var legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, "legend");
+        var id = 'legend-' + view.model.get('mapNumber'),
+            legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
         legendDijit.startup();
         dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
 
