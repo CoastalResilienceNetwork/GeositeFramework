@@ -21,9 +21,9 @@ require({
 });
 
 define(
-    ["dojo/_base/declare", "./AgsMeasure", "dojo/text!plugins/measure/templates.html"],
-    function (declare, AgsMeasure, templates) {
-        return declare(null, {
+    ["dojo/_base/declare", "framework/PluginBase", "./AgsMeasure", "dojo/text!plugins/measure/templates.html"],
+    function (declare, PluginBase, AgsMeasure, templates) {
+        return declare(PluginBase, {
             toolbarName: "Measure",
             fullName: "Measure distances and area on the map",
             toolbarType: "map",
@@ -33,7 +33,7 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.agsMeasure = new AgsMeasure({
-                    map: this.map,
+                    map: this.app._unsafeMap, //this.map,
                     tooltipTemplate: this.$templates.find('#template-measure-tooltip').html(),
                     infoBubbleTemplate: this.$templates.find('#template-measure-infobubble').html()
                 });

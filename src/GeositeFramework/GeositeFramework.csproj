@@ -162,6 +162,7 @@
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="js\PluginBase.js" />
     <Content Include="js\Screen.js" />
     <Content Include="plugins\layer_selector\icon.png" />
     <Content Include="plugins\layer_selector\icon_active.png" />

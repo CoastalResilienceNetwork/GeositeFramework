@@ -17,16 +17,7 @@
         Plugin code can just assume the plugin is valid if it has been loaded
         */
         function checkPluginCompliance(model) { 
-            var pluginObject = model.get('pluginObject'),
-                noOp = function noOp() { };
-
-            // Ensure that the framework will not fail if a plugin
-            // is missing an optional interface method.
-            // (Note: excluding 'identify' so we can check for it explicitly)
-            _.each(['activate', 'deactivate', 'getState', 'hibernate'], function (fn) {
-                pluginObject[fn] = pluginObject[fn] || noOp;
-            });
-            
+            var pluginObject = model.get('pluginObject');
             return (_.isFunction(pluginObject.initialize));
         }
 
