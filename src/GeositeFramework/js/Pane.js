@@ -145,9 +145,7 @@
         var esriMap = view.mapView.esriMap;
 
         // Wait for the map to load
-        // TODO: move to map object
         dojo.connect(esriMap, "onLoad", function () {
-
             // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
 

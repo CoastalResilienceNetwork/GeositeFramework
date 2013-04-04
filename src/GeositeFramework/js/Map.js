@@ -143,9 +143,12 @@
     dojo.require('esri.dijit.Legend');
 
     function initLegend(view, esriMap) {
+        // Create default legend section
         var id = 'legend-' + view.model.get('mapNumber'),
             legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
         legendDijit.startup();
+
+        // Update the legend whenever the map changes
         dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
 
         function updateLegend() {
