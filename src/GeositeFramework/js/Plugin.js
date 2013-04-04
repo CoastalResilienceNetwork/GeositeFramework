@@ -16,7 +16,7 @@
             var pluginObject = model.get('pluginObject'),
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
-                container = ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined)
+                $legendContainer = model.get('$legendContainer');
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
@@ -28,7 +28,8 @@
                 // TODO: fix wrapped map and pass it to plugin.
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 //map: esriMap,
-                container: container
+                container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
             });
         }
 
@@ -176,6 +177,7 @@
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view);
+            createLegendContainer(view);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -199,6 +201,13 @@
                 view.$el.removeClass("selected-plugin");
                 if (view.$uiContainer) {
                     view.$uiContainer.hide();
+                }
+            }
+            if (view.$legendContainer) {
+                if (view.model.get('active')) {
+                    view.$legendContainer.show();
+                } else {
+                    view.$legendContainer.hide();
                 }
             }
             return view;
@@ -241,11 +250,22 @@
             view.$uiContainer = $uiContainer;
         }
 
+        function createLegendContainer(view) {
+            // Create container for custom legend and attach to legend element
+            var $legendContainer = $('<div>').hide()
+                .appendTo(view.$el.parents('.content').find('.legend'));
+
+            // Tell the model about $legendContainer so it can pass it to the plugin object
+            view.model.set('$legendContainer', $legendContainer);
+            view.$legendContainer = $legendContainer;
+        }
+
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
             $uiContainer: null,
+            $legendContainer: null,
 
             initialize: function () { initialize(this, this.options.$parent); },
 
