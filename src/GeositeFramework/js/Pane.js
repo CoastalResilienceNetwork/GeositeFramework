@@ -61,46 +61,10 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, esriMap) {
+        var mapModel = model.get('mapModel');
         model.get('plugins').each(function (pluginModel) {
-            var pluginObject = pluginModel.get('pluginObject'),
-                pluginName = pluginModel.get('pluginSrcFolder'),
-                // The display container used in the model view will be created
-                // here so the plugin object can be constructed with a reference
-                // to it.
-                $displayContainer = $(N.app.templates['template-plugin-container']().trim());
-
-            pluginModel.set('$displayContainer', $displayContainer);
-            pluginObject.initialize({
-                app: {
-                    version: N.app.version,
-                    info: makeLogger(pluginName, "INFO"),
-                    warn: makeLogger(pluginName, "WARN"),
-                    error: makeLogger(pluginName, "ERROR"),
-                    _unsafeMap: esriMap
-                },
-                // TODO: fix wrapped map and pass it to plugin.
-                map: N.createMapWrapper(esriMap, model.get('mapModel'), pluginObject),
-                //map: esriMap,
-                container: $displayContainer.find('.plugin-container-inner')[0]
-            });
+            pluginModel.initPluginObject(mapModel, esriMap);
         });
-    }
-
-    function makeLogger(pluginName, level) {
-        return function(userMessage, developerMessage) {
-            if (developerMessage) {
-                // Log to server-side plugin-specific log file
-                Azavea.logMessage(developerMessage, pluginName, level);
-                if (level === "ERROR") {
-                    // Errors also get logged to server-side main log file
-                    Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
-                }
-            }
-            if (userMessage) {
-                // TODO: create a panel
-                alert(userMessage);
-            }
-        };
     }
 
     N.models = N.models || {};
@@ -204,8 +168,7 @@
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
             if (toolbarType === 'sidebar') {
-                var pluginView = new N.views.SidebarPlugin({ model: plugin });
-                $sidebar.append(pluginView.$el);
+                new N.views.SidebarPlugin({ model: plugin, $parent: $sidebar });
             } else if (toolbarType === 'map') {
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.$el);

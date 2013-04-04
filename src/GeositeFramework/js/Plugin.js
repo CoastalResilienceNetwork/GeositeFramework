@@ -12,6 +12,43 @@
             _.extend(model, selectable);
         }
 
+        function initPluginObject(model, mapModel, esriMap) {
+            var pluginObject = model.get('pluginObject'),
+                pluginName = model.get('pluginSrcFolder'),
+                $uiContainer = model.get('$uiContainer'),
+                container = ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined)
+            pluginObject.initialize({
+                app: {
+                    version: N.app.version,
+                    info: makeLogger(pluginName, "INFO"),
+                    warn: makeLogger(pluginName, "WARN"),
+                    error: makeLogger(pluginName, "ERROR"),
+                    _unsafeMap: esriMap
+                },
+                // TODO: fix wrapped map and pass it to plugin.
+                map: N.createMapWrapper(esriMap, mapModel, pluginObject),
+                //map: esriMap,
+                container: container
+            });
+        }
+
+        function makeLogger(pluginName, level) {
+            return function (userMessage, developerMessage) {
+                if (developerMessage) {
+                    // Log to server-side plugin-specific log file
+                    Azavea.logMessage(developerMessage, pluginName, level);
+                    if (level === "ERROR") {
+                        // Errors also get logged to server-side main log file
+                        Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
+                    }
+                }
+                if (userMessage) {
+                    // TODO: create a panel
+                    alert(userMessage);
+                }
+            };
+        }
+
         /*
         Check that the plugin implements the minimal viable interface.
         Plugin code can just assume the plugin is valid if it has been loaded
@@ -40,6 +77,8 @@
             initialize: function () { initialize(this); },
 
             isCompliant: function () { return checkPluginCompliance(this); },
+
+            initPluginObject: function (mapModel, esriMap) { initPluginObject(this, mapModel, esriMap); },
 
             onSelectedChanged: function () {
                 if (this.selected) {
@@ -133,6 +172,13 @@
 
     (function sidebarPlugin() {
 
+        function initialize(view, $parent) {
+            render(view);
+            view.$el.appendTo($parent);
+            createUiContainer(view);
+            N.views.BasePlugin.prototype.initialize.call(view);
+        }
+
         function render(view) {
             var model = view.model,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
@@ -142,24 +188,29 @@
                     selected: model.selected || model.get('active')
                 }));
 
-            view.$el.empty().append(html);
+            view.$el.empty().append(html)
 
-            if (model.selected === true) {
+            if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
-                if (view.$displayContainer) { view.$displayContainer.show(); }
+                if (view.$uiContainer) {
+                    view.$uiContainer.show();
+                }
             } else {
                 view.$el.removeClass("selected-plugin");
-                if (view.$displayContainer) { view.$displayContainer.hide(); }
+                if (view.$uiContainer) {
+                    view.$uiContainer.hide();
+                }
             }
             return view;
         }
 
-        function attachContainer() {
-            var view = this,
+        function createUiContainer(view) {
+            var $uiContainer = $(N.app.templates['template-plugin-container']().trim()),
+
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
-                        gutterWidth = 120,
-                        yCenter = pos.top + $el.height() / 2,
+                        gutterWidth = 20,
+                        yCenter = pos.top + 60/*avoid map controls*/ + $el.height() / 2,
                         xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
 
                     return {
@@ -168,16 +219,11 @@
                     }
                 };
 
-            // The sidebar plugin will attach the plugin display container
-            // to the pane, from which it's visibility can be toggled on 
-            // activation/deactivation
-            view.$displayContainer = this.model.get('$displayContainer');
-
-            view.$displayContainer
+            $uiContainer
                 // Position the dialog next to the sidebar button which shows it.
-                .css(calculatePosition(this.$el))
+                .css(calculatePosition(view.$el))
 
-                // Listen for events to turn the plug-in completely off
+                // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     view.model.turnOff();
                 }).end()
@@ -187,21 +233,21 @@
                     view.model.deselect();
                 });
 
-            view.$el.parents('.content').append(this.$displayContainer.hide());
+            // Attach to top pane element
+            view.$el.parents('.content').append($uiContainer.hide());
+
+            // Tell the model about $uiContainer so it can pass it to the plugin object
+            view.model.set('$uiContainer', $uiContainer);
+            view.$uiContainer = $uiContainer;
         }
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
-            $displayContainer: null,
+            $uiContainer: null,
 
-            initialize: function sidebarPluginInit() {
-                // Attach the plugin rendering container to the pane
-                this.model.on('change:$displayContainer', attachContainer, this);
-
-                N.views.BasePlugin.prototype.initialize.call(this);
-            },
+            initialize: function () { initialize(this, this.options.$parent); },
 
             render: function renderSidbarPlugin() { return render(this); }
         });
