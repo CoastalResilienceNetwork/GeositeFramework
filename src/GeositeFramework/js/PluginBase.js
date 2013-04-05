@@ -44,7 +44,7 @@ define(["dojo/_base/declare"],
             function collectFeatures() {
                 // Identify all active layers, collecting responses in "deferred" lists
                 _.each(services, function (service) {
-                    if (service.visibleLayers.length > 0 || service.visibleLayers[0] === -1) {
+                    if (service.visibleLayers.length > 0 && service.visibleLayers[0] !== -1) {
                         // This service has visible layers. Identify twice -- 
                         // once with loose tolerance to find "thin" features (point/line/polyline), and
                         // once with tight tolerance to find "area" features (polygon/raster).

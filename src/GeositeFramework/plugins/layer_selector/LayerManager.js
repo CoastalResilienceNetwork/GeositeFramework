@@ -17,7 +17,6 @@ define([
                 _onLoadingComplete;
 
             this.load = loadLayerData;
-            this.identify = identify;
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;

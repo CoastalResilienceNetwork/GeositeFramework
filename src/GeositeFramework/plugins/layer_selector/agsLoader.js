@@ -82,7 +82,6 @@ define(["jquery", "use!underscore"],
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
                             node.url = serviceUrl;
-                            node.identify = identify;
                             loadLayers(serviceData.layers, node);
                         },
                         error: _onLayerSourceLoadError
