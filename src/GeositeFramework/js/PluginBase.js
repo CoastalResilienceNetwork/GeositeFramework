@@ -22,11 +22,13 @@ define(["dojo/_base/declare"],
         });
 
         // ------------------------------------------------------------------------
-        // Identify
+        // Default "Identify" -- format feature info returned by esri.tasks.IdentifyTask
+        // Plugins that don't like this default behavior should override identify().
 
         function getMyServices(map) {
             // The ESRI map's "layers" are actually service objects (layer managers).
-            // Filter out ones that aren't mine (they'll be undefined and therefore falsy)
+            // Filter out ones that aren't mine. 
+            // (Because "map" is a WrappedMap, layers that aren't mine will be undefined.)
             return _.filter(_.map(map.layerIds, map.getLayer), _.identity);
         }
 
@@ -42,7 +44,7 @@ define(["dojo/_base/declare"],
             });
 
             function collectFeatures() {
-                // Identify all active layers, collecting responses in "deferred" lists
+                // Ask each active service to identify its features. Collect responses in "deferred" lists.
                 _.each(services, function (service) {
                     if (service.visibleLayers.length > 0 && service.visibleLayers[0] !== -1) {
                         // This service has visible layers. Identify twice -- 

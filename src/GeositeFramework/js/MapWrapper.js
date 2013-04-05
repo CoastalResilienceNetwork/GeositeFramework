@@ -9,6 +9,7 @@
         // ------------------------------------------------------------------------
         // Private variables and functions
 
+        // Create wrapper object, with esriMap as its prototype
         var mapMaker = function () {};
         mapMaker.prototype = esriMap;
         var _wrapper = new mapMaker(),
