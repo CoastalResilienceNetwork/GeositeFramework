@@ -65,13 +65,18 @@ h1, h2, h3, h4, h5, h6 {
 			text-transform: uppercase;
 			font-size: 16px !important;
 		}
-	.top-bar ul > li.name h2 {
+	.top-bar ul > li.name h2{
 		font-size: 16px;
 		float: left;
-		margin-left: 25px;
+		margin-left: 15px;
 		color: white;
 		text-transform: uppercase;
+	    
 	}
+    .top-bar ul > li.name h2 a {
+        font-size: inherit;
+        line-height: normal;
+    }
 		
 	.top-bar ul > li:not(.name):hover, 
 	.top-bar ul > li:not(.name).active, 
@@ -317,6 +322,35 @@ h1, h2, h3, h4, h5, h6 {
 {
 }
 
+/*-----------------------------------------
+    Dialog-Popup styles
+------------------------------------------*/
+.tmask {
+    position: absolute;
+    display: none;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    z-index: 800;
+}
+.tbox {
+    position: absolute;
+    display: none;
+    padding: 14px 17px;
+    z-index: 900;
+}
+
+.tclose {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
+}
 /* -----------------------------------------
    Media Queries
 ----------------------------------------- */
