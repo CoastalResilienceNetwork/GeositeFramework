@@ -145,25 +145,6 @@ define(["jquery", "use!underscore"],
                 }
             }
 
-            dojo.require("esri.tasks.identify");
-
-            function identify(serviceNode, map, point, tolerance) {
-                if (serviceNode.layerIds && serviceNode.layerIds.length > 0) {
-                    // This service node has some visible layers, so execute an "identify" task
-                    identifyParams = new esri.tasks.IdentifyParameters();
-                    identifyParams.tolerance = tolerance;
-                    identifyParams.layerIds = serviceNode.layerIds;
-                    identifyParams.width = map.width;
-                    identifyParams.height = map.height;
-                    identifyParams.geometry = point;
-                    identifyParams.mapExtent = map.extent;
-
-                    var identifyTask = new esri.tasks.IdentifyTask(serviceNode.url);
-                    var  deferred = identifyTask.execute(identifyParams);
-                    return deferred;
-                }
-            }
-
         }
 
         return AgsLoader;

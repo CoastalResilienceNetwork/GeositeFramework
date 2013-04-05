@@ -3,7 +3,7 @@
 require(["jquery.placeholder"]);
 define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
     function ($, _, Ext, treeFilter) {
-        $('input, textarea').placeholder(); // initialize jquery.placeholder
+        //$('input, textarea').placeholder(); // initialize jquery.placeholder
 
         var Ui = function (container, map, templates) {
             var _map = map,
@@ -30,25 +30,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_tree !== null && $(_container).is(":visible")) {
                     _tree.render(_$treeContainer[0]);
                     _$filterInput.focus();
-                }
-            }
-
-            this.formatIdentifiedFeatures = function (features, processResults) {
-                if (features.length === 0) {
-                    processResults(false);
-                } else {
-                    var $result = $('<div>'),
-                        template = _.template(_$templates.find('#template-layer-selector-result-of-identify').html());
-                    _.each(features, function (feature) {
-                        var html = template(feature).trim(),
-                            $section = $(html).click(expandOrCollapseAttributeSection);
-                        $result.append($section);
-                    });
-                    processResults($result.get(0), 400);
-                }
-
-                function expandOrCollapseAttributeSection() {
-                    $(this).find('.attributes').slideToggle();
                 }
             }
 
