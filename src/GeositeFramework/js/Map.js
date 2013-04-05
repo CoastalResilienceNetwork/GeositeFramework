@@ -65,14 +65,6 @@
 
         removeService: function (service) {
             delete this.serviceInfos[service.id];
-        },
-        
-        getServicesAddedByPlugin: function (pluginModel) {
-            var pluginObject = pluginModel.get('pluginObject'),
-                services = _.filter(this.serviceInfos, function (serviceInfo) {
-                    return (serviceInfo.pluginObject === pluginObject);
-                });
-            return services;
         }
 
     });
@@ -187,7 +179,6 @@
 
         // Accumulate results (probably asynchronously), and show them when all are accumulated
         pluginModels.each(function (pluginModel) {
-            //var services = view.model.getServicesAddedByPlugin(pluginModel);
             pluginModel.identify(event.mapPoint, processResults);
         });
 

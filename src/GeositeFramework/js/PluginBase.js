@@ -2,6 +2,10 @@
 
 define(["dojo/_base/declare"],
     function (declare) {
+
+        dojo.require("esri.tasks.identify");
+        dojo.require("dojo.DeferredList");
+
         return declare(null, {
             toolbarName: "",
             fullName: "",
@@ -14,19 +18,11 @@ define(["dojo/_base/declare"],
             hibernate: function () {},
             getState: function () {},
 
-            identify: function (map, point, processResults) {
-                var self = this;
-                this._layerManager.identify(map, point, function (features) {
-                    self._ui.formatIdentifiedFeatures(features, processResults);
-                });
-            }
+            identify: identify
         });
 
         // ------------------------------------------------------------------------
         // Identify
-
-        dojo.require("esri.tasks.identify");
-        dojo.require("dojo.DeferredList");
 
         function getMyServices(map) {
             // The ESRI map's "layers" are actually service objects (layer managers).
@@ -47,8 +43,8 @@ define(["dojo/_base/declare"],
 
             function collectFeatures() {
                 // Identify all active layers, collecting responses in "deferred" lists
-                _each(services, function (service) {
-                    if (service.visibleLayers.length > 0) {
+                _.each(services, function (service) {
+                    if (service.visibleLayers.length > 0 || service.visibleLayers[0] === -1) {
                         // This service has visible layers. Identify twice -- 
                         // once with loose tolerance to find "thin" features (point/line/polyline), and
                         // once with tight tolerance to find "area" features (polygon/raster).
@@ -64,7 +60,7 @@ define(["dojo/_base/declare"],
                             identifyParams.geometry = point;
                             identifyParams.mapExtent = map.extent;
 
-                            var identifyTask = new esri.tasks.IdentifyTask(serviceNode.url),
+                            var identifyTask = new esri.tasks.IdentifyTask(service.url),
                                 deferred = identifyTask.execute(identifyParams);
                             deferreds.push(deferred);
                         }
@@ -74,7 +70,7 @@ define(["dojo/_base/declare"],
 
             function processFeatures(formatFeatures) {
                 // When all responses are available, filter and format identified features
-                new DeferredList(thinFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
+                new dojo.DeferredList(thinFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
                     var thinFeatures = getFeatures(thinFeatureDeferreds, isThinFeature),
                         areaFeatures = getFeatures(areaFeatureDeferreds, isAreaFeature);
                     formatFeatures(thinFeatures.concat(areaFeatures));
@@ -103,7 +99,7 @@ define(["dojo/_base/declare"],
                     processResults(false);
                 } else {
                     var $result = $('<div>'),
-                        template = N.app.templates['plugin-result-of-identify'];
+                        template = Geosite.app.templates['plugin-result-of-identify'];
                     _.each(features, function (feature) {
                         var html = template(feature).trim(),
                             $section = $(html).click(expandOrCollapseAttributeSection);
