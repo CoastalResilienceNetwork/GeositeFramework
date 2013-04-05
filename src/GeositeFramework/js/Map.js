@@ -176,31 +176,31 @@
     }
 
     function doIdentify(view, pluginModels, event) {
-        // Only "Identify" if no plugin is selected (and therefore owns click events)
-        if (!pluginModels.selected || pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
-            var map = view.esriMap,
-                windowWidth = 300,
-                windowHeight = 600,
-                infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
-                $resultsContainer = $('<div>').addClass('identify-results'),
-                showIfLast = _.after(pluginModels.length, function () {
-                    showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
-                });
-
-            // Accumulate results (probably asynchronously), and show them when all are accumulated
-            pluginModels.each(function (pluginModel) {
-                pluginModel.identify(map, event.mapPoint, function (pluginTitle, result, width, height) {
-                    if (result) {
-                        var template = N.app.templates['template-result-of-identify'],
-                            $html = $(template({ pluginTitle: pluginTitle }).trim());
-                        $html.find('.identify-result').append(result);
-                        $resultsContainer.append($html);
-                        if (width)  { windowWidth  = Math.max(windowWidth,  width); }
-                        if (height) { windowHeight = Math.max(windowHeight, height); }
-                    }
-                    showIfLast();
-                });
+        var map = view.esriMap,
+            windowWidth = 300,
+            windowHeight = 600,
+            infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
+            $resultsContainer = $('<div>').addClass('identify-results'),
+            showIfLast = _.after(pluginModels.length, function () {
+                showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
             });
+
+        // Accumulate results (probably asynchronously), and show them when all are accumulated
+        pluginModels.each(function (pluginModel) {
+            //var services = view.model.getServicesAddedByPlugin(pluginModel);
+            pluginModel.identify(event.mapPoint, processResults);
+        });
+
+        function processResults(pluginTitle, result, width, height) {
+            if (result) {
+                var template = N.app.templates['template-result-of-identify'],
+                    $html = $(template({ pluginTitle: pluginTitle }).trim());
+                $html.find('.identify-result').append(result);
+                $resultsContainer.append($html);
+                if (width) { windowWidth = Math.max(windowWidth, width); }
+                if (height) { windowHeight = Math.max(windowHeight, height); }
+            }
+            showIfLast();
         }
     }
 
