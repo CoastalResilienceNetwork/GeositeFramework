@@ -4,14 +4,32 @@
     "type": "object",
     "properties": {
         "organization": {"type": "string", "required": true},
-        "title": {"type": "string", "required": true},
+        "titleMain": {
+			"type": "object",
+            "properties": {
+                "text": {"type": "string", "required": true},
+                "url": {"type": "string", "required": true}
+            },
+            "additionalProperties": false,
+			"required": true
+		},
+		"titleDetail": {
+			"type": "object",
+            "properties": {
+                "text": {"type": "string", "required": true},
+                "url": {"type": "string", "required": true}
+            },
+            "additionalProperties": false,
+			"required": true
+		},
         "headerLinks": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
                     "text": {"type": "string", "required": true},
-                    "url": {"type": "string", "required": true}
+                    "url": {"type": "string", "required": true},
+					"popup": {"type": "boolean", "required": false}
                 },
                 "additionalProperties": false
             }

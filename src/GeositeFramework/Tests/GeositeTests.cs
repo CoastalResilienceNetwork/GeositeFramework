@@ -39,7 +39,8 @@ namespace GeositeFramework.Tests
             var regionJson = @"
                 {
                     'organization': 'Sample Org',
-                    'title': 'Geosite Framework Sample',
+                    'titleMain': { 'text': 'Geosite Framework Sample', 'url': 'http://www.azavea.com/' },
+                    'titleDetail':  { 'text': 'Sample Region', 'url': 'http://www.azavea.com/' },
                     'initialExtent': [ -98.61328125, 17.392579271057766, -79.716796875,31.653381399664 ],
                     'headerLinks': [
                         { 'text': 'Azavea', 'url': 'http://www.azavea.com/' },
@@ -58,7 +59,8 @@ namespace GeositeFramework.Tests
             var geosite = new Geosite(LoadRegionData(regionJson), pluginFolderNames, pluginJsonData);
 
             Expect(geosite.Organization, EqualTo("Sample Org"));
-            Expect(geosite.Title, EqualTo("Geosite Framework Sample"));
+            Expect(geosite.TitleMain.Text, EqualTo("Geosite Framework Sample"));
+            Expect(geosite.TitleDetail.Text, EqualTo("Sample Region"));
             Expect(geosite.HeaderLinks.Count, EqualTo(2));
             Expect(geosite.HeaderLinks[0].Url, EqualTo("http://www.azavea.com/"));
             Expect(geosite.HeaderLinks[1].Text, EqualTo("GIS"));
@@ -97,7 +99,7 @@ namespace GeositeFramework.Tests
             Expect(messages.Count, EqualTo(3));
             Expect(messages[0], Contains("'a'")); // extra property
             Expect(messages[1], Contains("'b'")); // extra property
-            Expect(messages[2], Contains(": organization, title, initialExtent, basemaps.")); // missing required properties
+            Expect(messages[2], Contains(": organization, titleMain, titleDetail, initialExtent, basemaps.")); // missing required properties
         }
 
         /// <exclude/>
@@ -108,7 +110,8 @@ namespace GeositeFramework.Tests
             var regionJson = @"
                 {
                     'organization': '',
-                    'title': '',
+                    'titleMain': {'text':'', 'url':''},
+                    'titleDetail': {'text':'', 'url':''},
                     'initialExtent': [0,0,0],
                     'basemaps': [{'name':'', 'url':''}],
                 }";
@@ -121,7 +124,7 @@ namespace GeositeFramework.Tests
 
         /// <exclude/>
         [Test]
-        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "XYZ", MatchType = MessageMatch.Contains)]
+        [ExpectedException(typeof(JsonValidationException), ExpectedMessage = "XYZ", MatchType = MessageMatch.Contains)]
         public void TestMissingPlugin()
         {
             var regionJson = @"
@@ -230,7 +233,7 @@ namespace GeositeFramework.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "clause 'underscore' differently", MatchType = MessageMatch.Contains)]
+        [ExpectedException(typeof(JsonValidationException), ExpectedMessage = "clause 'underscore' differently", MatchType = MessageMatch.Contains)]
         public void TestPluginUseConflict()
         {
             var jsonData = new List<JsonData> 
