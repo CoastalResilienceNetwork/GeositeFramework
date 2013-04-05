@@ -29,7 +29,9 @@ define(["dojo/_base/declare"],
             // The ESRI map's "layers" are actually service objects (layer managers).
             // Filter out ones that aren't mine. 
             // (Because "map" is a WrappedMap, layers that aren't mine will be undefined.)
-            return _.filter(_.map(map.layerIds, map.getLayer), _.identity);
+            return _.filter(_.map(map.layerIds, map.getLayer), function (layer) {
+                return (layer && layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer");
+            });
         }
 
         function identify(point, processResults) {
