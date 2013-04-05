@@ -65,6 +65,14 @@
 
         removeService: function (service) {
             delete this.serviceInfos[service.id];
+        },
+        
+        getServicesAddedByPlugin: function (pluginModel) {
+            var pluginObject = pluginModel.get('pluginObject'),
+                services = _.filter(this.serviceInfos, function (serviceInfo) {
+                    return (serviceInfo.pluginObject === pluginObject);
+                });
+            return services;
         }
 
     });
