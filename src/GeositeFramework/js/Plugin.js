@@ -65,14 +65,13 @@
                 this.get('pluginObject').hibernate();
             },
 
-            identify: function (point, processResults) {
+            identify: function (map, point, processResults) {
                 var active = this.get('active'),
                     pluginObject = this.get('pluginObject'),
-                    pluginTitle = pluginObject.toolbarName,
-                    pluginIdentifyFn = pluginObject.identify;
-                if (active && _.isFunction(pluginIdentifyFn)) {
+                    pluginTitle = pluginObject.toolbarName;
+                if (active && _.isFunction(pluginObject.identify)) {
                     // This plugin might have some results, so give it a chance to identify()
-                    pluginIdentifyFn(point, function (results, width, height) {
+                    pluginObject.identify(map, point, function (results, width, height) {
                         processResults(pluginTitle, results, width, height);
                     });
                 } else {

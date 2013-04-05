@@ -5,12 +5,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
     function ($, _, Ext, treeFilter) {
         $('input, textarea').placeholder(); // initialize jquery.placeholder
 
-        var Ui = function (container, map) {
+        var Ui = function (container, map, templates) {
             var _map = map,
                 _container = container,
+                _$templates = $('<div>').append($(templates.trim())), // store templates in a utility div
                 _$filterInput = null,
                 _$treeContainer = null,
                 _tree = null;
+
+            // ------------------------------------------------------------------------
+            // Public methods
 
             this.render = function (rootNode) {
                 sortFolders([rootNode]);
@@ -28,6 +32,28 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     _$filterInput.focus();
                 }
             }
+
+            this.formatIdentifiedFeatures = function (features, processResults) {
+                if (features.length === 0) {
+                    processResults(false);
+                } else {
+                    var $result = $('<div>'),
+                        template = _.template(_$templates.find('#template-layer-selector-result-of-identify').html());
+                    _.each(features, function (feature) {
+                        var html = template(feature).trim(),
+                            $section = $(html).click(expandOrCollapseAttributeSection);
+                        $result.append($section);
+                    });
+                    processResults($result.get(0), 400);
+                }
+
+                function expandOrCollapseAttributeSection() {
+                    $(this).find('.attributes').slideToggle();
+                }
+            }
+
+            // ------------------------------------------------------------------------
+            // Private methods
 
             function addSpinner() {
                 $(_container).append(
@@ -83,6 +109,11 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     root: rootNode,
                     fields: ['text', 'leaf', 'cls', 'url', 'layerId']
                 });
+                // Each TreeStore node's "raw" property has a copy of the node it was created from,
+                // but without the "children" property. Restore "children" so LayerManager can 
+                // continue to traverse and modify the "raw" tree.
+                restoreChildren(store.tree.root);
+
                 var tree = Ext.create('FilteredTreePanel', {
                     store: store,
                     rootVisible: false,
@@ -97,6 +128,19 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     }
                 });
                 return tree;
+            }
+
+            function restoreChildren(cooked) {
+                // 'cooked' is a TreeStore node, and 'cooked.raw' is the node it was created from.
+                // Restore raw.children from cooked.ChildNodes, and recurse.
+                if (cooked.childNodes.length > 0) {
+                    cooked.raw.children = _.map(cooked.childNodes, function (cookedChild) {
+                        return cookedChild.raw;
+                    });
+                    _.each(cooked.childNodes, function (cookedChild) {
+                        restoreChildren(cookedChild);
+                    });
+                }
             }
 
             function resize() {

@@ -1,4 +1,4 @@
-﻿// Module LayerLoader.js
+﻿// Module LayerManager.js
 
 define([
         "dojo/json",
@@ -9,7 +9,7 @@ define([
     ],
     function (JSON, tv4, _, AgsLoader, WmsLoader) {
 
-        var LayerLoader = function (app) {
+        var LayerManager = function (app) {
             var _app = app,
                 _urls = [],
                 _rootNode = null,
@@ -17,6 +17,7 @@ define([
                 _onLoadingComplete;
 
             this.load = loadLayerData;
+            this.identify = identify;
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
@@ -108,6 +109,7 @@ define([
                     + "' Status: '" + textStatus + "' Error: '" + errorThrown + "'");
             }
 
+            // ------------------------------------------------------------------------
             // Functions to build a node tree of map layers. The node schema targets Ext.data.TreeStore 
             // and Ext.tree.Panel, but should be generic enough for other UI frameworks.
 
@@ -147,8 +149,66 @@ define([
                 return node;
             }
 
+            // ------------------------------------------------------------------------
+            // Identify
+
+            dojo.require("dojo.DeferredList");
+
+            function identify(map, point, processFeatures) {
+                // Identify all active layers, collecting responses in "deferred" lists
+                var identifiedFeatures = [],
+                    thinFeatureDeferreds = [],
+                    areaFeatureDeferreds = [];
+                identifyNode(_rootNode);
+
+                // When all responses are available, filter and process identified features
+                new dojo.DeferredList(thinFeatureDeferreds.concat(areaFeatureDeferreds)).then(function () {
+                    var thinFeatures = getFeatures(thinFeatureDeferreds, isThinFeature),
+                        areaFeatures = getFeatures(areaFeatureDeferreds, isAreaFeature);
+                    processFeatures(thinFeatures.concat(areaFeatures));
+                });
+
+                function identifyNode(node) {
+                    if (node.identify) {
+                        // This node can identify() its subtree.  Ask twice -- 
+                        // once with loose tolerance to find "thin" features (point/line/polyline), and
+                        // once with tight tolerance to find "area" features (polygon/raster).
+                        identifyWithTolerance(10, thinFeatureDeferreds);
+                        identifyWithTolerance(0, areaFeatureDeferreds);
+                    } else {
+                        // Continue searching subtree
+                        _.each(node.children, function (child) {
+                            identifyNode(child);
+                        });
+                    }
+
+                    function identifyWithTolerance(tolerance, deferreds) {
+                        var deferred = node.identify(node, map, point, tolerance);
+                        if (deferred) {
+                            deferreds.push(deferred);
+                        }
+                    }
+                }
+
+                function getFeatures(deferreds, filterFunction) {
+                    var identifiedFeatures = [];
+                    _.each(deferreds, function (deferred) {
+                        deferred.addCallback(function (features) {
+                            _.each(features, function (feature) {
+                                if (filterFunction(feature.feature)) {
+                                    identifiedFeatures.push(feature);
+                                }
+                            });
+                        });
+                    });
+                    return identifiedFeatures;
+                }
+
+                function isThinFeature(feature) { return _.contains(['Point', 'Line', 'Polyline'], feature.attributes.Shape); }
+                function isAreaFeature(feature) { return !isThinFeature(feature); }
+            }
         }
 
-        return LayerLoader;
+        return LayerManager;
     }
 );
