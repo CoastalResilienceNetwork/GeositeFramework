@@ -74,13 +74,6 @@ define([
             
             hibernate: function () {
                 // TODO: hide displayed map layers
-            },
-
-            identify: function (map, point, processResults) {
-                var self = this;
-                this._layerManager.identify(map, point, function (features) {
-                    self._ui.formatIdentifiedFeatures(features, processResults);
-                });
             }
 
         });
