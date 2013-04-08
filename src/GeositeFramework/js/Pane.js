@@ -18,7 +18,7 @@
                 extent: extent,
                 mapNumber: model.get('paneNumber')
             });
-        model.set('map', mapModel);
+        model.set('mapModel', mapModel);
     }
 
     function getHomeExtent(model) {
@@ -61,46 +61,10 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, esriMap) {
+        var mapModel = model.get('mapModel');
         model.get('plugins').each(function (pluginModel) {
-            var pluginObject = pluginModel.get('pluginObject'),
-                pluginName = pluginModel.get('pluginSrcFolder'),
-                // The display container used in the model view will be created
-                // here so the plugin object can be constructed with a reference
-                // to it.
-                $displayContainer = $(N.app.templates['template-plugin-container']().trim());
-
-            pluginModel.set('$displayContainer', $displayContainer);
-            pluginObject.initialize({
-                app: {
-                    version: N.app.version,
-                    info: makeLogger(pluginName, "INFO"),
-                    warn: makeLogger(pluginName, "WARN"),
-                    error: makeLogger(pluginName, "ERROR"),
-                    _unsafeMap: esriMap
-                },
-                // TODO: fix wrapped map and pass it to plugin.
-                //map: N.createMapWrapper(esriMap),
-                map: esriMap,
-                container: $displayContainer.find('.plugin-container-inner')[0]
-            });
+            pluginModel.initPluginObject(mapModel, esriMap);
         });
-    }
-
-    function makeLogger(pluginName, level) {
-        return function(userMessage, developerMessage) {
-            if (developerMessage) {
-                // Log to server-side plugin-specific log file
-                Azavea.logMessage(developerMessage, pluginName, level);
-                if (level === "ERROR") {
-                    // Errors also get logged to server-side main log file
-                    Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
-                }
-            }
-            if (userMessage) {
-                // TODO: create a panel
-                alert(userMessage);
-            }
-        };
     }
 
     N.models = N.models || {};
@@ -108,8 +72,8 @@
         defaults: {
             paneNumber: 0,
             regionData: null,
-            map: null,
-            plugins: null,
+            mapModel: null,
+            plugins: null
         },
 
         initialize: function () { return initialize(this); },
@@ -166,42 +130,22 @@
 
     function initBasemapSelector(view) {
         new Geosite.views.BasemapSelector({
-            model: view.model.get('map'),
+            model: view.model.get('mapModel'),
             el: view.$('.basemap-selector')
         });
     }
 
     function initMapView(view) {
         view.mapView = new Geosite.views.Map({
-            model: view.model.get('map'),
+            model: view.model.get('mapModel'),
             el: view.$('.map'),
             paneNumber: view.model.get('paneNumber')
         });
 
-        var esriMap = view.mapView.esriMap,
-            resizeMap = function resizeMap() {
-
-                // When the element containing the map resizes, the 
-                // map needs to be notified.  Do a slight delay so that
-                // the browser has time to actually make the element visible.
-                _.delay(function () {
-                    if (view.$('.map').is(':visible')) {
-                        var center = esriMap.extent.getCenter();
-                        esriMap.reposition();
-                        esriMap.resize(true);
-                        esriMap.centerAt(center);
-                    }
-                }, 150);
-            }
+        var esriMap = view.mapView.esriMap;
 
         // Wait for the map to load
         dojo.connect(esriMap, "onLoad", function () {
-            resizeMap();
-            $(N).on('resize', resizeMap);
-
-            // Add this map to the list of maps to sync when in sync mode
-            N.app.syncedMapManager.addMapView(view.mapView);
-
             // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
 
@@ -222,8 +166,7 @@
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
             if (toolbarType === 'sidebar') {
-                var pluginView = new N.views.SidebarPlugin({ model: plugin });
-                $sidebar.append(pluginView.$el);
+                new N.views.SidebarPlugin({ model: plugin, $parent: $sidebar });
             } else if (toolbarType === 'map') {
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.$el);

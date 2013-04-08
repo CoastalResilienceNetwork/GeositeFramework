@@ -43,6 +43,9 @@
 					    </ul>
 				    </div>
 			    </div>
+                <div class="legend">
+                    <div id="legend-<%= paneNumber %>"></div>
+                </div>
             </div>
         </div>
     </script>
@@ -178,10 +181,16 @@
 
         require({
             async: true,
-            packages: [{
-                name: "plugins",
-                location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
-            }],
+            packages: [
+                {
+                    name: "plugins",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
+                },
+                {
+                    name: "framework",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "js"
+                }
+            ],
             // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
             // like Underscore and Ext JS. (Reference syntax in plugins is e.g. "use!underscore".)
             paths: {
