@@ -24,14 +24,5 @@ describe('Plugin', function() {
         it('has an intialize method', function() {
             expect(plugin.initialize).toBeAFunction();
         });
-
-        it('has UI toggling ability.', function() {
-            expect(plugin.toggleUI).toBeAFunction();
-            expect(plugin.get('showingUI')).toBe(false);
-            plugin.toggleUI();
-            expect(plugin.get('showingUI')).toBe(true);
-        });
-
-
     });
 });
