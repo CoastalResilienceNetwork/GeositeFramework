@@ -31,6 +31,8 @@
             // Setup a manager for synced maps.  As maps are created, 
             // they will be added to it.
             N.app.syncedMapManager = new N.SyncedMapManager(N.app.models.screen);
+
+            registerPopupHandlers();
         },
 
         createPane: function createPane(paneIndex) {
@@ -47,6 +49,20 @@
         $(window).resize(_.debounce(resizeMap, 300));
     }
 
+    function registerPopupHandlers() {
+        $('a.framework-popup').click(function() {
+            var url = $(this).data('url');
+            TINY.box.show({
+                iframe: url,
+                boxid: 'frameless',
+                width: 750,
+                height: 450,
+                fixed: false,
+                maskopacity: 40
+            });
+        });
+    };
+    
     new N.TemplateLoader().load(N.app.templates);
 
 }(Geosite));

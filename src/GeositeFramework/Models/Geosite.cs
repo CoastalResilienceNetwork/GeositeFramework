@@ -17,12 +17,14 @@ namespace GeositeFramework.Models
         {
             public string Text;
             public string Url;
+            public bool Popup;
         }
 
         // Properties used in View rendering
         public string GeositeFrameworkVersion { get; set; }
         public string Organization { get; private set; }
-        public string Title { get; private set; }
+        public Link TitleMain { get; private set; }
+        public Link TitleDetail { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
         public string RegionDataJson { get; private set; }
         public List<string> PluginFolderNames { get; private set; }
@@ -94,16 +96,13 @@ namespace GeositeFramework.Models
 
             // Set public properties needed for View rendering
             Organization = (string)jsonObj["organization"];
-            Title = (string)jsonObj["title"];
+            TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
+            TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
 
             if (jsonObj["headerLinks"] != null)
             {
                 HeaderLinks = jsonObj["headerLinks"]
-                    .Select(j => new Link
-                    {
-                        Text = (string)j["text"],
-                        Url = (string)j["url"]
-                    }).ToList();
+                    .Select(ExtractLinkFromJson).ToList();
             }
 
             // JSON to be inserted in generated JavaScript code
@@ -121,6 +120,19 @@ namespace GeositeFramework.Models
             {
                 MergePluginConfigurationData(this, pluginConfigJsonData);
             }
+        }
+
+        /// <summary>
+        /// For a json specified link hash (tex/url) return a Link object
+        /// </summary>
+        private static Link ExtractLinkFromJson(JToken json)
+        {
+            return new Link
+            {
+                Text = (string)json["text"],
+                Url = (string)json["url"],
+                Popup = json["popup"] != null && bool.Parse(json["popup"].ToString())
+            };
         }
 
         private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)

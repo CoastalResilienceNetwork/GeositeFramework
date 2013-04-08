@@ -2,15 +2,27 @@
     Layout = null;
 }
 
+@using GeositeFramework.Models
 @model GeositeFramework.Models.Geosite
 
+@helper OptionalLinkText (Geosite.Link link) {
+    if (link.Url != null)
+    {
+        <a href="@link.Url">@link.Text</a>
+    }
+    else
+    {
+        @link.Text
+    }
+        
+}
 
 <!DOCTYPE html>
 <!--[if IE 8]>    		<html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-    <title>@Model.Title</title>
+    <title>@Model.Organization | @Model.TitleMain</title>
 
     <!-- Load CSS for plugins -->
     @foreach (var url in Model.PluginCssUrls) {
@@ -116,8 +128,8 @@
 		<nav class="top-bar">
 			<ul>
 				<li class="name">
-					<h1><a href="javascript:;">@Model.Organization</a></h1>
-					<h2>@Model.Title</h2>
+					<h1>@OptionalLinkText(@Model.TitleMain)</h1>
+					<h2>@OptionalLinkText(@Model.TitleDetail)</h2>
 				</li>
 				<!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
 				<li class="toggle-topbar"><a href="javascript:;"></a></li>
@@ -130,7 +142,17 @@
                         { 
                             <li class="divider"></li>
                         }
-					    <li><a href="@link.Url">@link.Text</a></li>
+                        <li>
+                            @if (link.Popup)
+                            {
+                                <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
+                            }
+                            else
+                            {
+                                <a href="@link.Url">@link.Text</a>    
+                            }
+                            
+					    </li>
                     }
 				</ul>
 			</section>
@@ -154,6 +176,7 @@
     <script src="js/lib/backbone.picky.js"></script>
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
+    <script src="js/lib/TinyBox2.js"></script>
 
     <script src="js/azavea.util.js"></script>
     <script src="js/Geosite.js"></script>
