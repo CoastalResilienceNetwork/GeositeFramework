@@ -5,23 +5,23 @@
     "properties": {
         "organization": {"type": "string", "required": true},
         "titleMain": {
-			"type": "object",
+            "type": "object",
             "properties": {
                 "text": {"type": "string", "required": true},
                 "url": {"type": "string", "required": true}
             },
             "additionalProperties": false,
-			"required": true
-		},
-		"titleDetail": {
-			"type": "object",
+            "required": true
+        },
+        "titleDetail": {
+            "type": "object",
             "properties": {
                 "text": {"type": "string", "required": true},
-                "url": {"type": "string", "required": true}
+                "url": {"type": "string", "required": false}
             },
             "additionalProperties": false,
-			"required": true
-		},
+            "required": true
+        },
         "headerLinks": {
             "type": "array",
             "items": {
@@ -29,7 +29,7 @@
                 "properties": {
                     "text": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
-					"popup": {"type": "boolean", "required": false}
+                    "popup": {"type": "boolean", "required": false}
                 },
                 "additionalProperties": false
             }
