@@ -1,7 +1,7 @@
 {
     "organization": "Sample Org",
-    "titleMain": { "text": "Geosite Framework Sameple", "url": "http://www.azavea.com/" },
-	"titleDetail": { "text": "Sample Region", "url": "http://www.azavea.com/" },
+    "titleMain": { "text": "Geosite Framework Sample", "url": "http://www.azavea.com/" },
+	"titleDetail": { "text": "Sample Region"},
     "headerLinks": [
         { "text": "Azavea", "url": "http://www.azavea.com/" },
         { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" }

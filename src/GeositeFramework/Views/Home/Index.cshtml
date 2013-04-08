@@ -2,8 +2,20 @@
     Layout = null;
 }
 
+@using GeositeFramework.Models
 @model GeositeFramework.Models.Geosite
 
+@helper OptionalLinkText (Geosite.Link link) {
+    if (link.Url != null)
+    {
+        <a href="@link.Url">@link.Text</a>
+    }
+    else
+    {
+        @link.Text
+    }
+        
+}
 
 <!DOCTYPE html>
 <!--[if IE 8]>    		<html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -116,8 +128,8 @@
 		<nav class="top-bar">
 			<ul>
 				<li class="name">
-					<h1><a href="@Model.TitleMain.Url">@Model.TitleMain.Text</a></h1>
-					<h2><a href="@Model.TitleDetail.Url">@Model.TitleDetail.Text</a></h2>
+					<h1>@OptionalLinkText(@Model.TitleMain)</h1>
+					<h2>@OptionalLinkText(@Model.TitleDetail)</h2>
 				</li>
 				<!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
 				<li class="toggle-topbar"><a href="javascript:;"></a></li>
