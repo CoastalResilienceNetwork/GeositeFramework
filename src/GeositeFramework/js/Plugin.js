@@ -190,7 +190,7 @@
                     selected: model.selected || model.get('active')
                 }));
 
-            view.$el.empty().append(html)
+            view.$el.empty().append(html);
 
             if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
