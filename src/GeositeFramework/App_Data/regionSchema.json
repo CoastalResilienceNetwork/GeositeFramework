@@ -8,7 +8,7 @@
             "type": "object",
             "properties": {
                 "text": {"type": "string", "required": true},
-                "url": {"type": "string", "required": true}
+                "url": {"type": "string", "required": false}
             },
             "additionalProperties": false,
             "required": true
