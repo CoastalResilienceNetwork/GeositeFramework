@@ -39,14 +39,15 @@ require({
 
 define([
         "dojo/_base/declare",
+        "framework/PluginBase",
         "./LayerManager",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json",
         "dojo/text!plugins/layer_selector/templates.html"
     ],
-    function (declare, LayerManager, Ui, layerSourcesJson, templates) {
+    function (declare, PluginBase, LayerManager, Ui, layerSourcesJson, templates) {
 
-        return declare(null, {
+        return declare(PluginBase, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",

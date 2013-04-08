@@ -48,10 +48,25 @@
                 id: 'map' + this.get('mapNumber'),
                 attributes: ['extent', 'selectedBasemapIndex']
             });
+
+            // Keep track of ArcGISDynamicMapServiceLayers added to the map
+            this.serviceInfos = {};
         },
 
         getSelectedBasemapName: function () { return getSelectedBasemap(this).name; },
-        getSelectedBasemapLayer:  function (esriMap) { return getSelectedBasemapLayer(this, esriMap); }
+        getSelectedBasemapLayer: function (esriMap) { return getSelectedBasemapLayer(this, esriMap); },
+
+        addService: function (service, plugin) {
+            this.serviceInfos[service.id] = {
+                service: service,
+                pluginObject: plugin
+            };
+        },
+
+        removeService: function (service) {
+            delete this.serviceInfos[service.id];
+        }
+
     });
 }(Geosite));
 
@@ -70,9 +85,35 @@
     }
 
     function createMap(view) {
-        view.esriMap = new esri.Map(view.$el.attr('id'));
+        var esriMap = new esri.Map(view.$el.attr('id')),
+            resizeMap = function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
+            _.delay(function () {
+                if (view.$el.is(':visible')) {
+                    var center = esriMap.extent.getCenter();
+                    esriMap.reposition();
+                    esriMap.resize(true);
+                    esriMap.centerAt(center);
+                }
+            }, 150);
+        }
+
+        view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+
+        // Wait for the map to load
+        dojo.connect(esriMap, "onLoad", function () {
+            resizeMap();
+            $(N).on('resize', resizeMap);
+
+            // Add this map to the list of maps to sync when in sync mode
+            N.app.syncedMapManager.addMapView(view);
+
+            initLegend(view, esriMap);
+        });
     }
 
     function loadExtent(view) {
@@ -97,6 +138,33 @@
         view.currentBasemapLayer = view.model.getSelectedBasemapLayer(view.esriMap);
         view.currentBasemapLayer.show();
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
+    }
+
+    dojo.require('esri.dijit.Legend');
+
+    function initLegend(view, esriMap) {
+        // Create default legend section
+        var id = 'legend-' + view.model.get('mapNumber'),
+            legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
+        legendDijit.startup();
+
+        // Update the legend whenever the map changes
+        dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
+
+        function updateLegend() {
+            var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
+                layerInfos = [];
+            _.each(services, function (service) {
+                var serviceInfo = view.model.serviceInfos[service.id];
+                if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
+                    // This service was added by a plugin, and the plugin wants it in the legend
+                    layerInfos.push({
+                        layer: serviceInfo.service
+                    });
+                }
+            });
+            legendDijit.refresh(layerInfos);
+        }
     }
 
     function doIdentify(view, pluginModels, event) {

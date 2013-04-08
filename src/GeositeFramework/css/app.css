@@ -318,6 +318,47 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* -----------------------------------------
+   Legend
+----------------------------------------- */
+
+.content .legend {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    right: 0;
+    width: 215px;
+    padding: 6px;
+    z-index: 1;
+    overflow: scroll;
+    background: #eee;
+}
+
+.esriLegendService {
+    padding-bottom: 8px;
+}
+
+.esriLegendService table {
+    margin: 0;
+    border: none;
+}
+
+.esriLegendService table tbody tr {
+    background-color: #eee;
+}
+
+.esriLegendService td {
+    padding: 0;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.esriLegendService img {
+    height: 18px;
+}
+
+
+
+/* -----------------------------------------
    Media Queries
 ----------------------------------------- */
 
