@@ -114,6 +114,20 @@
         </div>
     </script>
 
+    <script type="text/template" id="plugin-result-of-identify">
+        <div class="pluginLayerSelector-result-of-identify"><%= layerName %>
+            <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
+                <div class="attributes" style="display: none;">
+                    <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
+                        <% if (attributeName !== displayFieldName) { %>
+                            <div class="pluginLayerSelector-result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </script>
+
 	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
 	<div class="fixed">
 		<nav class="top-bar">

@@ -96,13 +96,13 @@
                 this.get('pluginObject').hibernate();
             },
 
-            identify: function (map, point, processResults) {
+            identify: function (point, processResults) {
                 var active = this.get('active'),
                     pluginObject = this.get('pluginObject'),
                     pluginTitle = pluginObject.toolbarName;
-                if (active && _.isFunction(pluginObject.identify)) {
+                if (active) {
                     // This plugin might have some results, so give it a chance to identify()
-                    pluginObject.identify(map, point, function (results, width, height) {
+                    pluginObject.identify(point, function (results, width, height) {
                         processResults(pluginTitle, results, width, height);
                     });
                 } else {

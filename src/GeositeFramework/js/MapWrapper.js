@@ -9,7 +9,10 @@
         // ------------------------------------------------------------------------
         // Private variables and functions
 
-        var _wrapper = _.extend({}, esriMap),
+        // Create wrapper object, with esriMap as its prototype
+        var mapMaker = function () {};
+        mapMaker.prototype = esriMap;
+        var _wrapper = new mapMaker(),
             _myLayers = [];
 
         function isMyLayer(layer) {

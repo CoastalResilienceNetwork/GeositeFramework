@@ -325,8 +325,8 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     top: 64px;
     bottom: 0;
-    right: 0;
-    width: 215px;
+    right: 85px;
+    width: 150px;
     padding: 6px;
     z-index: 1;
     overflow: scroll;
