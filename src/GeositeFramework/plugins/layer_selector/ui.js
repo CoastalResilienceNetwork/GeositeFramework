@@ -1,8 +1,8 @@
 ﻿// Module Ui.js
 
 require(["jquery.placeholder"]);
-define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
-    function ($, _, Ext, treeFilter) {
+define(["jquery", "use!underscore", "use!extjs", "./treeFilter", "use!TinyBox2"],
+    function ($, _, Ext, treeFilter, TINY) {
         //$('input, textarea').placeholder(); // initialize jquery.placeholder
 
         var Ui = function (container, map, templates) {
@@ -11,7 +11,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _$templates = $('<div>').append($(templates.trim())), // store templates in a utility div
                 _$filterInput = null,
                 _$treeContainer = null,
-                _tree = null;
+                _tree = null,
+                _justClickedItemIcon = false;
 
             // ------------------------------------------------------------------------
             // Public methods
@@ -20,6 +21,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 sortFolders([rootNode]);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
+                _tree.on("afteritemexpand", onItemExpanded, this);
+                _tree.on("itemclick", onItemClick, this);
                 removeSpinner();
                 renderUi();
                 this.display();
@@ -138,6 +141,57 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             function onCheckboxChanged(node, checked, eOpts) {
                 var layerData = node.raw;
                 layerData.showOrHideLayer(layerData, checked, _map);
+            }
+
+            function onItemExpanded(node, index, item, eOpts) {
+                // A tree item was just expanded; enable icon click handlers in child items
+                // (Using JQuery and a flag here because I can't see how to click-enable the icon via Ext)
+                $/*(item).find*/('.x-tree-icon').off('click').on('click', function () {
+                    // An icon was clicked; set flag for item click handler
+                    _justClickedItemIcon = true;
+                });
+            }
+
+            function onItemClick(extView, record, item, index, e, eOpts) {
+                if (_justClickedItemIcon) {
+                    if (record.raw.type === 'layer') {
+                        var layer = 0;
+                    } else if (record.raw.type === 'service') {
+                        showLayerDialog(record);
+                    }
+                }
+                _justClickedItemIcon = false;
+            }
+
+            function showLayerDialog(record) {
+                var $dialog = $('.pluginLayerSelector-info-box').remove(), // remove old dialog if present
+                    node = record.raw,
+                    template = _.template(_$templates.find('#template-layer-info-box').html()),
+                    html = template({ description: node.description }).trim(),
+                    $container = $(_container),
+                    position = $container.offset();
+                position.left += $container.outerWidth() + 20;
+                position.top -= parseInt($container.parent('.plugin-container').css('borderTopWidth')); // not sure why this is necessary
+
+                $dialog = $(html).offset(position).appendTo($('body'));
+                $dialog.find('.close').click(function () {
+                    $dialog.remove();
+                });
+
+                new Ext.Slider({
+                    width: "100%",
+                    minValue: 0,
+                    maxValue: 100,
+                    //fieldLabel: 'Opacity',
+                    value: node.opacity * 100,
+                    plugins: new Ext.slider.Tip(),
+                    listeners: {
+                        changecomplete: function (slider, value) {
+                            node.setOpacity(node, _map, value / 100);
+                        }
+                    },
+                    renderTo: $dialog.find('.slider')[0]
+                });
             }
 
             function onFilterBoxKeyup(event) {
