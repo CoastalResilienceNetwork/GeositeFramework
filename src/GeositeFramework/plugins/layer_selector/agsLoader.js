@@ -82,6 +82,9 @@ define(["jquery", "use!underscore"],
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
                             node.url = serviceUrl;
+                            node.description = serviceData.description;
+                            node.opacity = 0.7;
+                            node.setOpacity = setOpacity;
                             loadLayers(serviceData.layers, node);
                         },
                         error: _onLayerSourceLoadError
@@ -101,7 +104,8 @@ define(["jquery", "use!underscore"],
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
-                        _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
+                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, setOpacity, parentNode);
+                        node.description = layerSpec.description;
                     } else {
                         // This is a layer group; remember its node so its children can attach themselves
                         layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
@@ -114,26 +118,18 @@ define(["jquery", "use!underscore"],
 
             function showOrHideLayer(layerNode, shouldShow, map) {
                 var serviceNode = getServiceNode(layerNode),
-                    esriLayer = serviceNode.esriLayer,
-                    layerIds = serviceNode.layerIds;
-                if (esriLayer === undefined) {
-                    // This node's service has no layer object yet, so make one and cache it
-                    esriLayer = new esri.layers.ArcGISDynamicMapServiceLayer(serviceNode.url, { opacity: 0.7 });
-                    map.addLayer(esriLayer);
-                    serviceNode.esriLayer = esriLayer;
-                    layerIds = [];
-                }
+                    esriService = getServiceObject(serviceNode, map),
+                    layerIds = (!esriService || !esriService.layerIds || esriService.layerIds[0] === -1 ? [] : esriService.layerIds);
                 if (shouldShow) {
                     layerIds = _.union(layerIds, [layerNode.layerId]);
                 } else { // hide
                     layerIds = _.without(layerIds, layerNode.layerId);
                 }
                 if (layerIds.length === 0) {
-                    esriLayer.setVisibleLayers([-1]); // clear visible layers
+                    esriService.setVisibleLayers([-1]); // clear visible layers
                 } else {
-                    esriLayer.setVisibleLayers(layerIds);
+                    esriService.setVisibleLayers(layerIds);
                 }
-                serviceNode.layerIds = layerIds;
             }
 
             function getServiceNode(layerNode) {
@@ -144,6 +140,20 @@ define(["jquery", "use!underscore"],
                 }
             }
 
+            function getServiceObject(serviceNode, map) {
+                if (serviceNode.esriService === undefined) {
+                    // This node's service has no layer object yet, so make one and cache it
+                    serviceNode.esriService = new esri.layers.ArcGISDynamicMapServiceLayer(serviceNode.url, { opacity: serviceNode.opacity });
+                    map.addLayer(serviceNode.esriService);
+                }
+                return serviceNode.esriService;
+            }
+
+            function setOpacity(serviceNode, map, opacity) {
+                var esriService = getServiceObject(serviceNode, map);
+                esriService.setOpacity(opacity);
+                serviceNode.opacity = opacity;
+            }
         }
 
         return AgsLoader;
