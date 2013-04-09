@@ -42,9 +42,48 @@
 }
 
 /* 
- * Results of "Identify"
+ * Layer info box 
  */
 
-.pluginLayerSelector-result-of-identify {
-    padding-left: 20px;
+.pluginLayerSelector-info-box {
+    position: absolute; 
+    width: 300px;
+    max-height: 400px;
+    background: #fff;
+    border: 5px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.pluginLayerSelector-info-box .close {
+    position: absolute; 
+    top: -15px; 
+    right: -15px; 
+    width: 30px; 
+    height: 30px; 
+    cursor: pointer; 
+    background: url(images/close.png) no-repeat;
+}
+.pluginLayerSelector-info-box .close:hover {
+    background-position: 0 -30px
+}
+
+.pluginLayerSelector-info-box .description {
+    padding-bottom: 10px;
+}
+
+.pluginLayerSelector-info-box .info-label {
+    font-weight: bold;
+    padding-bottom: 3px;
+}
+
+/* Neutralize Foundation's zealous table styling so the slider won't look terrible */
+.pluginLayerSelector-info-box table {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+}
+
+.pluginLayerSelector-info-box td {
+    padding: 0;
 }
