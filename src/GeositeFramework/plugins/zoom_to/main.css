@@ -25,7 +25,8 @@
     height: 400px !important;
 }
 
-.pluginZoomTo:hover {
+.pluginZoomTo:hover,
+.pluginZoomTo:focus {
     width: 180px !important;
 }
 
@@ -35,7 +36,10 @@
 	-moz-transition: width 1s !important;
 	-webkit-transition: width 1s !important;
 	-o-transition: width 1s !important;
-}
+    }
+    .pluginZoomTo.active {
+        background-image: url(tools_search-active.png) !important;
+    }
 
 .pluginZoomTo-progressIndicator {
 	background-image: url(loading.gif) !important;

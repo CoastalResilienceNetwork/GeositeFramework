@@ -10,8 +10,11 @@
 }
 
 	.content .map .measure {		
-		background-image: url(icon.png);
-	}
+		  background-image: url(icon.png);
+	   }
+       .content .map .measure.active {
+            background-image: url(icon-active.png);
+       }
 
     .measure-tooltip > div
     {

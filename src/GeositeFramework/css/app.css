@@ -187,18 +187,47 @@ h1, h2, h3, h4, h5, h6 {
         border-radius: 5px;
         width: 300px;
         height: 400px;
-        overflow: auto;
+        overflow: visible;
         background: #FFFFFF;
+        z-index: 999;
+        box-shadow: 0 0 15px #333;
+		box-shadow: 0 0 15px rgba(0,0,0,.5);
+        }
+        .content .plugin-container:before {
+        	content: '';
+			position: absolute;
+			width: 0;
+			height: 0;
+			left: -15px;
+			top: 10px;
+			display: block;
+			border-right: 15px solid gray;
+			border-top: 15px solid transparent;
+			border-bottom: 15px solid transparent;
         }
         .content .plugin-container-header {
-            float: right;
+            height: 28px;
+            padding: 5px 8px;
+			background: gray;
+            }
+            .content .plugin-container-header h6 {
+            	float: left;
+            	margin: 0;
+            	color: white;
             }
             .content .plugin-container-header a {
-                padding: 5px;
-            }
+                float: right;
+                padding-left: 10px;
+                color: #CCC;
+            	}
+            	.content .plugin-container-header a:hover {
+            		color: #FFF;
+            	}
+
         .content .plugin-container-inner {
-            height: 100%; 
-            padding-top: 14px;
+            height: 325px; 
+            padding-top: 4px;
+            border-top: 1px solid #eee;
         }
 
 /* -----------------------------------------
@@ -219,12 +248,12 @@ h1, h2, h3, h4, h5, h6 {
 		}
 		.content .map .tools {
 			position: absolute;
-			top: 20px;
-			left: 65px;
+			top: 90px;
+			left: 20px;
             z-index: 1;
 			}
             .content .map .tools .topbar-plugin {
-                float: left;
+                margin-bottom: 8px;
             }
 			.content .map .tools .topbar-plugin div {
                 margin-right: 12px;
@@ -241,6 +270,11 @@ h1, h2, h3, h4, h5, h6 {
 				box-shadow: 0 0 12px rgba(0,0,0,.25);
                 border: 1px solid #999;
 				}
+				.content .map .tools .topbar-plugin div.active {
+					opacity: 1;
+					border: 1px solid #212323;
+					background-color: #333;
+				}
 				.content .map .tools .topbar-plugin div:hover {
 					opacity: 1;
 				}
@@ -252,47 +286,49 @@ h1, h2, h3, h4, h5, h6 {
             .esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
                 border-bottom: 1px solid #999;
             }
+            .esriSimpleSlider div {
+            	width: 32px;
+            }
 			
 		.content .map .basemap-selector {
 			position: absolute;
 			top: 16px;
 			right: 105px;
-			width: 110px;
-			height: 33px;
-			background: white;
-			padding: 5px;
 			cursor: pointer;
-			box-shadow: 0 0 12px rgba(0,0,0,.25);
             z-index: 1;
 			}
 			.content .map .basemap-selector .basemap-selector-title {
-				padding-top: 5px;
+				padding: 10px 15px;
 				font-weight: bold;
 				font-size: 12px;
+				display: block;
 				text-align: center;
-			}
+				position: relative;
+				width: auto;
+				background: white;
+				box-shadow: 0 0 12px rgba(0,0,0,.25);
+				}
 			.content .map .basemap-selector .basemap-selector-list {
 				display: none;
-				position: absolute;
-				right: 0;
-				padding-top: 15px;
-				width: 160px;
+				margin-top: 10px;
+				background: white;
+				padding: 5px 0;
+				box-shadow: 0 0 12px rgba(0,0,0,.25);
 				}
 				.content .map .basemap-selector .basemap-selector-list ul {
-					list-style: none inside;
+					list-style: none;
 					padding: 0;
 					margin: 0;
-					background: white;
-					box-shadow: 0 0 12px rgba(0,0,0,.25);
 					}
 					.content .map .basemap-selector .basemap-selector-list ul li {
 						font-size: 12px;
 						font-weight: bold;
-						padding: 4px 4px 4px 0;
-						margin-left: 26px;
+						padding: 5px 15px;
+						color: #999
 					}
 					.content .map .basemap-selector .basemap-selector-list ul li:hover {
-						list-style: disc outside;
+    					background: #EEE;
+    					color: #212323;
 					}
 				.content .map .basemap-selector:hover .basemap-selector-list {
 					display: block;
