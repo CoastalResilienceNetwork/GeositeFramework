@@ -1,7 +1,7 @@
 ﻿// Module Ui.js
 
 require(["jquery.placeholder"]);
-define(["jquery", "use!underscore", "use!extjs", "./treeFilter", "use!TinyBox2"],
+define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
     function ($, _, Ext, treeFilter, TINY) {
         //$('input, textarea').placeholder(); // initialize jquery.placeholder
 
