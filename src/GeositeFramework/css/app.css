@@ -65,13 +65,18 @@ h1, h2, h3, h4, h5, h6 {
 			text-transform: uppercase;
 			font-size: 16px !important;
 		}
-	.top-bar ul > li.name h2 {
+	.top-bar ul > li.name h2{
 		font-size: 16px;
 		float: left;
-		margin-left: 25px;
+		margin-left: 15px;
 		color: white;
 		text-transform: uppercase;
+	    
 	}
+    .top-bar ul > li.name h2 a {
+        font-size: inherit;
+        line-height: normal;
+    }
 		
 	.top-bar ul > li:not(.name):hover, 
 	.top-bar ul > li:not(.name).active, 
@@ -363,11 +368,6 @@ h1, h2, h3, h4, h5, h6 {
         display: block;
         width: 100%;
     }
-    .identify-info-window .spinner {
-        width: 100%;
-        height: 100%;
-        background: url(../img/spinner.gif) no-repeat center center;
-    }
 
 .identify-section
 {
@@ -377,6 +377,80 @@ h1, h2, h3, h4, h5, h6 {
 .identify-result
 {
 }
+
+.result-of-identify {
+    padding-left: 20px;
+}
+
+/*-----------------------------------------
+    Dialog-Popup styles
+------------------------------------------*/
+.tmask {
+    position: absolute;
+    display: none;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    z-index: 800;
+}
+.tbox {
+    position: absolute;
+    display: none;
+    padding: 14px 17px;
+    z-index: 900;
+}
+
+.tclose {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
+}
+/* -----------------------------------------
+   Legend
+----------------------------------------- */
+
+.content .legend {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    right: 85px;
+    width: 150px;
+    padding: 6px;
+    z-index: 1;
+    overflow: auto;
+    background: #eee;
+}
+
+.esriLegendService {
+    padding-bottom: 8px;
+}
+
+.esriLegendService table {
+    margin: 0;
+    border: none;
+}
+
+.esriLegendService table tbody tr {
+    background-color: #eee;
+}
+
+.esriLegendService td {
+    padding: 0;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.esriLegendService img {
+    height: 18px;
+}
+
+
 
 /* -----------------------------------------
    Media Queries

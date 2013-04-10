@@ -2,15 +2,27 @@
     Layout = null;
 }
 
+@using GeositeFramework.Models
 @model GeositeFramework.Models.Geosite
 
+@helper OptionalLinkText (Geosite.Link link) {
+    if (link.Url != null)
+    {
+        <a href="@link.Url">@link.Text</a>
+    }
+    else
+    {
+        @link.Text
+    }
+        
+}
 
 <!DOCTYPE html>
 <!--[if IE 8]>    		<html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-    <title>@Model.Title</title>
+    <title>@Model.Organization | @Model.TitleMain</title>
 
     <!-- Load CSS for plugins -->
     @foreach (var url in Model.PluginCssUrls) {
@@ -43,6 +55,9 @@
 					    </ul>
 				    </div>
 			    </div>
+                <div class="legend">
+                    <div id="legend-<%= paneNumber %>"></div>
+                </div>
             </div>
         </div>
     </script>
@@ -107,8 +122,24 @@
     </script>
 
     <script type="text/template" id="template-result-of-identify">
-        <div class="identify-section"><%- pluginTitle %></div>
-        <div class="identify-result"><%= result %></div>
+        <div>
+            <div class="identify-section"><%- pluginTitle %></div>
+            <div class="identify-result"></div>
+        </div>
+    </script>
+
+    <script type="text/template" id="plugin-result-of-identify">
+        <div class="result-of-identify"><%= layerName %>
+            <div class="result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
+                <div class="attributes" style="display: none;">
+                    <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
+                        <% if (attributeName !== displayFieldName) { %>
+                            <div class="result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
     </script>
 
 	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
@@ -116,8 +147,8 @@
 		<nav class="top-bar">
 			<ul>
 				<li class="name">
-					<h1><a href="javascript:;">@Model.Organization</a></h1>
-					<h2>@Model.Title</h2>
+					<h1>@OptionalLinkText(@Model.TitleMain)</h1>
+					<h2>@OptionalLinkText(@Model.TitleDetail)</h2>
 				</li>
 				<!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
 				<li class="toggle-topbar"><a href="javascript:;"></a></li>
@@ -130,7 +161,17 @@
                         { 
                             <li class="divider"></li>
                         }
-					    <li><a href="@link.Url">@link.Text</a></li>
+                        <li>
+                            @if (link.Popup)
+                            {
+                                <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
+                            }
+                            else
+                            {
+                                <a href="@link.Url">@link.Text</a>    
+                            }
+                            
+					    </li>
                     }
 				</ul>
 			</section>
@@ -154,6 +195,7 @@
     <script src="js/lib/backbone.picky.js"></script>
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
+    <script src="js/lib/TinyBox2.js"></script>
 
     <script src="js/azavea.util.js"></script>
     <script src="js/Geosite.js"></script>
@@ -178,10 +220,16 @@
 
         require({
             async: true,
-            packages: [{
-                name: "plugins",
-                location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
-            }],
+            packages: [
+                {
+                    name: "plugins",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
+                },
+                {
+                    name: "framework",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "js"
+                }
+            ],
             // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
             // like Underscore and Ext JS. (Reference syntax in plugins is e.g. "use!underscore".)
             paths: {
@@ -230,7 +278,6 @@
 
         require([@Html.Raw(Model.PluginModuleIdentifiers)], function(@Html.Raw(Model.PluginVariableNames)) {
             $(document).ready(function() {
-
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
                 Geosite.app.init('@Html.Raw(Model.GeositeFrameworkVersion)', regionData, plugins);

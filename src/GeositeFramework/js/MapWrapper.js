@@ -4,12 +4,15 @@
 // Wrap an esri.Map object, overriding methods so as to prevent plugins from doing things they shouldn't
 
 (function (N) {
-    N.createMapWrapper = function (esriMap) {
+    N.createMapWrapper = function (esriMap, mapModel, pluginObject) {
 
         // ------------------------------------------------------------------------
         // Private variables and functions
 
-        var _wrapper = _.extend({}, esriMap),
+        // Create wrapper object, with esriMap as its prototype
+        var mapMaker = function () {};
+        mapMaker.prototype = esriMap;
+        var _wrapper = new mapMaker(),
             _myLayers = [];
 
         function isMyLayer(layer) {
@@ -25,6 +28,9 @@
         function rememberLayer(layer) {
             if (!isMyLayer(layer)) {
                 _myLayers.push(layer);
+                if (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") {
+                    mapModel.addService(layer, pluginObject);
+                }
             }
         }
 
@@ -32,6 +38,9 @@
             _myLayers = _.reject(_myLayers, function (l) {
                 return l.id === layer.id;
             });
+            if (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") {
+                mapModel.removeService(layer);
+            }
         }
 
         // ------------------------------------------------------------------------

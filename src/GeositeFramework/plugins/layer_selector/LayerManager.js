@@ -1,4 +1,4 @@
-﻿// Module LayerLoader.js
+﻿// Module LayerManager.js
 
 define([
         "dojo/json",
@@ -9,7 +9,7 @@ define([
     ],
     function (JSON, tv4, _, AgsLoader, WmsLoader) {
 
-        var LayerLoader = function (app) {
+        var LayerManager = function (app) {
             var _app = app,
                 _urls = [],
                 _rootNode = null,
@@ -104,10 +104,11 @@ define([
             }
 
             function onLayerSourceLoadError(jqXHR, textStatus, errorThrown) {
-                _app.error("", "AJAX request to load layer source failed. Result text: '" + jqXHR.resultText
+                _app.error("", "AJAX request to load layer source failed: '" + (jqXHR.resultText || jqXHR)
                     + "' Status: '" + textStatus + "' Error: '" + errorThrown + "'");
             }
 
+            // ------------------------------------------------------------------------
             // Functions to build a node tree of map layers. The node schema targets Ext.data.TreeStore 
             // and Ext.tree.Panel, but should be generic enough for other UI frameworks.
 
@@ -146,9 +147,8 @@ define([
                 parentNode.children.push(node);
                 return node;
             }
-
         }
 
-        return LayerLoader;
+        return LayerManager;
     }
 );

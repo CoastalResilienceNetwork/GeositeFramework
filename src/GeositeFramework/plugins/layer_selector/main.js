@@ -39,25 +39,31 @@ require({
 
 define([
         "dojo/_base/declare",
-        "./LayerLoader",
+        "framework/PluginBase",
+        "./LayerManager",
         "./Ui",
-        "dojo/text!plugins/layer_selector/layers.json"
+        "dojo/text!plugins/layer_selector/layers.json",
+        "dojo/text!plugins/layer_selector/templates.html"
     ],
-    function (declare, LayerLoader, Ui, layerSourcesJson) {
+    function (declare, PluginBase, LayerManager, Ui, layerSourcesJson, templates) {
 
-        return declare(null, {
+        return declare(PluginBase, {
             toolbarName: "Map Layers",
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
+            allowIdentifyWhenActive: true,
 
+            _layerManager: null,
             _ui: null,
 
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
-                this._ui = new Ui(this.container, this.map);
+                this._layerManager = new LayerManager(this.app);
+                this._ui = new Ui(this.container, this.map, templates);
+
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                new LayerLoader(this.app).load(layerSourcesJson, function (tree) {
+                this._layerManager.load(layerSourcesJson, function (tree) {
                     self._ui.render(tree);
                 });
             },
@@ -68,11 +74,6 @@ define([
             
             hibernate: function () {
                 // TODO: hide displayed map layers
-            },
-
-            identify: function (point, processResults) {
-                var html = $('<div>').text('When the "Map Layers" plugin reports identify() information, it will go here.').html();
-                processResults(html, 400, 200);
             }
 
         });
