@@ -48,12 +48,16 @@
 
 .pluginLayerSelector-info-box {
     position: absolute; 
+}
+
+.pluginLayerSelector-info-box .body {
     width: 300px;
     max-height: 400px;
     background: #fff;
     border: 5px solid gray;
     border-radius: 5px;
     padding: 10px 10px 0 10px;
+    overflow: auto;
 }
 
 .pluginLayerSelector-info-box .close {
