@@ -127,12 +127,12 @@
     </script>
 
     <script type="text/template" id="plugin-result-of-identify">
-        <div class="pluginLayerSelector-result-of-identify"><%= layerName %>
-            <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
+        <div class="result-of-identify"><%= layerName %>
+            <div class="result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
                 <div class="attributes" style="display: none;">
                     <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
                         <% if (attributeName !== displayFieldName) { %>
-                            <div class="pluginLayerSelector-result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
+                            <div class="result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
                         <% } %>
                     <% }); %>
                 </div>
@@ -276,7 +276,6 @@
 
         require([@Html.Raw(Model.PluginModuleIdentifiers)], function(@Html.Raw(Model.PluginVariableNames)) {
             $(document).ready(function() {
-
                 var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
                     plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
                 Geosite.app.init('@Html.Raw(Model.GeositeFrameworkVersion)', regionData, plugins);

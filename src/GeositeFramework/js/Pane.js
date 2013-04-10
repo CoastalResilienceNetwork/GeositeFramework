@@ -129,14 +129,14 @@
     }
 
     function initBasemapSelector(view) {
-        new Geosite.views.BasemapSelector({
+        new N.views.BasemapSelector({
             model: view.model.get('mapModel'),
             el: view.$('.basemap-selector')
         });
     }
 
     function initMapView(view) {
-        view.mapView = new Geosite.views.Map({
+        view.mapView = new N.views.Map({
             model: view.model.get('mapModel'),
             el: view.$('.map'),
             paneNumber: view.model.get('paneNumber')

@@ -14,16 +14,21 @@ define(["use!underscore"],
                 // Create a WMSLayer object and wait for it to load.
                 // (Internally it's doing "GetCapabilities" on the WMS service.)
                 var wmsLayer = new esri.layers.WMSLayer(_url);
-                dojo.connect(wmsLayer, "onError", onLayerSourceLoadError);
                 dojo.connect(wmsLayer, "onLoad", function () {
                     var folderNode = makeContainerNode(_folderName, "folder", rootNode);
                     folderNode.wmsLayer = wmsLayer;
                     // Make a tree node for each layer exposed by the WMS service, filtered by the specified whitelist
                     _.each(wmsLayer.layerInfos, function (layerInfo, index) {
                         if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
-                            makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
+                            var node = makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
+                            node.description = layerInfo.description;
                         }
                     });
+                    onLayerSourceLoaded(_url);
+                });
+                dojo.connect(wmsLayer, "onError", function () {
+                    makeContainerNode(_folderName + " (Unavailable)", "folder", rootNode);
+                    onLayerSourceLoadError.apply(null, arguments);
                     onLayerSourceLoaded(_url);
                 });
             }
