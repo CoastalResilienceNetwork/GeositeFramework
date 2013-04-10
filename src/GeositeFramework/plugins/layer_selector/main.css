@@ -31,7 +31,7 @@
  */
 
 .pluginLayerSelector-service .x-tree-icon-parent {
-	background-image:url(images/gear.png) !important;
+	background-image:url(images/info.png) !important;
 }
 
 .pluginLayerSelector-layer-group .x-tree-icon-parent {
@@ -39,7 +39,7 @@
 }
 	
 .pluginLayerSelector-layer .x-tree-icon {
-	background-image:url(images/layer.png);
+	background-image:url(images/info.png);
 }
 
 /* 
