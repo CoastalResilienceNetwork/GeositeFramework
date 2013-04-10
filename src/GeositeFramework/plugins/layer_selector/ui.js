@@ -227,7 +227,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     hostname = sourceUrlAsLink.hostname,
                     port = sourceUrlAsLink.port || 80;
                 _.each($element.find('a'), function (link) {
-                    if (!link.hostname || link.href.indexOf(link.baseURI) === 0) {
+                    if (!link.hostname || link.href.indexOf(link.origin) === 0) {
                         link.hostname = hostname;
                         link.port = port;
                     }
