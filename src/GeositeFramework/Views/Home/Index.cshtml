@@ -55,6 +55,9 @@
 					    </ul>
 				    </div>
 			    </div>
+                <div class="legend">
+                    <div id="legend-<%= paneNumber %>"></div>
+                </div>
             </div>
         </div>
     </script>
@@ -120,6 +123,20 @@
         <div>
             <div class="identify-section"><%- pluginTitle %></div>
             <div class="identify-result"></div>
+        </div>
+    </script>
+
+    <script type="text/template" id="plugin-result-of-identify">
+        <div class="pluginLayerSelector-result-of-identify"><%= layerName %>
+            <div class="pluginLayerSelector-result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
+                <div class="attributes" style="display: none;">
+                    <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
+                        <% if (attributeName !== displayFieldName) { %>
+                            <div class="pluginLayerSelector-result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
         </div>
     </script>
 
@@ -201,10 +218,16 @@
 
         require({
             async: true,
-            packages: [{
-                name: "plugins",
-                location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
-            }],
+            packages: [
+                {
+                    name: "plugins",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
+                },
+                {
+                    name: "framework",
+                    location: location.pathname.replace(/\/[^/]+$/, "") + "js"
+                }
+            ],
             // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
             // like Underscore and Ext JS. (Reference syntax in plugins is e.g. "use!underscore".)
             paths: {

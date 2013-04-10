@@ -48,10 +48,25 @@
                 id: 'map' + this.get('mapNumber'),
                 attributes: ['extent', 'selectedBasemapIndex']
             });
+
+            // Keep track of ArcGISDynamicMapServiceLayers added to the map
+            this.serviceInfos = {};
         },
 
         getSelectedBasemapName: function () { return getSelectedBasemap(this).name; },
-        getSelectedBasemapLayer:  function (esriMap) { return getSelectedBasemapLayer(this, esriMap); }
+        getSelectedBasemapLayer: function (esriMap) { return getSelectedBasemapLayer(this, esriMap); },
+
+        addService: function (service, plugin) {
+            this.serviceInfos[service.id] = {
+                service: service,
+                pluginObject: plugin
+            };
+        },
+
+        removeService: function (service) {
+            delete this.serviceInfos[service.id];
+        }
+
     });
 }(Geosite));
 
@@ -70,9 +85,35 @@
     }
 
     function createMap(view) {
-        view.esriMap = new esri.Map(view.$el.attr('id'));
+        var esriMap = new esri.Map(view.$el.attr('id')),
+            resizeMap = function resizeMap() {
+            // When the element containing the map resizes, the 
+            // map needs to be notified.  Do a slight delay so that
+            // the browser has time to actually make the element visible.
+            _.delay(function () {
+                if (view.$el.is(':visible')) {
+                    var center = esriMap.extent.getCenter();
+                    esriMap.reposition();
+                    esriMap.resize(true);
+                    esriMap.centerAt(center);
+                }
+            }, 150);
+        }
+
+        view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+
+        // Wait for the map to load
+        dojo.connect(esriMap, "onLoad", function () {
+            resizeMap();
+            $(N).on('resize', resizeMap);
+
+            // Add this map to the list of maps to sync when in sync mode
+            N.app.syncedMapManager.addMapView(view);
+
+            initLegend(view, esriMap);
+        });
     }
 
     function loadExtent(view) {
@@ -99,32 +140,58 @@
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
     }
 
-    function doIdentify(view, pluginModels, event) {
-        // Only "Identify" if no plugin is selected (and therefore owns click events)
-        if (!pluginModels.selected || pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
-            var map = view.esriMap,
-                windowWidth = 300,
-                windowHeight = 600,
-                infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
-                $resultsContainer = $('<div>').addClass('identify-results'),
-                showIfLast = _.after(pluginModels.length, function () {
-                    showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
-                });
+    dojo.require('esri.dijit.Legend');
 
-            // Accumulate results (probably asynchronously), and show them when all are accumulated
-            pluginModels.each(function (pluginModel) {
-                pluginModel.identify(map, event.mapPoint, function (pluginTitle, result, width, height) {
-                    if (result) {
-                        var template = N.app.templates['template-result-of-identify'],
-                            $html = $(template({ pluginTitle: pluginTitle }).trim());
-                        $html.find('.identify-result').append(result);
-                        $resultsContainer.append($html);
-                        if (width)  { windowWidth  = Math.max(windowWidth,  width); }
-                        if (height) { windowHeight = Math.max(windowHeight, height); }
-                    }
-                    showIfLast();
-                });
+    function initLegend(view, esriMap) {
+        // Create default legend section
+        var id = 'legend-' + view.model.get('mapNumber'),
+            legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
+        legendDijit.startup();
+
+        // Update the legend whenever the map changes
+        dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
+
+        function updateLegend() {
+            var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
+                layerInfos = [];
+            _.each(services, function (service) {
+                var serviceInfo = view.model.serviceInfos[service.id];
+                if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
+                    // This service was added by a plugin, and the plugin wants it in the legend
+                    layerInfos.push({
+                        layer: serviceInfo.service
+                    });
+                }
             });
+            legendDijit.refresh(layerInfos);
+        }
+    }
+
+    function doIdentify(view, pluginModels, event) {
+        var map = view.esriMap,
+            windowWidth = 300,
+            windowHeight = 600,
+            infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
+            $resultsContainer = $('<div>').addClass('identify-results'),
+            showIfLast = _.after(pluginModels.length, function () {
+                showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
+            });
+
+        // Accumulate results (probably asynchronously), and show them when all are accumulated
+        pluginModels.each(function (pluginModel) {
+            pluginModel.identify(event.mapPoint, processResults);
+        });
+
+        function processResults(pluginTitle, result, width, height) {
+            if (result) {
+                var template = N.app.templates['template-result-of-identify'],
+                    $html = $(template({ pluginTitle: pluginTitle }).trim());
+                $html.find('.identify-result').append(result);
+                $resultsContainer.append($html);
+                if (width) { windowWidth = Math.max(windowWidth, width); }
+                if (height) { windowHeight = Math.max(windowHeight, height); }
+            }
+            showIfLast();
         }
     }
 

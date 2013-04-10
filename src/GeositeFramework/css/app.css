@@ -352,6 +352,47 @@ h1, h2, h3, h4, h5, h6 {
     background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
 }
 /* -----------------------------------------
+   Legend
+----------------------------------------- */
+
+.content .legend {
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    right: 85px;
+    width: 150px;
+    padding: 6px;
+    z-index: 1;
+    overflow: scroll;
+    background: #eee;
+}
+
+.esriLegendService {
+    padding-bottom: 8px;
+}
+
+.esriLegendService table {
+    margin: 0;
+    border: none;
+}
+
+.esriLegendService table tbody tr {
+    background-color: #eee;
+}
+
+.esriLegendService td {
+    padding: 0;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.esriLegendService img {
+    height: 18px;
+}
+
+
+
+/* -----------------------------------------
    Media Queries
 ----------------------------------------- */
 

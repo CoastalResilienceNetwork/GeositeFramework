@@ -12,21 +12,50 @@
             _.extend(model, selectable);
         }
 
+        function initPluginObject(model, mapModel, esriMap) {
+            var pluginObject = model.get('pluginObject'),
+                pluginName = model.get('pluginSrcFolder'),
+                $uiContainer = model.get('$uiContainer'),
+                $legendContainer = model.get('$legendContainer');
+            pluginObject.initialize({
+                app: {
+                    version: N.app.version,
+                    info: makeLogger(pluginName, "INFO"),
+                    warn: makeLogger(pluginName, "WARN"),
+                    error: makeLogger(pluginName, "ERROR"),
+                    _unsafeMap: esriMap
+                },
+                // TODO: fix wrapped map and pass it to plugin.
+                map: N.createMapWrapper(esriMap, mapModel, pluginObject),
+                //map: esriMap,
+                container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
+            });
+        }
+
+        function makeLogger(pluginName, level) {
+            return function (userMessage, developerMessage) {
+                if (developerMessage) {
+                    // Log to server-side plugin-specific log file
+                    Azavea.logMessage(developerMessage, pluginName, level);
+                    if (level === "ERROR") {
+                        // Errors also get logged to server-side main log file
+                        Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
+                    }
+                }
+                if (userMessage) {
+                    // TODO: create a panel
+                    alert(userMessage);
+                }
+            };
+        }
+
         /*
         Check that the plugin implements the minimal viable interface.
         Plugin code can just assume the plugin is valid if it has been loaded
         */
         function checkPluginCompliance(model) { 
-            var pluginObject = model.get('pluginObject'),
-                noOp = function noOp() { };
-
-            // Ensure that the framework will not fail if a plugin
-            // is missing an optional interface method.
-            // (Note: excluding 'identify' so we can check for it explicitly)
-            _.each(['activate', 'deactivate', 'getState', 'hibernate'], function (fn) {
-                pluginObject[fn] = pluginObject[fn] || noOp;
-            });
-            
+            var pluginObject = model.get('pluginObject');
             return (_.isFunction(pluginObject.initialize));
         }
 
@@ -50,6 +79,8 @@
 
             isCompliant: function () { return checkPluginCompliance(this); },
 
+            initPluginObject: function (mapModel, esriMap) { initPluginObject(this, mapModel, esriMap); },
+
             onSelectedChanged: function () {
                 if (this.selected) {
                     this.set('active', true);
@@ -65,13 +96,13 @@
                 this.get('pluginObject').hibernate();
             },
 
-            identify: function (map, point, processResults) {
+            identify: function (point, processResults) {
                 var active = this.get('active'),
                     pluginObject = this.get('pluginObject'),
                     pluginTitle = pluginObject.toolbarName;
-                if (active && _.isFunction(pluginObject.identify)) {
+                if (active) {
                     // This plugin might have some results, so give it a chance to identify()
-                    pluginObject.identify(map, point, function (results, width, height) {
+                    pluginObject.identify(point, function (results, width, height) {
                         processResults(pluginTitle, results, width, height);
                     });
                 } else {
@@ -142,6 +173,14 @@
 
     (function sidebarPlugin() {
 
+        function initialize(view, $parent) {
+            render(view);
+            view.$el.appendTo($parent);
+            createUiContainer(view);
+            createLegendContainer(view);
+            N.views.BasePlugin.prototype.initialize.call(view);
+        }
+
         function render(view) {
             var model = view.model,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
@@ -153,22 +192,34 @@
 
             view.$el.empty().append(html);
 
-            if (model.selected === true) {
+            if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
-                if (view.$displayContainer) { view.$displayContainer.show(); }
+                if (view.$uiContainer) {
+                    view.$uiContainer.show();
+                }
             } else {
                 view.$el.removeClass("selected-plugin");
-                if (view.$displayContainer) { view.$displayContainer.hide(); }
+                if (view.$uiContainer) {
+                    view.$uiContainer.hide();
+                }
+            }
+            if (view.$legendContainer) {
+                if (view.model.get('active')) {
+                    view.$legendContainer.show();
+                } else {
+                    view.$legendContainer.hide();
+                }
             }
             return view;
         }
 
-        function attachContainer() {
-            var view = this,
+        function createUiContainer(view) {
+            var $uiContainer = $(N.app.templates['template-plugin-container']().trim()),
+
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
-                        gutterWidth = 120,
-                        yCenter = pos.top + $el.height() / 2,
+                        gutterWidth = 20,
+                        yCenter = pos.top + 60/*avoid map controls*/ + $el.height() / 2,
                         xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
 
                     return {
@@ -177,16 +228,11 @@
                     }
                 };
 
-            // The sidebar plugin will attach the plugin display container
-            // to the pane, from which it's visibility can be toggled on 
-            // activation/deactivation
-            view.$displayContainer = this.model.get('$displayContainer');
-
-            view.$displayContainer
+            $uiContainer
                 // Position the dialog next to the sidebar button which shows it.
-                .css(calculatePosition(this.$el))
+                .css(calculatePosition(view.$el))
 
-                // Listen for events to turn the plug-in completely off
+                // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     view.model.turnOff();
                 }).end()
@@ -196,21 +242,32 @@
                     view.model.deselect();
                 });
 
-            view.$el.parents('.content').append(this.$displayContainer.hide());
+            // Attach to top pane element
+            view.$el.parents('.content').append($uiContainer.hide());
+
+            // Tell the model about $uiContainer so it can pass it to the plugin object
+            view.model.set('$uiContainer', $uiContainer);
+            view.$uiContainer = $uiContainer;
+        }
+
+        function createLegendContainer(view) {
+            // Create container for custom legend and attach to legend element
+            var $legendContainer = $('<div>').hide()
+                .appendTo(view.$el.parents('.content').find('.legend'));
+
+            // Tell the model about $legendContainer so it can pass it to the plugin object
+            view.model.set('$legendContainer', $legendContainer);
+            view.$legendContainer = $legendContainer;
         }
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
             tagName: 'li',
             className: 'sidebar-plugin',
-            $displayContainer: null,
+            $uiContainer: null,
+            $legendContainer: null,
 
-            initialize: function sidebarPluginInit() {
-                // Attach the plugin rendering container to the pane
-                this.model.on('change:$displayContainer', attachContainer, this);
-
-                N.views.BasePlugin.prototype.initialize.call(this);
-            },
+            initialize: function () { initialize(this, this.options.$parent); },
 
             render: function renderSidbarPlugin() { return render(this); }
         });
