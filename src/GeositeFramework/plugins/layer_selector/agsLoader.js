@@ -104,8 +104,8 @@ define(["jquery", "use!underscore"],
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
-                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, setOpacity, parentNode);
-                        node.description = layerSpec.description;
+                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
+                        node.fetchDescription = fetchDescription;
                     } else {
                         // This is a layer group; remember its node so its children can attach themselves
                         layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
@@ -154,6 +154,23 @@ define(["jquery", "use!underscore"],
                 esriService.setOpacity(opacity);
                 serviceNode.opacity = opacity;
             }
+
+            function fetchDescription(layerNode, callback) {
+                var serviceNode = getServiceNode(layerNode),
+                    url = serviceNode.url + "/" + layerNode.layerId;
+                $.ajax({
+                    dataType: 'jsonp',
+                    url: url + "?f=json",
+                    success: function (metadata) {
+                        layerNode.description = metadata.description;
+                        layerNode.url = url;
+                        layerNode.opacity = "setByService";
+                        callback();
+                    },
+                    error: _onLayerSourceLoadError
+                });
+            }
+
         }
 
         return AgsLoader;
