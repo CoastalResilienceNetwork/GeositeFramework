@@ -119,7 +119,7 @@ define(["jquery", "use!underscore"],
             function showOrHideLayer(layerNode, shouldShow, map) {
                 var serviceNode = getServiceNode(layerNode),
                     esriService = getServiceObject(serviceNode, map),
-                    layerIds = (!esriService || !esriService.layerIds || esriService.layerIds[0] === -1 ? [] : esriService.layerIds);
+                    layerIds = (!esriService || !esriService.visibleLayers || esriService.visibleLayers[0] === -1 ? [] : esriService.visibleLayers);
                 if (shouldShow) {
                     layerIds = _.union(layerIds, [layerNode.layerId]);
                 } else { // hide
