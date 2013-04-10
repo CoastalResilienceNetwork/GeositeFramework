@@ -141,56 +141,96 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             function onCheckboxChanged(node, checked, eOpts) {
                 var layerData = node.raw;
                 layerData.showOrHideLayer(layerData, checked, _map);
+                enableIconClick();
             }
 
             function onItemExpanded(node, index, item, eOpts) {
-                // A tree item was just expanded; enable icon click handlers in child items
+                enableIconClick();
+            }
+
+            function enableIconClick() {
+                // Enable icon click handlers
                 // (Using JQuery and a flag here because I can't see how to click-enable the icon via Ext)
-                $/*(item).find*/('.x-tree-icon').off('click').on('click', function () {
-                    // An icon was clicked; set flag for item click handler
+                $('.x-tree-icon').off('click').on('click', function () {
+                    // An icon was clicked -- set flag for item click handler
                     _justClickedItemIcon = true;
                 });
             }
 
             function onItemClick(extView, record, item, index, e, eOpts) {
+                // User has clicked somewhere on a tree item row. Only proceed if they clicked the item's icon.
                 if (_justClickedItemIcon) {
-                    if (record.raw.type === 'layer') {
-                        var layer = 0;
-                    } else if (record.raw.type === 'service') {
-                        showLayerDialog(record);
+                    var node = record.raw;
+                    if (node.description || node.fetchDescription) {
+                        var $dialog = showLayerDialog();
+                        if (node.fetchDescription) {
+                            node.fetchDescription(node, function () {
+                                fillLayerDialog($dialog, node);
+                            });
+                        } else {
+                            fillLayerDialog($dialog, node);
+                        }
                     }
+                    _justClickedItemIcon = false;
                 }
-                _justClickedItemIcon = false;
             }
 
-            function showLayerDialog(record) {
+            function showLayerDialog() {
                 var $dialog = $('.pluginLayerSelector-info-box').remove(), // remove old dialog if present
-                    node = record.raw,
                     template = _.template(_$templates.find('#template-layer-info-box').html()),
-                    html = template({ description: node.description }).trim(),
+                    html = template().trim(),
                     $container = $(_container),
                     position = $container.offset();
+                // Position dialog next to layer selector UI
                 position.left += $container.outerWidth() + 20;
                 position.top -= parseInt($container.parent('.plugin-container').css('borderTopWidth')); // not sure why this is necessary
-
                 $dialog = $(html).offset(position).appendTo($('body'));
                 $dialog.find('.close').click(function () {
                     $dialog.remove();
                 });
+                return $dialog;
+            }
 
-                new Ext.Slider({
-                    width: "100%",
-                    minValue: 0,
-                    maxValue: 100,
-                    //fieldLabel: 'Opacity',
-                    value: node.opacity * 100,
-                    plugins: new Ext.slider.Tip(),
-                    listeners: {
-                        changecomplete: function (slider, value) {
-                            node.setOpacity(node, _map, value / 100);
-                        }
-                    },
-                    renderTo: $dialog.find('.slider')[0]
+            function fillLayerDialog($dialog, node) {
+                if (node.description) {
+                    var $description = $dialog.find('.description').show().find('.info-value');
+                    $description.html(node.description);
+                    if (node.url) {
+                        fixRelativeLinks($description, node.url);
+                    }
+                }
+                if (node.setOpacity) {
+                    new Ext.Slider({
+                        width: "100%",
+                        minValue: 0,
+                        maxValue: 100,
+                        value: node.opacity * 100,
+                        plugins: new Ext.slider.Tip(),
+                        listeners: {
+                            changecomplete: function (slider, value) {
+                                node.setOpacity(node, _map, value / 100);
+                            }
+                        },
+                        renderTo: $dialog.find('.opacity').show().find('.info-value')[0]
+                    });
+                } else if (node.opacity === "setByService") {
+                    $dialog.find('.opacity').show().find('.info-value').text("Set opacity for all layers in this group by clicking on the group's info button.");
+                }
+                $dialog.find('.pluginLayerSelector-spinner').hide();
+            }
+
+            function fixRelativeLinks($element, sourceUrl) {
+                // ArcGIS Server "Description" html contains relative links, apparently assuming 
+                // the ArcGIS Server is the same machine as the Web server.
+                // That's not true for us, so for links whose hostname is empty we substitute the hostname from "sourceUrl".
+                var sourceUrlAsLink = $('<a>', { href: sourceUrl })[0],
+                    hostname = sourceUrlAsLink.hostname,
+                    port = sourceUrlAsLink.port || 80;
+                _.each($element.find('a'), function (link) {
+                    if (!link.hostname || link.hostname === 'localhost') {
+                        link.hostname = hostname;
+                        link.port = port;
+                    }
                 });
             }
 
