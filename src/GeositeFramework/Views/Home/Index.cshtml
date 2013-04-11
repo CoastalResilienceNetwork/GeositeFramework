@@ -64,6 +64,9 @@
 
     <script type="text/template" id="template-sidebar">
         <li><a href="javascript:;" class="home-button hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Map Home</a></li>
+        <% if (showExportButton) { %>
+		  <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+        <% } %>
         <li class="divider"></li>
         <% if (isMain) { %>
 			<% if (splitScreen) { %>
@@ -77,9 +80,6 @@
             <% } %>
             <li class="divider"></li>
 			<li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
-            <% if (showPrintButton) { %>
-			<li><a href="javascript:;" class="print-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Print Page</a></li>
-            <% } %>
 			<li><a href="javascript:;" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
         <% } else { %>
             <li>
@@ -166,7 +166,7 @@
         <label><input type="checkbox" name="export-include-legend"> Include Layer Legends</input></label>
       </div>
 
-      <div class="export-controls"><button id="export-button">Print</button></div>
+      <div class="export-controls"><button id="export-button">Export</button></div>
 
       <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
 
