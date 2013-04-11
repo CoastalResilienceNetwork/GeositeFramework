@@ -68,6 +68,10 @@
         "pluginOrder": {
             "type": "array",
             "items": {"type": "string"},
+        },
+        "printServerUrl": {
+            "type": "string",
+            "required": false
         }
     },
     "additionalProperties": false

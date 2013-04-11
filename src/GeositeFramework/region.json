@@ -22,5 +22,6 @@
             "url": "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer"
         }
     ],
-    "pluginOrder": [ "layer_selector", "zoom_to", "measure" ]
+    "pluginOrder": [ "layer_selector", "zoom_to", "measure" ],
+    "printServerUrl": "http://lr13.internal.azavea.com:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
 }
