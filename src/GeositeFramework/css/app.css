@@ -355,6 +355,13 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
 }
+.tinner {
+    padding: 15px;
+    border-radius: 5px;
+    background: #fff;
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
 /* -----------------------------------------
    Legend
 ----------------------------------------- */
@@ -394,8 +401,6 @@ h1, h2, h3, h4, h5, h6 {
     height: 18px;
 }
 
-
-
 /* -----------------------------------------
    Media Queries
 ----------------------------------------- */
@@ -419,4 +424,31 @@ h1, h2, h3, h4, h5, h6 {
 		.content .sidebar ul.side-nav.bottom > li a.hide-for-tablet .icon {
 			display: none;
 		}
+}
+
+/* -----------------------------------------
+   Export Window
+----------------------------------------- */
+
+.export-disabled-button {
+    color: gray;
+}
+.export-orientation-choices {
+    float: left;
+}
+.export-legend-choice {
+    float: left;
+    padding-left: 25px;
+}
+.export-controls {
+    float: right;
+}
+.export-indicator {
+    display: none;
+    float: right;
+    padding-right: 20px;
+}
+.export-output-area {
+    padding-top: 80px;
+    text-alignment: center;
 }
