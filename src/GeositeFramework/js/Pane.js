@@ -188,8 +188,24 @@
         events: {
             'click .home-button': function () {
                 this.mapView.esriMap.setExtent(this.model.getHomeExtent());
-            }
+            },
+            'click .export-button': 'exportMap'
+        },
+
+        exportMap: function exportMap(selectedPaneNumber) {
+            var model = new N.models.ExportTool({ esriMap: this.mapView.esriMap }),
+                view = new N.views.ExportTool({ model: model });
+
+            TINY.box.show({
+                html: view.render().el,
+                width: 450,
+                height: 275,
+                fixed: true,
+                maskopacity:50,
+                closejs: function () { view.remove(); }
+            });
         }
+
     });
 
 }(Geosite));
