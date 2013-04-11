@@ -33,7 +33,7 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.agsMeasure = new AgsMeasure({
-                    map: this.app._unsafeMap, //this.map,
+                    map: this.map,
                     tooltipTemplate: this.$templates.find('#template-measure-tooltip').html(),
                     infoBubbleTemplate: this.$templates.find('#template-measure-infobubble').html()
                 });

@@ -77,7 +77,9 @@
             <% } %>
             <li class="divider"></li>
 			<li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
+            <% if (showPrintButton) { %>
 			<li><a href="javascript:;" class="print-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Print Page</a></li>
+            <% } %>
 			<li><a href="javascript:;" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
         <% } else { %>
             <li>
@@ -128,6 +130,7 @@
         </div>
     </script>
 
+
     <script type="text/template" id="plugin-result-of-identify">
         <div class="result-of-identify"><%= layerName %>
             <div class="result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
@@ -140,6 +143,34 @@
                 </div>
             </div>
         </div>
+    </script>
+
+    <script type="text/template" id="template-export-window">
+      <h3>Export</h3>
+      <label>Title (Optional):<input type="text" id="export-title"></input></label>
+      <div class="export-orientation-choices">
+        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"> Landscape</input></label>
+        <label><input type="radio" name="export-orientation" value="Portrait"> Portrait</input></label>
+      </div>
+
+      <div class="export-legend-choice">
+        <label>
+          Paper Size:
+          <select id="export-paper-size">
+            <option value="Letter ANSI A">Letter</option>
+            <option value="Tabloid ANSI B">Tabloid</option>
+            <option value="A3">A3</option>
+            <option value="A4">A4</option>
+          </select>
+        </label>
+        <label><input type="checkbox" name="export-include-legend"> Include Layer Legends</input></label>
+      </div>
+
+      <div class="export-controls"><button id="export-button">Print</button></div>
+
+      <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
+
+      <div class="export-output-area"></div>
     </script>
 
 	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
@@ -204,6 +235,7 @@
     <script src="js/MapWrapper.js"></script>
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>
+    <script src="js/Export.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/Screen.js"></script>
     <script src="js/SyncedMapManager.js"></script>
