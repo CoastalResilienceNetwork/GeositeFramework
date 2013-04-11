@@ -50,24 +50,17 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function renderUi() {
-                _$filterInput = $('<input>', {
-                    type: 'text',
-                    keyup: onFilterBoxKeyup
-                })
-                    .attr('placeholder', 'Filter Map Layers');
+                var template = getTemplate('template-layer-selector'),
+                    $template = $(template());
+                $template.find('input').keyup(onFilterBoxKeyup);
+                $(_container).append($template);
+                _$filterInput = $template.find('input');
+                _$treeContainer = $template.find('.pluginLayerSelector-tree-container');
+            }
 
-                _$treeContainer = $('<div>', {
-                    'class': 'pluginLayerSelector-tree-container'
-                });
-                $(_container).append(
-                    $('<div>', { 'class': 'pluginLayerSelector-search' }).append(
-                        _$filterInput,
-                        $('<button>').hide()
-                    ),
-                    $('<div>', { 'class': 'pluginLayerSelector-rest' }).append(
-                        _$treeContainer
-                    )
-                );
+            function getTemplate(name) {
+                var template = _.template(_$templates.find('#' + name).html().trim());
+                return template;
             }
 
             function sortFolders(nodes) {
@@ -177,14 +170,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             function showLayerDialog() {
                 var $dialog = $('.pluginLayerSelector-info-box').remove(), // remove old dialog if present
-                    template = _.template(_$templates.find('#template-layer-info-box').html()),
-                    html = template().trim(),
+                    template = getTemplate('template-layer-selector'),
                     $container = $(_container),
                     position = $container.offset();
                 // Position dialog next to layer selector UI
                 position.left += $container.outerWidth() + 20;
                 position.top -= parseInt($container.parent('.plugin-container').css('borderTopWidth')); // not sure why this is necessary
-                $dialog = $(html).offset(position).appendTo($('body'));
+                $dialog = $(template()).offset(position).appendTo($('body'));
                 $dialog.find('.close').click(function () {
                     $dialog.remove();
                 });
