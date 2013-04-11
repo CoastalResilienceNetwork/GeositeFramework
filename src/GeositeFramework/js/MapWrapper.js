@@ -91,7 +91,7 @@
         // ------------------------------------------------------------------------
         // Event overrides
 
-        var _handlers = {
+        var _layerHandlers = {
 
             // Re-raise event if it involves my layers
 
@@ -142,16 +142,59 @@
                     _wrapper.onLayersReordered(layerIds);
                 }
             }
-
         };
 
-        _.each(_handlers, function (handler, eventName) {
+        _.each(_layerHandlers, function (handler, eventName) {
             // Create an empty function for this event, so plugins have something to bind to
             // when they call e.g. dojo.connect(mapWrapper, 'onLayerAdd', ...)
             _wrapper[eventName] = function () { };
 
             // When this event is raised on the ESRI map object, call our handler
             dojo.connect(esriMap, eventName, handler);
+        });
+
+        // For non-layer events just re-raise
+
+        var _nonLayerEventNames = [
+            'onBasemapChange',
+            'onClick',
+            'onDblClick',
+            'onExtentChange',
+            'onKeyDown',
+            'onKeyUp',
+            'onLoad',
+            'onMouseDown',
+            'onMouseDrag',
+            'onMouseDragEnd',
+            'onMouseDragStart',
+            'onMouseMove',
+            'onMouseOut',
+            'onMouseOver',
+            'onMouseUp',
+            'onMouseWheel',
+            'onPan',
+            'onPanEnd',
+            'onPanStart',
+            'onReposition',
+            'onResize',
+            'onTimeExtentChange',
+            'onUnload',
+            'onUpdateEnd',
+            'onUpdateStart',
+            'onZoom',
+            'onZoomEnd',
+            'onZoomStart'
+        ];
+
+        _.each(_nonLayerEventNames, function (eventName) {
+            // Create an empty function for this event, so plugins have something to bind to
+            // when they call e.g. dojo.connect(mapWrapper, 'onClick', ...)
+            _wrapper[eventName] = function () { };
+
+            // When this event is raised on the ESRI map object, re-raise
+            dojo.connect(esriMap, eventName, function () {
+                _wrapper[eventName].apply(null, arguments);
+            });
         });
 
         return _wrapper;
