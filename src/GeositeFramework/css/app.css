@@ -362,19 +362,31 @@ h1, h2, h3, h4, h5, h6 {
    "Identify" result window
 ----------------------------------------- */
 
-    /* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
-    .identify-info-window .content {
-        display: block;
-        width: 100%;
-    }
+/* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
+.esriPopup .esriPopupWrapper {
+	box-shadow: 0 0 14px #666;
+	box-shadow: 0 0 14px rgba(0,0,0,.5);
+	border-radius: 4px;
+}
+.esriPopup .contentPane {
+	border-bottom: 1px solid #999999;
+	border-radius: 0 0 4px 4px;
+}
 
-.identify-section
-{
+.identify-info-window .content {
+    display: block;
+    width: 100%;
+}
+
+.identify-section {
     font-weight: bold;
 }
 
-.identify-result
-{
+.identify-results {
+	font-weight: 300;
+	font-size: 13px;
+	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+	padding-bottom: 6px;
 }
 
 .result-of-identify {
