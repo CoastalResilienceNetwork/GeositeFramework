@@ -98,3 +98,9 @@
 .pluginLayerSelector-info-box td {
     padding: 0;
 }
+
+.pluginLayerSelector-rest .x-grid-row .x-grid-cell,
+.pluginLayerSelector-rest .x-grid-row .x-grid-cell-inner {
+    font-size: 13px;
+    font-family: 'Archivo Narrow', 'Arial Narrow', Helvetica, sans-serif;
+}

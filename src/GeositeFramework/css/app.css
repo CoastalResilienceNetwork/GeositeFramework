@@ -172,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
 		
 		.content .sidebar ul.side-nav.bottom {
 			position: absolute;
-			bottom: 20px;
+			bottom: 0;
 			}
 			.content .sidebar ul.side-nav.bottom > li.divider {
 				border-top: #808285 solid 1px;
@@ -262,7 +262,6 @@ h1, h2, h3, h4, h5, h6 {
                 margin-bottom: 8px;
             }
 			.content .map .tools .topbar-plugin div {
-                margin-right: 12px;
 				width: 34px;
 				height: 34px;
 				background-color: white;
@@ -416,38 +415,52 @@ h1, h2, h3, h4, h5, h6 {
 ----------------------------------------- */
 
 .content .legend {
-    position: absolute;
-    top: 64px;
-    bottom: 0;
-    right: 85px;
-    width: 150px;
-    padding: 6px;
-    z-index: 1;
-    overflow: auto;
-    background: #eee;
-}
+	position: absolute;
+	bottom: 50px;
+	right: 105px;
+	width: 160px;
+	padding: 10px 15px;
+	z-index: 1;
+	overflow: auto;
+	font-weight: bold;
+	background: #FFF;
+	font-size: 12px;
+	border-radius: 4px;
+	max-height: 440px;
+	box-shadow: 0 0 12px #666;
+	box-shadow: 0 0 12px rgba(0,0,0,.25);
+	}
+	.content .legend #legend-0_msg {
+		color: #AAA;
+		font-weight: bold;
+	}
 
 .esriLegendService {
     padding-bottom: 8px;
-}
+	}
+	.esriLegendService table {
+	    margin: 0;
+	    border: none;
+		}
+		.esriLegendService table tbody tr {
+		    background-color: #FFF;
+			}
+			.esriLegendService td {
+			    padding: 0;
+			    vertical-align: middle;
+			    line-height: normal;
+			    font-weight: 300;
+			}
+			.esriLegendService img {
+			    height: 18px;
+			    border: 1px solid #DDD;
+			}
 
-.esriLegendService table {
-    margin: 0;
-    border: none;
-}
-
-.esriLegendService table tbody tr {
-    background-color: #eee;
-}
-
-.esriLegendService td {
-    padding: 0;
-    vertical-align: middle;
-    line-height: normal;
-}
-
-.esriLegendService img {
-    height: 18px;
+.esriLegendLayerLabel {
+	position: relative;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	height: 25px;
 }
 
 
