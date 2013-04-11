@@ -2,46 +2,50 @@
     background-color: white;
     border: 1px solid #7EABCD;
     border-radius: 4px;
-    font-size: 9pt;
     padding: 5px;
     position: absolute;
     width: 200px;
     z-index: 9999;
+    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+    }
+    .measure-tooltip > div {
+        padding: 5px;
+        }
+        .measure-tooltip .measure-label, .measure-bubble .measure-label {
+            display: inline-block;
+            font-weight: bold;
+            width: 100px;
+        }
+
+
+.content .map .measure {		
+	  background-image: url(icon.png);
+   }
+   .content .map .measure.active {
+        background-image: url(icon-active.png);
+   }
+
+
+/* Fix conflict between our "content" class and esri InfoWindow's "content" class */
+.simpleInfoWindow.measure-info-window .content {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+.simpleInfoWindow.measure-info-window .close {
+    display: none;
 }
 
-	.content .map .measure {		
-		background-image: url(icon.png);
-	}
-
-    .measure-tooltip > div
-    {
-        padding: 5px;
-    }
-
-    .measure-tooltip .measure-label, .measure-bubble .measure-label
-    {
-        display: inline-block;
-        font-weight: bold;
-        width: 100px;
-    }
-
-    /* Fix conflict between our "content" class and esri InfoWindow's "content" class */
-    .measure-info-window .content
-    {
-        display: block;
-        width: 100%;
-    }
-
-    .measure-info-window .close
-    {
-        display: none;
-    }
-
-    .simpleInfoWindow.measure-info-window
-    {
-        background-color: #808080;
-        color: #fff;
-        width: 250px;
-        height: 55px;
-        box-shadow: 4px 3px 10px #000000;
-    }
+.simpleInfoWindow.measure-info-window {
+    background-color: #fff;
+    color: #212323;
+    width: 250px;
+    height: 60px;
+    border: 1px solid #7EABCD;
+    box-shadow: 0 0 15px #666;
+    box-shadow: 0 0 15px rgba(0,0,0,.5);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+    line-height: 18px;
+}

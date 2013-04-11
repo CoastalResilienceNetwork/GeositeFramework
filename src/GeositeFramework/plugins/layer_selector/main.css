@@ -7,16 +7,18 @@
 
 .pluginLayerSelector-search {
     height: 32px;
-    position: absolute;
+    position: relative;
     width: 100%;
     }
     .pluginLayerSelector-search input[type="text"] {
-        margin: 0;
+        margin: 0 auto;
+        width: 95%;
     }
 
 .pluginLayerSelector-rest {
     height: 100%;
-    padding-top: 32px;
+    margin-top: 5px;
+    border-top: 1px solid #EEE;
     }
     .pluginLayerSelector-tree-container {
         height: 100%;
@@ -24,6 +26,9 @@
         }
         .pluginLayerSelector-tree-container table {
             border-width: 0; /* Otherwise there's a light gray border from Foundation*/
+        }
+        .pluginLayerSelector-rest .x-grid-header-hidden .x-grid-body {
+            border: none;
         }
 
 /* 
@@ -33,6 +38,7 @@
 .pluginLayerSelector-service .x-tree-icon-parent {
 	background-image:url(images/gear.png) !important;
 }
+
 
 .pluginLayerSelector-layer-group .x-tree-icon-parent {
 	background-image:url(images/layers.png) !important;
@@ -91,4 +97,10 @@
 
 .pluginLayerSelector-info-box td {
     padding: 0;
+}
+
+.pluginLayerSelector-rest .x-grid-row .x-grid-cell,
+.pluginLayerSelector-rest .x-grid-row .x-grid-cell-inner {
+    font-size: 13px;
+    font-family: 'Archivo Narrow', 'Arial Narrow', Helvetica, sans-serif;
 }
