@@ -12,6 +12,7 @@
             id: 'screen', // for saving state with backbone.hashmodels
             mainPaneNumber: 0,
             splitScreen: false,
+            showPrintButton: false,
             syncMaps: false
         },
 
@@ -38,6 +39,12 @@
             // to the value provided
             var sync = (forceSyncTo === undefined ? !this.get('syncMaps') : forceSyncTo)
             this.set('syncMaps', sync);
+        },
+
+        initialize: function () {
+            if (N.app.data.region.printServerUrl) {
+                this.set('showPrintButton', true);
+            }
         }
     });
 
@@ -111,7 +118,8 @@
             'click .switch-screen': 'switchScreen',
             'click .split-screen': function () { this.model.split(); },
             'click .map-sync': function () { this.model.toggleMapSync(); },
-            'click .permalink-button': 'makePermalink'
+            'click .permalink-button': 'makePermalink',
+            'click .print-button': 'printMap'
         },
 
         switchScreen: function switchScreen(event) {
@@ -126,8 +134,24 @@
                 }
             });
             Backbone.HashModels.update();
-        }
+        },
 
+        printMap: function printMap() {
+            var mainPaneNumber = this.model.get('mainPaneNumber'),
+                mainPaneView = paneViews[mainPaneNumber],
+                esriMap = mainPaneView.mapView.esriMap,
+                model = new N.models.ExportTool({ esriMap: esriMap }),
+                view = new N.views.ExportTool({ model: model });
+
+            TINY.box.show({
+                html: view.render().el,
+                width: 450,
+                height: 275,
+                fixed: true,
+                maskopacity:50,
+                closejs: function () { view.remove(); }
+            });
+        }
     });
 
 }(Geosite));
