@@ -110,8 +110,8 @@ namespace GeositeFramework.Tests
             var regionJson = @"
                 {
                     'organization': '',
-                    'titleMain': {'text':'', 'url':''},
-                    'titleDetail': {'text':'', 'url':''},
+                    'titleMain': {'text':''},
+                    'titleDetail': {'text':''},
                     'initialExtent': [0,0,0],
                     'basemaps': [{'name':'', 'url':''}],
                 }";
@@ -122,34 +122,34 @@ namespace GeositeFramework.Tests
             Expect((ex as JsonValidationException).ParseMessages[0], Contains("3 is less than minimum count of 4"));
         }
 
-//        /// <exclude/>
-//        [Test]
-//        [ExpectedException(typeof(JsonValidationException), ExpectedMessage = "XYZ", MatchType = MessageMatch.Contains)]
-//        public void TestMissingPlugin()
-//        {
-//            var regionJson = @"
-//                {
-//                    'organization': '',
-//                    'titleMain': '',
-//                    'titleDetail': {'text':'', 'url':''},
-//                    'initialExtent': [0,0,0,0],
-//                    'basemaps': [{'name':'', 'url':''}],
-//                    'pluginOrder': [ 'layer_selector', 'XYZ' ]
-//                }";
-//            var pluginFolderNames = new List<string> { "nearshore_waves", "measure", "layer_selector", "explode" };
-//            CreateGeosite(regionJson, pluginFolderNames);
-//        }
+        /// <exclude/>
+        [Test]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "XYZ", MatchType = MessageMatch.Contains)]
+        public void TestMissingPlugin()
+        {
+            var regionJson = @"
+                {
+                    'organization': '',
+                    'titleMain': {'text':''},
+                    'titleDetail': {'text':''},
+                    'initialExtent': [0,0,0,0],
+                    'basemaps': [{'name':'', 'url':''}],
+                    'pluginOrder': [ 'layer_selector', 'XYZ' ]
+                }";
+            var pluginFolderNames = new List<string> { "nearshore_waves", "measure", "layer_selector", "explode" };
+            CreateGeosite(regionJson, pluginFolderNames);
+        }
 
         // ------------------------------------------------------------------------
         // Tests for plugin.json configuration
 
         private Geosite CreateGeosite(List<JsonData> pluginConfigJsonData)
         {
-            string regionJson = @"
+            var regionJson = @"
                 {
                     'organization': '',
-                    'titleMain': '',
-                    'titleDetail': {'text':'', 'url':''},
+                    'titleMain': {'text':''},
+                    'titleDetail': {'text':''},
                     'initialExtent': [0,0,0,0],
                     'basemaps': [{'name':'', 'url':''}]
                 }";
@@ -234,17 +234,17 @@ namespace GeositeFramework.Tests
             Expect((ex as JsonValidationException).ParseMessages[0], Contains("Expected Object but got String"));
         }
 
-        //[Test]
-        //[ExpectedException(typeof(JsonValidationException), ExpectedMessage = "clause 'underscore' differently", MatchType = MessageMatch.Contains)]
-        //public void TestPluginUseConflict()
-        //{
-        //    var jsonData = new List<JsonData> 
-        //    {
-        //        LoadPluginData(@"{ use: { underscore: { attach: '_' } } }"),
-        //        LoadPluginData(@"{ use: { underscore: { attach: '_2' } } }")
-        //    };
-        //    CreateGeosite(jsonData);
-        //}
+        [Test]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "clause 'underscore' differently", MatchType = MessageMatch.Contains)]
+        public void TestPluginUseConflict()
+        {
+            var jsonData = new List<JsonData> 
+            {
+                LoadPluginData(@"{ use: { underscore: { attach: '_' } } }"),
+                LoadPluginData(@"{ use: { underscore: { attach: '_2' } } }")
+            };
+            CreateGeosite(jsonData);
+        }
 
     }
 }
