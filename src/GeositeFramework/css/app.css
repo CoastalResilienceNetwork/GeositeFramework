@@ -133,6 +133,7 @@ h1, h2, h3, h4, h5, h6 {
 		background: #333;
 		position: relative;
 		float: left;
+		box-shadow: 0 0 20px #666;
 		box-shadow: 0 0 20px rgba(0,0,0,.5);
 		z-index: 9;
 		}
@@ -171,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
 		
 		.content .sidebar ul.side-nav.bottom {
 			position: absolute;
-			bottom: 20px;
+			bottom: 0;
 			}
 			.content .sidebar ul.side-nav.bottom > li.divider {
 				border-top: #808285 solid 1px;
@@ -188,22 +189,51 @@ h1, h2, h3, h4, h5, h6 {
 
     .content .plugin-container {
         position: absolute;
-        border: 5px gray solid;
+        border: 5px #444 solid;
         border-radius: 5px;
         width: 300px;
         height: 400px;
-        overflow: auto;
+        overflow: visible;
         background: #FFFFFF;
+        z-index: 999;
+        box-shadow: 0 0 15px #333;
+		box-shadow: 0 0 15px rgba(0,0,0,.5);
+        }
+        .content .plugin-container:before {
+        	content: '';
+			position: absolute;
+			width: 0;
+			height: 0;
+			left: -15px;
+			top: 10px;
+			display: block;
+			border-right: 15px solid #444;
+			border-top: 15px solid transparent;
+			border-bottom: 15px solid transparent;
         }
         .content .plugin-container-header {
-            float: right;
+            height: 28px;
+            padding: 5px 8px;
+			background: #444;
+            }
+            .content .plugin-container-header h6 {
+            	float: left;
+            	margin: 0;
+            	color: white;
             }
             .content .plugin-container-header a {
-                padding: 5px;
-            }
+                float: right;
+                padding-left: 10px;
+                color: #CCC;
+            	}
+            	.content .plugin-container-header a:hover {
+            		color: #FFF;
+            	}
+
         .content .plugin-container-inner {
-            height: 100%; 
-            padding-top: 14px;
+            height: 325px; 
+            padding-top: 4px;
+            border-top: 1px solid #eee;
         }
 
 /* -----------------------------------------
@@ -224,15 +254,14 @@ h1, h2, h3, h4, h5, h6 {
 		}
 		.content .map .tools {
 			position: absolute;
-			top: 20px;
-			left: 65px;
+			top: 90px;
+			left: 20px;
             z-index: 1;
 			}
             .content .map .tools .topbar-plugin {
-                float: left;
+                margin-bottom: 8px;
             }
 			.content .map .tools .topbar-plugin div {
-                margin-right: 12px;
 				width: 34px;
 				height: 34px;
 				background-color: white;
@@ -246,6 +275,13 @@ h1, h2, h3, h4, h5, h6 {
 				box-shadow: 0 0 12px rgba(0,0,0,.25);
                 border: 1px solid #999;
 				}
+				.content .map .tools .topbar-plugin div.active {
+					opacity: 1;
+					border: 1px solid #212323;
+					box-shadow: 0 0 15px black inset;
+					background-color: #999;
+					box-shadow: 0 0 15px rgba(0,0,0,.5) inset;
+				}
 				.content .map .tools .topbar-plugin div:hover {
 					opacity: 1;
 				}
@@ -257,47 +293,66 @@ h1, h2, h3, h4, h5, h6 {
             .esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
                 border-bottom: 1px solid #999;
             }
+            .esriSimpleSlider div {
+            	width: 32px;
+            }
 			
 		.content .map .basemap-selector {
 			position: absolute;
 			top: 16px;
 			right: 105px;
-			width: 110px;
-			height: 33px;
-			background: white;
-			padding: 5px;
 			cursor: pointer;
-			box-shadow: 0 0 12px rgba(0,0,0,.25);
             z-index: 1;
 			}
 			.content .map .basemap-selector .basemap-selector-title {
-				padding-top: 5px;
+				padding: 10px 15px;
 				font-weight: bold;
 				font-size: 12px;
+				display: block;
 				text-align: center;
-			}
+				position: relative;
+				width: auto;
+				background: white;
+				box-shadow: 0 0 12px #666;
+				box-shadow: 0 0 12px rgba(0,0,0,.25);
+				border-radius: 4px;
+				}
 			.content .map .basemap-selector .basemap-selector-list {
 				display: none;
-				position: absolute;
-				right: 0;
-				padding-top: 15px;
-				width: 160px;
+				margin-top: 12px;
+				background: white;
+				padding: 5px 0;
+				box-shadow: 0 0 12px #666;
+				box-shadow: 0 0 12px rgba(0,0,0,.25);
+				position: relative;
+				border-radius: 4px;
+				}
+				.content .map .basemap-selector .basemap-selector-list:before {
+					content: '';
+					position: absolute;
+					width: 0;
+					height: 0;
+					right: 15px;
+					top: -6px;
+					display: block;
+					border-bottom: 6px solid white;
+					border-left: 6px solid transparent;
+					border-right: 6px solid transparent;
 				}
 				.content .map .basemap-selector .basemap-selector-list ul {
-					list-style: none inside;
+					list-style: none;
 					padding: 0;
 					margin: 0;
-					background: white;
-					box-shadow: 0 0 12px rgba(0,0,0,.25);
 					}
 					.content .map .basemap-selector .basemap-selector-list ul li {
 						font-size: 12px;
 						font-weight: bold;
-						padding: 4px 4px 4px 0;
-						margin-left: 26px;
+						padding: 5px 15px;
+						color: #999
 					}
 					.content .map .basemap-selector .basemap-selector-list ul li:hover {
-						list-style: disc outside;
+    					background: #EEE;
+    					color: #212323;
 					}
 				.content .map .basemap-selector:hover .basemap-selector-list {
 					display: block;
@@ -307,19 +362,31 @@ h1, h2, h3, h4, h5, h6 {
    "Identify" result window
 ----------------------------------------- */
 
-    /* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
-    .identify-info-window .content {
-        display: block;
-        width: 100%;
-    }
+/* Fix conflict between esri InfoWindow's "content" class and our "content" class*/
+.esriPopup .esriPopupWrapper {
+	box-shadow: 0 0 14px #666;
+	box-shadow: 0 0 14px rgba(0,0,0,.5);
+	border-radius: 4px;
+}
+.esriPopup .contentPane {
+	border-bottom: 1px solid #999999;
+	border-radius: 0 0 4px 4px;
+}
 
-.identify-section
-{
+.identify-info-window .content {
+    display: block;
+    width: 100%;
+}
+
+.identify-section {
     font-weight: bold;
 }
 
-.identify-result
-{
+.identify-results {
+	font-weight: 300;
+	font-size: 13px;
+	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+	padding-bottom: 6px;
 }
 
 .result-of-identify {
@@ -367,38 +434,52 @@ h1, h2, h3, h4, h5, h6 {
 ----------------------------------------- */
 
 .content .legend {
-    position: absolute;
-    top: 64px;
-    bottom: 0;
-    right: 85px;
-    width: 150px;
-    padding: 6px;
-    z-index: 1;
-    overflow: auto;
-    background: #eee;
-}
+	position: absolute;
+	bottom: 50px;
+	right: 105px;
+	width: 160px;
+	padding: 10px 15px;
+	z-index: 1;
+	overflow: auto;
+	font-weight: bold;
+	background: #FFF;
+	font-size: 12px;
+	border-radius: 4px;
+	max-height: 440px;
+	box-shadow: 0 0 12px #666;
+	box-shadow: 0 0 12px rgba(0,0,0,.25);
+	}
+	.content .legend #legend-0_msg {
+		color: #AAA;
+		font-weight: bold;
+	}
 
 .esriLegendService {
     padding-bottom: 8px;
-}
+	}
+	.esriLegendService table {
+	    margin: 0;
+	    border: none;
+		}
+		.esriLegendService table tbody tr {
+		    background-color: #FFF;
+			}
+			.esriLegendService td {
+			    padding: 0;
+			    vertical-align: middle;
+			    line-height: normal;
+			    font-weight: 300;
+			}
+			.esriLegendService img {
+			    height: 18px;
+			    border: 1px solid #DDD;
+			}
 
-.esriLegendService table {
-    margin: 0;
-    border: none;
-}
-
-.esriLegendService table tbody tr {
-    background-color: #eee;
-}
-
-.esriLegendService td {
-    padding: 0;
-    vertical-align: middle;
-    line-height: normal;
-}
-
-.esriLegendService img {
-    height: 18px;
+.esriLegendLayerLabel {
+	position: relative;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	height: 25px;
 }
 
 /* -----------------------------------------
