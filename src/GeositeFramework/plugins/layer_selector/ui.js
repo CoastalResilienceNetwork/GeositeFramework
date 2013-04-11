@@ -170,7 +170,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             function showLayerDialog() {
                 var $dialog = $('.pluginLayerSelector-info-box').remove(), // remove old dialog if present
-                    template = getTemplate('template-layer-selector'),
+                    template = getTemplate('template-layer-info-box'),
                     $container = $(_container),
                     position = $container.offset();
                 // Position dialog next to layer selector UI
@@ -205,8 +205,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                         },
                         renderTo: $dialog.find('.opacity').show().find('.info-value')[0]
                     });
-                } else if (node.opacity === "setByService") {
-                    $dialog.find('.opacity').show().find('.info-value').text("Set opacity for all layers in this group by clicking on the group's info button.");
+                //} else if (node.opacity === "setByService") {
+                //    $dialog.find('.opacity').show().find('.info-value').text("Set opacity for all layers in this group by clicking on the group's info button.");
                 }
                 $dialog.find('.pluginLayerSelector-spinner').hide();
             }
