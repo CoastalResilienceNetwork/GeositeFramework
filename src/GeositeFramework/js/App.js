@@ -16,11 +16,16 @@
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
 
+            N.app.models.screen = new N.models.Screen();
+
             this.hashModels = Backbone.HashModels.init({
                 updateOnChange: false
             });
-            N.app.models.screen = new N.models.Screen();
-            this.hashModels.addModel(N.app.models.screen);
+            this.hashModels.addModel(N.app.models.screen, {
+                id: 'screen',
+                attributes: ['splitScreen', 'syncMaps']
+            });
+
             N.app.views.screen = new N.views.Screen({
                 model: N.app.models.screen,
                 el: $('body')
