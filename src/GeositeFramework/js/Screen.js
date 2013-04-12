@@ -128,12 +128,21 @@
         },
 
         makePermalink: function makePermalink() {
+            var windowTemplate = N.app.templates['permalink-share-window'];
+
             _.each(paneViews, function (paneView) {
                 if (paneView !== null) {
                     paneView.mapView.saveState();
                 }
             });
             Backbone.HashModels.update();
+
+            TINY.box.show({
+                html: windowTemplate({ url: window.location.href }),
+                width: 500,
+                height: 200,
+                fixed: true
+            });
         },
 
         printMap: function printMap() {
