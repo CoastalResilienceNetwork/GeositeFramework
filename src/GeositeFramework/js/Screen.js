@@ -9,7 +9,6 @@
     N.models = N.models || {};
     N.models.Screen = Backbone.Model.extend({
         defaults: {
-            id: 'screen', // for saving state with backbone.hashmodels
             mainPaneNumber: 0,
             splitScreen: false,
             showPrintButton: false,
