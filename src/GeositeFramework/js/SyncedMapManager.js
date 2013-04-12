@@ -53,7 +53,7 @@
                 function() { registerMapExtentListener(view); });
         }
 
-        function toggleMapSync() {
+        function updateExtentListeners() {
             var sync = screen.get('syncMaps');
             _.each(syncedMapViews, function (mapView) {
                 if (sync) {
@@ -71,7 +71,7 @@
             syncedMapViews.push(mapView);
         };
 
-        screen.on('change:syncMaps', toggleMapSync);
+        screen.on('change:syncMaps', updateExtentListeners);
 
         return {
             views: syncedMapViews,
