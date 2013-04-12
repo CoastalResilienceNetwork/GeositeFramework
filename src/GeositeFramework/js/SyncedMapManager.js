@@ -69,6 +69,9 @@
         function addMapView(mapView) {
             // Track which maps are meant to be synced
             syncedMapViews.push(mapView);
+
+            // Sync might be on if page was loaded from a permalink
+            updateExtentListeners();
         };
 
         screen.on('change:syncMaps', updateExtentListeners);
