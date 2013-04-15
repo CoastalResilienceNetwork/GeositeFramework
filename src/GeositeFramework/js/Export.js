@@ -124,12 +124,12 @@
         },
 
         enableSubmit: function () {
-            this.$("button#export-button").removeClass("export-disabled-button");
+            this.$("button#export-button").removeAttr('disabled');
             this.$("div.export-indicator").hide();
         },
 
         waitForPrintRequest: function () {
-            this.$("button#export-button").addClass("export-disabled-button");
+            this.$("button#export-button").attr('disabled', 'disabled');
             this.$("div.export-indicator").show();
             this.$("div.export-output-area").empty();
         },
