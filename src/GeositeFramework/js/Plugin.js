@@ -25,9 +25,7 @@
                     error: makeLogger(pluginName, "ERROR"),
                     _unsafeMap: esriMap
                 },
-                // TODO: fix wrapped map and pass it to plugin.
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
-                //map: esriMap,
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
                 legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
             });
@@ -136,8 +134,8 @@
             var model = view.model
             view.render();
             model.on('selected deselected', function () {
-                model.onSelectedChanged();
                 view.render();
+                model.onSelectedChanged();
             });
             model.on('change:active', function () {
                 view.render();
@@ -214,7 +212,8 @@
         }
 
         function createUiContainer(view) {
-            var $uiContainer = $(N.app.templates['template-plugin-container']().trim()),
+            var bindings = { title: view.model.get("pluginObject").toolbarName },
+                $uiContainer = $(N.app.templates['template-plugin-container'](bindings).trim()),
 
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
