@@ -199,7 +199,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                         value: node.opacity * 100,
                         plugins: new Ext.slider.Tip(),
                         listeners: {
-                            changecomplete: function (slider, value) {
+                            change: function (slider, value) {
                                 node.setOpacity(node, _map, value / 100);
                             }
                         },
