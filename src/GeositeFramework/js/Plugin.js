@@ -212,7 +212,8 @@
         }
 
         function createUiContainer(view) {
-            var $uiContainer = $(N.app.templates['template-plugin-container']().trim()),
+            var bindings = { title: view.model.get("pluginObject").toolbarName },
+                $uiContainer = $(N.app.templates['template-plugin-container'](bindings).trim()),
 
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
