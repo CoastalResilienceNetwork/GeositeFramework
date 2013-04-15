@@ -25,9 +25,7 @@
                     error: makeLogger(pluginName, "ERROR"),
                     _unsafeMap: esriMap
                 },
-                // TODO: fix wrapped map and pass it to plugin.
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
-                //map: esriMap,
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
                 legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
             });
