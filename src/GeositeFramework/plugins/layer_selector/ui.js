@@ -11,7 +11,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _$templates = $('<div>').append($(templates.trim())), // store templates in a utility div
                 _$filterInput = null,
                 _$treeContainer = null,
+                _$layerDialog = null,
                 _tree = null,
+                _treeNeedsRendering = true,
                 _justClickedItemIcon = false;
 
             // ------------------------------------------------------------------------
@@ -25,14 +27,28 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _tree.on("itemclick", onItemClick, this);
                 removeSpinner();
                 renderUi();
-                this.display();
+                // The Ext tree doesn't render right unless the container is visible
+                if ($(_container).is(":visible")) {
+                    this.display();
+                }
             }
 
             this.display = function () {
-                // The Ext tree doesn't render right unless the container is visible
-                if (_tree !== null && $(_container).is(":visible")) {
+                if (_tree && _treeNeedsRendering) {
                     _tree.render(_$treeContainer[0]);
+                    _treeNeedsRendering = false;
+                }
+                if (_$filterInput) {
                     _$filterInput.focus();
+                }
+                if (_$layerDialog) {
+                    _$layerDialog.show();
+                }
+            }
+
+            this.hideAll = function () {
+                if (_$layerDialog) {
+                    _$layerDialog.hide();
                 }
             }
 
@@ -155,13 +171,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_justClickedItemIcon) {
                     var node = record.raw;
                     if (node.description || node.fetchDescription) {
-                        var $dialog = showLayerDialog();
+                        showLayerDialog();
                         if (node.fetchDescription) {
                             node.fetchDescription(node, function () {
-                                fillLayerDialog($dialog, node);
+                                fillLayerDialog(node);
                             });
                         } else {
-                            fillLayerDialog($dialog, node);
+                            fillLayerDialog(node);
                         }
                     }
                     _justClickedItemIcon = false;
@@ -169,23 +185,29 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function showLayerDialog() {
-                var $dialog = $('.pluginLayerSelector-info-box').remove(), // remove old dialog if present
-                    template = getTemplate('template-layer-info-box'),
+                removeLayerDialog() // remove old dialog if present
+                var template = getTemplate('template-layer-info-box'),
                     $container = $(_container),
                     position = $container.offset();
                 // Position dialog next to layer selector UI
                 position.left += $container.outerWidth() + 20;
                 position.top -= parseInt($container.parent('.plugin-container').css('borderTopWidth')); // not sure why this is necessary
-                $dialog = $(template()).offset(position).appendTo($('body'));
-                $dialog.find('.close').click(function () {
-                    $dialog.remove();
+                _$layerDialog = $(template()).offset(position).appendTo($('body'));
+                _$layerDialog.find('.close').click(function () {
+                    removeLayerDialog();
                 });
-                return $dialog;
             }
 
-            function fillLayerDialog($dialog, node) {
+            function removeLayerDialog() {
+                if (_$layerDialog) {
+                    _$layerDialog.remove();
+                    _$layerDialog = null;
+                }
+            }
+
+            function fillLayerDialog(node) {
                 if (node.description) {
-                    var $description = $dialog.find('.description').show().find('.info-value');
+                    var $description = _$layerDialog.find('.description').show().find('.info-value');
                     $description.html(node.description);
                     if (node.url) {
                         fixRelativeLinks($description, node.url);
@@ -203,12 +225,12 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                                 node.setOpacity(node, _map, value / 100);
                             }
                         },
-                        renderTo: $dialog.find('.opacity').show().find('.info-value')[0]
+                        renderTo: _$layerDialog.find('.opacity').show().find('.info-value')[0]
                     });
                 //} else if (node.opacity === "setByService") {
-                //    $dialog.find('.opacity').show().find('.info-value').text("Set opacity for all layers in this group by clicking on the group's info button.");
+                //    _$layerDialog.find('.opacity').show().find('.info-value').text("Set opacity for all layers in this group by clicking on the group's info button.");
                 }
-                $dialog.find('.pluginLayerSelector-spinner').hide();
+                _$layerDialog.find('.pluginLayerSelector-spinner').hide();
             }
 
             function fixRelativeLinks($element, sourceUrl) {

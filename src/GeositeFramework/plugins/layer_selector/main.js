@@ -71,7 +71,11 @@ define([
             activate: function () {
                 this._ui.display();
             },
-            
+
+            deactivate: function () {
+                this._ui.hideAll();
+            },
+
             hibernate: function () {
                 // TODO: hide displayed map layers
             }

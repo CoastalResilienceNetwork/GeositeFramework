@@ -134,8 +134,8 @@
             var model = view.model
             view.render();
             model.on('selected deselected', function () {
-                model.onSelectedChanged();
                 view.render();
+                model.onSelectedChanged();
             });
             model.on('change:active', function () {
                 view.render();
