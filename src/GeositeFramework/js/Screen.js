@@ -11,7 +11,7 @@
         defaults: {
             mainPaneNumber: 0,
             splitScreen: false,
-            showPrintButton: false,
+            showExportButton: false,
             syncMaps: false
         },
 
@@ -42,7 +42,7 @@
 
         initialize: function () {
             if (N.app.data.region.printServerUrl) {
-                this.set('showPrintButton', true);
+                this.set('showExportButton', true);
             }
         }
     });
@@ -117,8 +117,7 @@
             'click .switch-screen': 'switchScreen',
             'click .split-screen': function () { this.model.split(); },
             'click .map-sync': function () { this.model.toggleMapSync(); },
-            'click .permalink-button': 'makePermalink',
-            'click .print-button': 'printMap'
+            'click .permalink-button': 'makePermalink'
         },
 
         switchScreen: function switchScreen(event) {

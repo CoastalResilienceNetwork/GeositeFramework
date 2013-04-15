@@ -18,10 +18,10 @@
 }
 
 <!DOCTYPE html>
-<!--[if IE 8]>    		<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 8]>          <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-	<meta charset="utf-8" />
+    <meta charset="utf-8" />
     <title>@Model.Organization | @Model.TitleMain</title>
 
     <!-- Load CSS for plugins -->
@@ -48,13 +48,13 @@
         <div class="map-outer">
             <div id="map-<%= paneNumber %>" class="map">
                 <div class="tools"></div>
-			    <div class="basemap-selector">
-				    <div class="basemap-selector-title"></div>
-				    <div class="basemap-selector-list">
-					    <ul>
-					    </ul>
-				    </div>
-			    </div>
+                <div class="basemap-selector">
+                    <div class="basemap-selector-title"></div>
+                    <div class="basemap-selector-list">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
                 <div class="legend">
                     <div id="legend-<%= paneNumber %>"></div>
                 </div>
@@ -64,9 +64,12 @@
 
     <script type="text/template" id="template-sidebar">
         <li><a href="javascript:;" class="home-button hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Map Home</a></li>
+        <% if (showExportButton) { %>
+          <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+        <% } %>
         <li class="divider"></li>
         <% if (isMain) { %>
-			<% if (splitScreen) { %>
+            <% if (splitScreen) { %>
                 <li><a class="switch-screen" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/>Full Map</a></li>
                 <li><a class="switch-screen" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/>Full Map</a></li>
             <% } else { %>
@@ -76,11 +79,8 @@
                 <li><a class="split-screen" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
             <% } %>
             <li class="divider"></li>
-			<li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
-            <% if (showPrintButton) { %>
-			<li><a href="javascript:;" class="print-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Print Page</a></li>
-            <% } %>
-			<li><a href="javascript:;" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
+            <li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
+            <li><a href="javascript:;" class="hide-for-tablet"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help/Support</a></li>
         <% } else { %>
             <li>
                 <a href="javascript:;" class="hide-for-tablet map-sync">
@@ -166,7 +166,7 @@
         <label><input type="checkbox" name="export-include-legend"> Include Layer Legends</input></label>
       </div>
 
-      <div class="export-controls"><button id="export-button">Print</button></div>
+      <div class="export-controls"><button id="export-button">Export</button></div>
 
       <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
 
@@ -180,19 +180,20 @@
     </script>
 
 
-	<!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
-	<div class="fixed">
-		<nav class="top-bar">
-			<ul>
-				<li class="name">
-					<h1>@OptionalLinkText(@Model.TitleMain)</h1>
-					<h2>@OptionalLinkText(@Model.TitleDetail)</h2>
-				</li>
-				<!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
-				<li class="toggle-topbar"><a href="javascript:;"></a></li>
-			</ul>
-			<section>
-				<ul class="right">
+    <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
+    <div class="fixed">
+        <nav class="top-bar">
+            <ul>
+                <li class="name">
+                    <h1>@OptionalLinkText(@Model.TitleMain)</h1>
+                    <h2>@OptionalLinkText(@Model.TitleDetail)</h2>
+                </li>
+                <!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
+                <li class="toggle-topbar"><a href="javascript:;"></a></li>
+            </ul>
+            <section>
+                <ul class="right">
+
                     @foreach (var link in Model.HeaderLinks)
                     {
                         if (link != Model.HeaderLinks.First())
@@ -209,25 +210,25 @@
                                 <a href="@link.Url">@link.Text</a>    
                             }
                             
-					    </li>
+                        </li>
                     }
-				</ul>
-			</section>
-		</nav>
-	</div>
-	
-	<!-- LEFT CONTENT AREA -->
-	<div id="left-pane" class="content"></div>
-	
-	<!-- RIGHT CONTENT AREA -->
-	<div id="right-pane" class="content"></div>
-	
+                </ul>
+            </section>
+        </nav>
+    </div>
+    
+    <!-- LEFT CONTENT AREA -->
+    <div id="left-pane" class="content"></div>
+    
+    <!-- RIGHT CONTENT AREA -->
+    <div id="right-pane" class="content"></div>
+    
 
 
     <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3compact"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="js/lib/foundation/foundation.min.js"></script>
-	<script src="js/lib/foundation/app.js"></script>
+    <script src="js/lib/foundation/app.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
