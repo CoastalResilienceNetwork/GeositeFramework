@@ -74,7 +74,7 @@
 
         createPDF: function () {
             var model = this,
-                resultTemplate = '<a href="<%= url %>" target="blank">Click here to retrieve your printable document.</a>',
+                resultTemplate = N.app.templates['template-export-url'];
                 templateLayout = this.get('exportPaperSize') + " " + this.get('exportOrientation');
 
             model.pdfManager.run(
@@ -83,7 +83,7 @@
                 model.get('exportIncludeLegend'),
                 function (result) {
                     model.set({
-                        outputText: _.template(resultTemplate)({ url: result.url }),
+                        outputText: resultTemplate({ url: result.url }),
                         submitEnabled: true
                     });
                 },
