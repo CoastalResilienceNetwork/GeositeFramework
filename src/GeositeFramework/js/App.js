@@ -19,7 +19,9 @@
             N.app.models.screen = new N.models.Screen();
 
             this.hashModels = Backbone.HashModels.init({
-                updateOnChange: false
+                updateOnChange: false,
+                hashUpdateCallback: this.showHashUrlPopup,
+                setupHashMonitorCallback: this.setupHashMonitorCallback
             });
             this.hashModels.addModel(N.app.models.screen, {
                 id: 'screen',
@@ -38,6 +40,34 @@
             N.app.syncedMapManager = new N.SyncedMapManager(N.app.models.screen);
 
             registerPopupHandlers();
+        },
+
+        showHashUrlPopup: function (hash) {
+            var windowTemplate = N.app.templates['permalink-share-window'],
+            currentHref = document.location.href;
+
+            // sometimes location.href will havea  trailing #, sometimes it
+            // won't. This makes sure to always append when missing.
+            if (currentHref.slice(-1) !== "#") { currentHref += "#"; }
+
+            TINY.box.show({
+                html: windowTemplate({ url: currentHref + hash }),
+                width: 500,
+                height: 200,
+                fixed: true,
+                openjs: function () {
+                    $('.permalink-textbox').select();
+                }
+            });
+        },
+
+        setupHashMonitorCallback: function (handleHashChangedFn) {
+            // Process the hash once using the handleHashChanged
+            // function, then clear it. This is done instead of the
+            // typical behavior of HashModels which is to continue
+            // listening for changes in the location.hash
+            handleHashChangedFn(location.hash);
+            location.hash = "";
         },
 
         createPane: function createPane(paneIndex) {
