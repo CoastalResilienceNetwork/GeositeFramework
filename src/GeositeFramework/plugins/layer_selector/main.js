@@ -77,7 +77,7 @@ define([
             },
 
             hibernate: function () {
-                // TODO: hide displayed map layers
+                this._layerManager.hideAllLayersForTree(this.map);
             }
 
         });

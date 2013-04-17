@@ -85,6 +85,7 @@ define(["jquery", "use!underscore"],
                             node.description = serviceData.description;
                             node.opacity = 0.7;
                             node.setOpacity = setOpacity;
+                            node.hideAllLayers = hideAllLayers;
                             loadLayers(serviceData.layers, node);
                         },
                         error: _onLayerSourceLoadError
@@ -111,6 +112,11 @@ define(["jquery", "use!underscore"],
                         layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
                     }
                 }, this);
+            }
+
+            function hideAllLayers (node, map) {
+                var esriService = getServiceObject(node, map);
+                esriService.setVisibleLayers([-1]);
             }
 
             // To show/hide an individual layer we have to specify all visible layers for the service. 

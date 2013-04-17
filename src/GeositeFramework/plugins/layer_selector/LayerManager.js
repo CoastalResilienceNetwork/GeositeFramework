@@ -17,6 +17,7 @@ define([
                 _onLoadingComplete;
 
             this.load = loadLayerData;
+            this.hideAllLayersForTree = function (map) { hideAllLayersForTree(_rootNode, map) };
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
@@ -146,6 +147,20 @@ define([
                 };
                 parentNode.children.push(node);
                 return node;
+            }
+
+            function hideAllLayersForTree(tree, map) {
+                hideAllLayersForNode(tree, map);
+
+                function hideAllLayersForNode(node, map) {
+                    if (node.hideAllLayers) {
+                        node.hideAllLayers(node, map)
+                    } else {
+                        _.each(node.children, function (child) {
+                            hideAllLayersForNode(child, map);
+                        });
+                    }
+                }
             }
         }
 
