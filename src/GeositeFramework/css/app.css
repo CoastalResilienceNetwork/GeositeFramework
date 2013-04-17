@@ -393,42 +393,6 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 20px;
 }
 
-/*-----------------------------------------
-    Dialog-Popup styles
-------------------------------------------*/
-.tmask {
-    position: absolute;
-    display: none;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    background: #000;
-    z-index: 800;
-}
-.tbox {
-    position: absolute;
-    display: none;
-    padding: 14px 17px;
-    z-index: 900;
-}
-
-.tclose {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
-}
-.tinner {
-    padding: 15px;
-    border-radius: 5px;
-    background: #fff;
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #333;
-}
 /* -----------------------------------------
    Legend
 ----------------------------------------- */
@@ -510,10 +474,6 @@ h1, h2, h3, h4, h5, h6 {
 /* -----------------------------------------
    Export Window
 ----------------------------------------- */
-
-.export-disabled-button {
-    color: gray;
-}
 .export-orientation-choices {
     float: left;
 }
