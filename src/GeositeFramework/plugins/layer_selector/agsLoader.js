@@ -114,9 +114,10 @@ define(["jquery", "use!underscore"],
                 }, this);
             }
 
-            function hideAllLayers (node, map) {
-                var esriService = getServiceObject(node, map);
-                esriService.setVisibleLayers([-1]);
+            function hideAllLayers (serviceNode, map) {
+                if (serviceNode.esriService) {
+                    serviceNode.esriService.setVisibleLayers([-1]);
+                }
             }
 
             // To show/hide an individual layer we have to specify all visible layers for the service. 
