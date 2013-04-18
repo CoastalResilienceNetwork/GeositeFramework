@@ -31,6 +31,30 @@
             });
         }
 
+        function setState(model, pluginState) {
+            var pluginObject = model.get('pluginObject');
+
+            if (pluginState !== "" && pluginObject.setState) {
+                model.set('active', true);
+                pluginObject.setState(pluginState);
+            }
+        }
+
+        function getState(model) {
+            var pluginObject = model.get('pluginObject');
+
+            if (model.get('active') === true && pluginObject.getState) {
+                return pluginObject.getState();
+            } else {
+                return null;
+            }
+        }
+
+        function name(model) {
+            // A public method for getting the name of the current plugin
+            return model.get('pluginSrcFolder');
+        }
+
         function makeLogger(pluginName, level) {
             return function (userMessage, developerMessage) {
                 if (developerMessage) {
@@ -78,6 +102,12 @@
             isCompliant: function () { return checkPluginCompliance(this); },
 
             initPluginObject: function (mapModel, esriMap) { initPluginObject(this, mapModel, esriMap); },
+
+            setState: function (pluginState) { setState(this, pluginState); },
+
+            getState: function () { return getState(this); },
+
+            name: function () { return name(this) },
 
             onSelectedChanged: function () {
                 if (this.selected) {
