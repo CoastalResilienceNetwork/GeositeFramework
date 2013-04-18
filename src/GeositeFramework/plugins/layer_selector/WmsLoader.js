@@ -17,6 +17,7 @@ define(["use!underscore"],
                 dojo.connect(wmsLayer, "onLoad", function () {
                     var folderNode = makeContainerNode(_folderName, "folder", rootNode);
                     folderNode.wmsLayer = wmsLayer;
+                    folderNode.hideAllLayers = hideAllLayers;
                     // Make a tree node for each layer exposed by the WMS service, filtered by the specified whitelist
                     _.each(wmsLayer.layerInfos, function (layerInfo, index) {
                         if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
@@ -53,6 +54,10 @@ define(["use!underscore"],
                 }
                 wmsLayer.setVisibleLayers(layerIds);
                 folderNode.layerIds = layerIds;
+            }
+
+            function hideAllLayers(node) {
+                node.wmsLayer.setVisibleLayers([]);
             }
 
         }
