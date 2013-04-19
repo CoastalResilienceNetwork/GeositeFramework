@@ -62,8 +62,14 @@
 
     function initPlugins(model, esriMap) {
         var mapModel = model.get('mapModel');
+
         model.get('plugins').each(function (pluginModel) {
+            var stateOfPlugin = model.get('stateOfPlugins')[pluginModel.name()];
+
             pluginModel.initPluginObject(mapModel, esriMap);
+            if (stateOfPlugin) {
+                pluginModel.setState(stateOfPlugin);
+            }
         });
     }
 
@@ -73,7 +79,8 @@
             paneNumber: 0,
             regionData: null,
             mapModel: null,
-            plugins: null
+            plugins: null,
+            stateOfPlugins: {}
         },
 
         initialize: function () { return initialize(this); },
@@ -204,6 +211,30 @@
                 maskopacity:50,
                 closejs: function () { view.remove(); }
             });
+        },
+
+        saveState: function () {
+            /*
+               Traverse all child objects and either tell them to
+               save their state if they are a backbone model registered
+               with hashmodels, or get their state from them and stick
+               it in our own model's pluginState object.
+            */
+            var plugins = this.model.get('plugins'),
+                stateOfPlugins = {};
+
+            plugins.each(function (plugin) {
+                var state = plugin.getState();
+
+                if (state) {
+                    stateOfPlugins[plugin.name()] = state;
+                }
+            });
+
+            this.model.set('stateOfPlugins', stateOfPlugins);
+
+            // backbone objects that are tracked by HashModels
+            this.mapView.saveState();
         }
 
     });
