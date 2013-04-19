@@ -91,6 +91,12 @@
                 regionData: N.app.data.region
             });
 
+            N.app.hashModels.addModel(pane, {
+                id: 'pane' + pane.get('paneNumber').toString(),
+                attributes: ['paneNumber', 'stateOfPlugins']
+            });
+
+
             // Create pane view
             paneViews[paneNumber] = new N.views.Pane({
                 model: pane,
@@ -127,11 +133,10 @@
 
         makePermalink: function makePermalink() {
             _.each(paneViews, function (paneView) {
-                if (paneView !== null) {
-                    paneView.mapView.saveState();
+                if (paneView !== null && paneView.saveState) {
+                    paneView.saveState();
                 }
             });
-
             Backbone.HashModels.update();
         },
 
