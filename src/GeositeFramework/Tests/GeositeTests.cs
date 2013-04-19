@@ -38,7 +38,6 @@ namespace GeositeFramework.Tests
         {
             var regionJson = @"
                 {
-                    'organization': 'Sample Org',
                     'titleMain': { 'text': 'Geosite Framework Sample', 'url': 'http://www.azavea.com/' },
                     'titleDetail':  { 'text': 'Sample Region', 'url': 'http://www.azavea.com/' },
                     'initialExtent': [ -98.61328125, 17.392579271057766, -79.716796875,31.653381399664 ],
@@ -58,7 +57,6 @@ namespace GeositeFramework.Tests
             var pluginJsonData = new List<JsonData> { LoadPluginData(@"{ css: ['main.css'], use: { underscore: { attach: '_' } } }") };
             var geosite = new Geosite(LoadRegionData(regionJson), pluginFolderNames, pluginJsonData);
 
-            Expect(geosite.Organization, EqualTo("Sample Org"));
             Expect(geosite.TitleMain.Text, EqualTo("Geosite Framework Sample"));
             Expect(geosite.TitleDetail.Text, EqualTo("Sample Region"));
             Expect(geosite.HeaderLinks.Count, EqualTo(2));
@@ -99,7 +97,7 @@ namespace GeositeFramework.Tests
             Expect(messages.Count, EqualTo(3));
             Expect(messages[0], Contains("'a'")); // extra property
             Expect(messages[1], Contains("'b'")); // extra property
-            Expect(messages[2], Contains(": organization, titleMain, titleDetail, initialExtent, basemaps.")); // missing required properties
+            Expect(messages[2], Contains(": titleMain, titleDetail, initialExtent, basemaps.")); // missing required properties
         }
 
         /// <exclude/>
@@ -109,7 +107,6 @@ namespace GeositeFramework.Tests
         {
             var regionJson = @"
                 {
-                    'organization': '',
                     'titleMain': {'text':''},
                     'titleDetail': {'text':''},
                     'initialExtent': [0,0,0],
@@ -129,7 +126,6 @@ namespace GeositeFramework.Tests
         {
             var regionJson = @"
                 {
-                    'organization': '',
                     'titleMain': {'text':''},
                     'titleDetail': {'text':''},
                     'initialExtent': [0,0,0,0],
@@ -147,7 +143,6 @@ namespace GeositeFramework.Tests
         {
             var regionJson = @"
                 {
-                    'organization': '',
                     'titleMain': {'text':''},
                     'titleDetail': {'text':''},
                     'initialExtent': [0,0,0,0],

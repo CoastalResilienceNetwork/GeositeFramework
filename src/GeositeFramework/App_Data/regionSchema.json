@@ -3,7 +3,7 @@
     "title": "Geosite configuration",
     "type": "object",
     "properties": {
-        "organization": {"type": "string", "required": true},
+        "googleAnalyticsPropertyId": {"type": "string", "required": false},
         "titleMain": {
             "type": "object",
             "properties": {
