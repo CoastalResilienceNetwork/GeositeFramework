@@ -43,7 +43,7 @@
         function getState(model) {
             var pluginObject = model.get('pluginObject');
 
-            if (model.get('active') === true && pluginObject.getState) {
+            if (model.get('active') === true) {
                 return pluginObject.getState();
             } else {
                 return null;

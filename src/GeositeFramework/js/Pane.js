@@ -68,7 +68,7 @@
 
             pluginModel.initPluginObject(mapModel, esriMap);
             if (stateOfPlugin) {
-                pluginModel.setState(model.get('stateOfPlugins')[pluginModel.name()]);
+                pluginModel.setState(stateOfPlugin);
             }
         });
     }
@@ -224,8 +224,10 @@
                 stateOfPlugins = {};
 
             plugins.each(function (plugin) {
-                if (plugin.getState()) {
-                    stateOfPlugins[plugin.name()] = plugin.getState();
+                var state = plugin.getState();
+
+                if (state) {
+                    stateOfPlugins[plugin.name()] = state;
                 }
             });
 
