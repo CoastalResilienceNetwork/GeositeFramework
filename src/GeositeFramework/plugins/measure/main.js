@@ -55,8 +55,8 @@ define(
 
             hibernate: function () {
                 this.deactivate();
-                this._pointLayer.clear();
-                this._lineLayer.clear();
+                if (this._pointLayer)  this._pointLayer.clear(); 
+                if (this._lineLayer) this._lineLayer.clear();
             }
         });
     }
