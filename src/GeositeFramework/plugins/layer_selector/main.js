@@ -77,7 +77,7 @@ define([
             },
 
             hibernate: function () {
-                this._layerManager.hideAllLayersForTree(this.map);
+                this._layerManager.hideAllLayers(this.map);
             }
 
         });

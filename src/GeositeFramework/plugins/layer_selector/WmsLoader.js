@@ -17,7 +17,10 @@ define(["use!underscore"],
                 dojo.connect(wmsLayer, "onLoad", function () {
                     var folderNode = makeContainerNode(_folderName, "folder", rootNode);
                     folderNode.wmsLayer = wmsLayer;
+                    folderNode.serviceName = _folderName;
                     folderNode.hideAllLayers = hideAllLayers;
+                    folderNode.setServiceState = setServiceState;
+                    folderNode.saveServiceState = saveServiceState;
                     // Make a tree node for each layer exposed by the WMS service, filtered by the specified whitelist
                     _.each(wmsLayer.layerInfos, function (layerInfo, index) {
                         if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
@@ -40,20 +43,44 @@ define(["use!underscore"],
             function showOrHideLayer(layerNode, shouldShow, map) {
                 var folderNode = layerNode.parent,
                     wmsLayer = folderNode.wmsLayer,
-                    layerIds = folderNode.layerIds;
-                if (layerIds === undefined) {
+                    visibleLayerIds = folderNode.visibleLayerIds;
+                if (visibleLayerIds === undefined) {
                     // This is the first event for a layer in this folder
                     wmsLayer.setOpacity(.7);
                     map.addLayer(wmsLayer);
-                    layerIds = [];
+                    visibleLayerIds = [];
                 }
                 if (shouldShow) {
-                    layerIds = _.union(layerIds, [layerNode.layerId]);
+                    visibleLayerIds = _.union(visibleLayerIds, [layerNode.layerId]);
                 } else { // hide
-                    layerIds = _.without(layerIds, layerNode.layerId);
+                    visibleLayerIds = _.without(visibleLayerIds, layerNode.layerId);
                 }
-                wmsLayer.setVisibleLayers(layerIds);
-                folderNode.layerIds = layerIds;
+                wmsLayer.setVisibleLayers(visibleLayerIds);
+                folderNode.visibleLayerIds = visibleLayerIds;
+            }
+
+            function setServiceState (folderNode, stateObject, map) {
+                var myStateObject = stateObject[folderNode.serviceName];
+
+                if (myStateObject) {
+                    if (folderNode.visibleLayerIds === undefined) {
+                        map.addLayer(folderNode.wmsLayer);
+                        folderNode.visibleLayerIds = myStateObject;
+                    }
+                    folderNode.wmsLayer.setVisibleLayers(myStateObject);
+                    folderNode.wmsLayer.setOpacity(.7);
+                    folderNode.expanded = true;
+
+                    _.each(folderNode.children, function (child) {
+                        if (_.contains(myStateObject, child.layerId)) { child.checked = true; }
+                    });
+                }
+            }
+
+            function saveServiceState (folderNode, stateObject) {
+                if (folderNode.visibleLayerIds && folderNode.visibleLayerIds !== []) {
+                    stateObject[folderNode.serviceName] = folderNode.visibleLayerIds;
+                }
             }
 
             function hideAllLayers(node) {
