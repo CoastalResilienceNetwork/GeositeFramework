@@ -55,6 +55,7 @@ define([
 
             _layerManager: null,
             _ui: null,
+            _currentState: {},
 
             initialize: function (frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
@@ -64,11 +65,17 @@ define([
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
                 this._layerManager.load(layerSourcesJson, function (tree) {
+                    if (self._currentState) {
+                        self._layerManager.setServiceState(self._currentState, self.map);
+                    }
                     self._ui.render(tree);
                 });
             },
 
             activate: function () {
+                if (this._currentState) {
+                    this._layerManager.setServiceState(this._currentState, this.map);
+                }
                 this._ui.display();
             },
 
@@ -77,7 +84,16 @@ define([
             },
 
             hibernate: function () {
+                this._currentState = this._layerManager.getServiceState();
                 this._layerManager.hideAllLayers(this.map);
+            },
+
+            getState: function () {
+                return this._layerManager.getServiceState();
+            },
+
+            setState: function (state) {
+                this._currentState = state;
             }
 
         });
