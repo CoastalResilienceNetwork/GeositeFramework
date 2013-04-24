@@ -22,7 +22,7 @@ namespace GeositeFramework.Models
 
         // Properties used in View rendering
         public string GeositeFrameworkVersion { get; set; }
-        public string Organization { get; private set; }
+        public string GoogleAnalyticsPropertyId { get; private set; }
         public Link TitleMain { get; private set; }
         public Link TitleDetail { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
@@ -95,9 +95,13 @@ namespace GeositeFramework.Models
             jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
-            Organization = (string)jsonObj["organization"];
             TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
             TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
+
+            if (jsonObj["googleAnalyticsPropertyId"] != null)
+            {
+                GoogleAnalyticsPropertyId = (string)jsonObj["googleAnalyticsPropertyId"];
+            }
 
             if (jsonObj["headerLinks"] != null)
             {
