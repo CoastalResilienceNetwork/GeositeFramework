@@ -81,11 +81,14 @@ define(["jquery", "use!underscore"],
                             // Service has loaded -- make its node and load its layers
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                            node.serviceName = serviceSpec.name;
                             node.url = serviceUrl;
                             node.description = serviceData.description;
                             node.opacity = 0.7;
                             node.setOpacity = setOpacity;
                             node.hideAllLayers = hideAllLayers;
+                            node.saveServiceState = saveServiceState;
+                            node.setServiceState = setServiceState;
                             loadLayers(serviceData.layers, node);
                         },
                         error: _onLayerSourceLoadError
@@ -120,13 +123,44 @@ define(["jquery", "use!underscore"],
                 }
             }
 
+            function setServiceState (serviceNode, stateObject, map) {
+                var myStateObject = stateObject[serviceNode.serviceName],
+                    esriService;
+
+                if (myStateObject) {
+                    serviceNode.opacity = myStateObject.opacity;
+                    esriService = getServiceObject(serviceNode, map);
+                    esriService.setVisibleLayers(myStateObject.visibleLayerIds);
+
+                    serviceNode.expanded = true;
+                    serviceNode.parent.expanded = true;
+
+                    _.each(serviceNode.children, function (child) {
+                        if (_.contains(myStateObject.visibleLayerIds, child.layerId)) { child.checked = true; }
+                    });
+                }
+            }
+
+            function saveServiceState (serviceNode, stateObject) {
+                if (serviceNode.esriService &&
+                    serviceNode.esriService.visibleLayers !== [-1]) {
+                    stateObject[serviceNode.serviceName] = {
+                        visibleLayerIds: getLayerIds(serviceNode.esriService),
+                        opacity: serviceNode.opacity,
+                        };
+                }
+            }
+
+            function getLayerIds (esriService) {
+                return (!esriService || !esriService.visibleLayers || esriService.visibleLayers[0] === -1 ? [] : esriService.visibleLayers);
+            }
+
             // To show/hide an individual layer we have to specify all visible layers for the service. 
             // So we keep track of the visible layer ids on the service-level data node.
-
             function showOrHideLayer(layerNode, shouldShow, map) {
                 var serviceNode = getServiceNode(layerNode),
                     esriService = getServiceObject(serviceNode, map),
-                    layerIds = (!esriService || !esriService.visibleLayers || esriService.visibleLayers[0] === -1 ? [] : esriService.visibleLayers);
+                    layerIds = getLayerIds(esriService);
                 if (shouldShow) {
                     layerIds = _.union(layerIds, [layerNode.layerId]);
                 } else { // hide
