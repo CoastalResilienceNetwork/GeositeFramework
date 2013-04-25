@@ -1,5 +1,16 @@
 {
-    "agsSources": ["http://gulfmex.coastalresilience.org/arcgis/rest/services"],
+    "agsSources": [
+        {
+            "url": "http://gulfmex.coastalresilience.org/arcgis/rest/services",
+            "folderTitle": "My Root Name",
+            "folders": [
+                {
+                    "name": "Alabama",
+                    "services": ["Bathymetry", "Seals"]
+                }
+            ]
+        }
+    ],
     "wmsSources": [
         {
             "url": "http://preview.grid.unep.ch:8080/geoserver/ows",

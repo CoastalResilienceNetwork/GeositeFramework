@@ -28,9 +28,9 @@ define([
                     // Load layer info from each source
                     _rootNode = makeRootNode();
                     if (layerData.agsSources !== undefined) {
-                        _.each(layerData.agsSources, function (url) {
-                            var loader = new AgsLoader(url);
-                            loadLayerSource(loader, url);
+                        _.each(layerData.agsSources, function (agsSource) {
+                            var loader = new AgsLoader(agsSource.url);
+                            loadLayerSource(loader, agsSource.url);
                         });
                     }
                     if (layerData.wmsSources !== undefined) {
@@ -71,7 +71,26 @@ define([
                 properties: {
                     agsSources: {
                         type: 'array',
-                        items: { type: 'string' }
+                        items: {
+                            type: 'object',
+                            properties: {
+                                url: { type: 'string' },
+                                folderTitle: { type: 'string' },
+                                folders: {
+                                    type: 'array',
+                                    items: { type: 'object',
+                                             properties: {
+                                                 name: { type: 'string' },
+                                                 services: { type: 'array',
+                                                             items: { type: 'string' }
+                                                           }
+                                             }
+                                           }
+                                }
+                            },
+                            required: ['url'],
+                            additionalProperties: false
+                        }
                     },
                     wmsSources: {
                         type: 'array',
