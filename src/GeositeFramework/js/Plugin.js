@@ -184,23 +184,23 @@
             // launches it.
             events: {
                 'click a.plugin-launcher': 'handleLaunch',
-                'click a.clear': 'handleClear'
+                'click a.plugin-clear': 'handleClear'
             },
 
             initialize: function () { initialize(this); },
 
             /*
-                handleLaunch is exposed so that it can be overridden by
+                Click handlers exposed so that they can be overridden by
                 extending classes, which should call the prototype to handle
                 common plugin view click handling
             */
             handleLaunch: function handleLaunch() {
                 this.model.toggleSelected();
             },
-            
-            handleClear: function handleClear() {
-                
-            }
+
+            // The base class is a no-op for now, but the function must be declared.
+            // Implementing classes will override this event
+            handleClear: function handleClear() {}
             
         });
     }());
