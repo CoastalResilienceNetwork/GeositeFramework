@@ -322,7 +322,7 @@ define(["jquery", "use!underscore"],
 
                 },
 
-                deactivate: deactivate,
+                deactivate: reset,
 
                 activate: function () {
                     // Clear any previous measurements

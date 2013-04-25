@@ -107,7 +107,7 @@
 
             getState: function () { return getState(this); },
 
-            name: function () { return name(this) },
+            name: function () { return name(this); },
 
             onSelectedChanged: function () {
                 if (this.selected) {
@@ -161,7 +161,7 @@
     (function basePluginView() {
 
         function initialize(view) {
-            var model = view.model
+            var model = view.model;
             view.render();
             model.on('selected deselected', function () {
                 view.render();
@@ -183,19 +183,25 @@
             // into. Make your UI separate from the button that
             // launches it.
             events: {
-                'click a': 'handleClick'
+                'click a.plugin-launcher': 'handleLaunch',
+                'click a.plugin-clear': 'handleClear'
             },
 
             initialize: function () { initialize(this); },
 
             /*
-                handleClick is exposed so that it can be overridden by
+                Click handlers exposed so that they can be overridden by
                 extending classes, which should call the prototype to handle
                 common plugin view click handling
             */
-            handleClick: function handleClick() {
+            handleLaunch: function handleLaunch() {
                 this.model.toggleSelected();
-            }
+            },
+
+            // The base class is a no-op for now, but the function must be declared.
+            // Implementing classes will override this event
+            handleClear: function handleClear() {}
+            
         });
     }());
 
@@ -255,7 +261,7 @@
                     return {
                         top: yCenter,
                         left: xEdgeWithBuffer
-                    }
+                    };
                 };
 
             $uiContainer
@@ -304,7 +310,7 @@
     }());
 
     (function topbarPluginView() {
-
+        
         function render() {
             // Topbar plugins don't render into any predefined context,
             // simply provide a div, render a template containg an anchor
@@ -314,13 +320,17 @@
             var view = this,
                 pluginObject = this.model.get('pluginObject'),
                 pluginTemplate = N.app.templates['template-topbar-plugin'],
+                toolsMarkup = N.app.templates['template-topbar-tools'](),
                 $container = $(pluginTemplate().trim());
+
+            this.$el.toggleClass('active', this.model.get('active'));
 
             if (pluginObject.renderLauncher
                     && _.isFunction(pluginObject.renderLauncher)) {
                 view.$el
                     .empty()
-                    .append($container.append(pluginObject.renderLauncher()));
+                    .append($container.append(pluginObject.renderLauncher()))
+                    .append(toolsMarkup);
             }
 
             return view;
@@ -329,7 +339,10 @@
         N.views = N.views || {};
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            render: render
+            render: render,
+            handleClear: function () {
+                this.model.turnOff();
+            }
         });
     }());
 }(Geosite));
