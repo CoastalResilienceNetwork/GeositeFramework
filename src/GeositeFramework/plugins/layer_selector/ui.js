@@ -20,6 +20,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             // Public methods
 
             this.render = function (rootNode) {
+                $(_container).empty();
                 sortFolders([rootNode]);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
@@ -27,16 +28,12 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _tree.on("itemclick", onItemClick, this);
                 removeSpinner();
                 renderUi();
-                // The Ext tree doesn't render right unless the container is visible
-                if ($(_container).is(":visible")) {
-                    this.display();
-                }
+                this.display();
             }
 
             this.display = function () {
-                if (_tree && _treeNeedsRendering) {
-                    _tree.render(_$treeContainer[0]);
-                    _treeNeedsRendering = false;
+                if (_tree) {
+                    displayExtTree();
                 }
                 if (_$filterInput) {
                     _$filterInput.focus();
@@ -54,6 +51,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             // ------------------------------------------------------------------------
             // Private methods
+
+            function displayExtTree () {
+                if ($(_container).is(":visible") && _treeNeedsRendering) {
+                    _tree.render(_$treeContainer[0]);
+                    _treeNeedsRendering = false;
+                }
+            }
 
             function addSpinner() {
                 $(_container).append(

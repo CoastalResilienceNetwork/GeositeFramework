@@ -17,7 +17,9 @@ define([
                 _onLoadingComplete;
 
             this.load = loadLayerData;
-            this.hideAllLayersForTree = function (map) { hideAllLayersForNode(_rootNode, map) };
+            this.hideAllLayers = function (map) { hideAllLayersForNode(_rootNode, map) };
+            this.setServiceState = function (stateObject, map) { setServiceStateForNode(_rootNode, stateObject, map); };
+            this.getServiceState = function () { return getServiceStateForNode (_rootNode); };
 
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 _onLoadingComplete = onLoadingComplete;
@@ -157,6 +159,32 @@ define([
                         hideAllLayersForNode(child, map);
                     });
                 }
+            }
+
+            function setServiceStateForNode (node, stateObject, map) {
+                if (node.setServiceState) {
+                    node.setServiceState(node, stateObject, map);
+                } else {
+                    _.each(node.children, function (child) {
+                        setServiceStateForNode(child, stateObject, map);
+                    });
+                }
+            }
+
+            function getServiceStateForNode (rootNode) {
+                var stateObject = {};
+
+                function saveServiceStateForNodeInner (node, stateObject) {
+                    if (node.saveServiceState) {
+                        node.saveServiceState(node, stateObject);
+                    } else {
+                        _.each(node.children, function (child) {
+                            saveServiceStateForNodeInner(child, stateObject);
+                        });
+                    }
+                }
+                saveServiceStateForNodeInner(rootNode, stateObject);
+                return stateObject;
             }
         }
         return LayerManager;
