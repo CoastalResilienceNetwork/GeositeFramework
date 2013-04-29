@@ -165,6 +165,9 @@
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="plugins\full_extent\icon.png" />
+    <Content Include="plugins\full_extent\main.js" />
+    <Content Include="plugins\full_extent\full_extent.css" />
     <Content Include="plugins\layer_selector\icon.png" />
     <Content Include="plugins\layer_selector\icon_active.png" />
     <Content Include="plugins\layer_selector\images\gear.png" />
@@ -242,6 +245,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\zoom_to\zoom_to.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\full_extent\plugin.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
