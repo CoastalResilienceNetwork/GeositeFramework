@@ -4,6 +4,7 @@ define(["jquery", "use!underscore"],
     function ($, _) {
         var AgsLoader = function (baseUrl) {
             var _baseUrl = baseUrl,
+                _folderServiceWhitelist = null,
                 _makeContainerNode = null,
                 _makeLeafNode = null,
                 _onLayerSourceLoaded = null,
@@ -17,16 +18,26 @@ define(["jquery", "use!underscore"],
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, layerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
+            function loadCatalog(rootNode, folderServiceWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
                 // Load root catalog entries
+                _folderServiceWhitelist = folderServiceWhitelist;
                 _makeContainerNode = makeContainerNode;
                 _makeLeafNode = makeLeafNode;
                 _onLayerSourceLoaded = onLayerSourceLoaded;
                 _onLayerSourceLoadError = onLayerSourceLoadError;
                 loadFolder("", function (entries) {
                     // Root of catalog has loaded -- load child folders and services
+                    var whitelistedFolders = _.pluck(_folderServiceWhitelist, 'name'),
+                        foldersToInclude = null;
+
+                    if (whitelistedFolders && whitelistedFolders.length > 0) {
+                        foldersToInclude = _.intersection(whitelistedFolders, entries.folders);
+                    } else {
+                        foldersToInclude = entries.folders;
+                    }
+
                     addParentNodeToServiceSpecs(rootNode, entries.services);
-                    loadFolders(entries.folders, entries.services, rootNode);
+                    loadFolders(foldersToInclude, entries.services, rootNode);
                 });
             }
 
@@ -38,15 +49,53 @@ define(["jquery", "use!underscore"],
             }
 
             function loadFolders(folderNames, serviceSpecs, parentNode) {
+
                 // Start loading all folders, keeping "deferred" objects so we know when they're done
                 var deferreds = _.map(folderNames, function (folderName) {
                     return loadFolder(folderName, function (entries) {
                         // Folder has loaded -- make its node and add its services to "serviceSpecs"
-                        var node = _makeContainerNode(folderName, "folder", parentNode);
-                        addParentNodeToServiceSpecs(node, entries.services);
-                        $.merge(serviceSpecs, entries.services);
+
+                        var node, 
+                            folderServiceMatchesCurrent, 
+                            folderServicesForCurrent, 
+                            whitelistedServicesForFolder,
+                            getServicesInWhitelist, 
+                            servicesToInclude, 
+                            sortedServices;
+
+                        node = _makeContainerNode(folderName, "folder", parentNode);
+
+                        // search the folder services object pulled from the layers config for
+                        // the current service. Construct a service whitelist.
+                        folderServiceMatchesCurrent = function (folderService) { 
+                            return folderService.name === folderName; 
+                        }
+                        folderServicesForCurrent = _.filter(_folderServiceWhitelist, folderServiceMatchesCurrent);
+                        whitelistedServicesForFolder = folderServicesForCurrent.length > 0 ? 
+                            folderServicesForCurrent[0].services : [];
+
+
+                        // if there is a whitelist, sort and filter according to the whitelist order
+                        if (whitelistedServicesForFolder && whitelistedServicesForFolder.length > 0) {
+
+                            getServicesInWhitelist = function (service) { 
+                                return _.contains(whitelistedServicesForFolder, getServiceName(service.name)); 
+                            };
+
+                            servicesToInclude = _.filter(entries.services, getServicesInWhitelist);
+
+                            sortedServices = _.sortBy(servicesToInclude, function (service) {
+                                return _.indexOf(whitelistedServicesForFolder, getServiceName(service.name));
+                            });
+                        } else {
+                            sortedServices = entries.services;
+                        }
+
+                        addParentNodeToServiceSpecs(node, sortedServices);
+                        $.merge(serviceSpecs, sortedServices);
                     });
                 });
+
                 // When all folders have loaded, load the services
                 $.when.apply($, deferreds).then(function () {
                     loadServices(serviceSpecs);
@@ -81,7 +130,7 @@ define(["jquery", "use!underscore"],
                             // Service has loaded -- make its node and load its layers
                             var serviceName = getServiceName(serviceSpec.name);
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
-                            node.serviceName = serviceSpec.name;
+                            node.serviceName = node.parent.parent.text + "/" + serviceSpec.name;
                             node.url = serviceUrl;
                             node.description = serviceData.description;
                             node.opacity = 0.7;
@@ -134,6 +183,9 @@ define(["jquery", "use!underscore"],
 
                     serviceNode.expanded = true;
                     serviceNode.parent.expanded = true;
+                    if (serviceNode.parent.parent) {
+                        serviceNode.parent.parent.expanded = true;
+                        }
 
                     _.each(serviceNode.children, function (child) {
                         if (_.contains(myStateObject.visibleLayerIds, child.layerId)) { child.checked = true; }
