@@ -107,14 +107,14 @@
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-            <a class="plugin-launcher" href="javascript:;">
+            <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;">
                 <img src="plugins/<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
                 <div><%- pluginObject.toolbarName %></div>
             </a>
     </script>
 
     <script type="text/template" id="template-topbar-plugin">
-            <a class="plugin-launcher" href="javascript:;"></a>
+            <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;"></a>
     </script>
     
     <script type="text/template" id="template-topbar-tools">
