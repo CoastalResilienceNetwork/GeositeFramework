@@ -21,7 +21,7 @@
 .content .map .measure {		
 	  background-image: url(icon.png);
    }
-   .content .map .measure.active {
+   .content .map .active .measure {
         background-image: url(icon-active.png);
    }
 
