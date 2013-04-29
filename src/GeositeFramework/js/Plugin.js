@@ -221,7 +221,8 @@
                 // The plugin icon looks active if the plugin is selected or
                 // active (aka, running but not focused)
                 html = pluginTemplate(_.extend(model.toJSON(), {
-                    selected: model.selected || model.get('active')
+                    selected: model.selected || model.get('active'),
+                    fullName: model.get('pluginObject').fullName
                 }));
 
             view.$el.empty().append(html);
@@ -321,7 +322,7 @@
                 pluginObject = this.model.get('pluginObject'),
                 pluginTemplate = N.app.templates['template-topbar-plugin'],
                 toolsMarkup = N.app.templates['template-topbar-tools'](),
-                $container = $(pluginTemplate().trim());
+                $container = $(pluginTemplate(pluginObject).trim());
 
             this.$el.toggleClass('active', this.model.get('active'));
 
