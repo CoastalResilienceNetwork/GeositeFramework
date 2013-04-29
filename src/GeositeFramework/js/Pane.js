@@ -86,9 +86,7 @@
 
         initialize: function () { return initialize(this); },
 
-        initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
-
-        getHomeExtent: function () { return getHomeExtent(this); }
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
     });
 
 }(Geosite));
@@ -194,9 +192,6 @@
         initialize: function (view) { initialize(this); },
 
         events: {
-            'click .home-button': function () {
-                this.mapView.esriMap.setExtent(this.model.getHomeExtent());
-            },
             'click .export-button': 'exportMap'
         },
 
