@@ -23,7 +23,8 @@ require({
 define(
     ["dojo/_base/declare", "framework/PluginBase"],
     function (declare, PluginBase) {
-        var $launcher = $('<div class="full-extent"></div>');
+        var $launcher = $('<div class="full-extent"></div>'),
+            _extent;
         
         function fullExtent (regionConfig)
         {
@@ -43,6 +44,7 @@ define(
             
             initialize: function (args) {
                 declare.safeMixin(this, args);
+                _extent = fullExtent(this.app.regionConfig);
             },
             
             renderLauncher: function renderLauncher() {
@@ -51,7 +53,7 @@ define(
 
             activate: function () {
                 var self = this;
-                self.app._unsafeMap.setExtent(fullExtent(this.app.regionConfig));
+                self.app._unsafeMap.setExtent(_extent);
                 self.forceDeactivate();
             }
         });
