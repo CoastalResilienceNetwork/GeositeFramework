@@ -22,7 +22,7 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
-    background: url(../img/foundation/orbit/left-arrow-small.png) no-repeat; /* TODO: we need a close icon*/
+    background: url(../img/icons/icon_close.png) no-repeat;
 }
 .tclose:hover {
     background-position:0 -30px;

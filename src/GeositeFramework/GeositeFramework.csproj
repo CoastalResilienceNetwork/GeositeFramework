@@ -133,6 +133,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
     <Content Include="Error404.html" />
     <Content Include="css\app.css" />
@@ -149,8 +150,11 @@
     <Content Include="img\foundation\orbit\right-arrow.png" />
     <Content Include="img\foundation\orbit\rotator-black.png" />
     <Content Include="img\foundation\orbit\timer-black.png" />
+    <Content Include="img\icons\icon_close.png" />
     <Content Include="img\icons\icon_help-support_up.png" />
     <Content Include="img\icons\icon_link-views_up.png" />
+    <Content Include="plugins\full_extent\icon_map-home.png" />
+    <Content Include="plugins\full_extent\icon_map-home_active.png" />
     <Content Include="img\icons\icon_print_up.png" />
     <Content Include="img\icons\icon_share_up.png" />
     <Content Include="img\icons\icon_split_up.png" />
@@ -165,7 +169,6 @@
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
     <Content Include="js\Screen.js" />
-    <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
     <Content Include="plugins\full_extent\full_extent.css" />
     <Content Include="plugins\layer_selector\icon.png" />
