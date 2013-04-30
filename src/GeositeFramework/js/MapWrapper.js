@@ -91,7 +91,7 @@
         // Pass along a call to the underlaying setExtent method.  Although
         // this could get called without error because the wrapper prototype
         // object is an esri.map, it only happened to work the first time.  We
-        // assume that it's reference to an internal extent property was being
+        // assume that its reference to an internal extent property was being
         // assigned to the wrong object.  This passthrough works repeatedly
         _wrapper.setExtent = function() {
             esriMap.setExtent.apply(esriMap, arguments);
