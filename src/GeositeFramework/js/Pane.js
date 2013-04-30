@@ -61,12 +61,13 @@
     //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
 
     function initPlugins(model, esriMap) {
-        var mapModel = model.get('mapModel');
+        var mapModel = model.get('mapModel'),
+            regionData = model.get('regionData');
 
         model.get('plugins').each(function (pluginModel) {
             var stateOfPlugin = model.get('stateOfPlugins')[pluginModel.name()];
 
-            pluginModel.initPluginObject(mapModel, esriMap);
+            pluginModel.initPluginObject(regionData, mapModel, esriMap);
             if (stateOfPlugin) {
                 pluginModel.setState(stateOfPlugin);
             }
@@ -85,9 +86,7 @@
 
         initialize: function () { return initialize(this); },
 
-        initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
-
-        getHomeExtent: function () { return getHomeExtent(this); }
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
     });
 
 }(Geosite));
@@ -193,9 +192,6 @@
         initialize: function (view) { initialize(this); },
 
         events: {
-            'click .home-button': function () {
-                this.mapView.esriMap.setExtent(this.model.getHomeExtent());
-            },
             'click .export-button': 'exportMap'
         },
 
