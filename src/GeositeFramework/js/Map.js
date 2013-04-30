@@ -72,6 +72,7 @@
 
 (function (N) {
     'use strict';
+
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
         view.model.on('change:extent',               function () { loadExtent(view); });
@@ -87,18 +88,18 @@
     function createMap(view) {
         var esriMap = new esri.Map(view.$el.attr('id'), { logo: false }),
             resizeMap = function resizeMap() {
-            // When the element containing the map resizes, the 
-            // map needs to be notified.  Do a slight delay so that
-            // the browser has time to actually make the element visible.
-            _.delay(function () {
-                if (view.$el.is(':visible')) {
-                    var center = esriMap.extent.getCenter();
-                    esriMap.reposition();
-                    esriMap.resize(true);
-                    esriMap.centerAt(center);
-                }
-            }, 150);
-        }
+                // When the element containing the map resizes, the 
+                // map needs to be notified.  Do a slight delay so that
+                // the browser has time to actually make the element visible.
+                _.delay(function() {
+                    if (view.$el.is(':visible')) {
+                        var center = esriMap.extent.getCenter();
+                        esriMap.reposition();
+                        esriMap.resize(true);
+                        esriMap.centerAt(center);
+                    }
+                }, 150);
+            };
 
         view.esriMap = esriMap;
         loadExtent(view);
@@ -113,6 +114,11 @@
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
+            
+            // Cache the parent of the infowindow rather than re-select it every time.
+            // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
+            // would be detached from the body and the parent would not be accessible 
+            view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
         });
     }
 
@@ -149,7 +155,7 @@
         legendDijit.startup();
 
         // Update the legend whenever the map changes
-        dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
+        dojo.connect(esriMap, 'onUpdateEnd', updateLegend);
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -171,7 +177,7 @@
         var map = view.esriMap,
             windowWidth = 300,
             windowHeight = 600,
-            infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
+            infoWindow = createIdentifyWindow(view, map, event, windowWidth, windowHeight),
             $resultsContainer = $('<div>').addClass('identify-results'),
             showIfLast = _.after(pluginModels.length, function () {
                 showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
@@ -197,13 +203,11 @@
 
     dojo.require("esri.dijit.Popup");
 
-    function createIdentifyWindow(map, event, width, height) {
-        // Delete the current info window (after grabbing its parent DOM node)
-        var $parent = $(map.infoWindow.domNode).parent();
+    function createIdentifyWindow(view, map, event, width, height) {
         map.infoWindow.destroy();
 
         // Create a new info window
-        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo($parent),
+        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo(view.$infoWindowParent),
             infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
         map.infoWindow = infoWindow;
         infoWindow.resize(width, height);
@@ -224,6 +228,7 @@
 
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
+        $infoWindowParent: null,
         initialize: function () { initialize(this); },
         doIdentify: function (pluginModels, event) { doIdentify(this, pluginModels, event); },
         saveState: function () { saveExtent(this); }

@@ -15,9 +15,9 @@ define(["use!underscore"],
                 // (Internally it's doing "GetCapabilities" on the WMS service.)
                 var wmsLayer = new esri.layers.WMSLayer(_url);
                 dojo.connect(wmsLayer, "onLoad", function () {
-                    var folderNode = makeContainerNode(_folderName, "folder", rootNode);
+                    var folderNode = rootNode;
                     folderNode.wmsLayer = wmsLayer;
-                    folderNode.serviceName = _folderName;
+                    folderNode.serviceName = folderNode.parent.text + "/" + _folderName;
                     folderNode.hideAllLayers = hideAllLayers;
                     folderNode.setServiceState = setServiceState;
                     folderNode.saveServiceState = saveServiceState;
@@ -70,6 +70,9 @@ define(["use!underscore"],
                     folderNode.wmsLayer.setVisibleLayers(myStateObject);
                     folderNode.wmsLayer.setOpacity(.7);
                     folderNode.expanded = true;
+                    if (folderNode.parent) {
+                        folderNode.parent.expanded = true;
+                    }
 
                     _.each(folderNode.children, function (child) {
                         if (_.contains(myStateObject, child.layerId)) { child.checked = true; }

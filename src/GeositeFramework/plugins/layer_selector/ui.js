@@ -21,7 +21,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             this.render = function (rootNode) {
                 $(_container).empty();
-                sortFolders([rootNode]);
+
+                rootNode = deracinate(rootNode);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
@@ -52,10 +53,38 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             // ------------------------------------------------------------------------
             // Private methods
 
+            function deracinate(rootNode, depth) {
+                /*
+                  Takes a tree and checks to see if the root node only
+                  has one child. If so, it promotes the child of the
+                  rootNode to the new rootNode, discarding the previous
+                  rootNode.
+                  
+                  This is done in order to avoid forcing the user to
+                  click into multiple generations of a tree to get to
+                  the services they want to use.
+                 */
+                if (rootNode.children && rootNode.children.length === 1) {
+                    return rootNode.children[0];
+                } else {
+                    return rootNode;
+                }
+            }
+
+
             function displayExtTree () {
                 if ($(_container).is(":visible") && _treeNeedsRendering) {
                     _tree.render(_$treeContainer[0]);
-                    _treeNeedsRendering = false;
+                    // // TODO this is a quirk. If we set this to false,
+                    // // the tree won't load properly in all cases, because it is
+                    // // tricky to predict how many times this method will be called
+                    // // depending on the runmode. So, setting treeneedsrendering to false
+                    // // will clear the UI and not rerender if this is the second call.
+                    // // on the other hand, if we set this to true, we get this persistent EXT
+                    // // error: 
+                    // // Uncaught TypeError: Cannot call method 'writeTo' of null 
+                    // //
+                    // _treeNeedsRendering = false;
                 }
             }
 
