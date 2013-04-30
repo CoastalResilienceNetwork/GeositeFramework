@@ -53,7 +53,7 @@ define(
 
             activate: function () {
                 var self = this;
-                self.app._unsafeMap.setExtent(_extent);
+                self.map.setExtent(_extent);
                 self.forceDeactivate();
             }
         });
