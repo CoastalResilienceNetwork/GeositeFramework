@@ -72,6 +72,9 @@
 
 (function (N) {
     'use strict';
+    
+    var _$infoWindowParent;
+    
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
         view.model.on('change:extent',               function () { loadExtent(view); });
@@ -113,6 +116,11 @@
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
+            
+            // Cache the parent of the infowindow rather than re-select it every time.
+            // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
+            // would be detached from the body and the parent would not be accessible 
+            _$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
         });
     }
 
@@ -198,12 +206,10 @@
     dojo.require("esri.dijit.Popup");
 
     function createIdentifyWindow(map, event, width, height) {
-        // Delete the current info window (after grabbing its parent DOM node)
-        var $parent = $(map.infoWindow.domNode).parent();
         map.infoWindow.destroy();
 
         // Create a new info window
-        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo($parent),
+        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo(_$infoWindowParent),
             infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
         map.infoWindow = infoWindow;
         infoWindow.resize(width, height);
