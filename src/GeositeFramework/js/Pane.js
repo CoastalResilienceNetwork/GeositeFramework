@@ -99,7 +99,12 @@
         initBasemapSelector(view);
         initMapView(view);
         initPluginViews(view);
-
+        view.$('.side-nav.top').mCustomScrollbar({
+                advanced: { updateOnContentResize: true },
+                mouseWheelPixels: 75,
+                autoHideScrollbar: true,
+                contentTouchScroll: true
+            });
         N.app.models.screen.on('change', function () { renderSidebar(view); });
     }
 
@@ -108,6 +113,7 @@
             html = paneTemplate(view.model.toJSON());
         view.$el.append(html);
         renderSidebar(view);
+
         renderSidebarLinks(view);
     }
 
