@@ -12,34 +12,89 @@ define([
         var LayerManager = function (app) {
             var _app = app,
                 _urls = [],
-                _rootNode = null,
+                _treeRootNode = null, // the absolute base of the tree
                 _cssClassPrefix = 'pluginLayerSelector',
-                _onLoadingComplete;
+                _onLoadingComplete,
+                _getUniqueFolderTitle = createFnForUniqueFolderTitles();
 
+            
+            /*
+              Public Methods
+             */
             this.load = loadLayerData;
-            this.hideAllLayers = function (map) { hideAllLayersForNode(_rootNode, map) };
-            this.setServiceState = function (stateObject, map) { setServiceStateForNode(_rootNode, stateObject, map); };
-            this.getServiceState = function () { return getServiceStateForNode (_rootNode); };
+            this.hideAllLayers = function (map) { hideAllLayersForNode(_treeRootNode, map) };
+            this.setServiceState = function (stateObject, map) { setServiceStateForNode(_treeRootNode, stateObject, map); };
+            this.getServiceState = function () { return getServiceStateForNode (_treeRootNode); };
 
+
+            /*
+              Private methods
+             */
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
-                _onLoadingComplete = onLoadingComplete;
                 var layerData = parseLayerConfigData(layerSourcesJson);
+
+                _onLoadingComplete = onLoadingComplete;
+
                 if (layerData) {
+                    _treeRootNode = makeRootNode();
+
                     // Load layer info from each source
-                    _rootNode = makeRootNode();
-                    if (layerData.agsSources !== undefined) {
-                        _.each(layerData.agsSources, function (url) {
-                            var loader = new AgsLoader(url);
-                            loadLayerSource(loader, url);
-                        });
-                    }
-                    if (layerData.wmsSources !== undefined) {
-                        _.each(layerData.wmsSources, function (spec) {
-                            var loader = new WmsLoader(spec.url, spec.folderTitle);
-                            loadLayerSource(loader, spec.url, spec.layerIds);
-                        });
-                    }
+                    _.each(layerData, function (dataSourceContainer) {
+                        var loader = null,
+                            innerContainer = null,
+                            source = null,
+                            sourceRootNode = null;
+
+                        // initialize layer data
+                        if (dataSourceContainer.agsSource) {
+                            source = dataSourceContainer.agsSource;
+                            loader = new AgsLoader(source.url);
+                            innerContainer = source.folders;
+
+                        } else if (dataSourceContainer.wmsSource) {
+                            source = dataSourceContainer.wmsSource;
+                            loader = new WmsLoader(source.url, source.folderTitle);
+                            innerContainer = source.layerIds;
+                        }
+
+                        // validate and load, or raise a schema error
+                        if ((dataSourceContainer.agsSource || dataSourceContainer.wmsSource) &&
+                            !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {
+
+                            sourceRootNode = makeContainerNode(_getUniqueFolderTitle(source), "folder", _treeRootNode);
+                            loadLayerSource(loader, source.url, sourceRootNode, innerContainer);
+                        } else { 
+                            _app.error("Schema error. Must have a single agsSource or wmsSource in each object.");
+                        }
+
+                    });
                 }
+            }
+
+            function createFnForUniqueFolderTitles () {
+                    var assignedNameCounter = 0,
+                    duplicateNameCounter = 1,
+                    usedNames = [],
+
+                    innerFunction = function (serviceSource) {
+                        /*
+                          Takes a serviceSource, gets the folderTitle and if it 
+                          is not defined, or not unique, it is assigned a unique name.
+                        */
+
+                        if (serviceSource.folderTitle === undefined) {
+                            return "folder_" + ++assignedNameCounter
+                        } else if (_.contains(usedNames, serviceSource.folderTitle)) {
+                            _app.error("", "Cannot have multiple top-level folders with the same name." + 
+                                       "Appending duplicate notice.");
+                            return serviceSource.folderTitle + "_(duplicate #" + ++duplicateNameCounter + ")"
+                        } else {
+                            usedNames.push(serviceSource.folderTitle);
+                            return serviceSource.folderTitle;
+                        }
+                    };
+
+                    return innerFunction;
             }
 
             function parseLayerConfigData(layerSourcesJson) {
@@ -66,17 +121,39 @@ define([
             var layerConfigSchema = {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 title: 'layer_selector plugin: layer sources specification',
-                type: 'object',
-                additionalProperties: false,
-                properties: {
-                    agsSources: {
-                        type: 'array',
-                        items: { type: 'string' }
-                    },
-                    wmsSources: {
-                        type: 'array',
-                        items: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    additionalProperties: false,
+                    properties: {
+                        agsSource: {
                             type: 'object',
+                            properties: {
+                                url: { type: 'string' },
+                                folderTitle: { type: 'string' },
+                                folders: {
+                                    type: 'array',
+                                    items: { 
+                                        type: 'object',
+                                        additionalProperties: false,
+                                        required: ['name'],
+                                        properties: {
+                                            name: { type: 'string' },
+                                            services: { 
+                                                type: 'array',
+                                                items: { type: 'string' }
+                                            }
+                                        }
+                                    }
+                                },
+                                required: ['url'],
+                                additionalProperties: false
+                            }
+                        },
+                        wmsSource: {
+                            type: 'object',
+                            additionalProperties: false,
+                            required: ['url', 'folderTitle'],
                             properties: {
                                 url: { type: 'string' },
                                 folderTitle: { type: 'string' },
@@ -84,17 +161,15 @@ define([
                                     type: 'array',
                                     items: { type: 'string' }
                                 }
-                            },
-                            required: ['url', 'folderTitle'],
-                            additionalProperties: false
+                            }
                         }
                     }
                 }
             }
 
-            function loadLayerSource(loader, url, layerIdWhitelist) {
+            function loadLayerSource(loader, url, sourceRootNode, folderOrLayerIdWhitelist) {
                 _urls.push(url);
-                loader.load(_rootNode, layerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError)
+                loader.load(sourceRootNode, folderOrLayerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError)
             }
 
             function onLayerSourceLoaded(url) {
@@ -102,7 +177,7 @@ define([
                 _urls = _.without(_urls, url);
                 if (_urls.length == 0) {
                     // All URLs are loaded
-                    _onLoadingComplete(_rootNode);
+                    _onLoadingComplete(_treeRootNode);
                 }
             }
 
@@ -123,16 +198,21 @@ define([
                 return node;
             }
 
-            function makeContainerNode(name, type, parentNode) {
+            function makeContainerNode(name, type, parentNode){
                 var node = {
                     type: type,
                     cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: name.replace(/_/g, " "),
+                    text: name ? name.replace(/_/g, " ") : "",
                     leaf: false,
                     children: [],
                     parent: parentNode
                 };
-                parentNode.children.push(node);
+                // TODO - I don't know why this was necessary. If parent node is defined,
+                // it should always have an array assigned to children. However, when
+                // modifying layers.json to only include AGS sources, this error came up.
+                if (parentNode.children) {
+                    parentNode.children.push(node);
+                }
                 return node;
             }
 
