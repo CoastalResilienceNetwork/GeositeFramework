@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
     <link rel="stylesheet" href="css/app.css">
 
     <script src="js/lib/foundation/modernizr.foundation.js"></script>
@@ -79,9 +80,6 @@
     </script>
 
     <script type="text/template" id="template-sidebar">
-        <% if (showExportButton) { %>
-          <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
-        <% } %>
         <li class="divider"></li>
         <% if (isMain) { %>
             <% if (splitScreen) { %>
@@ -94,6 +92,9 @@
                 <li><a class="split-screen" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
             <% } %>
             <li class="divider"></li>
+            <% if (showExportButton) { %>
+                <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+            <% } %>
             <li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
         <% } else { %>
             <li>
@@ -258,6 +259,8 @@
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
     <script src="js/lib/TinyBox2.js"></script>
+    <script src="js/lib/jquery.mCustomScrollbar.min.js"></script>
+    <script src="js/lib/jquery.mousewheel.min.js"></script>
 
     <script src="js/azavea.util.js"></script>
     <script src="js/Geosite.js"></script>

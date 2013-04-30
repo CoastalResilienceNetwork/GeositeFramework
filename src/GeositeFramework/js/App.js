@@ -78,9 +78,14 @@
     function initResizeHandler() {
 
         function resizeMap() {
+            var bottomHeight    = $('.side-nav.bottom').height(),
+                sidebarHeight   = $('.sidebar').height();
+
+            $('.side-nav.top').height(sidebarHeight - bottomHeight);
             $(N).trigger('resize');
         }
 
+        resizeMap();
         $(window).resize(_.debounce(resizeMap, 300));
     }
 

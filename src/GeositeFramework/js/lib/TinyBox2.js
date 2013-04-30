@@ -11,7 +11,7 @@ TINY.box = function () {
                 p = document.createElement('div'); p.className = 'tinner';
                 b = document.createElement('div'); b.className = 'tcontent';
                 m = document.createElement('div'); m.className = 'tmask';
-                g = document.createElement('div'); g.className = 'tclose'; g.v = 0;
+                g = document.createElement('div'); g.className = 'tclose'; g.v = 0; g.innerHTML += "&#10006;";
                 document.body.appendChild(m); document.body.appendChild(j); j.appendChild(p); p.appendChild(b);
                 m.onclick = g.onclick = TINY.box.hide; window.onresize = TINY.box.resize
             } else {

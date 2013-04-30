@@ -263,7 +263,7 @@
 
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
-                        gutterWidth = 20,
+                        gutterWidth = 70,
                         gutterHeight = -20,
                         yCenter = pos.top + $el.height() / 2 + gutterHeight,
                         xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
