@@ -1,6 +1,22 @@
-{
-    "agsSources": ["http://gulfmex.coastalresilience.org/arcgis/rest/services"],
-    "wmsSources": [
+[
+    {
+        "agsSource": 
+        {
+            "url": "http://gulfmex.coastalresilience.org/arcgis/rest/services",
+            "folderTitle": "Ags",
+            "folders": [
+                {
+                    "name": "Florida"
+                },
+                {
+                    "name": "Alabama",
+                    "services": ["Habitats", "Bathymetry", "Habitats"]
+                }
+            ]
+        }
+    },
+    {
+        "wmsSource":
         {
             "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
             "folderTitle": "Risks",
@@ -10,5 +26,13 @@
                 "preview:cs_frequency"
             ]
         }
-    ]
-}
+    },
+    {
+        "agsSource":
+        {
+            "url": "http://gulfmex.coastalresilience.org/arcgis/rest/services",
+            "folderTitle": "Ags"
+        }
+    }
+]
+
