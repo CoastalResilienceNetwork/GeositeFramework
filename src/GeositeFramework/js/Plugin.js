@@ -12,7 +12,7 @@
             _.extend(model, selectable);
         }
 
-        function initPluginObject(model, mapModel, esriMap) {
+        function initPluginObject(model, regionData, mapModel, esriMap) {
             var pluginObject = model.get('pluginObject'),
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
@@ -20,6 +20,7 @@
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
+                    regionConfig: regionData,
                     info: makeLogger(pluginName, "INFO"),
                     warn: makeLogger(pluginName, "WARN"),
                     error: makeLogger(pluginName, "ERROR"),
@@ -27,7 +28,15 @@
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
-                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
+                forceDeactivate: function () {
+                    // Drop the turnOff call to the end of the stack because
+                    // if the plugin called this from it's initialize event, the
+                    // selection change events from backbone.picky will still 
+                    // fire the unchanged selection model state, resulting in an
+                    // infinite loop.
+                    setTimeout(function () { model.turnOff(); }, 0);
+                }
             });
         }
 
@@ -101,7 +110,7 @@
 
             isCompliant: function () { return checkPluginCompliance(this); },
 
-            initPluginObject: function (mapModel, esriMap) { initPluginObject(this, mapModel, esriMap); },
+            initPluginObject: function (regionData, mapModel, esriMap) { initPluginObject(this, regionData, mapModel, esriMap); },
 
             setState: function (pluginState) { setState(this, pluginState); },
 
