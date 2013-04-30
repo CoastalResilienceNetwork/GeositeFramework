@@ -133,6 +133,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\jquery.mCustomScrollbar.css" />
     <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
     <Content Include="Error404.html" />
@@ -166,6 +167,8 @@
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\Geosite.js" />
+    <Content Include="js\lib\jquery.mCustomScrollbar.min.js" />
+    <Content Include="js\lib\jquery.mousewheel.min.js" />
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
     <Content Include="js\Screen.js" />
