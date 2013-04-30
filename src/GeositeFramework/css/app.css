@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .top-bar {
 	margin-bottom: 0;
-	background: #30BBC1;
+	background: #26648E;
 	}
 	.top-bar ul > li.divider {
 		background: white;
@@ -61,14 +61,14 @@ h1, h2, h3, h4, h5, h6 {
 			border-bottom: 45px solid transparent;
 		}
 		.top-bar ul > li.name h1 a {
-			color: #30BBC1;
+			color: #26648E;
 			text-transform: uppercase;
 			font-size: 16px !important;
 		}
 	.top-bar ul > li.name h2{
 		font-size: 16px;
 		float: left;
-		margin-left: 15px;
+		margin-left: 22px;
 		color: white;
 		text-transform: uppercase;
 	    
@@ -222,13 +222,35 @@ h1, h2, h3, h4, h5, h6 {
             	color: white;
             }
             .content .plugin-container-header a {
-                float: right;
+                float: left;
                 padding-left: 10px;
                 color: #CCC;
             	}
             	.content .plugin-container-header a:hover {
             		color: #FFF;
             	}
+            	.content .plugin-container-header a.plugin-close {
+            		position: absolute; 
+				    top: -15px; 
+				    right: -15px; 
+				    cursor: pointer; 
+				    padding: 4px 5px;
+				    background: #AAA;
+				    border-radius: 99px;
+				    color: white;
+				    font-size: 12px;
+				    text-shadow: 0 1px 2px #222;
+				    text-shadow: 0 1px 2px rgba(0,0,0,.75);
+				    border: white 3px solid;
+				    box-shadow: 0 1px 7px #222;
+				    box-shadow: 0 1px 7px rgba(0,0,0,.5);
+            		}
+            		.content .plugin-container-header a.plugin-close:hover {
+            			background: #BE1E2D;
+					    box-shadow: 0 1px 7px #000;
+					    box-shadow: 0 1px 7px rgba(0,0,0,.85);
+            		}
+
 
         .content .plugin-container-inner {
             height: 325px; 
@@ -260,15 +282,38 @@ h1, h2, h3, h4, h5, h6 {
 			}
             .content .map .tools .topbar-plugin {
                 margin-bottom: 8px;
-            }
-                .content .map .tools .topbar-plugin .topbar-tools
-                {
+                position: relative;
+                width: auto;
+                float: left;
+                clear: both;
+            	}
+                .content .map .tools .topbar-plugin .topbar-tools {
                     display: none;
                 }
-               .content .map .tools .topbar-plugin.active .topbar-tools
-                {
+                .content .map .tools .topbar-plugin.active .topbar-tools {
                     display: initial;
                 }
+                .content .map .tools .topbar-plugin .topbar-tools .plugin-clear {
+                	position: absolute;
+					bottom: -16px;
+					right: -18px;
+					padding: 4px 5px;
+					background: #AAA;
+					border-radius: 99px;
+					color: white;
+					font-size: 12px;
+					text-shadow: 0 1px 2px #222;
+					text-shadow: 0 1px 2px rgba(0,0,0,.75);
+					border: white 3px solid;
+					box-shadow: 0 1px 7px #222;
+					box-shadow: 0 1px 7px rgba(0,0,0,.5);
+                	}
+                	.content .map .tools .topbar-plugin .topbar-tools .plugin-clear:hover {
+                		background: #BE1E2D;
+						box-shadow: 0 1px 7px #000;
+						box-shadow: 0 1px 7px rgba(0,0,0,.85);
+                	}
+
 			.content .map .tools .topbar-plugin div {
 				width: 34px;
 				height: 34px;
@@ -421,9 +466,10 @@ h1, h2, h3, h4, h5, h6 {
 	box-shadow: 0 0 12px #666;
 	box-shadow: 0 0 12px rgba(0,0,0,.25);
 	}
-	.content .legend #legend-0_msg {
-		color: #AAA;
-		font-weight: bold;
+	.content .legend #legend-0_msg,
+	.content .legend #legend-1_msg {
+		color: #888;
+		font-weight: 400;
 	}
 
 .esriLegendService {
@@ -477,6 +523,9 @@ h1, h2, h3, h4, h5, h6 {
 		.content .sidebar ul.side-nav.bottom > li a.hide-for-tablet .icon {
 			display: none;
 		}
+	.content .legend {
+		max-height: 300px;
+	}
 }
 
 /* -----------------------------------------
