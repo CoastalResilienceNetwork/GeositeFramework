@@ -72,9 +72,7 @@
 
 (function (N) {
     'use strict';
-    
-    var _$infoWindowParent;
-    
+
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
         view.model.on('change:extent',               function () { loadExtent(view); });
@@ -120,7 +118,7 @@
             // Cache the parent of the infowindow rather than re-select it every time.
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
             // would be detached from the body and the parent would not be accessible 
-            _$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
+            view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
         });
     }
 
@@ -157,7 +155,7 @@
         legendDijit.startup();
 
         // Update the legend whenever the map changes
-        dojo.connect(esriMap, 'onUpdateEnd', updateLegend)
+        dojo.connect(esriMap, 'onUpdateEnd', updateLegend);
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -179,7 +177,7 @@
         var map = view.esriMap,
             windowWidth = 300,
             windowHeight = 600,
-            infoWindow = createIdentifyWindow(map, event, windowWidth, windowHeight),
+            infoWindow = createIdentifyWindow(view, map, event, windowWidth, windowHeight),
             $resultsContainer = $('<div>').addClass('identify-results'),
             showIfLast = _.after(pluginModels.length, function () {
                 showIdentifyResults(infoWindow, $resultsContainer, windowWidth, windowHeight);
@@ -205,11 +203,11 @@
 
     dojo.require("esri.dijit.Popup");
 
-    function createIdentifyWindow(map, event, width, height) {
+    function createIdentifyWindow(view, map, event, width, height) {
         map.infoWindow.destroy();
 
         // Create a new info window
-        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo(_$infoWindowParent),
+        var $infoWindow = $('<div>').addClass('identify-info-window').appendTo(view.$infoWindowParent),
             infoWindow = new esri.dijit.Popup({ map: map }, $infoWindow.get(0));
         map.infoWindow = infoWindow;
         infoWindow.resize(width, height);
@@ -230,6 +228,7 @@
 
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
+        $infoWindowParent: null,
         initialize: function () { initialize(this); },
         doIdentify: function (pluginModels, event) { doIdentify(this, pluginModels, event); },
         saveState: function () { saveExtent(this); }
