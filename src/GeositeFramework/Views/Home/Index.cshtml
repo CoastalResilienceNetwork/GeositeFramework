@@ -92,9 +92,6 @@
                 <li><a class="split-screen" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
             <% } %>
             <li class="divider"></li>
-            <% if (showExportButton) { %>
-                <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
-            <% } %>
             <li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
         <% } else { %>
             <li>
@@ -104,6 +101,10 @@
                 </a>
             </li>
         <% } %>
+        <% if (showExportButton) { %>
+            <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+        <% } %>
+
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
