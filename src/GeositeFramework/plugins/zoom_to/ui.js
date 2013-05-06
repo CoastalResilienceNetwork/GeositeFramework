@@ -10,7 +10,7 @@ define([],
                              '<div id="pluginZoomTo-clearSearch"></div>',
                              '<div id="pluginZoomTo-choices"></div>'
                              ].join("");
-            locationTemplate = '<a href="#"><%= address %></a> (<%= x %>, <%= y %>)<br>',
+            locationTemplate = '<a href="javascript:;"><%= address %></a> (<%= x %>, <%= y %>)<br>',
             searchErrorText = "There was an error completing your request.";
 
 

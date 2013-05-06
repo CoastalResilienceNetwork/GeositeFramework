@@ -8,7 +8,7 @@
 @helper OptionalLinkText (Geosite.Link link) {
     if (link.Url != null)
     {
-        <a href="@link.Url">@link.Text</a>
+        <a target="_blank" href="@link.Url">@link.Text</a>
     }
     else
     {
@@ -125,7 +125,7 @@
     </script>
     <script type="text/template" id="template-sidebar-link">
         <div class="sidebar-link">
-            <a href="<%= link.url %>"><%- link.text %></a>
+            <a target="_blank" href="<%= link.url %>"><%- link.text %></a>
         </div>
     </script>
 
@@ -232,7 +232,7 @@
                             }
                             else
                             {
-                                <a href="@link.Url">@link.Text</a>    
+                                <a target="_blank" href="@link.Url">@link.Text</a>    
                             }
                             
                         </li>
