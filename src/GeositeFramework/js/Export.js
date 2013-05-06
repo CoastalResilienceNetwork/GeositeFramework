@@ -1,7 +1,7 @@
 // on view submit button click, set exportMap to be the current map
 
 (function (N) {
-
+    "use strict";
     dojo.require("esri.tasks.PrintTask");
 
     ////////////////////////////////
@@ -41,7 +41,7 @@
         submissionIsValid: function () {
             return (
                 _.contains(["Portrait", "Landscape"], this.get('exportOrientation')) &&
-                _.contains(["A3","A4","Letter ANSI A","Tabloid ANSI B"], this.get('exportPaperSize')))
+                _.contains(["A3","A4","Letter ANSI A","Tabloid ANSI B"], this.get('exportPaperSize')));
         },
         
         setupDependencies: function () {
@@ -59,7 +59,7 @@
             params.template.preserveScale = false;
             params.template.showAttribution = false;
 
-            this.pdfManager = {}
+            this.pdfManager = {};
             this.pdfManager.params = params;
             this.pdfManager.printTask = printTask;
             this.pdfManager.run = function (layout, title, includeLegend, success, failure) {
@@ -69,12 +69,12 @@
                 this.params.template.layoutOptions.titleText = title;
                 if (!includeLegend) { this.params.template.layoutOptions.legendLayers = []; }
                 this.printTask.execute(this.params, success, failure);
-            }
+            };
         },
 
         createPDF: function () {
             var model = this,
-                resultTemplate = N.app.templates['template-export-url'];
+                resultTemplate = N.app.templates['template-export-url'],
                 templateLayout = this.get('exportPaperSize') + " " + this.get('exportOrientation');
 
             model.pdfManager.run(
@@ -87,7 +87,7 @@
                         submitEnabled: true
                     });
                 },
-                function (error) {
+                function () {
                     model.set('outputText', "There was an error processing your request.");
                 });
         }
@@ -102,7 +102,7 @@
         className: 'export-ui',
 
         events: {
-            "click button": function (event) { this.handleSubmit(); },
+            "click button": function () { this.handleSubmit(); },
             "keyup input": function (event) { this.handleKeyPress(event); }
         },
 
