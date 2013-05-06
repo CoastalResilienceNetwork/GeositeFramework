@@ -8,7 +8,7 @@
 @helper OptionalLinkText (Geosite.Link link) {
     if (link.Url != null)
     {
-        <a href="@link.Url">@link.Text</a>
+        <a target="_blank" href="@link.Url">@link.Text</a>
     }
     else
     {
@@ -92,9 +92,6 @@
                 <li><a class="split-screen" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
             <% } %>
             <li class="divider"></li>
-            <% if (showExportButton) { %>
-                <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
-            <% } %>
             <li><a href="javascript:;" class="permalink-button hide-for-tablet"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
         <% } else { %>
             <li>
@@ -104,6 +101,10 @@
                 </a>
             </li>
         <% } %>
+        <% if (showExportButton) { %>
+            <li><a href="javascript:;" class="export-button hide-for-tablet"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+        <% } %>
+
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
@@ -124,7 +125,7 @@
     </script>
     <script type="text/template" id="template-sidebar-link">
         <div class="sidebar-link">
-            <a href="<%= link.url %>"><%- link.text %></a>
+            <a target="_blank" href="<%= link.url %>"><%- link.text %></a>
         </div>
     </script>
 
@@ -199,7 +200,7 @@
 
     <script type="text/template" id="permalink-share-window">
       <h3>Save & Share</h3>
-      <label>Permalink:<input class="permalink-textbox" type="text" value="<%= url %>"></input></label>
+      <label>Permalink:<input class="permalink-textbox" type="text" readonly="readonly" value="<%= url %>"></input></label>
       <p>Share your map with friends or family, or just bookmark the link for later.</p>
     </script>
 
@@ -231,7 +232,7 @@
                             }
                             else
                             {
-                                <a href="@link.Url">@link.Text</a>    
+                                <a target="_blank" href="@link.Url">@link.Text</a>    
                             }
                             
                         </li>

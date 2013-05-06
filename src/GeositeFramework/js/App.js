@@ -56,7 +56,11 @@
                 height: 200,
                 fixed: true,
                 openjs: function () {
-                    $('.permalink-textbox').select();
+                    var $domElement = $('.tinner .permalink-textbox');
+                    $domElement.select();
+                    $domElement.mouseup(
+                        function () { $domElement.select(); }
+                    );
                 }
             });
         },
