@@ -9,6 +9,7 @@
     N.models = N.models || {};
     N.models.Screen = Backbone.Model.extend({
         defaults: {
+            helpUrl: null,
             mainPaneNumber: 0,
             splitScreen: false,
             showExportButton: false,
@@ -43,6 +44,9 @@
         initialize: function () {
             if (N.app.data.region.printServerUrl) {
                 this.set('showExportButton', true);
+            }
+            if (N.app.data.region.helpUrl) {
+                this.set('helpUrl', N.app.data.region.helpUrl);
             }
         }
     });

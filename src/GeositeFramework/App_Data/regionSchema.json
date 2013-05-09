@@ -72,6 +72,10 @@
         "printServerUrl": {
             "type": "string",
             "required": false
+        },
+        "helpUrl": {
+            "type": "string",
+            "required": false
         }
     },
     "additionalProperties": false
