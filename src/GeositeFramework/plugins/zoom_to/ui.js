@@ -7,10 +7,10 @@ define([],
         ////////////////////////////////
 
         var inputTemplate = ['<input type="text" placeholder="Search by Address" value="<%= inputValue %>" />',
-                             '<div id="pluginZoomTo-clearSearch"></div>',
+                             '<div id="pluginZoomTo-clearSearch">&#10006;</div>',
                              '<div id="pluginZoomTo-choices"></div>'
                              ].join("");
-            locationTemplate = '<a href="javascript:;"><%= address %></a> (<%= x %>, <%= y %>)<br>',
+            locationTemplate = '<a href="javascript:;"><%= address %></a>',
             searchErrorText = "There was an error completing your request.";
 
 
