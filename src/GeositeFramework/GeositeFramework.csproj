@@ -173,6 +173,7 @@
     <Content Include="plugins\draw_report\draw_report.css" />
     <Content Include="plugins\draw_report\icon_active.png" />
     <Content Include="plugins\draw_report\icon.png" />
+    <Content Include="plugins\draw_report\images\spinner.gif" />
     <Content Include="plugins\draw_report\main.js" />
     <Content Include="plugins\draw_report\templates.html" />
     <Content Include="plugins\full_extent\icon-active.png" />
