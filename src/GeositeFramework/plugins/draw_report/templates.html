@@ -1,0 +1,25 @@
+﻿
+<script type="text/template" id="template-report-pluginbody">
+    <div>
+        <h5>Step 1: Select Report</h5>
+        <div>
+            <select id="report-plugin-report-select"></select>
+        </div>
+        <div id="report-plugin-report-description">
+            <%= firstDescription %>
+        </div>
+        <div>
+            <h5>Step 2: Draw an area on the map</h5>
+            <button id="report-plugin-draw" class="button">Draw area of interest</button>
+    
+            <h5>Step 3: Generate Report</h5>
+            <button id="report-plugin-request" class="button" disabled>Generate</button>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/template" id="template-report-select-option">
+    <option value="<%=index %>"><%=name%></option>
+</script>
+

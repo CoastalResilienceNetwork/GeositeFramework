@@ -1,0 +1,39 @@
+﻿{
+    "gpUrl": "http://dev.ags.coastalresilience.org:6080/arcgis/rest/services/geoprocessing/DrawAndReport/GPServer/getDrawAndReportData",
+    "reports":
+        [
+            { 
+                "id": "example_1",
+                "name": "Example Report 1",
+                "description": "This is an example report with 3 layers: AL_submerged_vegetation, AL_oyster_larval_concentration & AL_water_access.",
+                "layers": [
+                    {    
+                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
+                        "field":"habit"
+                    },
+                    {
+                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration"
+                    },
+                    {
+                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Coastal_Management/AL_water_access",
+                        "field":"access"
+                    }
+                ]
+            }, 
+
+            { 
+                "id": "example_2",
+                "name": "Example Report 2",
+                "description": "This is an example report with 2 layers: AL_submerged_vegetation & AL_oyster_larval_concentration",
+                "layers": [
+                    {    
+                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
+                        "field":"habit"
+                    },
+                    {
+                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration"
+                    }
+                ]
+            }
+        ]
+}

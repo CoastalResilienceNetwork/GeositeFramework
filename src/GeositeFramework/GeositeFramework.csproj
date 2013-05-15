@@ -170,6 +170,11 @@
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="plugins\draw_report\draw_report.css" />
+    <Content Include="plugins\draw_report\icon_active.png" />
+    <Content Include="plugins\draw_report\icon.png" />
+    <Content Include="plugins\draw_report\main.js" />
+    <Content Include="plugins\draw_report\templates.html" />
     <Content Include="plugins\full_extent\icon-active.png" />
     <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
@@ -254,6 +259,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\full_extent\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\draw_report\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\draw_report\reports_config.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
