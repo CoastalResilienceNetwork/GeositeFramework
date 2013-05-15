@@ -1,3 +1,18 @@
-﻿.content .map .full-extent {		
-	  background-image: url(icon.png);
-   }
+﻿dl.tabs dd { cursor: pointer;}
+
+.plugin-report-spinner {
+    background: url(images/spinner.gif) no-repeat center center;
+    height: 32px;
+    width: 32px;
+    display: inline-block;
+}
+
+table.report-plugin-result-table {
+    width: 100%;
+}
+    table.report-plugin-result-table td {
+        width: 50%;
+    }
+.plugin-report-clean-text {
+    text-transform: capitalize;
+}

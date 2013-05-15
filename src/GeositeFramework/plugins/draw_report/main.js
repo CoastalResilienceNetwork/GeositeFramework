@@ -27,14 +27,15 @@ define(
 
         var _config = $.parseJSON(config),
             _$templates = $('<div>').append($(templates.trim())),
-            _$container,
             _$select,
             _$requestButton,
+            _$resultDisplay,
+            _$resultTab,
             _layer,
             _editbar,
             _currentFeature,        // Keep state of report runs for
-            _currentReport,         // getState() requests
-            _gp;
+            _currentReportId,       // getState() requests
+            _gp,            showSpinner, hideSpinner;
         dojo.require("esri.toolbars.draw");
         dojo.require("esri.tasks.gp");
         
@@ -55,6 +56,9 @@ define(
             _$select = $body.find("select");
             _$select.append.apply(_$select, rendered);
 
+            _$resultDisplay = $body.find("#report-plugin-tab-result");
+            _$resultTab = $body.find('#plugin-report-result-tab');
+            
             $body.find("#report-plugin-draw").click(handleStartDraw);
             _$requestButton = $body.find("#report-plugin-request").click(function() {
                 requestReport(_$select.val());
@@ -64,27 +68,32 @@ define(
         }
         
         function handleStartDraw() {
+            _layer.clear();
             _$requestButton.attr("disabled", "disabled");
             _editbar.activate(esri.toolbars.Draw.POLYGON);
         }
         
         function requestReport(reportIdx) {
             var featureSet = new esri.tasks.FeatureSet(),
-                report = _config.reports[reportIdx];
+                report = _config.reports[reportIdx],
+                params;
 
             featureSet.features = [_currentFeature];
-            _currentReport = report.id;
+            _currentReportId = report.id;
             
-            var params = {
+            params = {
                 "Layers": JSON.stringify(report.layers),
                 "Clip": featureSet
-            };
+            };
+
+            showSpinner();
             _gp.submitJob(params, gpFinished, null, function (error) {
                 this.app.error("Unable to process Report Analysis", error);
             });
         }
         
         function gpFinished(info) {
+            hideSpinner();
             if (info.jobStatus === 'esriJobSucceeded') {
                 _gp.getResultData(info.jobId, "Output", handleReportResult);
             } else {
@@ -96,9 +105,27 @@ define(
             }
         }
         
+        function spinner($container, action) {
+            var $spinner = $container.find(".plugin-report-spinner ");
+            return function () {
+                $spinner[action]();
+            };
+        }
+        
         function handleReportResult(result) {
-            // TODO: View Results
-            console.log(result.value);
+            var report = _.find(_config.reports, function(r) {
+                    return r.id = _currentReportId;
+                }),
+                // The layer results are in the same order as they are config'd
+                layerResults = _.zip(result.value, report.layers),
+                context = {
+                    name: report.name,
+                    layers: layerResults
+                };
+
+            _$resultDisplay.empty()
+                .append(getTemplate("template-report-results")(context));
+            _$resultTab.click();
         }
 
         function addGraphic(geometry) {
@@ -111,20 +138,42 @@ define(
             _editbar.deactivate();
         }
         
+        // Quick and dirty tab switcher without adding content
+        // to the browser hash (foundation does) which breaks hash models
+        function setupViewTabs($tabHost) {
+            var $tabContent = $tabHost.find('.tabs-content'),
+                $tabs = $tabHost.find('.tabs');
+            
+            $tabHost.on("click", "dl.tabs a", function() {
+                var $tab = $(this);
+                $tabContent.find('li').removeClass('active');
+                $tabs.find('dd').removeClass('active');
+                
+                $tab.parent().addClass('active');
+                $tabContent.find('#' + $tab.data('content')).addClass('active');
+            });
+        }
+        
         function initialize(context) {
             var self = context,
+                $container,
                 $desc;
 
             _gp = new esri.tasks.Geoprocessor(_config.gpUrl);
 
-            _$container = $(self.container).append(render(_config.reports));
-
+            $container = $(self.container).append(render(_config.reports));
+            setupViewTabs($container);
+            
             // Set the selected report description
-            $desc = _$container.find("#report-plugin-report-description");
-            _$container.on('change', 'select', function () {
+            $desc = $container.find("#report-plugin-report-description");
+            $container.on('change', 'select', function () {
                 $desc.html(_config.reports[$(this).val()].description);
             });
 
+            showSpinner = spinner($container, "show");
+            hideSpinner = spinner($container, "hide");
+            hideSpinner();
+            
             _layer = new esri.layers.GraphicsLayer({ id: "analysis-draw" });
             self.map.addLayer(_layer);
 
@@ -174,10 +223,10 @@ define(
             },
             
             getState: function () {
-                if (_currentFeature && _currentReport) {
+                if (_currentFeature && _currentReportId) {
                     return {
                         feature: _currentFeature.geometry.toJson(),
-                        report: _currentReport
+                        report: _currentReportId
                     };
                 }
                 return null;
