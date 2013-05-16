@@ -148,15 +148,15 @@ define(["jquery", "use!underscore"],
                 // Stop measuring
                 finish({
                     area: null,
-                    length: calculateDistance(_points).toFixed(2)
+                    length: Azavea.numberToString(calculateDistance(_points), 2)
                 });
             },
 
             formatTooltip = function (segment, line) {
 
                 return _tooltipTemplate({
-                    segmentLength: segment.toFixed(0),
-                    totalLength: line.toFixed(0),
+                    segmentLength: Azavea.numberToString(segment, 0),
+                    totalLength: Azavea.numberToString(line, 0),
                     units: _unitsLookup[options.esriLengthUnits]
                 });
             },
@@ -297,11 +297,10 @@ define(["jquery", "use!underscore"],
                     // Change the first node symbol to the default as we finish
                     setDefaultPointSymbol(evt.graphic);
 
-                    finish({
-                        area: area.toFixed(2),
-                        length: calculateDistance(_points).toFixed(2)
-                    });
-                }
+                finish({
+                    area: Azavea.numberToString(area, 2),
+                    length: Azavea.numberToString(calculateDistance(_points), 2)
+                });
             };
 
             // Public methods
