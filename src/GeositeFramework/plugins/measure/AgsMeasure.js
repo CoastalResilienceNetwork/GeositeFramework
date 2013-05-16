@@ -1,13 +1,18 @@
 ﻿
 define(["jquery", "use!underscore"],
     function ($, _) {
+        dojo.require("esri.tasks.geometry");
+        
         var AgsMeasure = function (opts) {
 
             var options = _.extend({
                 map: null,
                 tooltipTemplate: '',
                 infoBubbleTemplate: '',
-
+                // It is preferable to provide a custom geometry server, but 
+                // this url is non-warranty "production" ready
+                geomServiceUrl: 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
+                
                 pointSymbol: new esri.symbol.SimpleMarkerSymbol(
                     esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
                     new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
@@ -56,7 +61,8 @@ define(["jquery", "use!underscore"],
             _$tooltip = $('<div>'),
             _popupTemplate,
             _tooltipTemplate,
-
+            _geometrySvc,
+                
             showResultPopup = function (results) {
                 // Delete the current info window (after grabbing its parent DOM node)
                 var map = options.map,
@@ -283,19 +289,40 @@ define(["jquery", "use!underscore"],
                     // and create a polygon out of it
                     _points.push(_points[0]);
                     var polygon = new esri.geometry.Polygon(options.map.spatialReference);
+                    
+                    // If the user has drawn the polygon ring anti-clockwise, reverse the ring
+                    // to make it a valid esri geometry.
+                    if (!esri.geometry.isClockwise(_points)) {
+                        _points = _points.reverse();
+                    }
                     polygon.addRing(_points);
-
-                    var geoPolygon = esri.geometry.webMercatorToGeographic(polygon),
+                    
+                    // If the polygon self interesects, simplify it using the geometry service
+                    if (esri.geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
+                        _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
+                            setMeasureOutput(simplifiedPolygons[0], evt.graphic);
+                        });
+                    } else {
+                        setMeasureOutput(polygon, evt.graphic);
+                    }
+                    
+                }
+            }, 
+                
+            // Assumes polygon is valid at this point
+            setMeasureOutput = function (polygon, graphic)
+            {
+                var geoPolygon = esri.geometry.webMercatorToGeographic(polygon),
                         area = esri.geometry.geodesicAreas([geoPolygon],
                             options.esriAreaUnits)[0];
 
-                    // Remove our lines for the outline layer and replace them
-                    // with the new polygon area
-                    _outlineLayer.clear();
-                    _outlineLayer.add(new esri.Graphic(polygon, options.polygonSymbol));
+                // Remove our lines for the outline layer and replace them
+                // with the new polygon area
+                _outlineLayer.clear();
+                _outlineLayer.add(new esri.Graphic(polygon, options.polygonSymbol));
 
-                    // Change the first node symbol to the default as we finish
-                    setDefaultPointSymbol(evt.graphic);
+                // Change the first node symbol to the default as we finish
+                setDefaultPointSymbol(graphic);
 
                 finish({
                     area: Azavea.numberToString(area, 2),
@@ -319,6 +346,9 @@ define(["jquery", "use!underscore"],
                     _popupTemplate = _.template(options.infoBubbleTemplate);
                     _tooltipTemplate = _.template(options.tooltipTemplate);
 
+                    if (options.geomServiceUrl) {
+                        _geometrySvc = new esri.tasks.GeometryService(options.geomServiceUrl);
+                    }
                 },
 
                 deactivate: reset,
