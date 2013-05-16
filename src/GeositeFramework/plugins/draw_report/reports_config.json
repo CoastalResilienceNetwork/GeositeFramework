@@ -7,14 +7,19 @@
                 "name": "Example Report 1",
                 "description": "This is an example report with 3 layers: AL_submerged_vegetation, AL_oyster_larval_concentration & AL_water_access.",
                 "layers": [
-                    {    
+                    {   
+                        "display": "Alabama Submerged Vegetation",
                         "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
-                        "field":"habit"
+                        "field":"habit",
+                        "units": "km<sup>2</sup>"
                     },
                     {
-                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration"
+                        "display": "Alabama Oyster Larval Concentration",
+                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration",
+                        "units": "km<sup>2</sup>"
                     },
                     {
+                        "display": "Alabama Water Access",
                         "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Coastal_Management/AL_water_access",
                         "field":"access"
                     }
@@ -26,11 +31,14 @@
                 "name": "Example Report 2",
                 "description": "This is an example report with 2 layers: AL_submerged_vegetation & AL_oyster_larval_concentration",
                 "layers": [
-                    {    
+                    {   
+                        "display": "Alabama Submerged Vegetation",
                         "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
-                        "field":"habit"
+                        "field":"habit",
+                        "units": "km<sup>2</sup>"
                     },
                     {
+                        "display": "Alabama Oyster Larval Concentration",
                         "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration"
                     }
                 ]

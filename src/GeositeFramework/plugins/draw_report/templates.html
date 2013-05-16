@@ -1,21 +1,37 @@
 ﻿
 <script type="text/template" id="template-report-pluginbody">
     <div>
-        <h5>Step 1: Select Report</h5>
-        <div>
-            <select id="report-plugin-report-select"></select>
-        </div>
-        <div id="report-plugin-report-description">
-            <%= firstDescription %>
-        </div>
-        <div>
-            <h5>Step 2: Draw an area on the map</h5>
-            <button id="report-plugin-draw" class="button">Draw area of interest</button>
+        
+        <dl class="tabs">
+          <dd class="active"><a data-content="report-plugin-tab-select">Report Selection</a></dd>
+          <dd><a id="plugin-report-result-tab" data-content="report-plugin-tab-result">Report Results</a></dd>
+        </dl>
+
+        <ul class="tabs-content">
+          <li class="active" id="report-plugin-tab-select">
+            <h5>Step 1: Select Report</h5>
+            <div>
+                <select id="report-plugin-report-select"></select>
+            </div>
+            <div id="report-plugin-report-description">
+                <%= firstDescription %>
+            </div>
+            <div>
+                <h5>Step 2: Draw an area on the map</h5>
+                <button id="report-plugin-draw" class="button">Draw area of interest</button>
     
-            <h5>Step 3: Generate Report</h5>
-            <button id="report-plugin-request" class="button" disabled>Generate</button>
-        </div>
+                <h5>Step 3: Generate Report</h5>
+                <button id="report-plugin-request" class="button" disabled="disabled">Generate</button>
+                <div class="plugin-report-spinner"></div>
+            </div>
+          </li>
+
+          <li id="report-plugin-tab-result">
+              Generate a report to view the results
+          </li>
+        </ul>
     </div>
+
 </script>
 
 
@@ -23,3 +39,22 @@
     <option value="<%=index %>"><%=name%></option>
 </script>
 
+<script type="text/template" id="template-report-results">
+    <h4><%=name%></h4>
+    <% _.each(layers, function(layer) { %>
+        <h5><%=layer[1].display %></h5>
+        <h6 class="plugin-report-clean-text"><%=layer[1].field %></h6>
+        <% if (layer[0].length) { %> 
+            <table class="report-plugin-result-table">    
+                <% _.each(layer[0], function(valueRow) { %>
+                    <tr>
+                        <td class="plugin-report-clean-text"><%= valueRow.Category %></td>
+                        <td><%= Azavea.numberToString(valueRow.Amount, 2) %> <%= layer[1].units %></td>
+                    </tr>
+                <% }); %>
+            </table>
+        <% } else { %>
+            <span>No values for this layer in your area of interest.</span>
+        <% }  %>
+    <% }); %>
+</script>
