@@ -330,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
 						box-shadow: 0 1px 7px rgba(0,0,0,.85);
                 	}
 
-			.content .map .tools .topbar-plugin div {
+			.content .map .tools .topbar-plugin a.plugin-launcher > div {
 				width: 34px;
 				height: 34px;
 				background-color: white;
@@ -344,14 +344,14 @@ h1, h2, h3, h4, h5, h6 {
 				box-shadow: 0 0 12px rgba(0,0,0,.25);
                 border: 1px solid #999;
 				}
-				.content .map .tools .topbar-plugin.active div {
+				.content .map .tools .topbar-plugin.active a.plugin-launcher > div {
 					opacity: 1;
 					border: 1px solid #212323;
 					box-shadow: 0 0 15px black inset;
 					background-color: #999;
 					box-shadow: 0 0 15px rgba(0,0,0,.5) inset;
 				}
-				.content .map .tools .topbar-plugin div:hover {
+				.content .map .tools .topbar-plugin a.plugin-launcher > div:hover {
 					opacity: 1;
 				}
             .esriSimpleSlider {
