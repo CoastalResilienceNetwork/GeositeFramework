@@ -114,7 +114,7 @@ define(
         
         function handleReportResult(result) {
             var report = _.find(_config.reports, function(r) {
-                    return r.id = _currentReportId;
+                    return r.id === _currentReportId;
                 }),
                 // The layer results are in the same order as they are config'd
                 layerResults = _.zip(result.value, report.layers),
