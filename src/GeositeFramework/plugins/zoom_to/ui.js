@@ -30,8 +30,7 @@ define([],
                 showingInput: false,
                 showingLocationBox: false,
                 addressCandidates: [],
-                addressError: false,
-
+                addressError: false
             },
 
             initialize: function () {
