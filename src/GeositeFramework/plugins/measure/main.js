@@ -28,7 +28,7 @@ define(
             fullName: "Measure distances and area on the map",
             toolbarType: "map",
             // Load script templates into a dom fragment
-            $templates: $('<div>').append($(templates.trim())),
+            $templates: $('<div>').append($($.trim(templates))),
 
             initialize: function (args) {
                 declare.safeMixin(this, args);

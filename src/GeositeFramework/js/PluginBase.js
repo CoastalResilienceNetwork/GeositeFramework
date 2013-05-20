@@ -105,7 +105,7 @@ define(["dojo/_base/declare"],
                     var $result = $('<div>'),
                         template = Geosite.app.templates['plugin-result-of-identify'];
                     _.each(features, function (feature) {
-                        var html = template(feature).trim(),
+                        var html = $.trim(template(feature)),
                             $section = $(html).click(expandOrCollapseAttributeSection);
                         $result.append($section);
                     });

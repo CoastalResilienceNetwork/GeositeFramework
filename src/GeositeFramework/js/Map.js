@@ -191,7 +191,7 @@
         function processResults(pluginTitle, result, width, height) {
             if (result) {
                 var template = N.app.templates['template-result-of-identify'],
-                    $html = $(template({ pluginTitle: pluginTitle }).trim());
+                    $html = $($.trim(template({ pluginTitle: pluginTitle })));
                 $html.find('.identify-result').append(result);
                 $resultsContainer.append($html);
                 if (width) { windowWidth = Math.max(windowWidth, width); }
