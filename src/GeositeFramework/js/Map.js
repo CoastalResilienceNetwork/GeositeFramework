@@ -99,14 +99,17 @@
                         esriMap.centerAt(center);
                     }
                 }, 150);
-            };
+            },
+            loadEventFired = false;
 
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+        
 
         // Wait for the map to load
         dojo.connect(esriMap, "onLoad", function () {
+            loadEventFired = true;
             resizeMap();
             $(N).on('resize', resizeMap);
 
@@ -120,6 +123,17 @@
             // would be detached from the body and the parent would not be accessible 
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
         });
+
+
+        // On IE8, the map.onload event will often not fire at all, which breaks
+        // the app entirely.  The map does, in fact, load and its loaded property is
+        // set.  I put in this hack to check up on the event a little while after
+        // it was created and manually raise the event if the library didn't do it.
+        setTimeout(function() {
+            if (!loadEventFired) {
+                if (esriMap.loaded) esriMap.onLoad(esriMap);
+            }
+        }, 2500);
     }
 
     function loadExtent(view) {
