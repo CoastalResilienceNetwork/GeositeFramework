@@ -71,11 +71,10 @@ define([],
                 });
             },
 
-            setupLocator: function (url, map, zoomLevel, pointConstructor) {
+            setupLocator: function(url, map, zoomLevel, pointConstructor) {
                 // After the map is finished loading, the plugin will
                 // call this method and provide these values. This
                 // object is needed to geocode and to plot points.
-
                 this.locator = {
                     url: url,
                     map: map,
@@ -103,7 +102,6 @@ define([],
                 // Make an ajax request to the geocoder URL provided by 
                 // the plugin conf. Returns an array of candidates with
                 // latlng values on success, an error on failure.
-
                 var model = this,
                     singleLine =  this.get('inputValue'),
                     url = [this.locator.url, "SingleLine=",
@@ -137,6 +135,15 @@ define([],
         var UiInputView = Backbone.View.extend({
 
             className: "pluginZoomTo",
+            
+            // required for ALL click events
+            _cancelEventBubble: function(event) {
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                } else if (e.cancelBubble) {  // IE8
+                    event.cancelBubble = true;
+                }
+            },
 
             events: {
                 // Because this plugin renders some extra UI features into
@@ -148,12 +155,15 @@ define([],
                 // and plugins that behave similarly, ALL click events must
                 // manually stop event propation up to the <a> tag.
 
-                "click div#pluginZoomTo-clearSearch": function (e) {
-                    this.model.set('inputValue', "");
-                    e.stopPropagation(); // required for ALL click events
+                "click #pluginZoomTo-clearSearch": function (e) {
+                    this.clear();
+                    this._cancelEventBubble(e);
                 },
                 "click input": function (e) {
-                     e.stopPropagation(); // required for ALL click events
+                    this._cancelEventBubble(e);
+                },
+                "click": function(e) {
+                    this._cancelEventBubble(e);
                 },
                 "mouseenter": function () { this.model.set('hasMouse', true); },
                 "mouseleave": function () { this.model.set('hasMouse', false); },
@@ -180,8 +190,7 @@ define([],
                             }));
                         $fragment.click(function(e) {
                             view.centerAndZoom(x, y);
-                            // Don't bubble the click up to the plugin launcher
-                            e.stopPropagation();
+                            view._cancelEventBubble(e);
                         });
                         return $fragment;
                     };
@@ -205,6 +214,12 @@ define([],
 
                 if (event.which === 13) {
                     this.model.geocodeAddress();
+                    
+                    // I'm not entirely sure what the default action of IE is
+                    // when the user presses the enter key in a text box, but
+                    // whatever it is, it makes this plugin break.  So don't
+                    // do the default.
+                    event.preventDefault();
                 }
             },
 
@@ -247,6 +262,13 @@ define([],
                     .empty()
                     .append(renderedTemplate);
                 return this;
+            },
+
+            clear: function() {
+                this.model.set({
+                    inputValue: "",
+                    addressCandidates: []
+                });
             }
         });
 
