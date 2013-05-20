@@ -23,8 +23,7 @@ require({
 define(
     ["dojo/_base/declare", "framework/PluginBase"],
     function (declare, PluginBase) {
-        var $launcher = $('<div class="full-extent"></div>'),
-            _extent;
+        var _extent;
         
         function fullExtent (regionConfig)
         {
@@ -48,7 +47,7 @@ define(
             },
             
             renderLauncher: function renderLauncher() {
-                return $launcher;
+                return $('<div class="full-extent"></div>');
             },
 
             activate: function () {
