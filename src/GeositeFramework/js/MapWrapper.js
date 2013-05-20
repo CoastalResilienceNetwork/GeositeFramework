@@ -96,6 +96,12 @@
         _wrapper.setExtent = function() {
             esriMap.setExtent.apply(esriMap, arguments);
         };
+
+        // See note above.  MapWrapper map could only call centerAndZoom 2x before
+        // it stopped responding calls.
+        _wrapper.centerAndZoom = function() {
+            esriMap.centerAndZoom.apply(esriMap, arguments);
+        };
         
         // ------------------------------------------------------------------------
         // Event overrides
