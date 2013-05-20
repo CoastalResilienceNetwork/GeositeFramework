@@ -179,7 +179,11 @@ define([],
                                 x: x,
                                 y: y
                             }));
-                        $fragment.click(function () { view.centerAndZoom(x, y); });
+                        $fragment.click(function(e) {
+                            view.centerAndZoom(x, y);
+                            // Don't bubble the click up to the plugin launcher
+                            e.stopPropagation();
+                        });
                         return $fragment;
                     };
                 
@@ -193,17 +197,8 @@ define([],
             },
 
             centerAndZoom: function (x, y) {
-                // helper method so that other objects can
-                // tell the view to clear its input instead
-                // of accessing its members directly.
-                // thin wrapper around esri's map's center
-                // and zoom.
-
                 var point = this.model.locator.point(x, y);
                 this.model.locator.map.centerAndZoom(point, this.model.locator.zoomLevel);
-                this.$("#pluginZoomTo-choices").empty();
-                this.model.set('inputValue', "");
-                this.render();
             },
 
             handleKeyPress: function (event) {
