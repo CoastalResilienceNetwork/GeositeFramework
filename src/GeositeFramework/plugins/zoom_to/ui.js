@@ -159,7 +159,7 @@ define([],
                 "mouseleave": function () { this.model.set('hasMouse', false); },
                 "blur input": function () { this.model.set('hasFocus', false); },
                 "focus input": function () { this.model.set('hasFocus', true); },
-                "keyup input": function (event) { this.handleKeyPress(event); }
+                "keypress input": function (event) { this.handleKeyPress(event); }
             },
 
             buildCandidateEvents: function () {
@@ -208,8 +208,7 @@ define([],
             handleKeyPress: function (event) {
                 this.model.set("inputValue", this.$("input").val());
 
-                var keycode = (event.keyCode ? event.keyCode : null);
-                if (keycode === 13) {
+                if (event.which === 13) {
                     this.model.geocodeAddress();
                 }
             },
