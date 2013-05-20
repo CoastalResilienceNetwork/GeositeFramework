@@ -72,10 +72,6 @@
             // listening for changes in the location.hash
             handleHashChangedFn(location.hash);
             location.hash = "";
-        },
-
-        createPane: function createPane(paneIndex) {
-            initializePane(N.app.data.region, N.app.config.paneDefinitions[paneIndex]);
         }
     };
 
