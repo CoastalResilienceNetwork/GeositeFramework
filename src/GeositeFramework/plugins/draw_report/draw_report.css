@@ -16,6 +16,13 @@ ul.tabs-content.report-plugin-list {
 .tabs.report-plugin-tabs {
 	margin-bottom: 0px;
 	}
+	.tabs.report-plugin-tabs dd, .tabs.report-plugin-tabs li {
+		font-weight: 700;
+	}
+	.tabs.report-plugin-tabs dd.active, .tabs.report-plugin-tabs li.active {
+		border-top: 2px solid #2ba6cb;
+		margin-top: -2px;
+	}
 
 #report-plugin-tab-select h5 {
 	margin: 10px 0 8px;
