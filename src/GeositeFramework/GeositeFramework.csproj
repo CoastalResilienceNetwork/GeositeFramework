@@ -169,6 +169,7 @@
     <Content Include="js\lib\jquery.mousewheel.min.js" />
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
+    <Content Include="js\polyfill.js" />
     <Content Include="js\Screen.js" />
     <Content Include="plugins\draw_report\draw_report.css" />
     <Content Include="plugins\draw_report\icon_active.png" />
