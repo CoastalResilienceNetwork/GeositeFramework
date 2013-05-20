@@ -267,9 +267,8 @@ h1, h2, h3, h4, h5, h6 {
 
 
         .content .plugin-container-inner {
-            height: 325px; 
-            padding-top: 4px;
-            border-top: 1px solid #eee;
+            height: 362px; 
+            padding-top: 2px;
         }
 
 /* -----------------------------------------
