@@ -47,11 +47,11 @@ define(
                                         point);
             },
 
-            renderLauncher: _.once(function renderLauncher() {
                 this.input = this.input || new ui.UiInput();
                 this.inputView = this.inputView || new ui.UiInputView({ model: this.input });
+            renderLauncher: function renderLauncher() {
                 return this.inputView.render().$el;
-            }),
+            },
             
             hibernate: function() {
                 this.inputView.clear();
