@@ -5,6 +5,10 @@
     background: #434F46 !important;
     background: rgba(0,0,0,0.6) !important;
     color: #ffffff !important;
+    display: none;
+    }
+    .pluginZoomTo-with-choices #pluginZoomTo-choices {
+        display: block;
     }
     #pluginZoomTo-choices a {
         clear: both;
@@ -17,7 +21,11 @@
             background: #333;
         }
 
+#pluginZoomTo-clearSearch {
+    display: none;
+}
 .pluginZoomTo-showing-input #pluginZoomTo-clearSearch {
+    display: block;
     position: absolute;
     bottom: -12px;
     right: -14px;
