@@ -70,7 +70,10 @@
             // function, then clear it. This is done instead of the
             // typical behavior of HashModels which is to continue
             // listening for changes in the location.hash
-            handleHashChangedFn(location.hash);
+            
+            // IE8 will throw a syntax error if the hash contains a single
+            // # character before entering hashmodels
+            handleHashChangedFn(location.hash === '#' ? '' : location.hash);
             location.hash = "";
         }
     };
