@@ -306,7 +306,7 @@ h1, h2, h3, h4, h5, h6 {
                     display: none;
                 }
                 .content .map .tools .topbar-plugin.active .topbar-tools {
-                    display: initial;
+                    display: block;
                 }
                 .content .map .tools .topbar-plugin .topbar-tools .plugin-clear {
                 	position: absolute;
