@@ -56,7 +56,8 @@ define(["dojo/_base/declare"],
                         identify(0, areaFeatureDeferreds);
 
                         function identify(tolerance, deferreds) {
-                            identifyParams = new esri.tasks.IdentifyParameters();
+                            var identifyParams = new esri.tasks.IdentifyParameters();
+
                             identifyParams.tolerance = tolerance;
                             identifyParams.layerIds = service.visibleLayers;
                             identifyParams.width = map.width;
