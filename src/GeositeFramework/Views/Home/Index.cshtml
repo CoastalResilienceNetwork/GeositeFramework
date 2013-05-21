@@ -157,7 +157,10 @@
 
     <script type="text/template" id="plugin-result-of-identify">
         <div class="result-of-identify"><%= layerName %>
-            <div class="result-of-identify"><%= displayFieldName || 'Value'%>: <%= value %>
+            <div class="result-of-identify">
+            <% if (value) { %>
+            <%= displayFieldName || 'Value'%>: <%= value %>
+            <% } %>
                 <div class="attributes" style="display: none;">
                     <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
                         <% if (attributeName !== displayFieldName) { %>
