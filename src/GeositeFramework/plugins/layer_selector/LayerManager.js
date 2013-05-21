@@ -5,7 +5,7 @@ define([
         "use!tv4",
         "use!underscore",
         "./AgsLoader",
-        "./WmsLoader",
+        "./WmsLoader"
     ],
     function (JSON, tv4, _, AgsLoader, WmsLoader) {
 

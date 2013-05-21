@@ -17,6 +17,7 @@
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
                 $legendContainer = model.get('$legendContainer');
+            
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
@@ -259,7 +260,7 @@
 
         function createUiContainer(view) {
             var bindings = { title: view.model.get("pluginObject").toolbarName },
-                $uiContainer = $(N.app.templates['template-plugin-container'](bindings).trim()),
+                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
 
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
@@ -331,7 +332,7 @@
                 pluginObject = this.model.get('pluginObject'),
                 pluginTemplate = N.app.templates['template-topbar-plugin'],
                 toolsMarkup = N.app.templates['template-topbar-tools'](),
-                $container = $(pluginTemplate(pluginObject).trim());
+                $container = $($.trim(pluginTemplate(pluginObject)));
 
             this.$el.toggleClass('active', this.model.get('active'));
 
