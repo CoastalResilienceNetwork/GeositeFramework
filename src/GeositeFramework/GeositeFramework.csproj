@@ -169,6 +169,7 @@
     <Content Include="js\lib\jquery.mousewheel.min.js" />
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
+    <Content Include="js\polyfill.js" />
     <Content Include="js\Screen.js" />
     <Content Include="plugins\draw_report\draw_report.css" />
     <Content Include="plugins\draw_report\icon_active.png" />
@@ -213,6 +214,8 @@
     <Content Include="plugins\measure\icon.png" />
     <Content Include="plugins\zoom_to\main.js" />
     <Content Include="plugins\zoom_to\ui.js" />
+    <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\json2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

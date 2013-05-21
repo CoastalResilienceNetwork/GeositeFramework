@@ -67,9 +67,9 @@ define(["jquery", "use!underscore"],
 
                         // search the folder services object pulled from the layers config for
                         // the current service. Construct a service whitelist.
-                        folderServiceMatchesCurrent = function (folderService) { 
-                            return folderService.name === folderName; 
-                        }
+                        folderServiceMatchesCurrent = function(folderService) {
+                            return folderService.name === folderName;
+                        };
                         folderServicesForCurrent = _.filter(_folderServiceWhitelist, folderServiceMatchesCurrent);
                         whitelistedServicesForFolder = folderServicesForCurrent.length > 0 ? 
                             folderServicesForCurrent[0].services : [];
@@ -198,7 +198,7 @@ define(["jquery", "use!underscore"],
                     serviceNode.esriService.visibleLayers !== [-1]) {
                     stateObject[serviceNode.serviceName] = {
                         visibleLayerIds: getLayerIds(serviceNode.esriService),
-                        opacity: serviceNode.opacity,
+                        opacity: serviceNode.opacity
                         };
                 }
             }

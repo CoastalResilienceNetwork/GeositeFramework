@@ -26,7 +26,7 @@ define(
     function (declare, PluginBase, templates, config) {
 
         var _config = $.parseJSON(config),
-            _$templates = $('<div>').append($(templates.trim())),
+            _$templates = $('<div>').append($($.trim(templates))),
             _$select,
             _$requestButton,
             _$resultDisplay,
@@ -40,7 +40,7 @@ define(
         dojo.require("esri.tasks.gp");
         
         function getTemplate(name) {
-            var template = _.template(_$templates.find('#' + name).html().trim());
+            var template = _.template($.trim(_$templates.find('#' + name).html()));
             return template;
         }
 

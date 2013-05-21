@@ -8,7 +8,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
         var Ui = function (container, map, templates) {
             var _map = map,
                 _container = container,
-                _$templates = $('<div>').append($(templates.trim())), // store templates in a utility div
+                _$templates = $('<div>').append($($.trim(templates))), // store templates in a utility div
                 _$filterInput = null,
                 _$treeContainer = null,
                 _$layerDialog = null,
@@ -108,7 +108,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function getTemplate(name) {
-                var template = _.template(_$templates.find('#' + name).html().trim());
+                var template = _.template($.trim(_$templates.find('#' + name).html()));
                 return template;
             }
 

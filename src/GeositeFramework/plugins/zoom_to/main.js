@@ -36,21 +36,30 @@ define(
             fullName: "Zoom to a specific address.",
             toolbarType: "map",
 
+            _initializeViews: function () {
+                this.input = this.input || new ui.UiInput();
+                this.inputView = this.inputView || new ui.UiInputView({ model: this.input });
+            },
+            
             initialize: function (args) {
                 var spatialReference = new esri.SpatialReference({ wkid: 4326 /* lat-lng */ }),
                     point = function (x, y) { return new esri.geometry.Point(x, y, spatialReference); };
 
                 declare.safeMixin(this, args);
                 this.config = JSON.parse(configString);
+                if (!this.input) this._initializeViews();
                 this.input.setupLocator(this.config.locatorServiceUrl,
                                         this.map, this.config.defaultZoomLevel,
                                         point);
             },
 
             renderLauncher: function renderLauncher() {
-                this.input = this.input || new ui.UiInput();
-                this.inputView = this.inputView || new ui.UiInputView({ model: this.input });
+                if (!this.input) this._initializeViews();
                 return this.inputView.render().$el;
+            },
+            
+            hibernate: function() {
+                this.inputView.clear();
             }
 
         });
