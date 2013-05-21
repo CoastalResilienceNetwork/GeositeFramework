@@ -81,10 +81,12 @@
     function initResizeHandler() {
 
         function resizeMap() {
-            var bottomHeight    = $('.side-nav.bottom').height(),
-                sidebarHeight   = $('.sidebar').height();
-
-            $('.side-nav.top').height(sidebarHeight - bottomHeight);
+            var bottomHeight         = $('.side-nav.bottom:visible').height(),
+                sidebarHeight        = $('.sidebar:visible').height(),
+                rightBottomHeight    = $('#right-pane:visible .side-nav.bottom').height();
+            
+            $('.side-nav.top:visible').height(sidebarHeight - bottomHeight);
+            $('#right-pane .side-nav.top').height(sidebarHeight - rightBottomHeight);
             $(N).trigger('resize');
         }
 

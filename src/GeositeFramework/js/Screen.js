@@ -133,6 +133,7 @@
         switchScreen: function switchScreen(event) {
             var screenToShow = $(event.currentTarget).data('screen');
             this.model.showPane(screenToShow);
+            $(N).trigger('resize');
         },
 
         makePermalink: function makePermalink() {
