@@ -34,7 +34,7 @@ define(["dojo/_base/declare"],
             });
         }
 
-        function identify(point, processResults) {
+        function identify(mapPoint, clickPoint, processResults) {
             var map = this.map,
                 services = getMyServices(map),
                 thinFeatureDeferreds = [],

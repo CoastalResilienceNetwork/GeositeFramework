@@ -185,7 +185,8 @@
 
         // Accumulate results (probably asynchronously), and show them when all are accumulated
         pluginModels.each(function (pluginModel) {
-            pluginModel.identify(event.mapPoint, processResults);
+            var clickPoint = { x: event.x, y: event.y };
+            pluginModel.identify(event.mapPoint, clickPoint, processResults);
         });
 
         function processResults(pluginTitle, result, width, height) {
