@@ -242,9 +242,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (node.description) {
                     var $description = _$layerDialog.find('.description').show().find('.info-value');
                     $description.html(node.description);
-                    if (node.url) {
-                        fixRelativeLinks($description, node.url);
-                    }
                 }
                 if (node.setOpacity) {
                     new Ext.Slider({
@@ -265,22 +262,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
                 _$layerDialog.find('.pluginLayerSelector-spinner').hide();
             }
-
-            function fixRelativeLinks($element, sourceUrl) {
-                // ArcGIS Server "Description" html contains relative links, apparently assuming 
-                // the ArcGIS Server is the same machine as the Web server.
-                // That's not true for us, so for links whose hostname is empty we substitute the hostname from "sourceUrl".
-                var sourceUrlAsLink = $('<a>', { href: sourceUrl })[0],
-                    hostname = sourceUrlAsLink.hostname,
-                    port = sourceUrlAsLink.port || 80;
-                _.each($element.find('a'), function (link) {
-                    if (!link.hostname || link.baseURI.indexOf(link.origin) === 0) {
-                        link.hostname = hostname;
-                        link.port = port;
-                    }
-                });
-            }
-
+            
             function onFilterBoxKeyup(event) {
                 var text = _$filterInput.val();
                 if (text === "") {
