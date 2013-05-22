@@ -100,11 +100,17 @@
         initMapView(view);
         initPluginViews(view);
         view.$('.side-nav.top').mCustomScrollbar({
-                advanced: { updateOnContentResize: true },
-                mouseWheelPixels: 75,
-                autoHideScrollbar: true,
-                contentTouchScroll: true
-            });
+            advanced: { updateOnContentResize: true },
+            mouseWheelPixels: 75,
+            autoHideScrollbar: true,
+            contentTouchScroll: true,
+            callbacks: {
+                whileScrolling: function() {
+                    // Moves the plugin containers with the scrollbar
+                    $('.plugin-container').css('margin-top', mcs.top);
+                }
+            }
+        });
         N.app.models.screen.on('change', function () { renderSidebar(view); });
     }
 
