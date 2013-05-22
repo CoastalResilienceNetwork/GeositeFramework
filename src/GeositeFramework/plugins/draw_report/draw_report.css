@@ -39,7 +39,6 @@ ul.tabs-content.report-plugin-list {
     display: inline-block;
     position: absolute;
     left: 45%;
-    top: 42%;
 }
 
 #report-plugin-tab-result .default {
