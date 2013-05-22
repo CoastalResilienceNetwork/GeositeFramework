@@ -107,7 +107,7 @@
             callbacks: {
                 whileScrolling: function() {
                     // Moves the plugin containers with the scrollbar
-                    $('.plugin-container').css('margin-top', mcs.top);
+                    view.$('.plugin-container').css('margin-top', mcs.top);
                 }
             }
         });
