@@ -1,38 +1,94 @@
 [
     {
-        "agsSource": 
-        {
-            "url": "http://gulfmex.coastalresilience.org/arcgis/rest/services",
-            "folderTitle": "Ags",
+        "agsSource": {
+            "url": "http://dev.ags.coastalresilience.org:6080/arcgis/rest/services",
+            "folderTitle": "Coastal_Resilience_base_data",
             "folders": [
                 {
-                    "name": "Florida"
+                    "name": "Alabama",
+                    "services": [
+                        "Oyster_Restoration_Explorer",
+                        "Habitats",
+                        "Bathymetry",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Social_and_Economic"
+                    ]
                 },
                 {
-                    "name": "Alabama",
-                    "services": ["Habitats", "Bathymetry", "Habitats"]
+                    "name": "Florida",
+                    "services": [
+                        "Oyster_Restoration_Explorer",
+                        "Habitats",
+                        "Species",
+                        "Bathymetry",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Social_and_Economic",
+                        "Florida_Infrastructure",
+                        "Choctawhatchee_Bay_and_St._Andrews_Bay_Resiliency_Analysis"
+                    ]
+                },
+                {
+                    "name": "Louisiana",
+                    "services": [
+                        "Oyster_Restoration_Explorer",
+                        "Habitats",
+                        "Species",
+                        "Bathymetry",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Social_and_Economic"
+                    ]
+                },
+                {
+                    "name": "Mississippi",
+                    "services": [
+                        "Oyster_Restoration_Explorer",
+                        "Restoration_Projects",
+                        "Habitats",
+                        "Bathymetry",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Social_and_Economic",
+                        "Built_Infrastructure"
+                    ]
+                },
+                {
+                    "name": "Texas",
+                    "services": [
+                        "Oyster_Restoration_Explorer",
+                        "Restoration_Projects",
+                        "Habitats",
+                        "Bathymetry",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Social_and_Economic",
+                        "Galveston_Bay_Resiliency_Analysis"
+                    ]
+                },
+                {
+                    "name": "Gulf_of_Mexico",
+                    "services": [
+                        "Habitats",
+                        "Salinity",
+                        "Coastal_Management",
+                        "Coastal_Hazards",
+                        "Social_and_Economic"
+                    ]
                 }
             ]
         }
     },
     {
-        "wmsSource":
-        {
+        "wmsSource": {
             "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
-            "folderTitle": "Risks",
+            "folderTitle": "UNISDR",
             "layerIds": [
                 "preview:cy_risk",
                 "preview:cy_buffers",
                 "preview:cs_frequency"
             ]
         }
-    },
-    {
-        "agsSource":
-        {
-            "url": "http://gulfmex.coastalresilience.org/arcgis/rest/services",
-            "folderTitle": "Ags"
-        }
     }
 ]
-
