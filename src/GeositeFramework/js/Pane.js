@@ -105,9 +105,9 @@
             autoHideScrollbar: true,
             contentTouchScroll: true,
             callbacks: {
-                onScroll: function() {
-                    // TODO: move the plugin-container's respectively
-                    // $('.plugin-container').css('margin-top', mcs.top);
+                whileScrolling: function() {
+                    // Moves the plugin containers with the scrollbar
+                    $('.plugin-container').css('margin-top', mcs.top);
                 }
             }
         });
