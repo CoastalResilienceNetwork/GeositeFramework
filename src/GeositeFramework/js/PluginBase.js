@@ -190,20 +190,45 @@ define(["dojo/_base/declare",
 
                     _.each(wmsDeferreds, function (wmsDeferred) {
                         wmsDeferred.addCallback(function (text) {
+                            // we previously had logic to take the results
+                            // of an ajax call to the arcgis identify api
+                            // which returns a nicely formatted object.
+                            //
+                            // For WMS features, we make a call to the WMS
+                            // server which returns plain text that is parsed,
+                            // packed into an object similar to the arcgis
+                            // results, and sent along to the presentation
+                            // layer.
+                            //
+                            // Also, arcgis identify calls produce a default
+                            // value, which the presentation logic is built
+                            // around, but wms calls do not. The getFirstPair
+                            // function is used to extract a default value
+                            // from the parsed response for this purpose.
                             var features = parseWMSGetFeatureInfoText(text);
 
-                            _.each(features, function (feature) {
-                                // in order to fit the identify results to the
-                                // UI template, the WMS results must be composed
-                                // into an objects with the necessary fields
-                                var featureObject = {
-                                    displayFieldName: "",
-                                    layerName: wmsDeferred._layerName,
-                                    feature: {
-                                        attributes: feature
-                                    },
-                                    value: ""
-                                };
+                            _.each(features, function (rawFeatureObject) {
+                                var getFirstPair = function (obj) {
+                                    var keys, k, v;
+                                    keys = Object.keys(obj);
+                                    if (keys && keys.length > 0) {
+                                        k = keys[0];
+                                        v = obj[k];
+                                    } else {
+                                        k = "";
+                                        v = "";
+                                    }
+                                    return { fieldName: k, value: v };
+                                },
+                                    firstPair = getFirstPair(rawFeatureObject),
+                                    featureObject = {
+                                        displayFieldName: firstPair.fieldName,
+                                        layerName: wmsDeferred._layerName,
+                                        feature: {
+                                            attributes: rawFeatureObject
+                                        },
+                                        value: firstPair.value
+                                    };
 
                                 identifiedFeatures.push(featureObject);
                             });
