@@ -30,7 +30,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 removeSpinner();
                 renderUi();
                 this.display();
-            }
+            };
 
             this.display = function () {
                 if (_tree) {
@@ -42,13 +42,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_$layerDialog) {
                     _$layerDialog.show();
                 }
-            }
+            };
 
             this.hideAll = function () {
                 if (_$layerDialog) {
                     _$layerDialog.hide();
                 }
-            }
+            };
 
             // ------------------------------------------------------------------------
             // Private methods
@@ -274,7 +274,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             addSpinner();
-        }
+        };
 
         return Ui;
     }
