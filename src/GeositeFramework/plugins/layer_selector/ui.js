@@ -50,6 +50,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
             };
 
+            this.uncheckAndCollapse = function () {
+                _tree.collapseAll();
+                _tree.getRootNode().cascadeBy(function () {
+                    if (this.get('checked') === true) {
+                        this.set('checked', false);
+                    }
+                });
+                resize();
+            };
+
             // ------------------------------------------------------------------------
             // Private methods
 
