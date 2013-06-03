@@ -81,6 +81,7 @@ define([
 
             deactivate: function () {
                 this._ui.hideAll();
+                this._currentState = this._layerManager.getServiceState();
             },
 
             hibernate: function () {
