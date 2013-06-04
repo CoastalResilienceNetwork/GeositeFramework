@@ -22,7 +22,7 @@ define([
               Public Methods
              */
             this.load = loadLayerData;
-            this.hideAllLayers = function (map) { hideAllLayersForNode(_treeRootNode, map) };
+            this.hideAllLayers = function (map) { hideAllLayersForNode(_treeRootNode, map); };
             this.setServiceState = function (stateObject, map) { setServiceStateForNode(_treeRootNode, stateObject, map); };
             this.getServiceState = function () { return getServiceStateForNode (_treeRootNode); };
 
@@ -83,11 +83,11 @@ define([
                         */
 
                         if (serviceSource.folderTitle === undefined) {
-                            return "folder_" + ++assignedNameCounter
+                            return "folder_" + ++assignedNameCounter;
                         } else if (_.contains(usedNames, serviceSource.folderTitle)) {
                             _app.error("", "Cannot have multiple top-level folders with the same name." + 
                                        "Appending duplicate notice.");
-                            return serviceSource.folderTitle + "_(duplicate #" + ++duplicateNameCounter + ")"
+                            return serviceSource.folderTitle + "_(duplicate #" + ++duplicateNameCounter + ")";
                         } else {
                             usedNames.push(serviceSource.folderTitle);
                             return serviceSource.folderTitle;
@@ -165,11 +165,11 @@ define([
                         }
                     }
                 }
-            }
+            };
 
             function loadLayerSource(loader, url, sourceRootNode, folderOrLayerIdWhitelist) {
                 _urls.push(url);
-                loader.load(sourceRootNode, folderOrLayerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError)
+                loader.load(sourceRootNode, folderOrLayerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError);
             }
 
             function onLayerSourceLoaded(url) {
@@ -233,7 +233,7 @@ define([
 
             function hideAllLayersForNode(node, map) {
                 if (node.hideAllLayers) {
-                    node.hideAllLayers(node, map)
+                    node.hideAllLayers(node, map);
                 } else {
                     _.each(node.children, function (child) {
                         hideAllLayersForNode(child, map);
@@ -266,7 +266,7 @@ define([
                 saveServiceStateForNodeInner(rootNode, stateObject);
                 return stateObject;
             }
-        }
+        };
         return LayerManager;
     }
 );

@@ -43,9 +43,10 @@ define([
         "./LayerManager",
         "./Ui",
         "dojo/text!plugins/layer_selector/layers.json",
-        "dojo/text!plugins/layer_selector/templates.html"
+        "dojo/text!plugins/layer_selector/templates.html",
+        "jquery"
     ],
-    function (declare, PluginBase, LayerManager, Ui, layerSourcesJson, templates) {
+    function (declare, PluginBase, LayerManager, Ui, layerSourcesJson, templates, $) {
 
         return declare(PluginBase, {
             toolbarName: "Map Layers",
@@ -69,6 +70,7 @@ define([
                         self._layerManager.setServiceState(self._currentState, self.map);
                     }
                     self._ui.render(tree);
+                    $('a.pluginLayerSelector-clear').click(function () { self.clearAll(); });
                 });
             },
 
@@ -95,6 +97,12 @@ define([
 
             setState: function (state) {
                 this._currentState = state;
+            },
+
+            clearAll: function () {
+                this._layerManager.hideAllLayers(this.map);
+                this._ui.uncheckAndCollapse();
+                this._currentState = {};
             }
 
         });
