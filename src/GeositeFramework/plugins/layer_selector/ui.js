@@ -30,7 +30,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 removeSpinner();
                 renderUi();
                 this.display();
-            }
+            };
 
             this.display = function () {
                 if (_tree) {
@@ -42,13 +42,23 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_$layerDialog) {
                     _$layerDialog.show();
                 }
-            }
+            };
 
             this.hideAll = function () {
                 if (_$layerDialog) {
                     _$layerDialog.hide();
                 }
-            }
+            };
+
+            this.uncheckAndCollapse = function () {
+                _tree.collapseAll();
+                _tree.getRootNode().cascadeBy(function () {
+                    if (this.get('checked') === true) {
+                        this.set('checked', false);
+                    }
+                });
+                resize();
+            };
 
             // ------------------------------------------------------------------------
             // Private methods
@@ -274,7 +284,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             addSpinner();
-        }
+        };
 
         return Ui;
     }
