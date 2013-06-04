@@ -182,7 +182,7 @@ define(
         }
         
         return declare(PluginBase, {
-            toolbarName: "Analysis",
+            toolbarName: "Draw & Report",
             fullName: "Analyze a specific region of the map",
             toolbarType: "sidebar",
             allowIdentifyWhenActive: false,
