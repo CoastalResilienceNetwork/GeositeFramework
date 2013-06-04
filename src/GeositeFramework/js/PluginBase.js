@@ -272,6 +272,7 @@ define(["dojo/_base/declare",
 
                 function expandOrCollapseAttributeSection() {
                     $(this).find('.attributes').slideToggle();
+                    $(this).toggleClass("collapsed");
                 }
             }
 
