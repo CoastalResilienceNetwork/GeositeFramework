@@ -13,8 +13,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _$treeContainer = null,
                 _$layerDialog = null,
                 _tree = null,
-                _treeNeedsRendering = true,
-                _justClickedItemIcon = false;
+                _justClickedItemIcon = false,
+
+                renderExtTree;
 
             // ------------------------------------------------------------------------
             // Public methods
@@ -33,9 +34,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             };
 
             this.display = function () {
-                if (_tree) {
-                    displayExtTree();
-                }
+                renderExtTree();
+
                 if (_$filterInput) {
                     _$filterInput.focus();
                 }
@@ -81,22 +81,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
             }
 
+            renderExtTree = (function () {
+                var renderExtTreeCount = 0;
 
-            function displayExtTree () {
-                if ($(_container).is(":visible") && _treeNeedsRendering) {
-                    _tree.render(_$treeContainer[0]);
-                    // // TODO this is a quirk. If we set this to false,
-                    // // the tree won't load properly in all cases, because it is
-                    // // tricky to predict how many times this method will be called
-                    // // depending on the runmode. So, setting treeneedsrendering to false
-                    // // will clear the UI and not rerender if this is the second call.
-                    // // on the other hand, if we set this to true, we get this persistent EXT
-                    // // error: 
-                    // // Uncaught TypeError: Cannot call method 'writeTo' of null 
-                    // //
-                    // _treeNeedsRendering = false;
-                }
-            }
+                return function () {
+                    if (_tree && $(_container).is(":visible") && renderExtTreeCount === 0) {
+                        _tree.render(_$treeContainer[0]);
+                        renderExtTreeCount++;
+                    }
+                };
+            }());
 
             function addSpinner() {
                 $(_container).append(
