@@ -234,7 +234,7 @@
             plugins.each(function (plugin) {
                 var state = plugin.getState();
 
-                if (state) {
+                if (state && Object.keys(state).length > 0) {
                     stateOfPlugins[plugin.name()] = state;
                 }
             });
