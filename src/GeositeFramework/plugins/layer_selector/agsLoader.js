@@ -113,36 +113,35 @@ define(["jquery", "use!underscore"],
 
             function loadServices(serviceSpecs) {
                 // Start loading all services, keeping "deferred" objects so we know when they're done
-                var deferreds = _.map(serviceSpecs, loadService);
+                var mapServerServiceSpecs = _.filter(serviceSpecs, function (spec) { return spec.type === "MapServer"; }),
+                    deferreds = _.map(mapServerServiceSpecs, loadMapServerService);
                 $.when.apply($, deferreds).then(function () {
                     // All services have loaded, so report that we're done loading this base URL
                     _onLayerSourceLoaded(_baseUrl);
                 });
             }
 
-            function loadService(serviceSpec) {
-                if (serviceSpec.type === "MapServer") {
-                    var serviceUrl = _baseUrl + "/" + serviceSpec.name + "/MapServer";
-                    return $.ajax({
-                        dataType: 'jsonp',
-                        url: serviceUrl + "?f=json",
-                        success: function (serviceData) {
-                            // Service has loaded -- make its node and load its layers
-                            var serviceName = getServiceName(serviceSpec.name);
-                            var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
-                            node.serviceName = node.parent.parent.text + "/" + serviceSpec.name;
-                            node.url = serviceUrl;
-                            node.description = serviceData.description;
-                            node.opacity = 0.7;
-                            node.setOpacity = setOpacity;
-                            node.hideAllLayers = hideAllLayers;
-                            node.saveServiceState = saveServiceState;
-                            node.setServiceState = setServiceState;
-                            loadLayers(serviceData.layers, node);
-                        },
-                        error: _onLayerSourceLoadError
-                    });
-                }
+            function loadMapServerService(serviceSpec) {
+                var serviceUrl = _baseUrl + "/" + serviceSpec.name + "/MapServer";
+                return $.ajax({
+                    dataType: 'jsonp',
+                    url: serviceUrl + "?f=json",
+                    success: function (serviceData) {
+                        // Service has loaded -- make its node and load its layers
+                        var serviceName = getServiceName(serviceSpec.name);
+                        var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                        node.serviceName = node.parent.parent.text + "/" + serviceSpec.name;
+                        node.url = serviceUrl;
+                        node.description = serviceData.description;
+                        node.opacity = 0.7;
+                        node.setOpacity = setOpacity;
+                        node.hideAllLayers = hideAllLayers;
+                        node.saveServiceState = saveServiceState;
+                        node.setServiceState = setServiceState;
+                        loadLayers(serviceData.layers, node);
+                    },
+                    error: _onLayerSourceLoadError
+                });
             }
 
             function getServiceName(name) {
