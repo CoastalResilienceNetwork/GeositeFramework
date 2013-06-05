@@ -81,7 +81,7 @@ define(["use!underscore"],
             }
 
             function saveServiceState (folderNode, stateObject) {
-                if (folderNode.visibleLayerIds && folderNode.visibleLayerIds !== []) {
+                if (folderNode.visibleLayerIds && folderNode.visibleLayerIds.length > 0) {
                     stateObject[folderNode.serviceName] = folderNode.visibleLayerIds;
                 }
             }
