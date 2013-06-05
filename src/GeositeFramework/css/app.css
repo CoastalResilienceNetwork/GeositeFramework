@@ -617,6 +617,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+/* TinyBox overrides */
+.tinner {
+    overflow: auto;
+}
 
 /* -----------------------------------------
    IE8 Style Overrides
