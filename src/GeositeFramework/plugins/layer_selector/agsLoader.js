@@ -194,7 +194,7 @@ define(["jquery", "use!underscore"],
 
             function saveServiceState (serviceNode, stateObject) {
                 if (serviceNode.esriService &&
-                    serviceNode.esriService.visibleLayers !== [-1]) {
+                    !(_.isEqual(serviceNode.esriService.visibleLayers,[-1]))) {
                     stateObject[serviceNode.serviceName] = {
                         visibleLayerIds: getLayerIds(serviceNode.esriService),
                         opacity: serviceNode.opacity
