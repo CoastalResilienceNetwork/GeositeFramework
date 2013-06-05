@@ -90,7 +90,7 @@ define(["use!underscore"],
                 node.wmsLayer.setVisibleLayers([]);
             }
 
-        }
+        };
 
         return WmsLoader;
     }

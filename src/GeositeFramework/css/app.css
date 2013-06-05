@@ -479,10 +479,6 @@ h1, h2, h3, h4, h5, h6 {
 	.identify-result > div > .result-of-identify:hover {
 		opacity: .75;
 	}
-	.identify-result > div > .result-of-identify.collapsed {
-    	font-weight: bold;
-    	color: #999;
-	}
 	.identify-result > div > .result-of-identify:after {
 		content: '';
 		display: block;
