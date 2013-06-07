@@ -264,7 +264,11 @@ define(["dojo/_base/declare",
                         template = Geosite.app.templates['plugin-result-of-identify'];
                     _.each(features, function (feature) {
                         var html = $.trim(template(feature)),
-                            $section = $(html).click(expandOrCollapseAttributeSection);
+                            $section = $(html);
+                        if (Object.keys(feature.feature.attributes).length > 1) {
+                            $section.addClass("with-arrow");
+                            $section.click(expandOrCollapseAttributeSection);
+                        }
                         $result.append($section);
                     });
                     processResults($result.get(0), 400);
