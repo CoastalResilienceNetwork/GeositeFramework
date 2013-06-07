@@ -81,6 +81,10 @@ define(["use!underscore"],
             }
 
             function saveServiceState (folderNode, stateObject) {
+                /*
+                 Takes a stateObject passed down from the framework and
+                 records the wmsLoader's personal state into it
+                 */
                 if (folderNode.visibleLayerIds && folderNode.visibleLayerIds.length > 0) {
                     stateObject[folderNode.serviceName] = folderNode.visibleLayerIds;
                 }
