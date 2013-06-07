@@ -260,25 +260,9 @@
 
         function createUiContainer(view) {
             var bindings = { title: view.model.get("pluginObject").toolbarName },
-                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
-
-                calculatePosition = function ($el) {
-                    var pos = view.$el.position(),
-                        gutterWidth = 70,
-                        gutterHeight = -20,
-                        yCenter = pos.top + $el.height() / 2 + gutterHeight,
-                        xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
-
-                    return {
-                        top: yCenter,
-                        left: xEdgeWithBuffer
-                    };
-                };
+                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
             $uiContainer
-                // Position the dialog next to the sidebar button which shows it.
-                .css(calculatePosition(view.$el))
-
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     view.model.turnOff();

@@ -207,18 +207,8 @@ h1, h2, h3, h4, h5, h6 {
         z-index: 999;
         box-shadow: 0 0 15px #333;
 		box-shadow: 0 0 15px rgba(0,0,0,.5);
-        }
-        .content .plugin-container:before {
-        	content: '';
-			position: absolute;
-			width: 0;
-			height: 0;
-			left: -15px;
-			top: 10px;
-			display: block;
-			border-right: 15px solid #444;
-			border-top: 15px solid transparent;
-			border-bottom: 15px solid transparent;
+        top: 17.5px;
+        left: 155px;
         }
         .content .plugin-container-header {
             height: 28px;
