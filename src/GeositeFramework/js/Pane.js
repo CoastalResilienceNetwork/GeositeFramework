@@ -103,13 +103,7 @@
             advanced: { updateOnContentResize: true },
             mouseWheelPixels: 75,
             autoHideScrollbar: true,
-            contentTouchScroll: true,
-            callbacks: {
-                whileScrolling: function() {
-                    // Moves the plugin containers with the scrollbar
-                    view.$('.plugin-container').css('margin-top', mcs.top);
-                }
-            }
+            contentTouchScroll: true
         });
         N.app.models.screen.on('change', function () { renderSidebar(view); });
     }
