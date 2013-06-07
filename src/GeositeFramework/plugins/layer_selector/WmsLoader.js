@@ -90,8 +90,8 @@ define(["use!underscore"],
                 }
             }
 
-            function hideAllLayers(node) {
-                node.wmsLayer.setVisibleLayers([]);
+            function hideAllLayers(folderNode) {
+                folderNode.wmsLayer.setVisibleLayers([]);
             }
 
         };
