@@ -65,8 +65,8 @@ define(["use!underscore"],
                 if (myStateObject) {
                     if (folderNode.visibleLayerIds === undefined) {
                         map.addLayer(folderNode.wmsLayer);
-                        folderNode.visibleLayerIds = myStateObject;
                     }
+                    folderNode.visibleLayerIds = myStateObject;
                     folderNode.wmsLayer.setVisibleLayers(myStateObject);
                     folderNode.wmsLayer.setOpacity(.7);
                     folderNode.expanded = true;
@@ -92,6 +92,7 @@ define(["use!underscore"],
 
             function hideAllLayers(folderNode) {
                 folderNode.wmsLayer.setVisibleLayers([]);
+                folderNode.visibleLayerIds = [];
             }
 
         };
