@@ -266,7 +266,7 @@
                     var pos = view.$el.position(),
                         gutterWidth = 70,
                         gutterHeight = -20,
-                        yCenter = pos.top + $el.height() / 2 + gutterHeight,
+                        yCenter = $el.height() / 2 + gutterHeight,
                         xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
 
                     return {

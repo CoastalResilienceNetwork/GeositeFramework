@@ -102,14 +102,8 @@
         view.$('.side-nav.top').mCustomScrollbar({
             advanced: { updateOnContentResize: true },
             mouseWheelPixels: 75,
-            autoHideScrollbar: true,
+            autoHideScrollbar: false,
             contentTouchScroll: true,
-            callbacks: {
-                whileScrolling: function() {
-                    // Moves the plugin containers with the scrollbar
-                    view.$('.plugin-container').css('margin-top', mcs.top);
-                }
-            }
         });
         N.app.models.screen.on('change', function () { renderSidebar(view); });
     }

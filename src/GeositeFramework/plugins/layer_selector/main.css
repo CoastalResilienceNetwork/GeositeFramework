@@ -16,9 +16,13 @@
     }
 
 .pluginLayerSelector-rest {
-    height: 321px;
+    height: 301px;
     margin-top: 5px;
     border-top: 1px solid #EEE;
+    }
+    .pluginLayerSelector-clear {
+        padding: 4px 4px 2px;
+        display: block;
     }
     .pluginLayerSelector-tree-container {
         height: 100%;
