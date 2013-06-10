@@ -208,22 +208,11 @@ h1, h2, h3, h4, h5, h6 {
         box-shadow: 0 0 15px #333;
 		box-shadow: 0 0 15px rgba(0,0,0,.5);
         }
-        .content .plugin-container:before {
-        	content: '';
-			position: absolute;
-			width: 0;
-			height: 0;
-			left: -15px;
-			top: 10px;
-			display: block;
-			border-right: 15px solid #444;
-			border-top: 15px solid transparent;
-			border-bottom: 15px solid transparent;
-        }
         .content .plugin-container-header {
             height: 28px;
             padding: 5px 8px;
 			background: #444;
+			overflow: hidden;
             }
             .content .plugin-container-header h6 {
             	float: left;
@@ -231,52 +220,61 @@ h1, h2, h3, h4, h5, h6 {
             	color: white;
             }
             .content .plugin-container-header a {
-                float: left;
-                padding-left: 10px;
-                color: #CCC;
+                float: right;
+				color: #CCC;
+				font-weight: bold;
+				padding: 6px;
+				position: relative;
+				top: -6px;
+				right: -8px;
+				width: 26px;
+				text-align: center;
+				border-radius: 4px;
             	}
+            	.content .plugin-container-header a.plugin-off {
+            		border-left: 1px solid #666;
+            	}
+            	.content .plugin-container-header a.plugin-close {}
             	.content .plugin-container-header a:hover {
-            		color: #FFF;
+            		background: black;
+            		color: white;
             	}
-            	.content .plugin-container-header a.plugin-close,
-            	.tclose {
-					position: absolute;
-					top: -12px;
-					right: -12px;
-					cursor: pointer;
-					padding: 3px 4px;
-					background: #AAA;
-					border-radius: 99px;
-					color: white;
-					font-weight: 700;
-					z-index: 99;
-					height: 24px;
-					line-height: 7px;
-					text-indent: 1px;
-					width: 24px;
-					font-size: 28px;
-					text-shadow: 0 1px 2px #222;
-					text-shadow: 0 1px 2px rgba(0,0,0,.75);
-					border: white 3px solid;
-					box-shadow: 0 1px 7px #222;
-					box-shadow: 0 1px 7px rgba(0,0,0,.5);
-            		}
-            		.content .plugin-container-header a.plugin-close:hover,
-            		.tclose:hover {
-            			background: #BE1E2D;
-					    box-shadow: 0 1px 7px #000;
-					    box-shadow: 0 1px 7px rgba(0,0,0,.85);
-            		}
-            		.tclose {
-            			top: 0;
-            			right: 0;
-            		}
-
 
         .content .plugin-container-inner {
             height: 362px; 
             padding-top: 2px;
         }
+
+.tclose {
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	padding: 3px 4px;
+	background: #AAA;
+	border-radius: 99px;
+	color: white;
+	font-weight: 700;
+	z-index: 99;
+	height: 24px;
+	line-height: 7px;
+	text-indent: 1px;
+	width: 24px;
+	font-size: 28px;
+	text-shadow: 0 1px 2px #222;
+	text-shadow: 0 1px 2px rgba(0,0,0,.75);
+	border: white 3px solid;
+	box-shadow: 0 1px 7px #222;
+	box-shadow: 0 1px 7px rgba(0,0,0,.5);
+	}
+	.tclose:hover {
+		background: #BE1E2D;
+	    box-shadow: 0 1px 7px #000;
+	    box-shadow: 0 1px 7px rgba(0,0,0,.85);
+	}
+
+
+       
 
 /* -----------------------------------------
    Content Area - Map
@@ -563,6 +561,15 @@ h1, h2, h3, h4, h5, h6 {
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
 	float: right;
 	width: 5px;
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+	background: #62C5C9;
+	background: rgba(98,197,201,.65);
+}
+.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar,
+.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar {
+	background: #62C5C9;
+	background: rgba(98,197,201,.95);
 }
 
 /* -----------------------------------------
