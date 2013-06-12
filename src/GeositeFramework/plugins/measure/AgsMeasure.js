@@ -2,6 +2,7 @@
 define(["jquery", "use!underscore"],
     function ($, _) {
         dojo.require("esri.tasks.geometry");
+        dojo.require("esri.dijit.InfoWindow");
         
         var AgsMeasure = function (opts) {
 
@@ -70,13 +71,15 @@ define(["jquery", "use!underscore"],
                 map.infoWindow.destroy();
 
                 // Create a new info window at the starting measure node
-                var $infoWindow = $('<div>').appendTo($parent);
+                var $infoWindow = $('<div>').appendTo($parent),
                     infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
-                    $infoWindow.addClass('measure-info-window'); // style it ourselves
-                infoWindow.setContent(_popupTemplate(results));
-                infoWindow.setTitle(""); // hides title div
-                infoWindow.show(_points[0]);
+                infoWindow.startup();
                 map.infoWindow = infoWindow;
+                $(infoWindow.domNode).addClass('measure-info-window'); // style it ourselves
+                map.infoWindow.setContent(_popupTemplate(results));
+                map.infoWindow.setTitle(""); // hides title div
+                map.infoWindow.show(_points[0]);
+                
             },
 
             finish = function (results) {
