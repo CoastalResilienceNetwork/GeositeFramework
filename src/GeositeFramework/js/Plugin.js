@@ -275,10 +275,12 @@
                     };
                 };
 
+                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
+
             $uiContainer
                 // Position the dialog next to the sidebar button which shows it.
                 .css(calculatePosition(view.$el))
-
+            
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     view.model.turnOff();

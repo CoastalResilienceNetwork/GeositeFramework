@@ -102,8 +102,8 @@
         view.$('.side-nav.top').mCustomScrollbar({
             advanced: { updateOnContentResize: true },
             mouseWheelPixels: 75,
-            autoHideScrollbar: false,
-            contentTouchScroll: true,
+            autoHideScrollbar: true,
+            contentTouchScroll: true
         });
         N.app.models.screen.on('change', function () { renderSidebar(view); });
     }

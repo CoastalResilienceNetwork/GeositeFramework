@@ -65,8 +65,8 @@ define(["use!underscore"],
                 if (myStateObject) {
                     if (folderNode.visibleLayerIds === undefined) {
                         map.addLayer(folderNode.wmsLayer);
-                        folderNode.visibleLayerIds = myStateObject;
                     }
+                    folderNode.visibleLayerIds = myStateObject;
                     folderNode.wmsLayer.setVisibleLayers(myStateObject);
                     folderNode.wmsLayer.setOpacity(.7);
                     folderNode.expanded = true;
@@ -81,13 +81,18 @@ define(["use!underscore"],
             }
 
             function saveServiceState (folderNode, stateObject) {
+                /*
+                 Takes a stateObject passed down from the framework and
+                 records the wmsLoader's personal state into it
+                 */
                 if (folderNode.visibleLayerIds && folderNode.visibleLayerIds.length > 0) {
                     stateObject[folderNode.serviceName] = folderNode.visibleLayerIds;
                 }
             }
 
-            function hideAllLayers(node) {
-                node.wmsLayer.setVisibleLayers([]);
+            function hideAllLayers(folderNode) {
+                folderNode.wmsLayer.setVisibleLayers([]);
+                folderNode.visibleLayerIds = [];
             }
 
         };
