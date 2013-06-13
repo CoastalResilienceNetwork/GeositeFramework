@@ -26,6 +26,7 @@ define(["use!underscore"],
                         if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
                             var node = makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
                             node.description = layerInfo.description;
+                            node.extent = new esri.geometry.Extent(layerInfo.extent);
                         }
                     });
                     onLayerSourceLoaded(_url);

@@ -52,6 +52,12 @@
 	background-image:url(images/info.png);
 }
 
+.pluginLayer-extent-zoom {
+    background-image:url(images/zoom_in.png);
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
 /* 
  * Layer info box 
  */

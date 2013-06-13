@@ -14,6 +14,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _$layerDialog = null,
                 _tree = null,
                 _justClickedItemIcon = false,
+                _justClickedZoomIcon = false,
 
                 renderExtTree;
 
@@ -201,23 +202,50 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     // An icon was clicked -- set flag for item click handler
                     _justClickedItemIcon = true;
                 });
+                
+                $('.pluginLayer-extent-zoom').off('click').on('click', function () {
+                    // extent icon was clicked -- set flag for item click handler
+                    _justClickedZoomIcon = true;
+                });
             }
 
             function onItemClick(extView, record, item, index, e, eOpts) {
-                // User has clicked somewhere on a tree item row. Only proceed if they clicked the item's icon.
-                if (_justClickedItemIcon) {
-                    var node = record.raw;
-                    if (node.description || node.fetchDescription) {
-                        showLayerDialog();
-                        if (node.fetchDescription) {
-                            node.fetchDescription(node, function () {
-                                fillLayerDialog(node);
+                
+                // User has clicked somewhere on a tree item row. 
+                // Only proceed if they clicked one of the item's icon.
+                var node = record.raw;
+                if (_justClickedItemIcon) loadDescription();
+                if (_justClickedZoomIcon) loadExtent(); 
+                            
+                function loadDescription() {
+                    if (node.description || node.fetchMetadata) {
+                        if (node.fetchMetadata) {
+                            node.fetchMetadata(node, function () {
+                                showDialog(node);
                             });
                         } else {
-                            fillLayerDialog(node);
+                            showDialog(node);
                         }
                     }
                     _justClickedItemIcon = false;
+                }
+
+                function loadExtent() {
+                    if (node.extent || node.fetchMetadata) {
+                        if (node.fetchMetadata) {
+                            node.fetchMetadata(node, function() {
+                                _map.setExtent(node.extent);
+                            });
+                        } else {
+                            _map.setExtent(node.extent);
+                        }
+                        _justClickedZoomIcon = false;
+                    }
+                }
+
+                function showDialog() {
+                    showLayerDialog();
+                    fillLayerDialog(node);
                 }
             }
 

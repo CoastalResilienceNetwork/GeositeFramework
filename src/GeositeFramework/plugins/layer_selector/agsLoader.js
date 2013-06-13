@@ -157,7 +157,7 @@ define(["jquery", "use!underscore"],
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
                         var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
-                        node.fetchDescription = fetchDescription;
+                        node.fetchMetadata = fetchMetadata;
                     } else {
                         // This is a layer group; remember its node so its children can attach themselves
                         layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
@@ -247,7 +247,7 @@ define(["jquery", "use!underscore"],
                 serviceNode.opacity = opacity;
             }
 
-            function fetchDescription(layerNode, callback) {
+            function fetchMetadata(layerNode, callback) {
                 var serviceNode = getServiceNode(layerNode),
                     url = serviceNode.url + "/" + layerNode.layerId;
                 $.ajax({
@@ -255,6 +255,7 @@ define(["jquery", "use!underscore"],
                     url: url + "?f=json",
                     success: function (metadata) {
                         layerNode.description = metadata.description;
+                        layerNode.extent = new esri.geometry.Extent(metadata.extent);
                         layerNode.url = url;
                         layerNode.opacity = "setByService";
                         callback();
