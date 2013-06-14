@@ -26,16 +26,15 @@
             var model = this;
 
             model.setupDependencies();
-
-            model.on("change:exportTitle change:exportOrientation change:exportPaperSize change:exportIncludeLegend",
-                    function () {
-                        if (model.submissionIsValid()) {
-                            model.set('submitEnabled', false);
-                            model.createPDF();
-                        } else {
-                            model.set('outputText', "Please enter all required fields.");
-                        }
-                    });
+        },
+        
+        submitExport: function() {
+            if (this.submissionIsValid()) {
+                this.set('submitEnabled', false);
+                this.createPDF();
+            } else {
+                this.set('outputText', "Please enter all required fields.");
+            }
         },
 
         submissionIsValid: function () {
@@ -120,6 +119,7 @@
                     exportIncludeLegend: this.$("input:checkbox[name=export-include-legend]:checked").val() === "on" ? true : false,
                     exportPaperSize: this.$("select#export-paper-size").val()
                 });
+                this.model.submitExport();
             }
         },
 
