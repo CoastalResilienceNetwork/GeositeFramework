@@ -49,7 +49,7 @@ define(
                 this.config = JSON.parse(configString);
                 if (!this.input) this._initializeViews();
                 this.input.setupLocator(this.config.locatorServiceUrl,
-                                        this.map, this.config.defaultZoomLevel,
+                                        this.app._unsafeMap, this.config.defaultZoomLevel,
                                         point);
             },
 
