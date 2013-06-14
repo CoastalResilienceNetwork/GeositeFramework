@@ -143,23 +143,6 @@
                 }
             });
             Backbone.HashModels.update();
-        },
-
-        printMap: function printMap() {
-            var mainPaneNumber = this.model.get('mainPaneNumber'),
-                mainPaneView = paneViews[mainPaneNumber],
-                esriMap = mainPaneView.mapView.esriMap,
-                model = new N.models.ExportTool({ esriMap: esriMap }),
-                view = new N.views.ExportTool({ model: model });
-
-            TINY.box.show({
-                html: view.render().el,
-                width: 450,
-                height: 275,
-                fixed: true,
-                maskopacity:50,
-                closejs: function () { view.remove(); }
-            });
         }
     });
 
