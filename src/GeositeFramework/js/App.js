@@ -50,16 +50,29 @@
             // won't. This makes sure to always append when missing.
             if (currentHref.slice(-1) !== "#") { currentHref += "#"; }
 
+            // iOS devices need setSelectionRange, IE does not have the method
+            function _doSelect($dom, el) {
+                el.focus();
+                if (el.setSelectionRange) {
+                    el.setSelectionRange(0, 99999);
+                } else {
+                    $dom.select();
+                }
+            }
+            
             TINY.box.show({
                 html: windowTemplate({ url: currentHref + hash }),
                 width: 500,
                 height: 200,
                 fixed: true,
                 openjs: function () {
-                    var $domElement = $('.tinner .permalink-textbox');
-                    $domElement.select();
+                    var $domElement = $('.tinner .permalink-textbox'),
+                        box = $domElement[0];
+                    _doSelect($domElement, box);
                     $domElement.mouseup(
-                        function () { $domElement.select(); }
+                        function() {
+                            _doSelect($domElement, box);
+                        }
                     );
                 }
             });
