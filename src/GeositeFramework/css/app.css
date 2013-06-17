@@ -245,38 +245,33 @@ h1, h2, h3, h4, h5, h6 {
         }
 
 .tinner .tclose {
-    font-size: 15px;
-    padding: 5px 0;
+    font-size: 14px;
+    padding: 6px;
 }
 
 .tclose {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 20px;
+	right: 24px;
 	cursor: pointer;
-	padding: 3px 4px;
-	background: #AAA;
-	border-radius: 99px;
-	color: white;
+	padding: 6px;
+	background: #FFF;
+	border-radius: 4px;
+	color: #CCC;
 	font-weight: 700;
 	z-index: 99;
 	height: 24px;
-	line-height: 7px;
-	text-indent: 1px;
+	line-height: 10px;
 	width: 24px;
-	font-size: 28px;
-	text-shadow: 0 1px 2px #222;
-	text-shadow: 0 1px 2px rgba(0,0,0,.75);
-	border: white 3px solid;
-	box-shadow: 0 1px 7px #222;
-	box-shadow: 0 1px 7px rgba(0,0,0,.5);
 	}
 	.tclose:hover {
-		background: #BE1E2D;
-	    box-shadow: 0 1px 7px #000;
-	    box-shadow: 0 1px 7px rgba(0,0,0,.85);
+		background: #F1F2F2;
+		color: #333;
 	}
 
+.tcontent h3 {
+	margin-top: 4px;
+}
 
        
 
