@@ -80,26 +80,24 @@
 }
 
 .pluginLayerSelector-info-box .close {
-    position: absolute; 
-    top: -12px; 
-    right: -12px; 
-    cursor: pointer; 
-    padding: 3px 4px;
-    background: #AAA;
-    border-radius: 99px;
-    color: white;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    cursor: pointer;
+    padding: 6px;
+    background: #FFF;
+    border-radius: 4px;
+    color: #CCC;
+    font-weight: 700;
     z-index: 99;
-    font-size: 12px;
-    text-shadow: 0 1px 2px #222;
-    text-shadow: 0 1px 2px rgba(0,0,0,.75);
-    border: white 3px solid;
-    box-shadow: 0 1px 7px #222;
-    box-shadow: 0 1px 7px rgba(0,0,0,.5);
+    height: 24px;
+    line-height: 10px;
+    width: 24px;
+    font-size: 14px;
 }
 .pluginLayerSelector-info-box .close:hover {
-    background: #BE1E2D;
-    box-shadow: 0 1px 7px #000;
-    box-shadow: 0 1px 7px rgba(0,0,0,.85);
+    background: #F1F2F2;
+    color: #333;
 }
 
 .pluginLayerSelector-info-box .info-label {
