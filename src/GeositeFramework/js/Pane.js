@@ -112,6 +112,11 @@
         // needs to be displayed or not.  Wait a little while and then update the
         // scrollbar to let it determine visibility post render.
         setTimeout(function () { view.$('.side-nav.top').mCustomScrollbar("update"); }, 1000);
+
+        // Detects orientation change and updates the scrollbar
+        window.onorientationchange = function() {
+            view.$('.side-nav.top').mCustomScrollbar('update');
+        };
     }
 
     function render(view) {

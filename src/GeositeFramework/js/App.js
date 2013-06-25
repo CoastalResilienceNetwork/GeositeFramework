@@ -103,6 +103,8 @@
             $(N).trigger('resize');
         }
 
+        
+
         resizeMap();
         $(window).resize(_.debounce(resizeMap, 300));
     }
