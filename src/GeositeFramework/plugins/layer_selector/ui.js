@@ -257,7 +257,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 // Position dialog next to layer selector UI
                 position.left += $container.outerWidth() + 20;
                 position.top -= parseInt($container.parent('.plugin-container').css('borderTopWidth')); // not sure why this is necessary
-                _$layerDialog = $(template()).offset(position).appendTo($('body'));
+                _$layerDialog = $(template()).appendTo($('body')).offset(position);
                 _$layerDialog.find('.close').click(function () {
                     removeLayerDialog();
                 });
