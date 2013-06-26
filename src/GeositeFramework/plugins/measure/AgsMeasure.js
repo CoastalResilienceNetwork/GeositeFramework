@@ -157,7 +157,7 @@ define(["jquery", "use!underscore"],
                 // Stop measuring
                 finish({
                     area: null,
-                    length: Azavea.numberToString(calculateDistance(_points), 2)
+                    length: Azavea.numberToString(_renderedLength, 2)
                 });
             },
 
@@ -238,7 +238,11 @@ define(["jquery", "use!underscore"],
                 
                 // Cache a copy of the total line length so far, so we don't
                 // have to recalculate frequently on mouse move events
-                _renderedLength = calculateDistance(_points);
+                var calculated = calculateDistance(_points);
+
+                // Only update the _renderedLength if calculated is a valid number
+                // This is an IE10 workaround.
+                _renderedLength = isNaN(calculated) ? _renderedLength : calculated;
             },
 
             setDefaultPointSymbol = function (graphic) {
