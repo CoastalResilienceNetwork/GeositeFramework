@@ -175,9 +175,9 @@ define(["dojo/_base/declare",
             function processFeatures(formatFeatures) {
                 // When all responses are available, filter and format identified features
                 var allDeferreds = agsThinFeatureDeferreds.concat(agsAreaFeatureDeferreds).concat(wmsFeatureDeferreds),
-                    DeferredList = new dojo.DeferredList(allDeferreds);
+                    deferredList = new dojo.DeferredList(allDeferreds);
 
-                DeferredList.then(function () {
+                deferredList.then(function () {
                     var thinFeatures = getAgsFeatures(agsThinFeatureDeferreds, isThinFeature),
                         areaFeatures = getAgsFeatures(agsAreaFeatureDeferreds, isAreaFeature),
                         wmsFeatures = getWmsFeatures(wmsFeatureDeferreds);
