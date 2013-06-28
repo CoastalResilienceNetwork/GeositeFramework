@@ -104,8 +104,9 @@ define([],
                 // latlng values on success, an error on failure.
                 var model = this,
                     singleLine =  this.get('inputValue'),
-                    url = [this.locator.url, "SingleLine=",
-                           singleLine, "&outFields=&outSR=&f=pjson&callback=?"
+                    url = [this.locator.url, "text=",
+                           singleLine, "&outFields=type&2Ccity&2Cregion",
+                           "&f=pjson&callback=?&maxLocations=20"
                            ].join("");
 
                 model.abortGeocodeRequest();
@@ -116,8 +117,8 @@ define([],
                     url: url,
                     timeout: 12000,
                     success: function (results) { 
-                        if (results.candidates.length > 0) {
-                            model.set('addressCandidates', results.candidates); 
+                        if (results.locations.length > 0) {
+                            model.set('addressCandidates', results.locations);
                         } else {
                             model.set('addressError', true);
                         }
@@ -181,15 +182,15 @@ define([],
                         // and click event to center and zoom over the candidate's
                         // geopoint.
 
-                        var x = candidate.location.x,
-                            y = candidate.location.y,
+                        var x = candidate.feature.geometry.x,
+                            y = candidate.feature.geometry.y,
                             $fragment = $(_.template(locationTemplate)({ 
-                                address: candidate.address,
+                                address: candidate.name,
                                 x: x,
                                 y: y
                             }));
                         $fragment.click(function(e) {
-                            view.centerAndZoom(x, y);
+                            view.centerAndZoom(x, y, candidate.extent);
                             view._cancelEventBubble(e);
                         });
                         return $fragment;
@@ -204,9 +205,9 @@ define([],
                     .append(content);
             },
 
-            centerAndZoom: function (x, y) {
-                var point = this.model.locator.point(x, y);
-                this.model.locator.map.centerAndZoom(point, this.model.locator.zoomLevel);
+            centerAndZoom: function (x, y, rawExtentObj) {
+                var extent = new esri.geometry.Extent(rawExtentObj);
+                this.model.locator.map.setExtent(extent);
             },
 
             handleKeyPress: function (event) {
