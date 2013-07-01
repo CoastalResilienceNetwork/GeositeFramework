@@ -78,6 +78,7 @@ define(["dojo/_base/declare",
 
                             var identifyTask = new esri.tasks.IdentifyTask(service.url),
                                 deferred = identifyTask.execute(identifyParams);
+                            deferred._layerInfos = service.layerInfos;
                             deferreds.push(deferred);
                         }
                     }
@@ -175,9 +176,9 @@ define(["dojo/_base/declare",
             function processFeatures(formatFeatures) {
                 // When all responses are available, filter and format identified features
                 var allDeferreds = agsThinFeatureDeferreds.concat(agsAreaFeatureDeferreds).concat(wmsFeatureDeferreds),
-                    DeferredList = new dojo.DeferredList(allDeferreds);
+                    deferredList = new dojo.DeferredList(allDeferreds);
 
-                DeferredList.then(function () {
+                deferredList.then(function () {
                     var thinFeatures = getAgsFeatures(agsThinFeatureDeferreds, isThinFeature),
                         areaFeatures = getAgsFeatures(agsAreaFeatureDeferreds, isAreaFeature),
                         wmsFeatures = getWmsFeatures(wmsFeatureDeferreds);
@@ -208,19 +209,7 @@ define(["dojo/_base/declare",
                             var features = parseWMSGetFeatureInfoText(text);
 
                             _.each(features, function (rawFeatureObject) {
-                                var getFirstPair = function (obj) {
-                                    var keys, k, v;
-                                    keys = Object.keys(obj);
-                                    if (keys && keys.length > 0) {
-                                        k = keys[0];
-                                        v = obj[k];
-                                    } else {
-                                        k = "";
-                                        v = "";
-                                    }
-                                    return { fieldName: k, value: v };
-                                },
-                                    firstPair = getFirstPair(rawFeatureObject),
+                                var firstPair = getFirstAttribute(rawFeatureObject),
                                     featureObject = {
                                         displayFieldName: firstPair.fieldName,
                                         layerName: wmsDeferred._layerName,
@@ -237,12 +226,42 @@ define(["dojo/_base/declare",
                     return identifiedFeatures;
                 }
 
+                function getFirstAttribute (obj) {
+                    var keys, k, v;
+                    keys = Object.keys(obj);
+                    if (keys && keys.length > 0) {
+                        k = keys[0];
+                        v = obj[k];
+                    } else {
+                        k = "";
+                        v = "";
+                    }
+                    return { fieldName: k, value: v };
+                }
+
+                function addAgsLayerDataWhereMissing(feature, deferred) {
+                    var firstAttribute = getFirstAttribute(feature.feature.attributes);
+
+                    feature.displayFieldName = feature.displayFieldName || firstAttribute.fieldName;
+                    feature.value = feature.value || firstAttribute.value;
+
+                    if (!feature.layerName) {
+                        if (deferred._layerInfos &&
+                            deferred._layerInfos.length > feature.layerId) {
+                            feature.layerName = deferred._layerInfos[feature.layerId].name;
+                        } else {
+                            feature.layerName = "(...)";
+                        }
+                    }
+                }
+
                 function getAgsFeatures(deferreds, filterFunction) {
                     var identifiedFeatures = [];
                     _.each(deferreds, function (deferred) {
                             deferred.addCallback(function (features) {
                                 _.each(features, function (feature) {
                                     if (filterFunction(feature.feature)) {
+                                        addAgsLayerDataWhereMissing(feature, deferred);
                                         identifiedFeatures.push(feature);
                                     }
                                 });
