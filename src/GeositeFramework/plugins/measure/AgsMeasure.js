@@ -261,7 +261,7 @@ define(["jquery", "use!underscore"],
             handleMarkerMouseOver = function (evt) {
                 // Check if the graphic the mouse is on was the first 
                 // node added to the measure line
-                if (isFirstNode(evt)) {
+                if (isFirstNode(evt) && _points.length > 2) {
                     // Change the style of the node to demonstrate that it
                     // can be clicked to complete as polygon
                     setHoverPointSymbol(evt.graphic);
@@ -277,11 +277,19 @@ define(["jquery", "use!underscore"],
             },
 
             handleMarkerDblClick = function (evt) {
-                finishMeasureAsPolygon(evt);
+                _finishPolygonOrStopProp(evt);
             },
                 
             handleMarkerClick = function (evt) {
-                finishMeasureAsPolygon(evt);
+                _finishPolygonOrStopProp(evt);
+            },
+
+            _finishPolygonOrStopProp = function (evt) {
+                if (_points.length > 2) {
+                    tryToFinishMeasureAsPolygon(evt);
+                } else {
+                    dojo.stopEvent(evt);
+                }
             },
                 
             finishMeasureAsPolygon = function(evt) {
