@@ -54,6 +54,9 @@ define(["jquery", "use!underscore"],
             },
 
             _points = [],
+            _originPointEvent = null,
+            _defaultOriginPointGraphic = null,
+            _firstNodeClickBuffer = 20, // measured in pixels
             _renderedLength = 0,
             _pointLayer = null,
             _outlineLayer = null,
@@ -111,6 +114,8 @@ define(["jquery", "use!underscore"],
                 _outlineLayer.clear();
 
                 _points = [];
+                _originPointEvent = null,
+                _defaultOriginPointGraphic = null,
                 _renderedLength = 0;
                 _hoverLine = null;
                 _eventHandles = {};
@@ -201,7 +206,28 @@ define(["jquery", "use!underscore"],
                     });
             },
 
+            pointsMakeValidPolygon = function () {
+                return (_points && _points.length > 2);
+            },
+
             handleMapClick = function (evt) {
+                if (pointsMakeValidPolygon()) {
+                    var originP = new esri.geometry.ScreenPoint(_originPointEvent.x,
+                                                                _originPointEvent.y),
+                        bufferP = new esri.geometry.ScreenPoint(evt.clientX, evt.clientY),
+                        len = esri.geometry.getLength(originP, bufferP);
+                    if (len < _firstNodeClickBuffer) {
+                        finishMeasureAsPolygon();
+                    } else {
+                        continueMeasureAndAddPoint(evt);
+                    }
+                } else {
+                    continueMeasureAndAddPoint(evt);
+                }
+            },
+
+            continueMeasureAndAddPoint = function (evt) {
+
                 // Track each point clicked to create a line segment for 
                 // measuring length
                 _points.push(evt.mapPoint);
@@ -216,6 +242,12 @@ define(["jquery", "use!underscore"],
                     // The first point has been added, start listening
                     // for measure events
                     setupMeasureEvents();
+
+                    // Cache the event generated when clicking the first point. this will
+                    // be needed to calculate the distance from origin of subsequent clicks
+                    _originPointEvent = evt;
+
+                    _defaultOriginPointGraphic = pointGraphic;
 
                     // Double clicks are handled exclusively by this tool while active
                     options.map.disableDoubleClickZoom();
@@ -245,7 +277,7 @@ define(["jquery", "use!underscore"],
                 _renderedLength = isNaN(calculated) ? _renderedLength : calculated;
             },
 
-            setDefaultPointSymbol = function (graphic) {
+            setDefaultOriginPointSymbol = function (graphic) {
                 graphic.setSymbol(options.pointSymbol);
             },
 
@@ -261,7 +293,7 @@ define(["jquery", "use!underscore"],
             handleMarkerMouseOver = function (evt) {
                 // Check if the graphic the mouse is on was the first 
                 // node added to the measure line
-                if (isFirstNode(evt) && _points.length > 2) {
+                if (isFirstNode(evt) && pointsMakeValidPolygon()) {
                     // Change the style of the node to demonstrate that it
                     // can be clicked to complete as polygon
                     setHoverPointSymbol(evt.graphic);
@@ -272,60 +304,62 @@ define(["jquery", "use!underscore"],
                 // Return the node to the deafult symbol, if it was
                 // the first node added
                 if (isFirstNode(evt)) {
-                    setDefaultPointSymbol(evt.graphic);
+                    setDefaultOriginPointSymbol(evt.graphic);
                 }
             },
 
             handleMarkerDblClick = function (evt) {
-                _finishPolygonOrStopProp(evt);
+                finishPolygonOrStopProp(evt);
             },
                 
             handleMarkerClick = function (evt) {
-                _finishPolygonOrStopProp(evt);
+                finishPolygonOrStopProp(evt);
             },
 
-            _finishPolygonOrStopProp = function (evt) {
-                if (_points.length > 2) {
+            finishPolygonOrStopProp = function (evt) {
+                if (pointsMakeValidPolygon()) {
                     tryToFinishMeasureAsPolygon(evt);
                 } else {
                     dojo.stopEvent(evt);
                 }
             },
                 
-            finishMeasureAsPolygon = function(evt) {
+            tryToFinishMeasureAsPolygon = function (evt) {
+                if (isFirstNode(evt) && pointsMakeValidPolygon()) {
+                    dojo.stopEvent(evt);
+                    finishMeasureAsPolygon();
+                }
+            },
+
+            finishMeasureAsPolygon = function() {
                 // If the first measurement node was clicked, and there
                 // has already been a line drawn, close the line into a 
-                // polyon
-                if (isFirstNode(evt) && _points.length > 1) {
-                    // Don't let the map handle this click
-                    dojo.stopEvent(evt);
+                // polygon
 
-                    // Make the last point be the same coordinates of the first point
-                    // and create a polygon out of it
-                    _points.push(_points[0]);
-                    var polygon = new esri.geometry.Polygon(options.map.spatialReference);
-                    
-                    // If the user has drawn the polygon ring anti-clockwise, reverse the ring
-                    // to make it a valid esri geometry.
-                    if (!esri.geometry.isClockwise(_points)) {
-                        _points = _points.reverse();
-                    }
-                    polygon.addRing(_points);
-                    
-                    // If the polygon self interesects, simplify it using the geometry service
-                    if (esri.geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
-                        _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
-                            setMeasureOutput(simplifiedPolygons[0], evt.graphic);
-                        });
-                    } else {
-                        setMeasureOutput(polygon, evt.graphic);
-                    }
-                    
+                // Make the last point be the same coordinates of the first point
+                // and create a polygon out of it
+                _points.push(_points[0]);
+                var polygon = new esri.geometry.Polygon(options.map.spatialReference);
+                
+                // If the user has drawn the polygon ring anti-clockwise, reverse the ring
+                // to make it a valid esri geometry.
+                if (!esri.geometry.isClockwise(_points)) {
+                    _points = _points.reverse();
+                }
+                polygon.addRing(_points);
+                
+                // If the polygon self interesects, simplify it using the geometry service
+                if (esri.geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
+                    _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
+                        setMeasureOutput(simplifiedPolygons[0]);
+                    });
+                } else {
+                    setMeasureOutput(polygon);
                 }
             }, 
-                
+            
             // Assumes polygon is valid at this point
-            setMeasureOutput = function (polygon, graphic)
+            setMeasureOutput = function (polygon)
             {
                 var geoPolygon = esri.geometry.webMercatorToGeographic(polygon),
                         area = esri.geometry.geodesicAreas([geoPolygon],
@@ -337,7 +371,7 @@ define(["jquery", "use!underscore"],
                 _outlineLayer.add(new esri.Graphic(polygon, options.polygonSymbol));
 
                 // Change the first node symbol to the default as we finish
-                setDefaultPointSymbol(graphic);
+                setDefaultOriginPointSymbol(_defaultOriginPointGraphic);
 
                 finish({
                     area: Azavea.numberToString(area, 2),
