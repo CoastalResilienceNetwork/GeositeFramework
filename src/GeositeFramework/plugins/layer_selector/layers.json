@@ -1,7 +1,7 @@
 [
     {
         "agsSource": {
-            "url": "http://dev.ags.coastalresilience.org:6080/arcgis/rest/services",
+            "url": "http://devags.coastalresilience.org:6080/arcgis/rest/services",
             "folderTitle": "Coastal_Resilience_base_data",
             "folders": [
                 {
