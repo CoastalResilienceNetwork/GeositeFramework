@@ -557,6 +557,20 @@ h1, h2, h3, h4, h5, h6 {
 	height: 25px;
 }
 
+/* This span displays the raw name of a map layer.
+   The nicely-formatted name is also displayed, so
+   there's no harm in hiding this.*/
+span.esriLegendServiceLabel {
+    display: none;
+}
+
+/* Bold the nicely-formatted layer name */
+table.esriLegendLayerLabel tbody tr td {
+    font-weight: bold;
+    padding-top: 4px;
+    padding-bottom: 1px;
+}
+
 .mCSB_container {
 	margin-right: 0 !important;
 }
