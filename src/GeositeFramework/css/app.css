@@ -247,6 +247,7 @@ h1, h2, h3, h4, h5, h6 {
 .tinner .tclose {
     font-size: 14px;
     padding: 6px;
+    right: 26px;
 }
 
 .tclose {
@@ -644,7 +645,12 @@ table.esriLegendLayerLabel tbody tr td {
 /* TinyBox overrides */
 .tinner {
     overflow: auto;
-}
+	}
+	.tinner iframe {
+		width: 100%;
+		height: 400px;
+		margin-top: 15px;
+	}
 
 /* -----------------------------------------
    IE8 Style Overrides
