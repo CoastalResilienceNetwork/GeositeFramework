@@ -148,7 +148,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 var tree = Ext.create('FilteredTreePanel', {
                     store: store,
                     rootVisible: false,
-                    width: 'auto',
+                    width: 400,
                     animate: false,
                     scroll: false,
                     border: false,
