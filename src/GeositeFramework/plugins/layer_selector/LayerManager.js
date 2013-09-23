@@ -15,7 +15,8 @@ define([
                 _treeRootNode = null, // the absolute base of the tree
                 _cssClassPrefix = 'pluginLayerSelector',
                 _onLoadingComplete,
-                _getUniqueFolderTitle = createFnForUniqueFolderTitles();
+                _getUniqueFolderTitle = createFnForUniqueFolderTitles(),
+                _layerData = null;
 
             
             /*
@@ -31,15 +32,15 @@ define([
               Private methods
              */
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
-                var layerData = parseLayerConfigData(layerSourcesJson);
+                _layerData = parseLayerConfigData(layerSourcesJson);
 
                 _onLoadingComplete = onLoadingComplete;
 
-                if (layerData) {
+                if (_layerData) {
                     _treeRootNode = makeRootNode();
 
                     // Load layer info from each source
-                    _.each(layerData, function (dataSourceContainer) {
+                    _.each(_layerData, function (dataSourceContainer) {
                         var loader = null,
                             innerContainer = null,
                             source = null,
@@ -177,6 +178,13 @@ define([
                 _urls = _.without(_urls, url);
                 if (_urls.length == 0) {
                     // All URLs are loaded
+                    var sourceByTitle = _.map(_layerData, function(layerInfo) {
+                            return (layerInfo.wmsSource || layerInfo.agsSource).folderTitle;
+                        }),
+                        children = _.sortBy(_treeRootNode.children, function (sub) {
+                            return _.indexOf(sourceByTitle, sub.text.replace(/ /g, '_'));
+                    });
+                    _treeRootNode.children = children;
                     _onLoadingComplete(_treeRootNode);
                 }
             }

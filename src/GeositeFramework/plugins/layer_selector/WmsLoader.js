@@ -27,8 +27,14 @@ define(["use!underscore"],
                             var node = makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
                             node.description = layerInfo.description;
                             node.extent = new esri.geometry.Extent(layerInfo.extent);
+                            node.layerName = layerInfo.name;
                         }
                     });
+                    // Sort the services by thier whitelist order
+                    var children = _.sortBy(rootNode.children, function (child) {
+                        return _.indexOf(layerIdWhitelist, child.layerName);
+                    });
+                    rootNode.children = children;
                     onLayerSourceLoaded(_url);
                 });
                 dojo.connect(wmsLayer, "onError", function () {

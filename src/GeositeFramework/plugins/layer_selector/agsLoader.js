@@ -55,31 +55,31 @@ define(["jquery", "use!underscore"],
                     return loadFolder(folderName, function (entries) {
                         // Folder has loaded -- make its node and add its services to "serviceSpecs"
 
-                        var node, 
-                            folderServiceMatchesCurrent, 
-                            folderServicesForCurrent, 
+                        var node,
+                            folderServiceMatchesCurrent,
+                            folderServicesForCurrent,
                             whitelistedServicesForFolder,
-                            getServicesInWhitelist, 
-                            servicesToInclude, 
+                            getServicesInWhitelist,
+                            servicesToInclude,
                             sortedServices;
 
                         node = _makeContainerNode(folderName, "folder", parentNode);
 
                         // search the folder services object pulled from the layers config for
                         // the current service. Construct a service whitelist.
-                        folderServiceMatchesCurrent = function(folderService) {
+                        folderServiceMatchesCurrent = function (folderService) {
                             return folderService.name === folderName;
                         };
                         folderServicesForCurrent = _.filter(_folderServiceWhitelist, folderServiceMatchesCurrent);
-                        whitelistedServicesForFolder = folderServicesForCurrent.length > 0 ? 
+                        whitelistedServicesForFolder = folderServicesForCurrent.length > 0 ?
                             folderServicesForCurrent[0].services : [];
 
 
                         // if there is a whitelist, sort and filter according to the whitelist order
                         if (whitelistedServicesForFolder && whitelistedServicesForFolder.length > 0) {
 
-                            getServicesInWhitelist = function (service) { 
-                                return _.contains(whitelistedServicesForFolder, getServiceName(service.name)); 
+                            getServicesInWhitelist = function (service) {
+                                return _.contains(whitelistedServicesForFolder, getServiceName(service.name));
                             };
 
                             servicesToInclude = _.filter(entries.services, getServicesInWhitelist);
@@ -98,6 +98,11 @@ define(["jquery", "use!underscore"],
 
                 // When all folders have loaded, load the services
                 $.when.apply($, deferreds).then(function () {
+                    // Sort the services by thier whitelist order
+                    var children = _.sortBy(parentNode.children, function (child) {
+                        return _.indexOf(folderNames, child.text.replace(/ /g, '_'));
+                    });
+                    parentNode.children = children;
                     loadServices(serviceSpecs);
                 });
             }
@@ -165,13 +170,13 @@ define(["jquery", "use!underscore"],
                 }, this);
             }
 
-            function hideAllLayers (serviceNode, map) {
+            function hideAllLayers(serviceNode, map) {
                 if (serviceNode.esriService) {
                     serviceNode.esriService.setVisibleLayers([-1]);
                 }
             }
 
-            function setServiceState (serviceNode, stateObject, map) {
+            function setServiceState(serviceNode, stateObject, map) {
                 var myStateObject = stateObject[serviceNode.serviceName],
                     esriService;
 
@@ -184,7 +189,7 @@ define(["jquery", "use!underscore"],
                     serviceNode.parent.expanded = true;
                     if (serviceNode.parent.parent) {
                         serviceNode.parent.parent.expanded = true;
-                        }
+                    }
 
                     _.each(serviceNode.children, function (child) {
                         if (_.contains(myStateObject.visibleLayerIds, child.layerId)) { child.checked = true; }
@@ -192,17 +197,17 @@ define(["jquery", "use!underscore"],
                 }
             }
 
-            function saveServiceState (serviceNode, stateObject) {
+            function saveServiceState(serviceNode, stateObject) {
                 if (serviceNode.esriService &&
-                    !(_.isEqual(serviceNode.esriService.visibleLayers,[-1]))) {
+                    !(_.isEqual(serviceNode.esriService.visibleLayers, [-1]))) {
                     stateObject[serviceNode.serviceName] = {
                         visibleLayerIds: getLayerIds(serviceNode.esriService),
                         opacity: serviceNode.opacity
-                        };
+                    };
                 }
             }
 
-            function getLayerIds (esriService) {
+            function getLayerIds(esriService) {
                 return (!esriService || !esriService.visibleLayers || esriService.visibleLayers[0] === -1 ? [] : esriService.visibleLayers);
             }
 
@@ -264,7 +269,7 @@ define(["jquery", "use!underscore"],
                 });
             }
 
-        }
+        };
 
         return AgsLoader;
     }
