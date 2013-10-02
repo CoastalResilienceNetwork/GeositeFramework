@@ -86,7 +86,7 @@
     }
 
     function createMap(view) {
-        var esriMap = new esri.Map(view.$el.attr('id'), { logo: false }),
+        var esriMap = new esri.Map(view.$el.attr('id')),
             resizeMap = function resizeMap() {
                 // When the element containing the map resizes, the 
                 // map needs to be notified.  Do a slight delay so that
