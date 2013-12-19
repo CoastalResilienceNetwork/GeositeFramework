@@ -1,13 +1,42 @@
 ﻿// PluginBase.js -- superclass for plugin modules
 
 define(["dojo/_base/declare",
-        "dojo/_base/xhr"
+        "dojo/_base/xhr",
+        "dojo/aspect",
+        "dojo/_base/lang",
+        "dojo/on",
+        "dojo/query",
+        "dojo/NodeList-traverse",
+        "dojo/dom-style",
+        "dojo/dom-construct",
+        "dojo/dom-class",
+        "esri/tasks/IdentifyTask",
+        "esri/tasks/IdentifyParameters",
+        "dojo/DeferredList",
+        "dojo/_base/Deferred",
+        "dijit/layout/ContentPane",
+        "dijit/form/CheckBox",
+        "dijit/form/Button"
        ],
-    function (declare, xhr) {
-
-        dojo.require("esri.tasks.identify");
-        dojo.require("dojo.DeferredList");
-
+    function (declare,
+                xhr,
+                aspect, 
+                lang, 
+                on, 
+                query, 
+                NodeListtrav, 
+                domStyle, 
+                domConstruct, 
+                domClass, 
+                dIdentifyTask, 
+                IdentifyParameters, 
+                dDeferredList, 
+                Deferred, 
+                ContentPane, 
+                CheckBox, 
+                Button
+                ) {
+        
         return declare(null, {
             toolbarName: "",
             fullName: "",
@@ -19,9 +48,81 @@ define(["dojo/_base/declare",
             deactivate: function () {},
             hibernate: function () {},
             getState: function () {},
+            
+            showInfographic: CheckandShowInfographic,
 
-            identify: identify
+            identify: identify,
+            constructor: function(args) {
+                declare.safeMixin(this,args);
+                aspect.after(this,'activate', lang.hitch(this,this.showInfographic));
+            }
         });
+
+        function CheckandShowInfographic(override) {
+            if (this.infoGraphic) {
+
+                var showValueKey = this.toolbarName + " showinfographic",
+                    doNotShow = localStorage[showValueKey] === 'true';
+                
+                if (!this.infoGraphicArea) {
+                    var paneNode = query(this.container).parent().parent(),
+                        pluginContainer = query(this.container).parent(),
+                        headers = pluginContainer.children(".plugin-container-header"),
+                        moreinfo = domConstruct.create("a", {href:"javascript:;", title: "View the info-graphic", innerHTML:"?"});
+
+                    this.mainPanel = pluginContainer[0];
+                    
+                    on(moreinfo, "click", lang.hitch(this, function(){
+                        this.showInfographic(true);
+                    }));
+                    
+                    headers[0].appendChild(moreinfo);
+                    
+                    this.infoGraphicArea = new ContentPane({
+                          innerHTML: "<img src='" + this.infoGraphic + "' /><br>"
+                        });
+                    
+                    domClass.add(this.infoGraphicArea.domNode, "claro plugin-infographic");
+                    
+                    var checkboxnode = domConstruct.create("span");
+                    this.infoGraphicArea.domNode.appendChild(checkboxnode);
+                    this._nscheckBox = new CheckBox({
+                        name: "checkBox",
+                        checked: doNotShow,
+                        onChange: lang.hitch(this, function (show) { localStorage.setItem(showValueKey, show); })
+                    }, checkboxnode);
+                    
+                    var noshow = domConstruct.create("span", {innerHTML:"Don't Show This on Start "});
+                    this.infoGraphicArea.domNode.appendChild(noshow);
+                    
+                    var buttonnode = domConstruct.create("span");
+                    this.infoGraphicArea.domNode.appendChild(buttonnode);
+                        
+                    var closeinfo = new Button({
+                        label: "Continue",
+                        onClick: lang.hitch(this,function() {
+                            domStyle.set(this.infoGraphicArea.domNode, 'display', 'none');
+                            domStyle.set(this.mainPanel, 'display', '');
+                        })
+                        },buttonnode);
+
+                    paneNode[0].appendChild(this.infoGraphicArea.domNode);
+
+                } else {
+                    var ison = domStyle.get(this.infoGraphicArea.domNode, "display");
+                    if (ison != 'none') {
+                        domStyle.set(this.mainPanel, 'display', 'none');
+                    }
+                  }
+        
+                if ((!doNotShow) || (override)) {
+                    this._nscheckBox.attr("checked", doNotShow);
+                    
+                    domStyle.set(this.infoGraphicArea.domNode, 'display', 'initial');
+                    domStyle.set(this.mainPanel, 'display', 'none');
+                  }
+            }
+        }
 
         // ------------------------------------------------------------------------
         // Default "Identify" -- format feature info returned by esri.tasks.IdentifyTask
