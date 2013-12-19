@@ -133,8 +133,13 @@ define(["dojo/_base/declare",
             // Filter out ones that aren't mine. 
             // (Because "map" is a WrappedMap, layers that aren't mine will be undefined.)
             return _.filter(_.map(map.layerIds, map.getLayer), function (layer) {
-                return (layer && layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer");
-            });
+                return (layer &&
+                    (
+                        (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") ||
+                        (layer.declaredClass === "esri.layers.ArcGISTiledMapServiceLayer") ||
+                        (layer.declaredClass === "esri.layers.FeatureLayer")
+                    ));
+            }); 
         }
 
         function getMyWmsServices(map) {
@@ -168,7 +173,7 @@ define(["dojo/_base/declare",
                         identify(0, agsAreaFeatureDeferreds);
 
                         function identify(tolerance, deferreds) {
-                            var identifyParams = new esri.tasks.IdentifyParameters();
+                            var identifyParams = new IdentifyParameters();
 
                             identifyParams.tolerance = tolerance;
                             identifyParams.layerIds = service.visibleLayers;
@@ -177,7 +182,7 @@ define(["dojo/_base/declare",
                             identifyParams.geometry = mapPoint;
                             identifyParams.mapExtent = map.extent;
 
-                            var identifyTask = new esri.tasks.IdentifyTask(service.url),
+                            var identifyTask = new dIdentifyTask(service.url),
                                 deferred = identifyTask.execute(identifyParams);
                             deferred._layerInfos = service.layerInfos;
                             deferreds.push(deferred);
@@ -277,7 +282,7 @@ define(["dojo/_base/declare",
             function processFeatures(formatFeatures) {
                 // When all responses are available, filter and format identified features
                 var allDeferreds = agsThinFeatureDeferreds.concat(agsAreaFeatureDeferreds).concat(wmsFeatureDeferreds),
-                    deferredList = new dojo.DeferredList(allDeferreds);
+                    deferredList = new dDeferredList(allDeferreds);
 
                 deferredList.then(function () {
                     var thinFeatures = getAgsFeatures(agsThinFeatureDeferreds, isThinFeature),
