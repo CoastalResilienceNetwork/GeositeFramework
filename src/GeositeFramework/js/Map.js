@@ -178,9 +178,13 @@
                 var serviceInfo = view.model.serviceInfos[service.id];
                 if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
                     // This service was added by a plugin, and the plugin wants it in the legend
-                    layerInfos.push({
-                        layer: serviceInfo.service
-                    });
+                    var layer;
+                    if (serviceInfo.service.declaredClass === "esri.layers.FeatureLayer") {
+                        layer = { layer: serviceInfo.service, title: serviceInfo.service.id };
+                    } else {
+                        layer = { layer: serviceInfo.service };
+                    }
+                    layerInfos.push(layer);
                 }
             });
             legendDijit.refresh(layerInfos);
