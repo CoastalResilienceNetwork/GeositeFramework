@@ -38,6 +38,17 @@
 
     <script src="js/lib/foundation/modernizr.foundation.js"></script>
     
+    <!-- Simple implementation style overrides from config -->
+    <style type="text/css">
+        .top-bar {
+            background: @Model.PrimaryColor;
+        } 
+
+        .top-bar ul > li.name h1 a {
+            color: @Model.SecondaryColor;
+        }
+    </style>
+
     @if (Model.GoogleAnalyticsPropertyId != null)
     {
         <script type="text/javascript">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -13,6 +14,11 @@ namespace GeositeFramework.Models
     /// </summary>
     public class Geosite
     {
+        // For backwards compatibility with V1 region.json files, 
+        // provide defaults for the customized colors
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#26648E");
+        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#26648E");
+
         public class Link
         {
             public string Text;
@@ -32,6 +38,8 @@ namespace GeositeFramework.Models
         public string PluginVariableNames { get; private set; }
         public List<string> PluginCssUrls { get; private set; }
         public string ConfigurationForUseJs { get; private set; }
+        public String PrimaryColor { get; private set; }
+        public String SecondaryColor { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -98,6 +106,19 @@ namespace GeositeFramework.Models
             TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
             TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
 
+            var colorConfig = jsonObj["colors"];
+            if (colorConfig != null)
+            {
+                PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
+                SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
+            }
+            else
+            {
+                PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
+                SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
+            }
+
+
             if (jsonObj["googleAnalyticsPropertyId"] != null)
             {
                 GoogleAnalyticsPropertyId = (string)jsonObj["googleAnalyticsPropertyId"];
@@ -123,6 +144,27 @@ namespace GeositeFramework.Models
             if (pluginConfigJsonData != null)
             {
                 MergePluginConfigurationData(this, pluginConfigJsonData);
+            }
+        }
+       
+        /// <summary>
+        /// Validate the color syntax and return an HTML acceptable version
+        /// of the specified color
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private String ExtractColorFromJson(JToken json, string key)
+        {
+            try
+            {
+                var color =  ColorTranslator.FromHtml(json[key].ToString());
+                return ColorTranslator.ToHtml(color);
+            }
+            catch (Exception e)
+            {
+                const string msg = "Bad color config for key: `{0}`. Please use Hex (HTML) notation, ex. #FFCC66";
+                throw new Exception(String.Format(msg, key));
             }
         }
 

@@ -76,6 +76,15 @@
         "helpUrl": {
             "type": "string",
             "required": false
+        },
+        "colors": {
+            "type": "object",
+            "properties": {
+                "primary": {"type": "string", "required": true},
+                "secondary": {"type": "string", "required": true}
+            },
+            "required": false,
+            "additionalProperties": false
         }
     },
     "additionalProperties": false
