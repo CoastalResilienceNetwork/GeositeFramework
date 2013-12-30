@@ -14,6 +14,13 @@ namespace GeositeFramework.Tests
     public class GeositeTests : AssertionHelper
     {
         private static readonly string _appDataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\App_Data");
+        private string baseValidRegionJson = @"
+                {
+                    'titleMain': {'text':''},
+                    'titleDetail': {'text':''},
+                    'initialExtent': [0,0,0,0],
+                    'basemaps': [{'name':'', 'url':''}]
+                ";
 
         // ------------------------------------------------------------------------
         // Tests for region.json configuration
@@ -98,6 +105,36 @@ namespace GeositeFramework.Tests
             Expect(messages[0], Contains("'a'")); // extra property
             Expect(messages[1], Contains("'b'")); // extra property
             Expect(messages[2], Contains(": titleMain, titleDetail, initialExtent, basemaps.")); // missing required properties
+        }
+
+        /// <exclude/>
+        [Test]
+        public void TestGoodColorsJson()
+        {
+            const string primary = "#C0C0C0", secondary = "#FF11AA";
+            var regionJson = baseValidRegionJson + 
+                    ",'colors': { 'primary': '" + primary + "',  'secondary': '" + secondary + "'}}";
+            var geo = CreateGeosite(regionJson);
+            Assert.AreEqual(geo.PrimaryColor, primary);
+            Assert.AreEqual(geo.SecondaryColor, secondary);
+        }
+
+        /// <exclude/>
+        [Test]
+        [ExpectedException(typeof(Exception), Handler = "HandleBadJsonColors")]
+        public void TestBadColorsJson()
+        {
+            var regionJson = baseValidRegionJson + 
+                    @",'colors': {
+                        'primary': 'hot pink',
+                        'secondary': 'cool cucumber'
+                    }
+                }";
+            CreateGeosite(regionJson);
+        }
+        private void HandleBadJsonColors(Exception ex)
+        {
+            Expect(ex.Message, Contains("Bad color config"));
         }
 
         /// <exclude/>
