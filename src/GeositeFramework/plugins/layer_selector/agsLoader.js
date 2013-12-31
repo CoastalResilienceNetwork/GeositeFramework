@@ -5,14 +5,13 @@ define(["jquery", "use!underscore"],
         dojo.require("esri.layers.FeatureLayer");
         dojo.require("esri.utils");
         dojo.require("dojo.DeferredList");
-        var AgsLoader = function(baseUrl, source) {
+        var AgsLoader = function(baseUrl) {
             var _baseUrl = baseUrl,
                 _folderConfigs = null,
                 _makeContainerNode = null,
                 _makeLeafNode = null,
                 _onLayerSourceLoaded = null,
-                _onLayerSourceLoadError = null,
-                _source = source;
+                _onLayerSourceLoadError = null;
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
             // The catalog root contains folders and/or services.
@@ -72,14 +71,13 @@ define(["jquery", "use!underscore"],
                     //   - the "url" to query for further info, or "error" if no further info is available
                     //   - "config" info from the "layers.json" file
                     //   - "parentNode" so we can attach it to the node tree
-                    // The specs retain their original order from the "layers.json" file.
+                    // The specs retain their original order from the "layers.json" file, which allows us to
+                    // create nodes in the correct order.
 
                     var serviceDeferreds = _.map(serviceSpecs, function (serviceSpec) {
                         if (serviceSpec.error) {
                             // Include errors so results stay in order. Wrap in a deferred object for homogeneity.
-                            var deferred = new dojo.Deferred(_.identity);
-                            deferred.resolve([{ error: { message: serviceSpec.error } }, serviceSpec]);
-                            return deferred;
+                            return makeDeferredError(serviceSpec.error);
                         } else if (serviceSpec.type === "MapServer") {
                             return esri.request({
                                 url: serviceSpec.url + "/" + serviceSpec.name + "/MapServer",
@@ -87,35 +85,39 @@ define(["jquery", "use!underscore"],
                                 handleAs: "json",
                                 callbackParamName: "callback",
                                 timeout: 10000
-                            }).then(function(results) {
-                                return [results, serviceSpec];
-                            }, function(error) {
-                                return [{ "error": { "message": "Error: Failed to load map service (" + error.message + ")." } }, service];
+                            }).then(_.identity,
+                            function (error) {
+                                return makeError("Error: Failed to load map service (" + error.message + ").");
                             });
                         } else {
+                            return makeDeferredError("Only 'MapServer' services are supported");
+                        }
+
+                        function makeDeferredError(message) {
                             var deferred = new dojo.Deferred(_.identity);
-                            deferred.resolve([{ error: { message: "Only 'MapServer' services are supported" } }, serviceSpec]);
+                            deferred.resolve(makeError(message));
                             return deferred;
+                        }
+
+                        function makeError(message) {
+                            return { error: message };
                         }
                     });
 
                     new dojo.DeferredList(serviceDeferreds).then(function (results) {
-                        var resultsServices = results;
-
-                        var serviceSpecs = _.map(resultsServices, function(result) { return result[1][1]; });
-                        var serviceInfos = _.map(resultsServices, function(result) { return result[1][0]; });
-                        _.each(serviceSpecs, function(serviceSpec, i) {
-                            var serviceData = serviceInfos[i],
+                        _.each(results, function(result, i) {
+                            var serviceData = result[1],
+                                serviceSpec = serviceSpecs[i],
                                 serviceName = getServiceName(serviceSpec.name),
-                                currentService = serviceSpec.config,
+                                serviceConfig = serviceSpec.config,
                                 serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
 
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
-                            node.text = (_.has(currentService, "displayName")) ? currentService.displayName : node.text;
+                            node.text = (_.has(serviceConfig, "displayName")) ? serviceConfig.displayName : node.text;
                             node.serviceName = serviceSpec.name;
                             if (_.has(serviceData, "error")) {
                                 node.text = node.text + " (Unavailable)";
-                                node.description = serviceData.error.message;
+                                node.description = serviceData.error;
                                 node.url = serviceUrl;
                                 delete node.children;
                                 node.leaf = true;
@@ -128,11 +130,11 @@ define(["jquery", "use!underscore"],
                                 } else {
                                     node.description = serviceData.description;
                                 }
-                                node.opacity = (_.has(currentService, "opacity")) ? currentService.opacity : 0.7;
+                                node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
                                 node.params = { "opacity": node.opacity };
                                 node.extent = new esri.geometry.Extent(serviceData.fullExtent);
                                 node.checked = false;
-                                node.serviceType = currentService.type;
+                                node.serviceType = serviceConfig.type;
                                 node.setOpacity = setOpacity;
                                 node.hideAllLayers = hideAllLayers;
                                 node.saveServiceState = saveServiceState;
@@ -141,9 +143,9 @@ define(["jquery", "use!underscore"],
 
                                 if (node.serviceType === "dynamic") {
                                     node.url = serviceUrl;
-                                    if (_.has(currentService, "showLayers")) {
-                                        if (currentService.showLayers.length > 0) {
-                                            var layers = _.map(currentService.showLayers, function(i) {
+                                    if (_.has(serviceConfig, "showLayers")) {
+                                        if (serviceConfig.showLayers.length > 0) {
+                                            var layers = _.map(serviceConfig.showLayers, function(i) {
                                                 var item = _.find(serviceData.layers, function(s) {
                                                     if (s.id == i.id) {
                                                         return s;
@@ -163,8 +165,8 @@ define(["jquery", "use!underscore"],
                                             delete node.children;
                                             node.leaf = true;
                                             node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
-                                            if (_.has(currentService, "visibleLayerIds")) {
-                                                node.visibleLayerIds = currentService.visibleLayerIds;
+                                            if (_.has(serviceConfig, "visibleLayerIds")) {
+                                                node.visibleLayerIds = serviceConfig.visibleLayerIds;
                                             }
                                         }
                                     } else {
@@ -175,42 +177,42 @@ define(["jquery", "use!underscore"],
                                     delete node.children;
                                     node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
                                     node.leaf = true;
-                                    if (_.has(currentService, "displayLevels")) {
-                                        node.params.displayLevels = currentService.displayLevels;
+                                    if (_.has(serviceConfig, "displayLevels")) {
+                                        node.params.displayLevels = serviceConfig.displayLevels;
                                     }
                                 } else if (node.serviceType === "feature-layer") {
-                                    node.url = serviceUrl + "/" + currentService.layerIndex;
+                                    node.url = serviceUrl + "/" + serviceConfig.layerIndex;
                                     delete node.children;
                                     node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
                                     node.leaf = true;
-                                    if (_.has(currentService, "mode")) {
+                                    if (_.has(serviceConfig, "mode")) {
                                         var modes = {
                                             "snapshot": esri.layers.FeatureLayer.MODE_SNAPSHOT,
                                             "ondemand": esri.layers.FeatureLayer.MODE_ONDEMAND,
                                             "selection": esri.layers.FeatureLayer.MODE_SELECTION
                                         };
-                                        var mode = modes[currentService.mode];
+                                        var mode = modes[serviceConfig.mode];
                                         node.params.mode = mode;
                                     }
-                                    if (_.has(currentService, "symbology")) {
-                                        var symbol = getLayerSymbology(currentService.symbology);
+                                    if (_.has(serviceConfig, "symbology")) {
+                                        var symbol = getLayerSymbology(serviceConfig.symbology);
                                         node.symbology = symbol;
                                     }
-                                    if (_.has(currentService, "outFields")) {
-                                        node.params.outFields = currentService.outFields;
+                                    if (_.has(serviceConfig, "outFields")) {
+                                        node.params.outFields = serviceConfig.outFields;
                                     }
-                                    if (_.has(currentService, "autoGeneralize")) {
-                                        node.params.autoGeneralize = currentService.autoGeneralize;
+                                    if (_.has(serviceConfig, "autoGeneralize")) {
+                                        node.params.autoGeneralize = serviceConfig.autoGeneralize;
                                     }
-                                    if (_.has(currentService, "displayOnPan")) {
-                                        node.params.displayOnPan = currentService.displayOnPan;
+                                    if (_.has(serviceConfig, "displayOnPan")) {
+                                        node.params.displayOnPan = serviceConfig.displayOnPan;
                                     }
-                                    if (_.has(currentService, "layerDefinition")) {
-                                        node.layerDefinition = currentService.layerDefinition;
+                                    if (_.has(serviceConfig, "layerDefinition")) {
+                                        node.layerDefinition = serviceConfig.layerDefinition;
                                     }
                                 }
-                                if (_.has(currentService, "id")) {
-                                    node.params.id = currentService.id;
+                                if (_.has(serviceConfig, "id")) {
+                                    node.params.id = serviceConfig.id;
                                 }
                                 if (_.has(node.parent, "groupAsService")) {
                                     node.cls = "pluginLayerSelector-layer";

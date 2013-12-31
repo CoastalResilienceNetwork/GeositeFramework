@@ -53,7 +53,7 @@ define([
                                     _urls.push(url + "/" + service.name);
                                 });
                             });
-                            loader = new AgsLoader(source.url, source);
+                            loader = new AgsLoader(source.url);
                             innerContainer = source.folders;
 
                         } else if (dataSourceContainer.wmsSource) {
