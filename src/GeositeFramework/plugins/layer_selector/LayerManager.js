@@ -1,4 +1,4 @@
-// Module LayerManager.js
+﻿// Module LayerManager.js
 
 define([
         "dojo/json",
@@ -51,7 +51,7 @@ define([
                                 _.each(folder.services, function(service) {
                                     service.guid = _.uniqueId(service.name + "_");
                                     var url = (_.has(folder, "url")) ? folder.url : source.url;
-                                    var url = (folder.name != "") ? url + "/" + folder.name : url;
+                                    url = (folder.name != "") ? url + "/" + folder.name : url;
                                     _urls.push(url + "/" + service.name);
 
                                 });

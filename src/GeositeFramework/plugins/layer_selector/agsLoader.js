@@ -1,4 +1,4 @@
-// Module AgsLoader.js
+﻿// Module AgsLoader.js
 
 define(["jquery", "use!underscore"],
     function ($, _) {
@@ -7,7 +7,7 @@ define(["jquery", "use!underscore"],
         dojo.require("dojo.DeferredList");
         var AgsLoader = function(baseUrl, source) {
             var _baseUrl = baseUrl,
-                _folderServiceWhitelist = null,
+                _folderConfigs = null,
                 _makeContainerNode = null,
                 _makeLeafNode = null,
                 _onLayerSourceLoaded = null,
@@ -22,23 +22,22 @@ define(["jquery", "use!underscore"],
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, folderServiceWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
+            function loadCatalog(rootNode, folderConfigs, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
                 // Load root catalog entries
-                _folderServiceWhitelist = folderServiceWhitelist;
+                _folderConfigs = folderConfigs;
                 _makeContainerNode = makeContainerNode;
                 _makeLeafNode = makeLeafNode;
                 _onLayerSourceLoaded = onLayerSourceLoaded;
                 _onLayerSourceLoadError = onLayerSourceLoadError;
 
-                loadFolders(_folderServiceWhitelist, [], rootNode);
+                loadFolders(_folderConfigs, rootNode);
             }
 
-            function loadFolders(folderNames, serviceSpecs, parentNode) {
+            function loadFolders(folderConfigs, parentNode) {
                 // Start loading all folders, keeping "deferred" objects so we know when they're done
-                var dfs = _.map(folderNames, function(server) {
+                var dfs = _.map(folderConfigs, function (server) {
                     var folderName = server.name;
                     var url = (_.has(server, "url")) ? server.url : _baseUrl;
-                    ;
                     var requestUrl = url + (folderName === "" ? "" : "/" + folderName);
                     return esri.request({
                         url: requestUrl,
@@ -248,62 +247,43 @@ define(["jquery", "use!underscore"],
                 });
             }
 
-            function processFolderSuccess(entries, folderName, server, url, parentNode) {
-                var node, folderServiceMatchesCurrent, folderServicesForCurrent, whitelistedServicesForFolder, getServicesInWhitelist, servicesToInclude, sortedServices;
-                if (_.has(server, "groupFolder")) {
-                    if ((_.has(server, "groupAsService")) && (server.groupAsService)) {
-                        node = makeGroupContainerNode(server, parentNode.parent, "service");
+            function processFolderSuccess(entries, folderName, folderConfig, url, parentNode) {
+                var node, services;
+                if (_.has(folderConfig, "groupFolder")) {
+                    if ((_.has(folderConfig, "groupAsService")) && (folderConfig.groupAsService)) {
+                        node = makeGroupContainerNode(folderConfig, parentNode.parent, "service");
                         node.checked = false;
                         node.type = "group-service";
-                        node.description = (server.description) ? server.description : "No description or metadata available for this map service.";
+                        node.description = (folderConfig.description) ? folderConfig.description : "No description or metadata available for this map service.";
                         node.groupAsService = true;
                     } else {
-                        node = makeGroupContainerNode(server, parentNode.parent, "folder");
+                        node = makeGroupContainerNode(folderConfig, parentNode.parent, "folder");
                     }
                 } else {
-                    var displayName = (_.has(server, "displayName")) ? server.displayName : folderName;
+                    var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
                     node = (folderName == "") ? parentNode : checkContainerNodeExists(displayName, parentNode, "folder");
                 }
 
-                folderServiceMatchesCurrent = function(folderService) {
-                    return folderService.services === server.services;
-                };
-
-                folderServicesForCurrent = _.filter(_folderServiceWhitelist, folderServiceMatchesCurrent);
-
-                whitelistedServicesForFolder = folderServicesForCurrent.length > 0 ? folderServicesForCurrent[0].services : [];
-                whitelistedServicesForFolder = _.map(whitelistedServicesForFolder, function(service) { return service.name });
-                if (whitelistedServicesForFolder && whitelistedServicesForFolder.length > 0) {
-                    servicesToInclude = _.map(whitelistedServicesForFolder, function(name) {
-                        var item;
-                        _.each(entries.services, function(service) {
-                            if (getServiceName(service.name) == name) {
-                                item = _.clone(service);
-                            }
+                if (folderConfig.services && folderConfig.services.length > 0) {
+                    services = _.map(folderConfig.services, function (serviceConfig) {
+                        var item = _.find(entries.services, function(service) {
+                            return getServiceName(service.name) == serviceConfig.name;
                         });
-
                         if (_.isUndefined(item)) {
-                            var service = _.find(folderServicesForCurrent[0].services, function(s) {
-                                return s.name == name;
-                            });
-                            item = processServiceError(service, folderName, node, url, "Map service unavailable or invalid url");
+                            item = processServiceError(serviceConfig, folderName, node, url, "Map service unavailable or invalid url");
                         }
                         return item;
                     });
-
-                    sortedServices = _.sortBy(servicesToInclude, function(service) {
-                        return _.indexOf(whitelistedServicesForFolder, getServiceName(service.name));
-                    });
                 } else {
-                    sortedServices = entries.services;
+                    services = entries.services;
                 }
 
-                _.each(sortedServices, function(service, i) {
-                    service.guid = server.services[i].guid;
+                _.each(services, function(service, i) {
+                    service.guid = folderConfig.services[i].guid;
                 });
 
-                addPropsToServiceSpecs(node, url, sortedServices);
-                return sortedServices;
+                addPropsToServiceSpecs(node, url, services);
+                return services;
             }
 
             function processFolderError(error, folderName, server, url, parentNode) {
