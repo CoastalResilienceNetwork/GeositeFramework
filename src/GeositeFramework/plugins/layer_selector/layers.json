@@ -9,13 +9,13 @@
                     "services": [
                         { "name": "Habitats", "type":"dynamic" },
                         { "name": "Bathymetry", "type":"dynamic" },
-                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "BAD Salinity", "type":"dynamic" },
                         { "name": "Coastal_Management", "type":"dynamic" },
                         { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 },
                 {
-                    "name": "Florida",
+                    "name": "BAD Florida",
                     "services": [
                         { "name": "FEMA_Repetitive_Loss", "type":"dynamic" },
                         { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },

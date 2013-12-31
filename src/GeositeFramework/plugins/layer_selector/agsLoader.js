@@ -35,36 +35,41 @@ define(["jquery", "use!underscore"],
 
             function loadFolders(folderConfigs, parentNode) {
                 // Start loading all folders, keeping "deferred" objects so we know when they're done
-                var dfs = _.map(folderConfigs, function (server) {
-                    var folderName = server.name;
-                    var url = (_.has(server, "url")) ? server.url : _baseUrl;
-                    var requestUrl = url + (folderName === "" ? "" : "/" + folderName);
+                var folderDeferreds = _.map(folderConfigs, function (folderConfig) {
+                    var folderName = folderConfig.name,
+                        url = (_.has(folderConfig, "url")) ? folderConfig.url : _baseUrl,
+                        requestUrl = url + (folderName === "" ? "" : "/" + folderName),
+                        result = {
+                            folderConfig: folderConfig,
+                            url: url,
+                            node: parentNode
+                        };
                     return esri.request({
                         url: requestUrl,
                         content: { f: "json" },
                         handleAs: "json",
                         callbackParamName: "callback",
                         timeout: 10000
-                    }).then(function(results) {
-                        return ["success", { "results": results, "folder": folderName, "server": server, "url": url, "node": parentNode }];
+                    }).then(function (results) {
+                        return _.extend(result, { success: true, results: results });
                     }, function(error) {
-                        return ["error", { "results": error, "folder": folderName, "server": server, "url": url, "node": parentNode }];
+                        return _.extend(result, { success: false, results: error });
                     });
                 });
 
-                var defs = new dojo.DeferredList(dfs);
-                defs.then(function(data) {
+                new dojo.DeferredList(folderDeferreds).then(function (data) {
                     var results = _.map(data, function(result) {
-                        var item = result[1][1];
-                        if (result[1][0] === "success") {
-                            var services = processFolderSuccess(item.results, item.folder, item.server, item.url, item.node);
+                        var item = result[1];
+                        if (item.success) {
+                            return processFolderSuccess(item.results, item.folderConfig, item.url, item.node);
                         } else {
-                            var services = processFolderError(item.results, item.folder, item.server, item.url, item.node);
+                            return processFolderError(item.results, item.folderConfig, item.url, item.node);
                         }
-                        return services;
                     });
                     var serviceDataSpecs = _.flatten(results, true);
-                    var mapServerServiceSpecs = _.filter(serviceDataSpecs, function(spec) { return (spec.type === "MapServer") && (!spec.error); });
+                    var mapServerServiceSpecs = _.filter(serviceDataSpecs, function (spec) {
+                        return (spec.type === "MapServer") && (!spec.error);
+                    });
                     var services = _.map(mapServerServiceSpecs, function(service) {
                         var url = service.url + "/" + service.name + "/MapServer";
                         return esri.request({
@@ -73,16 +78,17 @@ define(["jquery", "use!underscore"],
                             handleAs: "json",
                             callbackParamName: "callback",
                             timeout: 10000
-                        }).then(function(results) {
+                        }).then(function (results) {
                             return [results, service];
-                        }, function(error) {
+                        }, function (error) {
                             return [{ "error": { "message": "Error: Failed to load map service (" + error.message + ")." } }, service];
                         });
                     });
                     var serviceDefs = new dojo.DeferredList(services);
                     serviceDefs.then(function(results) {
                         if ((serviceDataSpecs.length != results.length) || (results[0] === 0)) {
-                            var serviceGuids = _.pluck(serviceDataSpecs, "guid"), resultsServices = [];
+                            var serviceGuids = _.pluck(serviceDataSpecs, "guid"),
+                                resultsServices = [];
                             if ((results[0][1]) && (results[0][1].length > 0)) {
                                 var resultsGuids = _.map(results, function(result) {
                                     if (result[1][1]) {
@@ -247,8 +253,9 @@ define(["jquery", "use!underscore"],
                 });
             }
 
-            function processFolderSuccess(entries, folderName, folderConfig, url, parentNode) {
-                var node, services;
+            function processFolderSuccess(entries, folderConfig, url, parentNode) {
+                var node,
+                    folderName = folderConfig.name;
                 if (_.has(folderConfig, "groupFolder")) {
                     if ((_.has(folderConfig, "groupAsService")) && (folderConfig.groupAsService)) {
                         node = makeGroupContainerNode(folderConfig, parentNode.parent, "service");
@@ -261,9 +268,10 @@ define(["jquery", "use!underscore"],
                     }
                 } else {
                     var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
-                    node = (folderName == "") ? parentNode : checkContainerNodeExists(displayName, parentNode, "folder");
+                    node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
                 }
 
+                var services;
                 if (folderConfig.services && folderConfig.services.length > 0) {
                     services = _.map(folderConfig.services, function (serviceConfig) {
                         var item = _.find(entries.services, function(service) {
@@ -286,15 +294,16 @@ define(["jquery", "use!underscore"],
                 return services;
             }
 
-            function processFolderError(error, folderName, server, url, parentNode) {
-                var node;
-                if (_.has(server, "groupFolder")) {
-                    node = makeGroupContainerNode(server, parentNode.parent, "folder");
+            function processFolderError(error, folderConfig, url, parentNode) {
+                var node,
+                    folderName = folderConfig.name;
+                if (_.has(folderConfig, "groupFolder")) {
+                    node = makeGroupContainerNode(folderConfig, parentNode.parent, "folder");
                 } else {
-                    var displayName = (_.has(server, "displayName")) ? server.displayName : folderName;
-                    node = (folderName == "") ? parentNode : checkContainerNodeExists(displayName, parentNode, "folder");
+                    var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
+                    node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
                 }
-                var services = _.map(server.services, function(service) {
+                var services = _.map(folderConfig.services, function(service) {
                     var item = processServiceError(service, folderName, node, url, error.message);
                     return item;
                 });
@@ -317,13 +326,13 @@ define(["jquery", "use!underscore"],
                     var path = server.groupFolder.split("/");
                     //check if containers exist, if not, make them
                     _.each(path, function(name) {
-                        node = checkContainerNodeExists(name, node, type);
+                        node = getOrMakeContainerNode(name, node, type);
                     });
                 }
                 return node;
             }
 
-            function checkContainerNodeExists(name, parentNode, type) {
+            function getOrMakeContainerNode(name, parentNode, type) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
                     var folder = _.find(parentNode.children, function(child) {
