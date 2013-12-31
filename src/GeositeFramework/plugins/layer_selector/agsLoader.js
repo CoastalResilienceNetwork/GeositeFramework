@@ -58,7 +58,7 @@ define(["jquery", "use!underscore"],
                 });
 
                 new dojo.DeferredList(folderDeferreds).then(function (data) {
-                    var results = _.map(data, function(result) {
+                    var serviceSpecs = _.map(data, function (result) {
                         var item = result[1];
                         if (item.success) {
                             return processFolderSuccess(item.results, item.folderConfig, item.url, item.node);
@@ -66,65 +66,49 @@ define(["jquery", "use!underscore"],
                             return processFolderError(item.results, item.folderConfig, item.url, item.node);
                         }
                     });
-                    var serviceDataSpecs = _.flatten(results, true);
-                    var mapServerServiceSpecs = _.filter(serviceDataSpecs, function (spec) {
-                        return (spec.type === "MapServer") && (!spec.error);
-                    });
-                    var services = _.map(mapServerServiceSpecs, function(service) {
-                        var url = service.url + "/" + service.name + "/MapServer";
-                        return esri.request({
-                            url: url,
-                            content: { f: "json" },
-                            handleAs: "json",
-                            callbackParamName: "callback",
-                            timeout: 10000
-                        }).then(function (results) {
-                            return [results, service];
-                        }, function (error) {
-                            return [{ "error": { "message": "Error: Failed to load map service (" + error.message + ")." } }, service];
-                        });
-                    });
-                    var serviceDefs = new dojo.DeferredList(services);
-                    serviceDefs.then(function(results) {
-                        if ((serviceDataSpecs.length != results.length) || (results[0] === 0)) {
-                            var serviceGuids = _.pluck(serviceDataSpecs, "guid"),
-                                resultsServices = [];
-                            if ((results[0][1]) && (results[0][1].length > 0)) {
-                                var resultsGuids = _.map(results, function(result) {
-                                    if (result[1][1]) {
-                                        return result[1][1].guid;
-                                    }
-                                });
-                                _.each(serviceGuids, function(guid, i) {
-                                    var index = _.indexOf(resultsGuids, guid);
-                                    if (index > -1) {
-                                        resultsServices.push(results[index]);
-                                    } else {
-                                        resultsServices.push([true, [{ "error": { "message": serviceDataSpecs[i].error } }, serviceDataSpecs[i]]]);
-                                    }
-                                });
-                            } else {
-                                _.each(serviceDataSpecs, function(service) {
-                                    resultsServices.push([true, [{ "error": { "message": service.error } }, service]]);
-                                });
-                            }
+                    serviceSpecs = _.flatten(serviceSpecs, true);
+
+                    // Each item in "serviceSpecs" contains info for a service, including:
+                    //   - the "url" to query for further info, or "error" if no further info is available
+                    //   - "config" info from the "layers.json" file
+                    //   - "parentNode" so we can attach it to the node tree
+                    // The specs retain their original order from the "layers.json" file.
+
+                    var serviceDeferreds = _.map(serviceSpecs, function (serviceSpec) {
+                        if (serviceSpec.error) {
+                            // Include errors so results stay in order. Wrap in a deferred object for homogeneity.
+                            var deferred = new dojo.Deferred(_.identity);
+                            deferred.resolve([{ error: { message: serviceSpec.error } }, serviceSpec]);
+                            return deferred;
+                        } else if (serviceSpec.type === "MapServer") {
+                            return esri.request({
+                                url: serviceSpec.url + "/" + serviceSpec.name + "/MapServer",
+                                content: { f: "json" },
+                                handleAs: "json",
+                                callbackParamName: "callback",
+                                timeout: 10000
+                            }).then(function(results) {
+                                return [results, serviceSpec];
+                            }, function(error) {
+                                return [{ "error": { "message": "Error: Failed to load map service (" + error.message + ")." } }, service];
+                            });
                         } else {
-                            resultsServices = results;
+                            var deferred = new dojo.Deferred(_.identity);
+                            deferred.resolve([{ error: { message: "Only 'MapServer' services are supported" } }, serviceSpec]);
+                            return deferred;
                         }
+                    });
+
+                    new dojo.DeferredList(serviceDeferreds).then(function (results) {
+                        var resultsServices = results;
 
                         var serviceSpecs = _.map(resultsServices, function(result) { return result[1][1]; });
                         var serviceInfos = _.map(resultsServices, function(result) { return result[1][0]; });
                         _.each(serviceSpecs, function(serviceSpec, i) {
                             var serviceData = serviceInfos[i],
                                 serviceName = getServiceName(serviceSpec.name),
-                                serviceObjects = [];
-                            _.each(_source.folders, function(folder) {
-                                serviceObjects = $.merge($.merge([], serviceObjects), folder.services);
-                            });
-                            var currentService = _.find(serviceObjects, function(s) {
-                                return s.guid == serviceSpec.guid;
-                            });
-                            var serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
+                                currentService = serviceSpec.config,
+                                serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
 
                             var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
                             node.text = (_.has(currentService, "displayName")) ? currentService.displayName : node.text;
@@ -140,11 +124,10 @@ define(["jquery", "use!underscore"],
                                 }
                             } else {
                                 if (serviceData.description == "") {
-                                    var description = "No description or metadata available for this map service.";
+                                    node.description = (serviceData.serviceDescription != "") ? serviceData.serviceDescription : "No description or metadata available for this map service.";
                                 } else {
-                                    var description = serviceData.description;
+                                    node.description = serviceData.description;
                                 }
-                                node.description = description;
                                 node.opacity = (_.has(currentService, "opacity")) ? currentService.opacity : 0.7;
                                 node.params = { "opacity": node.opacity };
                                 node.extent = new esri.geometry.Extent(serviceData.fullExtent);
@@ -271,27 +254,25 @@ define(["jquery", "use!underscore"],
                     node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
                 }
 
-                var services;
+                var serviceSpecs;
                 if (folderConfig.services && folderConfig.services.length > 0) {
-                    services = _.map(folderConfig.services, function (serviceConfig) {
-                        var item = _.find(entries.services, function(service) {
-                            return getServiceName(service.name) == serviceConfig.name;
+                    serviceSpecs = _.map(folderConfig.services, function (serviceConfig) {
+                        var serviceSpec = _.find(entries.services, function(serviceSpec) {
+                            return getServiceName(serviceSpec.name) == serviceConfig.name;
                         });
-                        if (_.isUndefined(item)) {
-                            item = processServiceError(serviceConfig, folderName, node, url, "Map service unavailable or invalid url");
+                        if (_.isUndefined(serviceSpec)) {
+                            serviceSpec = processServiceError(serviceConfig, folderName, node, url, "Map service unavailable or invalid url");
+                        } else {
+                            serviceSpec.config = serviceConfig;
                         }
-                        return item;
+                        return serviceSpec;
                     });
                 } else {
-                    services = entries.services;
+                    serviceSpecs = entries.services;
                 }
 
-                _.each(services, function(service, i) {
-                    service.guid = folderConfig.services[i].guid;
-                });
-
-                addPropsToServiceSpecs(node, url, services);
-                return services;
+                addPropsToServiceSpecs(node, url, serviceSpecs);
+                return serviceSpecs;
             }
 
             function processFolderError(error, folderConfig, url, parentNode) {
@@ -303,8 +284,8 @@ define(["jquery", "use!underscore"],
                     var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
                     node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
                 }
-                var services = _.map(folderConfig.services, function(service) {
-                    var item = processServiceError(service, folderName, node, url, error.message);
+                var services = _.map(folderConfig.services, function (serviceConfig) {
+                    var item = processServiceError(serviceConfig, folderName, node, url, error.message);
                     return item;
                 });
                 return services;
@@ -345,15 +326,15 @@ define(["jquery", "use!underscore"],
                 return node;
             }
 
-            function processServiceError(service, folderName, node, url, error) {
-                var item = {};
-                item.guid = service.guid;
-                item.name = (folderName === "") ? service.name : folderName + "/" + service.name;
-                item.type = "MapServer";
-                item.parentNode = node;
-                item.url = url;
-                item.error = "Error: Failed to load map service (" + error + ").";
-                return item;
+            function processServiceError(serviceConfig, folderName, node, url, error) {
+                return {
+                    config: serviceConfig,
+                    name: (folderName === "") ? serviceConfig.name : folderName + "/" + serviceConfig.name,
+                    type: "MapServer",
+                    parentNode: node,
+                    url: url,
+                    error: "Error: Failed to load map service (" + error + ")."
+                };
             }
 
             function getLayerSymbology(symbology) {

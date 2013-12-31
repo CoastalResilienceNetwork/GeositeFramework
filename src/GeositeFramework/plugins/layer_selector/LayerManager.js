@@ -47,13 +47,10 @@ define([
                         if (dataSourceContainer.agsSource) {
                             source = dataSourceContainer.agsSource;
                             _.each(source.folders, function(folder) {
-                                folder.guid = _.uniqueId(folder.name + "_");
                                 _.each(folder.services, function(service) {
-                                    service.guid = _.uniqueId(service.name + "_");
                                     var url = (_.has(folder, "url")) ? folder.url : source.url;
                                     url = (folder.name != "") ? url + "/" + folder.name : url;
                                     _urls.push(url + "/" + service.name);
-
                                 });
                             });
                             loader = new AgsLoader(source.url, source);
