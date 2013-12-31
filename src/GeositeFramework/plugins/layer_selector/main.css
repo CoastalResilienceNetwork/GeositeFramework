@@ -40,20 +40,20 @@
  */
 
 .pluginLayerSelector-service .x-tree-icon-parent {
-	background-image:url(images/gear.png) !important;
+    background-image:url(images/gear.png) !important;
 }
 
 .pluginLayerSelector-service .x-tree-icon-leaf {
-	background-image:url(images/gear.png) !important;
+    background-image:url(images/gear.png) !important;
 }
 
 
 .pluginLayerSelector-layer-group .x-tree-icon-parent {
-	background-image:url(images/layers.png) !important;
+    background-image:url(images/layers.png) !important;
 }
-	
+    
 .pluginLayerSelector-layer .x-tree-icon {
-	background-image:url(images/info.png);
+    background-image:url(images/info.png);
 }
 
 .pluginLayer-extent-zoom {

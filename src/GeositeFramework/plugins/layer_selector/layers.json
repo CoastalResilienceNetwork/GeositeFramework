@@ -18,7 +18,7 @@
                     "name": "Florida",
                     "services": [
                         { "name": "FEMA_Repetitive_Loss", "type":"dynamic" },
-						{ "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+                        { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
                         { "name": "Habitats", "type":"dynamic" },
                         { "name": "Species", "type":"dynamic" },
                         { "name": "Bathymetry", "type":"dynamic" },
