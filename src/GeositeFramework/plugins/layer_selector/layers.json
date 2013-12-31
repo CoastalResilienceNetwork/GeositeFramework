@@ -7,87 +7,74 @@
                 {
                     "name": "Alabama",
                     "services": [
-                        "Oyster_Restoration_Explorer",
-                        "Habitats",
-                        "Bathymetry",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Social_and_Economic"
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Bathymetry", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 },
                 {
                     "name": "Florida",
                     "services": [
-                        "Oyster_Restoration_Explorer",
-                        "Habitats",
-                        "Species",
-                        "Bathymetry",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Social_and_Economic",
-                        "Florida_Infrastructure",
-                        "Choctawhatchee_Bay_and_St._Andrews_Bay_Resiliency_Analysis"
+                        { "name": "FEMA_Repetitive_Loss", "type":"dynamic" },
+						{ "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Species", "type":"dynamic" },
+                        { "name": "Bathymetry", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" },
+                        { "name": "Florida_Infrastructure", "type":"dynamic" }
                     ]
                 },
                 {
                     "name": "Louisiana",
                     "services": [
-                        "Oyster_Restoration_Explorer",
-                        "Habitats",
-                        "Species",
-                        "Bathymetry",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Social_and_Economic"
+                        { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Species", "type":"dynamic" },
+                        { "name": "Bathymetry", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 },
                 {
                     "name": "Mississippi",
                     "services": [
-                        "Oyster_Restoration_Explorer",
-                        "Restoration_Projects",
-                        "Habitats",
-                        "Bathymetry",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Social_and_Economic",
-                        "Built_Infrastructure"
+                        { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+                        { "name": "Restoration_Projects", "type":"dynamic" },
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Bathymetry", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" },
+                        { "name": "Built_Infrastructure", "type":"dynamic" }
                     ]
                 },
                 {
                     "name": "Texas",
                     "services": [
-                        "Oyster_Restoration_Explorer",
-                        "Restoration_Projects",
-                        "Habitats",
-                        "Bathymetry",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Social_and_Economic",
-                        "Galveston_Bay_Resiliency_Analysis"
+                        { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+                        { "name": "Restoration_Projects", "type":"dynamic" },
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Bathymetry", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 },
                 {
                     "name": "Gulf_of_Mexico",
                     "services": [
-                        "Habitats",
-                        "Salinity",
-                        "Coastal_Management",
-                        "Coastal_Hazards",
-                        "Social_and_Economic"
+                        { "name": "Habitats", "type":"dynamic" },
+                        { "name": "Salinity", "type":"dynamic" },
+                        { "name": "Coastal_Management", "type":"dynamic" },
+                        { "name": "Coastal_Hazards", "type":"dynamic" },
+                        { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 }
-            ]
-        }
-    },
-    {
-        "wmsSource": {
-            "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
-            "folderTitle": "UNISDR",
-            "layerIds": [
-                "preview:cy_risk",
-                "preview:cy_buffers",
-                "preview:cs_frequency"
             ]
         }
     }

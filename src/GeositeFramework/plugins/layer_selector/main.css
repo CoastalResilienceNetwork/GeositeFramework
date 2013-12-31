@@ -43,6 +43,10 @@
 	background-image:url(images/gear.png) !important;
 }
 
+.pluginLayerSelector-service .x-tree-icon-leaf {
+	background-image:url(images/gear.png) !important;
+}
+
 
 .pluginLayerSelector-layer-group .x-tree-icon-parent {
 	background-image:url(images/layers.png) !important;

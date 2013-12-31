@@ -15,8 +15,7 @@ define([
                 _treeRootNode = null, // the absolute base of the tree
                 _cssClassPrefix = 'pluginLayerSelector',
                 _onLoadingComplete,
-                _getUniqueFolderTitle = createFnForUniqueFolderTitles(),
-                _layerData = null;
+                _getUniqueFolderTitle = createFnForUniqueFolderTitles();
 
             
             /*
@@ -32,39 +31,53 @@ define([
               Private methods
              */
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
-                _layerData = parseLayerConfigData(layerSourcesJson);
+                var layerData = parseLayerConfigData(layerSourcesJson);
+				//console.log(layerData);
 
                 _onLoadingComplete = onLoadingComplete;
 
-                if (_layerData) {
+                if (layerData) {
                     _treeRootNode = makeRootNode();
 
                     // Load layer info from each source
-                    _.each(_layerData, function (dataSourceContainer) {
-                        var loader = null,
-                            innerContainer = null,
-                            source = null,
-                            sourceRootNode = null;
+                    _.each(layerData, function (dataSourceContainer) {
+                        var loader = null, innerContainer = null, source = null, sourceRootNode = null;
 
                         // initialize layer data
                         if (dataSourceContainer.agsSource) {
                             source = dataSourceContainer.agsSource;
-                            loader = new AgsLoader(source.url);
+							_.each(source.folders, function(folder){
+								folder.guid = _.uniqueId(folder.name + "_");
+								_.each(folder.services, function(service){
+									service.guid = _.uniqueId(service.name + "_");
+									var url = (_.has(folder, "url")) ? folder.url : source.url;
+									var url = (folder.name != "") ? url + "/" + folder.name : url;
+									_urls.push(url + "/" + service.name)
+									
+								});
+							})
+                            loader = new AgsLoader(source.url, source);
                             innerContainer = source.folders;
 
                         } else if (dataSourceContainer.wmsSource) {
                             source = dataSourceContainer.wmsSource;
-                            loader = new WmsLoader(source.url, source.folderTitle);
+							_urls.push(source.url)
+							var extent = _app._unsafeMap.extent;
+                            loader = new WmsLoader(source.url, source.folderTitle, source, extent);
                             innerContainer = source.layerIds;
                         }
 
                         // validate and load, or raise a schema error
-                        if ((dataSourceContainer.agsSource || dataSourceContainer.wmsSource) &&
-                            !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {
-
-                            sourceRootNode = makeContainerNode(_getUniqueFolderTitle(source), "folder", _treeRootNode);
+                        if ((dataSourceContainer.agsSource) && !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {
+							if (source.folderTitle === "") {
+								sourceRootNode = _treeRootNode;
+							} else {
+								sourceRootNode = makeContainerNode(source.folderTitle, "folder", _treeRootNode);
+							}
                             loadLayerSource(loader, source.url, sourceRootNode, innerContainer);
-                        } else { 
+                        } else if ((dataSourceContainer.wmsSource) && !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {  
+							loadLayerSource(loader, source.url, _treeRootNode, innerContainer);
+						} else { 
                             _app.error("Schema error. Must have a single agsSource or wmsSource in each object.");
                         }
 
@@ -73,9 +86,7 @@ define([
             }
 
             function createFnForUniqueFolderTitles () {
-                    var assignedNameCounter = 0,
-                    duplicateNameCounter = 1,
-                    usedNames = [],
+                    var assignedNameCounter = 0, duplicateNameCounter = 1, usedNames = [],
 
                     innerFunction = function (serviceSource) {
                         /*
@@ -86,8 +97,7 @@ define([
                         if (serviceSource.folderTitle === undefined) {
                             return "folder_" + ++assignedNameCounter;
                         } else if (_.contains(usedNames, serviceSource.folderTitle)) {
-                            _app.error("", "Cannot have multiple top-level folders with the same name." + 
-                                       "Appending duplicate notice.");
+                            _app.error("", "Cannot have multiple top-level folders with the same name." + "Appending duplicate notice.");
                             return serviceSource.folderTitle + "_(duplicate #" + ++duplicateNameCounter + ")";
                         } else {
                             usedNames.push(serviceSource.folderTitle);
@@ -119,7 +129,7 @@ define([
 
             // Schema for validating layers.config file (see http://json-schema.org)
 
-            var layerConfigSchema = {
+			var layerConfigSchema = {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 title: 'layer_selector plugin: layer sources specification',
                 type: 'array',
@@ -139,12 +149,141 @@ define([
                                         additionalProperties: false,
                                         required: ['name'],
                                         properties: {
-                                            name: { type: 'string' },
+                                            url: { type: 'string' },
+											name: { type: 'string' },
+											displayName: { type: 'string' },
+											groupFolder: { type: 'string' },
+											groupAsService: { type: 'boolean' },
+											description: { type: 'string' },
                                             services: { 
                                                 type: 'array',
-                                                items: { type: 'string' }
-                                            }
-                                        }
+												items: {
+													type: 'object',
+													additionalProperties: false,
+													required: ['name', 'type'],
+													properties: {
+														name: { type: 'string' },
+														displayName: { type: 'string' },
+														type: { type: 'string' },
+														opacity: { type: 'number' },
+														visible: { type: 'boolean' },
+														description: { type: 'string' },
+														id: { type: 'string' },
+														showLayers: {
+															type: 'array',
+															items: {
+																type: 'object',
+																additionalProperties: false,
+																required: ['id'],
+																properties: {
+																	id: { type: 'integer' },
+																	displayName: { type: 'string' },
+																	parentLayerId: { type: 'integer' }
+																}
+															}
+														},
+														visibleLayerIds: { type: 'array', items: { type: 'integer' } },
+														displayLevels: { type: 'array', items: { type: 'integer' } },
+														layerIndex: { type: 'integer' },
+														mode: { type: 'string' },
+														outFields:{ type: 'array', items: { type: 'string' } },
+														autoGeneralize: { type: 'boolean' },
+														maxAllowableOffset: { type: 'boolean' },
+														displayOnPan: { type: 'boolean' },
+														layerDefinition: { type: 'string' },
+														symbology: {
+															type: 'object',
+															additionalProperties: false,
+															properties: {
+																fill: { 
+																	type: 'object',
+																	additionalProperties: false,
+																	properties: {
+																		type: { type: 'string' },
+																		style: { type: 'string' },
+																		color: { type: 'array', items: { type: 'number' } },
+																		outline: {
+																			type: 'object',
+																			additionalProperties: false,
+																			properties: {
+																				type: { type: 'string' },
+																				style: { type: 'string' },
+																				color: { type: 'array', items: { type: 'number' } },
+																				width: { type: 'number' },
+																				cap: { type: 'string' },
+																				miter: { type: 'string' },
+																				miterLimit: { type: 'string' }
+																			}
+																		},
+																		url: { type: 'string' },
+																		height: { type: 'number' },
+																		width: { type: 'number' },
+																		offset: { 
+																			type: 'object',
+																			additionalProperties: false,
+																			properties: {
+																				x: { type: 'number' },
+																				y: { type: 'number' }
+																			}
+																		},
+																		xscale: { type: 'number' },
+																		yscale: { type: 'number' }
+																	}
+																},
+																line: { 
+																	type: 'object',
+																	additionalProperties: false,
+																	properties: {
+																		type: { type: 'string' },
+																		style: { type: 'string' },
+																		color: { type: 'array', items: { type: 'number' } },
+																		width: { type: 'number' },
+																		cap: { type: 'string' },
+																		miter: { type: 'string' },
+																		miterLimit: { type: 'string' }
+																	} 
+																},
+																marker: {
+																	type: 'object',
+																	additionalProperties: false,
+																	properties: {
+																		type: { type: 'string' },
+																		style: { type: 'string' },
+																		color: { type: 'array', items: { type: 'number' } },
+																		size: { type: 'integer' },
+																		angle: { type: 'number' },
+																		outline: {
+																			type: 'object',
+																			additionalProperties: false,
+																			properties: {
+																				type: { type: 'string' },
+																				style: { type: 'string' },
+																				color: { type: 'array', items: { type: 'number' } },
+																				width: { type: 'number' },
+																				cap: { type: 'string' },
+																				miter: { type: 'string' },
+																				miterLimit: { type: 'string' }
+																			}
+																		},
+																		url: { type: 'string' },
+																		height: { type: 'number' },
+																		width: { type: 'number' },
+																		offset: { 
+																			type: 'object',
+																			additionalProperties: false,
+																			properties: {
+																				x: { type: 'number' },
+																				y: { type: 'number' }
+																			}
+																		}
+																	} 
+																}
+															}
+														}														
+													}
+												}
+											}
+										}
                                     }
                                 },
                                 required: ['url'],
@@ -158,33 +297,52 @@ define([
                             properties: {
                                 url: { type: 'string' },
                                 folderTitle: { type: 'string' },
+								description: { type: 'string' },
+								resourceInfo: { type: 'boolean' },
+								groupFolder: { type: 'string' },
+								opacity: { type: 'number' },
                                 layerIds: {
-                                    type: 'array',
-                                    items: { type: 'string' }
+									type: 'array',
+									items: {
+										type: 'object',
+										additionalProperties: false,
+										required: ['name'],
+										properties: {
+											name: { type: 'string' },
+											displayName: { type: 'string' },
+											description: { type: 'string' },
+											extent: {
+												type: 'object',
+												additionalProperties: false,
+												properties: {
+													xmin: { type: 'number' },
+													ymin: { type: 'number' },
+													xmax: { type: 'number' },
+													ymax: { type: 'number' },
+													sr: { type: 'integer' }
+												}
+											}
+										}
+									}
                                 }
                             }
                         }
                     }
                 }
-            };
+            };	
 
             function loadLayerSource(loader, url, sourceRootNode, folderOrLayerIdWhitelist) {
-                _urls.push(url);
+                //_urls.push(url);
                 loader.load(sourceRootNode, folderOrLayerIdWhitelist, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError);
             }
 
             function onLayerSourceLoaded(url) {
                 // Specified URL is loaded; remove it from the list
-                _urls = _.without(_urls, url);
+				var i = _.indexOf(_urls, url)
+				if(i != -1)  { _urls.splice(i, 1); }
+				
                 if (_urls.length == 0) {
                     // All URLs are loaded
-                    var sourceByTitle = _.map(_layerData, function(layerInfo) {
-                            return (layerInfo.wmsSource || layerInfo.agsSource).folderTitle;
-                        }),
-                        children = _.sortBy(_treeRootNode.children, function (sub) {
-                            return _.indexOf(sourceByTitle, sub.text.replace(/ /g, '_'));
-                    });
-                    _treeRootNode.children = children;
                     _onLoadingComplete(_treeRootNode);
                 }
             }
@@ -211,6 +369,7 @@ define([
                     type: type,
                     cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: name ? name.replace(/_/g, " ") : "",
+					name: _.uniqueId(name + "_"),
                     leaf: false,
                     children: [],
                     parent: parentNode
@@ -235,12 +394,13 @@ define([
                     parent: parentNode,
                     showOrHideLayer: showOrHideLayer // function which shows or hides the layer
                 };
-                parentNode.children.push(node);
+				if (!parentNode.children) { parentNode.children = []; }
+				parentNode.children.push(node);
                 return node;
             }
 
             function hideAllLayersForNode(node, map) {
-                if (node.hideAllLayers) {
+				if (node.hideAllLayers) {
                     node.hideAllLayers(node, map);
                 } else {
                     _.each(node.children, function (child) {

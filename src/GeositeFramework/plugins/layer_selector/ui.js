@@ -26,6 +26,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
                 rootNode = deracinate(rootNode);
                 _tree = createTree(rootNode);
+				//console.log(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
                 _tree.on("itemclick", onItemClick, this);
@@ -84,10 +85,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             renderExtTree = (function () {
                 var renderExtTreeCount = 0;
-
                 return function () {
                     if (_tree && $(_container).is(":visible") && renderExtTreeCount === 0) {
-                        _tree.render(_$treeContainer[0]);
+						_tree.render(_$treeContainer[0]);
                         renderExtTreeCount++;
                     }
                 };
@@ -186,8 +186,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
-                var layerData = node.raw;
-                layerData.showOrHideLayer(layerData, checked, _map);
+				node.raw.showOrHideLayer(node, checked, _map);
+				node.raw.checked = checked;
+				if (node.hasChildNodes()) {
+					if (!node.isExpanded() && node.get('checked')) {
+						node.expand();
+					}
+				}
                 enableIconClick();
             }
 
@@ -224,20 +229,21 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                                 showDialog(node);
                             });
                         } else {
-                            showDialog(node);
+							showDialog(node);
                         }
                     }
                     _justClickedItemIcon = false;
                 }
 
                 function loadExtent() {
+					
                     if (node.extent || node.fetchMetadata) {
                         if (node.fetchMetadata) {
                             node.fetchMetadata(node, function() {
-                                _map.setExtent(node.extent);
+								_map.setExtent(node.extent);
                             });
                         } else {
-                            _map.setExtent(node.extent);
+							_map.setExtent(node.extent);
                         }
                         _justClickedZoomIcon = false;
                     }
