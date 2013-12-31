@@ -151,13 +151,16 @@ namespace GeositeFramework.Models
         /// Validate the color syntax and return an HTML acceptable version
         /// of the specified color
         /// </summary>
-        /// <param name="json"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="json">JSON Color entry from the config</param>
+        /// <param name="key">Which color key to extract.</param>
+        /// <returns>HEX/HTML color code from config</returns>
         private String ExtractColorFromJson(JToken json, string key)
         {
             try
             {
+                // Run the values through the type system to provide meaningful 
+                // errors to syntax problems, since these values are essentially 
+                // getting tossed into the web page as code
                 var color =  ColorTranslator.FromHtml(json[key].ToString());
                 return ColorTranslator.ToHtml(color);
             }
