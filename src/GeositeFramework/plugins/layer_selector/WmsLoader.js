@@ -18,25 +18,42 @@ define(["use!underscore"],
                 var layerIdWhitelist = _.pluck(layerWhiteList, 'name');
                 if (_.has(_source, "resourceInfo")) {
                     if (_source.resourceInfo) {
-                        var layerInfos = _.map(layerWhiteList, function(layer){
+                        var layerInfos = _.map(layerWhiteList, function (layer) {
                             var displayName =  (_.has(layer, "displayName")) ? layer.displayName : layer.name;
-                            var layerExtent = new esri.geometry.Extent({"xmin": layer.extent.xmin, "ymin": layer.extent.ymin, "xmax": layer.extent.xmax, "ymax":layer.extent.ymax, "spatialReference": { "wkid": layer.extent.sr } });
-                            return new esri.layers.WMSLayerInfo( { name: layer.name, title: displayName, description: layer.description, extent: layerExtent });
+                            var layerExtent = new esri.geometry.Extent({
+                                xmin: layer.extent.xmin,
+                                ymin: layer.extent.ymin,
+                                xmax: layer.extent.xmax,
+                                ymax: layer.extent.ymax,
+                                spatialReference: { wkid: layer.extent.sr }
+                            });
+                            return new esri.layers.WMSLayerInfo({
+                                name: layer.name,
+                                title: displayName,
+                                description: layer.description,
+                                extent: layerExtent
+                            });
                         });
                         var description = (_.has(_source, "description")) ? _source.description : "";
-                        var resourceInfo = { extent: _extent, layerInfos: layerInfos, description: description };
-                        var wmsLayer = new esri.layers.WMSLayer(_url, { resourceInfo: resourceInfo, visibleLayers: layerIdWhitelist });
+                        var resourceInfo = {
+                            extent: _extent,
+                            layerInfos: layerInfos,
+                            description: description
+                        };
+                        var wmsLayer = new esri.layers.WMSLayer(_url, {
+                            resourceInfo: resourceInfo,
+                            visibleLayers: layerIdWhitelist
+                        });
                         
-                        onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode) ;
+                        onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode);
                         dojo.connect(wmsLayer, "onLoad", function () { });
                         dojo.connect(wmsLayer, "onError", function (err) { 
                             esri.config.defaults.io.timeout = 60000;
                             alert("Error: Unable to load data from this service. Either the service is unavailable or <br> the request can't be completed at the current map scale or browser size.");
                         });
-                    } else  {
+                    } else {
                         var wmsLayer = new esri.layers.WMSLayer(_url);
-                         dojo.connect(wmsLayer, "onLoad", function () {
-                        });
+                        dojo.connect(wmsLayer, "onLoad", function () {});
                         dojo.connect(wmsLayer, "onError", function () {
                             esri.config.defaults.io.timeout = 60000;
                             checkContainerNodeExists(_folderName + " (Unavailable)", rootNode, makeContainerNode, "service");
@@ -54,12 +71,12 @@ define(["use!underscore"],
                         if (_.has(_source, "groupFolder")) {
                             var groupFolder = makeGroupContainerNode(_source, rootNode, makeContainerNode);
                             if (groupFolder) {
-                                var folderNode = checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
+                                checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
                             } else {
-                                var folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
+                                checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
                             }
                         } else {
-                            var folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
+                            checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
                         }
                         onLayerSourceLoadError.apply(null, arguments);
                         onLayerSourceLoaded(_url);
@@ -73,35 +90,37 @@ define(["use!underscore"],
                     var path = server.groupFolder.split("/");
                     //check if containers exist, if not, make them
                     _.each(path, function(name) {
-                        node = checkContainerNodeExists(name, node, makeContainerNode, "folder")
+                        node = checkContainerNodeExists(name, node, makeContainerNode, "folder");
                     });
                 }
                 return node;
             }
             
             function checkContainerNodeExists(name, parentNode, makeContainerNode, type) {
+                var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
-                    var folder = _.find(parentNode.children, function(child){
-                            return child.text == name;
+                    var folder = _.find(parentNode.children, function (child) {
+                        return child.text == name;
                     });
-                    var node = (_.isUndefined(folder)) ? makeContainerNode(name, type, parentNode) : folder;
+                    node = (_.isUndefined(folder)) ? makeContainerNode(name, type, parentNode) : folder;
                 } else {
-                    var node = makeContainerNode(name, type, parentNode)
+                    node = makeContainerNode(name, type, parentNode);
                 }
                 return node;
             }
             
             function onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode) {
                 esri.config.defaults.io.timeout = 60000;
+                var folderNode;
                 if (_.has(_source, "groupFolder")) {
                     var groupFolder = makeGroupContainerNode(_source, rootNode, makeContainerNode);
                     if (groupFolder) {
-                        var folderNode = checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
+                        folderNode = checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
                     } else {
-                        var folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
+                        folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
                     }
                 } else {
-                    var folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
+                    folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
                 }
                 folderNode.wmsLayer = wmsLayer;
                 folderNode.serviceName = (folderNode.parent.text) ?  folderNode.parent.text + "/" + _folderName : _folderName;

@@ -1,4 +1,4 @@
-﻿// Module LayerManager.js
+// Module LayerManager.js
 
 define([
         "dojo/json",
@@ -46,22 +46,22 @@ define([
                         // initialize layer data
                         if (dataSourceContainer.agsSource) {
                             source = dataSourceContainer.agsSource;
-                            _.each(source.folders, function(folder){
+                            _.each(source.folders, function(folder) {
                                 folder.guid = _.uniqueId(folder.name + "_");
-                                _.each(folder.services, function(service){
+                                _.each(folder.services, function(service) {
                                     service.guid = _.uniqueId(service.name + "_");
                                     var url = (_.has(folder, "url")) ? folder.url : source.url;
                                     var url = (folder.name != "") ? url + "/" + folder.name : url;
-                                    _urls.push(url + "/" + service.name)
-                                    
+                                    _urls.push(url + "/" + service.name);
+
                                 });
-                            })
+                            });
                             loader = new AgsLoader(source.url, source);
                             innerContainer = source.folders;
 
                         } else if (dataSourceContainer.wmsSource) {
                             source = dataSourceContainer.wmsSource;
-                            _urls.push(source.url)
+                            _urls.push(source.url);
                             var extent = _app._unsafeMap.extent;
                             loader = new WmsLoader(source.url, source.folderTitle, source, extent);
                             innerContainer = source.layerIds;
@@ -338,7 +338,7 @@ define([
 
             function onLayerSourceLoaded(url) {
                 // Specified URL is loaded; remove it from the list
-                var i = _.indexOf(_urls, url)
+                var i = _.indexOf(_urls, url);
                 if(i != -1)  { _urls.splice(i, 1); }
                 
                 if (_urls.length == 0) {
