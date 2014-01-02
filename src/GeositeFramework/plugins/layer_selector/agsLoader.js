@@ -78,14 +78,13 @@ define(["jquery", "use!underscore"],
                         node = makeGroupContainerNode(folderConfig, parentNode.parent, "service");
                         node.checked = false;
                         node.type = "group-service";
-                        node.description = (folderConfig.description) ? folderConfig.description : "No description or metadata available for this map service.";
+                        node.description = folderConfig.description || "No description or metadata available for this map service.";
                         node.groupAsService = true;
                     } else {
                         node = makeGroupContainerNode(folderConfig, parentNode.parent, "folder");
                     }
                 } else {
-                    var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
-                    node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
+                    node = getOrMakeFolderNode(folderConfig, folderName, parentNode);
                 }
 
                 var serviceSpecs;
@@ -105,7 +104,13 @@ define(["jquery", "use!underscore"],
                     serviceSpecs = entries.services;
                 }
 
-                addPropsToServiceSpecs(node, url, serviceSpecs);
+                _.each(serviceSpecs, function (serviceSpec) {
+                    var folder = serviceSpec.name.split("/")[0],
+                        cleanUrl = url.split("/" + folder)[0];
+                    serviceSpec.url = cleanUrl;
+                    serviceSpec.parentNode = node;
+                });
+
                 return serviceSpecs;
             }
 
@@ -115,8 +120,7 @@ define(["jquery", "use!underscore"],
                 if (_.has(folderConfig, "groupFolder")) {
                     node = makeGroupContainerNode(folderConfig, parentNode.parent, "folder");
                 } else {
-                    var displayName = (_.has(folderConfig, "displayName")) ? folderConfig.displayName : folderName;
-                    node = (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
+                    node = getOrMakeFolderNode(folderConfig, folderName, parentNode);
                 }
                 var services = _.map(folderConfig.services, function (serviceConfig) {
                     var item = processServiceError(serviceConfig, folderName, node, url, error.message);
@@ -125,14 +129,9 @@ define(["jquery", "use!underscore"],
                 return services;
             }
 
-            function addPropsToServiceSpecs(parentNode, url, serviceSpecs) {
-                // When a service is loaded we'll want to know where to hang its tree nodes
-                _.each(serviceSpecs, function (serviceSpec) {
-                    var folder = serviceSpec.name.split("/")[0];
-                    var cleanUrl = url.split("/" + folder)[0];
-                    serviceSpec.url = cleanUrl;
-                    serviceSpec.parentNode = parentNode;
-                });
+            function getOrMakeFolderNode(folderConfig, folderName, parentNode) {
+                var displayName = folderConfig.displayName || folderName;
+                return (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
             }
 
             function makeGroupContainerNode(server, parentNode, type) {
@@ -236,11 +235,7 @@ define(["jquery", "use!underscore"],
                         node.cls = "pluginLayerSelector-layer";
                     }
                 } else {
-                    if (serviceData.description == "") {
-                        node.description = (serviceData.serviceDescription != "") ? serviceData.serviceDescription : "No description or metadata available for this map service.";
-                    } else {
-                        node.description = serviceData.description;
-                    }
+                    node.description = serviceData.description || serviceData.serviceDescription || "No description or metadata available for this map service.";
                     node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
                     node.params = { "opacity": node.opacity };
                     node.extent = new esri.geometry.Extent(serviceData.fullExtent);
@@ -287,18 +282,18 @@ define(["jquery", "use!underscore"],
                 node.url = serviceUrl;
                 if (_.has(serviceConfig, "showLayers")) {
                     if (serviceConfig.showLayers.length > 0) {
-                        var layers = _.map(serviceConfig.showLayers, function (i) {
-                            var item = _.find(serviceData.layers, function (s) {
-                                if (s.id == i.id) {
-                                    return s;
+                        var layers = _.map(serviceConfig.showLayers, function (layerConfig) {
+                            var item = _.find(serviceData.layers, function (layer) {
+                                if (layer.id == layerConfig.id) {
+                                    return layer;
                                 }
                             });
                             var layer = _.clone(item);
-                            if (_.has(i, "parentLayerId")) {
-                                layer.parentLayerId = i.parentLayerId;
+                            if (_.has(layerConfig, "parentLayerId")) {
+                                layer.parentLayerId = layerConfig.parentLayerId;
                             }
-                            if (_.has(i, "displayName")) {
-                                layer.name = i.displayName;
+                            if (_.has(layerConfig, "displayName")) {
+                                layer.name = layerConfig.displayName;
                             }
                             return layer;
                         });
@@ -746,7 +741,7 @@ define(["jquery", "use!underscore"],
                     dataType: 'jsonp',
                     url: url + "?f=json",
                     success: function(metadata) {
-                        layerNode.description = (metadata.description != "") ? metadata.description : "No description or metadata available for this layer.";
+                        layerNode.description = metadata.description || "No description or metadata available for this layer.";
                         layerNode.extent = new esri.geometry.Extent(metadata.extent);
                         layerNode.url = url;
                         layerNode.opacity = "setByService";
