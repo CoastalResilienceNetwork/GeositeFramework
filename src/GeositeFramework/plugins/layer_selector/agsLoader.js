@@ -34,7 +34,7 @@ define(["jquery", "use!underscore"],
 
             function loadFolders(folderConfigs, parentNode) {
                 // Start loading all folders, keeping "deferred" objects so we know when they're done
-                var folderDeferreds = _.map(folderConfigs, function (folderConfig) {
+                var folderDeferreds = _.map(folderConfigs, function(folderConfig) {
                     var folderName = folderConfig.name,
                         url = (_.has(folderConfig, "url")) ? folderConfig.url : _baseUrl,
                         requestUrl = url + (folderName === "" ? "" : "/" + folderName),
@@ -49,15 +49,15 @@ define(["jquery", "use!underscore"],
                         handleAs: "json",
                         callbackParamName: "callback",
                         timeout: 10000
-                    }).then(function (results) {
+                    }).then(function(results) {
                         return _.extend(result, { success: true, results: results });
                     }, function(error) {
                         return _.extend(result, { success: false, results: error });
                     });
                 });
 
-                new dojo.DeferredList(folderDeferreds).then(function (data) {
-                    var serviceSpecs = _.map(data, function (result) {
+                new dojo.DeferredList(folderDeferreds).then(function(data) {
+                    var serviceSpecs = _.map(data, function(result) {
                         var item = result[1];
                         if (item.success) {
                             return processFolderSuccess(item.results, item.folderConfig, item.url, item.node);
@@ -66,175 +66,7 @@ define(["jquery", "use!underscore"],
                         }
                     });
                     serviceSpecs = _.flatten(serviceSpecs, true);
-
-                    // Each item in "serviceSpecs" contains info for a service, including:
-                    //   - the "url" to query for further info, or "error" if no further info is available
-                    //   - "config" info from the "layers.json" file
-                    //   - "parentNode" so we can attach it to the node tree
-                    // The specs retain their original order from the "layers.json" file, which allows us to
-                    // create nodes in the correct order.
-
-                    var serviceDeferreds = _.map(serviceSpecs, function (serviceSpec) {
-                        if (serviceSpec.error) {
-                            // Include errors so results stay in order. Wrap in a deferred object for homogeneity.
-                            return makeDeferredError(serviceSpec.error);
-                        } else if (serviceSpec.type === "MapServer") {
-                            return esri.request({
-                                url: serviceSpec.url + "/" + serviceSpec.name + "/MapServer",
-                                content: { f: "json" },
-                                handleAs: "json",
-                                callbackParamName: "callback",
-                                timeout: 10000
-                            }).then(_.identity,
-                            function (error) {
-                                return makeError("Error: Failed to load map service (" + error.message + ").");
-                            });
-                        } else {
-                            return makeDeferredError("Only 'MapServer' services are supported");
-                        }
-
-                        function makeDeferredError(message) {
-                            var deferred = new dojo.Deferred(_.identity);
-                            deferred.resolve(makeError(message));
-                            return deferred;
-                        }
-
-                        function makeError(message) {
-                            return { error: message };
-                        }
-                    });
-
-                    new dojo.DeferredList(serviceDeferreds).then(function (results) {
-                        _.each(results, function(result, i) {
-                            var serviceData = result[1],
-                                serviceSpec = serviceSpecs[i],
-                                serviceName = getServiceName(serviceSpec.name),
-                                serviceConfig = serviceSpec.config,
-                                serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
-
-                            var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
-                            node.text = (_.has(serviceConfig, "displayName")) ? serviceConfig.displayName : node.text;
-                            node.serviceName = serviceSpec.name;
-                            if (_.has(serviceData, "error")) {
-                                node.text = node.text + " (Unavailable)";
-                                node.description = serviceData.error;
-                                node.url = serviceUrl;
-                                delete node.children;
-                                node.leaf = true;
-                                if (_.has(node.parent, "groupAsService")) {
-                                    node.cls = "pluginLayerSelector-layer";
-                                }
-                            } else {
-                                if (serviceData.description == "") {
-                                    node.description = (serviceData.serviceDescription != "") ? serviceData.serviceDescription : "No description or metadata available for this map service.";
-                                } else {
-                                    node.description = serviceData.description;
-                                }
-                                node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
-                                node.params = { "opacity": node.opacity };
-                                node.extent = new esri.geometry.Extent(serviceData.fullExtent);
-                                node.checked = false;
-                                node.serviceType = serviceConfig.type;
-                                node.setOpacity = setOpacity;
-                                node.hideAllLayers = hideAllLayers;
-                                node.saveServiceState = saveServiceState;
-                                node.setServiceState = setServiceState;
-                                node.showOrHideLayer = showOrHideLayer;
-
-                                if (node.serviceType === "dynamic") {
-                                    node.url = serviceUrl;
-                                    if (_.has(serviceConfig, "showLayers")) {
-                                        if (serviceConfig.showLayers.length > 0) {
-                                            var layers = _.map(serviceConfig.showLayers, function(i) {
-                                                var item = _.find(serviceData.layers, function(s) {
-                                                    if (s.id == i.id) {
-                                                        return s;
-                                                    }
-                                                });
-                                                var layer = _.clone(item);
-                                                if (_.has(i, "parentLayerId")) {
-                                                    layer.parentLayerId = i.parentLayerId;
-                                                }
-                                                if (_.has(i, "displayName")) {
-                                                    layer.name = i.displayName;
-                                                }
-                                                return layer;
-                                            });
-                                            loadLayers(layers, node);
-                                        } else {
-                                            delete node.children;
-                                            node.leaf = true;
-                                            node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
-                                            if (_.has(serviceConfig, "visibleLayerIds")) {
-                                                node.visibleLayerIds = serviceConfig.visibleLayerIds;
-                                            }
-                                        }
-                                    } else {
-                                        loadLayers(serviceData.layers, node);
-                                    }
-                                } else if (node.serviceType === "tiled") {
-                                    node.url = serviceUrl;
-                                    delete node.children;
-                                    node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
-                                    node.leaf = true;
-                                    if (_.has(serviceConfig, "displayLevels")) {
-                                        node.params.displayLevels = serviceConfig.displayLevels;
-                                    }
-                                } else if (node.serviceType === "feature-layer") {
-                                    node.url = serviceUrl + "/" + serviceConfig.layerIndex;
-                                    delete node.children;
-                                    node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
-                                    node.leaf = true;
-                                    if (_.has(serviceConfig, "mode")) {
-                                        var modes = {
-                                            "snapshot": esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                                            "ondemand": esri.layers.FeatureLayer.MODE_ONDEMAND,
-                                            "selection": esri.layers.FeatureLayer.MODE_SELECTION
-                                        };
-                                        var mode = modes[serviceConfig.mode];
-                                        node.params.mode = mode;
-                                    }
-                                    if (_.has(serviceConfig, "symbology")) {
-                                        var symbol = getLayerSymbology(serviceConfig.symbology);
-                                        node.symbology = symbol;
-                                    }
-                                    if (_.has(serviceConfig, "outFields")) {
-                                        node.params.outFields = serviceConfig.outFields;
-                                    }
-                                    if (_.has(serviceConfig, "autoGeneralize")) {
-                                        node.params.autoGeneralize = serviceConfig.autoGeneralize;
-                                    }
-                                    if (_.has(serviceConfig, "displayOnPan")) {
-                                        node.params.displayOnPan = serviceConfig.displayOnPan;
-                                    }
-                                    if (_.has(serviceConfig, "layerDefinition")) {
-                                        node.layerDefinition = serviceConfig.layerDefinition;
-                                    }
-                                }
-                                if (_.has(serviceConfig, "id")) {
-                                    node.params.id = serviceConfig.id;
-                                }
-                                if (_.has(node.parent, "groupAsService")) {
-                                    node.cls = "pluginLayerSelector-layer";
-                                    delete node.setOpacity;
-                                    node.parent.setOpacity = setOpacity;
-                                    node.parent.opacity = node.opacity;
-                                    node.parent.saveServiceState = saveServiceState;
-                                    node.parent.setServiceState = setServiceState;
-                                    node.parent.showOrHideLayer = showOrHideLayer;
-                                }
-                            }
-
-                            var url = serviceUrl.split("/");
-                            url.pop();
-                            _onLayerSourceLoaded(url.join("/"));
-
-                        });
-                    }, function(error) {
-                        //console.log("-----------------------------failed-----------------------------");
-                        //console.log(error);
-                    });
-
+                    loadServices(serviceSpecs);
                 });
             }
 
@@ -259,7 +91,7 @@ define(["jquery", "use!underscore"],
                 var serviceSpecs;
                 if (folderConfig.services && folderConfig.services.length > 0) {
                     serviceSpecs = _.map(folderConfig.services, function (serviceConfig) {
-                        var serviceSpec = _.find(entries.services, function(serviceSpec) {
+                        var serviceSpec = _.find(entries.services, function (serviceSpec) {
                             return getServiceName(serviceSpec.name) == serviceConfig.name;
                         });
                         if (_.isUndefined(serviceSpec)) {
@@ -295,7 +127,7 @@ define(["jquery", "use!underscore"],
 
             function addPropsToServiceSpecs(parentNode, url, serviceSpecs) {
                 // When a service is loaded we'll want to know where to hang its tree nodes
-                _.each(serviceSpecs, function(serviceSpec) {
+                _.each(serviceSpecs, function (serviceSpec) {
                     var folder = serviceSpec.name.split("/")[0];
                     var cleanUrl = url.split("/" + folder)[0];
                     serviceSpec.url = cleanUrl;
@@ -308,7 +140,7 @@ define(["jquery", "use!underscore"],
                 if ((server.groupFolder) && (server.groupFolder != "")) {
                     var path = server.groupFolder.split("/");
                     //check if containers exist, if not, make them
-                    _.each(path, function(name) {
+                    _.each(path, function (name) {
                         node = getOrMakeContainerNode(name, node, type);
                     });
                 }
@@ -318,7 +150,7 @@ define(["jquery", "use!underscore"],
             function getOrMakeContainerNode(name, parentNode, type) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
-                    var folder = _.find(parentNode.children, function(child) {
+                    var folder = _.find(parentNode.children, function (child) {
                         return child.text == name;
                     });
                     node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode) : folder;
@@ -337,6 +169,211 @@ define(["jquery", "use!underscore"],
                     url: url,
                     error: "Error: Failed to load map service (" + error + ")."
                 };
+            }
+
+            function loadServices(serviceSpecs) {
+                // Each item in "serviceSpecs" contains info for a service, including:
+                //   - the "url" to query for further info, or "error" if no further info is available
+                //   - "config" info from the "layers.json" file
+                //   - "parentNode" so we can attach it to the node tree
+                // The specs retain their original order from the "layers.json" file, which allows us to
+                // create nodes in the correct order.
+
+                var serviceDeferreds = _.map(serviceSpecs, function(serviceSpec) {
+                    if (serviceSpec.error) {
+                        // Include errors so results stay in order. Wrap in a deferred object for homogeneity.
+                        return makeDeferredError(serviceSpec.error);
+                    } else if (serviceSpec.type === "MapServer") {
+                        return esri.request({
+                            url: serviceSpec.url + "/" + serviceSpec.name + "/MapServer",
+                            content: { f: "json" },
+                            handleAs: "json",
+                            callbackParamName: "callback",
+                            timeout: 10000
+                        }).then(_.identity,
+                            function(error) {
+                                return makeError("Error: Failed to load map service (" + error.message + ").");
+                            });
+                    } else {
+                        return makeDeferredError("Only 'MapServer' services are supported");
+                    }
+
+                    function makeDeferredError(message) {
+                        var deferred = new dojo.Deferred(_.identity);
+                        deferred.resolve(makeError(message));
+                        return deferred;
+                    }
+
+                    function makeError(message) {
+                        return { error: message };
+                    }
+                });
+
+                new dojo.DeferredList(serviceDeferreds).then(function(results) {
+                    _.each(results, function(result, i) {
+                        var serviceData = result[1],
+                            serviceSpec = serviceSpecs[i];
+                        loadService(serviceSpec, serviceData);
+                    });
+                });
+            }
+
+            function loadService(serviceSpec, serviceData) {
+                var serviceName = getServiceName(serviceSpec.name),
+                    serviceConfig = serviceSpec.config,
+                    serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
+
+                var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                node.text = (_.has(serviceConfig, "displayName")) ? serviceConfig.displayName : node.text;
+                node.serviceName = serviceSpec.name;
+                if (_.has(serviceData, "error")) {
+                    node.text = node.text + " (Unavailable)";
+                    node.description = serviceData.error;
+                    node.url = serviceUrl;
+                    delete node.children;
+                    node.leaf = true;
+                    if (_.has(node.parent, "groupAsService")) {
+                        node.cls = "pluginLayerSelector-layer";
+                    }
+                } else {
+                    if (serviceData.description == "") {
+                        node.description = (serviceData.serviceDescription != "") ? serviceData.serviceDescription : "No description or metadata available for this map service.";
+                    } else {
+                        node.description = serviceData.description;
+                    }
+                    node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
+                    node.params = { "opacity": node.opacity };
+                    node.extent = new esri.geometry.Extent(serviceData.fullExtent);
+                    node.checked = false;
+                    node.serviceType = serviceConfig.type;
+                    node.setOpacity = setOpacity;
+                    node.hideAllLayers = hideAllLayers;
+                    node.saveServiceState = saveServiceState;
+                    node.setServiceState = setServiceState;
+                    node.showOrHideLayer = showOrHideLayer;
+
+                    if (node.serviceType === "dynamic") {
+                        loadDynamicService(node, serviceConfig, serviceData, serviceUrl);
+                    } else if (node.serviceType === "tiled") {
+                        loadTiledService(node, serviceConfig, serviceUrl);
+                    } else if (node.serviceType === "feature-layer") {
+                        loadFeatureLayerService(node, serviceConfig, serviceUrl);
+                    }
+                    if (_.has(serviceConfig, "id")) {
+                        node.params.id = serviceConfig.id;
+                    }
+                    if (_.has(node.parent, "groupAsService")) {
+                        node.cls = "pluginLayerSelector-layer";
+                        delete node.setOpacity;
+                        node.parent.setOpacity = setOpacity;
+                        node.parent.opacity = node.opacity;
+                        node.parent.saveServiceState = saveServiceState;
+                        node.parent.setServiceState = setServiceState;
+                        node.parent.showOrHideLayer = showOrHideLayer;
+                    }
+                }
+
+                var url = serviceUrl.split("/");
+                url.pop();
+                _onLayerSourceLoaded(url.join("/"));
+            }
+
+            function getServiceName(name) {
+                // "Alabama/Bathymetry" => "Bathymetry"
+                return (name.indexOf('/') == -1 ? name : name.split('/')[1]);
+            }
+
+            function loadDynamicService(node, serviceConfig, serviceData, serviceUrl) {
+                node.url = serviceUrl;
+                if (_.has(serviceConfig, "showLayers")) {
+                    if (serviceConfig.showLayers.length > 0) {
+                        var layers = _.map(serviceConfig.showLayers, function (i) {
+                            var item = _.find(serviceData.layers, function (s) {
+                                if (s.id == i.id) {
+                                    return s;
+                                }
+                            });
+                            var layer = _.clone(item);
+                            if (_.has(i, "parentLayerId")) {
+                                layer.parentLayerId = i.parentLayerId;
+                            }
+                            if (_.has(i, "displayName")) {
+                                layer.name = i.displayName;
+                            }
+                            return layer;
+                        });
+                        loadLayers(layers, node);
+                    } else {
+                        delete node.children;
+                        node.leaf = true;
+                        node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
+                        if (_.has(serviceConfig, "visibleLayerIds")) {
+                            node.visibleLayerIds = serviceConfig.visibleLayerIds;
+                        }
+                    }
+                } else {
+                    loadLayers(serviceData.layers, node);
+                }
+            }
+
+            function loadLayers(layerSpecs, serviceNode) {
+                var layerNodes = {};
+                _.each(layerSpecs, function (layerSpec) {
+                    // A layer might specify a parent layer; otherwise it hangs off the service
+                    var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
+                    if (layerSpec.subLayerIds === null) {
+                        // This is an actual layer
+                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
+                        node.fetchMetadata = fetchMetadata;
+                    } else {
+                        // This is a layer group; remember its node so its children can attach themselves
+                        layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
+                        layerNodes[layerSpec.id].checked = false;
+                        layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
+                    }
+                }, this);
+            }
+
+            function loadTiledService(node, serviceConfig, serviceUrl) {
+                node.url = serviceUrl;
+                delete node.children;
+                node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
+                node.leaf = true;
+                if (_.has(serviceConfig, "displayLevels")) {
+                    node.params.displayLevels = serviceConfig.displayLevels;
+                }
+            }
+
+            function loadFeatureLayerService(node, serviceConfig, serviceUrl) {
+                node.url = serviceUrl + "/" + serviceConfig.layerIndex;
+                delete node.children;
+                node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
+                node.leaf = true;
+                if (_.has(serviceConfig, "mode")) {
+                    var modes = {
+                        "snapshot": esri.layers.FeatureLayer.MODE_SNAPSHOT,
+                        "ondemand": esri.layers.FeatureLayer.MODE_ONDEMAND,
+                        "selection": esri.layers.FeatureLayer.MODE_SELECTION
+                    };
+                    var mode = modes[serviceConfig.mode];
+                    node.params.mode = mode;
+                }
+                if (_.has(serviceConfig, "symbology")) {
+                    var symbol = getLayerSymbology(serviceConfig.symbology);
+                    node.symbology = symbol;
+                }
+                if (_.has(serviceConfig, "outFields")) {
+                    node.params.outFields = serviceConfig.outFields;
+                }
+                if (_.has(serviceConfig, "autoGeneralize")) {
+                    node.params.autoGeneralize = serviceConfig.autoGeneralize;
+                }
+                if (_.has(serviceConfig, "displayOnPan")) {
+                    node.params.displayOnPan = serviceConfig.displayOnPan;
+                }
+                if (_.has(serviceConfig, "layerDefinition")) {
+                    node.layerDefinition = serviceConfig.layerDefinition;
+                }
             }
 
             function getLayerSymbology(symbology) {
@@ -435,7 +472,6 @@ define(["jquery", "use!underscore"],
                         }
                     }
                 }
-                ;
                 return symbol;
             }
 
@@ -490,29 +526,6 @@ define(["jquery", "use!underscore"],
                     }
                 }
                 return symbol;
-            }
-
-            function getServiceName(name) {
-                // "Alabama/Bathymetry" => "Bathymetry"
-                return (name.indexOf('/') == -1 ? name : name.split('/')[1]);
-            }
-
-            function loadLayers(layerSpecs, serviceNode) {
-                var layerNodes = {};
-                _.each(layerSpecs, function(layerSpec) {
-                    // A layer might specify a parent layer; otherwise it hangs off the service
-                    var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
-                    if (layerSpec.subLayerIds === null) {
-                        // This is an actual layer
-                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
-                        node.fetchMetadata = fetchMetadata;
-                    } else {
-                        // This is a layer group; remember its node so its children can attach themselves
-                        layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
-                        layerNodes[layerSpec.id].checked = false;
-                        layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
-                    }
-                }, this);
             }
 
             function hideAllLayers(serviceNode, map) {
