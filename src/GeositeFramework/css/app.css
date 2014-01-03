@@ -24,6 +24,10 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
 }
 
+.code-like {
+    font-family: "Courier New", Courier, monospace;
+}
+
 /*------------------------------------------
     EXT Style "adjustments"
 ------------------------------------------*/

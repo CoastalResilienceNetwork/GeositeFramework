@@ -164,6 +164,7 @@
     <Content Include="js\App.js" />
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
+    <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
     <Content Include="js\Geosite.js" />
     <Content Include="js\lib\jquery.mCustomScrollbar.min.js" />
