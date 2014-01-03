@@ -7,121 +7,125 @@ define(["use!underscore"],
             var _url = url,
                 _folderName = folderName,
                 _source = source,
-                _extent = extent;
+                _extent = extent,
+                _makeContainerNode = null,
+                _makeLeafNode = null,
+                _onLayerSourceLoaded = null,
+                _onLayerSourceLoadError = null;
 
             this.load = loadCatalog;
 
-            function loadCatalog(rootNode, layerWhiteList, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
-                // Create a WMSLayer object and wait for it to load.
-                // (Internally it's doing "GetCapabilities" on the WMS service.)
+            function loadCatalog(rootNode, layerConfigs, makeContainerNode, makeLeafNode, onLayerSourceLoaded, onLayerSourceLoadError) {
+                _makeContainerNode = makeContainerNode;
+                _makeLeafNode = makeLeafNode;
+                _onLayerSourceLoaded = onLayerSourceLoaded;
+                _onLayerSourceLoadError = onLayerSourceLoadError;
+
                 esri.config.defaults.io.timeout = 30000;
-                var layerIdWhitelist = _.pluck(layerWhiteList, 'name');
+                var layerIdWhitelist = _.pluck(layerConfigs, 'name');
                 if (_.has(_source, "resourceInfo")) {
                     if (_source.resourceInfo) {
-                        var layerInfos = _.map(layerWhiteList, function (layer) {
-                            var displayName =  (_.has(layer, "displayName")) ? layer.displayName : layer.name;
-                            var layerExtent = new esri.geometry.Extent({
-                                xmin: layer.extent.xmin,
-                                ymin: layer.extent.ymin,
-                                xmax: layer.extent.xmax,
-                                ymax: layer.extent.ymax,
-                                spatialReference: { wkid: layer.extent.sr }
-                            });
-                            return new esri.layers.WMSLayerInfo({
-                                name: layer.name,
-                                title: displayName,
-                                description: layer.description,
-                                extent: layerExtent
-                            });
-                        });
-                        var description = (_.has(_source, "description")) ? _source.description : "";
-                        var resourceInfo = {
-                            extent: _extent,
-                            layerInfos: layerInfos,
-                            description: description
-                        };
-                        var wmsLayer = new esri.layers.WMSLayer(_url, {
-                            resourceInfo: resourceInfo,
-                            visibleLayers: layerIdWhitelist
-                        });
-                        
-                        onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode);
-                        dojo.connect(wmsLayer, "onLoad", function () { });
-                        dojo.connect(wmsLayer, "onError", function (err) { 
-                            esri.config.defaults.io.timeout = 60000;
-                            alert("Error: Unable to load data from this service. Either the service is unavailable or <br> the request can't be completed at the current map scale or browser size.");
-                        });
+                        // Layer "resource info" is specified in "layerConfigs"
+                        loadCatalogUsingResourceInfo(rootNode, layerConfigs, layerIdWhitelist);
                     } else {
+                        // Config file specifies this WMS source should not be loaded
                         var wmsLayer = new esri.layers.WMSLayer(_url);
                         dojo.connect(wmsLayer, "onLoad", function () {});
                         dojo.connect(wmsLayer, "onError", function () {
-                            esri.config.defaults.io.timeout = 60000;
-                            checkContainerNodeExists(_folderName + " (Unavailable)", rootNode, makeContainerNode, "service");
-                            onLayerSourceLoadError.apply(null, arguments);
-                            onLayerSourceLoaded(_url);
+                            getOrMakeContainerNode(_folderName + " (Unavailable)", rootNode, "service");
+                            _onLayerSourceLoadError.apply(null, arguments);
+                            _onLayerSourceLoaded(_url);
                         });
                     }
                 } else {
+                    // Create a WMSLayer object and wait for it to load.
+                    // (Internally it's doing "GetCapabilities" on the WMS service.)
                     var wmsLayer = new esri.layers.WMSLayer(_url);
                     dojo.connect(wmsLayer, "onLoad", function () {
-                        onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode);
+                        loadLayers(wmsLayer, rootNode, layerIdWhitelist);
                     });
                     dojo.connect(wmsLayer, "onError", function () {
-                        esri.config.defaults.io.timeout = 60000;
-                        if (_.has(_source, "groupFolder")) {
-                            var groupFolder = makeGroupContainerNode(_source, rootNode, makeContainerNode);
-                            if (groupFolder) {
-                                checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
-                            } else {
-                                checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
-                            }
-                        } else {
-                            checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
-                        }
-                        onLayerSourceLoadError.apply(null, arguments);
-                        onLayerSourceLoaded(_url);
+                        getOrMakeFolderNode(rootNode);
+                        _onLayerSourceLoadError.apply(null, arguments);
+                        _onLayerSourceLoaded(_url);
                     });
                 } 
             }
-            
-            function makeGroupContainerNode(server, parentNode, makeContainerNode) {
+
+            function loadCatalogUsingResourceInfo(rootNode, layerConfigs, layerIdWhitelist) {
+                var layerInfos = _.map(layerConfigs, function(layerConfig) {
+                    var displayName = (_.has(layerConfig, "displayName")) ? layerConfig.displayName : layerConfig.name;
+                    var layerExtent = new esri.geometry.Extent({
+                        xmin: layerConfig.extent.xmin,
+                        ymin: layerConfig.extent.ymin,
+                        xmax: layerConfig.extent.xmax,
+                        ymax: layerConfig.extent.ymax,
+                        spatialReference: { wkid: layerConfig.extent.sr }
+                    });
+                    return new esri.layers.WMSLayerInfo({
+                        name: layerConfig.name,
+                        title: displayName,
+                        description: layerConfig.description,
+                        extent: layerExtent
+                    });
+                });
+                var description = (_.has(_source, "description")) ? _source.description : "";
+                var resourceInfo = {
+                    extent: _extent,
+                    layerInfos: layerInfos,
+                    description: description
+                };
+                var wmsLayer = new esri.layers.WMSLayer(_url, {
+                    resourceInfo: resourceInfo,
+                    visibleLayers: layerIdWhitelist
+                });
+
+                loadLayers(wmsLayer, rootNode, layerIdWhitelist);
+                dojo.connect(wmsLayer, "onLoad", function() {
+                });
+                dojo.connect(wmsLayer, "onError", function(err) {
+                    esri.config.defaults.io.timeout = 60000;
+                    alert("Error: Unable to load data from this service. Either the service is unavailable or <br> the request can't be completed at the current map scale or browser size.");
+                });
+            }
+
+            function getOrMakeFolderNode(rootNode) {
+                if (_.has(_source, "groupFolder")) {
+                    var groupFolder = makeGroupContainerNode(_source, rootNode);
+                    if (groupFolder) {
+                        return getOrMakeContainerNode(_folderName, groupFolder, "service");
+                    }
+                }
+                return getOrMakeContainerNode(_folderName, rootNode, "service");
+            }
+
+            function makeGroupContainerNode(server, parentNode) {
                 var node = parentNode;
                 if (server.groupFolder != "" ) {
                     var path = server.groupFolder.split("/");
                     //check if containers exist, if not, make them
-                    _.each(path, function(name) {
-                        node = checkContainerNodeExists(name, node, makeContainerNode, "folder");
+                    _.each(path, function (name) {
+                        node = getOrMakeContainerNode(name, node, "folder");
                     });
                 }
                 return node;
             }
             
-            function checkContainerNodeExists(name, parentNode, makeContainerNode, type) {
+            function getOrMakeContainerNode(name, parentNode, type) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
                     var folder = _.find(parentNode.children, function (child) {
                         return child.text == name;
                     });
-                    node = (_.isUndefined(folder)) ? makeContainerNode(name, type, parentNode) : folder;
+                    node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode) : folder;
                 } else {
-                    node = makeContainerNode(name, type, parentNode);
+                    node = _makeContainerNode(name, type, parentNode);
                 }
                 return node;
             }
-            
-            function onLoadWmsLayer(wmsLayer, rootNode, layerIdWhitelist, onLayerSourceLoaded, makeContainerNode, makeLeafNode) {
-                esri.config.defaults.io.timeout = 60000;
-                var folderNode;
-                if (_.has(_source, "groupFolder")) {
-                    var groupFolder = makeGroupContainerNode(_source, rootNode, makeContainerNode);
-                    if (groupFolder) {
-                        folderNode = checkContainerNodeExists(_folderName, groupFolder, makeContainerNode, "service");
-                    } else {
-                        folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
-                    }
-                } else {
-                    folderNode = checkContainerNodeExists(_folderName, rootNode, makeContainerNode, "service");
-                }
+
+            function loadLayers(wmsLayer, rootNode, layerIdWhitelist) {
+                var folderNode = getOrMakeFolderNode(rootNode);
                 folderNode.wmsLayer = wmsLayer;
                 folderNode.serviceName = (folderNode.parent.text) ?  folderNode.parent.text + "/" + _folderName : _folderName;
                 folderNode.description = (wmsLayer.description != "") ? wmsLayer.description : "No description or metadata available for this map service.";
@@ -136,11 +140,11 @@ define(["use!underscore"],
                 // Make a tree node for each layer exposed by the WMS service, filtered by the specified whitelist
                 _.each(wmsLayer.layerInfos, function (layerInfo, index) {
                     if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
-                        var node = makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
+                        var node = _makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
                         node.description = layerInfo.description;
                         node.extent = new esri.geometry.Extent(layerInfo.extent);
                     }
-                    onLayerSourceLoaded(_url);
+                    _onLayerSourceLoaded(_url);
                 });
             }
 

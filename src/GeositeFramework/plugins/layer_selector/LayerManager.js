@@ -32,7 +32,6 @@ define([
              */
             function loadLayerData(layerSourcesJson, onLoadingComplete) {
                 var layerData = parseLayerConfigData(layerSourcesJson);
-                //console.log(layerData);
 
                 _onLoadingComplete = onLoadingComplete;
 
@@ -311,6 +310,7 @@ define([
                                             extent: {
                                                 type: 'object',
                                                 additionalProperties: false,
+                                                required: ['xmin', 'ymin', 'xmax', 'ymax', 'sr'],
                                                 properties: {
                                                     xmin: { type: 'number' },
                                                     ymin: { type: 'number' },
@@ -336,8 +336,9 @@ define([
             function onLayerSourceLoaded(url) {
                 // Specified URL is loaded; remove it from the list
                 var i = _.indexOf(_urls, url);
-                if(i != -1)  { _urls.splice(i, 1); }
-                
+                if (i != -1) {
+                    _urls.splice(i, 1);
+                }
                 if (_urls.length == 0) {
                     // All URLs are loaded
                     _onLoadingComplete(_treeRootNode);

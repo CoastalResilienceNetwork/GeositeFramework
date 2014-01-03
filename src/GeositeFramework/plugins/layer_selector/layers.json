@@ -18,7 +18,7 @@
                     "name": "Florida",
                     "services": [
                         { "name": "FEMA_Repetitive_Loss", "type":"dynamic" },
-                        { "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
+						{ "name": "Oyster_Restoration_Explorer", "type":"dynamic" },
                         { "name": "Habitats", "type":"dynamic" },
                         { "name": "Species", "type":"dynamic" },
                         { "name": "Bathymetry", "type":"dynamic" },
@@ -75,6 +75,17 @@
                         { "name": "Social_and_Economic", "type":"dynamic" }
                     ]
                 }
+            ]
+        }
+    },
+    {
+        "wmsSource": {
+            "url": "http://preview.grid.unep.ch:8080/geoserver/ows",
+            "folderTitle": "UNISDR",
+            "layerIds": [
+                { "name": "preview:cy_risk" },
+                { "name": "preview:cy_buffers" },
+                { "name": "preview:cs_frequency" }
             ]
         }
     }

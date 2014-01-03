@@ -26,7 +26,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
                 rootNode = deracinate(rootNode);
                 _tree = createTree(rootNode);
-                //console.log(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
                 _tree.on("itemclick", onItemClick, this);
