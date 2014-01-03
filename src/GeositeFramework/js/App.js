@@ -43,39 +43,12 @@
         },
 
         showHashUrlPopup: function (hash) {
-            var windowTemplate = N.app.templates['permalink-share-window'],
-            currentHref = document.location.href;
+            var permalink = new N.models.Permalink({ hash: hash }),
+                popup = new N.views.Permalink({
+                    model: permalink
+                });
 
-            // sometimes location.href will havea  trailing #, sometimes it
-            // won't. This makes sure to always append when missing.
-            if (currentHref.slice(-1) !== "#") { currentHref += "#"; }
-
-            // iOS devices need setSelectionRange, IE does not have the method
-            function _doSelect($dom, el) {
-                el.focus();
-                if (el.setSelectionRange) {
-                    el.setSelectionRange(0, 99999);
-                } else {
-                    $dom.select();
-                }
-            }
-            
-            TINY.box.show({
-                html: windowTemplate({ url: currentHref + hash }),
-                width: 500,
-                height: 200,
-                fixed: true,
-                openjs: function () {
-                    var $domElement = $('.tinner .permalink-textbox'),
-                        box = $domElement[0];
-                    _doSelect($domElement, box);
-                    $domElement.mouseup(
-                        function() {
-                            _doSelect($domElement, box);
-                        }
-                    );
-                }
-            });
+            popup.render();
         },
 
         setupHashMonitorCallback: function (handleHashChangedFn) {

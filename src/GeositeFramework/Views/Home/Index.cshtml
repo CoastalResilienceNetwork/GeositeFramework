@@ -217,10 +217,25 @@
             <a target="_blank" class="export-output-url" href="<%= url %>">Click here to retrieve your printable document.</a>
     </script>
 
+    <!-- Adding any white space between the textarea and the iframe
+        will result in whitespace within the rendered textarea, which looks strange. -->
+    <script type="text/template" id="embed-iframe">
+       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= url %>"></iframe>        
+       </textarea>
+    </script>
+
     <script type="text/template" id="permalink-share-window">
-      <h3>Save & Share</h3>
-      <label>Permalink:<input class="permalink-textbox" type="text" value="<%= url %>"></input></label>
-      <p>Share your map with friends or family, or just bookmark the link for later.</p>
+        <div id="permalink-dialog">
+          <h3>Save & Share</h3>
+          <label>Permalink:<input class="permalink-textbox" type="text" value="<%= url %>"/></label>
+          <p>Share your map with friends or family, or just bookmark the link for later.</p>
+          <label>Embed this map in your website:</label>
+          <div id="iframe-embed"></div>
+          <label>Embed Width (px)
+               <input type="number" class="embed-size width" value="<%= width %>" /></label>
+           <label>Embed Height (px)
+               <input type="number" class="embed-size height" value="<%= height %>" /></label>
+        </div>
     </script>
 
 
@@ -291,6 +306,7 @@
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>
     <script src="js/Export.js"></script>
+    <script src="js/Permalink.js"></script>
     <script src="js/TemplateLoader.js"></script>
     <script src="js/Screen.js"></script>
     <script src="js/SyncedMapManager.js"></script>
