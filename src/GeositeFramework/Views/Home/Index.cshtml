@@ -220,14 +220,14 @@
     <!-- Adding any white space between the textarea and the iframe
         will result in whitespace within the rendered textarea, which looks strange. -->
     <script type="text/template" id="embed-iframe">
-       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= url %>"></iframe>        
+       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>        
        </textarea>
     </script>
 
     <script type="text/template" id="permalink-share-window">
         <div id="permalink-dialog">
           <h3>Save & Share</h3>
-          <label>Permalink:<input class="permalink-textbox" type="text" value="<%= url %>"/></label>
+          <label>Permalink:<input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
           <p>Share your map with friends or family, or just bookmark the link for later.</p>
           <label>Embed this map in your website:</label>
           <div id="iframe-embed"></div>
@@ -283,7 +283,8 @@
     <div id="right-pane" class="content"></div>
     
     <script src="js/polyfill.js"></script>
-
+    
+    <script src="//apis.google.com/js/client.js"></script>
     <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.5compact"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="Scripts/json2.min.js"></script>

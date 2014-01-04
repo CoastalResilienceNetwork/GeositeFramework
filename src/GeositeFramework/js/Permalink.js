@@ -6,7 +6,8 @@
             height: 400,
             width: 500,
             hash: null,
-            url: null
+            url: null,
+            shortUrl: null
         },
         
         initialize: function () {
@@ -16,16 +17,36 @@
             if (cleanHref.slice(-1) !== "#") { cleanHref += "#"; }
 
             this.set('url', cleanHref + this.get('hash'));
+        },
+        
+        shorten: function() {
+            var model = this,
+                request = gapi.client.urlshortener.url.insert({
+                    'resource': {
+                        'longUrl': model.get('url')
+                    }
+                });
+
+            request.execute(function (result) {
+                if (result.error) {
+                    Azavea.logError("Error in URL Shortener", result.error);
+                    model.set('shortUrl', model.get('url'));
+                } else {
+                    model.set('shortUrl', result.id);
+                }
+            });
         }
     });
 
     N.views.Permalink = Backbone.View.extend({
         dialogTemplate: null,
         embedView: null,
-
+        
         initialize: function () {
             this.template = N.app.templates['permalink-share-window'];
-            this.model.on('change', this.renderEmbedCode, this);
+            this.model.on('change:height change:width', this.renderEmbedCode, this);
+            this.model.on('change:shortUrl', this.render, this);
+            this.model.shorten();
         },
 
         events: {
