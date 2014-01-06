@@ -1,5 +1,5 @@
 ﻿/*jslint nomen:true, devel:true */
-/*global Geosite, $, _*/
+/*global Geosite, $, _, gapi*/
 
 (function (N) {
     "use strict";
@@ -15,6 +15,12 @@
             N.app.version = version;
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
+
+            // Set up the google url shortener service
+            gapi.client.load('urlshortener', 'v1');
+            if (regionData.googleUrlShortenerApiKey) {
+                gapi.client.setApiKey(regionData.googleUrlShortenerApiKey);
+            }
 
             N.app.models.screen = new N.models.Screen();
 
@@ -47,8 +53,6 @@
                 popup = new N.views.Permalink({
                     model: permalink
                 });
-
-            popup.render();
         },
 
         setupHashMonitorCallback: function (handleHashChangedFn) {

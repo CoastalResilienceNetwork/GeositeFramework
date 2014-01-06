@@ -4,6 +4,7 @@
     "type": "object",
     "properties": {
         "googleAnalyticsPropertyId": {"type": "string", "required": false},
+        "googleUrlShortenerApiKey": {"type": "string", "required": false},
         "titleMain": {
             "type": "object",
             "properties": {
