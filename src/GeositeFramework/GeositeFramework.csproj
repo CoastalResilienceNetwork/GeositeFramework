@@ -165,6 +165,7 @@
     <Content Include="js\App.js" />
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
+    <Content Include="js\HelpOverlay.js" />
     <Content Include="js\lib\pageguide.min.js" />
     <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
