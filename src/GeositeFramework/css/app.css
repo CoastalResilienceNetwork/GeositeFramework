@@ -672,6 +672,25 @@ table.esriLegendLayerLabel tbody tr td {
 	}
 
 /* -----------------------------------------
+    Help Overlay overrides
+--------------------------------------------*/
+body #tlyPageGuideWrapper #tlyPageGuideMessages {
+    top: 300px;
+    margin: 0 5% 0 27%;
+    width: 50%;
+    max-height: 200px;
+}
+body #tlyPageGuideWrapper #tlyPageGuide li {
+    background: #0a0a0a;
+    background: rgba(10, 10, 10, 0.4);
+}
+body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_right:after,
+body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_bottom:after,
+body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
+    border-top: 15px solid #0a0a0a;
+    border-top: 15px solid rgba(10, 10, 10, 0.4);
+}
+/* -----------------------------------------
    IE8 Style Overrides
 ----------------------------------------- */
 
