@@ -40,11 +40,11 @@
  */
 
 .pluginLayerSelector-service .x-tree-icon-parent {
-    background-image:url(images/gear.png) !important;
+    background-image:url(images/info-red.png) !important;
 }
 
 .pluginLayerSelector-service .x-tree-icon-leaf {
-    background-image:url(images/gear.png) !important;
+    background-image:url(images/info-red.png) !important;
 }
 
 
@@ -53,7 +53,7 @@
 }
     
 .pluginLayerSelector-layer .x-tree-icon {
-    background-image:url(images/info.png);
+    background-image:url(images/info-blue.png);
 }
 
 .pluginLayer-extent-zoom {
