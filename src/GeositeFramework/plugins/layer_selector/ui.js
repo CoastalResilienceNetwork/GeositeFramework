@@ -84,7 +84,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             renderExtTree = (function () {
                 var renderExtTreeCount = 0;
-
                 return function () {
                     if (_tree && $(_container).is(":visible") && renderExtTreeCount === 0) {
                         _tree.render(_$treeContainer[0]);
@@ -186,8 +185,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
-                var layerData = node.raw;
-                layerData.showOrHideLayer(layerData, checked, _map);
+                node.raw.showOrHideLayer(node, checked, _map);
+                node.raw.checked = checked;
+                if (node.hasChildNodes()) {
+                    if (!node.isExpanded() && node.get('checked')) {
+                        node.expand();
+                    }
+                }
                 enableIconClick();
             }
 
@@ -231,6 +235,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
 
                 function loadExtent() {
+                    
                     if (node.extent || node.fetchMetadata) {
                         if (node.fetchMetadata) {
                             node.fetchMetadata(node, function() {
