@@ -25,6 +25,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 $(_container).empty();
 
                 rootNode = deracinate(rootNode);
+                highlightNewNodes(rootNode);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
@@ -79,6 +80,42 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     return rootNode.children[0];
                 } else {
                     return rootNode;
+                }
+            }
+
+            function highlightNewNodes(node, parentIsNew, newLayerIds) {
+                var isNew = parentIsNew;
+                if (!parentIsNew) {
+                    if (newLayerIds && _.contains(newLayerIds, node.layerId)) {
+                        isNew = true;    
+                    } else if (node.isNew) {
+                        var start = Date.parse(node.isNew.startDate),
+                            end = new Date(Date.parse(node.isNew.endDate)),
+                            now = Date.now();
+                        end.setDate(end.getDate() + 1);
+                        if (now > start && now < end) {
+                            if (node.isNew.layerIds) {
+                                newLayerIds = node.isNew.layerIds;
+                            } else {
+                                isNew = true;
+                            }
+                        }
+                    }
+                    if (isNew) {
+                        for (var ancestor = node.parent; ancestor; ancestor = ancestor.parent) {
+                            highlightNode(ancestor);
+                        }
+                    }
+                }
+                if (isNew) {
+                    highlightNode(node);
+                }
+                _.each(node.children, function(child) {
+                    highlightNewNodes(child, isNew, newLayerIds);
+                });
+
+                function highlightNode(n) {
+                    n.cls += ' pluginLayerSelector-new';
                 }
             }
 

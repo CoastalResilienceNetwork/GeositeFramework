@@ -69,7 +69,7 @@ define([
                             if (source.folderTitle === "") {
                                 sourceRootNode = _treeRootNode;
                             } else {
-                                sourceRootNode = makeContainerNode(source.folderTitle, "folder", _treeRootNode);
+                                sourceRootNode = makeContainerNode(source.folderTitle, "folder", _treeRootNode, source);
                             }
                             loadLayerSource(loader, source.url, sourceRootNode, innerContainer);
                         } else if ((dataSourceContainer.wmsSource) && !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {  
@@ -157,7 +157,7 @@ define([
                 return node;
             }
 
-            function makeContainerNode(name, type, parentNode){
+            function makeContainerNode(name, type, parentNode, config){
                 var node = {
                     type: type,
                     cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
@@ -165,7 +165,8 @@ define([
                     name: _.uniqueId(name + "_"),
                     leaf: false,
                     children: [],
-                    parent: parentNode
+                    parent: parentNode,
+                    isNew: config ? config.isNew : undefined
                 };
                 // TODO - I don't know why this was necessary. If parent node is defined,
                 // it should always have an array assigned to children. However, when
@@ -176,7 +177,7 @@ define([
                 return node;
             }
 
-            function makeLeafNode(title, layerId, showOrHideLayer, parentNode) {
+            function makeLeafNode(title, layerId, showOrHideLayer, parentNode, config) {
                 var node = {
                     type: "layer",
                     cls: _cssClassPrefix + "-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
@@ -185,7 +186,8 @@ define([
                     checked: false,
                     layerId: layerId,
                     parent: parentNode,
-                    showOrHideLayer: showOrHideLayer // function which shows or hides the layer
+                    showOrHideLayer: showOrHideLayer, // function which shows or hides the layer
+                    isNew: config ? config.isNew : undefined
                 };
                 if (!parentNode.children) { parentNode.children = []; }
                 parentNode.children.push(node);

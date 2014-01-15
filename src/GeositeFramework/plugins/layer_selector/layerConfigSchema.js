@@ -30,6 +30,7 @@ define(function () {
             properties: {
                 url: { type: 'string' },
                 folderTitle: { type: 'string' },
+                isNew: isNew(),
                 folders: {
                     type: 'array',
                     items: {
@@ -43,6 +44,7 @@ define(function () {
                             groupFolder: { type: 'string' },
                             groupAsService: { type: 'boolean' },
                             description: { type: 'string' },
+                            isNew: isNew(),
                             services: {
                                 type: 'array',
                                 items: {
@@ -57,6 +59,16 @@ define(function () {
                                         visible: { type: 'boolean' },
                                         description: { type: 'string' },
                                         id: { type: 'string' },
+                                        isNew: {
+                                            type: 'object',
+                                            additionalProperties: false,
+                                            required: ["startDate", "endDate"],
+                                            properties: {
+                                                startDate: { type: 'string' },
+                                                endDate: { type: 'string' },
+                                                layerIds: { type: 'array', items: { type: 'integer' } },
+                                            }
+                                        },
                                         showLayers: {
                                             type: 'array',
                                             items: {
@@ -86,6 +98,18 @@ define(function () {
                         }
                     }
                 }
+            }
+        };
+    }
+
+    function isNew() {
+        return {
+            type: 'object',
+            additionalProperties: false,
+            required: ["startDate", "endDate"],
+            properties: {
+                startDate: { type: 'string' },
+                endDate: { type: 'string' }
             }
         };
     }
@@ -171,6 +195,7 @@ define(function () {
                 resourceInfo: { type: 'boolean' },
                 groupFolder: { type: 'string' },
                 opacity: { type: 'number' },
+                isNew: isNew(),
                 layerIds: {
                     type: 'array',
                     items: {
@@ -181,6 +206,7 @@ define(function () {
                             name: { type: 'string' },
                             displayName: { type: 'string' },
                             description: { type: 'string' },
+                            isNew: isNew(),
                             extent: {
                                 type: 'object',
                                 additionalProperties: false,

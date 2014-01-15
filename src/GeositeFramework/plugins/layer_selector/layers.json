@@ -3,6 +3,7 @@
         "agsSource": {
             "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
             "folderTitle": "Coastal Resilience (National)",
+            "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
             "folders": [
                 {
                     "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
@@ -44,6 +45,7 @@
                     "url": "http://olga.er.usgs.gov/stpgis/rest/services",
                     "name": "Vulnerability",
                     "displayName": "Hurricane-Induced Coastal Erosion Hazards",
+                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
                     "services": [
                         { "name": "NACCH_water_level", "displayName": "Water levels (m, NAVD88)", "type":"dynamic", "opacity": 0.5,
                           "showLayers": [
@@ -101,7 +103,8 @@
                     "name": "National",
                     "displayName": "National Assessment of Shoreline Change",
                     "services": [
-                        { "name": "slc_HistoricShoreline", "displayName": "Historic Shorelines by State", "type":"dynamic", "opacity": 1
+                        { "name": "slc_HistoricShoreline", "displayName": "Historic Shorelines by State", "type":"dynamic", "opacity": 1,
+                          "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100", "layerIds": [4, 10] }
                         },
                         { "name": "slc_LongTerm", "displayName": "Long-term Shoreline Change (m/yr)", "type":"dynamic", "opacity": 1,
                           "showLayers": []
@@ -122,6 +125,7 @@
             "description": "The nowCOAST 'obs' Web Map Service (WMS) provides layers containing near real-time surface meteorological and oceanographic observations from various sources.  Some observations are updated as frequently as every six minutes, while others are updated hourly.  The 'obs' WMS is one of several map services provided by NOAA's nowCOAST project (http://nowcoast.noaa.gov).  For further layer information such as layer icons, legend graphics, layer descriptions, and valid timestamps, see the nowCOAST 'LayerInfo Web Service' description page at: http://nowcoast.noaa.gov/help/layerinfo.shtml.  For more information about nowCOAST's available Web Map Services, see the nowCOAST Map Services information page at: http://nowcoast.noaa.gov/help/mapservices.shtml.  nowCOAST is a product of the NOAA/NOS/OCS Coast Survey Development Laboratory.",
             "opacity": 0.5,
             "resourceInfo": true,
+            "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
             "layerIds": [
                 { 
                     "name": "RAS_RIDGE_NEXRAD",
@@ -163,19 +167,22 @@
                     "name": "NCEP_RAS_ANAL_RTG_SST",
                     "displayName": "Sea Surface Temperature (Daily)", 
                     "description": "Daily Gridded Global Sea Surface Temperature Analysis", 
-                    "extent": { "xmin": -180.0 ,"ymin":-90.0 ,"xmax":180.0, "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -180.0 ,"ymin":-90.0 ,"xmax":180.0, "ymax":90.0 , "sr": 4326  },
+                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" }
                 },
                 {
                     "name": "RTMA_RAS_AIRTEMP",
                     "displayName": "Surface Air Temperature (Real-Time Mesoscale Analysis)", 
                     "description": "Real-Time Mesoscale Analysis - Gridded Surface Air Temperature", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  },
+                    "isNew": { "startDate": "1/1/2099", "endDate": "1/1/2100" }
                 },
                 {
                     "name": "RTMA_RAS_WSPD",
                     "displayName": "Surface Wind Speed (Real-Time Mesoscale Analysis)", 
                     "description": "Real-Time Mesoscale Analysis - Gridded Surface Wind Speed", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  },
+                    "isNew": { "startDate": "1/15/2014", "endDate": "1/15/2014" }
                 },
                 {
                     "name": "RTMA_RAS_QPE_1HR",

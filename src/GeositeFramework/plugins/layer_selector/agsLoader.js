@@ -131,13 +131,13 @@ define(["jquery", "use!underscore"],
 
             function getOrMakeFolderNode(folderConfig, folderName, parentNode) {
                 var displayName = folderConfig.displayName || folderName;
-                return (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder");
+                return (folderName == "") ? parentNode : getOrMakeContainerNode(displayName, parentNode, "folder", folderConfig);
             }
 
-            function makeGroupContainerNode(server, parentNode, type) {
+            function makeGroupContainerNode(config, parentNode, type) {
                 var node = parentNode;
-                if ((server.groupFolder) && (server.groupFolder != "")) {
-                    var path = server.groupFolder.split("/");
+                if ((config.groupFolder) && (config.groupFolder != "")) {
+                    var path = config.groupFolder.split("/");
                     //check if containers exist, if not, make them
                     _.each(path, function (name) {
                         node = getOrMakeContainerNode(name, node, type);
@@ -146,15 +146,15 @@ define(["jquery", "use!underscore"],
                 return node;
             }
 
-            function getOrMakeContainerNode(name, parentNode, type) {
+            function getOrMakeContainerNode(name, parentNode, type, config) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
                     var folder = _.find(parentNode.children, function (child) {
                         return child.text == name;
                     });
-                    node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode) : folder;
+                    node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode, config) : folder;
                 } else {
-                    node = _makeContainerNode(name, type, parentNode);
+                    node = _makeContainerNode(name, type, parentNode, config);
                 }
                 return node;
             }
@@ -222,7 +222,7 @@ define(["jquery", "use!underscore"],
                     serviceConfig = serviceSpec.config,
                     serviceUrl = serviceSpec.url + "/" + serviceSpec.name + "/MapServer";
 
-                var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode);
+                var node = _makeContainerNode(serviceName, "service", serviceSpec.parentNode, serviceConfig);
                 node.text = (_.has(serviceConfig, "displayName")) ? serviceConfig.displayName : node.text;
                 node.serviceName = serviceSpec.name;
                 if (_.has(serviceData, "error")) {
@@ -321,10 +321,11 @@ define(["jquery", "use!underscore"],
                         var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
                         node.fetchMetadata = fetchMetadata;
                     } else {
-                        // This is a layer group; remember its node so its children can attach themselves
+                        // This is a layer group
                         layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
                         layerNodes[layerSpec.id].checked = false;
                         layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
+                        layerNodes[layerSpec.id].layerId = layerSpec.id;
                     }
                 }, this);
             }
