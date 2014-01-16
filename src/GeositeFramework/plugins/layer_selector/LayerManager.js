@@ -4,10 +4,11 @@ define([
         "dojo/json",
         "use!tv4",
         "use!underscore",
+        "./layerConfigSchema",
         "./AgsLoader",
         "./WmsLoader"
     ],
-    function (JSON, tv4, _, AgsLoader, WmsLoader) {
+    function (JSON, tv4, _, layerConfigSchema, AgsLoader, WmsLoader) {
 
         var LayerManager = function (app) {
             var _app = app,
@@ -68,7 +69,7 @@ define([
                             if (source.folderTitle === "") {
                                 sourceRootNode = _treeRootNode;
                             } else {
-                                sourceRootNode = makeContainerNode(source.folderTitle, "folder", _treeRootNode);
+                                sourceRootNode = makeContainerNode(source.folderTitle, "folder", _treeRootNode, source);
                             }
                             loadLayerSource(loader, source.url, sourceRootNode, innerContainer);
                         } else if ((dataSourceContainer.wmsSource) && !(dataSourceContainer.agsSource && dataSourceContainer.wmsSource)) {  
@@ -109,8 +110,7 @@ define([
                 var errorMessage;
                 try {
                     var data = JSON.parse(layerSourcesJson),
-                        schema = layerConfigSchema,
-                        valid = tv4.validate(data, schema);
+                        valid = tv4.validate(data, layerConfigSchema);
                     if (valid) {
                         return data;
                     } else {
@@ -122,211 +122,6 @@ define([
                 _app.error("", "Error in config file layers.json: " + errorMessage);
                 return null;
             }
-
-            // Schema for validating layers.config file (see http://json-schema.org)
-
-            var layerConfigSchema = {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                title: 'layer_selector plugin: layer sources specification',
-                type: 'array',
-                items: {
-                    type: 'object',
-                    additionalProperties: false,
-                    properties: {
-                        agsSource: {
-                            type: 'object',
-                            properties: {
-                                url: { type: 'string' },
-                                folderTitle: { type: 'string' },
-                                folders: {
-                                    type: 'array',
-                                    items: { 
-                                        type: 'object',
-                                        additionalProperties: false,
-                                        required: ['name'],
-                                        properties: {
-                                            url: { type: 'string' },
-                                            name: { type: 'string' },
-                                            displayName: { type: 'string' },
-                                            groupFolder: { type: 'string' },
-                                            groupAsService: { type: 'boolean' },
-                                            description: { type: 'string' },
-                                            services: { 
-                                                type: 'array',
-                                                items: {
-                                                    type: 'object',
-                                                    additionalProperties: false,
-                                                    required: ['name', 'type'],
-                                                    properties: {
-                                                        name: { type: 'string' },
-                                                        displayName: { type: 'string' },
-                                                        type: { type: 'string' },
-                                                        opacity: { type: 'number' },
-                                                        visible: { type: 'boolean' },
-                                                        description: { type: 'string' },
-                                                        id: { type: 'string' },
-                                                        showLayers: {
-                                                            type: 'array',
-                                                            items: {
-                                                                type: 'object',
-                                                                additionalProperties: false,
-                                                                required: ['id'],
-                                                                properties: {
-                                                                    id: { type: 'integer' },
-                                                                    displayName: { type: 'string' },
-                                                                    parentLayerId: { type: 'integer' }
-                                                                }
-                                                            }
-                                                        },
-                                                        visibleLayerIds: { type: 'array', items: { type: 'integer' } },
-                                                        displayLevels: { type: 'array', items: { type: 'integer' } },
-                                                        layerIndex: { type: 'integer' },
-                                                        mode: { type: 'string' },
-                                                        outFields:{ type: 'array', items: { type: 'string' } },
-                                                        autoGeneralize: { type: 'boolean' },
-                                                        maxAllowableOffset: { type: 'boolean' },
-                                                        displayOnPan: { type: 'boolean' },
-                                                        layerDefinition: { type: 'string' },
-                                                        symbology: {
-                                                            type: 'object',
-                                                            additionalProperties: false,
-                                                            properties: {
-                                                                fill: { 
-                                                                    type: 'object',
-                                                                    additionalProperties: false,
-                                                                    properties: {
-                                                                        type: { type: 'string' },
-                                                                        style: { type: 'string' },
-                                                                        color: { type: 'array', items: { type: 'number' } },
-                                                                        outline: {
-                                                                            type: 'object',
-                                                                            additionalProperties: false,
-                                                                            properties: {
-                                                                                type: { type: 'string' },
-                                                                                style: { type: 'string' },
-                                                                                color: { type: 'array', items: { type: 'number' } },
-                                                                                width: { type: 'number' },
-                                                                                cap: { type: 'string' },
-                                                                                miter: { type: 'string' },
-                                                                                miterLimit: { type: 'string' }
-                                                                            }
-                                                                        },
-                                                                        url: { type: 'string' },
-                                                                        height: { type: 'number' },
-                                                                        width: { type: 'number' },
-                                                                        offset: { 
-                                                                            type: 'object',
-                                                                            additionalProperties: false,
-                                                                            properties: {
-                                                                                x: { type: 'number' },
-                                                                                y: { type: 'number' }
-                                                                            }
-                                                                        },
-                                                                        xscale: { type: 'number' },
-                                                                        yscale: { type: 'number' }
-                                                                    }
-                                                                },
-                                                                line: { 
-                                                                    type: 'object',
-                                                                    additionalProperties: false,
-                                                                    properties: {
-                                                                        type: { type: 'string' },
-                                                                        style: { type: 'string' },
-                                                                        color: { type: 'array', items: { type: 'number' } },
-                                                                        width: { type: 'number' },
-                                                                        cap: { type: 'string' },
-                                                                        miter: { type: 'string' },
-                                                                        miterLimit: { type: 'string' }
-                                                                    } 
-                                                                },
-                                                                marker: {
-                                                                    type: 'object',
-                                                                    additionalProperties: false,
-                                                                    properties: {
-                                                                        type: { type: 'string' },
-                                                                        style: { type: 'string' },
-                                                                        color: { type: 'array', items: { type: 'number' } },
-                                                                        size: { type: 'integer' },
-                                                                        angle: { type: 'number' },
-                                                                        outline: {
-                                                                            type: 'object',
-                                                                            additionalProperties: false,
-                                                                            properties: {
-                                                                                type: { type: 'string' },
-                                                                                style: { type: 'string' },
-                                                                                color: { type: 'array', items: { type: 'number' } },
-                                                                                width: { type: 'number' },
-                                                                                cap: { type: 'string' },
-                                                                                miter: { type: 'string' },
-                                                                                miterLimit: { type: 'string' }
-                                                                            }
-                                                                        },
-                                                                        url: { type: 'string' },
-                                                                        height: { type: 'number' },
-                                                                        width: { type: 'number' },
-                                                                        offset: { 
-                                                                            type: 'object',
-                                                                            additionalProperties: false,
-                                                                            properties: {
-                                                                                x: { type: 'number' },
-                                                                                y: { type: 'number' }
-                                                                            }
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            }
-                                                        }                                                       
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                required: ['url'],
-                                additionalProperties: false
-                            }
-                        },
-                        wmsSource: {
-                            type: 'object',
-                            additionalProperties: false,
-                            required: ['url', 'folderTitle'],
-                            properties: {
-                                url: { type: 'string' },
-                                folderTitle: { type: 'string' },
-                                description: { type: 'string' },
-                                resourceInfo: { type: 'boolean' },
-                                groupFolder: { type: 'string' },
-                                opacity: { type: 'number' },
-                                layerIds: {
-                                    type: 'array',
-                                    items: {
-                                        type: 'object',
-                                        additionalProperties: false,
-                                        required: ['name'],
-                                        properties: {
-                                            name: { type: 'string' },
-                                            displayName: { type: 'string' },
-                                            description: { type: 'string' },
-                                            extent: {
-                                                type: 'object',
-                                                additionalProperties: false,
-                                                required: ['xmin', 'ymin', 'xmax', 'ymax', 'sr'],
-                                                properties: {
-                                                    xmin: { type: 'number' },
-                                                    ymin: { type: 'number' },
-                                                    xmax: { type: 'number' },
-                                                    ymax: { type: 'number' },
-                                                    sr: { type: 'integer' }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };  
 
             function loadLayerSource(loader, url, sourceRootNode, folderOrLayerIdWhitelist) {
                 //_urls.push(url);
@@ -362,7 +157,7 @@ define([
                 return node;
             }
 
-            function makeContainerNode(name, type, parentNode){
+            function makeContainerNode(name, type, parentNode, config){
                 var node = {
                     type: type,
                     cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
@@ -370,7 +165,8 @@ define([
                     name: _.uniqueId(name + "_"),
                     leaf: false,
                     children: [],
-                    parent: parentNode
+                    parent: parentNode,
+                    isNew: config ? config.isNew : undefined
                 };
                 // TODO - I don't know why this was necessary. If parent node is defined,
                 // it should always have an array assigned to children. However, when
@@ -381,7 +177,7 @@ define([
                 return node;
             }
 
-            function makeLeafNode(title, layerId, showOrHideLayer, parentNode) {
+            function makeLeafNode(title, layerId, showOrHideLayer, parentNode, config) {
                 var node = {
                     type: "layer",
                     cls: _cssClassPrefix + "-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
@@ -390,7 +186,8 @@ define([
                     checked: false,
                     layerId: layerId,
                     parent: parentNode,
-                    showOrHideLayer: showOrHideLayer // function which shows or hides the layer
+                    showOrHideLayer: showOrHideLayer, // function which shows or hides the layer
+                    isNew: config ? config.isNew : undefined
                 };
                 if (!parentNode.children) { parentNode.children = []; }
                 parentNode.children.push(node);

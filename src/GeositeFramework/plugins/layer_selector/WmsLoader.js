@@ -3,10 +3,10 @@
 define(["use!underscore"],
     function (_) {
         dojo.require("esri.layers.wms");
-        var WmsLoader = function (url, folderName, source, extent) {
+        var WmsLoader = function (url, folderName, config, extent) {
             var _url = url,
                 _folderName = folderName,
-                _source = source,
+                _config = config,
                 _extent = extent,
                 _makeContainerNode = null,
                 _makeLeafNode = null,
@@ -22,11 +22,10 @@ define(["use!underscore"],
                 _onLayerSourceLoadError = onLayerSourceLoadError;
 
                 esri.config.defaults.io.timeout = 30000;
-                var layerIdWhitelist = _.pluck(layerConfigs, 'name');
-                if (_.has(_source, "resourceInfo")) {
-                    if (_source.resourceInfo) {
+                if (_.has(_config, "resourceInfo")) {
+                    if (_config.resourceInfo) {
                         // Layer "resource info" is specified in "layerConfigs"
-                        loadCatalogUsingResourceInfo(rootNode, layerConfigs, layerIdWhitelist);
+                        loadCatalogUsingResourceInfo(rootNode, layerConfigs);
                     } else {
                         // Config file specifies this WMS source should not be loaded
                         var wmsLayer = new esri.layers.WMSLayer(_url);
@@ -42,7 +41,7 @@ define(["use!underscore"],
                     // (Internally it's doing "GetCapabilities" on the WMS service.)
                     var wmsLayer = new esri.layers.WMSLayer(_url);
                     dojo.connect(wmsLayer, "onLoad", function () {
-                        loadLayers(wmsLayer, rootNode, layerIdWhitelist);
+                        loadLayers(wmsLayer, rootNode, layerConfigs);
                     });
                     dojo.connect(wmsLayer, "onError", function () {
                         getOrMakeFolderNode(rootNode);
@@ -52,7 +51,7 @@ define(["use!underscore"],
                 } 
             }
 
-            function loadCatalogUsingResourceInfo(rootNode, layerConfigs, layerIdWhitelist) {
+            function loadCatalogUsingResourceInfo(rootNode, layerConfigs) {
                 var layerInfos = _.map(layerConfigs, function(layerConfig) {
                     var displayName = (_.has(layerConfig, "displayName")) ? layerConfig.displayName : layerConfig.name;
                     var layerExtent = new esri.geometry.Extent({
@@ -69,7 +68,7 @@ define(["use!underscore"],
                         extent: layerExtent
                     });
                 });
-                var description = (_.has(_source, "description")) ? _source.description : "";
+                var description = (_.has(_config, "description")) ? _config.description : "";
                 var resourceInfo = {
                     extent: _extent,
                     layerInfos: layerInfos,
@@ -77,10 +76,10 @@ define(["use!underscore"],
                 };
                 var wmsLayer = new esri.layers.WMSLayer(_url, {
                     resourceInfo: resourceInfo,
-                    visibleLayers: layerIdWhitelist
+                    visibleLayers: _.pluck(layerConfigs, 'name')
                 });
 
-                loadLayers(wmsLayer, rootNode, layerIdWhitelist);
+                loadLayers(wmsLayer, rootNode, layerConfigs);
                 dojo.connect(wmsLayer, "onLoad", function() {
                 });
                 dojo.connect(wmsLayer, "onError", function(err) {
@@ -90,19 +89,19 @@ define(["use!underscore"],
             }
 
             function getOrMakeFolderNode(rootNode) {
-                if (_.has(_source, "groupFolder")) {
-                    var groupFolder = makeGroupContainerNode(_source, rootNode);
+                if (_.has(_config, "groupFolder")) {
+                    var groupFolder = makeGroupContainerNode(_config, rootNode);
                     if (groupFolder) {
-                        return getOrMakeContainerNode(_folderName, groupFolder, "service");
+                        return getOrMakeContainerNode(_folderName, groupFolder, "service", _config);
                     }
                 }
-                return getOrMakeContainerNode(_folderName, rootNode, "service");
+                return getOrMakeContainerNode(_folderName, rootNode, "service", _config);
             }
 
-            function makeGroupContainerNode(server, parentNode) {
+            function makeGroupContainerNode(config, parentNode) {
                 var node = parentNode;
-                if (server.groupFolder != "" ) {
-                    var path = server.groupFolder.split("/");
+                if (config.groupFolder != "" ) {
+                    var path = config.groupFolder.split("/");
                     //check if containers exist, if not, make them
                     _.each(path, function (name) {
                         node = getOrMakeContainerNode(name, node, "folder");
@@ -111,25 +110,25 @@ define(["use!underscore"],
                 return node;
             }
             
-            function getOrMakeContainerNode(name, parentNode, type) {
+            function getOrMakeContainerNode(name, parentNode, type, config) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
                     var folder = _.find(parentNode.children, function (child) {
                         return child.text == name;
                     });
-                    node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode) : folder;
+                    node = (_.isUndefined(folder)) ? _makeContainerNode(name, type, parentNode, config) : folder;
                 } else {
-                    node = _makeContainerNode(name, type, parentNode);
+                    node = _makeContainerNode(name, type, parentNode, config);
                 }
                 return node;
             }
 
-            function loadLayers(wmsLayer, rootNode, layerIdWhitelist) {
+            function loadLayers(wmsLayer, rootNode, layerConfigs) {
                 var folderNode = getOrMakeFolderNode(rootNode);
                 folderNode.wmsLayer = wmsLayer;
                 folderNode.serviceName = (folderNode.parent.text) ?  folderNode.parent.text + "/" + _folderName : _folderName;
                 folderNode.description = (wmsLayer.description != "") ? wmsLayer.description : "No description or metadata available for this map service.";
-                folderNode.opacity = (_.has(_source,"opacity")) ? _source.opacity : 0.7;
+                folderNode.opacity = (_.has(_config,"opacity")) ? _config.opacity : 0.7;
                 folderNode.extent = new esri.geometry.Extent(wmsLayer.fullExtent);
                 folderNode.checked = false;
                 folderNode.hideAllLayers = hideAllLayers;
@@ -137,10 +136,14 @@ define(["use!underscore"],
                 folderNode.saveServiceState = saveServiceState;
                 folderNode.showOrHideLayer = showOrHideLayer;
                 folderNode.setOpacity = setOpacity;
-                // Make a tree node for each layer exposed by the WMS service, filtered by the specified whitelist
+                // Make a tree node for each layer exposed by the WMS service, filtered by the specified layerConfigs
                 _.each(wmsLayer.layerInfos, function (layerInfo, index) {
-                    if (!layerIdWhitelist || layerIdWhitelist.length === 0 || _.contains(layerIdWhitelist, layerInfo.name)) {
-                        var node = _makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode);
+                    var layerConfig = {};
+                    if (layerConfigs) {
+                        layerConfig = _.findWhere(layerConfigs, { name: layerInfo.name });
+                    }
+                    if (layerConfig) {
+                        var node = _makeLeafNode(layerInfo.title, index, showOrHideLayer, folderNode, layerConfig);
                         node.description = layerInfo.description;
                         node.extent = new esri.geometry.Extent(layerInfo.extent);
                     }
