@@ -181,7 +181,7 @@ define([
                 var node = {
                     type: "layer",
                     cls: _cssClassPrefix + "-layer", // When the tree is displayed the node's associated DOM element will have this CSS class
-                    text: title.replace(/_/g, " ") + ' <div class="pluginLayer-extent-zoom">',
+                    text: title.replace(/_/g, " "),
                     leaf: true,
                     checked: false,
                     layerId: layerId,
