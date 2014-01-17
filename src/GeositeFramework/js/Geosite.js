@@ -13,6 +13,7 @@
     N.Geosite.models = {};
     N.Geosite.collections = {};
     N.Geosite.views = {};
+    N.Geosite.controllers = {};
     N.Geosite.plugins = [];
 
     N.Geosite.on('error', function handleError(model, error) {

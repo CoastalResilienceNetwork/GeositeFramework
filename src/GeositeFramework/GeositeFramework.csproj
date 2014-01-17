@@ -134,6 +134,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="css\jquery.mCustomScrollbar.css" />
+    <Content Include="css\pageguide.min.css" />
     <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
     <Content Include="Error404.html" />
@@ -164,6 +165,8 @@
     <Content Include="js\App.js" />
     <Content Include="js\azavea.util.js" />
     <Content Include="js\BasemapSelector.js" />
+    <Content Include="js\HelpOverlay.js" />
+    <Content Include="js\lib\pageguide.min.js" />
     <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
     <Content Include="js\Geosite.js" />

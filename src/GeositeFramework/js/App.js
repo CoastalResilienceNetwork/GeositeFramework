@@ -7,6 +7,7 @@
         // Model and View instances (see Geosite.js for "class" objects)
         models: [],
         views: [],
+        controllers: {},
         templates: {},
         data: {},
         hashModels: null,
@@ -22,6 +23,7 @@
                 gapi.client.setApiKey(regionData.googleUrlShortenerApiKey);
             }
 
+            N.app.controllers.help = new N.controllers.HelpOverlay();
             N.app.models.screen = new N.models.Screen();
 
             this.hashModels = Backbone.HashModels.init({

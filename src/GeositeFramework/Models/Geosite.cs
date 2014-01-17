@@ -24,6 +24,7 @@ namespace GeositeFramework.Models
             public string Text;
             public string Url;
             public bool Popup;
+            public string ElementId;
         }
 
         // Properties used in View rendering
@@ -180,7 +181,8 @@ namespace GeositeFramework.Models
             {
                 Text = (string)json["text"],
                 Url = (string)json["url"],
-                Popup = json["popup"] != null && bool.Parse(json["popup"].ToString())
+                Popup = json["popup"] != null && bool.Parse(json["popup"].ToString()),
+                ElementId = json["elementId"] != null ? (string)json["elementId"] : null
             };
         }
 

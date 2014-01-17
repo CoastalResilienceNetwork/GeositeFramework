@@ -30,7 +30,8 @@
                 "properties": {
                     "text": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
-                    "popup": {"type": "boolean", "required": false}
+                    "popup": {"type": "boolean", "required": false},
+                    "elementId": {"type": "string", "required": false}
                 },
                 "additionalProperties": false
             }
