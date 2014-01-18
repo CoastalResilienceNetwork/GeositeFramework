@@ -352,29 +352,14 @@
     <script src="js/lib/jquery.mousewheel.min.js"></script>
     <script src="js/lib/pageguide.min.js"></script>
 
-    <script src="js/azavea.util.js"></script>
-    <script src="js/Geosite.js"></script>
-    <script src="js/HelpOverlay.js"></script>
-    <script src="js/BasemapSelector.js"></script>
-    <script src="js/Map.js"></script>
-    <script src="js/MapWrapper.js"></script>
-    <script src="js/Pane.js"></script>
-    <script src="js/Plugin.js"></script>
-    <script src="js/Export.js"></script>
-    <script src="js/Permalink.js"></script>
-    <script src="js/TemplateLoader.js"></script>
-    <script src="js/Screen.js"></script>
-    <script src="js/SyncedMapManager.js"></script>
-    <script src="js/App.js"></script>
-    
     <script type="text/javascript">
-        // Configure the Dojo module loader so that module identifiers starting with "plugins/" 
-        // will be loaded from the site's root "plugins" folder.
-        // (This usage of require() is mentioned in http://dojotoolkit.org/documentation/tutorials/1.7/modules)
-        //
-        // The calls to location.pathname.replace() below prepend the app's root path to library locations. 
-        // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
-        // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
+            // Configure the Dojo module loader so that module identifiers starting with "plugins/" 
+            // will be loaded from the site's root "plugins" folder.
+            // (This usage of require() is mentioned in http://dojotoolkit.org/documentation/tutorials/1.7/modules)
+            //
+            // The calls to location.pathname.replace() below prepend the app's root path to library locations. 
+            // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
+            // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
 
         require({
             async: true,
@@ -395,9 +380,26 @@
             },
             use: { @Html.Raw(Model.ConfigurationForUseJs) }
         });
+            // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
+            define.amd.jQuery = true;
+    </script>
 
-        // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
-        define.amd.jQuery = true;
+    <script src="js/azavea.util.js"></script>
+    <script src="js/Geosite.js"></script>
+    <script src="js/HelpOverlay.js"></script>
+    <script src="js/BasemapSelector.js"></script>
+    <script src="js/Map.js"></script>
+    <script src="js/MapWrapper.js"></script>
+    <script src="js/Pane.js"></script>
+    <script src="js/Plugin.js"></script>
+    <script src="js/Export.js"></script>
+    <script src="js/Permalink.js"></script>
+    <script src="js/TemplateLoader.js"></script>
+    <script src="js/Screen.js"></script>
+    <script src="js/SyncedMapManager.js"></script>
+    <script src="js/App.js"></script>
+    
+    <script type="text/javascript">
 
         // Initialize logging URL before we load any modules
         Azavea.logUrl = "Log";
@@ -434,7 +436,7 @@
         //         });
         //     });
 
-        require([@Html.Raw(Model.PluginModuleIdentifiers)], 
+        require([@Html.Raw(Model.PluginModuleIdentifiers)],
             function(@Html.Raw(Model.PluginVariableNames)) {
                 $(document).ready(function() {
                     var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
