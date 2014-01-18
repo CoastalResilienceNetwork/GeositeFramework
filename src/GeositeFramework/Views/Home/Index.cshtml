@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="@url">
     }
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
@@ -109,8 +110,11 @@
                         </ul>
                     </div>
                 </div>
-                <div class="legend">
-                    <div id="legend-<%= paneNumber %>"></div>
+                <div id="legend-container-<%= paneNumber %>" class="legend">
+                    <div class="legend-header">Map Legend</div>
+                    <div class="legend-body">
+                        <div id="legend-<%= paneNumber %>"></div>
+                    </div>
                 </div>
             </div>
         </div>
