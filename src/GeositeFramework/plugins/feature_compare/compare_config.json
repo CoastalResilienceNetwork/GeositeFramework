@@ -1,0 +1,24 @@
+﻿{
+    "pluginName": "Feature Comparison",
+    "pluginDesc": "Compare attributes of up to three features",
+    "featureName": "Watershed",
+    "layers": [
+        {
+            "name": "HUC 8",
+            "url": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/Watershed_and_Political_Boundaries/MapServer/0",
+            "attrs": ["canal_idx", "DamIdx", "RES_Idx", "DamStorIdx", "VEG_idx", "Prot_idx", "chan_idx"]
+        },
+        {
+            "name": "HUC 12",
+            "url": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/Watershed_and_Political_Boundaries/MapServer/1",
+            "attrs": ["ACRES"]
+        }
+     ],
+     "selectionColors": [
+        [4,180,174,1],
+        [1,116,223,1],
+        [4,180,4,1]
+     ],
+     "highlightColor": [15, 10, 105, 0.45],
+     "highlightOutlineColor": [255, 255, 255, 0.35]
+}
