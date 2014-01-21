@@ -4,11 +4,12 @@ define([
         "dojo/json",
         "use!tv4",
         "use!underscore",
+        "./stripJsonComments",
         "./layerConfigSchema",
         "./AgsLoader",
         "./WmsLoader"
     ],
-    function (JSON, tv4, _, layerConfigSchema, AgsLoader, WmsLoader) {
+    function (JSON, tv4, _, stripJsonComments, layerConfigSchema, AgsLoader, WmsLoader) {
 
         var LayerManager = function (app) {
             var _app = app,
@@ -109,7 +110,8 @@ define([
                 // Parse and validate config data to get URLs of layer sources
                 var errorMessage;
                 try {
-                    var data = JSON.parse(layerSourcesJson),
+                    var json = stripJsonComments(layerSourcesJson),
+                        data = JSON.parse(json),
                         valid = tv4.validate(data, layerConfigSchema);
                     if (valid) {
                         return data;
