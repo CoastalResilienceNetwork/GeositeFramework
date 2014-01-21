@@ -301,7 +301,6 @@ define(["jquery", "use!underscore"],
                     } else {
                         delete node.children;
                         node.leaf = true;
-                        node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
                         if (_.has(serviceConfig, "visibleLayerIds")) {
                             node.visibleLayerIds = serviceConfig.visibleLayerIds;
                         }
@@ -333,7 +332,6 @@ define(["jquery", "use!underscore"],
             function loadTiledService(node, serviceConfig, serviceUrl) {
                 node.url = serviceUrl;
                 delete node.children;
-                node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
                 node.leaf = true;
                 if (_.has(serviceConfig, "displayLevels")) {
                     node.params.displayLevels = serviceConfig.displayLevels;
@@ -343,7 +341,6 @@ define(["jquery", "use!underscore"],
             function loadFeatureLayerService(node, serviceConfig, serviceUrl) {
                 node.url = serviceUrl + "/" + serviceConfig.layerIndex;
                 delete node.children;
-                node.text = node.text + ' <div class="pluginLayer-extent-zoom">';
                 node.leaf = true;
                 if (_.has(serviceConfig, "mode")) {
                     var modes = {

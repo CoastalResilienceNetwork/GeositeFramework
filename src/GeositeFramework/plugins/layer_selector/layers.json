@@ -6,31 +6,23 @@
             "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
             "folders": [
                 {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
-                    "name": "",
-                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
-                    "groupAsService": true,
-                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
+                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
+                    "name": "",  // Don't show a folder for these services
                     "services": [
-                        { "name": "Population", "displayName": "Population", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Population_Density", "displayName": "Population Density", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Children_Under_5", "displayName": "Children Under 5", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Children_Under_5_Percentage", "displayName": "Children Under 5 (% of total pop)", "type":"tiled", "opacity": 0.75 },
-                        { "name": "People_Over_65", "displayName": "People Over 65", "type":"tiled", "opacity": 0.75 },
-                        { "name": "People_Over_65_Percentage", "displayName": "People Over 65 (% of total pop)", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Families_in_Poverty", "displayName": "Families in Poverty", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Families_in_Poverty_Percentage", "displayName": "Families in Poverty (% of total families)", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Median_Owner_Occupied_Home_Value", "displayName": "Median Owner-Occupied Home Value (1,000s of USD)", "type":"tiled", "opacity": 0.75 }
+                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5 },
+                        { "name": "Ecoregions_and_Provinces", "displayName": "Eco-regions and Provinces", "type":"dynamic", "opacity": 0.5 }
                     ]
                 },
                 {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
+                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
                     "name": "",
+                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
+                    "groupAsService": true,  // Show folder as if it were a service (with a description and a checkbox)
+                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
                     "services": [
-                        { "name": "Habitats", "displayName": "Habitats", "type":"dynamic", "opacity": 0.5 },
-                        { "name": "Coastal_Hazards", "displayName": "Coastal Hazards", "type":"dynamic", "opacity": 0.5 },
-                        { "name": "World_Risk_Index_2012", "displayName": "World Risk Index 2012", "type":"dynamic", "opacity": 0.5 },
-                        { "name": "Ecoregions_and_Provinces", "displayName": "Ecoregions and Provinces", "type":"dynamic", "opacity": 0.5 }
+                        { "name": "Families_in_Poverty", "type":"tiled", "opacity": 0.75 },
+                        { "name": "Families_in_Poverty_Percentage", "type":"tiled", "opacity": 0.75 },
+                        { "name": "Median_Owner_Occupied_Home_Value", "displayName": "Median Owner-Occupied Home Value (1,000s of USD)", "type":"tiled", "opacity": 0.75 }
                     ]
                 }
             ]
@@ -54,46 +46,13 @@
                               {"id":5, "parentLayerId":0 },
                               {"id":6, "parentLayerId":-1 },
                               {"id":10, "parentLayerId":6 },
-                              {"id":11, "parentLayerId":6 },
-                              {"id":12, "parentLayerId":-1 },
-                              {"id":16, "parentLayerId":12 },
-                              {"id":17, "parentLayerId":12 },
-                              {"id":18, "parentLayerId":-1 },
-                              {"id":22, "parentLayerId":18 },
-                              {"id":23, "parentLayerId":18 },
-                              {"id":24, "parentLayerId":-1 },
-                              {"id":28, "parentLayerId":24 },
-                              {"id":29, "parentLayerId":24 }                      
+                              {"id":11, "parentLayerId":6 }
                           ]
                         },
                         { "name": "NACCH_dune_features", "displayName": "Dune elevations (m, NAVD88)", "type":"dynamic", "opacity": 0.5,
                           "showLayers": [
                               {"id":3, "parentLayerId":-1 },
                               {"id":4, "parentLayerId":-1 }                           
-                          ]
-                        },
-                        { "name": "NACCH_change_probabilities", "displayName": "Coastal change probabilities (%)", "type":"dynamic", "opacity": 0.5,
-                          "showLayers": [
-                              {"id":0, "parentLayerId":-1 },
-                              {"id":5, "parentLayerId":0 },
-                              {"id":6, "parentLayerId":0 },
-                              {"id":7, "parentLayerId":0 },
-                              {"id":8, "parentLayerId":-1 },
-                              {"id":13, "parentLayerId":8 },
-                              {"id":14, "parentLayerId":8 },
-                              {"id":15, "parentLayerId":8 },
-                              {"id":16, "parentLayerId":-1 },
-                              {"id":21, "parentLayerId":16 },
-                              {"id":22, "parentLayerId":16 },
-                              {"id":23, "parentLayerId":16 },
-                              {"id":24, "parentLayerId":-1 },
-                              {"id":29, "parentLayerId":24 },
-                              {"id":30, "parentLayerId":24 },
-                              {"id":31, "parentLayerId":24 },
-                              {"id":32, "parentLayerId":-1 },
-                              {"id":37, "parentLayerId":32 },
-                              {"id":38, "parentLayerId":32 },
-                              {"id":39, "parentLayerId":32 }                              
                           ]
                         }
                     ]
@@ -103,14 +62,17 @@
                     "name": "National",
                     "displayName": "National Assessment of Shoreline Change",
                     "services": [
+                        // Shows all layers individually (with 2 identified as "new")
                         { "name": "slc_HistoricShoreline", "displayName": "Historic Shorelines by State", "type":"dynamic", "opacity": 1,
                           "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100", "layerIds": [4, 10] }
                         },
+                        // Combines all layers
                         { "name": "slc_LongTerm", "displayName": "Long-term Shoreline Change (m/yr)", "type":"dynamic", "opacity": 1,
                           "showLayers": []
                         },
+                        // Combines specified layers
                         { "name": "slc_ShortTerm", "displayName": "Short-term Shoreline Change (m/yr)", "type":"dynamic", "opacity": 1,
-                          "showLayers": [], "visibleLayerIds": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80]
+                          "showLayers": [], "visibleLayerIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                         }
                     ]
                 }
@@ -124,71 +86,20 @@
             "groupFolder": "NOAA/nowCOAST",
             "description": "The nowCOAST 'obs' Web Map Service (WMS) provides layers containing near real-time surface meteorological and oceanographic observations from various sources.  Some observations are updated as frequently as every six minutes, while others are updated hourly.  The 'obs' WMS is one of several map services provided by NOAA's nowCOAST project (http://nowcoast.noaa.gov).  For further layer information such as layer icons, legend graphics, layer descriptions, and valid timestamps, see the nowCOAST 'LayerInfo Web Service' description page at: http://nowcoast.noaa.gov/help/layerinfo.shtml.  For more information about nowCOAST's available Web Map Services, see the nowCOAST Map Services information page at: http://nowcoast.noaa.gov/help/mapservices.shtml.  nowCOAST is a product of the NOAA/NOS/OCS Coast Survey Development Laboratory.",
             "opacity": 0.5,
-            "resourceInfo": true,
+            "resourceInfo": true,  // Use configured layer info instead of asking the server for it
             "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
             "layerIds": [
                 { 
                     "name": "RAS_RIDGE_NEXRAD",
                     "displayName": "Radar Mosaic", 
                     "description": "Radar Mosaic for CONUS, Puerto Rico, Hawaii, Alaska and Guam", 
-                    "extent": { "xmin": -180.0 ,"ymin":-90.0 ,"xmax":180.0, "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "RAS_GOES",
-                    "displayName": "Cloud Imagery (Visible)", 
-                    "description": "Visible Satellite Cloud Imagery", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "RAS_GOES_I4",
-                    "displayName": "Cloud Imagery (Infrared)", 
-                    "description": "Infrared Satellite Cloud Imagery", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  }
                 },
                 {
                     "name": "OBS_MET_TEMP",
                     "displayName": "Surface Air Temperature (Point Observations)", 
                     "description": "Surface Air Temperature point observations (degrees Fahrenheit)", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                }
-            ]
-        }
-    },
-    {
-        "wmsSource": {
-            "url": "http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/analyses",
-            "folderTitle": "Gridded Weather & Oceanographic Surface Analyses",
-            "groupFolder": "NOAA/nowCOAST",
-            "description": "The nowCOAST 'analyses' Web Map Service (WMS) provides layers containing various NOAA gridded weather and oceanographic surface analysis products.  The 'analyses' WMS is one of several map services provided by NOAA's nowCOAST project (http://nowcoast.noaa.gov).  For further layer information such as layer icons, legend graphics, layer descriptions, and valid timestamps, see the nowCOAST 'LayerInfo Web Service' description page at: http://nowcoast.noaa.gov/help/layerinfo.shtml.  For more information about nowCOAST's available Web Map Services, see the nowCOAST Map Services information page at: http://nowcoast.noaa.gov/help/mapservices.shtml.  nowCOAST is a product of the NOAA/NOS/OCS Coast Survey Development Laboratory.",
-            "opacity": 0.5,
-            "resourceInfo": true,
-            "layerIds": [
-                { 
-                    "name": "NCEP_RAS_ANAL_RTG_SST",
-                    "displayName": "Sea Surface Temperature (Daily)", 
-                    "description": "Daily Gridded Global Sea Surface Temperature Analysis", 
-                    "extent": { "xmin": -180.0 ,"ymin":-90.0 ,"xmax":180.0, "ymax":90.0 , "sr": 4326  },
-                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" }
-                },
-                {
-                    "name": "RTMA_RAS_AIRTEMP",
-                    "displayName": "Surface Air Temperature (Real-Time Mesoscale Analysis)", 
-                    "description": "Real-Time Mesoscale Analysis - Gridded Surface Air Temperature", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  },
-                    "isNew": { "startDate": "1/1/2099", "endDate": "1/1/2100" }
-                },
-                {
-                    "name": "RTMA_RAS_WSPD",
-                    "displayName": "Surface Wind Speed (Real-Time Mesoscale Analysis)", 
-                    "description": "Real-Time Mesoscale Analysis - Gridded Surface Wind Speed", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  },
-                    "isNew": { "startDate": "1/15/2014", "endDate": "1/15/2014" }
-                },
-                {
-                    "name": "RTMA_RAS_QPE_1HR",
-                    "displayName": "1-hr Precipitation Accumulation (Real-Time Mesoscale Analysis)", 
-                    "description": "Real-Time Mesoscale Analysis - Quantitative Precipiation Estimate - 1-hr Accumulation", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  }
                 }
             ]
         }
@@ -202,47 +113,19 @@
             "opacity": 0.5,
             "resourceInfo": true,
             "layerIds": [
-                { 
-                    "name": "NDFD_RAS_WAVEH_1_00",
-                    "displayName": "Significant Wave Height (+24 hr)", 
-                    "description": "NDFD Gridded Significant Wave Height Forecast", 
-                    "extent": { "xmin": -180.0 ,"ymin":-90.0 ,"xmax":180.0, "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "NDFD_RAS_WSPD_1_00",
-                    "displayName": "Wind Speed (+24 hr)", 
-                    "description": "NDFD Gridded Wind Speed Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "NDFD_RAS_WGUST_1_00",
-                    "displayName": "Wind Gust (+24 hr)", 
-                    "description": "NDFD Gridded Wind Gust Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                },
                 {
                     "name": "NDFD_RAS_MINT_1_00",
                     "displayName": "Minimum Daily Surface Air Temperature (+24 hr)", 
                     "description": "NDFD Gridded Minimum Daily Surface Air Temperature Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
+                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" }
                 },
                 {
                     "name": "NDFD_RAS_MAXT_1_00",
                     "displayName": "Maximum Daily Surface Air Temperature (+24 hr)", 
                     "description": "NDFD Gridded Maximum Daily Surface Air Temperature Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "NDFD_RAS_RHM_1_00",
-                    "displayName": "Relative Humidity (+24 hr)", 
-                    "description": "NDFD Gridded Relative Humidity Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
-                },
-                {
-                    "name": "NDFD_RAS_QPF_1_00",
-                    "displayName": "Quantitative Precipitation (+24 hr)", 
-                    "description": "NDFD Gridded Quantitative Precipitation Forecast", 
-                    "extent": { "xmin": -180.0,"ymin":-90.0 ,"xmax":180.0 , "ymax":90.0 , "sr": 4326  }
+                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
+                    "isNew": { "startDate": "1/1/2014", "endDate": "1/10/2014" }
                 }
             ]
         }
@@ -272,71 +155,11 @@
                     "services": [
                         { 
                             "name": "AllStorms",
-                            "displayName": "Category 1",
-                            "id": "Category 1",
-                            "type":"feature-layer",
-                            "opacity": 0.9, 
-                            "layerIndex":1,
-                            "mode": "ondemand",
-                            "autoGeneralize": true,
-                            "outFields": ["Display_SaffirSimpson"],
-                            "layerDefinition": "Display_SaffirSimpson = 'Category 1'",
-                            "symbology": { "line": { "type": "simple", "style": "solid", "color": [0,255,0], "width": 1 } }
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
-                    "services": [
-                        { 
-                            "name": "AllStorms",
-                            "displayName": "Category 2",
-                            "id": "Category 2",
-                            "type":"feature-layer",
-                            "opacity": 0.9, 
-                            "layerIndex":1,
-                            "mode": "ondemand",
-                            "autoGeneralize": true,
-                            "outFields": ["Display_SaffirSimpson"],
-                            "layerDefinition": "Display_SaffirSimpson = 'Category 2'",
-                            "symbology": { "line": { "type": "simple", "style": "solid", "color": [155,250,0], "width": 1 } }
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
-                    "services": [
-                        { 
-                            "name": "AllStorms",
-                            "displayName": "Category 3",
-                            "id": "Category 3",
-                            "type":"feature-layer",
-                            "opacity": 0.9, 
-                            "layerIndex":1,
-                            "mode": "ondemand",
-                            "autoGeneralize": true,
-                            "outFields": ["Display_SaffirSimpson"],
-                            "layerDefinition": "Display_SaffirSimpson = 'Category 3'",
-                            "symbology": { "line": { "type": "simple", "style": "solid", "color": [255,210,10], "width": 1 } }
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
-                    "services": [
-                        { 
-                            "name": "AllStorms",
                             "displayName": "Category 4",
                             "id": "Category 4",
-                            "type":"feature-layer",
+                            "type": "feature-layer",
                             "opacity": 0.9, 
-                            "layerIndex":1,
+                            "layerIndex": 1,
                             "mode": "ondemand",
                             "autoGeneralize": true,
                             "outFields": ["Display_SaffirSimpson"],
@@ -354,9 +177,9 @@
                             "name": "AllStorms",
                             "displayName": "Category 5",
                             "id": "Category 5",
-                            "type":"feature-layer",
+                            "type": "feature-layer",
                             "opacity": 0.9, 
-                            "layerIndex":1,
+                            "layerIndex": 1,
                             "mode": "ondemand",
                             "autoGeneralize": true,
                             "outFields": ["Display_SaffirSimpson"],
@@ -371,74 +194,9 @@
                     "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
                     "services": [
                         { 
-                            "name": "conf_0ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (0 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
-                    "services": [
-                        { 
-                            "name": "conf_1ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (1 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
-                    "services": [
-                        { 
-                            "name": "conf_2ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (2 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
-                    "services": [
-                        { 
-                            "name": "conf_3ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (3 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
-                    "services": [
-                        { 
-                            "name": "conf_4ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (4 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
-                    "services": [
-                        { 
                             "name": "conf_5ft",
                             "displayName": "Sea Level Rise Mapping Confidence (5 ft)", 
-                            "type":"tiled", 
+                            "type": "tiled", 
                             "opacity": 0.5
                         }
                     ]
@@ -451,7 +209,7 @@
                         { 
                             "name": "conf_6ft",
                             "displayName": "Sea Level Rise Mapping Confidence (6 ft)", 
-                            "type":"tiled", 
+                            "type": "tiled", 
                             "opacity": 0.5
                         }
                     ]
@@ -462,74 +220,9 @@
                     "groupFolder": "NOAA/Sea Level Rise",
                     "services": [
                         { 
-                            "name": "slr_0ft",
-                            "displayName": "Sea Level Rise (0 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
-                            "name": "slr_1ft",
-                            "displayName": "Sea Level Rise (1 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
-                            "name": "slr_2ft",
-                            "displayName": "Sea Level Rise (2 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
-                            "name": "slr_3ft",
-                            "displayName": "Sea Level Rise (3 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
-                            "name": "slr_4ft",
-                            "displayName": "Sea Level Rise (4 ft)", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
                             "name": "slr_5ft",
                             "displayName": "Sea Level Rise (5 ft)", 
-                            "type":"tiled", 
+                            "type": "tiled", 
                             "opacity": 0.5
                         }
                     ]
@@ -542,7 +235,7 @@
                         { 
                             "name": "slr_6ft",
                             "displayName": "Sea Level Rise (6 ft)", 
-                            "type":"tiled", 
+                            "type": "tiled", 
                             "opacity": 0.5
                         }
                     ]
@@ -555,8 +248,50 @@
                         { 
                             "name": "Flood_Frequency",
                             "displayName": "Coastal Flood Frequency", 
-                            "type":"tiled", 
+                            "type": "tiled", 
                             "opacity": 0.5
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "wmsSource": {
+            "url": "http://thisWmsServerDoesNotExist.com",
+            "folderTitle": "Imposter WMS server",
+            "layerIds": [ { "name": "no" } ]
+        }
+    },
+/*
+Causes the layer selector to hang
+    {
+        "wmsSource": {
+            "url": "http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/forecasts",
+            "folderTitle": "WMS server with a missing layer",
+            "resourceInfo": true,
+            "layerIds": [ { "name": "Forecast for December 2039" } ]
+        }
+    },
+*/
+    {
+        "agsSource": {
+            "url": "http://thisAgsServerDoesNotExist.com",
+            "folderTitle": "Imposter AGS server"
+        }
+    },
+    {
+        "agsSource": {
+            "url": "http://csc.noaa.gov/arcgis/rest/services",
+            "folderTitle": "AGS server with a missing service",
+            "folders": [
+                {
+                    "url": "http://csc.noaa.gov/arcgis/rest/services",
+                    "name": "Hurricanes",
+                    "services": [
+                        { 
+                            "name": "Hurricanes on the moon",
+                            "type": "dynamic"
                         }
                     ]
                 }

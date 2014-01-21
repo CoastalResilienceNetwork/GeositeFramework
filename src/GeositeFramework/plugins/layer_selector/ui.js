@@ -2,7 +2,7 @@
 
 require(["jquery.placeholder"]);
 define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
-    function ($, _, Ext, treeFilter, TINY) {
+    function ($, _, Ext, treeFilter) {
         //$('input, textarea').placeholder(); // initialize jquery.placeholder
 
         var Ui = function (container, map, templates) {
@@ -26,6 +26,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
                 rootNode = deracinate(rootNode);
                 highlightNewNodes(rootNode);
+                addZoomButtons(rootNode);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
@@ -65,7 +66,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             // ------------------------------------------------------------------------
             // Private methods
 
-            function deracinate(rootNode, depth) {
+            function deracinate(rootNode) {
                 /*
                   Takes a tree and checks to see if the root node only
                   has one child. If so, it promotes the child of the
@@ -83,11 +84,20 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
             }
 
+            function addZoomButtons(node) {
+                if (node.leaf) {
+                    node.text += ' <div class="pluginLayer-extent-zoom">';
+                }
+                _.each(node.children, function (child) {
+                    addZoomButtons(child);
+                });
+            }
+
             function highlightNewNodes(node, parentIsNew, newLayerIds) {
                 var isNew = parentIsNew;
                 if (!parentIsNew) {
                     if (newLayerIds && _.contains(newLayerIds, node.layerId)) {
-                        isNew = true;    
+                        isNew = true;
                     } else if (node.isNew) {
                         var start = Date.parse(node.isNew.startDate),
                             end = new Date(Date.parse(node.isNew.endDate)),
@@ -110,7 +120,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (isNew) {
                     highlightNode(node);
                 }
-                _.each(node.children, function(child) {
+                _.each(node.children, function (child) {
                     highlightNewNodes(child, isNew, newLayerIds);
                 });
 
