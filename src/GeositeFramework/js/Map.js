@@ -161,15 +161,32 @@
     }
 
     dojo.require('esri.dijit.Legend');
+    dojo.require("dojox.layout.ResizeHandle");
+    dojo.require('dojo.dnd.Moveable');
 
     function initLegend(view, esriMap) {
         // Create default legend section
-        var id = 'legend-' + view.model.get('mapNumber'),
+        var mapNumber =  view.model.get('mapNumber'),
+            id = 'legend-' + mapNumber,
             legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
+
         legendDijit.startup();
 
+        view.$legendEl = $(legendDijit.domNode);
+        view.$legendEl.addClass('esriLegendService');
+        view.legendContainerId = "legend-container-" + mapNumber;
+       
+        // Make the legend resizable and moveable
+        var handle = new dojox.layout.ResizeHandle({
+            targetId: view.legendContainerId 
+        }).placeAt(view.legendContainerId);
+
+        var mover = new dojo.dnd.Moveable(
+            document.getElementById(view.legendContainerId)
+        );
+
         // Update the legend whenever the map changes
-        dojo.connect(esriMap, 'onUpdateEnd', updateLegend);
+        dojo.connect(esriMap, 'onUpdateEnd', _.debounce(updateLegend, 100));
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -187,9 +204,47 @@
                     layerInfos.push(layer);
                 }
             });
+            if (view.arrangedLegend) {
+                view.arrangedLegend.destroy();
+            }
             legendDijit.refresh(layerInfos);
+
+            // The ESRI Legend Dijit renders as a series of nested tables and divs
+            // which makes having a re-flow layout impossible.  We re-render the legend
+            // list by removing each legend and sub-legend 'nugget' and moving them into
+            // a flat list, which we can do a simple css based reflow on.
+            var legendNuggets = [];
+            view.$legendEl.find('.esriLegendService').each(function(idx, legendParent) {
+                $(legendParent).children('div').each(function(idx, legendItem) {
+                    var $legend = $(legendItem);
+                    if ($legend.hasClass('esriLegendGroupLayer')) {
+                        legendNuggets.push.apply(legendNuggets, $legend.children('div'));
+                    } else {
+                        legendNuggets.push(legendItem);
+                    }
+                });
+            });
+
+            legendNuggets.sort(heightComparator);
+
+            view.$legendEl.empty()
+                .append.apply(view.$legendEl, legendNuggets);
         }
     }
+
+    // Compare DOM elements by their computed height
+    function heightComparator(a, b) {
+        var ha = $(a).height(), 
+            hb = $(b).height();
+
+        if (ha < hb) {
+            return -1;
+        }
+        if (ha > hb) {
+            return 1;
+        }
+        return 0;
+    };
 
     function doIdentify(view, pluginModels, event) {
         var map = view.esriMap,

@@ -527,18 +527,29 @@ input.code-like, textarea.code-like {
 	position: absolute;
 	bottom: 45px;
 	right: 105px;
-	width: 160px;
-	padding: 10px 15px;
+	width: 180px;
+    height: 200px;
 	z-index: 1;
-	overflow: auto;
 	font-weight: bold;
 	background: #FFF;
 	font-size: 12px;
 	border-radius: 4px;
-	max-height: 440px;
+	min-height: 240px;
 	box-shadow: 0 0 12px #666;
 	box-shadow: 0 0 12px rgba(0,0,0,.25);
 	}
+    .content .legend .legend-header {
+        padding: 10px;
+        background: #444;
+        color: #fff;
+        cursor: move;
+    }
+    .content .legend .legend-body {
+        padding: 10px 15px; 
+        overflow: auto;
+        height: 85%;
+        min-height: 200px;
+    }
 	.content .legend #legend-0_msg,
 	.content .legend #legend-1_msg {
 		color: #888;
@@ -549,8 +560,10 @@ input.code-like, textarea.code-like {
         display: none;
     }
 
-.esriLegendService {
+#legend-0 > div, #legend-1 > div {
     padding-bottom: 8px;
+    float: left;
+    width: 215px;
 	}
 	.esriLegendService table {
 	    margin: 0;
@@ -581,6 +594,7 @@ input.code-like, textarea.code-like {
    The nicely-formatted name is also displayed, so
    there's no harm in hiding this.*/
 span.esriLegendServiceLabel {
+    font-size: 1.2em;
     display: none;
 }
 
@@ -633,7 +647,7 @@ table.esriLegendLayerLabel tbody tr td {
 			display: none;
 		}
 	.content .legend {
-		max-height: 300px;
+		max-height: 550px;
 	}
 }
 
