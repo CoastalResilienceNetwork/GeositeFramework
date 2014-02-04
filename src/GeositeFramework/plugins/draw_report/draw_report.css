@@ -1,4 +1,10 @@
-﻿dl.tabs dd { 
+﻿.report-plugin-outer {
+    height: 100%;
+    padding-bottom: 40px; /* reduces inner container's 100% height by height of tab controls*/
+    overflow: visible;
+}
+
+dl.tabs dd { 
 	cursor: pointer;
 }
 
@@ -6,8 +12,7 @@ ul.tabs-content.report-plugin-list {
 	margin: 0 0 0;
 	padding: 0;
 	overflow: auto;
-	height: 320px;
-	position: relative;
+	height: 100%;
 	}
 	ul.tabs-content.report-plugin-list > li {
 		padding: 0 12px;

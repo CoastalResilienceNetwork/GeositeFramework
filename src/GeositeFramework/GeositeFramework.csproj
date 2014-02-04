@@ -186,6 +186,7 @@
     <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
     <Content Include="plugins\full_extent\full_extent.css" />
+    <Content Include="plugins\layer_selector\stripJsonComments.js" />
     <Content Include="plugins\layer_selector\icon.png" />
     <Content Include="plugins\layer_selector\icon_active.png" />
     <Content Include="plugins\layer_selector\images\gear.png" />

@@ -5,35 +5,42 @@
     background: url(images/spinner.gif) no-repeat center center;
 }
 
-.pluginLayerSelector-search {
-    height: 32px;
-    position: relative;
+.pluginLayerSelector-outer {
+    height: 100%;
     width: 100%;
-    }
-    .pluginLayerSelector-search input[type="text"] {
-        margin: 2px auto 0;
-        width: 95%;
+    padding-bottom: 58px;  /* reduces inner container's 100% height by search area's height */
+    overflow: visible;
     }
 
-.pluginLayerSelector-rest {
-    height: 301px;
-    margin-top: 5px;
-    border-top: 1px solid #EEE;
-    }
-    .pluginLayerSelector-clear {
-        padding: 4px 4px 2px;
-        display: block;
-    }
-    .pluginLayerSelector-tree-container {
+    .pluginLayerSelector-search {
+        height: 58px;
+        position: relative;
+        width: 100%;
+        padding: 2px 4px 0 4px;
+        }
+        .pluginLayerSelector-search input[type="text"] {
+            margin: 0;
+            width: 100%;
+        }
+        .pluginLayerSelector-clear {
+            padding: 5px 0 0 1px;
+            display: block;
+        }
+
+    .pluginLayerSelector-rest {
         height: 100%;
-        overflow: auto;
+        border-top: 1px solid #EEE;
         }
-        .pluginLayerSelector-tree-container table {
-            border-width: 0; /* Otherwise there's a light gray border from Foundation*/
-        }
-        .pluginLayerSelector-rest .x-grid-header-hidden .x-grid-body {
-            border: none;
-        }
+        .pluginLayerSelector-tree-container {
+            height: 100%;
+            overflow: auto;
+            }
+            .pluginLayerSelector-tree-container table {
+                border-width: 0; /* Otherwise there's a light gray border from Foundation*/
+            }
+            .pluginLayerSelector-rest .x-grid-header-hidden .x-grid-body {
+                border: none;
+            }
 
 /* 
  * Icons for different levels of the "Map Layers" tree 

@@ -194,7 +194,11 @@
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
             if (toolbarType === 'sidebar') {
-                new N.views.SidebarPlugin({ model: plugin, $parent: $sidebar });
+                new N.views.SidebarPlugin({
+                    model: plugin,
+                    $parent: $sidebar,
+                    paneNumber: view.model.get('paneNumber')
+                });
             } else if (toolbarType === 'map') {
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
                 $topbar.append(pluginView.$el);
