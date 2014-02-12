@@ -306,7 +306,9 @@
                 targetId: containerId
             }).placeAt(containerId);
 
-            new dojo.dnd.Moveable($uiContainer[0]);
+            new dojo.dnd.Moveable($uiContainer[0], {
+                 handle: $uiContainer.find('.plugin-container-header')[0]
+            });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             view.model.set('$uiContainer', $uiContainer);

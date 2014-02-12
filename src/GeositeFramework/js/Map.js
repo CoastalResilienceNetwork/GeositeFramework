@@ -182,8 +182,9 @@
         }).placeAt(view.legendContainerId);
 
         var mover = new dojo.dnd.Moveable(
-            document.getElementById(view.legendContainerId)
-        );
+            document.getElementById(view.legendContainerId), {
+                handle: $('#' + view.legendContainerId).find('.legend-header')[0]
+            } );
 
         // Update the legend whenever the map changes
         dojo.connect(esriMap, 'onUpdateEnd', _.debounce(updateLegend, 100));
