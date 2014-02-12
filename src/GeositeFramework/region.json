@@ -23,7 +23,7 @@
         { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" }
     ],
     "pluginOrder": [ "layer_selector", "zoom_to", "measure" ],
-    "printServerUrl": "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
+    "printServerUrl": "http://50.18.215.52/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
     "colors": {
         "primary": "#26648E",
         "secondary": "#26648E"
