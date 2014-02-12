@@ -182,6 +182,15 @@
     <Content Include="plugins\draw_report\images\spinner.gif" />
     <Content Include="plugins\draw_report\main.js" />
     <Content Include="plugins\draw_report\templates.html" />
+    <Content Include="plugins\feature_compare\Comparer.js" />
+    <Content Include="plugins\feature_compare\Feature.js" />
+    <Content Include="plugins\feature_compare\FeatureComparer.js" />
+    <Content Include="plugins\feature_compare\feature_compare.css" />
+    <Content Include="plugins\feature_compare\icon.png" />
+    <Content Include="plugins\feature_compare\icon_active.png" />
+    <Content Include="plugins\feature_compare\images\spinner.gif" />
+    <Content Include="plugins\feature_compare\main.js" />
+    <Content Include="plugins\feature_compare\templates.html" />
     <Content Include="plugins\full_extent\icon-active.png" />
     <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
@@ -276,6 +285,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\draw_report\reports_config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\feature_compare\compare_config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\feature_compare\plugin.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
