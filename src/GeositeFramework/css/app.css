@@ -197,23 +197,30 @@ input.code-like, textarea.code-like {
 			color: transparent;
 		}
 
-    .content .plugin-container {
+    .content .plugin-container-outer {
         position: absolute;
         border: 5px #444 solid;
         border-radius: 5px;
         width: 300px;
         height: 400px;
-        overflow: visible;
         background: #FFFFFF;
         z-index: 999;
         box-shadow: 0 0 15px #333;
 		box-shadow: 0 0 15px rgba(0,0,0,.5);
+        }
+
+    .content .plugin-container {
+        width: 100%;
+        height: 100%;
+        padding-bottom: 28px; /* reduces inner container's 100% height by header's height */
+        overflow: visible;
         }
         .content .plugin-container-header {
             height: 28px;
             padding: 5px 8px;
 			background: #444;
 			overflow: hidden;
+            cursor: move;
             }
             .content .plugin-container-header h6 {
             	float: left;
@@ -235,15 +242,15 @@ input.code-like, textarea.code-like {
             	.content .plugin-container-header a.plugin-off {
             		border-left: 1px solid #666;
             	}
-            	.content .plugin-container-header a.plugin-close {}
             	.content .plugin-container-header a:hover {
             		background: black;
             		color: white;
             	}
 
         .content .plugin-container-inner {
-            height: 362px; 
+            height: 100%; 
             padding-top: 2px;
+            overflow: auto;
         }
 
         .content .plugin-infographic {

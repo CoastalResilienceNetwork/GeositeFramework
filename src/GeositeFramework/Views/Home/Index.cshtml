@@ -178,14 +178,17 @@
     </script>
 
     <script type="text/template" id="template-plugin-container">
-        <div class="plugin-container">
-            <div class="plugin-container-header">
-                <h6><%- title %></h6>
-                <a class="plugin-off" href="javascript:;">&#10006;</a>
-                <a class="plugin-close" href="javascript:;">&#95;</a>
+        <div class="plugin-container-outer" id="<%= id %>" style="position: absolute;"> <!-- Extra outer div to minimize mis-alignment of dojo resize "ghost".
+                                                                                             Position:absolute to eliminate jump in dojo drag. -->
+            <div class="plugin-container">
+                <div class="plugin-container-header">
+                    <h6><%- title %></h6>
+                    <a class="plugin-off" href="javascript:;">&#10006;</a>
+                    <a class="plugin-close" href="javascript:;">&#95;</a>
                 
+                </div>
+                <div class="plugin-container-inner"></div>
             </div>
-            <div class="plugin-container-inner"></div>
         </div>
     </script>
 

@@ -215,12 +215,15 @@
         });
     }());
 
+    dojo.require("dojox.layout.ResizeHandle");
+    dojo.require('dojo.dnd.Moveable');
+
     (function sidebarPlugin() {
 
-        function initialize(view, $parent) {
+        function initialize(view, $parent, paneNumber) {
             render(view);
             view.$el.appendTo($parent);
-            createUiContainer(view);
+            createUiContainer(view, paneNumber);
             createLegendContainer(view);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
@@ -258,8 +261,12 @@
             return view;
         }
 
-        function createUiContainer(view) {
-            var bindings = { title: view.model.get("pluginObject").toolbarName },
+        function createUiContainer(view, paneNumber) {
+            var containerId = view.model.name() + '-' + paneNumber,
+                bindings = {
+                    title: view.model.get("pluginObject").toolbarName,
+                    id: containerId
+                },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
 
                 calculatePosition = function ($el) {
@@ -294,6 +301,13 @@
             // Attach to top pane element
             view.$el.parents('.content').append($uiContainer.hide());
 
+            // Make the container resizable and moveable
+            new dojox.layout.ResizeHandle({
+                targetId: containerId
+            }).placeAt(containerId);
+
+            new dojo.dnd.Moveable($uiContainer[0]);
+
             // Tell the model about $uiContainer so it can pass it to the plugin object
             view.model.set('$uiContainer', $uiContainer);
             view.$uiContainer = $uiContainer;
@@ -316,7 +330,7 @@
             $uiContainer: null,
             $legendContainer: null,
 
-            initialize: function () { initialize(this, this.options.$parent); },
+            initialize: function () { initialize(this, this.options.$parent, this.options.paneNumber); },
 
             render: function renderSidbarPlugin() { return render(this); }
         });
