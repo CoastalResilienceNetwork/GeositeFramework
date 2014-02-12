@@ -34,7 +34,7 @@ define(
         return declare(PluginBase, {
             toolbarName: "Zoom To",
             fullName: "Zoom to a specific address.",
-            toolbarType: "map",
+            toolbarType: "maptop",
 
             _initializeViews: function () {
                 this.input = this.input || new ui.UiInput();

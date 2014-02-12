@@ -174,6 +174,8 @@
 
             // Clicking the map means "Identify" contents at a point
             dojo.connect(esriMap, "onClick", tryIdentify);
+            
+            adjustToolPositions(view, esriMap);
         });
 
         function tryIdentify(event) {
@@ -194,7 +196,8 @@
         // create a view for each plugin model (it will render), and add its element
         // to the appropriate plugin section
         var $sidebar = view.$('.plugins'),
-            $topbar = view.$('.tools');
+            $maptopbar = view.$('.top-tools'),
+            $mapbar = view.$('.tools');
 
         view.model.get('plugins').each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
@@ -204,11 +207,36 @@
                     $parent: $sidebar,
                     paneNumber: view.model.get('paneNumber')
                 });
-            } else if (toolbarType === 'map') {
+            } else {
                 var pluginView = new N.views.TopbarPlugin({ model: plugin });
-                $topbar.append(pluginView.$el);
+                if (toolbarType === 'maptop') {
+                    $maptopbar.append(pluginView.$el);
+                } else if (toolbarType === 'map') {
+                    $mapbar.append(pluginView.$el);
+                } else {
+                    throw "Invalid plugin toolbarType: '" + toolbarType + "'";
+                }
             }
         });
+    }
+
+    function adjustToolPositions(view, esriMap) {
+        // If there are tools above the "+/-" zoom buttons, move everything down
+        var nMapTopPlugins = view.$('.top-tools').children().length;
+        if (nMapTopPlugins > 0) {
+            var $zoomButtons = view.$('#' + esriMap.id + '_zoom_slider'),
+                $mapbar = view.$('.tools');
+            lowerTool($zoomButtons, nMapTopPlugins);
+            lowerTool($mapbar, nMapTopPlugins);
+        }
+    }
+
+    function lowerTool($el, toolCount) {
+        // Move $el lower on the page by "toolCount" slots
+        var pluginButtonHeight = 44,
+            offset = $el.offset();
+        offset.top += toolCount * pluginButtonHeight;
+        $el.offset(offset);
     }
 
     N.views = N.views || {};
