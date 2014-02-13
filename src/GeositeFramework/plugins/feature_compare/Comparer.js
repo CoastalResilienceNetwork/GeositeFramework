@@ -5,11 +5,10 @@
         highlightGraphic: null,
         currentLayer: null,
         currentFieldInfos: null,
-        selectedFeatures: new Backbone.Collection(),
-        selectionGraphics: [],
-        selectionLayer: new esri.layers.GraphicsLayer(
-            { id: 'compare-feature-selection' }),
-        layerEventHandlers: [],
+        selectedFeatures: null,
+        selectionGraphics: null,
+        selectionLayer: null ,
+        layerEventHandlers: null,
         
         defaults: {
             maxSelectableFeatures: 3
@@ -18,6 +17,12 @@
         initialize: function(attrs, options) {
             this.options = options;
             this.highlightStyle = this._makeHighlightSymbol();
+            this.selectedFeatures = new Backbone.Collection();
+            this.selectionLayer = new esri.layers.GraphicsLayer(
+                { id: 'compare-feature-selection' });
+            this.selectionGraphics = [];
+            this.layerEventHandlers = [];
+
             this.options.map.addLayer(this.selectionLayer);
             this.activate();
         },
