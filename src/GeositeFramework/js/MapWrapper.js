@@ -145,7 +145,7 @@
                     return isMyLayer(result.layer);
                 });
                 if (results.length > 0) {
-                    _wrapper.onLayersAddResult(layer);
+                    _wrapper.onLayersAddResult(results);
                 }
             },
 

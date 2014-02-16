@@ -141,11 +141,15 @@
                 if (active) {
                     // This plugin might have some results, so give it a chance to identify()
                     pluginObject.identify(mapPoint, clickPoint, function (results, width, height) {
-                        processResults(pluginTitle, results, width, height);
+                        processResults({ pluginTitle: pluginTitle,
+                                         result: results,
+                                         width: width,
+                                         height: height });
                     });
                 } else {
                     // This plugin has no results
-                    processResults(pluginTitle, false);
+                    processResults({ pluginTitle: pluginTitle,
+                                     result: false });
                 }
             }
         });

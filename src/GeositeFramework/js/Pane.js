@@ -173,13 +173,18 @@
             view.model.initPlugins(esriMap);
 
             // Clicking the map means "Identify" contents at a point
-            dojo.connect(esriMap, "onClick", doIdentify);
+            dojo.connect(esriMap, "onClick", tryIdentify);
         });
 
-        function doIdentify(event) {
+        function tryIdentify(event) {
+            // Check if 'identify' is possible and then execute.
+            //
+            // the framework level 'identify' feature can be disabled by
+            // an active plugin if the plugin uses the map click for another
+            // purpose.
             var pluginModels = view.model.get('plugins');
-            if (!pluginModels.selected || pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
-                // No plugin owns click events, so proceed
+            if (!pluginModels.selected ||
+                pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
                 view.mapView.doIdentify(pluginModels, event);
             }
         }
