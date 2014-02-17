@@ -1,5 +1,5 @@
 {    
-	"css": [
+    "css": [
         "plugins/feature_compare/feature_compare.css"
     ],
     "use": {
