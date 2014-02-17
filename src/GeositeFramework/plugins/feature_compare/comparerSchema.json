@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-03/schema#",
+    "title": "Feature Comparer Plugin Schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["layers", "selectionColors", "highlightColor", "highlightOutlineColor"],
+    "properties": {
+        "pluginName": {"type": "string", "required": false},
+        "pluginDesc": {"type": "string", "required": false},
+        "layers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "required": true},
+                    "url": {"type": "string", "required": true},
+                    "attrs": {"type": "array", "items": {
+                        "type": "string"}, "required": true}
+                }
+            },
+            "additionalProperties": false,
+            "required": true
+        },
+
+        "selectionColors": {
+            "required": true,
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "number"
+                }
+            }
+        },
+
+        "highlightColor": {
+            "required": true,
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        },
+
+        "highlightOutlineColor": {
+            "required": true,
+            "type": "array",
+            "items": {
+                "type": "number"
+            }
+        }
+    }
+}
