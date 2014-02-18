@@ -34,11 +34,13 @@ define(
         return declare(PluginBase, {
             toolbarName: "Zoom To",
             fullName: "Zoom to a specific address.",
-            toolbarType: "map",
+            toolbarType: "maptop",
 
             _initializeViews: function () {
-                this.input = this.input || new ui.UiInput();
-                this.inputView = this.inputView || new ui.UiInputView({ model: this.input });
+                if (!this.input) {
+                    this.input = new ui.UiInput();
+                    this.inputView = new ui.UiInputView({ model: this.input });
+                }
             },
             
             initialize: function (args) {
@@ -47,14 +49,14 @@ define(
 
                 declare.safeMixin(this, args);
                 this.config = JSON.parse(configString);
-                if (!this.input) this._initializeViews();
+                this._initializeViews();
                 this.input.setupLocator(this.config.locatorServiceUrl,
                                         this.app._unsafeMap, this.config.defaultZoomLevel,
                                         point);
             },
 
-            renderLauncher: function renderLauncher() {
-                if (!this.input) this._initializeViews();
+            renderLauncher: function () {
+                this._initializeViews();
                 return this.inputView.render().$el;
             },
             
