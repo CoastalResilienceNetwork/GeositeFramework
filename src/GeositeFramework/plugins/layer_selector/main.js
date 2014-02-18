@@ -91,6 +91,10 @@ define([
                 this._layerManager.hideAllLayers(this.map);
             },
 
+            resize: function (dx, dy) {
+                this._ui.onContainerSizeChanged(dx, dy);
+            },
+
             getState: function () {
                 return this._layerManager.getServiceState();
             },

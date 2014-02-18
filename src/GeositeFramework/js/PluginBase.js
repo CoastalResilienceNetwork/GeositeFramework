@@ -47,8 +47,10 @@ define(["dojo/_base/declare",
             activate: function () {},
             deactivate: function () {},
             hibernate: function () {},
+            resize: function () {},
             getState: function () {},
-            
+            setState: function () {},
+
             showInfographic: CheckandShowInfographic,
 
             identify: identify,
