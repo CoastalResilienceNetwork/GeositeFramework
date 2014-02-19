@@ -131,13 +131,19 @@
     function renderSidebar(view) {
         var sidebarTemplate = N.app.templates['template-sidebar'],
             paneNumber = view.model.get('paneNumber'),
-            data = _.extend(N.app.models.screen.toJSON(), {
-                isMain: paneNumber === N.app.models.screen.get('mainPaneNumber'),
-                alternatePaneNumber: paneNumber === 0 ? 1 : 0
-            }),
+            screenData = N.app.models.screen.toJSON(),
+            isMain = screenData.mainPaneNumber === paneNumber,
+            data = _.extend(screenData, { isMain: isMain }),
             html = sidebarTemplate(data);
 
         view.$('.bottom.side-nav').empty().append(html);
+
+        // Highlight selected screen button
+        if (screenData.splitScreen) {
+            view.$('.split-screen').addClass('selected');
+        } else {
+            view.$('a[data-screen=' + screenData.mainPaneNumber + ']').addClass('selected');
+        }
     }
 
     // TODO: Sidebar links aren't in the prototype - do we have anything for them?
