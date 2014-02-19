@@ -1,4 +1,7 @@
-﻿// PluginBase.js -- superclass for plugin modules
+﻿/*jslint nomen:true, devel:true */
+/*global _, $, Geosite, esri */
+
+// PluginBase.js -- superclass for plugin modules
 
 define(["dojo/_base/declare",
         "dojo/_base/xhr",
@@ -36,7 +39,9 @@ define(["dojo/_base/declare",
                 CheckBox, 
                 Button
                 ) {
-        
+
+        var URL_PATTERN = /^https?:\/\/.+/;
+
         return declare(null, {
             toolbarName: "",
             fullName: "",
@@ -299,7 +304,7 @@ define(["dojo/_base/declare",
 
                     _.each(wmsDeferreds, function (wmsDeferred) {
                         wmsDeferred.addCallback(function (text) {
-                            // we previously had logic to take the results
+                            // we have logic on the Ags side to take the results
                             // of an ajax call to the arcgis identify api
                             // which returns a nicely formatted object.
                             //
@@ -390,15 +395,42 @@ define(["dojo/_base/declare",
                     var $result = $('<div>'),
                         template = Geosite.app.templates['plugin-result-of-identify'];
                     _.each(features, function (feature) {
-                        var html = $.trim(template(feature)),
-                            $section = $(html);
+                        var html, $section;
+
+                        // each feature object has a special attribute stored in
+                        // feature.value as well as a collection of attributes in
+                        // feature.feature.attributes. Preprocess all of these to
+                        // wrap URL strings in hyperlinks.
+                        _.each(_.keys(feature.feature.attributes), function (key) {
+                            var attrValue = feature.feature.attributes[key];
+                            if (URL_PATTERN.test(attrValue)) {
+                                feature.feature.attributes[key] = urlWrapped(attrValue);
+                            }
+                        });
+                        if (URL_PATTERN.test(feature.value)) {
+                            feature.value = urlWrapped(feature.value);
+                        }
+
+                        html = $.trim(template(feature)),
+                        $section = $(html);
                         if (Object.keys(feature.feature.attributes).length > 1) {
                             $section.addClass("with-arrow");
+                            // make the outer result-of-identify section expand
+                            // but prevent propagation from the inner sections,
+                            // for the purpose of hyperlink clicking, copy and
+                            // pasting, casual browsing, etc.
                             $section.click(expandOrCollapseAttributeSection);
+                            $section.find('.result-of-identify').on('click',
+                                function (e) { e.stopPropagation(); });
                         }
                         $result.append($section);
                     });
                     processResults($result.get(0), 400);
+                }
+
+                function urlWrapped (value) {
+                    return '<a target="_blank" href="' + value + '">'
+                        + value + '</a>';
                 }
 
                 function expandOrCollapseAttributeSection() {
