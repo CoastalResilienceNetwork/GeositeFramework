@@ -287,7 +287,7 @@
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
             $uiContainer
-                // Position the dialog next to the sidebar button which shows it.
+                // Position the dialog
                 .css(calculatePosition(view.$el))
             
                 // Listen for events to turn the plugin completely off
@@ -305,16 +305,26 @@
 
             // Make the container resizable and moveable
             new dojox.layout.ResizeHandle({
-                targetId: containerId
-            }).placeAt(containerId);
+                targetId: containerId,
+                activeResize: true,
+                animateSizing: false
+            })
+                .placeAt(containerId)
+                .on('resize', function (e) { onContainerResize(view, this, e); });
 
             new dojo.dnd.Moveable($uiContainer[0], {
-                 handle: $uiContainer.find('.plugin-container-header')[0]
+                handle: $uiContainer.find('.plugin-container-header')[0]
             });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             view.model.set('$uiContainer', $uiContainer);
             view.$uiContainer = $uiContainer;
+        }
+
+        function onContainerResize(view, resizeHandle, event) {
+            var dx = event.x - resizeHandle.startPoint.x,
+                dy = event.y - resizeHandle.startPoint.y;
+            view.model.get("pluginObject").resize(dx, dy);
         }
 
         function createLegendContainer(view) {

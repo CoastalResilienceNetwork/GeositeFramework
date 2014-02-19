@@ -60,7 +60,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                         this.set('checked', false);
                     }
                 });
-                resize();
+                onContentSizeChanged();
+            };
+
+            this.onContainerSizeChanged = function (dx, dy) {
+                // The ExtJS TreePanel can't be sized to fit its widest element, 
+                // nor can you discover those widths programatically.
+                // So we let users reveal more by resizing the container,
+                // setting here the tree panel width to the container's width.
+                setTreeWidthToContainerWidth();
+                onContentSizeChanged();
             };
 
             // ------------------------------------------------------------------------
@@ -133,11 +142,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 var renderExtTreeCount = 0;
                 return function () {
                     if (_tree && $(_container).is(":visible") && renderExtTreeCount === 0) {
+                        setTreeWidthToContainerWidth();
                         _tree.render(_$treeContainer[0]);
                         renderExtTreeCount++;
                     }
                 };
             }());
+
+            function setTreeWidthToContainerWidth() {
+                _tree.setWidth($(_container).width());
+            }
 
             function addSpinner() {
                 $(_container).append(
@@ -197,10 +211,11 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     animate: false,
                     scroll: false,
                     border: false,
+                    width: $(_container).width(),
                     listeners: {
-                        load: resize,
-                        itemexpand: resize,
-                        itemcollapse: resize
+                        load: onContentSizeChanged,
+                        itemexpand: onContentSizeChanged,
+                        itemcollapse: onContentSizeChanged
                     }
                 });
                 return tree;
@@ -219,15 +234,18 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
             }
 
-            function resize() {
-                // Hack from http://stackoverflow.com/questions/8362022/ext-tree-panel-automatic-height-in-extjs-4
-                setTimeout(function () {
+            function onContentSizeChanged() {
+                // Set size of tree element using size of expanded tree nodes, via hack from 
+                // http://stackoverflow.com/questions/8362022/ext-tree-panel-automatic-height-in-extjs-4
+                // This makes the plugin panel's scrollbar work correctly.
+                // It also truncates too-wide tree node labels (adding "...").
+                _.defer(function () {
                     var innerElement = _tree.getEl().down('table.x-grid-table');
                     if (innerElement) {
                         _tree.setHeight(innerElement.getHeight());
                         _tree.setWidth(innerElement.getWidth());
                     }
-                }, 1);
+                });
             }
 
             function onCheckboxChanged(node, checked, eOpts) {
@@ -353,7 +371,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 } else {
                     _tree.filterByText(text);
                 }
-                resize();
+                onContentSizeChanged();
             }
 
             addSpinner();
