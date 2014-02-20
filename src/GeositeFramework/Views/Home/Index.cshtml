@@ -124,15 +124,12 @@
     <script type="text/template" id="template-sidebar">
         <li class="divider"></li>
         <% if (isMain) { %>
-            <% if (splitScreen) { %>
-                <li><a class="switch-screen" data-screen="0" title="View only Map 1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/>Full Map</a></li>
-                <li><a class="switch-screen" data-screen="1" title="View only Map 2" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/>Full Map</a></li>
-            <% } else { %>
-                <li><a class="switch-screen" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Switch to the other workspace">
-                    <img class="icon" src="img/icons/icon_switch-<%= alternatePaneNumber %>_up.png"/>Switch Map
-                </a></li>
-                <li><a class="split-screen" href="javascript:;" title="Split the current workspace into two workspaces"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
-            <% } %>
+            <li><a class="switch-screen" data-screen="0" title="View only Map 1" href="javascript:;">
+                    <img class="icon" src="img/icons/icon_switch-0_up.png"/>Map 1</a></li>
+            <li><a class="switch-screen" data-screen="1" title="View only Map 2" href="javascript:;">
+                    <img class="icon" src="img/icons/icon_switch-1_up.png"/>Map 2</a></li>
+            <li><a class="split-screen" title="Split the current workspace into two workspaces" href="javascript:;">
+                    <img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
             <li class="divider"></li>
             <li><a href="javascript:;" class="permalink-button hide-for-tablet" title="Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
             <% if (helpUrl) { %>
