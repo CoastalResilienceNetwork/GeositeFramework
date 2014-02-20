@@ -27,5 +27,6 @@
     "colors": {
         "primary": "#26648E",
         "secondary": "#26648E"
-    }
+    },
+    "identifyBlacklist": ["OBJECTID", "OBJECTID_1"]
 }
