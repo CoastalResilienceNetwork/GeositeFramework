@@ -42,7 +42,7 @@
         },
 
         initialize: function () {
-            if (N.app.data.region.printServerUrl) {
+            if (N.app.data.region.export.printServerUrl) {
                 this.set('showExportButton', true);
             }
             if (N.app.data.region.helpUrl) {
