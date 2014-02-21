@@ -242,9 +242,7 @@
             // The selection index determines which color the feature is marked as,
             // and is not sequential, because any selection can be sliced from the list
             // so the first available index must be calculated
-            var usedIndexes = this.selectedFeatures.map(function(feature) {
-                    return feature.get('selectionIndex');
-                }),
+            var usedIndexes = this.selectedFeatures.pluck('selectionIndex'),
                 allIndexes = _.range(this.get('maxSelectableFeatures'));
 
             return _.difference(allIndexes, usedIndexes)[0];
