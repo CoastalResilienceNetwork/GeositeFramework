@@ -189,7 +189,8 @@ define([
                     layerId: layerId,
                     parent: parentNode,
                     showOrHideLayer: showOrHideLayer, // function which shows or hides the layer
-                    isNew: config ? config.isNew : undefined
+                    isNew: config ? config.isNew : undefined,
+                    downloadUrl: config ? config.downloadUrl : undefined
                 };
                 if (!parentNode.children) { parentNode.children = []; }
                 parentNode.children.push(node);

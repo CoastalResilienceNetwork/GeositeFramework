@@ -1,0 +1,46 @@
+{
+  "currentVersion" : 10.02, 
+  "id" : 4, 
+  "name" : "Category 1 Cyclone Economic Exposure (US$ x 1000 per sq km)", 
+  "type" : "Raster Layer", 
+  "description" : "Dataset courtesy of the PREVIEW Global Risk Data Platform. This dataset includes an estimation of the averag annual economical exposition to tropical cyclones of Saffir-Simpson category I over the period 1970 - 2010. It is based on three sources:\n1) IBTrACS v03r03 (1969 - 2011, http://www.ncdc.noaa.gov/oa/ibtracs/), year 2011 completed by online data from JMA, JTWC and UNISYS.\n2) A GIS modeling based on an initial equation from Greg Holland, which was further modified to take into consideration the movement of the cyclones through time.\n3) A Global Domestic Product grid for the year 2010, provided by the World Bank.\n\nUnit is expected average annual GDP (2010 as the year of reference) exposed in thousand US $ (year 2000 equivalent) .\n\nThis product was modeled using global data and aggregated to ~ 5 km resolution to be distributed.\n\nCredit: Raw data: IBTrACS,JMA, JTWC, UNISYS and World Bank, compilation and GIS processing\n  UNEP/GRID-Geneva.   \u003ca href='/xml/global_cy_econ1.xml' target='_blank'\u003e\u003cb\u003e Metadata\u003c/b\u003e\u003ca\u003e\u003c/br\u003e\n\t", 
+  "definitionExpression" : "", 
+  "geometryType" : "", 
+  "copyrightText" : "", 
+  "parentLayer" : {"id" : 3, "name" : "Cyclone Economic Exposure"}, 
+  "subLayers" : [], 
+  "minScale" : 0, 
+  "maxScale" : 0, 
+  "defaultVisibility" : false, 
+  "extent" : {
+    "xmin" : -20037507.0671618, 
+    "ymin" : -30240971.9583863, 
+    "xmax" : 20037507.0671618, 
+    "ymax" : 18807214.0966737, 
+    "spatialReference" : {
+      "wkid" : 102100
+    }
+  }, 
+  "hasAttachments" : false, 
+  "htmlPopupType" : "esriServerHTMLPopupTypeNone", 
+  "drawingInfo" : null, 
+  "displayField" : null, 
+  "fields" : [
+    {
+      "name" : "OBJECTID", 
+      "type" : "esriFieldTypeOID", 
+      "alias" : "OBJECTID"}, 
+    {
+      "name" : "VALUE", 
+      "type" : "esriFieldTypeInteger", 
+      "alias" : "VALUE"}, 
+    {
+      "name" : "COUNT", 
+      "type" : "esriFieldTypeInteger", 
+      "alias" : "COUNT"}
+  ], 
+  "typeIdField" : null, 
+  "types" : null, 
+  "relationships" : [], 
+  "capabilities" : "Map,Query,Data"
+}

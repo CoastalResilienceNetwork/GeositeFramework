@@ -58,11 +58,12 @@
 .pluginLayerSelector-layer-group .x-tree-icon-parent {
     background-image:url(images/layers.png) !important;
 }
-    
+
 .pluginLayerSelector-layer .x-tree-icon {
     background-image:url(images/info-blue.png);
 }
 
+.pluginLayer-download,
 .pluginLayer-extent-zoom {
     background-image:url(images/zoom_in.png);
     width: 16px;
@@ -72,6 +73,7 @@
     top: 2px;
     left: 2px;
 }
+.pluginLayer-download { background-image: url(images/download.png); }
 
 .pluginLayerSelector-new div {
     font-weight: bold;
