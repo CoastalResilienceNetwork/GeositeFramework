@@ -1,4 +1,5 @@
-﻿
+﻿/*global _, $, esri, Backbone */
+
 define([],
     function () {
 
@@ -125,7 +126,7 @@ define([],
             _cancelEventBubble: function(event) {
                 if (event.stopPropagation) {
                     event.stopPropagation();
-                } else if (e.cancelBubble) {  // IE8
+                } else if (event.cancelBubble) {  // IE8
                     event.cancelBubble = true;
                 }
             },
