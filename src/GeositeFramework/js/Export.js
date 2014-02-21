@@ -14,7 +14,16 @@
             // set by view, listened internally
             exportTitle: "",
             exportOrientation: null,
-            exportPaperSize: null,
+            // Default ArcGIS print template is Letter ANSI A {Portrait|Landscape}
+            // but the framework provides custom templates that can be installed on
+            // the AGS to achieve better export results.  Check the region.json to
+            // enable the custom template.
+            printLayoutTemplatePrefix: 'Letter ANSI A',
+            // By default, the ESRI print task reserves space in the 
+            // template for the legend, which doesn't resize.  To reclaim
+            // the space we use a different template for Legend/No Legend
+            // but this won't work if you are not using a custom layout
+            useDifferentTemplateWithLegend: false,    
             exportIncludeLegend: false,
 
             // set internally, listened by view
@@ -38,20 +47,27 @@
         },
 
         submissionIsValid: function () {
-            return (
-                _.contains(["Portrait", "Landscape"], this.get('exportOrientation')) &&
-                _.contains(["A3","A4","Letter ANSI A","Tabloid ANSI B"], this.get('exportPaperSize')));
+            return _.contains(["Portrait", "Landscape"], this.get('exportOrientation'));
         },
         
         setupDependencies: function () {
             /*
               Creates an interface for the rest of the model to interact
-              with the esri javascript api.
+              with the esri javascript api, only if an export setting has
+              been specified in the region.json
             */
-            var url = N.app.data.region.printServerUrl,
+            var url = N.app.data.region.export.printServerUrl,
                 printTask = new esri.tasks.PrintTask(url),
                 params = new esri.tasks.PrintParameters();
 
+            // If there is a custom template scheme for export, override the
+            // default settings.  If no custom template is provided, the export
+            // will work with the out-of-the-box ArcGIS Print Task settings
+            if (N.app.data.region.export.customPrintTemplatePrefix) {
+                this.set('printLayoutTemplatePrefix',
+                    N.app.data.region.export.customPrintTemplatePrefix);
+                this.set('useDifferentTemplateWithLegend', true);
+            }
             params.map = this.get('esriMap');
             params.template = new esri.tasks.PrintTemplate();
             params.template.format = "PDF";
@@ -74,7 +90,20 @@
         createPDF: function () {
             var model = this,
                 resultTemplate = N.app.templates['template-export-url'],
-                templateLayout = this.get('exportPaperSize') + " " + this.get('exportOrientation');
+                templateLayout = makePrintTemplateName();
+
+            function makePrintTemplateName() {
+                // Print templates are MXDs on an AGS Server with the following
+                // naming convention: <<TemplatePrefix>> <<Orientation>> <<""|Legend>>.mxd
+                // This is an ESRI convention and includes whitespace, but the template
+                // name should not include the file extension.
+                var includeLegend = model.get('exportIncludeLegend') && model.get('useDifferentTemplateWithLegend'),
+                    legendSuffix = includeLegend ? 'Legend' : '',
+                    prefix = model.get('printLayoutTemplatePrefix'),
+                    orientation = model.get('exportOrientation');
+
+                return $.trim(prefix + " " + orientation + " " + legendSuffix);
+            }
 
             model.pdfManager.run(
                 templateLayout,
@@ -87,7 +116,7 @@
                     });
                 },
                 function () {
-                    model.set('outputText', "There was an error processing your request.");
+                    model.set('outputText', "Unable to export map, please try again.");
                 });
         }
     });
@@ -101,7 +130,7 @@
         className: 'export-ui',
 
         events: {
-            "click button": function () { this.handleSubmit(); },
+            "click #export-button": function () { this.handleSubmit(); },
             "keyup input": function (event) { this.handleKeyPress(event); }
         },
 
@@ -115,21 +144,20 @@
                 this.model.set({
                     exportTitle: this.$("#export-title").val(),
                     exportOrientation: this.$("input:radio[name=export-orientation]:checked").val(),
-                    // TODO: this is a little too magical and implicitly derived. Be more clear.
-                    exportIncludeLegend: this.$("input:checkbox[name=export-include-legend]:checked").val() === "on" ? true : false,
-                    exportPaperSize: this.$("select#export-paper-size").val()
+                    exportIncludeLegend: this.$('input[name=export-include-legend]').is(':checked')
                 });
                 this.model.submitExport();
             }
         },
 
         enableSubmit: function () {
-            this.$("button#export-button").removeAttr('disabled');
+            this.$("#export-button").removeAttr('disabled');
             this.$("div.export-indicator").hide();
+            this.model.set('submitEnabled', true);
         },
 
         waitForPrintRequest: function () {
-            this.$("button#export-button").attr('disabled', 'disabled');
+            this.$("#export-button").attr('disabled', 'disabled');
             this.$("div.export-indicator").show();
             this.$("div.export-output-area").empty();
         },

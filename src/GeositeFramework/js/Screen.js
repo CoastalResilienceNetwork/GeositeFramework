@@ -37,12 +37,12 @@
         toggleMapSync: function (forceSyncTo) {
             // Toggle the value of the sync property, or if forceSyncTo is set, 
             // to the value provided
-            var sync = (forceSyncTo === undefined ? !this.get('syncMaps') : forceSyncTo)
+            var sync = (forceSyncTo === undefined ? !this.get('syncMaps') : forceSyncTo);
             this.set('syncMaps', sync);
         },
 
         initialize: function () {
-            if (N.app.data.region.export.printServerUrl) {
+            if (N.app.data.region.export && N.app.data.region.export.printServerUrl) {
                 this.set('showExportButton', true);
             }
             if (N.app.data.region.helpUrl) {

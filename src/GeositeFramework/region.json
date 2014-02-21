@@ -25,7 +25,7 @@
     "pluginOrder": [ "layer_selector", "zoom_to", "measure" ],
     "export": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
-        "customPrintTemplatePrefix": "Letter ANSI A GeoSiteFramework"
+        "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework"
     },
     "colors": {
         "primary": "#26648E",
