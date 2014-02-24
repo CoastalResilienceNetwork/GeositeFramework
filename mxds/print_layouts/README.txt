@@ -1,0 +1,1 @@
+These custom templates can be installed on the print server specified in the region.json config file, in the ExportWebMapTemplates directory of the ArcGIS installation.  You must restart the PrintTask service after changing the contents of that directory, since the template names are cached.

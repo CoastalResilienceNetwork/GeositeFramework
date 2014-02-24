@@ -71,9 +71,19 @@
             "type": "array",
             "items": {"type": "string"},
         },
-        "printServerUrl": {
-            "type": "string",
-            "required": false
+        "export": {
+            "type": "object",
+            "properties": {
+                "printServerUrl": {
+                    "type": "string",
+                    "required": false
+                },
+                "customPrintTemplatePrefix": {
+                    "type": "string",
+                    "required": false
+                }
+            },
+            "additionalProperties": false
         },
         "helpUrl": {
             "type": "string",

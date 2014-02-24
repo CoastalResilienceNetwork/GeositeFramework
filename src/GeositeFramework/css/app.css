@@ -671,24 +671,18 @@ table.esriLegendLayerLabel tbody tr td {
 /* -----------------------------------------
    Export Window
 ----------------------------------------- */
-.export-orientation-choices {
-    float: left;
+.export-ui .row {
+    width: 100%;
+    min-width: 100%;
 }
-.export-legend-choice {
-    float: left;
-    padding-left: 25px;
+.export-output-area {
+    padding-top: 10px;
 }
-.export-controls {
-    float: right;
-}
+
 .export-indicator {
     display: none;
     float: right;
     padding-right: 20px;
-}
-.export-output-area {
-    padding-top: 80px;
-    text-alignment: center;
 }
 
 

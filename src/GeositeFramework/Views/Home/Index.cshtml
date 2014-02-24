@@ -216,35 +216,36 @@
     </script>
 
     <script type="text/template" id="template-export-window">
-      <h3>Export</h3>
-      <label>Title (Optional):<input type="text" id="export-title"></input></label>
-      <div class="export-orientation-choices">
-        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"> Landscape</input></label>
-        <label><input type="radio" name="export-orientation" value="Portrait"> Portrait</input></label>
-      </div>
+      <h3>Map Export</h3>
+      <h5>Title (Optional):<input type="text" id="export-title"/></h5>
 
-      <div class="export-legend-choice">
-        <label>
-          Paper Size:
-          <select id="export-paper-size">
-            <option value="Letter ANSI A">Letter</option>
-            <option value="Tabloid ANSI B">Tabloid</option>
-            <option value="A3">A3</option>
-            <option value="A4">A4</option>
-          </select>
-        </label>
-        <label><input type="checkbox" name="export-include-legend"> Include Layer Legends</input></label>
-      </div>
-
-      <div class="export-controls"><button id="export-button">Export</button></div>
+        <div class="row">
+            <div class="small-4 columns">
+                <h5>Orientation</h5>
+                <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/>Landscape</label>
+                <label><input type="radio" name="export-orientation" value="Portrait"/>Portrait</label>
+            </div>
+            <div class="small-4 columns">
+                 <h5>Legend</h5>
+                <label><input type="checkbox" name="export-include-legend" />Include Layer Legend</label>
+            </div>
+            <div class="small-4 columns">
+                <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-6 columns">
+                <div class="export-output-area"></div>
+            </div>
+            <div class="small-6 columns">
+                <a href="#" id="export-button" class="button radius">Generate Map Export</a>
+            </div>
+        </div>
       
-      <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
-
-      <div class="export-output-area"></div>
     </script>
 
     <script type="text/template" id="template-export-url">
-            <a target="_blank" class="export-output-url" href="<%= url %>">Click here to retrieve your printable document.</a>
+            <a target="_blank" class="export-output-url" href="<%= url %>">View your printable document.</a>
     </script>
 
     <!-- Adding any white space between the textarea and the iframe
