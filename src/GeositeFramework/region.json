@@ -4,7 +4,7 @@
     "headerLinks": [
         { "text": "Azavea", "url": "http://www.azavea.com/" },
         { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" },
-        { "text": "Tour", "url": "javascript:;", elementId: "help-overlay-start"}
+        { "text": "Tour", "url": "javascript:;", "elementId": "help-overlay-start"}
     ],
     "initialExtent": [
         -98.61328125,
