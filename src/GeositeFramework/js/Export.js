@@ -116,7 +116,10 @@
                     });
                 },
                 function () {
-                    model.set('outputText', "Unable to export map, please try again.");
+                    model.set({
+                        outputText: "There was an error processing your request.",
+                        submitEnabled: true
+                    })
                 });
         }
     });

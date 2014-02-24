@@ -1,10 +1,11 @@
 ﻿/*jslint nomen:true, devel:true */
-/*global Backbone, _, $, Geosite*/
+/*global Backbone, _, $ */
 
 // A plugin wraps around a plugin object and manages it in backbone
 
-(function (N) {
+require(['use!Geosite', 'framework/Logger'], function(N, Logger) {
     "use strict";
+
     (function () {
 
         function initialize(model) {
@@ -16,15 +17,16 @@
             var pluginObject = model.get('pluginObject'),
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
-                $legendContainer = model.get('$legendContainer');
+                $legendContainer = model.get('$legendContainer'),
+                logger = new Logger(pluginName);
             
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
                     regionConfig: regionData,
-                    info: makeLogger(pluginName, "INFO"),
-                    warn: makeLogger(pluginName, "WARN"),
-                    error: makeLogger(pluginName, "ERROR"),
+                    info: _.bind(logger.info, logger),
+                    warn: _.bind(logger.warn, logger),
+                    error: _.bind(logger.error, logger),
                     _unsafeMap: esriMap
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
@@ -63,23 +65,6 @@
         function name(model) {
             // A public method for getting the name of the current plugin
             return model.get('pluginSrcFolder');
-        }
-
-        function makeLogger(pluginName, level) {
-            return function (userMessage, developerMessage) {
-                if (developerMessage) {
-                    // Log to server-side plugin-specific log file
-                    Azavea.logMessage(developerMessage, pluginName, level);
-                    if (level === "ERROR") {
-                        // Errors also get logged to server-side main log file
-                        Azavea.logError("Error in plugin '" + pluginName + "': " + developerMessage);
-                    }
-                }
-                if (userMessage) {
-                    // TODO: create a panel
-                    alert(userMessage);
-                }
-            };
         }
 
         /*
@@ -386,4 +371,4 @@
             }
         });
     }());
-}(Geosite));
+});
