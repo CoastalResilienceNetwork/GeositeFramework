@@ -97,6 +97,10 @@
             },
             "required": false,
             "additionalProperties": false
+        },
+        "identifyBlacklist": {
+            "type": "array",
+            "items": { "type": "string" }
         }
     },
     "additionalProperties": false

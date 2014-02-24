@@ -1,5 +1,5 @@
 ﻿/*jslint nomen:true, devel:true */
-/*global _, $, Geosite, esri */
+/*global _, $, Geosite, esri, localStorage */
 
 // PluginBase.js -- superclass for plugin modules
 
@@ -40,7 +40,8 @@ define(["dojo/_base/declare",
                 Button
                 ) {
 
-        var URL_PATTERN = /^https?:\/\/.+/;
+        var URL_PATTERN = /^https?:\/\/.+/,
+            isBlacklisted;
 
         return declare(null, {
             toolbarName: "",
@@ -60,6 +61,7 @@ define(["dojo/_base/declare",
 
             identify: identify,
             constructor: function(args) {
+                isBlacklisted = _.partial(_.contains, Geosite.app.data.region.identifyBlacklist);
                 declare.safeMixin(this,args);
                 aspect.after(this,'activate', lang.hitch(this,this.showInfographic));
             }
@@ -316,7 +318,7 @@ define(["dojo/_base/declare",
                             //
                             // Also, arcgis identify calls produce a default
                             // value, which the presentation logic is built
-                            // around, but wms calls do not. The getFirstPair
+                            // around, but wms calls do not. The getFirstAttribute
                             // function is used to extract a default value
                             // from the parsed response for this purpose.
                             var features = parseWMSGetFeatureInfoText(text);
@@ -340,16 +342,14 @@ define(["dojo/_base/declare",
                 }
 
                 function getFirstAttribute (obj) {
-                    var keys, k, v;
-                    keys = Object.keys(obj);
-                    if (keys && keys.length > 0) {
-                        k = keys[0];
-                        v = obj[k];
-                    } else {
-                        k = "";
-                        v = "";
-                    }
-                    return { fieldName: k, value: v };
+                    // a helper method for extracting the first eligible key
+                    // value pair from an object that is not located in the
+                    // global blacklist.
+                    var eligibleKeys = _.reject(_.keys(obj), isBlacklisted),
+                        key = eligibleKeys && eligibleKeys.length > 0 ? eligibleKeys[0] : "",
+                        value = key === "" ? "" : obj[key];
+
+                    return { fieldName: key, value: value };
                 }
 
                 function addAgsLayerDataWhereMissing(feature, deferred) {
@@ -394,22 +394,26 @@ define(["dojo/_base/declare",
                 } else {
                     var $result = $('<div>'),
                         template = Geosite.app.templates['plugin-result-of-identify'];
+
                     _.each(features, function (feature) {
-                        var html, $section;
+                        var html, $section,
+                            UrlWrapAndDropBlacklisted = function (attributes, key) {
+                                if (!isBlacklisted(key)) {
+                                    attributes[key] =
+                                        urlWrappedIfUrl(feature.feature.attributes[key]);
+                                }
+                                return attributes;
+                            };
 
                         // each feature object has a special attribute stored in
                         // feature.value as well as a collection of attributes in
                         // feature.feature.attributes. Preprocess all of these to
-                        // wrap URL strings in hyperlinks.
-                        _.each(_.keys(feature.feature.attributes), function (key) {
-                            var attrValue = feature.feature.attributes[key];
-                            if (URL_PATTERN.test(attrValue)) {
-                                feature.feature.attributes[key] = urlWrapped(attrValue);
-                            }
-                        });
-                        if (URL_PATTERN.test(feature.value)) {
-                            feature.value = urlWrapped(feature.value);
-                        }
+                        // wrap URL strings in hyperlinks. Preprocess just attributes
+                        // to remove blacklisted attributes from the final output.
+                        feature.feature.attributes = _.reduce(_.keys(feature.feature.attributes),
+                                                              UrlWrapAndDropBlacklisted, {});
+                        feature.value = urlWrappedIfUrl(feature.value);
+
 
                         html = $.trim(template(feature)),
                         $section = $(html);
@@ -428,9 +432,13 @@ define(["dojo/_base/declare",
                     processResults($result.get(0), 400);
                 }
 
-                function urlWrapped (value) {
-                    return '<a target="_blank" href="' + value + '">'
-                        + value + '</a>';
+                function urlWrappedIfUrl (value) {
+                    if (URL_PATTERN.test(value)) {
+                        return '<a target="_blank" href="' + value + '">'
+                            + value + '</a>';
+                    } else {
+                        return value;
+                    }
                 }
 
                 function expandOrCollapseAttributeSection() {
