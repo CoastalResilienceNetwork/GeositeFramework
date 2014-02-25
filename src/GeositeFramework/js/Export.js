@@ -138,37 +138,52 @@ require(['use!Geosite',
         createPDF: function () {
             var model = this,
                 resultTemplate = N.app.templates['template-export-url'],
-                templateLayout = makePrintTemplateName();
-
-            function makePrintTemplateName() {
-                // Print templates are MXDs on an AGS Server with the following
-                // naming convention: <<TemplatePrefix>> <<Orientation>> <<""|Legend>>.mxd
-                // This is an ESRI convention and includes whitespace, but the template
-                // name should not include the file extension.
-                var includeLegend = model.get('exportIncludeLegend') && model.get('useDifferentTemplateWithLegend'),
-                    legendSuffix = includeLegend ? 'Legend' : '',
-                    prefix = model.get('printLayoutTemplatePrefix'),
-                    orientation = model.get('exportOrientation');
-
-                return $.trim(prefix + " " + orientation + " " + legendSuffix);
-            }
-
-            model.pdfManager.run(
-                templateLayout,
-                model.get('exportTitle'),
-                model.get('exportIncludeLegend'),
-                function (result) {
-                    model.set({
-                        outputText: resultTemplate({ url: result.url }),
-                        submitEnabled: true
-                    });
+                attempts = 5,
+                onSuccess = function(result) {
+                    model.set('outputText', resultTemplate({ url: result.url }));
+                    onFinish();
                 },
-                function () {
-                    model.set({
-                        outputText: "There was an error processing your request.",
-                        submitEnabled: true
-                    })
-                });
+                onFailure = function() {
+                    var result = [];
+                    result.push('There was an error processing your request.');
+                    if (attempts > 0) {
+                        var s = attempts == 1 ? '' : 's';
+                        result.push('Trying again ' + attempts + ' more time' + s + '...');
+                    }
+                    model.set('outputText', result.join('<br />'));
+                    tryCreatePdf();
+                },
+                onFinish = function() {
+                    model.set('submitEnabled', true);
+                },
+                tryCreatePdf = function() {
+                    if (attempts <= 0) {
+                        onFinish();
+                    }
+                    model.pdfManager.run(
+                        model.getPrintTemplateName(),
+                        model.get('exportTitle'),
+                        model.get('exportIncludeLegend'),
+                        onSuccess,
+                        onFailure
+                    );
+                    attempts--;
+                };
+            tryCreatePdf();
+        },
+
+        getPrintTemplateName: function() {
+            // Print templates are MXDs on an AGS Server with the following
+            // naming convention: <<TemplatePrefix>> <<Orientation>> <<""|Legend>>.mxd
+            // This is an ESRI convention and includes whitespace, but the template
+            // name should not include the file extension.
+            var model = this,
+                includeLegend = model.get('exportIncludeLegend') && model.get('useDifferentTemplateWithLegend'),
+                legendSuffix = includeLegend ? 'Legend' : '',
+                prefix = model.get('printLayoutTemplatePrefix'),
+                orientation = model.get('exportOrientation');
+
+            return $.trim(prefix + " " + orientation + " " + legendSuffix);
         }
     });
 
@@ -209,7 +224,7 @@ require(['use!Geosite',
         waitForPrintRequest: function () {
             this.$("#export-button").attr('disabled', 'disabled');
             this.$("div.export-indicator").show();
-            this.$("div.export-output-area").empty();
+            this.$(".export-output-area").empty();
         },
 
         initialize: function () {
@@ -224,7 +239,7 @@ require(['use!Geosite',
                 }
             });
             view.listenTo(view.model, "change:outputText", function () {
-                view.$("div.export-output-area").html(this.model.get('outputText'));
+                view.$(".export-output-area").html(this.model.get('outputText'));
             });
         },
 

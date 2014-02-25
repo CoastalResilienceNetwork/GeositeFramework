@@ -675,8 +675,9 @@ table.esriLegendLayerLabel tbody tr td {
     width: 100%;
     min-width: 100%;
 }
+
 .export-output-area {
-    padding-top: 10px;
+    margin-top: 10px;
 }
 
 .export-indicator {
@@ -695,6 +696,10 @@ table.esriLegendLayerLabel tbody tr td {
 		height: 400px;
 		margin-top: 15px;
 	}
+
+.export-ui .row .left-col { float: left; width: 60%; }
+.export-ui .row .right-col { float: right; }
+.export-ui .row p { margin: 0; }
 
 /* -----------------------------------------
     Help Overlay overrides
