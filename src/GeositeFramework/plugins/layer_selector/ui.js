@@ -27,6 +27,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 rootNode = deracinate(rootNode);
                 highlightNewNodes(rootNode);
                 addZoomButtons(rootNode);
+                addDownloadButtons(rootNode);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
@@ -95,10 +96,19 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             function addZoomButtons(node) {
                 if (node.leaf) {
-                    node.text += ' <div class="pluginLayer-extent-zoom">';
+                    node.text += ' <span class="pluginLayer-extent-zoom"></span>';
                 }
                 _.each(node.children, function (child) {
                     addZoomButtons(child);
+                });
+            }
+
+            function addDownloadButtons(node) {
+                if (node.downloadUrl) {
+                    node.text += ' <a href="' + node.downloadUrl + '" class="pluginLayer-download" target="_blank"></a>';
+                }
+                _.each(node.children, function (child) {
+                    addDownloadButtons(child);
                 });
             }
 
@@ -278,13 +288,16 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function onItemClick(extView, record, item, index, e, eOpts) {
-                
-                // User has clicked somewhere on a tree item row. 
+                // User has clicked somewhere on a tree item row.
                 // Only proceed if they clicked one of the item's icon.
                 var node = record.raw;
-                if (_justClickedItemIcon) loadDescription();
-                if (_justClickedZoomIcon) loadExtent(); 
-                            
+
+                if (_justClickedItemIcon) {
+                    loadDescription();
+                } else if (_justClickedZoomIcon) {
+                    loadExtent();
+                }
+
                 function loadDescription() {
                     if (node.description || node.fetchMetadata) {
                         if (node.fetchMetadata) {
@@ -299,7 +312,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
 
                 function loadExtent() {
-                    
                     if (node.extent || node.fetchMetadata) {
                         if (node.fetchMetadata) {
                             node.fetchMetadata(node, function() {

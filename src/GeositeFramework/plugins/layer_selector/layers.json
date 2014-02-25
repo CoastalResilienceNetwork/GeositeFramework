@@ -9,7 +9,10 @@
                     "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
                     "name": "",  // Don't show a folder for these services
                     "services": [
-                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5 },
+                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5,
+                            "layerMetadata": [
+                                {"id":4, "parentLayerId":3, "downloadUrl": "/static/global_cy_econ1.json"}
+                            ]},
                         { "name": "Ecoregions_and_Provinces", "displayName": "Eco-regions and Provinces", "type":"dynamic", "opacity": 0.5 }
                     ]
                 },
@@ -42,7 +45,7 @@
                         { "name": "NACCH_water_level", "displayName": "Water levels (m, NAVD88)", "type":"dynamic", "opacity": 0.5,
                           "showLayers": [
                               {"id":0, "parentLayerId":-1 },
-                              {"id":4, "parentLayerId":0 },
+                              {"id":4, "parentLayerId":0, "downloadUrl": "http://coastal.er.usgs.gov/hurricanes/erosionhazards" },
                               {"id":5, "parentLayerId":0 },
                               {"id":6, "parentLayerId":-1 },
                               {"id":10, "parentLayerId":6 },
@@ -93,7 +96,8 @@
                     "name": "RAS_RIDGE_NEXRAD",
                     "displayName": "Radar Mosaic", 
                     "description": "Radar Mosaic for CONUS, Puerto Rico, Hawaii, Alaska and Guam", 
-                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  }
+                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
+                    "downloadUrl": "http://nowcoast.noaa.gov/help/mapservices.shtml"
                 },
                 {
                     "name": "OBS_MET_TEMP",

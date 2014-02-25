@@ -69,18 +69,15 @@ define(function () {
                                                 layerIds: { type: 'array', items: { type: 'integer' } },
                                             }
                                         },
+                                        // Layers whitelist
                                         showLayers: {
                                             type: 'array',
-                                            items: {
-                                                type: 'object',
-                                                additionalProperties: false,
-                                                required: ['id'],
-                                                properties: {
-                                                    id: { type: 'integer' },
-                                                    displayName: { type: 'string' },
-                                                    parentLayerId: { type: 'integer' }
-                                                }
-                                            }
+                                            items: layer()
+                                        },
+                                        // Sparsely populated layer meta data that associates by id and parentLayerId
+                                        layerMetadata: {
+                                            type: 'array',
+                                            items: layer()
                                         },
                                         visibleLayerIds: { type: 'array', items: { type: 'integer' } },
                                         displayLevels: { type: 'array', items: { type: 'integer' } },
@@ -98,6 +95,20 @@ define(function () {
                         }
                     }
                 }
+            }
+        };
+    }
+
+    function layer() {
+        return {
+            type: 'object',
+            additionalProperties: false,
+            required: ['id'],
+            properties: {
+                id: { type: 'integer' },
+                displayName: { type: 'string' },
+                parentLayerId: { type: 'integer' },
+                downloadUrl: { type: 'string' }
             }
         };
     }
@@ -207,6 +218,7 @@ define(function () {
                             displayName: { type: 'string' },
                             description: { type: 'string' },
                             isNew: isNew(),
+                            downloadUrl: { type: 'string' },
                             extent: {
                                 type: 'object',
                                 additionalProperties: false,

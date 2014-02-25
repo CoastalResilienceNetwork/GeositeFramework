@@ -280,10 +280,16 @@ define(["jquery", "use!underscore"],
 
             function loadDynamicService(node, serviceConfig, serviceData, serviceUrl) {
                 node.url = serviceUrl;
+
+                var dataLayers = serviceData.layers;
+
+                if (_.has(serviceConfig, "layerMetadata")) {
+                    dataLayers = mergeLayerMetadata(dataLayers, serviceConfig.layerMetadata);
+                }
                 if (_.has(serviceConfig, "showLayers")) {
                     if (serviceConfig.showLayers.length > 0) {
                         var layers = _.map(serviceConfig.showLayers, function (layerConfig) {
-                            var item = _.find(serviceData.layers, function (layer) {
+                            var item = _.find(dataLayers, function (layer) {
                                 if (layer.id == layerConfig.id) {
                                     return layer;
                                 }
@@ -294,6 +300,9 @@ define(["jquery", "use!underscore"],
                             }
                             if (_.has(layerConfig, "displayName")) {
                                 layer.name = layerConfig.displayName;
+                            }
+                            if (_.has(layerConfig, "downloadUrl")) {
+                                layer.downloadUrl = layerConfig.downloadUrl;
                             }
                             return layer;
                         });
@@ -306,7 +315,7 @@ define(["jquery", "use!underscore"],
                         }
                     }
                 } else {
-                    loadLayers(serviceData.layers, node);
+                    loadLayers(dataLayers, node);
                 }
             }
 
@@ -317,7 +326,7 @@ define(["jquery", "use!underscore"],
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
                     if (layerSpec.subLayerIds === null) {
                         // This is an actual layer
-                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode);
+                        var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode, layerSpec);
                         node.fetchMetadata = fetchMetadata;
                     } else {
                         // This is a layer group
@@ -747,6 +756,24 @@ define(["jquery", "use!underscore"],
                     },
                     error: _onLayerSourceLoadError
                 });
+            }
+
+            // Merge items based on id and parentLayerId properties
+            function mergeLayerMetadata(layers, layerMetadata) {
+                var key = function(item) {
+                        return [item.id || 0, item.parentLayerId || 0];
+                    },
+                    hashMap = _.object(_.map(layerMetadata, function(item) {
+                        return [key(item), item];
+                    })),
+                    result = _.map(layers, function(layer) {
+                        var metadata = hashMap[key(layer)];
+                        if (metadata) {
+                            return _.extend(layer, metadata);
+                        }
+                        return layer;
+                    });
+                return result;
             }
 
         };
