@@ -3,7 +3,15 @@
 
 // A plugin wraps around a plugin object and manages it in backbone
 
-require(['use!Geosite', 'framework/Logger'], function(N, Logger) {
+require(['use!Geosite',
+         'framework/Logger',
+         'dojox/layout/ResizeHandle',
+         'dojo/dnd/Moveable'
+        ],
+    function(N,
+             Logger,
+             ResizeHandle,
+             Moveable) {
     "use strict";
 
     (function () {
@@ -204,9 +212,6 @@ require(['use!Geosite', 'framework/Logger'], function(N, Logger) {
         });
     }());
 
-    dojo.require("dojox.layout.ResizeHandle");
-    dojo.require('dojo.dnd.Moveable');
-
     (function sidebarPlugin() {
 
         function initialize(view, $parent, paneNumber) {
@@ -251,9 +256,11 @@ require(['use!Geosite', 'framework/Logger'], function(N, Logger) {
         }
 
         function createUiContainer(view, paneNumber) {
-            var containerId = view.model.name() + '-' + paneNumber,
+            var model = view.model,
+                pluginObject = model.get('pluginObject'),
+                containerId = view.model.name() + '-' + paneNumber,
                 bindings = {
-                    title: view.model.get("pluginObject").toolbarName,
+                    title: pluginObject.toolbarName,
                     id: containerId
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
@@ -274,35 +281,35 @@ require(['use!Geosite', 'framework/Logger'], function(N, Logger) {
             $uiContainer
                 // Position the dialog
                 .css(calculatePosition(view.$el))
-            
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
-                    view.model.turnOff();
+                    model.turnOff();
                 }).end()
-
                 // Unselect the plugin, but keep active
                 .find('.plugin-close').on('click', function () {
-                    view.model.deselect();
+                    model.deselect();
                 });
 
             // Attach to top pane element
             view.$el.parents('.content').append($uiContainer.hide());
 
-            // Make the container resizable and moveable
-            new dojox.layout.ResizeHandle({
-                targetId: containerId,
-                activeResize: true,
-                animateSizing: false
-            })
-                .placeAt(containerId)
-                .on('resize', function (e) { onContainerResize(view, this, e); });
+            if (!!pluginObject.resizable) {
+                // Make the container resizable and moveable
+                new ResizeHandle({
+                        targetId: containerId,
+                        activeResize: true,
+                        animateSizing: false
+                    })
+                    .placeAt(containerId)
+                    .on('resize', function (e) { onContainerResize(view, this, e); });
+            }
 
-            new dojo.dnd.Moveable($uiContainer[0], {
+            new Moveable($uiContainer[0], {
                 handle: $uiContainer.find('.plugin-container-header')[0]
             });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
-            view.model.set('$uiContainer', $uiContainer);
+            model.set('$uiContainer', $uiContainer);
             view.$uiContainer = $uiContainer;
         }
 

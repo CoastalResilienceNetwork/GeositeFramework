@@ -49,6 +49,7 @@ define(["dojo/_base/declare",
             toolbarType: "sidebar",
             showServiceLayersInLegend: true,
             allowIdentifyWhenActive: false,
+            resizable: true,
 
             activate: function () {},
             deactivate: function () {},
