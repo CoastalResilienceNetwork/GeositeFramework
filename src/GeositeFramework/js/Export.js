@@ -33,10 +33,11 @@ require(['use!Geosite',
             // but this won't work if you are not using a custom layout
             useDifferentTemplateWithLegend: false,    
             exportIncludeLegend: false,
-
             // set internally, listened by view
             submitEnabled: true,
-            outputText: ""
+            outputText: "",
+            // Pane number of map to export
+            paneNumber: 0
         },
         
         initialize: function () {
@@ -239,7 +240,7 @@ require(['use!Geosite',
                 }
             });
             view.listenTo(view.model, "change:outputText", function () {
-                view.$(".export-output-area").html(this.model.get('outputText'));
+                view.$(".export-output-area").html(view.model.get('outputText'));
             });
         },
 
@@ -248,6 +249,8 @@ require(['use!Geosite',
             this.$el
                 .empty()
                 .append(body);
+            var paneNumber = (+this.model.get('paneNumber')) + 1;
+            this.$('.export-pane-number').text(paneNumber);
             return this;
         }
     });
