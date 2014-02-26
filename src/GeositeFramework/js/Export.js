@@ -138,7 +138,7 @@ require(['use!Geosite',
         createPDF: function () {
             var model = this,
                 resultTemplate = N.app.templates['template-export-url'],
-                attempts = 5,
+                attempts = 3,
                 onSuccess = function(result) {
                     model.set('outputText', resultTemplate({ url: result.url }));
                     onFinish();
