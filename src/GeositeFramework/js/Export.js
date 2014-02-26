@@ -1,8 +1,16 @@
 // on view submit button click, set exportMap to be the current map
 
-(function (N) {
+require(['use!Geosite',
+         'esri/tasks/PrintTask',
+         'dojo/Deferred',
+         'dojo/request',
+         'framework/Logger'],
+    function(N,
+             PrintTask,
+             Deferred,
+             request,
+             Logger) {
     "use strict";
-    dojo.require("esri.tasks.PrintTask");
 
     ////////////////////////////////
     // MODEL CLASS
@@ -25,15 +33,15 @@
             // but this won't work if you are not using a custom layout
             useDifferentTemplateWithLegend: false,    
             exportIncludeLegend: false,
-
             // set internally, listened by view
             submitEnabled: true,
-            outputText: ""
+            outputText: "",
+            // Pane number of map to export
+            paneNumber: 0
         },
         
         initialize: function () {
             var model = this;
-
             model.setupDependencies();
         },
         
@@ -56,9 +64,8 @@
               with the esri javascript api, only if an export setting has
               been specified in the region.json
             */
-            var url = N.app.data.region.export.printServerUrl,
-                printTask = new esri.tasks.PrintTask(url),
-                params = new esri.tasks.PrintParameters();
+            var model = this,
+                url = N.app.data.region.export.printServerUrl;
 
             // If there is a custom template scheme for export, override the
             // default settings.  If no custom template is provided, the export
@@ -68,56 +75,116 @@
                     N.app.data.region.export.customPrintTemplatePrefix);
                 this.set('useDifferentTemplateWithLegend', true);
             }
+
+            model.set('submitEnabled', false);
+            model.fetchServiceConfig(url).then(function(config) {
+                var printTask = new PrintTask(url, {async: config.async});
+                var taskParams = model.getExportParams();
+                model.pdfManager = model.createPdfManager(taskParams, printTask);
+                model.set('submitEnabled', true);
+            });
+        },
+
+        // Fetch task settings from REST API
+        fetchServiceConfig: function(url) {
+            var defer = new Deferred(),
+                jsonUrl = 'proxy.ashx?' + url + '?f=json',
+                config = {
+                    async: false
+                },
+                onSuccess = function(data) {
+                    if (data) {
+                        config.async = data.executionType == 'esriExecutionTypeAsynchronous';
+                    }
+                },
+                onFailure = function() {
+                    new Logger('export').warn(null, 'Failed to load service config');
+                },
+                onFinish = function() {
+                    defer.resolve(config);
+                };
+            request(jsonUrl, {handleAs: 'json'})
+                .then(onSuccess, onFailure)
+                .then(onFinish);
+            return defer.promise;
+        },
+
+        getExportParams: function() {
+            var params = new esri.tasks.PrintParameters();
             params.map = this.get('esriMap');
             params.template = new esri.tasks.PrintTemplate();
             params.template.format = "PDF";
             params.template.preserveScale = false;
             params.template.showAttribution = false;
+            return params;
+        },
 
-            this.pdfManager = {};
-            this.pdfManager.params = params;
-            this.pdfManager.printTask = printTask;
-            this.pdfManager.run = function (layout, title, includeLegend, success, failure) {
+        createPdfManager: function(taskParams, printTask) {
+            var pdfManager = {};
+            pdfManager.params = this.getExportParams();
+            pdfManager.printTask = printTask;
+            pdfManager.run = function (layout, title, includeLegend, success, failure) {
                 // Populate the dynamic parameters and create the pdf
                 this.params.template.layout = layout;
                 this.params.template.layoutOptions = {};
                 this.params.template.layoutOptions.titleText = title;
-                if (!includeLegend) { this.params.template.layoutOptions.legendLayers = []; }
+                if (!includeLegend) {
+                    this.params.template.layoutOptions.legendLayers = [];
+                }
                 this.printTask.execute(this.params, success, failure);
             };
+            return pdfManager;
         },
 
         createPDF: function () {
             var model = this,
                 resultTemplate = N.app.templates['template-export-url'],
-                templateLayout = makePrintTemplateName();
-
-            function makePrintTemplateName() {
-                // Print templates are MXDs on an AGS Server with the following
-                // naming convention: <<TemplatePrefix>> <<Orientation>> <<""|Legend>>.mxd
-                // This is an ESRI convention and includes whitespace, but the template
-                // name should not include the file extension.
-                var includeLegend = model.get('exportIncludeLegend') && model.get('useDifferentTemplateWithLegend'),
-                    legendSuffix = includeLegend ? 'Legend' : '',
-                    prefix = model.get('printLayoutTemplatePrefix'),
-                    orientation = model.get('exportOrientation');
-
-                return $.trim(prefix + " " + orientation + " " + legendSuffix);
-            }
-
-            model.pdfManager.run(
-                templateLayout,
-                model.get('exportTitle'),
-                model.get('exportIncludeLegend'),
-                function (result) {
-                    model.set({
-                        outputText: resultTemplate({ url: result.url }),
-                        submitEnabled: true
-                    });
+                attempts = 3,
+                onSuccess = function(result) {
+                    model.set('outputText', resultTemplate({ url: result.url }));
+                    onFinish();
                 },
-                function () {
-                    model.set('outputText', "Unable to export map, please try again.");
-                });
+                onFailure = function() {
+                    var result = [];
+                    result.push('There was an error processing your request.');
+                    if (attempts > 0) {
+                        var s = attempts == 1 ? '' : 's';
+                        result.push('Trying again ' + attempts + ' more time' + s + '...');
+                    }
+                    model.set('outputText', result.join('<br />'));
+                    tryCreatePdf();
+                },
+                onFinish = function() {
+                    model.set('submitEnabled', true);
+                },
+                tryCreatePdf = function() {
+                    if (attempts <= 0) {
+                        onFinish();
+                    }
+                    model.pdfManager.run(
+                        model.getPrintTemplateName(),
+                        model.get('exportTitle'),
+                        model.get('exportIncludeLegend'),
+                        onSuccess,
+                        onFailure
+                    );
+                    attempts--;
+                };
+            tryCreatePdf();
+        },
+
+        getPrintTemplateName: function() {
+            // Print templates are MXDs on an AGS Server with the following
+            // naming convention: <<TemplatePrefix>> <<Orientation>> <<""|Legend>>.mxd
+            // This is an ESRI convention and includes whitespace, but the template
+            // name should not include the file extension.
+            var model = this,
+                includeLegend = model.get('exportIncludeLegend') && model.get('useDifferentTemplateWithLegend'),
+                legendSuffix = includeLegend ? 'Legend' : '',
+                prefix = model.get('printLayoutTemplatePrefix'),
+                orientation = model.get('exportOrientation');
+
+            return $.trim(prefix + " " + orientation + " " + legendSuffix);
         }
     });
 
@@ -153,13 +220,12 @@
         enableSubmit: function () {
             this.$("#export-button").removeAttr('disabled');
             this.$("div.export-indicator").hide();
-            this.model.set('submitEnabled', true);
         },
 
         waitForPrintRequest: function () {
             this.$("#export-button").attr('disabled', 'disabled');
             this.$("div.export-indicator").show();
-            this.$("div.export-output-area").empty();
+            this.$(".export-output-area").empty();
         },
 
         initialize: function () {
@@ -174,8 +240,7 @@
                 }
             });
             view.listenTo(view.model, "change:outputText", function () {
-                view.$("div.export-output-area").html(this.model.get('outputText'));
-                view.enableSubmit();
+                view.$(".export-output-area").html(view.model.get('outputText'));
             });
         },
 
@@ -184,8 +249,9 @@
             this.$el
                 .empty()
                 .append(body);
+            var paneNumber = (+this.model.get('paneNumber')) + 1;
+            this.$('.export-pane-number').text(paneNumber);
             return this;
         }
     });
-
-}(Geosite));
+});

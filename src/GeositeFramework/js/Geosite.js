@@ -7,6 +7,11 @@
 
 (function (N) {
     "use strict";
+
+    if (N.Geosite) {
+        return;
+    }
+
     N.Geosite = _.clone(Backbone.Events);
 
     // Class objects (see App.js for instances)
@@ -20,6 +25,3 @@
         console.log("Geosite error: " + error);
     });
 }(this));
-
-
-

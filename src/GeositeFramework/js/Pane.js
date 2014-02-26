@@ -256,7 +256,10 @@
         },
 
         exportMap: function exportMap(selectedPaneNumber) {
-            var model = new N.models.ExportTool({ esriMap: this.mapView.esriMap }),
+            var model = new N.models.ExportTool({
+                    esriMap: this.mapView.esriMap,
+                    paneNumber: this.model.get('paneNumber')
+                }),
                 view = new N.views.ExportTool({ model: model });
 
             TINY.box.show({

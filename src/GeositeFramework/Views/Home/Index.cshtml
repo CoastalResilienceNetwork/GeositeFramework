@@ -216,8 +216,8 @@
     </script>
 
     <script type="text/template" id="template-export-window">
-      <h3>Map Export</h3>
-      <h5>Title (Optional):<input type="text" id="export-title"/></h5>
+      <h3>Map <span class="export-pane-number"></span> Export</h3>
+      <h5>Title (Optional):</h5> <input type="text" id="export-title"/>
 
         <div class="row">
             <div class="small-4 columns">
@@ -234,11 +234,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="small-6 columns">
+            <div class="left-col">
                 <div class="export-output-area"></div>
             </div>
-            <div class="small-6 columns">
-                <a href="#" id="export-button" class="button radius">Generate Map Export</a>
+            <div class="right-col">
+                <a href="#" id="export-button" class="button radius" disabled="disabled">Generate Map Export</a>
             </div>
         </div>
       
@@ -367,6 +367,10 @@
             // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
             // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
 
+        var useConfig = { @Html.Raw(Model.ConfigurationForUseJs) };
+        useConfig['Azavea'] = { attach: 'Azavea' };
+        useConfig['Geosite'] = { attach: 'Geosite' };
+
         require({
             async: true,
             packages: [
@@ -382,15 +386,16 @@
             // The next two sections configure https://github.com/tbranyen/use.js, which handles non-AMD-compliant libraries
             // like Underscore and Ext JS. (Reference syntax in plugins is e.g. "use!underscore".)
             paths: {
-                "use": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/use"
+                "use": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/use",
+                "Azavea": location.pathname.replace(/\/[^/]+$/, "") + "js/azavea.util",
+                "Geosite": location.pathname.replace(/\/[^/]+$/, "") + "js/Geosite"
             },
-            use: { @Html.Raw(Model.ConfigurationForUseJs) }
+            use: useConfig
         });
             // Tell Dojo's "define" that JQuery is AMD-compatible. Otherwise you can't reference it in a define().
             define.amd.jQuery = true;
     </script>
 
-    <script src="js/azavea.util.js"></script>
     <script src="js/Geosite.js"></script>
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
@@ -409,8 +414,10 @@
     
     <script type="text/javascript">
 
-        // Initialize logging URL before we load any modules
-        Azavea.logUrl = "Log";
+        require(['use!Azavea'], function(Azavea) {
+            // Initialize logging URL before we load any modules
+            Azavea.logUrl = "Log";
+        });
 
         // Our require() call below for loading plugins shouldn't fail, since:
         //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
