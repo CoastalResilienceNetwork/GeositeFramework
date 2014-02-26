@@ -205,8 +205,6 @@ input.code-like, textarea.code-like {
         position: absolute;
         border: 5px #444 solid;
         border-radius: 5px;
-        width: 300px;
-        height: 400px;
         background: #FFFFFF;
         z-index: 999;
         box-shadow: 0 0 15px #333;
@@ -216,8 +214,10 @@ input.code-like, textarea.code-like {
     .content .plugin-container {
         width: 100%;
         height: 100%;
-        padding-bottom: 28px; /* reduces inner container's 100% height by header's height */
         overflow: visible;
+        }
+        .content .plugin-container-outer.resizable .plugin-container {
+            padding-bottom: 28px; /* reduces inner container's 100% height by header's height */
         }
         .content .plugin-container-header {
             height: 28px;
@@ -258,20 +258,16 @@ input.code-like, textarea.code-like {
         }
 
         .content .plugin-infographic {
-            z-index:10000 !important; 
-            position:absolute !important;
-            left:155px !important;
-            top:18px !important;
-            background-color:#FFF !important;
-            padding:5px !important;
-            border-style:solid;
-            border-width:4px;
-            border-color:#444;
-            border-radius:5px;
-            text-align:right !important;
+            text-align: right;
             display: none;
-            box-shadow: 0 0 15px #000000;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .content .plugin-infographic .graphic {
+            display: block;
+        }
+
+        .content  .plugin-infographic label {
+            display: inline;
         }
 
 .tinner .tclose {
