@@ -5,13 +5,18 @@
 
 require(['use!Geosite',
          'framework/Logger',
-         'dojox/layout/ResizeHandle',
-         'dojo/dnd/Moveable'
+         'dojo/_base/lang',
+         'dojo/dom-style',
+         'dojo/dnd/Moveable',
+         'dojox/layout/ResizeHandle'
         ],
     function(N,
              Logger,
-             ResizeHandle,
-             Moveable) {
+             lang,
+             domStyle,
+             Moveable,
+             ResizeHandle
+             ) {
     "use strict";
 
     (function () {
@@ -215,10 +220,18 @@ require(['use!Geosite',
     (function sidebarPlugin() {
 
         function initialize(view, $parent, paneNumber) {
+            var model = view.model,
+                pluginObject = model.get('pluginObject');
+            view.paneNumber = paneNumber;
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
             createLegendContainer(view);
+            pluginObject.on('setWidth', lang.hitch(null, setWidth, view));
+            pluginObject.on('setHeight', lang.hitch(null, setHeight, view));
+            pluginObject.on('setResizable', lang.hitch(null, setResizable, view));
+            setWidth(view, pluginObject.width);
+            setHeight(view, pluginObject.height);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -255,16 +268,19 @@ require(['use!Geosite',
             return view;
         }
 
+        function getContainerId(view) {
+            return view.model.name() + '-' + view.paneNumber;
+        }
+
         function createUiContainer(view, paneNumber) {
             var model = view.model,
                 pluginObject = model.get('pluginObject'),
-                containerId = view.model.name() + '-' + paneNumber,
+                containerId = getContainerId(view),
                 bindings = {
                     title: pluginObject.toolbarName,
                     id: containerId
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
-
                 calculatePosition = function ($el) {
                     var pos = view.$el.position(),
                         gutterWidth = 70,
@@ -276,7 +292,8 @@ require(['use!Geosite',
                     };
                 };
 
-                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
+            $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
+            view.$uiContainer = $uiContainer;
 
             $uiContainer
                 // Position the dialog
@@ -293,16 +310,7 @@ require(['use!Geosite',
             // Attach to top pane element
             view.$el.parents('.content').append($uiContainer.hide());
 
-            if (!!pluginObject.resizable) {
-                // Make the container resizable and moveable
-                new ResizeHandle({
-                        targetId: containerId,
-                        activeResize: true,
-                        animateSizing: false
-                    })
-                    .placeAt(containerId)
-                    .on('resize', function (e) { onContainerResize(view, this, e); });
-            }
+            setResizable(view, !!pluginObject.resizable);
 
             new Moveable($uiContainer[0], {
                 handle: $uiContainer.find('.plugin-container-header')[0]
@@ -310,7 +318,6 @@ require(['use!Geosite',
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
-            view.$uiContainer = $uiContainer;
         }
 
         function onContainerResize(view, resizeHandle, event) {
@@ -327,6 +334,38 @@ require(['use!Geosite',
             // Tell the model about $legendContainer so it can pass it to the plugin object
             view.model.set('$legendContainer', $legendContainer);
             view.$legendContainer = $legendContainer;
+        }
+
+        // Draw resize handle if resizable, destroy it if not resizable.
+        function setResizable(view, resizable) {
+            var handle = view.resizeHandle,
+                handleExists = typeof handle !== 'undefined' && handle != null,
+                containerId = getContainerId(view);
+            if (resizable && !handleExists) {
+                // Make the container resizable and moveable
+                handle = new ResizeHandle({
+                    targetId: containerId,
+                    activeResize: true,
+                    animateSizing: false
+                });
+                handle.placeAt(containerId)
+                handle.on('resize', function (e) { onContainerResize(view, this, e); });
+                view.resizeHandle = handle;
+            } else if (!resizable && handleExists) {
+                handle.destroy();
+                view.resizeHandle = null;
+            }
+            view.$uiContainer.toggleClass('resizable', resizable);
+        }
+
+        function setWidth(view, width) {
+            var $uiContainer = view.$uiContainer[0];
+            domStyle.set($uiContainer, 'width', width == null ? 'auto' : width + 'px');
+        }
+
+        function setHeight(view, height) {
+            var $uiContainer = view.$uiContainer[0];
+            domStyle.set($uiContainer, 'height', height == null ? 'auto' : height + 'px');
         }
 
         N.views = N.views || {};
