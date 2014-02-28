@@ -186,8 +186,14 @@
                 handle: $('#' + view.legendContainerId).find('.legend-header')[0]
             } );
 
-        // Update the legend whenever the map changes
-        dojo.connect(esriMap, 'onUpdateEnd', _.debounce(updateLegend, 100));
+        // Update the legend whenever the map changes. Certain layer events can only
+        // be captured by the catchall `onUpdateEnd`, so bind to that. However, the
+        // body of `updateLegend` immediately looks at visible layers, while some may
+        // still asynchronously be in queue to become visible. As a protection, call
+        // `updateLegend` explicitly when a layer has finished adding.
+        var updateLegendManager = _.debounce(updateLegend, 200);
+        dojo.connect(esriMap, 'onUpdateEnd', updateLegendManager);
+        dojo.connect(esriMap, 'onLayerAdd', updateLegendManager);
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
