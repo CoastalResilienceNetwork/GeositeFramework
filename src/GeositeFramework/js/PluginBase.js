@@ -186,6 +186,7 @@ define(["dojo/_base/declare",
 
                             identifyParams.tolerance = tolerance;
                             identifyParams.layerIds = service.visibleLayers;
+                            identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
                             identifyParams.width = map.width;
                             identifyParams.height = map.height;
                             identifyParams.geometry = mapPoint;
