@@ -65,13 +65,17 @@ define([
 
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                this._layerManager.load(layerSourcesJson, function (tree) {
+                this._layerManager.load(this.getLayersJson(), function (tree) {
                     if (self._currentState) {
                         self._layerManager.setServiceState(self._currentState, self.map);
                     }
                     self._ui.render(tree);
                     $('a.pluginLayerSelector-clear').click(function () { self.clearAll(); });
                 });
+            },
+
+            getLayersJson: function() {
+                return layerSourcesJson;
             },
 
             activate: function () {
