@@ -45,13 +45,16 @@ namespace GeositeFramework.Models
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
         /// </summary>
-        public static Geosite LoadSiteData(string regionJsonFilePath, string pluginsFolderPath, string appDataFolderPath)
+        public static Geosite LoadSiteData(string regionJsonFilePath, string basePath, string appDataFolderPath)
         {
             var jsonDataRegion = new JsonDataRegion(appDataFolderPath).LoadFile(regionJsonFilePath);
-            var pluginFolderPaths = Directory.EnumerateDirectories(pluginsFolderPath);
+            var pluginDirectories = PluginLoader.GetPluginDirectories(jsonDataRegion, basePath);
+            PluginLoader.VerifyDirectoriesExist(pluginDirectories);
+            var pluginFolderPaths = pluginDirectories.SelectMany(path => Directory.EnumerateDirectories(path));
             var pluginConfigData = GetPluginConfigurationData(pluginFolderPaths, appDataFolderPath);
-            var pluginFolderNames = pluginFolderPaths.Select(p => Path.GetFileName(p)).ToList();
-            var geosite = new Geosite(jsonDataRegion, pluginFolderNames, pluginConfigData);
+            var pluginFolderNames = pluginFolderPaths.Select(path => PluginLoader.GetPluginFolderPath(basePath, path)).ToList();
+            var pluginModuleNames = pluginFolderPaths.Select(path => PluginLoader.GetPluginModuleName(basePath, path)).ToList();
+            var geosite = new Geosite(jsonDataRegion, pluginFolderNames, pluginModuleNames, pluginConfigData);
             return geosite;
         }
 
@@ -84,21 +87,22 @@ namespace GeositeFramework.Models
         /// </summary>
         /// <param name="jsonDataRegion">JSON configuration data (e.g. from a "region.json" configuration file)</param>
         /// <param name="existingPluginFolderNames">A list of plugin folder names (not full paths -- relative to the site "plugins" folder)</param>
-        public Geosite(JsonData jsonDataRegion, List<string> existingPluginFolderNames, List<JsonData> pluginConfigJsonData)
+        public Geosite(JsonData jsonDataRegion, List<string> existingPluginFolderNames,
+            List<string> pluginModuleNames, List<JsonData> pluginConfigJsonData)
         {
             // Validate the region configuration JSON
             var jsonObj = jsonDataRegion.Validate();
 
             // Get plugin folder names, in the specified order
-            if (jsonObj["pluginOrder"] == null)
+            if (jsonObj["pluginOrder"] != null)
             {
-                PluginFolderNames = existingPluginFolderNames;
+                List<string> pluginOrder = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
+                Func<string, int> byPluginOrder = x => pluginOrder.IndexOf(PluginLoader.StripPluginModule(x));
+                PluginLoader.SortPluginNames(existingPluginFolderNames, byPluginOrder);
+                PluginLoader.SortPluginNames(pluginModuleNames, byPluginOrder);
             }
-            else
-            {
-                var specifiedFolderNames = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
-                PluginFolderNames = GetOrderedPluginFolderNames(existingPluginFolderNames, specifiedFolderNames);
-            }
+
+            PluginFolderNames = existingPluginFolderNames;
 
             // Augment the JSON so the client will have the full list of folder names
             jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
@@ -136,7 +140,7 @@ namespace GeositeFramework.Models
 
             // Create plugin module identifiers, to be inserted in generated JavaScript code. Example:
             //     "'plugins/layer_selector/main', 'plugins/measure/main'"
-            PluginModuleIdentifiers = string.Join(", ", PluginFolderNames.Select(name => string.Format("'plugins/{0}/main'", name)));
+            PluginModuleIdentifiers = "'" + string.Join("', '", pluginModuleNames) + "'";
 
             // Create plugin variable names, to be inserted in generated JavaScript code. Example:
             //     "p0, p1"
@@ -147,7 +151,7 @@ namespace GeositeFramework.Models
                 MergePluginConfigurationData(this, pluginConfigJsonData);
             }
         }
-       
+
         /// <summary>
         /// Validate the color syntax and return an HTML acceptable version
         /// of the specified color
@@ -184,30 +188,6 @@ namespace GeositeFramework.Models
                 Popup = json["popup"] != null && bool.Parse(json["popup"].ToString()),
                 ElementId = json["elementId"] != null ? (string)json["elementId"] : null
             };
-        }
-
-        private static List<string> GetOrderedPluginFolderNames(List<string> existingFolderNames, List<string> specifiedFolderNames)
-        {
-            var retVal = new List<string>();
-            var existingNames = new List<string>(existingFolderNames); // copy input argument so we don't modify it
-
-            // The "specified" folder names are in the desired order. 
-            // Make sure each exists and remove it from the list of existing folder names.
-            foreach (var folderName in specifiedFolderNames)
-            {
-                if (existingFolderNames.Contains(folderName))
-                {
-                    retVal.Add(folderName);
-                    existingNames.Remove(folderName);
-                }
-                else
-                {
-                    throw new ApplicationException("Specified plugin folder not found: " + folderName);
-                }
-            }
-            // Append any existing folder names that weren't specified
-            retVal.AddRange(existingNames);
-            return retVal;
         }
 
         // Example plugin.json file:

@@ -67,6 +67,10 @@
                 "additionalProperties": false
             }
         },
+        "pluginFolders": {
+            "type": "array",
+            "items": {"type": "string"},
+        },
         "pluginOrder": {
             "type": "array",
             "items": {"type": "string"},

@@ -47,16 +47,12 @@ namespace GeositeFramework
         private Geosite LoadGeositeData()
         {
             // Load geosite data from "region.json" file
+            string basePath = HostingEnvironment.MapPath("~/");
             string configFilePath = HostingEnvironment.MapPath("~/region.json");
-            string pluginsFolderPath = HostingEnvironment.MapPath("~/plugins");
             string appDataFolderPath = HostingEnvironment.MapPath("~/App_Data");
             if (!File.Exists(configFilePath))
             {
                 throw new FileNotFoundException("Site configuration file not found: " + configFilePath);
-            }
-            if (!Directory.Exists(pluginsFolderPath))
-            {
-                throw new FileNotFoundException("Plugins folder not found: " + pluginsFolderPath);
             }
             if (!Directory.Exists(appDataFolderPath))
             {
@@ -64,7 +60,7 @@ namespace GeositeFramework
             }
             try
             {
-                var geositeData = Geosite.LoadSiteData(configFilePath, pluginsFolderPath, appDataFolderPath);
+                var geositeData = Geosite.LoadSiteData(configFilePath, basePath, appDataFolderPath);
                 geositeData.GeositeFrameworkVersion = _geositeFrameworkVersion;
                 return geositeData;
             }
