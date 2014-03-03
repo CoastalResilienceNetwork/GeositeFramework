@@ -55,6 +55,7 @@ define(["dojo/_base/declare",
             width: 300,
             height: 400,
 
+            initialize: function() {},
             activate: function () {},
             deactivate: function () {},
             hibernate: function () {},
