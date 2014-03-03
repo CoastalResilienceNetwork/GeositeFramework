@@ -8,14 +8,18 @@ require(['use!Geosite',
          'dojo/_base/lang',
          'dojo/dom-style',
          'dojo/dnd/Moveable',
-         'dojox/layout/ResizeHandle'
+         'dojox/layout/ResizeHandle',
+         'dijit/form/CheckBox',
+         'dijit/form/Button'
         ],
     function(N,
              Logger,
              lang,
              domStyle,
              Moveable,
-             ResizeHandle
+             ResizeHandle,
+             CheckBox,
+             Button
              ) {
     "use strict";
 
@@ -103,7 +107,8 @@ require(['use!Geosite',
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
                 pluginObject: null,
-                active: false
+                active: false,
+                displayHelp: false
             },
             initialize: function () { initialize(this); },
 
@@ -121,6 +126,9 @@ require(['use!Geosite',
                 if (this.selected) {
                     this.set('active', true);
                     this.get('pluginObject').activate();
+                    if (this.get('showHelpOnStartup')) {
+                        this.set('displayHelp', true);
+                    }
                 } else {
                     this.get('pluginObject').deactivate();
                 }
@@ -149,6 +157,35 @@ require(['use!Geosite',
                     processResults({ pluginTitle: pluginTitle,
                                      result: false });
                 }
+            },
+
+            get: function(key) {
+                if (key == 'showHelpOnStartup') {
+                    return this._getShowHelpOnStartup();
+                }
+                return Backbone.Model.prototype.get.apply(this, arguments);
+            },
+
+            set: function(key, val, options) {
+                if (key == 'showHelpOnStartup') {
+                    this._setShowHelpOnStartup(val);
+                }
+                return Backbone.Model.prototype.set.apply(this, arguments);
+            },
+
+            _getShowHelpOnStartup: function() {
+                var pluginObject = this.get('pluginObject'),
+                    showValueKey = pluginObject.toolbarName + " showinfographic";
+                if (typeof localStorage[showValueKey] !== 'undefined') {
+                    return localStorage[showValueKey] === 'true';
+                }
+                return true;
+            },
+
+            _setShowHelpOnStartup: function(val) {
+                var pluginObject = this.get('pluginObject'),
+                    showValueKey = pluginObject.toolbarName + " showinfographic";
+                localStorage.setItem(showValueKey, val);
             }
         });
 
@@ -227,11 +264,10 @@ require(['use!Geosite',
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
             createLegendContainer(view);
-            pluginObject.on('setWidth', lang.hitch(null, setWidth, view));
-            pluginObject.on('setHeight', lang.hitch(null, setHeight, view));
-            pluginObject.on('setResizable', lang.hitch(null, setResizable, view));
+            createHelpScreen(view);
             setWidth(view, pluginObject.width);
             setHeight(view, pluginObject.height);
+            view.listenTo(model, 'change:displayHelp', onDisplayHelpChanged);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -278,7 +314,8 @@ require(['use!Geosite',
                 containerId = getContainerId(view),
                 bindings = {
                     title: pluginObject.toolbarName,
-                    id: containerId
+                    id: containerId,
+                    isHelpButtonVisible: isHelpButtonVisible(view)
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
                 calculatePosition = function ($el) {
@@ -305,12 +342,15 @@ require(['use!Geosite',
                 // Unselect the plugin, but keep active
                 .find('.plugin-close').on('click', function () {
                     model.deselect();
+                }).end()
+                .find('.plugin-help').on('click', function () {
+                    model.set('displayHelp', true);
                 });
 
             // Attach to top pane element
             view.$el.parents('.content').append($uiContainer.hide());
 
-            setResizable(view, !!pluginObject.resizable);
+            setResizable(view, pluginObject.resizable);
 
             new Moveable($uiContainer[0], {
                 handle: $uiContainer.find('.plugin-container-header')[0]
@@ -334,6 +374,58 @@ require(['use!Geosite',
             // Tell the model about $legendContainer so it can pass it to the plugin object
             view.model.set('$legendContainer', $legendContainer);
             view.$legendContainer = $legendContainer;
+        }
+
+        function createHelpScreen(view) {
+            var model = view.model,
+                pluginObject = model.get('pluginObject'),
+                pluginContainer = view.$uiContainer.find('.plugin-container');
+
+            if (pluginObject.infoGraphic) {
+                view.helpScreen = new N.views.InfoGraphicView({
+                    model: model
+                });
+                pluginContainer.append(view.helpScreen.el);
+                view.helpScreen.$el.hide();
+            }
+        }
+
+        function isHelpButtonVisible(view) {
+            var model = view.model,
+                pluginObject = model.get('pluginObject');
+            return typeof pluginObject.infoGraphic !== 'undefined';
+        }
+
+        function onDisplayHelpChanged() {
+            var view = this,
+                model = view.model,
+                pluginObject = model.get('pluginObject'),
+                $uiContainer = view.$uiContainer,
+                $mainPanel = $uiContainer.find('.plugin-container-inner'),
+                showInfoGraphic = !!model.get('displayHelp');
+
+            if (!view.helpScreen) {
+                return;
+            }
+
+            if (showInfoGraphic) {
+                view.helpScreen.$el.show();
+                $mainPanel.hide();
+            } else {
+                view.helpScreen.$el.hide();
+                $mainPanel.show();
+            }
+
+            // Disable resizing when infographic is active
+            setResizable(this, pluginObject.resizable && !showInfoGraphic);
+            // Plugin window should expand to fit content when infographic is active
+            if (showInfoGraphic) {
+                setWidth(this, null);
+                setHeight(this, null);
+            } else {
+                setWidth(this, pluginObject.width);
+                setHeight(this, pluginObject.height);
+            }
         }
 
         // Draw resize handle if resizable, destroy it if not resizable.
@@ -375,9 +467,58 @@ require(['use!Geosite',
             $uiContainer: null,
             $legendContainer: null,
 
-            initialize: function () { initialize(this, this.options.$parent, this.options.paneNumber); },
+            initialize: function() {
+                initialize(this, this.options.$parent, this.options.paneNumber);
+            },
 
-            render: function renderSidbarPlugin() { return render(this); }
+            render: function() {
+                return render(this);
+            }
+        });
+    }());
+
+    (function infoGraphicView() {
+        N.views = N.views || {};
+        N.views.InfoGraphicView = Backbone.View.extend({
+            tagName: 'div',
+            className: 'claro plugin-infographic',
+
+            initialize: function() {
+                this.render();
+            },
+
+            render: function() {
+                var pluginModel = this.model,
+                    pluginObject = pluginModel.get('pluginObject');
+
+                var img = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
+                this.$el.append(img);
+
+                var checkboxnode = $('<span>').get(0);
+                this.$el.append(checkboxnode);
+
+                var nscheckBox = new CheckBox({
+                    name: "checkBox",
+                    checked: !pluginModel.get('showHelpOnStartup'),
+                    onChange: function(show) {
+                        pluginModel.set('showHelpOnStartup', !show);
+                    }
+                }, checkboxnode);
+
+                var lbl = $("<label>Don't Show This on Start</label>")
+                    .attr('for', nscheckBox.id);
+                this.$el.append(lbl);
+
+                var buttonnode = $('<span>').get(0);
+                this.$el.append(buttonnode);
+
+                var closeinfo = new Button({
+                    label: "Continue",
+                    onClick: function() {
+                        pluginModel.set('displayHelp', false);
+                    }
+                }, buttonnode);
+            }
         });
     }());
 
