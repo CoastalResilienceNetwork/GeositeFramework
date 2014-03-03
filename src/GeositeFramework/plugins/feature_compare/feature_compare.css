@@ -1,5 +1,15 @@
-﻿.comparer-feature-list .comparer-feature-col {
+﻿.comparer-feature-header {
+    padding: 5px;
+}
+
+.comparer-feature-header hr {
+    margin: 5px;
+}
+
+.comparer-feature-list .comparer-feature-col {
     float: left;
+    margin: 1px;
+    min-width: 100px;
 }
 
 .comparer-selection-badge {

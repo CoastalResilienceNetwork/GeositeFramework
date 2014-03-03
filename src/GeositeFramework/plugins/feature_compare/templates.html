@@ -1,6 +1,6 @@
 ﻿
 <script type="text/template" id="template-comparer-pluginbody">
-    <div>
+    <div class="comparer-feature-header">
         <h4><%= featureName %> Comparison Tools</h4> 
         <div>Load a type of feature, then select up to <%= maxSelectableFeatures %> <%=featureName%>s to compare values from.</div>
         <select>
@@ -9,6 +9,7 @@
                 <option value="<%=idx %>"><%= layer.name %></option>
             <% }) %>
         </select>
+        <hr />
         <div class="comparer-feature-list"></div>
     </div>
 </script>
