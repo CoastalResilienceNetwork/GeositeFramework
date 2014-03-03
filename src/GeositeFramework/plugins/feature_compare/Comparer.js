@@ -42,7 +42,7 @@
 
             model.currentLayer = new esri.layers.FeatureLayer(layerInfo.url, {
                 mode: esri.layers.FeatureLayer.ON_DEMAND,
-                outFields: layerInfo.attrs
+                outFields: _.pluck(layerInfo.attrs, "name")
             });
 
             model.currentLayer.comparerIndex = layerIdx;
@@ -51,7 +51,7 @@
                 // When the layer is loaded, get a list of just the field infos
                 // for which we are using to comapre field values.
                 model.currentFieldInfos = _.filter(model.currentLayer.fields, function(field) {
-                    return _.contains(layerInfo.attrs, field.name);
+                    return _.contains(_.pluck(layerInfo.attrs, "name"), field.name);
                 });
 
                 model._addStateSelectedFeatures();
@@ -126,7 +126,11 @@
 
             this._preSelectedFeatureIds = state.selectedIds;
             this.addLayer(state.currentLayerIdx);
-        }, 
+        },
+
+        getFieldFormatDefinitions: function() {
+            return this.get('layers')[this.currentLayer.comparerIndex].attrs;
+        },
 
         _addStateSelectedFeatures: function() {
             var model = this,
@@ -183,7 +187,8 @@
                 graphic = new esri.Graphic(featureGraphic.geometry, symbol),
                 selectionAttrs = _.extend(featureGraphic.attributes, {
                     selectionIndex: selectionIndex,
-                    selectionColor: model.get('selectionColors')[selectionIndex]
+                    selectionColor: model.get('selectionColors')[selectionIndex],
+                    fieldInfos: model.getFieldFormatDefinitions()
                 }),
                 feature = new compFeature.Feature(selectionAttrs);
 
@@ -280,12 +285,20 @@
 
         renderComparisons: function() {
             var view = this,
+                model = view.model,
                 featureEls = view.model.selectedFeatures.map(function (feature) {
                     return new compFeature.FeatureView({
                         model: feature,
                         orderedFieldInfos: view.model.currentFieldInfos,
                         el: $(view.options.templates.feature({ id: feature.cid})),
-                        valueTemplate: view.options.templates.featureValue
+                        valueTemplate: view.options.templates.featureValue,
+                        error: function(fieldName, msg) {
+                            var logMsg = "Layer: " + model.currentLayer.name + "\n" +
+                                "Field: " + fieldName + "\n" +
+                                "Error: " + msg;
+
+                            model.options.app.warn("", logMsg);
+                        }
                     }).$el;
             });
 
