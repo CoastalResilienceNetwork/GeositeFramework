@@ -14,8 +14,18 @@
                 "properties": {
                     "name": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
-                    "attrs": {"type": "array", "items": {
-                        "type": "string"}, "required": true}
+                    "attrs": {
+                        "type": "object", 
+                        "properties": {
+                            "name": {"type": "string", "required": true},
+                            "format": {"type": "string", "required": false},
+                            "maxLength": {"type": "integer", "required": false},
+                            "digits": {"type": "integer", "required": false},
+                            "units": {"type": "string", "required": false},
+                            "nonZeroCutoff": {"type": "number", "required": false}
+                        }, 
+                        "required": true
+                    }
                 }
             },
             "additionalProperties": false,

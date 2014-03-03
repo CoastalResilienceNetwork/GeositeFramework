@@ -6,13 +6,31 @@
         {
             "name": "HUC 8",
             "url": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/Watershed_and_Political_Boundaries/MapServer/0",
-            "attrs": ["canal_idx", "DamIdx", "RES_Idx", "DamStorIdx", "VEG_idx", "Prot_idx", "chan_idx"]
+            "attrs": [
+                {"name": "SUBREGION", "format": "text", "maxLength": 25},
+                {"name": "canal_idx", "format": "number", "digits": 3, "unit": " mi", "nonZeroCutoff": 0.001},
+                {"name": "DamIdx", "format": "number", "digits": 4, "unit": " mi<sup>2</sup>", "nonZeroCutoff": 0.0001},
+                {"name": "ResX100", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.001},
+                {"name": "DamStorIdx", "format": "number", "digits": 4, "unit": " ft", "nonZeroCutoff": 0.0001},
+                {"name": "VEG_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001},
+                {"name": "Prot_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001},
+                {"name": "chan_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001}
+            ]
         },
         {
             "name": "HUC 12",
             "url": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/Watershed_and_Political_Boundaries/MapServer/1",
-            "attrs": ["ACRES"]
-        }
+            "attrs": [
+                {"name": "STATES", "format": "text", "maxLength": 25},
+                {"name": "canal_idx", "format": "number", "digits": 3, "unit": " mi", "nonZeroCutoff": 0.001},
+                {"name": "DamIdx", "format": "number", "digits": 4, "unit": " mi<sup>2</sup>", "nonZeroCutoff": 0.0001},
+                {"name": "ResX100", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.001},
+                {"name": "DamStorIdx", "format": "number", "digits": 4, "unit": " ft", "nonZeroCutoff": 0.0001},
+                {"name": "VEG_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001},
+                {"name": "Prot_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001},
+                {"name": "chan_idx", "format": "percent", "digits": 2, "unit": "%", "nonZeroCutoff": 0.0001}
+            ]
+        }    
      ],
      "selectionColors": [
         [4,180,174,1],

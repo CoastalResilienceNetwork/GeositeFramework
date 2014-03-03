@@ -9,7 +9,8 @@
 
             this.$templates = $('<div>').append($($.trim(options.templates)));
             this.comparer = new compare.Comparer(this.config, {
-                map: options.context.map
+                map: options.context.map,
+                app: this.app
             });
 
             this.comparerView = new compare.ComparerView({

@@ -191,6 +191,7 @@
     <Content Include="plugins\feature_compare\images\spinner.gif" />
     <Content Include="plugins\feature_compare\main.js" />
     <Content Include="plugins\feature_compare\templates.html" />
+    <Content Include="plugins\feature_compare\ValueFormatter.js" />
     <Content Include="plugins\full_extent\icon-active.png" />
     <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
