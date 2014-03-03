@@ -14,6 +14,7 @@
                 "properties": {
                     "name": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
+                    "mapDisplayAttribute": {"type": "string", "required": false},
                     "attrs": {
                         "type": "object", 
                         "properties": {

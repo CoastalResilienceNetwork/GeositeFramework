@@ -1,4 +1,14 @@
-﻿define(["use!underscore", "./Feature"], function(_, compFeature) {
+﻿define([
+        "use!underscore",
+        "./Feature",
+        "dijit/TooltipDialog",
+        "dijit/popup"
+    ], function (
+        _,
+        compFeature,
+        TooltipDialog,
+        popup
+    ) {
     var Comparer = Backbone.Model.extend({
 
         highlightStyle: null,
@@ -25,6 +35,11 @@
 
             this.options.map.addLayer(this.selectionLayer);
             this.activate();
+
+            this.dialog = new TooltipDialog({
+                id: "feature-compare-tooltip"
+            });
+            this.dialog.startup();
         },
 
         addLayer: function(layerIdx) {
@@ -59,18 +74,24 @@
 
             model.options.map.addLayer(model.currentLayer);
 
+            model.options.map.on('extent-change', 
+                _.bind(model._clearHighlight, model));
+            
             mouseOver = model.currentLayer.on('mouse-over', function(e) {
                 // When mousing very speedily, the 'mouse-out' event may
                 // get skipped, so double check a 'clear' before highlighting
-                model._clearHighlightGraphic();
+                model._clearHighlight();
                 model.highlightGraphic = new esri.Graphic(e.graphic.geometry,
                     model.highlightStyle, e.graphic.attributes);
                 model.options.map.graphics.add(model.highlightGraphic);
                 model.options.map.setMapCursor('pointer');
-            }); 
+
+                model._showMapFeatureHover.apply(model,
+                    [e, e.graphic.attributes[layerInfo.mapDisplayAttribute]]);
+            });
 
             mouseOut = model.options.map.graphics.on('mouse-out',
-                _.bind(model._clearHighlightGraphic, model));
+                _.bind(model._clearHighlight, model));
 
             click = model.options.map.graphics.on('click',
                 _.bind(model._handleFeatureClick, model));
@@ -84,7 +105,7 @@
                 this.currentLayer = null;
                 this.selectedFeatures.reset();
             }
-            this._clearHighlightGraphic();
+            this._clearHighlight();
             this.selectionLayer.clear();
         },
 
@@ -98,7 +119,7 @@
         },
 
         hide: function() {
-            this._clearHighlightGraphic();
+            this._clearHighlight();
             if (this.currentLayer) {
                 this.currentLayer.disableMouseEvents();
             }
@@ -132,6 +153,17 @@
             return this.get('layers')[this.currentLayer.comparerIndex].attrs;
         },
 
+        _showMapFeatureHover: function(mouseEvent, featureValue) {
+            if (featureValue) {
+                this.dialog.setContent(featureValue);
+                popup.open({
+                    popup: this.dialog,
+                    x: mouseEvent.pageX + 10,  // offset tip from pointer a bit
+                    y: mouseEvent.pageY 
+                });
+            }
+        }, 
+
         _addStateSelectedFeatures: function() {
             var model = this,
                 update = model.currentLayer.on('update', function () {
@@ -152,13 +184,14 @@
                 update.remove();
             });
         },
-        
-        _clearHighlightGraphic: function() {
+
+        _clearHighlight: function() {
             if (this.highlightGraphic) {
                 this.options.map.graphics.remove(this.highlightGraphic);
                 this.highlightGraphic = null;
                 this.options.map.setMapCursor('default');
             }
+            popup.close(this.dialog);
         },
 
         _handleFeatureClick: function(e) {
