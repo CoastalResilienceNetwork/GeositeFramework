@@ -124,11 +124,11 @@ require(['use!Geosite',
 
             onSelectedChanged: function () {
                 if (this.selected) {
-                    this.set('active', true);
-                    this.get('pluginObject').activate();
-                    if (this.getShowHelpOnStartup()) {
+                    if (!this.get('active') && this.getShowHelpOnStartup()) {
                         this.set('displayHelp', true);
                     }
+                    this.set('active', true);
+                    this.get('pluginObject').activate();
                 } else {
                     this.get('pluginObject').deactivate();
                 }
