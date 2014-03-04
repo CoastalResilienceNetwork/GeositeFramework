@@ -24,8 +24,9 @@
     }
 
     function renderSelectedBasemapName(view) {
-        var name = view.model.getSelectedBasemapName();
-        view.$('.basemap-selector-title').text(name);
+        var name = view.model.getSelectedBasemapName(),
+            downArrow = '<span>&#9660;</span>';
+        view.$('.basemap-selector-title').html(name + downArrow);
     }
 
     function onItemClicked(view, e) {
