@@ -42,8 +42,8 @@ define([
         "framework/PluginBase",
         "./LayerManager",
         "./Ui",
-        "dojo/text!plugins/layer_selector/layers.json",
-        "dojo/text!plugins/layer_selector/templates.html",
+        "dojo/text!./layers.json",
+        "dojo/text!./templates.html",
         "jquery"
     ],
     function (declare, PluginBase, LayerManager, Ui, layerSourcesJson, templates, $) {

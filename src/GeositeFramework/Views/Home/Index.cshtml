@@ -151,7 +151,7 @@
 
     <script type="text/template" id="template-sidebar-plugin">
             <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;">
-                <img src="plugins/<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
+                <img src="<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
                 <div><%- pluginObject.toolbarName %></div>
             </a>
     </script>
@@ -385,6 +385,10 @@
                 {
                     name: "plugins",
                     location: location.pathname.replace(/\/[^/]+$/, "") + "plugins"  // e.g. "/virtualFolderName/plugins"
+                },
+                {
+                    name: "tnc",
+                    location: location.protocol + "//" + location.host + location.pathname.replace(/\/+$/, "")
                 },
                 {
                     name: "framework",

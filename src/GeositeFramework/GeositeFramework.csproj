@@ -122,11 +122,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PluginLoader.cs" />
     <Compile Include="Helpers\JsonDataPlugin.cs" />
     <Compile Include="Helpers\JsonData.cs" />
     <Compile Include="Helpers\JsonDataRegion.cs" />
     <Compile Include="Models\Geosite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\PluginLoaderTests.cs" />
     <Compile Include="Tests\GeositeTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -27,12 +27,12 @@ namespace GeositeFramework.Tests
 
         private Geosite CreateGeosite(string regionJson)
         {
-            return new Geosite(LoadRegionData(regionJson), new List<string>(), null);
+            return new Geosite(LoadRegionData(regionJson), new List<string>(), new List<string>(), null);
         }
 
-        private Geosite CreateGeosite(string regionJson, List<string> pluginFolderNames)
+        private Geosite CreateGeosite(string regionJson, List<string> pluginFolderNames, List<string> pluginModuleNames)
         {
-            return new Geosite(LoadRegionData(regionJson), pluginFolderNames, null);
+            return new Geosite(LoadRegionData(regionJson), pluginFolderNames, pluginModuleNames, null);
         }
 
         private JsonData LoadRegionData(string regionJson)
@@ -60,16 +60,17 @@ namespace GeositeFramework.Tests
                     ],
                     'pluginOrder': [ 'layer_selector', 'measure' ]
                 }";
-            var pluginFolderNames = new List<string> { "nearshore_waves", "measure", "layer_selector", "explode"};
+            var pluginFolderNames = new List<string> { "nearshore_waves", "measure", "layer_selector", "explode" };
+            var pluginModuleNames = new List<string> { "nearshore_waves/main", "measure/main", "layer_selector/main", "explode/main" };
             var pluginJsonData = new List<JsonData> { LoadPluginData(@"{ css: ['main.css'], use: { underscore: { attach: '_' } } }") };
-            var geosite = new Geosite(LoadRegionData(regionJson), pluginFolderNames, pluginJsonData);
+            var geosite = new Geosite(LoadRegionData(regionJson), pluginFolderNames, pluginModuleNames, pluginJsonData);
 
             Expect(geosite.TitleMain.Text, EqualTo("Geosite Framework Sample"));
             Expect(geosite.TitleDetail.Text, EqualTo("Sample Region"));
             Expect(geosite.HeaderLinks.Count, EqualTo(2));
             Expect(geosite.HeaderLinks[0].Url, EqualTo("http://www.azavea.com/"));
             Expect(geosite.HeaderLinks[1].Text, EqualTo("GIS"));
-            Expect(geosite.PluginModuleIdentifiers, EqualTo("'plugins/layer_selector/main', 'plugins/measure/main', 'plugins/nearshore_waves/main', 'plugins/explode/main'"));
+            Expect(geosite.PluginModuleIdentifiers, EqualTo("'layer_selector/main', 'measure/main', 'nearshore_waves/main', 'explode/main'"));
             Expect(geosite.PluginVariableNames, EqualTo("p0, p1, p2, p3"));
             Expect(geosite.PluginCssUrls, Contains("main.css"));
             Expect(geosite.ConfigurationForUseJs, Contains("underscore"));
@@ -156,23 +157,6 @@ namespace GeositeFramework.Tests
             Expect((ex as JsonValidationException).ParseMessages[0], Contains("3 is less than minimum count of 4"));
         }
 
-        /// <exclude/>
-        [Test]
-        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "XYZ", MatchType = MessageMatch.Contains)]
-        public void TestMissingPlugin()
-        {
-            var regionJson = @"
-                {
-                    'titleMain': {'text':''},
-                    'titleDetail': {'text':''},
-                    'initialExtent': [0,0,0,0],
-                    'basemaps': [{'name':'', 'url':''}],
-                    'pluginOrder': [ 'layer_selector', 'XYZ' ]
-                }";
-            var pluginFolderNames = new List<string> { "nearshore_waves", "measure", "layer_selector", "explode" };
-            CreateGeosite(regionJson, pluginFolderNames);
-        }
-
         // ------------------------------------------------------------------------
         // Tests for plugin.json configuration
 
@@ -185,7 +169,7 @@ namespace GeositeFramework.Tests
                     'initialExtent': [0,0,0,0],
                     'basemaps': [{'name':'', 'url':''}]
                 }";
-            return new Geosite(LoadRegionData(regionJson), new List<string>(), pluginConfigJsonData);
+            return new Geosite(LoadRegionData(regionJson), new List<string>(), new List<string>(), pluginConfigJsonData);
         }
 
         private JObject ParsePluginData(string pluginJson)
@@ -277,6 +261,5 @@ namespace GeositeFramework.Tests
             };
             CreateGeosite(jsonData);
         }
-
     }
 }
