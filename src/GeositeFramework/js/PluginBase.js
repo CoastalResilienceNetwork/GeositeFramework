@@ -425,7 +425,7 @@ define(["dojo/_base/declare",
                             // for the purpose of hyperlink clicking, copy and
                             // pasting, casual browsing, etc.
                             $section.click(expandOrCollapseAttributeSection);
-                            $section.find('.result-of-identify').on('click',
+                            $section.find('[data-class="result-of-identify-inner"]').on('click',
                                 function (e) { e.stopPropagation(); });
                         }
                         $result.append($section);

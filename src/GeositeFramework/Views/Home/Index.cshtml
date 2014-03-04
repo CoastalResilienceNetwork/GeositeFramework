@@ -199,18 +199,26 @@
 
 
     <script type="text/template" id="plugin-result-of-identify">
-        <div class="result-of-identify collapsed"><%= layerName %>
-            <div class="result-of-identify">
-            <% if (value) { %>
-            <%= displayFieldName || 'Value'%>: <%= value %>
-            <% } %>
-                <div class="attributes" style="display: none;">
-                    <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
-                        <% if (attributeName !== displayFieldName) { %>
-                            <div class="result-of-identify"><%= attributeName %>: <%= attributeValue %></div>
-                        <% } %>
-                    <% }); %>
-                </div>
+        <div class="result-of-identify collapsed">
+            <div data-class="result-of-identify-inner">
+                <%= layerName %><br/>
+                <% if (value) { %>
+                <%= displayFieldName || 'Value'%>: <%= value %>
+                <% } %>
+                    <div class="attributes" style="display: none;">
+                        <table>
+                            <tbody>
+                                <% _.each(feature.attributes, function(attributeValue, attributeName) { %>
+                                    <% if (attributeName !== displayFieldName) { %>
+                                        <tr>
+                                            <td><%= attributeName %></td>
+                                            <td><%= attributeValue %></td>
+                                        </tr>
+                                    <% } %>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
     </script>
