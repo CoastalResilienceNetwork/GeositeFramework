@@ -5,47 +5,25 @@
 
 define(["dojo/_base/declare",
         "dojo/_base/xhr",
-        "dojo/aspect",
-        "dojo/_base/lang",
         "dojo/on",
-        "dojo/query",
-        "dojo/NodeList-traverse",
-        "dojo/dom-style",
-        "dojo/dom-construct",
-        "dojo/dom-class",
-        "dojo/Evented",
         "esri/tasks/IdentifyTask",
         "esri/tasks/IdentifyParameters",
         "dojo/DeferredList",
-        "dojo/_base/Deferred",
-        "dijit/layout/ContentPane",
-        "dijit/form/CheckBox",
-        "dijit/form/Button"
+        "dojo/_base/Deferred"
        ],
     function (declare,
                 xhr,
-                aspect, 
-                lang, 
                 on, 
-                query, 
-                NodeListtrav, 
-                domStyle, 
-                domConstruct, 
-                domClass, 
-                Evented,
                 dIdentifyTask, 
                 IdentifyParameters, 
                 dDeferredList, 
-                Deferred, 
-                ContentPane, 
-                CheckBox, 
-                Button
+                Deferred
                 ) {
 
         var URL_PATTERN = /^https?:\/\/.+/,
             isBlacklisted;
 
-        return declare([Evented], {
+        return declare(null, {
             toolbarName: "",
             fullName: "",
             toolbarType: "sidebar",
@@ -63,107 +41,13 @@ define(["dojo/_base/declare",
             getState: function () {},
             setState: function () {},
 
-            showInfographic: CheckandShowInfographic,
-
             identify: identify,
+
             constructor: function(args) {
                 isBlacklisted = _.partial(_.contains, Geosite.app.data.region.identifyBlacklist);
                 declare.safeMixin(this,args);
-                aspect.after(this,'activate', lang.hitch(this,this.showInfographic));
             }
         });
-
-        function CheckandShowInfographic(override) {
-            if (this.infoGraphic) {
-                var showValueKey = this.toolbarName + " showinfographic",
-                    doNotShow = localStorage[showValueKey] === 'true';
-
-                if (!this.infoGraphicArea) {
-                    var pluginContainer = query(this.container).parent(),
-                        headers = pluginContainer.children(".plugin-container-header"),
-                        pluginContainerInner = pluginContainer.children(".plugin-container-inner"),
-                        moreinfo = domConstruct.create("a", {
-                            href: "javascript:;",
-                            title: "View the info-graphic",
-                            innerHTML:"?"
-                        });
-
-                    this.mainPanel = pluginContainerInner[0];
-
-                    on(moreinfo, "click", lang.hitch(this, function() {
-                        this.showInfographic(true);
-                    }));
-
-                    headers[0].appendChild(moreinfo);
-
-                    var img = domConstruct.create('img', {
-                        src: this.infoGraphic,
-                        'class': 'graphic'
-                    });
-                    this.infoGraphicArea = domConstruct.create("div");
-                    this.infoGraphicArea.appendChild(img);
-
-                    domClass.add(this.infoGraphicArea, "claro plugin-infographic");
-
-                    var checkboxnode = domConstruct.create("span");
-                    this.infoGraphicArea.appendChild(checkboxnode);
-                    this._nscheckBox = new CheckBox({
-                        name: "checkBox",
-                        checked: doNotShow,
-                        onChange: lang.hitch(this, function (show) {
-                            localStorage.setItem(showValueKey, show);
-                        })
-                    }, checkboxnode);
-
-                    var noshow = domConstruct.create("label", {
-                        innerHTML: "Don't Show This on Start ",
-                        'for': this._nscheckBox.id
-                    });
-                    this.infoGraphicArea.appendChild(noshow);
-
-                    var buttonnode = domConstruct.create("span");
-                    this.infoGraphicArea.appendChild(buttonnode);
-
-                    var closeinfo = new Button({
-                        label: "Continue",
-                        onClick: lang.hitch(this, function() {
-                            this.showInfographic(false);
-                        })
-                    }, buttonnode);
-
-                    pluginContainer[0].appendChild(this.infoGraphicArea);
-                }
-
-                this._nscheckBox.attr("checked", doNotShow);
-
-                var showInfoGraphic = typeof override !== 'undefined' ? !!override : !doNotShow;
-                domStyle.set(this.infoGraphicArea, 'display', showInfoGraphic ? 'block' : 'none');
-                domStyle.set(this.mainPanel, 'display', showInfoGraphic ? 'none' : 'block');
-
-                // Disable resizing when infographic is active
-                setResizable(this, this.resizable && !showInfoGraphic);
-                // Plugin window should expand to fit content when infographic is active
-                if (showInfoGraphic) {
-                    setWidth(this, null);
-                    setHeight(this, null);
-                } else {
-                    setWidth(this, this.width);
-                    setHeight(this, this.height);
-                }
-            }
-        }
-
-        function setWidth(model, width) {
-            model.emit('setWidth', width);
-        }
-
-        function setHeight(model, height) {
-            model.emit('setHeight', height);
-        }
-
-        function setResizable(model, resizable) {
-            model.emit('setResizable', resizable);
-        }
 
         // ------------------------------------------------------------------------
         // Default "Identify" -- format feature info returned by esri.tasks.IdentifyTask
