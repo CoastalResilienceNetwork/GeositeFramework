@@ -298,6 +298,9 @@
   <ItemGroup>
     <Content Include="plugins\feature_compare\comparerSchema.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TourInfo..cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
