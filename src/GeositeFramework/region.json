@@ -22,7 +22,18 @@
         { "name": "Streets"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" },
         { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" }
     ],
-    "pluginOrder": [ "layer_selector", "zoom_to", "measure" ],
+    "pluginFolders": [
+        "plugins",
+        "sample_plugins"
+    ],
+    "pluginOrder": [
+        "layer_selector",
+        "custom_layer_selector",
+        "draw_report",
+        "feature_compare",
+        "zoom_to",
+        "measure"
+    ],
     "export": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
         "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework"
