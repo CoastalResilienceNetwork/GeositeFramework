@@ -13,6 +13,7 @@ define(["dojo/_base/declare",
         "dojo/dom-style",
         "dojo/dom-construct",
         "dojo/dom-class",
+        "dojo/Evented",
         "esri/tasks/IdentifyTask",
         "esri/tasks/IdentifyParameters",
         "dojo/DeferredList",
@@ -31,6 +32,7 @@ define(["dojo/_base/declare",
                 domStyle, 
                 domConstruct, 
                 domClass, 
+                Evented,
                 dIdentifyTask, 
                 IdentifyParameters, 
                 dDeferredList, 
@@ -43,12 +45,15 @@ define(["dojo/_base/declare",
         var URL_PATTERN = /^https?:\/\/.+/,
             isBlacklisted;
 
-        return declare(null, {
+        return declare([Evented], {
             toolbarName: "",
             fullName: "",
             toolbarType: "sidebar",
             showServiceLayersInLegend: true,
             allowIdentifyWhenActive: false,
+            resizable: true,
+            width: 300,
+            height: 400,
 
             activate: function () {},
             deactivate: function () {},
@@ -69,68 +74,94 @@ define(["dojo/_base/declare",
 
         function CheckandShowInfographic(override) {
             if (this.infoGraphic) {
-
                 var showValueKey = this.toolbarName + " showinfographic",
                     doNotShow = localStorage[showValueKey] === 'true';
-                
-                if (!this.infoGraphicArea) {
-                    var paneNode = query(this.container).parent().parent(),
-                        pluginContainer = query(this.container).parent(),
-                        headers = pluginContainer.children(".plugin-container-header"),
-                        moreinfo = domConstruct.create("a", {href:"javascript:;", title: "View the info-graphic", innerHTML:"?"});
 
-                    this.mainPanel = pluginContainer[0];
-                    
-                    on(moreinfo, "click", lang.hitch(this, function(){
+                if (!this.infoGraphicArea) {
+                    var pluginContainer = query(this.container).parent(),
+                        headers = pluginContainer.children(".plugin-container-header"),
+                        pluginContainerInner = pluginContainer.children(".plugin-container-inner"),
+                        moreinfo = domConstruct.create("a", {
+                            href: "javascript:;",
+                            title: "View the info-graphic",
+                            innerHTML:"?"
+                        });
+
+                    this.mainPanel = pluginContainerInner[0];
+
+                    on(moreinfo, "click", lang.hitch(this, function() {
                         this.showInfographic(true);
                     }));
-                    
+
                     headers[0].appendChild(moreinfo);
-                    
-                    this.infoGraphicArea = new ContentPane({
-                          innerHTML: "<img src='" + this.infoGraphic + "' /><br>"
-                        });
-                    
-                    domClass.add(this.infoGraphicArea.domNode, "claro plugin-infographic");
-                    
+
+                    var img = domConstruct.create('img', {
+                        src: this.infoGraphic,
+                        'class': 'graphic'
+                    });
+                    this.infoGraphicArea = domConstruct.create("div");
+                    this.infoGraphicArea.appendChild(img);
+
+                    domClass.add(this.infoGraphicArea, "claro plugin-infographic");
+
                     var checkboxnode = domConstruct.create("span");
-                    this.infoGraphicArea.domNode.appendChild(checkboxnode);
+                    this.infoGraphicArea.appendChild(checkboxnode);
                     this._nscheckBox = new CheckBox({
                         name: "checkBox",
                         checked: doNotShow,
-                        onChange: lang.hitch(this, function (show) { localStorage.setItem(showValueKey, show); })
+                        onChange: lang.hitch(this, function (show) {
+                            localStorage.setItem(showValueKey, show);
+                        })
                     }, checkboxnode);
-                    
-                    var noshow = domConstruct.create("span", {innerHTML:"Don't Show This on Start "});
-                    this.infoGraphicArea.domNode.appendChild(noshow);
-                    
+
+                    var noshow = domConstruct.create("label", {
+                        innerHTML: "Don't Show This on Start ",
+                        'for': this._nscheckBox.id
+                    });
+                    this.infoGraphicArea.appendChild(noshow);
+
                     var buttonnode = domConstruct.create("span");
-                    this.infoGraphicArea.domNode.appendChild(buttonnode);
-                        
+                    this.infoGraphicArea.appendChild(buttonnode);
+
                     var closeinfo = new Button({
                         label: "Continue",
-                        onClick: lang.hitch(this,function() {
-                            domStyle.set(this.infoGraphicArea.domNode, 'display', 'none');
-                            domStyle.set(this.mainPanel, 'display', '');
+                        onClick: lang.hitch(this, function() {
+                            this.showInfographic(false);
                         })
-                        },buttonnode);
+                    }, buttonnode);
 
-                    paneNode[0].appendChild(this.infoGraphicArea.domNode);
+                    pluginContainer[0].appendChild(this.infoGraphicArea);
+                }
 
+                this._nscheckBox.attr("checked", doNotShow);
+
+                var showInfoGraphic = typeof override !== 'undefined' ? !!override : !doNotShow;
+                domStyle.set(this.infoGraphicArea, 'display', showInfoGraphic ? 'block' : 'none');
+                domStyle.set(this.mainPanel, 'display', showInfoGraphic ? 'none' : 'block');
+
+                // Disable resizing when infographic is active
+                setResizable(this, this.resizable && !showInfoGraphic);
+                // Plugin window should expand to fit content when infographic is active
+                if (showInfoGraphic) {
+                    setWidth(this, null);
+                    setHeight(this, null);
                 } else {
-                    var ison = domStyle.get(this.infoGraphicArea.domNode, "display");
-                    if (ison != 'none') {
-                        domStyle.set(this.mainPanel, 'display', 'none');
-                    }
-                  }
-        
-                if ((!doNotShow) || (override)) {
-                    this._nscheckBox.attr("checked", doNotShow);
-                    
-                    domStyle.set(this.infoGraphicArea.domNode, 'display', 'initial');
-                    domStyle.set(this.mainPanel, 'display', 'none');
-                  }
+                    setWidth(this, this.width);
+                    setHeight(this, this.height);
+                }
             }
+        }
+
+        function setWidth(model, width) {
+            model.emit('setWidth', width);
+        }
+
+        function setHeight(model, height) {
+            model.emit('setHeight', height);
+        }
+
+        function setResizable(model, resizable) {
+            model.emit('setResizable', resizable);
         }
 
         // ------------------------------------------------------------------------
