@@ -1,5 +1,5 @@
 ﻿/*jslint nomen:true, devel:true */
-/*global Backbone, _, Geosite*/
+/*global Backbone, _, Geosite, $ */
 
 // Represents the entire app "screen", with attributes for pane layout and map sync.
 
@@ -16,7 +16,7 @@
             syncMaps: false
         },
 
-        showPane: function switchScreen(mainPaneNumber) {
+        showPane: function (mainPaneNumber) {
             this.set({
                 'mainPaneNumber': mainPaneNumber,
                 'splitScreen': false
@@ -67,7 +67,9 @@
 
     function initialize(view) {
         render(view);
-        view.model.on('change', function () { render(view); });
+        view.model.on(
+            'change:splitScreen change:syncMaps change:mainPaneNumber',
+            function () { render(view); });
     }
 
     function render(view) {

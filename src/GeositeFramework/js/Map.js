@@ -87,19 +87,17 @@
 
     function createMap(view) {
         var esriMap = new esri.Map(view.$el.attr('id')),
-            resizeMap = function resizeMap() {
+            resizeMap = _.debounce(function () {
                 // When the element containing the map resizes, the 
                 // map needs to be notified.  Do a slight delay so that
                 // the browser has time to actually make the element visible.
-                _.delay(function() {
                     if (view.$el.is(':visible')) {
                         var center = esriMap.extent.getCenter();
                         esriMap.reposition();
                         esriMap.resize(true);
                         esriMap.centerAt(center);
                     }
-                }, 150);
-            },
+            }, 300),
             loadEventFired = false;
 
         view.esriMap = esriMap;
