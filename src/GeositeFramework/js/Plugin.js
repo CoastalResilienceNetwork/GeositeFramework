@@ -126,7 +126,7 @@ require(['use!Geosite',
                 if (this.selected) {
                     this.set('active', true);
                     this.get('pluginObject').activate();
-                    if (this.get('showHelpOnStartup')) {
+                    if (this.getShowHelpOnStartup()) {
                         this.set('displayHelp', true);
                     }
                 } else {
@@ -159,21 +159,7 @@ require(['use!Geosite',
                 }
             },
 
-            get: function(key) {
-                if (key == 'showHelpOnStartup') {
-                    return this._getShowHelpOnStartup();
-                }
-                return Backbone.Model.prototype.get.apply(this, arguments);
-            },
-
-            set: function(key, val, options) {
-                if (key == 'showHelpOnStartup') {
-                    this._setShowHelpOnStartup(val);
-                }
-                return Backbone.Model.prototype.set.apply(this, arguments);
-            },
-
-            _getShowHelpOnStartup: function() {
+            getShowHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
                     showValueKey = pluginObject.toolbarName + " showinfographic";
                 if (typeof localStorage[showValueKey] !== 'undefined') {
@@ -182,7 +168,7 @@ require(['use!Geosite',
                 return true;
             },
 
-            _setShowHelpOnStartup: function(val) {
+            setShowHelpOnStartup: function(val) {
                 var pluginObject = this.get('pluginObject'),
                     showValueKey = pluginObject.toolbarName + " showinfographic";
                 localStorage.setItem(showValueKey, val);
@@ -499,9 +485,9 @@ require(['use!Geosite',
 
                 var nscheckBox = new CheckBox({
                     name: "checkBox",
-                    checked: !pluginModel.get('showHelpOnStartup'),
+                    checked: !pluginModel.getShowHelpOnStartup(),
                     onChange: function(show) {
-                        pluginModel.set('showHelpOnStartup', !show);
+                        pluginModel.setShowHelpOnStartup(!show);
                     }
                 }, checkboxnode);
 
