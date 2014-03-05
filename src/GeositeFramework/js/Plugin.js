@@ -305,13 +305,9 @@ require(['use!Geosite',
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
                 calculatePosition = function ($el) {
-                    var pos = view.$el.position(),
-                        gutterWidth = 70,
-                        xEdgeWithBuffer = pos.left + $el.width() + gutterWidth;
-
                     return {
                         top: 64,
-                        left: xEdgeWithBuffer
+                        left: 70
                     };
                 };
 
@@ -331,10 +327,11 @@ require(['use!Geosite',
                 }).end()
                 .find('.plugin-help').on('click', function () {
                     model.set('displayHelp', true);
-                });
+                })
+                .hide();
 
             // Attach to top pane element
-            view.$el.parents('.content').append($uiContainer.hide());
+            view.$el.parents('.content').find('.map-outer > .map').append($uiContainer);
 
             setResizable(view, pluginObject.resizable);
 
