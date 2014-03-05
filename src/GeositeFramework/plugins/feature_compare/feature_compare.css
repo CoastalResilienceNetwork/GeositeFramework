@@ -26,11 +26,11 @@
     padding: 2px;
 }
 
-#feature-compare-tooltip > div.dijitTooltipContainer > div {
+.feature-compare-tooltip > div.dijitTooltipContainer > div {
     padding: 5px;
 }
 
-#feature-compare-tooltip .dijitTooltipContainer {
+.feature-compare-tooltip .dijitTooltipContainer {
     border:1px solid gray;
     background-color: #c0c0c0;
     background-color: rgba(192,192,192, 0.85);

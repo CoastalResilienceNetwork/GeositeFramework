@@ -37,7 +37,7 @@
             this.activate();
 
             this.dialog = new TooltipDialog({
-                id: "feature-compare-tooltip"
+                'class': "feature-compare-tooltip"
             });
             this.dialog.startup();
         },
