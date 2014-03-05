@@ -29,7 +29,8 @@ define(
             toolbarType: "sidebar",
             allowIdentifyWhenActive: false,
             showServiceLayersInLegend: false,
-            
+            width: 500,
+
             initialize: function (args) {
 
                 this.comparer = new FeatureComparer({
