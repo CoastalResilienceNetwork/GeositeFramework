@@ -17,8 +17,8 @@ require({
 });
 
 define(
-    ["dojo/_base/declare", "framework/PluginBase", "dojo/text!plugins/feature_compare/templates.html",
-        "dojo/text!plugins/feature_compare/compare_config.json", './FeatureComparer'],
+    ["dojo/_base/declare", "framework/PluginBase", "dojo/text!./templates.html",
+        "dojo/text!./compare_config.json", './FeatureComparer'],
     function (declare, PluginBase, templates, config, FeatureComparer) {
 
         var _config = $.parseJSON(config);
