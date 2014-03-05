@@ -74,9 +74,9 @@
 
             model.options.map.addLayer(model.currentLayer);
 
-            model.options.map.on('extent-change', 
-                _.bind(model._clearHighlight, model));
-            
+            var clearHighlight = _.bind(model._clearHighlight, model);
+            model.options.map.on('zoom-end', clearHighlight);
+
             mouseOver = model.currentLayer.on('mouse-over', function(e) {
                 // When mousing very speedily, the 'mouse-out' event may
                 // get skipped, so double check a 'clear' before highlighting
@@ -90,8 +90,7 @@
                     [e, e.graphic.attributes[layerInfo.mapDisplayAttribute]]);
             });
 
-            mouseOut = model.options.map.graphics.on('mouse-out',
-                _.bind(model._clearHighlight, model));
+            mouseOut = model.options.map.graphics.on('mouse-out', clearHighlight);
 
             click = model.options.map.graphics.on('click',
                 _.bind(model._handleFeatureClick, model));
