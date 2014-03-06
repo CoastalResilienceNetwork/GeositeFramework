@@ -91,8 +91,7 @@ define([
             },
 
             hibernate: function () {
-                this._currentState = this._layerManager.getServiceState();
-                this._layerManager.hideAllLayers(this.map);
+                this.clearAll();
             },
 
             resize: function (dx, dy) {
