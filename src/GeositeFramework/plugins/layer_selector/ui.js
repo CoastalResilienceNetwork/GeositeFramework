@@ -46,6 +46,11 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_$layerDialog) {
                     _$layerDialog.show();
                 }
+               
+                // Size to contents of window when displaying
+                // the form initially.  If it was resized while
+                // the container was hidden, w/h are equal to 0
+                this.onContainerSizeChanged();
             };
 
             this.hideAll = function () {
