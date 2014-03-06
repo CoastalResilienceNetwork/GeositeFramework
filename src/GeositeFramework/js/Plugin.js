@@ -5,22 +5,19 @@
 
 require(['use!Geosite',
          'framework/Logger',
-         'dojo/_base/lang',
          'dojo/dom-style',
-         'dojo/dnd/Moveable',
+         'framework/widgets/ConstrainedMoveable',
          'dojox/layout/ResizeHandle',
          'dijit/form/CheckBox',
          'dijit/form/Button'
         ],
     function(N,
              Logger,
-             lang,
              domStyle,
-             Moveable,
+             ConstrainedMoveable,
              ResizeHandle,
              CheckBox,
-             Button
-             ) {
+             Button) {
     "use strict";
 
     (function () {
@@ -335,8 +332,9 @@ require(['use!Geosite',
 
             setResizable(view, pluginObject.resizable);
 
-            new Moveable($uiContainer[0], {
-                handle: $uiContainer.find('.plugin-container-header')[0]
+            new ConstrainedMoveable($uiContainer[0], {
+                handle: $uiContainer.find('.plugin-container-header')[0],
+                within: true
             });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
