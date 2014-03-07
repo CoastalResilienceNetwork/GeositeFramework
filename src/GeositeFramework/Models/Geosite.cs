@@ -23,8 +23,21 @@ namespace GeositeFramework.Models
         {
             public string Text;
             public string Url;
+
+            /// <summary>
+            /// Should this link generate a popup window with the url
+            /// </summary>
             public bool Popup;
+
+            /// <summary>
+            /// Resulting <a> tag will receive this id
+            /// </summary>
             public string ElementId;
+
+            /// <summary>
+            /// List of child link signifies a dropdown menu
+            /// </summary>
+            public IList<Link> Items;
         }
 
         // Properties used in View rendering
@@ -186,8 +199,16 @@ namespace GeositeFramework.Models
                 Text = (string)json["text"],
                 Url = (string)json["url"],
                 Popup = json["popup"] != null && bool.Parse(json["popup"].ToString()),
-                ElementId = json["elementId"] != null ? (string)json["elementId"] : null
+                ElementId = json["elementId"] != null ? (string)json["elementId"] : null,
+                Items = ExtractLinkListFromJson(json)
             };
+        }
+
+        private static List<Link> ExtractLinkListFromJson(JToken json)
+        {
+            return json["items"] != null
+                ? json["items"].Select(ExtractLinkFromJson).ToList()
+                : new List<Link>();
         }
 
         // Example plugin.json file:
