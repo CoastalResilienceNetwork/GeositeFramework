@@ -1,7 +1,15 @@
 ﻿/*jslint nomen:true, devel:true */
 /*global Backbone, _, $, Geosite, esri, Azavea, setTimeout, dojo, dojox */
 
-(function (N) {
+require(['use!Geosite',
+         'esri/dijit/Legend',
+         'dojox/layout/ResizeHandle',
+         'framework/widgets/ConstrainedMoveable'
+        ],
+    function(N,
+             Legend,
+             ResizeHandle,
+             ConstrainedMoveable) {
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
@@ -66,12 +74,7 @@
         removeService: function (service) {
             delete this.serviceInfos[service.id];
         }
-
     });
-}(Geosite));
-
-(function (N) {
-    'use strict';
 
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
@@ -158,15 +161,11 @@
         view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
     }
 
-    dojo.require('esri.dijit.Legend');
-    dojo.require("dojox.layout.ResizeHandle");
-    dojo.require('dojo.dnd.Moveable');
-
     function initLegend(view, esriMap) {
         // Create default legend section
         var mapNumber =  view.model.get('mapNumber'),
             id = 'legend-' + mapNumber,
-            legendDijit = new esri.dijit.Legend({ map: esriMap, layerInfos: [] }, id);
+            legendDijit = new Legend({ map: esriMap, layerInfos: [] }, id);
 
         legendDijit.startup();
 
@@ -175,14 +174,17 @@
         view.legendContainerId = "legend-container-" + mapNumber;
        
         // Make the legend resizable and moveable
-        var handle = new dojox.layout.ResizeHandle({
-            targetId: view.legendContainerId 
+        new ResizeHandle({
+            targetId: view.legendContainerId,
+            activeResize: true,
+            animateSizing: false
         }).placeAt(view.legendContainerId);
 
-        var mover = new dojo.dnd.Moveable(
+        new ConstrainedMoveable(
             document.getElementById(view.legendContainerId), {
-                handle: $('#' + view.legendContainerId).find('.legend-header')[0]
-            } );
+                handle: $('#' + view.legendContainerId).find('.legend-header')[0],
+                within: true
+            });
 
         // Update the legend whenever the map changes. Certain layer events can only
         // be captured by the catchall `onUpdateEnd`, so bind to that. However, the
@@ -251,7 +253,6 @@
         return 0;
     };
 
-
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
         $infoWindowParent: null,
@@ -259,5 +260,4 @@
         doIdentify: function (pluginModels, event) { N.doIdentify(this, pluginModels, event); },
         saveState: function () { saveExtent(this); }
     });
-
-}(Geosite));
+});
