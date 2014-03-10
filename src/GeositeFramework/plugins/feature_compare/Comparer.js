@@ -165,7 +165,7 @@
 
         _addStateSelectedFeatures: function() {
             var model = this,
-                update = model.currentLayer.on('update', function () {
+                update = model.currentLayer.on('update-end', function () {
                 // Select feature if they were present in saved hash state
                 if (model._preSelectedFeatureIds) {
                     var featureGraphics = _.filter(model.currentLayer.graphics, function(g) {
