@@ -3,9 +3,10 @@
 }
 
 @using GeositeFramework.Models
-@model GeositeFramework.Models.Geosite
+@model Geosite
 
-@helper OptionalLinkText (Geosite.Link link) {
+@helper OptionalLinkText(Geosite.Link link)
+{
     if (link.Url != null)
     {
         <a target="_blank" href="@link.Url">@link.Text</a>
@@ -17,6 +18,41 @@
         
 }
 
+
+@helper RenderLinks(IList<Geosite.Link> links, bool showDividers = true)
+{
+    foreach (var link in links)
+    {
+        if (link != Model.HeaderLinks.First() && showDividers)
+        {
+            <li class="divider"></li>
+        }
+        <li id="@link.ElementId">
+            @if (link.Popup)
+            {
+                <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
+            }
+            else if (link.Items != null && link.Items.Any())
+            {
+                var id = "link-dd-" + link.GetHashCode();
+                <a href="@link.Url" data-dropdown="#@id" class="dropdown-init">@link.Text
+                    <span class="dropdown-arrow">▼</span>
+                </a>
+                <div id="@id" class="dropdown dropdown-tip">
+                    <ul class="dropdown-menu">
+                        @RenderLinks(link.Items, false)
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <a target="_blank" href="@link.Url">@link.Text</a>
+            }
+                                
+        </li>
+    }
+
+}
 <!DOCTYPE html>
 <!--[if IE 8]>          <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
@@ -26,19 +62,19 @@
     <title>@Model.TitleMain.Text | @Model.TitleDetail.Text</title>
 
     <!-- Load CSS for plugins -->
-    @foreach (var url in Model.PluginCssUrls) {
+    @foreach (var url in Model.PluginCssUrls)
+    {
         <link rel="stylesheet" href="@url">
     }
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">
-    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/foundation.min.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/app.css">
-
-    <script src="js/lib/foundation/modernizr.foundation.js"></script>
+    <link rel="stylesheet" href="css/jquery.dropdown.css"/>
     
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
@@ -73,6 +109,11 @@
             opacity: 0.2;
         }
 
+        /* Site color for header dropdown menu selection */
+        .top-bar .dropdown .dropdown-menu LI > A:hover,
+        .top-bar .dropdown .dropdown-menu LABEL:hover {
+            background-color: @Model.SecondaryColor;
+        }
     </style>
 
     @if (Model.GoogleAnalyticsPropertyId != null)
@@ -293,25 +334,7 @@
             </ul>
             <section>
                 <ul class="right">
-
-                    @foreach (var link in Model.HeaderLinks)
-                    {
-                        if (link != Model.HeaderLinks.First())
-                        { 
-                            <li class="divider"></li>
-                        }
-                        <li id="@link.ElementId">
-                            @if (link.Popup)
-                            {
-                                <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
-                            }
-                            else
-                            {
-                                <a target="_blank" href="@link.Url">@link.Text</a>    
-                            }
-                            
-                        </li>
-                    }
+                    @RenderLinks(Model.HeaderLinks)
                 </ul>
             </section>
         </nav>
@@ -329,10 +352,10 @@
     
     <script src="//apis.google.com/js/client.js"></script>
     <script src="//serverapi.arcgisonline.com/jsapi/arcgis/?v=3.5compact"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="Scripts/json2.min.js"></script>
     <script src="js/lib/foundation/foundation.min.js"></script>
     <script src="js/lib/foundation/app.js"></script>
+    <script src="js/lib/jquery.dropdown.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>

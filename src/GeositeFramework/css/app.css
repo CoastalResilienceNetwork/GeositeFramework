@@ -47,6 +47,10 @@ input.code-like, textarea.code-like {
 		background: white;
 		background: rgba(255,255,255,.5);
 	}
+ 	.top-bar ul span.dropdown-arrow {
+  	     font-size: 10px;
+   	     margin-left: 4px;
+    }
 	.top-bar ul > li.name h1 {
 		background: white;
 		position: relative;

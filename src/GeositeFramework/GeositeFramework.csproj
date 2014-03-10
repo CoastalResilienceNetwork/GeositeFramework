@@ -135,6 +135,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\jquery.dropdown.css" />
     <Content Include="css\jquery.mCustomScrollbar.css" />
     <Content Include="css\pageguide.min.css" />
     <Content Include="css\TinyBox2.css" />
@@ -299,8 +300,9 @@
     <Content Include="plugins\feature_compare\comparerSchema.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\TourInfo..cshtml" />
+    <Content Include="Views\Shared\TourInfo.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

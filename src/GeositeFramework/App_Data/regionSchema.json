@@ -31,7 +31,17 @@
                     "text": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
                     "popup": {"type": "boolean", "required": false},
-                    "elementId": {"type": "string", "required": false}
+                    "elementId": {"type": "string", "required": false},
+                    "items": {"type": "array", "items": {
+                            "type": "object",
+                            "properties": {
+                                "text": {"type": "string", "required": true},
+                                "url": {"type": "string", "required": true},
+                                "popup": {"type": "boolean", "required": false},
+                                "elementId": {"type": "string", "required": false}
+                            },
+                            "additionalProperties": false
+                        }, "required": false}
                 },
                 "additionalProperties": false
             }
@@ -69,11 +79,11 @@
         },
         "pluginFolders": {
             "type": "array",
-            "items": {"type": "string"},
+            "items": {"type": "string"}
         },
         "pluginOrder": {
             "type": "array",
-            "items": {"type": "string"},
+            "items": {"type": "string"}
         },
         "export": {
             "type": "object",
