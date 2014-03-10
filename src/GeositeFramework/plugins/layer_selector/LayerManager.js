@@ -164,12 +164,12 @@ define([
                     type: type,
                     cls: _cssClassPrefix + "-" + type, // When the tree is displayed the node's associated DOM element will have this CSS class
                     text: name ? name.replace(/_/g, " ") : "",
-                    name: _.uniqueId(name + "_"),
                     leaf: false,
                     children: [],
                     parent: parentNode,
                     isNew: config ? config.isNew : undefined
                 };
+                node.name = nodeUid(node);
                 // TODO - I don't know why this was necessary. If parent node is defined,
                 // it should always have an array assigned to children. However, when
                 // modifying layers.json to only include AGS sources, this error came up.
@@ -195,6 +195,15 @@ define([
                 if (!parentNode.children) { parentNode.children = []; }
                 parentNode.children.push(node);
                 return node;
+            }
+
+           function nodeUid(node) {
+                if (node === _treeRootNode) {
+                    return 'root';
+                } else if (node.parent) {
+                    return nodeUid(node.parent) + '/' + node.text;
+                }
+                return node.text;
             }
 
             function hideAllLayersForNode(node, map) {
