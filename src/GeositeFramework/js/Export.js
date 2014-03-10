@@ -65,14 +65,14 @@ require(['use!Geosite',
               been specified in the region.json
             */
             var model = this,
-                url = N.app.data.region.export.printServerUrl;
+                url = N.app.data.region.print.printServerUrl;
 
             // If there is a custom template scheme for export, override the
             // default settings.  If no custom template is provided, the export
             // will work with the out-of-the-box ArcGIS Print Task settings
-            if (N.app.data.region.export.customPrintTemplatePrefix) {
+            if (N.app.data.region.print.customPrintTemplatePrefix) {
                 this.set('printLayoutTemplatePrefix',
-                    N.app.data.region.export.customPrintTemplatePrefix);
+                    N.app.data.region.print.customPrintTemplatePrefix);
                 this.set('useDifferentTemplateWithLegend', true);
             }
 
