@@ -214,14 +214,18 @@
                     paneNumber: view.model.get('paneNumber')
                 });
             } else {
-                var pluginView = new N.views.TopbarPlugin({ model: plugin });
+                var $parent = null;
                 if (toolbarType === 'maptop') {
-                    $maptopbar.append(pluginView.$el);
+                    $parent = $maptopbar;
                 } else if (toolbarType === 'map') {
-                    $mapbar.append(pluginView.$el);
+                    $parent = $mapbar;
                 } else {
                     throw "Invalid plugin toolbarType: '" + toolbarType + "'";
                 }
+                new N.views.TopbarPlugin({
+                    model: plugin,
+                    $parent: $parent
+                });
             }
         });
     }
