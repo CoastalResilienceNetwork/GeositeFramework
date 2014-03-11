@@ -255,7 +255,10 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 // This makes the plugin panel's scrollbar work correctly.
                 // It also truncates too-wide tree node labels (adding "...").
                 _.defer(function () {
-                    var innerElement = _tree.getEl().down('table.x-grid-table');
+                    var el = _tree.getEl();
+                    if (!el) { return; }
+
+                    var innerElement = el.down('table.x-grid-table');
                     if (innerElement) {
                         _tree.setHeight(innerElement.getHeight());
                         _tree.setWidth(innerElement.getWidth());
