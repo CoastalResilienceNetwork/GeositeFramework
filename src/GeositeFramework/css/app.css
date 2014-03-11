@@ -235,7 +235,8 @@ input.code-like, textarea.code-like {
                 margin: 0;
                 color: white;
             }
-            .content .plugin-container-header a {
+            .content .plugin-container-header a,
+            .content .legend .legend-header a {  
                 float: right;
                 color: #CCC;
                 font-weight: bold;
@@ -250,7 +251,8 @@ input.code-like, textarea.code-like {
                 .content .plugin-container-header a.plugin-off {
                     border-left: 1px solid #666;
                 }
-                .content .plugin-container-header a:hover {
+                .content .plugin-container-header a:hover,
+                .content .legend .legend-header a:hover {  
                     background: black;
                     color: white;
                 }
@@ -586,7 +588,7 @@ input.code-like, textarea.code-like {
         cursor: move;
     }
     .content .legend .legend-body {
-        padding: 10px 15px; 
+        padding: 10px 15px;
         overflow: auto;
         height: 100%;
         min-height: 200px;

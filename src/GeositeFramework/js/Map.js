@@ -172,7 +172,9 @@ require(['use!Geosite',
         view.$legendEl = $(legendDijit.domNode);
         view.$legendEl.addClass('esriLegendService');
         view.legendContainerId = "legend-container-" + mapNumber;
-       
+
+        var $legendContainer = $('#' + view.legendContainerId);
+
         // Make the legend resizable and moveable
         new ResizeHandle({
             targetId: view.legendContainerId,
@@ -182,9 +184,13 @@ require(['use!Geosite',
 
         new ConstrainedMoveable(
             document.getElementById(view.legendContainerId), {
-                handle: $('#' + view.legendContainerId).find('.legend-header')[0],
+                handle: $legendContainer.find('.legend-header')[0],
                 within: true
             });
+
+        $legendContainer.find('.legend-close').click(function() {
+            $legendContainer.hide();
+        });
 
         // Update the legend whenever the map changes. Certain layer events can only
         // be captured by the catchall `onUpdateEnd`, so bind to that. However, the
