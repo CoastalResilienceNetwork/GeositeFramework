@@ -130,8 +130,6 @@ input.code-like, textarea.code-like {
 /* -----------------------------------------
    Content Area - Sidebar
 ----------------------------------------- */
-    
-
     .content .sidebar {
         width: 85px;
         height: 100%;
@@ -161,10 +159,6 @@ input.code-like, textarea.code-like {
                     font-size: 12px;
                     font-weight: 700;
                     line-height: 16px;
-                }
-                .content .sidebar ul.side-nav li a.selected {
-                    background: #068;
-                    color: #AAA;
                 }
             .content .sidebar ul.side-nav.top {
                 overflow: hidden;
@@ -204,7 +198,6 @@ input.code-like, textarea.code-like {
             border: none;
             color: transparent;
         }
-
     .content .plugin-container-outer {
         position: absolute;
         border: 5px #444 solid;
