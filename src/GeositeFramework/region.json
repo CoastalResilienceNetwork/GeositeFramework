@@ -41,7 +41,7 @@
         "zoom_to",
         "measure"
     ],
-    "export": {
+    "print": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
         "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework"
     },

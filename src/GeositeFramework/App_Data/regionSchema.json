@@ -85,7 +85,7 @@
             "type": "array",
             "items": {"type": "string"}
         },
-        "export": {
+        "print": {
             "type": "object",
             "properties": {
                 "printServerUrl": {
