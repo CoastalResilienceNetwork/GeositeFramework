@@ -132,6 +132,7 @@
         var sidebarTemplate = N.app.templates['template-sidebar'],
             paneNumber = view.model.get('paneNumber'),
             data = _.extend(N.app.models.screen.toJSON(), {
+                paneNumber: paneNumber,
                 isMain: paneNumber === N.app.models.screen.get('mainPaneNumber'),
                 alternatePaneNumber: paneNumber === 0 ? 1 : 0
             }),
