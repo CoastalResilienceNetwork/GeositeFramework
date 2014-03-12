@@ -571,7 +571,7 @@ input.code-like, textarea.code-like {
     min-height: 240px;
     box-shadow: 0 0 12px #666;
     box-shadow: 0 0 12px rgba(0,0,0,.25);
-    padding-bottom: 34px; /* header offset */
+    padding-bottom: 36px; /* header offset */
     overflow:visible;
     }
     .content .legend .legend-header {
@@ -584,6 +584,7 @@ input.code-like, textarea.code-like {
         padding: 10px 15px;
         overflow: auto;
         height: 100%;
+        width: 100%;
         min-height: 200px;
     }
     .content .legend #legend-0_msg,
