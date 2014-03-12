@@ -94,7 +94,14 @@ define(["dojo/_base/declare",
                         // This service has visible layers. Identify twice -- 
                         // once with loose tolerance to find "thin" features (point/line/polyline), and
                         // once with tight tolerance to find "area" features (polygon/raster).
-                        identify(10, agsThinFeatureDeferreds);
+                        
+                        // When zoomed in close (high zoom level) we want a wider tolerance area,
+                        // than when zoomed far out (low zoom level), with at least a 2px min. 
+                        // Using a fixed number would return "too many" features when zoomed out 
+                        // then there were small features clustered near each other.  This is a 
+                        // little magic and was developed by trial and error.
+                        var zoomTolerance = map.getZoom() * (3 / 8) + 2;
+                        identify(zoomTolerance, agsThinFeatureDeferreds);
                         identify(0, agsAreaFeatureDeferreds);
 
                         function identify(tolerance, deferreds) {
