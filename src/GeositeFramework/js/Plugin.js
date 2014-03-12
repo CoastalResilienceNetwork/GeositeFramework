@@ -202,6 +202,18 @@ require(['use!Geosite',
             model.on('change:active', function () {
                 view.render();
             });
+
+            createLegendContainer(view);
+        }
+
+        function createLegendContainer(view) {
+            // Create container for custom legend and attach to legend element
+            var $legendContainer = $('<div>').hide()
+                .appendTo(view.$el.parents('.content').find('.legend'));
+
+            // Tell the model about $legendContainer so it can pass it to the plugin object
+            view.model.set('$legendContainer', $legendContainer);
+            view.$legendContainer = $legendContainer;
         }
 
         N.views = N.views || {};
@@ -246,7 +258,6 @@ require(['use!Geosite',
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
-            createLegendContainer(view);
             createHelpScreen(view);
             setWidth(view, pluginObject.width);
             setHeight(view, pluginObject.height);
@@ -345,16 +356,6 @@ require(['use!Geosite',
             var dx = event.x - resizeHandle.startPoint.x,
                 dy = event.y - resizeHandle.startPoint.y;
             view.model.get("pluginObject").resize(dx, dy);
-        }
-
-        function createLegendContainer(view) {
-            // Create container for custom legend and attach to legend element
-            var $legendContainer = $('<div>').hide()
-                .appendTo(view.$el.parents('.content').find('.legend'));
-
-            // Tell the model about $legendContainer so it can pass it to the plugin object
-            view.model.set('$legendContainer', $legendContainer);
-            view.$legendContainer = $legendContainer;
         }
 
         function createHelpScreen(view) {
@@ -533,6 +534,10 @@ require(['use!Geosite',
         N.views = N.views || {};
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
+            initialize: function() {
+                this.options.$parent.append(this.$el);
+                N.views.BasePlugin.prototype.initialize.call(this);
+            },
             render: render,
             handleClear: function () {
                 this.model.turnOff();

@@ -39,7 +39,9 @@
         "draw_report",
         "feature_compare",
         "zoom_to",
-        "measure"
+        "full_extent",
+        "measure",
+        "legend_display"
     ],
     "print": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
