@@ -335,7 +335,7 @@ require(['use!Geosite',
                 }).end()
                 .find('.plugin-help').on('click', function () {
                     model.set('displayHelp', true);
-                })
+                }).end()
                 .hide();
 
             // Attach to top pane element
