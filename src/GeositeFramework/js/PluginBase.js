@@ -101,25 +101,25 @@ define(["dojo/_base/declare",
                         // then there were small features clustered near each other.  This is a 
                         // little magic and was developed by trial and error.
                         var zoomTolerance = map.getZoom() * (3 / 8) + 2;
-                        identify(zoomTolerance, agsThinFeatureDeferreds);
-                        identify(0, agsAreaFeatureDeferreds);
+                        ags_identify(zoomTolerance, agsThinFeatureDeferreds);
+                        ags_identify(0, agsAreaFeatureDeferreds);
+                    }
 
-                        function identify(tolerance, deferreds) {
-                            var identifyParams = new IdentifyParameters();
+                    function ags_identify(tolerance, deferreds) {
+                        var identifyParams = new IdentifyParameters();
 
-                            identifyParams.tolerance = tolerance;
-                            identifyParams.layerIds = service.visibleLayers;
-                            identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
-                            identifyParams.width = map.width;
-                            identifyParams.height = map.height;
-                            identifyParams.geometry = mapPoint;
-                            identifyParams.mapExtent = map.extent;
+                        identifyParams.tolerance = tolerance;
+                        identifyParams.layerIds = service.visibleLayers;
+                        identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
+                        identifyParams.width = map.width;
+                        identifyParams.height = map.height;
+                        identifyParams.geometry = mapPoint;
+                        identifyParams.mapExtent = map.extent;
 
-                            var identifyTask = new dIdentifyTask(service.url),
-                                deferred = identifyTask.execute(identifyParams);
-                            deferred._layerInfos = service.layerInfos;
-                            deferreds.push(deferred);
-                        }
+                        var identifyTask = new dIdentifyTask(service.url),
+                            deferred = identifyTask.execute(identifyParams);
+                        deferred._layerInfos = service.layerInfos;
+                        deferreds.push(deferred);
                     }
                 });
 
@@ -152,62 +152,61 @@ define(["dojo/_base/declare",
                             buffer = 10;
                         }
 
-                        identify(buffer, wmsFeatureDeferreds);
+                        wms_identify(buffer, wmsFeatureDeferreds);
+                    }
 
+                    function wms_identify(tolerance, deferreds) {
+                        var url,
+                        templateGetFeatureInfoUrl = _.template(
+                            esri.config.defaults.io.proxyUrl + '?' + service.url + '?' +
+                                'SERVICE=WMS&' +
+                                'VERSION=1.1.1&' +
+                                'REQUEST=GetFeatureInfo&' +
+                                'LAYERS=<%=layers%>&' +
+                                'QUERY_LAYERS=<%=layers%>&STYLES=&' +
+                                'BBOX=<%=bbox%>' +
+                                '&HEIGHT=<%=height%>&' +
+                                'WIDTH=<%=width%>&' +
+                                'FORMAT=image%2Fpng&' +
+                                'INFO_FORMAT=text%2Fplain' +
+                                '&SRS=EPSG%3A3857&' +
+                                'X=<%=x%>&Y=<%=y%>&' +
+                                'BUFFER=<%=buffer%>');
 
-                        function identify(tolerance, deferreds) {
-                            var url,
-                            templateGetFeatureInfoUrl = _.template(
-                                esri.config.defaults.io.proxyUrl + '?' + service.url + '?' +
-                                    'SERVICE=WMS&' +
-                                    'VERSION=1.1.1&' +
-                                    'REQUEST=GetFeatureInfo&' +
-                                    'LAYERS=<%=layers%>&' +
-                                    'QUERY_LAYERS=<%=layers%>&STYLES=&' +
-                                    'BBOX=<%=bbox%>' +
-                                    '&HEIGHT=<%=height%>&' +
-                                    'WIDTH=<%=width%>&' +
-                                    'FORMAT=image%2Fpng&' +
-                                    'INFO_FORMAT=text%2Fplain' +
-                                    '&SRS=EPSG%3A3857&' +
-                                    'X=<%=x%>&Y=<%=y%>&' +
-                                    'BUFFER=<%=buffer%>');
- 
-                            _.each(service.visibleLayers, function (layer) {
-                                var deferred = xhr.get({
-                                    url: templateGetFeatureInfoUrl({
-                                        x: clickPoint.x,
-                                        y: clickPoint.y,
-                                        layers: layer,
-                                        bbox: [map.extent.xmin, map.extent.ymin, map.extent.xmax, map.extent.ymax].join(","),
-                                        height: map.height,
-                                        width: map.width,
-                                        buffer: tolerance
-                                    }),
-                                    handleAs: 'text'
-                                });
-                                deferreds.push(deferred);
-
-                                // TODO - find a better way to transport this information
-                                //
-                                // The problem is that, at the time this deferred object is
-                                // created, we have a url and a layer name. Then, when the
-                                // deferred is resolved, it will return a text object that
-                                // is parsed to only contain feature info. There's no easy
-                                // way to poke this data through. A solution is to modify
-                                // and test the parsing code to also extract the layer name,
-                                // then compare it to a hash with layer names as keys and
-                                // descriptions (titles) as values. An ideal solution is to
-                                // modify the structure of this code to have access to this
-                                // information at the time the callback is added to the
-                                // deferred.
-                                //
-                                deferred._layerName = _.find(service.layerInfos, 
-                                                             function (layerInfo) {
-                                                                 return layerInfo.name == layer; 
-                                                             }).title;
+                        _.each(service.visibleLayers, function (layer) {
+                            var deferred = xhr.get({
+                                url: templateGetFeatureInfoUrl({
+                                    x: clickPoint.x,
+                                    y: clickPoint.y,
+                                    layers: layer,
+                                    bbox: [map.extent.xmin, map.extent.ymin, map.extent.xmax, map.extent.ymax].join(","),
+                                    height: map.height,
+                                    width: map.width,
+                                    buffer: tolerance
+                                }),
+                                handleAs: 'text'
                             });
-                        }
+                            deferreds.push(deferred);
+
+                            // TODO - find a better way to transport this information
+                            //
+                            // The problem is that, at the time this deferred object is
+                            // created, we have a url and a layer name. Then, when the
+                            // deferred is resolved, it will return a text object that
+                            // is parsed to only contain feature info. There's no easy
+                            // way to poke this data through. A solution is to modify
+                            // and test the parsing code to also extract the layer name,
+                            // then compare it to a hash with layer names as keys and
+                            // descriptions (titles) as values. An ideal solution is to
+                            // modify the structure of this code to have access to this
+                            // information at the time the callback is added to the
+                            // deferred.
+                            //
+                            deferred._layerName = _.find(service.layerInfos, 
+                                                         function (layerInfo) {
+                                                             return layerInfo.name == layer; 
+                                                         }).title;
+                        });
                     }
                 });
             }
