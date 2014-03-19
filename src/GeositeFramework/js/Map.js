@@ -241,6 +241,22 @@ require(['use!Geosite',
 
             view.$legendEl.empty()
                 .append.apply(view.$legendEl, legendNuggets);
+
+            // compare the total number of visible layers on the map to the number
+            // of legendNuggets to determine if the legend has gotten info for all
+            // visible layers. If not, recur with a delay.
+            // this is a hack, because sometimes when loading from browser cache,
+            // layerAdd events don't fire.
+            function countVisibleLayers(count, layerInfo) {
+                var vl = layerInfo.layer.visibleLayers,
+                    shouldAdd = !(vl.length === 1 && vl[0] === -1);
+                return count += shouldAdd ? vl.length : 0;
+            }
+            var totalVisibleLayers =_.reduce(layerInfos, countVisibleLayers, 0);
+
+            if (totalVisibleLayers !== legendNuggets.length) {
+                _.delay(updateLegend, 1000);
+            }
         }
     }
 
