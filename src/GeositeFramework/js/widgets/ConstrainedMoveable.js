@@ -27,6 +27,8 @@ define(['use!Geosite',
     var ConstrainedMoveable = declare([move.parentConstrainedMoveable], {
         constructor: function() {
             this.inherited(arguments);
+            // Our mover will be used to handle drag events.
+            this.mover = CustomMover;
             // Widget will keep its default position until the user moves it.
             this.docked = true;
             this.resizeHandler = lang.hitch(this, 'onWindowResize');
@@ -56,6 +58,31 @@ define(['use!Geosite',
 
         isVisible: function() {
             return domStyle.get(this.node, 'display') != 'none';
+        }
+    });
+
+    //
+    // Issue #222: Legend Container "jumps" on first click.
+    //
+    // The default Dojo Mover includes the header as part of the container content box when
+    // calculating the widget position for the first time.
+    //
+    // To prevent this, we set an absolutely positioned value before Dojo gets the chance to.
+    //
+    var CustomMover = declare([Mover], {
+        onFirstMove: function(e) {
+            this.computePosition();
+            this.inherited(arguments);
+        },
+        computePosition: function() {
+            var s = this.node.style;
+            if (s.position) {
+                return;
+            }
+            var m = domGeom.getMarginBox(this.node);
+            s.position = "absolute";
+            s.left = m.l + 'px';
+            s.top = m.t + 'px';
         }
     });
 
