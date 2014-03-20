@@ -78,6 +78,10 @@
 .pluginLayerSelector-new div {
     font-weight: bold;
 }
+    .pluginLayerSelector-new .text {
+        background: url(images/new.png) 0 50% no-repeat;
+        padding-left: 25px;
+    }
 
 /* 
  * Layer info box 

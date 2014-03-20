@@ -28,6 +28,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 highlightNewNodes(rootNode);
                 addZoomButtons(rootNode);
                 addDownloadButtons(rootNode);
+                wrapText(rootNode);
                 _tree = createTree(rootNode);
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
@@ -114,6 +115,14 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
                 _.each(node.children, function (child) {
                     addDownloadButtons(child);
+                });
+            }
+
+            // Wrap each node text value in a span tag.
+            function wrapText(node) {
+                node.text = '<span class="text">' + node.text + '</span>';
+                _.each(node.children, function(child) {
+                    wrapText(child);
                 });
             }
 
