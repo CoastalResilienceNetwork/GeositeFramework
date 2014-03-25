@@ -90,7 +90,7 @@ define(["dojo/_base/declare",
                 // Ask each active service to identify its features. Collect responses in "deferred" lists.
  
                 _.each(agsServices, function (service) {
-                    if (service.visibleLayers.length > 0 && service.visibleLayers[0] !== -1) {
+                    if (service.visible && service.visibleLayers.length > 0 && service.visibleLayers[0] !== -1) {
                         // This service has visible layers. Identify twice -- 
                         // once with loose tolerance to find "thin" features (point/line/polyline), and
                         // once with tight tolerance to find "area" features (polygon/raster).
@@ -124,7 +124,7 @@ define(["dojo/_base/declare",
                 });
 
                 _.each(wmsServices, function (service) {
-                    if (service.visibleLayers.length > 0) {
+                    if (service.visible && service.visibleLayers.length > 0) {
 
                         var zoomLevel = map.getZoom(),
                             buffer;
