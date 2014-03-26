@@ -6,20 +6,19 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             fullName: "Identify point sample plugin",
             infoGraphic: "sample_plugins/identify_point/splash.png",
             allowIdentifyWhenActive: true,
-            resizable: true,
-            width: 300,
-            height: 200,
+            resizable: false,
+            width: 320,
+            height: 'auto',
 
             initialize: function(args) {
                 declare.safeMixin(this, args);
-                $(this.container).append('<h4>Click any point on the map to display Latitude and Longitude</h4>');
-                $(this.container).append('<div class="last-result"></div>');
+                $(this.container).append('<h4 style="padding: 5px;">Click any point on the map to display Latitude and Longitude</h4>');
             },
 
             identify: function(mapPoint, clickPoint, processResults) {
-                var $lastResult = $('.last-result', this.container);
-                $lastResult.html("<p>You clicked on latitude " + mapPoint.getLatitude() + " longitude " + mapPoint.getLongitude() + "</p>");
-                processResults(false);
+                var text = "You clicked on latitude " + mapPoint.getLatitude() + " longitude " + mapPoint.getLongitude(),
+                    identifyWidth = 300;
+                processResults(text, identifyWidth);
             }
         });
     }
