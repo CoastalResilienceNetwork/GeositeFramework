@@ -8,6 +8,7 @@
             fullName: "Show/Hide the map legend",
             toolbarType: "map",
             allowIdentifyWhenActive: true,
+            closeOthersWhenActive: false,
             
             initialize: function (args) {
                 declare.safeMixin(this, args);
@@ -20,7 +21,6 @@
 
             activate: function () {
                 $legendEl.toggle();
-                this.forceDeactivate();
             }
         });
     }

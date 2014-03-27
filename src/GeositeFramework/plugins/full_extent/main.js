@@ -40,6 +40,7 @@ define(
             fullName: "Zoom out to the default map extent",
             toolbarType: "map",
             allowIdentifyWhenActive: true,
+            closeOthersWhenActive: false,
             
             initialize: function (args) {
                 declare.safeMixin(this, args);
@@ -53,7 +54,6 @@ define(
             activate: function () {
                 var self = this;
                 self.map.setExtent(_extent);
-                self.forceDeactivate();
             }
         });
     }

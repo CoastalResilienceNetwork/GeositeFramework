@@ -45,15 +45,7 @@ require(['use!Geosite',
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
-                legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
-                forceDeactivate: function () {
-                    // Drop the turnOff call to the end of the stack because
-                    // if the plugin called this from it's initialize event, the
-                    // selection change events from backbone.picky will still 
-                    // fire the unchanged selection model state, resulting in an
-                    // infinite loop.
-                    setTimeout(function () { model.turnOff(); }, 0);
-                }
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
             });
         }
 
@@ -539,6 +531,15 @@ require(['use!Geosite',
                 N.views.BasePlugin.prototype.initialize.call(this);
             },
             render: render,
+            // Override handleLaunch so topbar plugins can have custom launch behavior.
+            handleLaunch: function() {
+                var pluginObject = this.model.get('pluginObject');
+                if (pluginObject.closeOthersWhenActive) {
+                    N.views.BasePlugin.prototype.handleLaunch.apply(this, arguments);
+                } else {
+                    pluginObject.activate();
+                }
+            },
             handleClear: function () {
                 this.model.turnOff();
             }
