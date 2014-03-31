@@ -77,4 +77,6 @@
     width: 34px;
     height: 34px;
     cursor: pointer;
+    /* Fixes event propagation in IE10 (See issue #240) */
+    background: rgba(0, 0, 0, 0);
 }

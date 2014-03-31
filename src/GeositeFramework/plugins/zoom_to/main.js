@@ -35,6 +35,7 @@ define(
             toolbarName: "Zoom To",
             fullName: "Zoom to a specific address.",
             toolbarType: "maptop",
+            closeOthersWhenActive: false,
 
             _initializeViews: function () {
                 if (!this.input) {
