@@ -47,6 +47,8 @@ define(["dojo/_base/declare",
             resize: function () {},
             getState: function () {},
             setState: function () {},
+            // Called when switching from infographic to the primary view or vice versa.
+            onContainerVisibilityChanged: function (visible) {},
 
             identify: identify,
 

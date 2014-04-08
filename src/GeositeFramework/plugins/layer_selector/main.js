@@ -90,6 +90,10 @@ define([
                 this._currentState = this._layerManager.getServiceState();
             },
 
+            onContainerVisibilityChanged: function(visible) {
+                this._ui.display();
+            },
+
             hibernate: function () {
                 this.clearAll();
             },
