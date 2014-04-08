@@ -392,7 +392,8 @@ require(['use!Geosite',
 
             // Disable resizing when infographic is active
             setResizable(this, pluginObject.resizable && !showInfoGraphic);
-            // Plugin window should expand to fit content when infographic is active
+
+            // Expand plugin panel to fit content when infographic is active
             if (showInfoGraphic) {
                 setWidth(this, null);
                 setHeight(this, null);
@@ -400,6 +401,9 @@ require(['use!Geosite',
                 setWidth(this, pluginObject.width);
                 setHeight(this, pluginObject.height);
             }
+
+            var primaryContainerVisible = !showInfoGraphic;
+            pluginObject.onContainerVisibilityChanged(primaryContainerVisible);
         }
 
         // Draw resize handle if resizable, destroy it if not resizable.
