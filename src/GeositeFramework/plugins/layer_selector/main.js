@@ -70,7 +70,9 @@ define([
                         self._layerManager.setServiceState(self._currentState, self.map);
                     }
                     self._ui.render(tree);
-                    $('a.pluginLayerSelector-clear').click(function () { self.clearAll(); });
+                    $('a.pluginLayerSelector-clear', self.container).click(function() {
+                        self.clearAll();
+                    });
                 });
             },
 
