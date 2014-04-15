@@ -19,6 +19,7 @@
         selectionGraphics: null,
         selectionLayer: null ,
         layerEventHandlers: null,
+        getObjectId: null,
         
         defaults: {
             maxSelectableFeatures: 3
@@ -63,8 +64,9 @@
             model.currentLayer.comparerIndex = layerIdx;
 
             load = model.currentLayer.on('load', function() {
+                model.getObjectId = objectIdGetter(layerInfo, model.currentLayer);
                 // When the layer is loaded, get a list of just the field infos
-                // for which we are using to comapre field values.
+                // for which we are using to compare field values.
                 model.currentFieldInfos = _.filter(model.currentLayer.fields, function(field) {
                     return _.contains(_.pluck(layerInfo.attrs, "name"), field.name);
                 });
@@ -129,12 +131,12 @@
         },
 
         getState: function() {
+            var self = this;
             if (!this.currentLayer) { return null; }
-
             return {
                 currentLayerIdx: this.currentLayer.comparerIndex,
                 selectedIds: this.selectedFeatures.map(function(feature) {
-                    return feature.get('OBJECTID');
+                    return self.getObjectId(feature);
                 })
             };
         },
@@ -169,7 +171,7 @@
                 // Select feature if they were present in saved hash state
                 if (model._preSelectedFeatureIds) {
                     var featureGraphics = _.filter(model.currentLayer.graphics, function(g) {
-                        return _.contains(model._preSelectedFeatureIds, g.attributes.OBJECTID);
+                        return _.contains(model._preSelectedFeatureIds, model.getObjectId(g));
                     });
 
                     _.each(featureGraphics, model._selectFeature, model);
@@ -203,10 +205,11 @@
         },
 
         _unselectFeature: function(graphic) {
-            var features = this.selectedFeatures.where({
-                    OBJECTID: graphic.attributes.OBJECTID
+            var self = this,
+                objectId = this.getObjectId(graphic),
+                features = this.selectedFeatures.filter(function(feature) {
+                    return self.getObjectId(feature) == objectId;
                 });
-
             if (features.length) {
                 this._removeSelectedFeature(features[0].cid);
             }
@@ -270,8 +273,10 @@
         },
          
         _featureIsSelected: function(feature) {
+            var self = this,
+                objectId = this.getObjectId(feature);
             return this.selectedFeatures.any(function(existing) {
-                return existing.attributes.OBJECTID === feature.attributes.OBJECTID;
+                return self.getObjectId(existing) === objectId;
             });
         },
 
@@ -355,6 +360,33 @@
             this.model._removeSelectedFeature(id);
         }
     });
+
+    // Return a function that will return the OBJECTID property
+    // for a given feature graphic or feature Backbone model.
+    var objectIdGetter = function(layerInfo, esriLayer) {
+        // Check if OBJECTID field is defined in layer config.
+        if (layerInfo.objectIdField) {
+            return function(feature) {
+                return feature.attributes[layerInfo.objectIdField];
+            };
+        }
+
+        // Check if an 'esriFieldTypeOID' field is configured on the AGS endpoint.
+        var objectIdFields = _.filter(esriLayer.fields, function(field) {
+                return field.type == 'esriFieldTypeOID';
+            }),
+            objectIdField = objectIdFields.length > 0 && objectIdFields[0];
+        if (objectIdField) {
+            return function(feature) {
+                return feature.attributes[objectIdField.name];
+            };
+        }
+
+        // Backward compatible behavior assumes there will be an attribute called OBJECTID.
+        return function(feature) {
+            return feature.attributes['OBJECTID'];
+        };
+    }
 
     return {
         Comparer: Comparer,

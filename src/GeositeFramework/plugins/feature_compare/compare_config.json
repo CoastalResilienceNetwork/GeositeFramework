@@ -7,6 +7,7 @@
             "name": "HUC 8",
             "url": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/Watershed_and_Political_Boundaries/MapServer/0",
             "mapDisplayAttribute": "SUBREGION",
+            "objectIdField": "OBJECTID",
             "attrs": [
                 {"name": "SUBREGION", "format": "text", "maxLength": 25},
                 {"name": "canal_idx", "format": "number", "digits": 3, "unit": " mi", "nonZeroCutoff": 0.001},
