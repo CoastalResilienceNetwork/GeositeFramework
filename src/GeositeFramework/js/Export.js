@@ -144,7 +144,7 @@ require(['use!Geosite',
                     model.set('outputText', resultTemplate({ url: result.url }));
                     onFinish();
                 },
-                onFailure = function() {
+                onFailure = _.debounce(function() {
                     var result = [];
                     result.push('There was an error processing your request.');
                     if (attempts > 0) {
@@ -153,13 +153,14 @@ require(['use!Geosite',
                     }
                     model.set('outputText', result.join('<br />'));
                     tryCreatePdf();
-                },
+                }, 1000),
                 onFinish = function() {
                     model.set('submitEnabled', true);
                 },
                 tryCreatePdf = function() {
                     if (attempts <= 0) {
                         onFinish();
+                        return;
                     }
                     model.pdfManager.run(
                         model.getPrintTemplateName(),
