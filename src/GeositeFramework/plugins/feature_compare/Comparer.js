@@ -67,8 +67,8 @@
                 model.getObjectId = objectIdGetter(layerInfo, model.currentLayer);
                 // When the layer is loaded, get a list of just the field infos
                 // for which we are using to compare field values.
-                model.currentFieldInfos = _.filter(model.currentLayer.fields, function(field) {
-                    return _.contains(_.pluck(layerInfo.attrs, "name"), field.name);
+                model.currentFieldInfos = _.map(layerInfo.attrs, function(field) {
+                    return _.findWhere(model.currentLayer.fields, { name: field.name });
                 });
 
                 model._addStateSelectedFeatures();
