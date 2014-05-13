@@ -18,6 +18,10 @@
             };
         }
 
+        if (value === null) {
+            return { valid: true, origValue: value, value: '[No Value]' };
+        }
+
         if (this.options.format === 'number') {
             return this.number(value, this.options);
         }
