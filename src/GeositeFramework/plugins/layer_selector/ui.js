@@ -52,6 +52,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 // the form initially.  If it was resized while
                 // the container was hidden, w/h are equal to 0
                 this.onContainerSizeChanged();
+
+                enableIconClick();
             };
 
             this.hideAll = function () {
