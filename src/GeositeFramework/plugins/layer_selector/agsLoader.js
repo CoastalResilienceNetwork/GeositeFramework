@@ -617,7 +617,7 @@ define(["jquery", "use!underscore"],
                         if (layerNode.type === "layer-group") {
                             node.cascadeBy(function() {
                                 if (this.get('checked')) {
-                                    if (this.raw.layerId) {
+                                    if (this.raw.leaf) {
                                         layerIds = _.union(layerIds, this.raw.layerId);
                                     }
                                 }
