@@ -288,6 +288,9 @@ define(["dojo/_base/declare",
                     var firstAttribute = getFirstAttribute(feature.feature.attributes);
 
                     feature.displayFieldName = feature.displayFieldName || firstAttribute.fieldName;
+                    // We don't have access to the alias for this field, so clean it up a little by
+                    // swapping underscores for spaces.
+                    feature.displayFieldName = feature.displayFieldName.replace(/_/g, ' ');
                     feature.value = feature.value || firstAttribute.value;
 
                     if (!feature.layerName) {
