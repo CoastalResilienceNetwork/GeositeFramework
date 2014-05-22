@@ -26,7 +26,10 @@ public class proxy : IHttpHandler {
 
         // Get the URL requested by the client (take the entire querystring at once
         //  to handle the case of the URL itself containing querystring parameters)
-		string uri = Uri.UnescapeDataString(context.Request.QueryString.ToString());
+        //  Also replace + with encoded spaces, as this Uri method will replace a 
+        //  space with + which is not a valid Uri scheme for AGS.
+        string uri = Uri.UnescapeDataString(
+            context.Request.QueryString.ToString()).Replace("+", "%20");
 
         // Get token, if applicable, and append to the request
         string token = getTokenFromConfigFile(uri);
