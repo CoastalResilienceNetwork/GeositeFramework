@@ -597,10 +597,13 @@ input.code-like, textarea.code-like {
         display: none;
     }
 
-#legend-0 > div, #legend-1 > div {
+#legend-0 > div, #legend-1 > div, .custom-legend {
     padding-bottom: 8px;
     float: left;
     width: 215px;
+    }
+    .legend-body .esriLegendService {
+        padding-bottom: 0;
     }
     .esriLegendService table {
         margin: 0;
