@@ -200,8 +200,8 @@ require(['use!Geosite',
 
         function createLegendContainer(view) {
             // Create container for custom legend and attach to legend element
-            var $legendContainer = $('<div>').hide()
-                .appendTo(view.$el.parents('.content').find('.legend'));
+            var $legendContainer = $('<div>', {'class': 'custom-legend'}).hide()
+                .appendTo(view.$el.parents('.content').find('.legend .legend-body'));
 
             // Tell the model about $legendContainer so it can pass it to the plugin object
             view.model.set('$legendContainer', $legendContainer);
