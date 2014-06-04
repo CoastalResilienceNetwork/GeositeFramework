@@ -12,7 +12,7 @@
             
             initialize: function (args) {
                 declare.safeMixin(this, args);
-                $legendEl = $(this.legendContainer.parentElement);
+                $legendEl = $(this.legendContainer).parents('.legend');
             },
             
             renderLauncher: function () {
