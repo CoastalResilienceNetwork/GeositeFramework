@@ -1,18 +1,17 @@
 ﻿define(
     ["dojo/_base/declare", "framework/PluginBase"],
     function (declare, PluginBase) {
-        var $legendEl = null;
-        
+
         return declare(PluginBase, {
             toolbarName: "LegendDisplay",
             fullName: "Show/Hide the map legend",
             toolbarType: "map",
             allowIdentifyWhenActive: true,
             closeOthersWhenActive: false,
-            
+
             initialize: function (args) {
                 declare.safeMixin(this, args);
-                $legendEl = $(this.legendContainer).parents('.legend');
+                this.$legendEl = $(this.legendContainer).parents('.legend');
             },
             
             renderLauncher: function () {
@@ -20,7 +19,7 @@
             },
 
             activate: function () {
-                $legendEl.toggle();
+                this.$legendEl.toggle();
             }
         });
     }
