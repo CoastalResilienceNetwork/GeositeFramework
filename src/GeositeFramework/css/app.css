@@ -263,6 +263,7 @@ input.code-like, textarea.code-like {
 
         .content .plugin-infographic .graphic {
             display: block;
+            max-width: none;
         }
 
         .content  .plugin-infographic label {
