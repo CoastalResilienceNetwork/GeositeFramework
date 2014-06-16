@@ -104,8 +104,19 @@ input.code-like, textarea.code-like {
         color: white;
         text-transform: uppercase;
     }
-    
-    
+
+    /* Copied from foundation */
+    .top-bar>ul .name h1,
+    .top-bar>ul .name h2 {
+        margin: 0;
+    }
+
+    /* Copied from foundation */
+    .top-bar ul>li.name h1 a,
+    .top-bar ul>li.name h2 a {
+        line-height: 45px !important;
+    }
+
 /* -----------------------------------------
    Content Area - Helpers
 ----------------------------------------- */

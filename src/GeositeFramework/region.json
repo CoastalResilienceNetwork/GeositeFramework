@@ -1,6 +1,12 @@
 {
-    "titleMain": { "text": "Geosite Framework Sample", "url": "http://www.azavea.com/" },
-	"titleDetail": { "text": "Sample Region"},
+    "titleMain": {
+        "text": "Geosite Framework Sample",
+        "url": "http://www.azavea.com/"
+    },
+    "titleDetail": {
+        "text": "Sample Region",
+        "url": "http://www.azavea.com/"
+    },
     "headerLinks": [
         { "text": "Menu", "url":"#", "items": [
                 { "text": "Cat", "url": "https://en.wikipedia.org/wiki/Cat" },
