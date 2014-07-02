@@ -98,6 +98,13 @@
                 _.bind(model._handleFeatureClick, model));
 
             model.layerEventHandlers = [load, mouseOver, mouseOut, click];
+
+            // mouse-out on a feature is not reliable, so the highlight graphic
+            // could persist even if the cursor is not hovered over a graphic.
+            // The highlight graphic could then be exported if it was 'stuck' as the
+            // user selected the export tool.  Ensure that no feature is 
+            // highlighted if the user leaves the map element (to use another tool)
+            model.options.map.on('mouse-out', clearHighlight);
         },
 
         clear: function() {
