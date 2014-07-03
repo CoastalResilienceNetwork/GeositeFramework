@@ -120,7 +120,8 @@ require(['use!Geosite',
         },
 
         createPdfManager: function(taskParams, printTask) {
-            var pdfManager = {};
+            var model = this,
+                pdfManager = {};
             pdfManager.params = this.getExportParams();
             pdfManager.printTask = printTask;
             pdfManager.run = function (layout, title, includeLegend, success, failure) {
@@ -128,12 +129,53 @@ require(['use!Geosite',
                 this.params.template.layout = layout;
                 this.params.template.layoutOptions = {};
                 this.params.template.layoutOptions.titleText = title;
-                if (!includeLegend) {
-                    this.params.template.layoutOptions.legendLayers = [];
-                }
+                this.params.template.layoutOptions.legendLayers = includeLegend ?
+                    model.getLegendLayers(taskParams.map) : [];
                 this.printTask.execute(this.params, success, failure);
             };
             return pdfManager;
+        },
+
+        // Return list of all visible layers on map.
+        // Issue #269.
+        // We no longer add group nodes to the list of visible map ids.
+        // However, it seems like the PrintTask cannot render the map legend
+        // without all parent layer ids present.
+        getLegendLayers: function(map) {
+            var model = this,
+                result = [];
+            _.each(map.getLayersVisibleAtScale(), function(layer) {
+                if (layer.visibleLayers && layer.visibleLayers.length > 0 && layer.visibleLayers[0] !== -1) {
+                    var legendLayer = new esri.tasks.LegendLayer();
+                    legendLayer.layerId = layer.id;
+                    legendLayer.subLayerIds = model.getLayerParents(layer, layer.visibleLayers);
+                    result.push(legendLayer);
+                }
+            });
+            return result;
+        },
+
+        // Return union of layerIds and related parent layer ids.
+        getLayerParents: function(layer, layerIds) {
+            var result = _.clone(layerIds),
+                // Build lookup table.
+                layerId_to_parentLayerId = _.object(_.zip(
+                    _.pluck(layer.layerInfos, 'id'),
+                    _.pluck(layer.layerInfos, 'parentLayerId')
+                )),
+                layerId = null,
+                i = 0;
+            // Loop through each visible layer and append its direct parent.
+            // This is an iterative node traversal process that will queue the
+            // next node to process at each iteration. Once we reach the root layer
+            // node there is no parent node to queue and the loop terminates.
+            while ((layerId = result[i++]) != null) {
+                var parentLayerId = layerId_to_parentLayerId[layerId];
+                if (parentLayerId != null && parentLayerId > -1 && !_.contains(result, parentLayerId)) {
+                    result.push(parentLayerId);
+                }
+            }
+            return result;
         },
 
         createPDF: function () {
