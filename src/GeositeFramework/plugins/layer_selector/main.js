@@ -21,7 +21,7 @@ require({
         },
         {
             name: "extjs",
-            location: "//cdn.sencha.io/ext-4.1.1-gpl",
+            location: "//d16l3xhd6wlg5a.cloudfront.net",
             main: "ext-all"
         },
         {
