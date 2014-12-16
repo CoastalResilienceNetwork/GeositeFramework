@@ -119,15 +119,18 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CsvHelper.cs" />
     <Compile Include="Helpers\PluginLoader.cs" />
     <Compile Include="Helpers\JsonDataPlugin.cs" />
     <Compile Include="Helpers\JsonData.cs" />
     <Compile Include="Helpers\JsonDataRegion.cs" />
     <Compile Include="Models\Geosite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\DownloadTests.cs" />
     <Compile Include="Tests\PluginLoaderTests.cs" />
     <Compile Include="Tests\GeositeTests.cs" />
   </ItemGroup>
