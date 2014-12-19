@@ -41,12 +41,30 @@ require(['use!Geosite',
                     info: _.bind(logger.info, logger),
                     warn: _.bind(logger.warn, logger),
                     error: _.bind(logger.error, logger),
-                    _unsafeMap: esriMap
+                    _unsafeMap: esriMap,
+                    downloadAsCsv: requestCsvDownload,
+                    downloadAsPlainText: requestTextDownload
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
                 legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
             });
+        }
+
+        function requestCsvDownload(filename, content) {
+            requestDownload(filename, content, 'download/csv');
+        }
+
+        function requestTextDownload(filename, content) {
+            requestDownload(filename, content, 'download/text');
+        }
+
+        function requestDownload(filename, content, action) {
+            $('#download-csv-form')
+                .attr('action', action)
+                .find('input[name=content]').val(JSON.stringify(content)).end()
+                .find('input[name=filename]').val(filename).end()
+                .submit();
         }
 
         function setState(model, pluginState) {

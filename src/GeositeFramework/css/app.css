@@ -28,6 +28,10 @@ input.code-like, textarea.code-like {
     font-family: "Courier New", Courier, monospace;
 }
 
+.hidden {
+    display: none;
+}
+
 /*------------------------------------------
     EXT Style "adjustments"
 ------------------------------------------*/
