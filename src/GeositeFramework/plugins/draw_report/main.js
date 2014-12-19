@@ -31,6 +31,7 @@ define(
             _$requestButton,
             _$resultDisplay,
             _$resultTab,
+            _$download,
             _layer,
             _editbar,
             _currentFeature,        // Keep state of report runs for
@@ -44,7 +45,7 @@ define(
             return template;
         }
 
-        function render(reports) {
+        function render(reports, app) {
             var bodyTemplate = getTemplate("template-report-pluginbody"),
                 optionTemplate = getTemplate("template-report-select-option"),
                 $body = $(bodyTemplate({firstDescription: reports[0].description})),
@@ -61,7 +62,7 @@ define(
             
             $body.find("#report-plugin-draw").click(handleStartDraw);
             _$requestButton = $body.find("#report-plugin-request").click(function() {
-                requestReport(_$select.val());
+                requestReport(_$select.val(), app);
             });
             
             return $body;
@@ -73,7 +74,7 @@ define(
             _editbar.activate(esri.toolbars.Draw.POLYGON);
         }
         
-        function requestReport(reportIdx) {
+        function requestReport(reportIdx, app) {
             var featureSet = new esri.tasks.FeatureSet(),
                 report = _config.reports[reportIdx],
                 params;
@@ -87,15 +88,15 @@ define(
             };
 
             showSpinner();
-            _gp.submitJob(params, gpFinished, null, function (error) {
+            _gp.submitJob(params, _.partial(gpFinished, app), null, function (error) {
                 this.app.error("Unable to process Report Analysis", error);
             });
         }
         
-        function gpFinished(info) {
+        function gpFinished(app, info) {
             hideSpinner();
             if (info.jobStatus === 'esriJobSucceeded') {
-                _gp.getResultData(info.jobId, "Output", handleReportResult);
+                _gp.getResultData(info.jobId, "Output", _.partial(handleReportResult, app));
             } else {
                 var messages = _.reduce(info.messages,
                     function(prev, message) {
@@ -112,7 +113,7 @@ define(
             };
         }
         
-        function handleReportResult(result) {
+        function handleReportResult(app, result) {
             var report = _.find(_config.reports, function(r) {
                     return r.id === _currentReportId;
                 }),
@@ -125,7 +126,31 @@ define(
 
             _$resultDisplay.empty()
                 .append(getTemplate("template-report-results")(context));
+
+            var $download = _$resultDisplay.find('.plugin-report-download');
+            $download.click(_.partial(initiateCsvDownload, context, app));
+
             _$resultTab.click();
+        }
+
+        function initiateCsvDownload(reportDetails, app) {
+            var filename = reportDetails.name.replace(/ /g, '_') + "_summary.csv";
+            var header = ["category", "amount", "feature", "units"];
+
+            var rowLists = _.map(reportDetails.layers, function(layerDef) {
+                var feature = layerDef[1].display;
+                var units = layerDef[1].units;
+                var commonFields = [feature, units];
+
+                return _.map(layerDef[0], function(layerValues) {
+                    var row = [layerValues.Category, layerValues.Amount];
+                    return row.concat(commonFields);
+                });
+            });
+
+            var file = _.flatten(rowLists, true);
+            file.unshift(header);
+            app.downloadAsCsv(filename, file);
         }
 
         function addGraphic(geometry) {
@@ -161,7 +186,7 @@ define(
 
             _gp = new esri.tasks.Geoprocessor(_config.gpUrl);
 
-            $container = $(self.container).append(render(_config.reports));
+            $container = $(self.container).append(render(_config.reports, context.app));
             setupViewTabs($container);
             
             // Set the selected report description

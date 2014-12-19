@@ -1,47 +1,78 @@
 ﻿{
-    "gpUrl": "http://dev.ags.coastalresilience.org:6080/arcgis/rest/services/geoprocessing/DrawAndReport/GPServer/getDrawAndReportData",
-    "reports":
-        [
-            { 
-                "id": "example_1",
-                "name": "Example Report 1",
-                "description": "This is an example report with 3 layers: AL_submerged_vegetation, AL_oyster_larval_concentration & AL_water_access.",
-                "layers": [
-                    {   
-                        "display": "Alabama Submerged Vegetation",
-                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
-                        "field":"habit",
-                        "units": "km<sup>2</sup>"
-                    },
-                    {
-                        "display": "Alabama Oyster Larval Concentration",
-                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration",
-                        "units": "km<sup>2</sup>"
-                    },
-                    {
-                        "display": "Alabama Water Access",
-                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Coastal_Management/AL_water_access",
-                        "field":"access"
-                    }
-                ]
-            }, 
-
-            { 
-                "id": "example_2",
-                "name": "Example Report 2",
-                "description": "This is an example report with 2 layers: AL_submerged_vegetation & AL_oyster_larval_concentration",
-                "layers": [
-                    {   
-                        "display": "Alabama Submerged Vegetation",
-                        "layer": "gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_submerged_vegetation",
-                        "field":"habit",
-                        "units": "km<sup>2</sup>"
-                    },
-                    {
-                        "display": "Alabama Oyster Larval Concentration",
-                        "layer":"gulfmex/sde_imports/AL_GulfDS_oysters_web.gdb/AL_Habitat/AL_oyster_larval_concentration"
-                    }
-                ]
-            }
-        ]
+    "gpUrl": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/DrawAndReport/GPServer/getDrawAndReportDataPath",
+    "reports": [
+        {
+            "id": "Managed_Areas",
+            "name": "Managed Areas",
+            "description": "This is an example report with multiple layers: managed areas.",
+            "layers": [
+                {
+                    "display": "Wetlands Reserve Program",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_WRP",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "Wildlife Management Area total area",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_WMA",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "Wildlife Management Areas",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_WMA",
+                    "field": "NAME",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Wildlife Refuge total area",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_NWR",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Wildlife Refuges",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_NWR",
+                    "field": "NAME",
+                    "units": "Square km"
+                },
+                {
+                    "display": "State Parks total area",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_State_Park",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "State Parks",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_State_Park",
+                    "field": "NAME",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Parks total area",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_Nat_Parks",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Parks",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_Nat_Parks",
+                    "field": "NAME",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Forest total area",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_Nat_Forest",
+                    "field": "",
+                    "units": "Square km"
+                },
+                {
+                    "display": "National Forest",
+                    "layer": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb/All_Nat_Forest",
+                    "field": "NAME",
+                    "units": "Square km"
+                }
+            ]
+        }
+    ]
 }
