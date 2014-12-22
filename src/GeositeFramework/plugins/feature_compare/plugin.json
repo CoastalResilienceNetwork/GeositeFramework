@@ -1,8 +1,0 @@
-{    
-    "css": [
-        "plugins/feature_compare/feature_compare.css"
-    ],
-    "use": {
-        "underscore": { "attach": "_" }
-    }
-}
