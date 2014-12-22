@@ -185,7 +185,7 @@ namespace GeositeFramework.Models
             catch (Exception e)
             {
                 const string msg = "Bad color config for key: `{0}`. Please use Hex (HTML) notation, ex. #FFCC66";
-                throw new Exception(String.Format(msg, key));
+                throw new Exception(String.Format(msg, key), e);
             }
         }
 
