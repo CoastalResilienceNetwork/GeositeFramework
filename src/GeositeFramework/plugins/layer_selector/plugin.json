@@ -1,7 +1,7 @@
 {
     "css": [
         "plugins/layer_selector/main.css",
-        "//cdn.sencha.io/ext-4.1.1-gpl/resources/css/ext-all.css"
+        "//d16l3xhd6wlg5a.cloudfront.net/resources/css/ext-all.css"
     ],
     "use": {
         "underscore": { "attach": "_" },
