@@ -40,7 +40,8 @@
 </script>
 
 <script type="text/template" id="template-report-results">
-    <h4><%=name%></h4>
+    <h4><%=name%></h4> 
+    <button class="button small plugin-report-download">Download Results</button>
     <% _.each(layers, function(layer) { %>
         <h5><%=layer[1].display %></h5>
         <h6 class="plugin-report-clean-text"><%=layer[1].field %></h6>

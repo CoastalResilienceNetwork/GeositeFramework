@@ -138,6 +138,15 @@
 <!-- EX.: view-split, view-left, view-right -->
 <body class="view-left" style="zoom: 0 !important;">
 
+    <!-- iframe and form are used in tandem to facilitate a non-reloading
+        POST to the download URL.  The form targets the iframe, making it reload
+        when performing the action -->
+    <iframe name="download-frame" class="hidden"></iframe>
+    <form id="download-csv-form" target="download-frame" method="POST" class="hidden">
+        <input type="hidden" name="content" />
+        <input type="hidden" name="filename" />
+    </form>
+
     <script type="text/template" id="template-pane">
         <div class="sidebar">
             <ul class="plugins side-nav twelve top"></ul>
