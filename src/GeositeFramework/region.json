@@ -25,6 +25,21 @@
         -79.716796875,
         31.653381399664
     ],
+    "subregions": {
+        "color": "#c0c0c0",
+        "opacity": 0.5,
+        "clickToFocus": true,
+        "areas": [
+            {
+                "id": "flower-garden",
+                "display": "Flower Garden Banks Marine Sanctuary",
+                "details": "The sanctuary protects a productive...",
+                "shape": [[-94.7900390625,27.780771643348196],[-94.7900390625,28.497660832963472],[-93.724365234375,28.497660832963472],[-93.724365234375,27.780771643348196],[-94.7900390625,27.780771643348196]], 
+                "color": "#434343",
+                "opacity": 0.7
+            }
+        ]
+    },
     "basemaps": [
         { "name": "Topographic"        , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" },
         { "name": "National Geographic", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer" },
