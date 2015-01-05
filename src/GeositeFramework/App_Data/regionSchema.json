@@ -64,6 +64,26 @@
             "maxItems": 4,
             "items": {"type": "number"}
         },
+        "subregions": {
+            "type": "object",
+            "required": false,
+            "properties": {
+                "color": {"type": "string", "required": false},
+                "opacity": {"type": "number", "required": false},
+                "clickToFocus": {"type": "boolean", "required": true},
+                "areas": {"type": "array", "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string", "required": true},
+                        "display": {"type": "string", "required": true},
+                        "details": {"type": "string", "required": true},
+                        "shape": {"type": "array", "required": true},
+                        "color": {"type": "string", "required": false},
+                        "opacity": {"type": "number", "required": false}
+                    }
+                }}
+            }
+        },
         "basemaps": {
             "type": "array", 
             "required": true,
