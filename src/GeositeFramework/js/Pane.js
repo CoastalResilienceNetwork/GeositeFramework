@@ -64,12 +64,31 @@
         var mapModel = model.get('mapModel'),
             regionData = model.get('regionData');
 
-        model.get('plugins').each(function (pluginModel) {
-            var stateOfPlugin = model.get('stateOfPlugins')[pluginModel.name()];
+        model.get('plugins').each(function(pluginModel) {
+            var savedState = model.get('stateOfPlugins');
 
             pluginModel.initPluginObject(regionData, mapModel, esriMap);
-            if (stateOfPlugin) {
-                pluginModel.setState(stateOfPlugin);
+
+            if (savedState) {
+                // If the saved state included data for this plugin, set it.
+                if (savedState.plugins) {
+                    var pluginState = savedState.plugins[pluginModel.name()];
+
+                    if (pluginState) {
+                        pluginModel.setState(pluginState);
+                    }
+                }
+                
+                // If this plugin was selected, whether it set data or not,
+                // select the plugin to activate.
+                if (savedState.selectedPlugin === pluginModel.name()) {
+                    // Selecting the model immediately causes errors within 
+                    // backbone.picky so defer the selection.  I suspect this is
+                    // related to issue #288 as well.
+                    _.delay(function() {
+                        pluginModel.select();
+                    }, 0);
+                }
             }
         });
     }
@@ -279,17 +298,26 @@
                it in our own model's pluginState object.
             */
             var plugins = this.model.get('plugins'),
-                stateOfPlugins = {};
+                stateOfPlugins = {},
+                selected = null;
 
             plugins.each(function (plugin) {
                 var state = plugin.getState();
 
+                // Track which plugin is open
+                if (plugin.selected && !selected) {
+                    selected = plugin.name();
+                }
                 if (state && Object.keys(state).length > 0) {
                     stateOfPlugins[plugin.name()] = state;
                 }
             });
 
-            this.model.set('stateOfPlugins', stateOfPlugins);
+            var savedState = {
+                selectedPlugin: selected,
+                plugins: stateOfPlugins
+            };
+            this.model.set('stateOfPlugins', savedState);
 
             // backbone objects that are tracked by HashModels
             this.mapView.saveState();
