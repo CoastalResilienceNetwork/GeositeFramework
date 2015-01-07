@@ -19,8 +19,25 @@
                 mapNumber: model.get('paneNumber')
             });
         model.set('mapModel', mapModel);
+
+        mapModel.on('subregion-activate', function(activeRegion) {
+            invokeOnPlugins(model, 'subregionActivated', [activeRegion]);
+        });
+
+        mapModel.on('subregion-deactivate', function(deactivatedRegion) {
+            invokeOnPlugins(model, 'subregionDeactivated', [deactivatedRegion]);
+        });
     }
 
+    function invokeOnPlugins(model, methodName, args) {
+            var plugins = model.get('plugins');
+            plugins.each(function(plugin) {
+                var pluginObj = plugin.model.get('pluginObject');
+                if (_.isFunction(pluginObj[methodName])) {
+                    pluginObj[methodName].apply(pluginObj, args);
+                }
+            });
+    }
     function getHomeExtent(model) {
         var x = model.get('regionData').initialExtent,
             extent = new esri.geometry.Extent(
