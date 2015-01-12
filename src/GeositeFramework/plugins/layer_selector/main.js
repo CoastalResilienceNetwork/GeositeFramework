@@ -116,6 +116,14 @@ define([
                 this._layerManager.hideAllLayers(this.map);
                 this._ui.uncheckAndCollapse();
                 this._currentState = {};
+            },
+            
+            subregionActivated: function(subregion) {
+                console.debug('now using subregion ' + subregion.display);
+            },
+            
+            subregionDeactivated: function(subregion) {
+                console.debug('now leaving subregion ' + subregion.display);
             }
 
         });
