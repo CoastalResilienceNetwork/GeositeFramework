@@ -128,6 +128,9 @@ require(['use!Geosite',
         });
 
         function setupSubregions(subregions, esriMap) {
+            // Subregions are not required
+            if (!subregions) return;
+
             var subRegionManager = new N.controllers.SubRegion(subregions, esriMap);
 
             subRegionManager.onActivated(function(subregion) {
