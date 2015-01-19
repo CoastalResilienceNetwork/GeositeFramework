@@ -182,6 +182,7 @@
     <Content Include="js\PluginBase.js" />
     <Content Include="js\polyfill.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="js\SubRegion.js" />
     <Content Include="plugins\draw_report\draw_report.css" />
     <Content Include="plugins\draw_report\icon_active.png" />
     <Content Include="plugins\draw_report\icon.png" />

@@ -123,8 +123,21 @@ require(['use!Geosite',
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
             // would be detached from the body and the parent would not be accessible 
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
+
+            setupSubregions(N.app.data.region.subregions, esriMap);
         });
 
+        function setupSubregions(subregions, esriMap) {
+            var subRegionManager = new N.controllers.SubRegion(subregions, esriMap);
+
+            subRegionManager.onActivated(function(subregion) {
+                view.model.trigger('subregion-activate', subregion);
+            });
+
+            subRegionManager.onDeactivated(function(subregion) {
+                view.model.trigger('subregion-deactivate', subregion);
+            });
+        }
 
         // On IE8, the map.onload event will often not fire at all, which breaks
         // the app entirely.  The map does, in fact, load and its loaded property is
