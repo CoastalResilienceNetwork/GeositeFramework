@@ -51,7 +51,8 @@
 
         events: {
             'change .embed-size.width': function () { this.updateSize('width'); },
-            'change .embed-size.height': function () { this.updateSize('height'); }
+            'change .embed-size.height': function () { this.updateSize('height'); },
+            'click .show-long-permalink': 'toggleLongPermalink'
         },
         
         render: function () {
@@ -70,7 +71,7 @@
             TINY.box.show({
                 html: this.template(view.model.toJSON()),
                 width: 500,
-                height: 400,
+                height: 435,
                 fixed: true,
                 openjs: function () {
                     view.setElement($('#permalink-dialog'));
@@ -108,6 +109,10 @@
 
         updateSize: function (key) {
             this.model.set(key, this.$('.' + key).val());
+        },
+
+        toggleLongPermalink: function() {
+            this.$el.find('#long-permalink-textbox').toggle();
         }
     }); 
 

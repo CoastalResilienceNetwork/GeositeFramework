@@ -766,3 +766,12 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 .lt-ie9 {
     
 }
+
+
+/* ----------------------------------------
+    Permalink dialog
+------------------------------------------ */
+
+#long-permalink-textbox {
+    display: none;
+}

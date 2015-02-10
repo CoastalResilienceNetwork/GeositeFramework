@@ -331,9 +331,14 @@
           <label>Embed this map in your website:</label>
           <div id="iframe-embed"></div>
           <label>Embed Width (px)
-               <input type="number" class="embed-size width" value="<%= width %>" /></label>
-           <label>Embed Height (px)
-               <input type="number" class="embed-size height" value="<%= height %>" /></label>
+            <input type="number" class="embed-size width" value="<%= width %>" /></label>
+          <label>Embed Height (px)
+            <input type="number" class="embed-size height" value="<%= height %>" /></label>
+          <em>
+            <label>Need the unshortened permalink? <a href="javascript:void(0);" class="show-long-permalink">Get it here.</a>
+              <input class="code-like" id="long-permalink-textbox" type="text" value="<%= url %>"/>
+            </label>
+          </em>
         </div>
     </script>
 
