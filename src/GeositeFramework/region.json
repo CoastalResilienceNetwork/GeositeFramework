@@ -72,7 +72,8 @@
         "zoom_to",
         "full_extent",
         "measure",
-        "legend_display"
+        "legend_display",
+        "subregion_toggle"
     ],
     "print": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",

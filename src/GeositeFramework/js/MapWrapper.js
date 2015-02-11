@@ -46,6 +46,10 @@
         // ------------------------------------------------------------------------
         // Method overrides
 
+        _wrapper.getMapId = function() {
+            return esriMap.id;
+        }
+
         _wrapper.getLayer = function (layerId) {
             // Get a layer if it's mine
             return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : undefined);

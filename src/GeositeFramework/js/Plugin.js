@@ -43,7 +43,8 @@ require(['use!Geosite',
                     error: _.bind(logger.error, logger),
                     _unsafeMap: esriMap,
                     downloadAsCsv: requestCsvDownload,
-                    downloadAsPlainText: requestTextDownload
+                    downloadAsPlainText: requestTextDownload,
+                    dispatcher: N.app.dispatcher
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),

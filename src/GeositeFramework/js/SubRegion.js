@@ -34,6 +34,11 @@
             hideTooltip(e, tooltip);
         });
 
+        // Event fired from the subregion-toggle plugin on click
+        N.app.dispatcher.on('subregion-toggle:toggle', function(e) {
+            toggleSubRegions(e, self.map.id, self.subRegionLayer);
+        });
+        
         // If click-activation is enabled, wire up the event
         if (subregions.clickToFocus) {
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-over', 'pointer');
@@ -119,5 +124,15 @@
 
     function hideTooltip(e, tooltip) {
         tooltip.hide();
+    }
+
+    function toggleSubRegions(eventMapId, mapId, subRegionLayer) {
+        if (mapId === eventMapId) {
+            if (subRegionLayer.visible) {
+                subRegionLayer.hide();
+            } else {
+                subRegionLayer.show();
+            }
+        }
     }
 });
