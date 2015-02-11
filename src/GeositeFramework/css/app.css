@@ -767,11 +767,34 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     
 }
 
-
 /* ----------------------------------------
     Permalink dialog
 ------------------------------------------ */
-
 #long-permalink-textbox {
     display: none;
+}
+/* ----------------------------------------
+    Subregion Tooltip
+------------------------------------------- */
+.subregion-tooltip.esriPopup .titlePane, .subregion-tooltip.esriPopup .actionsPane { 
+    display: none;
+}
+
+.subregion-tooltip.esriPopup .content, .subregion-tooltip.esriPopup .contentPane {
+    display: block;
+    color: #fff !important;
+    background-color: #444 !important;
+    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
+    border-bottom: none !important;
+    border-radius: 12px;
+    width: 100px;
+}
+
+.subregion-tooltip.esriPopup .esriPopupWrapper {
+    border-radius: 12px;
+    width: 100px;
+}
+
+.subregion-tooltip.esriPopup .pointer {
+    background-color: #444;
 }
