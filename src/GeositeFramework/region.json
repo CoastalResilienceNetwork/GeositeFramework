@@ -12,7 +12,7 @@
                 { "text": "Cat", "url": "https://en.wikipedia.org/wiki/Cat" },
                 { "text": "Dog", "popup": true, "url": "https://en.wikipedia.org/wiki/Dog" },
                 { "text": "Fish", "url": "https://en.wikipedia.org/wiki/Fish" },
-                { "text": "Tour Again", "url": "javascript:;", "elementId": "help-overlay-start"},
+                { "text": "Tour Again", "url": "javascript:;", "elementId": "help-overlay-start"}
             ]
         },
         { "text": "Azavea", "url": "http://www.azavea.com/" },
@@ -82,5 +82,46 @@
         "primary": "#26648E",
         "secondary": "#26648E"
     },
-    "identifyBlacklist": ["OBJECTID", "OBJECTID_1"]
+    "identifyBlacklist": ["OBJECTID", "OBJECTID_1"],
+	"launchpad": {
+        "showSubRegions": true,
+        "categories": [
+          {
+            "name": "What's new?",
+            "description": "Lorem Ipsum",
+            "issues": [
+                { 
+                  "name": "Sea Rise",
+                  "description": "Lorem Ipsum",
+                  "saveCode": "e34df34rd3....3434",
+                  "faIcon": "fa-map"
+                },
+                { 
+                  "name": "Habitat",
+                  "description": "Lorem Ipsum",
+                  "saveCode": "e34df34rd3....3434",
+                  "faIcon": "fa-animal"
+                }
+              ]
+          },
+          {
+            "name": "Use Cases",
+            "description": "Lorem Ipsum",
+            "issues": [
+                { 
+                  "name": "Transportation",
+                  "description": "Lorem Ipsum",
+                  "saveCode": "e34df34rd3....3434",
+                  "faIcon": "fa-train"
+                },
+                { 
+                  "name": "Climate Change",
+                  "description": "Lorem Ipsum",
+                  "saveCode": "e34df34rd3....3434",
+                  "faIcon": "fa-ocean"
+                }
+              ]
+          }      
+        ]
+    }	
 }
