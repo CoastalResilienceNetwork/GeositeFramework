@@ -10,6 +10,10 @@ define(
 
             initialize: function (args) {
                 declare.safeMixin(this, args);
+
+                if (this.app.regionConfig.subregions.hideByDefault) {
+                    this.activate();
+                }
             },
 
             renderLauncher: function () {
