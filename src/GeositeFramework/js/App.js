@@ -11,6 +11,7 @@
         templates: {},
         data: {},
         hashModels: null,
+        dispatcher: _.clone(Backbone.Events),
 
         init: function initializeApp(version, regionData, pluginClasses) {
             N.app.version = version;

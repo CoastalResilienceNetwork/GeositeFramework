@@ -71,6 +71,7 @@
                 "color": {"type": "string", "required": false},
                 "opacity": {"type": "number", "required": false},
                 "clickToFocus": {"type": "boolean", "required": true},
+                "hideByDefault": {"type": "boolean", "required": false},
                 "areas": {"type": "array", "items": {
                     "type": "object",
                     "properties": {
