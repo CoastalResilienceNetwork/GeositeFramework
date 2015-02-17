@@ -8,7 +8,8 @@
         "url": "http://www.azavea.com/"
     },
     "headerLinks": [
-        { "text": "Menu", "url":"#", "items": [
+       { "text": "Getting started", "launchpadId": "get-started", "url": "" },
+       { "text": "Menu", "url":"#", "items": [
                 { "text": "Cat", "url": "https://en.wikipedia.org/wiki/Cat" },
                 { "text": "Dog", "popup": true, "url": "https://en.wikipedia.org/wiki/Dog" },
                 { "text": "Fish", "url": "https://en.wikipedia.org/wiki/Fish" },
@@ -84,45 +85,48 @@
         "secondary": "#26648E"
     },
     "identifyBlacklist": ["OBJECTID", "OBJECTID_1"],
-    "launchpad": {
-        "showSubRegions": true,
-        "categories": [
-          {
-            "name": "What's new?",
-            "description": "Lorem Ipsum",
-            "issues": [
-                { 
-                  "name": "Sea Rise",
-                  "description": "Lorem Ipsum",
-                  "saveCode": "e34df34rd3....3434",
-                  "faIcon": "fa-map"
-                },
-                { 
-                  "name": "Habitat",
-                  "description": "Lorem Ipsum",
-                  "saveCode": "e34df34rd3....3434",
-                  "faIcon": "fa-animal"
-                }
-              ]
-          },
-          {
-            "name": "Use Cases",
-            "description": "Lorem Ipsum",
-            "issues": [
-                { 
-                  "name": "Transportation",
-                  "description": "Lorem Ipsum",
-                  "saveCode": "e34df34rd3....3434",
-                  "faIcon": "fa-train"
-                },
-                { 
-                  "name": "Climate Change",
-                  "description": "Lorem Ipsum",
-                  "saveCode": "e34df34rd3....3434",
-                  "faIcon": "fa-ocean"
-                }
-              ]
-          }      
-        ]
-    }
+    "launchpads": [
+        {
+            "id": "get-started",
+            "showSubRegions": true,
+            "categories": [
+              {
+                "name": "What's new?",
+                "description": "Lorem Ipsum",
+                "issues": [
+                    {
+                      "name": "Sea Rise",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-map"
+                    },
+                    {
+                      "name": "Habitat",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-animal"
+                    }
+                  ]
+              },
+              {
+                "name": "Use Cases",
+                "description": "Lorem Ipsum",
+                "issues": [
+                    {
+                      "name": "Transportation",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-train"
+                    },
+                    {
+                      "name": "Climate Change",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-ocean"
+                    }
+                  ]
+              }
+            ]
+        }
+    ]
 }

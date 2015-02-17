@@ -31,6 +31,7 @@
                     "text": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
                     "popup": {"type": "boolean", "required": false},
+                    "launchpadId": {"type": "string", "required": false},
                     "elementId": {"type": "string", "required": false},
                     "items": {"type": "array", "items": {
                             "type": "object",
@@ -136,27 +137,31 @@
             "type": "array",
             "items": { "type": "string" }
         },
-        "launchpad": {
-            "type": "object",
+        "launchpads": {
+            "type": "array",
             "required": false,
-            "properties": {
-                "showSubRegions": { "type": "boolean", "required": false },
-                "categories": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": { "type": "string" },
-                            "description": { "type": "string" },
-                            "issues": { 
-                                "type": "array", 
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": { "type": "string" },
-                                        "description": { "type": "string" },
-                                        "saveCode": { "type": "string" },
-                                        "faIcon": { "type": "string" }
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "required": true },
+                    "showSubRegions": { "type": "boolean", "required": false },
+                    "categories": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": { "type": "string" },
+                                "description": { "type": "string" },
+                                "issues": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": { "type": "string" },
+                                            "description": { "type": "string" },
+                                            "saveCode": { "type": "string" },
+                                            "faIcon": { "type": "string" }
+                                        }
                                     }
                                 }
                             }
@@ -164,7 +169,7 @@
                     }
                 }
             }
-		}
+        }
     },
     "additionalProperties": false
 }

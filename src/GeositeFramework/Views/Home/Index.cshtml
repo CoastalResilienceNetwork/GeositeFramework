@@ -32,6 +32,10 @@
             {
                 <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
             }
+            else if (link.LaunchpadId != null)
+            {
+                <a class="launchpad-trigger" href="javascript:;" data-launchpad-id="@link.LaunchpadId">@link.Text</a>
+            }
             else if (link.Items != null && link.Items.Any())
             {
                 var id = "link-dd-" + link.GetHashCode();
@@ -438,6 +442,7 @@
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
     <script src="js/SubRegion.js"></script>
+    <script src="js/Launchpad.js"></script>
     <script src="js/MapWrapper.js"></script>
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>
