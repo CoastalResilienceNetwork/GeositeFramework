@@ -49,6 +49,7 @@ define(["dojo/_base/declare",
             setState: function () {},
             subregionActivated: function() {},
             subregionDeactivated: function() {},
+            validate: function () { return true; },
 
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},

@@ -23,6 +23,11 @@ define(
             activate: function () {
                 var mapId = this.map.getMapId();
                 this.app.dispatcher.trigger('subregion-toggle:toggle', mapId);
+            },
+            
+            validate: function(regionData) {
+                // This plugin is only valid if there are subregions present in the config
+                return !!regionData.subregions;
             }
         });
     }

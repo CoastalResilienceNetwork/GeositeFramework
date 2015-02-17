@@ -20,13 +20,20 @@
             });
         model.set('mapModel', mapModel);
 
+        initializeSubregionDisplays(mapModel, model);
+
+    }
+
+    function initializeSubregionDisplays(mapModel, pane)
+    {
         mapModel.on('subregion-activate', function(activeRegion) {
-            invokeOnPlugins(model, 'subregionActivated', [activeRegion]);
+            invokeOnPlugins(pane, 'subregionActivated', [activeRegion]);
         });
 
         mapModel.on('subregion-deactivate', function(deactivatedRegion) {
-            invokeOnPlugins(model, 'subregionDeactivated', [deactivatedRegion]);
+            invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion]);
         });
+        
     }
 
     function invokeOnPlugins(model, methodName, args) {
@@ -234,9 +241,16 @@
         // to the appropriate plugin section
         var $sidebar = view.$('.plugins'),
             $maptopbar = view.$('.top-tools'),
-            $mapbar = view.$('.tools');
+            $mapbar = view.$('.tools'),
+            regionData = view.model.get('regionData'),
+            plugins = view.model.get('plugins'),
+            invalidPlugins = plugins.reject(function(plugin) {
+                return plugin.get('pluginObject').validate(regionData);
+            });
 
-        view.model.get('plugins').each(function (plugin) {
+        plugins.remove(invalidPlugins);
+        
+        plugins.each(function (plugin) {
             var toolbarType = plugin.get('pluginObject').toolbarType;
             if (toolbarType === 'sidebar') {
                 new N.views.SidebarPlugin({
