@@ -88,12 +88,38 @@
     "launchpads": [
         {
             "id": "get-started",
+            "title": "Launchpad title",
+            "description": "This is the launchpad description",
             "showSubRegions": true,
             "categories": [
               {
                 "name": "What's new?",
-                "description": "Lorem Ipsum",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "issues": [
+                    {
+                      "name": "Sea Rise",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-map"
+                    },
+                    {
+                      "name": "Habitat",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-animal"
+                    },
+                    {
+                      "name": "Sea Rise",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-map"
+                    },
+                    {
+                      "name": "Habitat",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "e34df34rd3....3434",
+                      "faIcon": "fa-animal"
+                    },
                     {
                       "name": "Sea Rise",
                       "description": "Lorem Ipsum",
