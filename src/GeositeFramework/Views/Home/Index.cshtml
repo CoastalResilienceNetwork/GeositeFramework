@@ -355,7 +355,7 @@
             <div class="row">
               <h3>Pick a Geography</h3>
               <% _.each(subregions.areas, function(subregion) { %>
-                  <span><%= subregion.display %></span>
+                  <span class="subregion" data-subregion-id="<%= subregion.id %>"><%= subregion.display %></span>
               <% }); %>
             </div>
           <% } %>
