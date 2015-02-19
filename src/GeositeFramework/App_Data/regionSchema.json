@@ -80,7 +80,12 @@
                         "display": {"type": "string", "required": true},
                         "details": {"type": "string", "required": true},
                         "shape": {"type": "array", "required": true},
-                        "color": {"type": "string", "required": false}
+                        "color": {"type": "string", "required": false},
+                        "availablePlugins": {
+                            "type": "array",
+                            "required": false,
+                            "items": {"type": "string"}
+                        }
                     }
                 }}
             }
