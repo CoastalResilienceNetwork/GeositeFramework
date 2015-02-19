@@ -28,12 +28,41 @@
     {
         mapModel.on('subregion-activate', function(activeRegion) {
             invokeOnPlugins(pane, 'subregionActivated', [activeRegion]);
+            invokeOnPlugins(pane, 'hibernate', [activeRegion]);
+            setSidebarPluginVisibility(pane, activeRegion.availablePlugins);
         });
 
         mapModel.on('subregion-deactivate', function(deactivatedRegion) {
             invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion]);
+            showAllSidebarPlugins(pane);
         });
+    }
+
+    function showAllSidebarPlugins(pane) {
+        setSidebarPluginVisibility(pane, []);
+    }
+
+    function setSidebarPluginVisibility(pane, availablePlugins) {
+        // Hide any plugins which are not available, but if none are specifically made
+        // available, all will be available.
+
+        var plugins = pane.get('plugins'),
+            anyAvailable = !_.isEmpty(availablePlugins);
         
+        plugins.each(function(plugin) {
+            var type = plugin.get('pluginObject').toolbarType,
+                pluginLauncherSelector = '.' + plugin.getId() + '-' + pane.get('paneNumber');
+
+            if (anyAvailable && type === 'sidebar'
+                    && !_.contains(availablePlugins, plugin.getId())) {
+                $(pluginLauncherSelector).hide();
+
+                // Also hide the ui container if it happens to be showing.
+                plugin.get('$uiContainer').hide();
+            } else {
+                $(pluginLauncherSelector).show();
+            }
+        });
     }
 
     function invokeOnPlugins(model, methodName, args) {
