@@ -45,7 +45,7 @@
             // the first map.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
             if (self.map.id === activeMapId) {
-                activateSubRegion(subRegionGraphic, self.map, self.activateCallbacks, self.subRegionLayer, Polygon);
+                activateSubRegion(self, subRegionGraphic, Polygon);
             }
         });
         
@@ -54,14 +54,9 @@
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-over', 'pointer');
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-out', 'default');
 
-            // Placeholder, we don't know how regions will deactive yet
-            self.subRegionLayer.on('dbl-click',
-                _.partial(changeSubregionActivation, self.deactivateCallbacks));
-
             self.subRegionLayer.on('click', function (e) {
-                activateSubRegion(e.graphic, self.map, self.activateCallbacks, self.subRegionLayer, Polygon);
+                activateSubRegion(self, e.graphic, Polygon);
             });
-
         };
     }
 
@@ -73,16 +68,23 @@
         this.deactivateCallbacks.push(callback);
     };
 
-    function activateSubRegion(subRegionGraphic, map, activateCallbacks, subRegionLayer, Polygon) {
-        subRegionLayer.hide();
-        zoomToSubRegion(subRegionGraphic, map, Polygon);
-        changeSubregionActivation(activateCallbacks, subRegionGraphic);
+    function activateSubRegion(subRegionManager, subRegionGraphic, Polygon) {
+        subRegionManager.subRegionLayer.hide();
+        addSubRegionHeader(subRegionManager, subRegionGraphic);
+        zoomToSubRegion(subRegionGraphic, subRegionManager.map, Polygon);
+        changeSubregionActivation(subRegionManager.activateCallbacks, subRegionGraphic.attributes);
     }
 
-    function changeSubregionActivation(callbacks, subRegionLayer) {
+    function deactivateSubRegion(subRegionManager, mapExtent, subRegionLayerAttributes) {
+        changeSubregionActivation(subRegionManager.deactivateCallbacks, subRegionLayerAttributes);
+        subRegionManager.map.setExtent(mapExtent);
+        subRegionManager.subRegionLayer.show();
+    }
+
+    function changeSubregionActivation(callbacks, subRegionLayerAttributes) {
         _.each(callbacks, function(callback) {
             if (_.isFunction(callback)) {
-                callback(subRegionLayer.attributes);
+                callback(subRegionLayerAttributes);
             }
         });
 
@@ -162,4 +164,65 @@
 
         map.setExtent(extent.expand(2));
     }
+
+    function addSubRegionHeader(subRegionManager, subRegionGraphic) {
+        var $mapContainer = $(subRegionManager.map.container),
+            subRegionModel = new N.models.SubRegion(subRegionGraphic.attributes),
+            subRegionHeader = new N.views.SubRegionHeader({
+                model: subRegionModel,
+                // We need to access to things in the container,
+                // but we don't want it to be the $el of the view.
+                $container: $mapContainer,
+                subRegionManager: subRegionManager,
+                deactivateFn: _.partial(
+                    deactivateSubRegion,
+                    subRegionManager,
+                    subRegionManager.map.extent
+                )
+            });
+
+        $mapContainer.prepend(subRegionHeader.render().$el);
+    }
+
+    N.models.SubRegion = Backbone.Model.extend({});
+
+    N.views.SubRegionHeader = Backbone.View.extend({
+        initialize: function () {
+            this.template = N.app.templates['template-subregion'];
+            this.$container = this.options.$container;
+            this.deactivateFn = this.options.deactivateFn;
+            this.mapControlsToAdjust = [
+               '.control-container',
+               '.esriSimpleSlider'
+            ];
+        },
+
+        events: {
+            'click .leave a': 'close'
+        },
+
+        render: function () {
+            this.toggleMapControlPositions();
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+
+        toggleMapControlPositions: function () {
+            _.each(this.mapControlsToAdjust, function (mapControlSelector) {
+                var $control = this.$container.find(mapControlSelector);
+
+                if ($control.hasClass('subregion-active')) {
+                    $control.removeClass('subregion-active');
+                } else {
+                    $control.addClass('subregion-active');
+                }
+            }, this);
+        },
+
+        close: function () {
+            this.remove();
+            this.toggleMapControlPositions();
+            this.deactivateFn(this.model.attributes);
+        }
+    });
 });

@@ -158,13 +158,15 @@
         </div>
         <div class="map-outer">
             <div id="map-<%= paneNumber %>" class="map">
-                <div class="top-tools"></div>
-                <div class="tools"></div>
-                <div class="basemap-selector">
-                    <div class="basemap-selector-title"></div>
-                    <div class="basemap-selector-list">
-                        <ul>
-                        </ul>
+                <div class="control-container">
+                    <div class="top-tools"></div>
+                    <div class="tools"></div>
+                    <div class="basemap-selector">
+                        <div class="basemap-selector-title"></div>
+                        <div class="basemap-selector-list">
+                            <ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div id="legend-container-<%= paneNumber %>" class="legend">
@@ -369,6 +371,13 @@
               <% }); %>
             </div>
           <% }); %>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-subregion">
+        <div class="subregion-header">
+            <p>You are currently in <%= display %></p>
+            <p class="leave"><a href="javascript:void(0);"><i class="fa fa-times-circle"></i>Leave Region</a></p>
         </div>
     </script>
 

@@ -121,6 +121,14 @@ input.code-like, textarea.code-like {
         line-height: 45px !important;
     }
 
+.control-container {
+    position: absolute;
+    width: 100%;
+}
+    .control-container.subregion-active {
+        top: 40px;
+    }
+
 /* -----------------------------------------
    Content Area - Helpers
 ----------------------------------------- */
@@ -417,6 +425,9 @@ input.code-like, textarea.code-like {
             }
             .esriSimpleSlider div {
                 width: 32px;
+            }
+            .esriSimpleSlider.subregion-active {
+                top: 103px !important;
             }
             
         .content .map .basemap-selector {
@@ -774,7 +785,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     display: none;
 }
 /* ----------------------------------------
-    Subregion Tooltip
+    Subregions
 ------------------------------------------- */
 .subregion-tooltip.esriPopup .titlePane, .subregion-tooltip.esriPopup .actionsPane { 
     display: none;
@@ -798,3 +809,26 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 .subregion-tooltip.esriPopup .pointer {
     background-color: #444;
 }
+
+.subregion-header {
+    z-index: 10;
+    width: 100%;
+    position: absolute;
+    height: 50px;
+    background-color: rgba(194, 32, 32, 0.5);
+}
+    .subregion-header p {
+        color: #fff;
+        opacity: 1.0;
+        padding: 15px;
+        display: inline-block;
+    }
+
+    .subregion-header .leave {
+        float: right;
+        width: 200px;
+    }
+
+    .subregion-header a, a.visited, a.link, a.active {
+        color: #fff;
+    }
