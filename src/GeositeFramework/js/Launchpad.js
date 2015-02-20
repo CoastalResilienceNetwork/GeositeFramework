@@ -20,6 +20,10 @@ require(['use!Geosite'], function (N) {
             this.template = N.app.templates['template-launchpad'];
         },
 
+        events: {
+            'click .subregion': 'activateSubRegion'
+        },
+
         render: function () {
             var self = this;
 
@@ -29,8 +33,25 @@ require(['use!Geosite'], function (N) {
                 width: 750,
                 height: 450,
                 fixed: false,
-                maskopacity: 40
+                maskopacity: 40,
+                openjs: function () {
+                    self.setElement($('.launchpad'));
+                },
+                closejs: function () {
+                    self.remove();
+                }
             });
+        },
+
+        activateSubRegion: function (e) {
+            var eventData = {
+                mapId: null,
+                subRegionId: $(e.target).data('subregion-id')
+            };
+
+            this.remove();
+            TINY.box.hide();
+            N.app.dispatcher.trigger('launchpad:activate-subregion', eventData);
         }
     });
 
