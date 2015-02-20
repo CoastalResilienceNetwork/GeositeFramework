@@ -130,6 +130,10 @@ require(['use!Geosite',
 
             name: function () { return name(this); },
 
+            getId: function() {
+                return _.last(name(this).split('/'));
+            },
+
             onSelectedChanged: function () {
                 if (this.selected) {
                     if (!this.get('active') && this.getShowHelpOnStartup()) {
@@ -287,6 +291,7 @@ require(['use!Geosite',
                 }));
 
             view.$el.empty().append(html);
+            view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.model.selected === true) {
                 view.$el.addClass("selected-plugin");
