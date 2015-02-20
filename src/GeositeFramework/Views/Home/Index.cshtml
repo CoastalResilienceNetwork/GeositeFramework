@@ -347,6 +347,30 @@
         </div>
     </script>
 
+    <script type="text/template" id="template-launchpad">
+        <div class="launchpad">
+          <h1><%= title %></h1>
+          <strong><%= description %></strong>
+          <% if (showSubRegions) { %>
+            <div class="row">
+              <h3>Pick a Geography</h3>
+              <% _.each(subregions.areas, function(subregion) { %>
+                  <span><%= subregion.display %></span>
+              <% }); %>
+            </div>
+          <% } %>
+          <% _.each(categories, function(category) { %>
+            <div class="row">
+              <h3><%= category.name %></h3>
+              <%= category.description %>
+
+              <% _.each(category.issues, function(issue) { %>
+                 <p><i class="<%= issue.faIcon %>"></i> <%= issue.name %></p>
+              <% }); %>
+            </div>
+          <% }); %>
+        </div>
+    </script>
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <div class="fixed">
