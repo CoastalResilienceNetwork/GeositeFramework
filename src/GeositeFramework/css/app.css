@@ -728,13 +728,123 @@ table.esriLegendLayerLabel tbody tr td {
 
 /* TinyBox overrides */
 .tinner {
-    overflow: auto;
-    }
-    .tinner iframe {
-        width: 100%;
-        height: 400px;
-        margin-top: 15px;
-    }
+    overflow: hidden;
+    padding: 0!important;
+}
+
+.tinner .tclose{
+    color: #ffffff;
+    opacity: 0.8;
+    background: transparent;
+}
+
+.tinner .tclose:hover{
+    color: #ffffff;
+    opacity: 1;
+}
+
+.launchpad, .tcontent, .launchpad-content{
+    height: 100%;
+}
+
+.launchpad .header{
+    background-color: #26648E;
+    width: 100%;
+    padding: 16px;
+}
+
+.launchpad h2{
+    font-size: 16px;
+    color: #ffffff;
+    margin: 0!important;
+    text-transform: uppercase;
+}
+
+.launchpad h3{
+    color: #444;
+    font-size: 16px;
+}
+
+.launchpad .launchpad-content{
+    position: relative;
+    width: 100%;
+    padding: 14px 0;
+    overflow-y: auto;
+}
+.launchpad .row{
+    width: 100%;
+    min-width: 100%;
+    padding: 8px 16px;
+}
+
+.launchpad .row .well{
+    background-color: #e9eaea;
+    border-radius: 6px;
+    padding: 14px;
+}
+
+.launchpad .well .description{
+    display: inline-block;
+    width: 200px;
+    vertical-align: top;
+}
+
+.launchpad .well .description p{
+    font-size: 13px;
+    line-height: 15px;
+}
+
+.launchpad .well .thumbs{
+    width: 460px;
+    display: inline-block;
+    padding-left: 12px;
+}
+
+.launchpad .well ul{
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.launchpad .well ul li{
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    background-color: rgba(150,150,150,.2);
+    padding: 10px;
+    border-radius: 6px;
+    white-space: normal;
+    vertical-align: top;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.launchpad .well ul li:hover{
+    background-color: rgba(150,150,150,.4);
+}
+
+.launchpad ul li i{
+    display: block;
+    padding: 16px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.launchpad ul li label{
+    display: block;
+    font-size: 12px;
+    text-align: center;
+}
+
+.tinner iframe {
+    width: 100%;
+    height: 400px;
+    margin-top: 15px;
+}
 
 .export-ui .row .left-col { float: left; width: 60%; }
 .export-ui .row .right-col { float: right; }

@@ -81,6 +81,7 @@
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/jquery.dropdown.css"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
@@ -289,29 +290,34 @@
     </script>
 
     <script type="text/template" id="template-export-window">
-      <h3>Map <span class="export-pane-number"></span> Export</h3>
-      <h5>Title (Optional):</h5> <input type="text" id="export-title"/>
-
-        <div class="row">
-            <div class="small-4 columns">
-                <h5>Orientation</h5>
-                <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/>Landscape</label>
-                <label><input type="radio" name="export-orientation" value="Portrait"/>Portrait</label>
+        <div class="launchpad">
+            <div class="header">
+                <h2>Map <span class="export-pane-number"></span> Export</h2>
             </div>
-            <div class="small-4 columns">
-                 <h5>Legend</h5>
-                <label><input type="checkbox" name="export-include-legend" />Include Layer Legend</label>
-            </div>
-            <div class="small-4 columns">
-                <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="left-col">
-                <div class="export-output-area"></div>
-            </div>
-            <div class="right-col">
-                <a href="#" id="export-button" class="button radius" disabled="disabled">Generate Map Export</a>
+            <div class="launchpad-content">
+                <div class="row">
+                    <h5>Title (Optional):</h5> <input type="text" id="export-title"/>
+                    <div class="small-4 columns">
+                        <h5>Orientation</h5>
+                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/>Landscape</label>
+                        <label><input type="radio" name="export-orientation" value="Portrait"/>Portrait</label>
+                    </div>
+                    <div class="small-4 columns">
+                         <h5>Legend</h5>
+                        <label><input type="checkbox" name="export-include-legend" />Include Layer Legend</label>
+                    </div>
+                    <div class="small-4 columns">
+                        <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="left-col">
+                        <div class="export-output-area"></div>
+                    </div>
+                    <div class="right-col">
+                        <a href="#" id="export-button" class="button radius" disabled="disabled">Generate Map Export</a>
+                    </div>
+                </div>
             </div>
         </div>
       
@@ -329,46 +335,75 @@
     </script>
 
     <script type="text/template" id="permalink-share-window">
-        <div id="permalink-dialog">
-          <h3>Save & Share</h3>
-          <label>Permalink:<input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
-          <p>Share your map with friends or family, or just bookmark the link for later.</p>
-          <label>Embed this map in your website:</label>
-          <div id="iframe-embed"></div>
-          <label>Embed Width (px)
-            <input type="number" class="embed-size width" value="<%= width %>" /></label>
-          <label>Embed Height (px)
-            <input type="number" class="embed-size height" value="<%= height %>" /></label>
-          <em>
-            <label>Need the unshortened permalink? <a href="javascript:void(0);" class="show-long-permalink">Get it here.</a>
-              <input class="code-like" id="long-permalink-textbox" type="text" value="<%= url %>"/>
-            </label>
-          </em>
+        <div class="launchpad">
+            <div class="header">
+                <h2>Save & Share</h2>
+            </div>
+            <div class="launchpad-content">
+                <div class="row" id="permalink-dialog">
+                  <label>Permalink:<input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
+                  <p>Share your map with friends or family, or just bookmark the link for later.</p>
+                  <label>Embed this map in your website:</label>
+                  <div id="iframe-embed"></div>
+                  <label>Embed Width (px)
+                    <input type="number" class="embed-size width" value="<%= width %>" /></label>
+                  <label>Embed Height (px)
+                    <input type="number" class="embed-size height" value="<%= height %>" /></label>
+                  <em>
+                    <label>Need the unshortened permalink? <a href="javascript:void(0);" class="show-long-permalink">Get it here.</a>
+                      <input class="code-like" id="long-permalink-textbox" type="text" value="<%= url %>"/>
+                    </label>
+                  </em>
+                </div>
+            </div>
         </div>
     </script>
 
     <script type="text/template" id="template-launchpad">
         <div class="launchpad">
-          <h1><%= title %></h1>
-          <strong><%= description %></strong>
-          <% if (showSubRegions) { %>
-            <div class="row">
-              <h3>Pick a Geography</h3>
-              <% _.each(subregions.areas, function(subregion) { %>
-                  <span class="subregion" data-subregion-id="<%= subregion.id %>"><%= subregion.display %></span>
-              <% }); %>
+            <div class="header">
+                <h2><%= title %></h2>
             </div>
-          <% } %>
-          <% _.each(categories, function(category) { %>
-            <div class="row">
-              <h3><%= category.name %></h3>
-              <%= category.description %>
-
-              <% _.each(category.issues, function(issue) { %>
-                 <p><i class="<%= issue.faIcon %>"></i> <%= issue.name %></p>
-              <% }); %>
+            <div class="launchpad-content ">
+                <div class="row">
+                    <p><%= description %></p>
+                </div>
+                <% if (showSubRegions) { %>
+                <div class="row">
+                    <div class="well">
+                        <div class="description">
+                            <h3>Pick a Geography</h3>
+                            <p>Picking a Geography allows you to Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt</p>
+                        </div>
+                        <div class="thumbs">
+                            <ul>
+                                <% _.each(subregions.areas, function(subregion) { %>
+                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div> 
+                </div>
+                <% } %>
+                
+                <% _.each(categories, function(category) { %>
+                <div class="row">
+                    <div class="well">
+                        <div class="description">
+                            <h3><%= category.name %></h3>
+                            <p><%= category.description %></p>
+                        </div>
+                        <div class="thumbs">
+                            <ul>
+                                <% _.each(category.issues, function(issue) { %>
+                                    <li><i class="<%= issue.faIcon %>"></i><label <%= issue.name %></label></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
             </div>
-          <% }); %>
         </div>
     </script>
 
