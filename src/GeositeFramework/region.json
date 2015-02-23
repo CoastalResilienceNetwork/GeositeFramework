@@ -30,7 +30,7 @@
         "color": "#00C5CD",
         "opacity": 0.2,
         "clickToFocus": true,
-        "hideByDefault": true,
+        "hideByDefault": false,
         "areas": [
             {
                 "id": "flower-garden",
