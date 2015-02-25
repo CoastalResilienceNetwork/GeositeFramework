@@ -115,20 +115,75 @@
 
     function initPlugins(model, esriMap) {
         var mapModel = model.get('mapModel'),
-            regionData = model.get('regionData');
+            regionData = model.get('regionData'),
+            savedState = model.get('stateOfPlugins');
 
         model.get('plugins').each(function(pluginModel) {
-            var savedState = model.get('stateOfPlugins');
-
             pluginModel.initPluginObject(regionData, mapModel, esriMap);
+            model.setPluginState(pluginModel, savedState);
+        });
+    }
+
+    function activateScenario(pane, scenarioState) {
+        var state = Backbone.HashModels.decodeStateObject(scenarioState);
+
+        // Drop the plugin state setting until after the stack clears to prevent errors when the
+        // map is not in a ready state.
+        setTimeout(function() {
+            pane.get('plugins').each(function(pluginModel) {
+
+                // Set the state of the plugin involved in this scenario
+                var paneState = state['pane' + pane.get('paneNumber')];
+                if (paneState && paneState.stateOfPlugins) {
+                    var stateWasSet = pane.setPluginState(pluginModel, paneState.stateOfPlugins);
+                    if (stateWasSet) {
+                        pluginModel.get('pluginObject').activate();
+                    }
+                }
+
+            });
+        }, 0);
+    }
+
+    N.models = N.models || {};
+    N.models.Pane = Backbone.Model.extend({
+        defaults: {
+            paneNumber: 0,
+            regionData: null,
+            mapModel: null,
+            plugins: null,
+            stateOfPlugins: {}
+        },
+
+        initialize: function () { 
+            var self = this;
+
+            N.app.dispatcher.on('launchpad:activate-scenario', function(savedState) {
+                activateScenario(self, savedState);
+            });
+
+            return initialize(this); 
+        },
+
+        initPlugins: function (esriMap) { return initPlugins(this, esriMap); },
+
+        setPluginState: function(pluginModel, savedState) {
+            var stateWasSet = false;
 
             if (savedState) {
                 // If the saved state included data for this plugin, set it.
                 if (savedState.plugins) {
-                    var pluginState = savedState.plugins[pluginModel.name()];
+                    var pluginState = savedState.plugins[pluginModel.name()],
+                        pluginObject = pluginModel.get('pluginObject');
 
                     if (pluginState) {
+                        // Turn the plugin off in case it has currently loaded state
+                        // which should be reset prior to setting the new state
+                        pluginObject.hibernate();
                         pluginModel.setState(pluginState);
+                        stateWasSet = true;
+                    } else {
+                        pluginObject.hibernate();
                     }
                 }
                 
@@ -143,22 +198,9 @@
                     }, 0);
                 }
             }
-        });
-    }
 
-    N.models = N.models || {};
-    N.models.Pane = Backbone.Model.extend({
-        defaults: {
-            paneNumber: 0,
-            regionData: null,
-            mapModel: null,
-            plugins: null,
-            stateOfPlugins: {}
-        },
-
-        initialize: function () { return initialize(this); },
-
-        initPlugins: function (esriMap) { return initPlugins(this, esriMap); }
+            return stateWasSet;
+        }
     });
 
 }(Geosite));

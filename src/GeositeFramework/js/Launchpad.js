@@ -7,9 +7,19 @@ require(['use!Geosite'], function (N) {
     N.controllers.Launchpads = function (launchpadsConfig) {
         this.collection = new N.collections.Launchpads();
         initLaunchpads(launchpadsConfig, this.collection);
-    }
+    };
 
-    N.models.Launchpad = Backbone.Model.extend({});
+    N.models.Launchpad = Backbone.Model.extend({
+        initialize: function() {
+            var categories = this.get('categories');
+            _.each(categories, function(category, catIdx) {
+                _.each(category.issues, function(issue, issueIdx) {
+                    var idComponents = [catIdx, issue.name.replace(/ /, '-'), issueIdx];
+                    issue.id = idComponents.join('-').toLowerCase();
+                });
+            });
+        }
+    });
 
     N.collections.Launchpads = Backbone.Collection.extend({
         model: N.models.Launchpad
@@ -21,7 +31,8 @@ require(['use!Geosite'], function (N) {
         },
 
         events: {
-            'click .subregion': 'activateSubRegion'
+            'click .subregion': 'activateSubRegion',
+            'click .lp-issue-btn': 'activateScenario'
         },
 
         render: function () {
@@ -43,15 +54,36 @@ require(['use!Geosite'], function (N) {
             });
         },
 
-        activateSubRegion: function (e) {
+        activateSubRegion: function(e) {
             var eventData = {
                 mapId: null,
-                subRegionId: $(e.target).data('subregion-id')
+                id: $(e.currentTarget).data('subregion-id')
             };
 
+            this.activateLaunchpadEvent('launchpad:activate-subregion', eventData);
+        },
+        
+        activateScenario: function(e) {
+            var categories = _(this.model.get('categories')),
+                issueId = $(e.currentTarget).data('issue-id'),
+                issue;
+
+            categories.each(function(category) {
+                if (issue) { return false; }
+
+                issue = _(category.issues).findWhere({id: issueId}) 
+            });
+
+            if (issue) { 
+                this.activateLaunchpadEvent('launchpad:activate-scenario', issue.saveCode);
+            }
+        },
+        
+        activateLaunchpadEvent: function(eventName, eventData) {
             this.remove();
             TINY.box.hide();
-            N.app.dispatcher.trigger('launchpad:activate-subregion', eventData);
+            N.app.dispatcher.trigger(eventName, eventData);
+            
         }
     });
 

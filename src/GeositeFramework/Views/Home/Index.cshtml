@@ -366,6 +366,7 @@
             <div class="popover-header">
                 <h2><%= title %></h2>
             </div>
+
             <div class="popover-content ">
                 <div class="row">
                     <p><%= description %></p>
@@ -398,7 +399,10 @@
                         <div class="thumbs">
                             <ul>
                                 <% _.each(category.issues, function(issue) { %>
-                                    <li><i class="<%= issue.faIcon %>"></i><label <%= issue.name %></label></li>
+                                    <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
+                                        <i class="<%= issue.faIcon %>"></i>
+                                        <label> <%= issue.name %></label>
+                                    </li>
                                 <% }); %>
                             </ul>
                         </div>
