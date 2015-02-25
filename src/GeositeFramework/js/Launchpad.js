@@ -29,7 +29,7 @@ require(['use!Geosite'], function (N) {
 
             TINY.box.show({
                 html: self.template(self.model.toJSON()),
-                boxid: 'frameless',
+                boxid: '',
                 width: 750,
                 height: 450,
                 fixed: false,

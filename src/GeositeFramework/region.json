@@ -89,7 +89,7 @@
     "launchpads": [
         {
             "id": "get-started",
-            "title": "Launchpad title",
+            "title": "Getting Started",
             "description": "This is the launchpad description",
             "showSubRegions": true,
             "categories": [
@@ -101,7 +101,7 @@
                       "name": "Sea Rise",
                       "description": "Lorem Ipsum",
                       "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-map"
+                      "faIcon": "fa fa-map-marker"
                     },
                     {
                       "name": "Habitat",
