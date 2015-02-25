@@ -743,35 +743,35 @@ table.esriLegendLayerLabel tbody tr td {
     opacity: 1;
 }
 
-.launchpad, .tcontent, .launchpad-content{
+.popover, .tcontent, .popover-content{
     height: 100%;
 }
 
-.launchpad .header{
+.popover-header{
     background-color: #26648E;
     width: 100%;
     padding: 16px;
 }
 
-.launchpad h2{
+.popover h2{
     font-size: 16px;
     color: #ffffff;
     margin: 0!important;
     text-transform: uppercase;
 }
 
-.launchpad h3{
+.popover h3{
     color: #444;
     font-size: 16px;
 }
 
-.launchpad .launchpad-content{
+.popover .popover-content{
     position: relative;
     width: 100%;
     padding: 14px 0;
     overflow-y: auto;
 }
-.launchpad .row{
+.popover .row{
     width: 100%;
     min-width: 100%;
     padding: 8px 16px;

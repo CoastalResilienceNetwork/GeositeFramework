@@ -290,11 +290,11 @@
     </script>
 
     <script type="text/template" id="template-export-window">
-        <div class="launchpad">
-            <div class="header">
+        <div class="popover">
+            <div class="popover-header">
                 <h2>Map <span class="export-pane-number"></span> Export</h2>
             </div>
-            <div class="launchpad-content">
+            <div class="popover-content">
                 <div class="row">
                     <h5>Title (Optional):</h5> <input type="text" id="export-title"/>
                     <div class="small-4 columns">
@@ -335,11 +335,11 @@
     </script>
 
     <script type="text/template" id="permalink-share-window">
-        <div class="launchpad">
-            <div class="header">
+        <div class="popover">
+            <div class="popover-header">
                 <h2>Save & Share</h2>
             </div>
-            <div class="launchpad-content">
+            <div class="popover-content">
                 <div class="row" id="permalink-dialog">
                   <label>Permalink:<input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
                   <p>Share your map with friends or family, or just bookmark the link for later.</p>
@@ -360,11 +360,11 @@
     </script>
 
     <script type="text/template" id="template-launchpad">
-        <div class="launchpad">
-            <div class="header">
+        <div class="popover launchpad">
+            <div class="popover-header">
                 <h2><%= title %></h2>
             </div>
-            <div class="launchpad-content ">
+            <div class="popover-content ">
                 <div class="row">
                     <p><%= description %></p>
                 </div>
