@@ -27,13 +27,13 @@
     function initializeSubregionDisplays(mapModel, pane)
     {
         mapModel.on('subregion-activate', function(activeRegion) {
-            invokeOnPlugins(pane, 'subregionActivated', [activeRegion]);
+            invokeOnPlugins(pane, 'subregionActivated', [activeRegion, pane]);
             invokeOnPlugins(pane, 'hibernate', [activeRegion]);
             setSidebarPluginVisibility(pane, activeRegion.availablePlugins);
         });
 
         mapModel.on('subregion-deactivate', function(deactivatedRegion) {
-            invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion]);
+            invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion, pane]);
             showAllSidebarPlugins(pane);
         });
     }

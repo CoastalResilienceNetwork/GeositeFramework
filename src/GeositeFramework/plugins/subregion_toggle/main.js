@@ -17,7 +17,7 @@ define(
             },
 
             renderLauncher: function () {
-                return '<div class="subregion-toggle"></div>';
+                return '<div class="' + this.getClassName() + '"></div>';
             },
 
             activate: function () {
@@ -28,7 +28,20 @@ define(
             validate: function(regionData) {
                 // This plugin is only valid if there are subregions present in the config
                 return !!regionData.subregions;
+            },
+
+            getClassName: function() {
+                return 'subregion-toggle';
+            },
+
+            subregionActivated: function(subregion, pane) {
+                $('#map-' + pane.get('paneNumber')).find('.' + this.getClassName()).hide();
+            },
+
+            subregionDeactivated: function(subregion, pane) {
+                $('#map-' + pane.get('paneNumber')).find('.' + this.getClassName()).show();
             }
+
         });
     }
 );
