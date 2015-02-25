@@ -1,4 +1,4 @@
-﻿/*jslint nomen:true, devel:true */
+/*jslint nomen:true, devel:true */
 /*global Geosite, $, _, gapi*/
 
 (function (N) {
@@ -14,6 +14,7 @@
         dispatcher: _.clone(Backbone.Events),
 
         init: function initializeApp(version, regionData, pluginClasses) {
+            var self = this;
             N.app.version = version;
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
@@ -35,9 +36,14 @@
                 hashUpdateCallback: this.showHashUrlPopup,
                 setupHashMonitorCallback: this.setupHashMonitorCallback
             });
+
             this.hashModels.addModel(N.app.models.screen, {
                 id: 'screen',
                 attributes: ['splitScreen', 'syncMaps']
+            });
+
+            N.app.dispatcher.on('launchpad:activate-scenario', function(state) {
+                self.hashModels.triggerStateChange(state);
             });
 
             N.app.views.screen = new N.views.Screen({

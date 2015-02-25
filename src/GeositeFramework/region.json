@@ -101,37 +101,38 @@
                       "name": "Sea Rise",
                       "description": "Lorem Ipsum",
                       "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa fa-map-marker"
+                      "saveCode": "eyJtYXAwIjrEgGV4dGVudMSGxIB0eXBlxIYixInEi8SNIiwieG1pbsSGLTkzODcwNzguNTY5NjQ1OTc3xJt5xJ7EoDoyNzUwMjA0LsS5xLIwMMSrNTjEm8SdYXjEocSlxLk4ODUuNjPEsjE0xK45xLTEgsWLOjPEuTbEpjLEqjLFkMWkODPEpMSbc3BhdGlhbFJlZmVyxIxjxJTEhyJ3a2lkxIYxxLzGgTDEm2zFrWVzdFfFvcW/xZ3FkDd9fcWqZWxlY8SLZEJhc2XEgnBJbmTEicSGM8aSIsWsbmXEhcW6xqhlTnVtYsW1xIbGhCLGicaHT2ZQbHVnxJ9zxI/GtsaUxpbGmMa7xr3En8SVcMa8xr5ucy/GhnnFtV/GnMaVxpdvcsSaxqfHi8a/x4HHiseHx43Hj2HHkXLHk8eDx5bHmMW6cm9vdC9Db8abdMWwIMWyc2lsacW3ZSAoTsWtaW9uxbApL1NvY8WvbCBhxqEgRWPIgW/EnmPHgW/FrMiIxJHGtC7EusSbY2jGlmtlxo1mxbDGnMSbdmnHtmLGlVPFtcioxbjHgDpbyKRsyKbItMi2yKVlXcamx6rHrMeux7DGt8iKx7XHt8e5bsW4x7zHvsWuyIHIg8i/x7HHs0hhemFyZMixxIDIlmHImHnImjXIncifY8ihyKPIuci8x6vHrcevyY7JgsaIyYTHusmIx7/Ji2zIhMiPx5dlxr7IgXPIi8iNUMeqyKjJhsaIyJXIl2nImTowxKrJnsigyKLEhsi3ZcmkyL5VU0dTL0h1cnJpY8iMZS3GoGR1xbhkIMmnyYHIjseqx7bIgSDJkMmSyZTHjk5BQ0NIIHfGh3IgxpV2xpTJv8mZyoHJm8qDyoUiyJ7Kh8miyLXKi8SbyL3HrcqOypDKksqUypbKmMapypvGocqeyKLKocmAx7LIikXKpciAbsqoyZHJk8mVL8qtyq/KscqdxqkgxbTFrcqUyb7FusmYyZrJnMqGyaDKiDrKisqMx61OT0FBL25vd0PLt1NUy6BlyZPHtMyDbC1UaW3Hu09ixpxydsmux43Kusutyr7JncuAyZ/JocqJyaPLhsmly6DLt8u5y7vLvcu/zIFHypZkxqLKoFPKlMikyYdGybPKmMaJyZYiy6zKvMuuzJjLgsyby4TLtMyfy7jIhXTHl23HjkFsbMqTypXKl8qZzLPMtcqCyoTMl8uBy7DLg8aczLzLtsy+U82Acs2CL82EbM2XzYHNi8qAzY0uxZnMuM2RzLrNk8ydyL7Nlcu5yK1hIExlyrjJgsipZS9NxINwxJ9ny5RuZsW+x7ovyJDNvSA1ZsSOy6vNocq9zY7Lr8yay7LMnCLLh8y9zazMg82vzbHGlMe0zbTNts24zbrNvM2+xqLJvc6ByIFmIDbOhsyUzLbMls6My7HLs82py7XMoMiFzpTNsM2yzpjGnC9zbMq1zoXOh8mXzonMt82Qzo10cnXLhc6QzJ7Nq86wza7Oss6XUs6ZzrfKtc6lzrvMtM69zqnNpc+Az4LPhM6RyqLLliBGbMeryqDKqcuex47Pnc+fz5zFtnHPg8mGyr3OvMq7zaLNj8yZzqvJo8aRz7M=",
+                      "faIcon": "fa fa-life-bouy"
+                    },
+                    {
+                      "name": "Habitat Risk",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "eyJtYXAwIjrEgGV4dGVudMSGxIB0eXBlxIYixInEi8SNIiwieG1pbsSGLTk0NTU4NzEuODk1MTAyNjYzxJt5xJ7EoDoyMTYwNMS6LsS6N8SkMjLEq8SzxJzEgnjEoTgzxYw3NzYuMzE5xKfEssWSxLTFiMSGMjczNjTEpC42McSwMDkzNMSnxJtzcGF0aWFsUmVmZXLEjGPElMSHIndraWTEhsSuxLkwMMSbbMWtZXN0V8W9xb86Mzg1N33Em1/FrHJ0c8SGW8SIxIrEjMSOxbrEkcSTxJXEl8aexJrFh8SfxKHEo8SlxKfEqcSrxK3Er8SxxYbEtcaoxLjEusS8xL7FgMWCxYTFpsSbxJ1hxYk6LcWLxY3Fj8WRxZPFlcWMMcWYxr/FmsWcxZ7FoMWixaTFpsWoN8WqxazFrsWwxbLFtMW2bsW4xI/Fu8aMxoDEr8SuxoQixobEi8aJxovFvsSGxo/GkX3GkyJmcmFtZUlkxpk6WzBdfce9xaplbGVjxItkQmFzZcSCcEluZMSJxIY0x7DFrG5lxIXFusiUZU51bWLFtcSGx6XGicaHT2ZQbHVnxJ/HucSAyInIgsiEZWTIpsioxrQic8e0cMiCxpXIp8ipbnMvxb7GnmlmecaVb8SfxI7Em8i4yLPIvcefyYrIvMi+xoZ5xbVfyK3Ig3Rvcsefcm9vdC9Db8iIdMWwIMWyc2lsacW3ZSAoTsWtaW9uxbApL1NvY8WvbCBhyI4gRWPJsm/EnmPHn2/FrMm5xJHIoC43NcSbY2jIg2vIsMSGZsWwyInEm3ZpyadiyIJTxbXKmsW4x7lbypZsypjKpcqnypdlx78iyZvJncmfyaHIosm7yabJqMmqx53JrMmuybDJssm0yrDJosmkSGF6YXLHuMqGyohpyoo6MC7KjiLKkMqSypQ6dHJ1ZcqZyptpyp1lTGHJknLHt8qjx7zHsMquyZ7JoMq+yrPGiMq1yavJrcmvxa7Ku2zJtcqAyZhlyKnJsnPJvMm+UMmbyprKt8irIsqHYcqJecqLy43Lj2PKk8aNyqhly6PJnMmeVVNHUy9IdXJyaWPJvWUtyI1kdcW4ZCDLpsqyyb/Jm8mnybIgy4DLgsuEyL5OQUNDSCB3xodyIMiCdsiBy4bMgcuIzIPLisuMyo/KkcyHy5HMisyMyq/Mj8yRzJPMlcyXzJnIlcycyI7Mn8iwzKLKscmjybtFzKbJsW7MqcuBy4PHuC/MrsywzLLMnsiVIMW0xa3MlcaIzLvMgsyEzYHLkMyJyqrNhsmeTk9BQS9ub3dDzbRTVM2fZcuDyaXOgGwtVGnHtSBPYsiJcnbKusmMxbrMgM2rzL/Mhc2CzIjKlc2wxJvLpM2fzbTNts24zbrNvM2+R8yXZMiPzKFTzJXKlsW4IEbLs8yZxonLvs6SzL3NrMuOzpbNhM6Zyq3Mjc6czbXJtsmXcm3IvkFsbMyUzJbMmMyazrHLh8uJy4vOlc2uzpjKpsyLzprOus2zzrxTzr7PgC/PgmzPlsmYz4DNqs6zzL85za3Ng82vz5DNsc67zbbKn2EgTGXMucqzyptlL03Eg3DEn2fNk25myYDKty/Kgc+6IDVmxp/EgM6yz4vNgM61z446zYXPksqvz5TPqc6Az6zPrsiByaXPsc+zz7XPt8+5z7vIj8+9z79mIDbQg8+f0IfPjc+kz4/Iic+n0I/JttCRz63Pr9CVyIkvc2zMttCC0ITLv8+KzL7PjM+jzpfQi864zpvQqs+q0JLQrlLQltCyzLbQodC20IbQudCIzIbQvNCMzrnKr8yjzZXOrGzJnMyhzKrNnci+RtGVb8yhRsW2ccuVx53MvtCF0LjOtNGNzrfPpsewyLZtyLhlyLrJi8i+Y3XGicqDX8mRyZPJlciEyZjJms660ZLJpMq0yanLq8q5y67Js8uwybbJuMm6y7jMocuyzbjKhNCj0YvKjdC70anKmCLKmsqcyp7KoMyYzanHusyKLNKezIrKrM6b0b/LqMmn0oLKt8uszo/KvNKkzZvMq8uFzpHRps6U0pPPpdCo0I3Lpc2U0oDLqdKnzqvShM2ZyrzLssW2y7XIvdKLIMu6b8u8yqLSkNGnzrbGjcuTy5XLl9KYy5vLncW1y6DGmjHHvcev05k=",
+                      "faIcon": "fa fa-paw"
+                    },
+                    {
+                      "name": "Split Screen",
+                      "description": "Lorem Ipsum",
+                      "saveCode": "eyJtYXAwIjrEgGV4dGVudMSGxIB0eXBlxIYixInEi8SNIiwieG1pbsSGLTkyODc3MTAuNDPEpDc1MjUzxJt5xJ7EoDoyxK4wMjA0LsS4xKYwMDU2NTjEm8SdYXjEoTg4xLjEsDMuxKY0NDjEsTc2xLPEgsWKOsSsxZc3xLouxK/FlcSkODMzxYYic3BhdGlhbFJlZmVyxIxjxJTEhyJ3a2lkxIbEqDLEqDDEm2zFrGVzdFfFvMW+xZzFlTd9xJtfxatydHPEhlvEiMSKxIzEjsW5xJHEk8SVxJfGm8SaxJzEtcShxKPEpcSnxKnEq8StxK/EscWZxJ/EhsS4NcS6xLzEvsSmxZ/FgsWExajFiMWbLcWMxY7EscWRN8WTxZUzxZfFmcWJxIbFnTbFnzLFocSkxaLFpcWnxJvFqsWsxa7FsMWyxbTFtsW4xIDFu8W9xb/EusaCxoTGhsaIxorHn8aNNcaPxpAiZnJhbWVJZMaWOlswXX3HuMeUZWxlY8SLZEJhc2XEgnBJbmTEiceKx6vFq25lxIXFuciOZU51bWLFtMSGxoPFqXTGhk9mUGx1Z8Sfx7TEgMiEx73Hv2VkyKHIo8awOiJwyKLIpG5zL8aFecW0X8iox750b3LGo8iyyK7ItcSPyLHIs8ilyLdhyLlyyLvHvMi9yL/JhXJvb3QvQ2/Ig8idbCDFsXNpbGnHmyAoTseWb27FrykvU29jx5cgYciJIEVjyadvxJ5jyYVvxavJrsSRyJrFkTXEm2Nox75ryKvEhmbFr8iExJt2acmeYse9U8W0yo3Ft8e0W8qJbMqLypjKmsqKZce6IsmSyZTJlsmYxojFr8mcxofJn8mhbsW3yaPJpcWtyafJqcqjyZnKpkhhemFyx7PJusm8acm+OsSpyoEiyoPKhcqHOsqbZceryqHJlcmXyrPJm8mdyqnJosmkyabJqGzJqsm0yL9lyKTJp3PJsMmyUMmSyo3Kq8aHyrthyb15yb/LgcuDY8qGxozLh8uJyZPJlVVTR1MvSHVycmljybFlLciIZHXFt2Qgy4zKpcmbRcmSyZ7JpyDKtcq3yrnItk5BQ0NIIHfGhnIgx712x7zLpMumy6jKgsqEy6vLhcuuxJvLii/Lssu0y7bLuMu6y7zIj8u/yInMgsirzIXKpMmaybPMimnMjMyOyrjHsy/MksyUzJbMgciPIMWzxazLuMujxbnJu8ulyr3Lp8q/xaHMosuEy63KncuvyqJOT0FBL25vd0PNmFNUzL9lyrjKp8WvLVRpx7AgT2LIhHJ2y5PIpiLNi8ygzY/Lqcyjy6zKiM2UzKfLsMy/zZjNms2czZ7NoM2iR8u6ZMiKzIRTy7jKicqsRsuYy7zGiM2zzbXNjcyhy4LNucylzbzKoM2+zZfNmcmryL5ybci2QWxsy7fLucu7y73Ok8q8yr7LgM2RzKTNk8qZy4jNvc2WzoDOn8i/zqIvzqRsU86gzqLMn86VzY85zq/NusuGzprMqM6dzZrKkmEgTGXMncuOyo5lL03Eg3DEn2fMtW5mxb3Hmy/Jtc+bIDVmxpzEgM6Uzq3NkM6XzZLNu86yzZXJlc+JyavNpM+Nz4/HvMmcz5LPlM+Wz5jPms+cyIrLos+fyadmIDbPpM+Az6jNuM+rz4bPrc60z6/Ots+Lz7PPkM+2yIQvc2zMms+jz6XNtM6szY7Ors+qzrDEhnRydc6zzpvOtc6e0I7PjtCQUs+30JTMmtCD0JjPp9Cbz6nLqs+F0KDQos+uyrLMhyBGbMmTzITMvMyQL9C70L3QusW1cdCiyqvNjs+m0JrOltCzzpnPrcerc8evyLJlxpLJh8i1z591xojJt1/IuMi6yLzHv8mQxbnMqMyGzLfLj8mgy5HKrsy6y5TJqsmsya7KpsmxzITLl82cybjQhdCxxK7PhNGOyosiyo3Kj8qRypPLu82JypfKnSzLh9KEyp3Kn9GjzLbKptGmyqrKrMuSyq/Rq9C4zLfQv8q6zYrRi8230bjOsciE0LfRpNKLyqjRp8uiyq3Lk8qxy5fFtcuayLXLncyEy59vy6HKldG10YzOmMaM0LXLiH3StdGQY8W1xIzJhcWqyaB0U9K4ZdK6OtKzx5R5yqvPlXDHtMymxIHEgzHJhcahxJnGncSSxbjElsaaxJnFh8alOi3GgsSuNjLFkMSsxLzFpzYzxZgixLTIr8WmNjTErjcuOcWVMTHErDI005jHidOaOTk2xYIwOS4xNcWFNNOyMcWoxLTTuDM007vFp8eONdOsxY0w1IrFpceUxavFrcWvxbHFs8W1y6LJhceexozGgMeiIsaFxIvHpcaLx4rGjtK1x7vIqciAyILIhMiGzIDIizrGj8SbyJPTjsiSy73IlciXyJk6MceUyJ3Ei8ifyK3ItM2z0Z/IgNWCyK/FqdGSx73RlcmDyLbPncSNaWZ5xpJvxJ/EjtS00ZbIptK2fQ==",
+                      "faIcon": "fa fa-leaf"
                     },
                     {
                       "name": "Habitat",
                       "description": "Lorem Ipsum",
                       "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-animal"
+                      "faIcon": "fa fa-leaf"
                     },
                     {
                       "name": "Sea Rise",
                       "description": "Lorem Ipsum",
                       "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-map"
+                      "faIcon": "fa fa-leaf"
                     },
                     {
                       "name": "Habitat",
                       "description": "Lorem Ipsum",
                       "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-animal"
-                    },
-                    {
-                      "name": "Sea Rise",
-                      "description": "Lorem Ipsum",
-                      "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-map"
-                    },
-                    {
-                      "name": "Habitat",
-                      "description": "Lorem Ipsum",
-                      "saveCode": "e34df34rd3....3434",
-                      "faIcon": "fa-animal"
+                      "faIcon": "fa fa-leaf"
                     }
                   ]
               },

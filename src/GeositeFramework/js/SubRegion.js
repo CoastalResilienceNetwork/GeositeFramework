@@ -40,7 +40,7 @@
         });
 
         N.app.dispatcher.on('launchpad:activate-subregion', function (e) {
-            var subRegionGraphic = getSubRegionById(e.subRegionId, self.subRegionLayer);
+            var subRegionGraphic = getSubRegionById(e.id, self.subRegionLayer);
             // Going to a subregion from the launchpad should only effect
             // the first map.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
