@@ -152,6 +152,7 @@
                     "title": { "type": "string", "required": true },
                     "description": { "type": "string", "required": true },
                     "showSubRegions": { "type": "boolean", "required": false },
+                    "showByDefault": { "type": "boolean", "required": false },
                     "categories": {
                         "type": "array",
                         "items": {

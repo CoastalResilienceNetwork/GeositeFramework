@@ -28,6 +28,10 @@ require(['use!Geosite'], function (N) {
     N.views.Launchpad = Backbone.View.extend({
         initialize: function () {
             this.template = N.app.templates['template-launchpad'];
+
+            if (this.model.get('showByDefault')) {
+                this.render();
+            }
         },
 
         events: {
@@ -97,11 +101,12 @@ require(['use!Geosite'], function (N) {
             if (!launchpadConfig) {
                 Azavea.logError("No configuration found for launchpad id " + launchpadId);
             } else {
-                var launchpad = new N.models.Launchpad(launchpadConfig),
-                    launchpadView = new N.views.Launchpad({ model: launchpad });
-
+                var launchpad = new N.models.Launchpad(launchpadConfig);
                 launchpad.set({ "subregions": N.app.data.region.subregions });
                 launchpadCollection.add(launchpad);
+
+                var launchpadView = new N.views.Launchpad({ model: launchpad });
+
                 registerLaunchpadHandler(trigger, launchpadView);
             }
         }, this);
