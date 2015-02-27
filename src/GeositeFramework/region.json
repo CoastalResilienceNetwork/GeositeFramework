@@ -72,9 +72,9 @@
         "layer_selector",
         "custom_layer_selector",
         "zoom_to",
-        "full_extent",
         "measure",
         "legend_display",
+        "full_extent",
         "subregion_toggle"
     ],
     "print": {
