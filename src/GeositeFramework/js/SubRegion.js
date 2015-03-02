@@ -48,7 +48,7 @@
 
         N.app.dispatcher.on('launchpad:activate-subregion', function (e) {
             // Going to a subregion from the launchpad should only effect
-            // the first map.
+            // the active map or the first map in split screen view.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
             if (self.map.id === activeMapId) {
                 self.initializeSubregion(e.id, Polygon);
