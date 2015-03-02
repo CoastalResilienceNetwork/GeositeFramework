@@ -78,8 +78,17 @@ require(['use!Geosite'], function (N) {
                 issue = _(category.issues).findWhere({id: issueId}) 
             });
 
-            if (issue) { 
-                this.activateLaunchpadEvent('launchpad:activate-scenario', issue.saveCode);
+            if (issue) {
+                var saveCode = issue.saveCode,
+                    decodedSaveCode = N.app.hashModels.decodeStateObject(saveCode);
+
+                // If the saved state contains only one map, we want to make
+                // sure to target the active map pane.
+                if (_.size(decodedSaveCode) === 2) {
+                    saveCode = modifyStateForActivePane(decodedSaveCode);
+                }
+
+                this.activateLaunchpadEvent('launchpad:activate-scenario', saveCode);
             }
         },
         
@@ -122,5 +131,35 @@ require(['use!Geosite'], function (N) {
         $(trigger).click(function () {
             launchpadView.render();
         });
+    }
+
+    function modifyStateForActivePane(state) {
+        var activePane = N.app.models.screen.get('mainPaneNumber'),
+            statePane = getStatePaneNumber(state);
+
+        if (activePane === statePane) {
+            return N.app.hashModels.encodeStateObject(state);
+        } else {
+            // Update the state to act on the active pane, which means
+            // changing the keys to map0 -> map1, if the state was for
+            // map0, but map1 is the active map, etc.
+            var modifiedState = _.object(_.map(state, function(v, k) {
+                if (k.search('pane') !== -1) {
+                    v.paneNumber = activePane;
+                }
+                return [k.replace(/\d/, activePane), v];
+            }))
+
+           return N.app.hashModels.encodeStateObject(modifiedState);
+        }
+    }
+
+    // Get the pane number of the saved state.
+    // Assumes there is only one pane/map in the state.
+    function getStatePaneNumber(state) {
+        var stateMap = _.keys(state)[0],
+            statePane = parseInt(stateMap.match(/\d/));
+
+        return statePane;
     }
 });
