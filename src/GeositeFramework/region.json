@@ -92,6 +92,7 @@
             "title": "Getting Started",
             "description": "This is the launchpad description",
             "showSubRegions": true,
+            "showByDefault": true,
             "categories": [
               {
                 "name": "What's new?",
