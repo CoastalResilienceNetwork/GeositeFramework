@@ -35,6 +35,7 @@ require(['use!Geosite'], function (N) {
         },
 
         events: {
+            'click .free-explore': 'freeExplore',
             'click .subregion': 'activateSubRegion',
             'click .lp-issue-btn': 'activateScenario'
         },
@@ -91,12 +92,20 @@ require(['use!Geosite'], function (N) {
                 this.activateLaunchpadEvent('launchpad:activate-scenario', saveCode);
             }
         },
+
+        freeExplore: function() {
+            this.activateLaunchpadEvent('launchpad:deactivate-subregion');
+            this.activateLaunchpadEvent('launchpad:free-explore');
+        },
         
         activateLaunchpadEvent: function(eventName, eventData) {
+            this.close();
+            N.app.dispatcher.trigger(eventName, eventData);
+        },
+
+        close: function() {
             this.remove();
             TINY.box.hide();
-            N.app.dispatcher.trigger(eventName, eventData);
-            
         }
     });
 

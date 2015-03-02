@@ -76,7 +76,7 @@
 
     N.controllers.SubRegion.prototype.initializeSubregion = function(subRegionId, Polygon) {
         var subRegionGraphic = getSubRegionById(subRegionId, this.subRegionLayer);
-        activateSubRegion(this, subRegionGraphic, Polygon);
+        this.activateSubRegion(subRegionGraphic, Polygon);
     };
 
     N.controllers.SubRegion.prototype.activateSubRegion = function(subRegionGraphic, Polygon) {
@@ -218,7 +218,7 @@
                     deactivateSubRegion,
                     subRegionManager,
                     extentOnExit
-                )
+                ),
             });
 
         $mapContainer.prepend(subRegionHeader.render().$el);
@@ -237,6 +237,8 @@
                '.control-container',
                '.esriSimpleSlider'
             ];
+            this.listenTo(N.app.dispatcher, 'launchpad:deactivate-subregion',
+                _.bind(this.deactivateSubregion, this));
         },
 
         events: {
@@ -270,8 +272,16 @@
             this.subRegionManager.initializeSubregion(e.target.value, Polygon);
         },
 
+        deactivateSubregion: function() {
+            if ('map-' + N.app.models.screen.get('mainPaneNumber')
+                    === this.subRegionManager.map.id) {
+                this.close();
+            }
+        },
+
         close: function (resetCurrentRegionId) {
             this.remove();
+            this.stopListening();
             this.toggleMapControlPositions();
 
             var oldRegion = _.findWhere(this.model.attributes.subregions,

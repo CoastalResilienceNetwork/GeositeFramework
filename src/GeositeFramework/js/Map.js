@@ -79,6 +79,11 @@ require(['use!Geosite',
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
         view.model.on('change:extent',               function () { loadExtent(view); });
+        N.app.dispatcher.on('launchpad:free-explore', function () {
+            if (N.app.models.screen.get('mainPaneNumber') === view.model.get('mapNumber')) {
+                loadExtent(view);
+            }
+        });
 
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
