@@ -415,7 +415,15 @@
 
     <script type="text/template" id="template-subregion">
         <div class="subregion-header">
-            <p>You are currently in <%= display %></p>
+            <p>You are currently in
+                <select class="header-region-selection">
+                    <% _.each(subregions, function(region) { %>
+                        <option <%= region.id=== selectedId ? "selected" : "" %>
+                                value="<%= region.id %>"><%= region.display %>
+                        </option>
+                    <% }); %>
+                </select>
+            </p>
             <p class="leave"><a href="javascript:void(0);"><i class="fa fa-times-circle"></i>Leave Region</a></p>
         </div>
     </script>
