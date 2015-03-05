@@ -27,12 +27,16 @@
     function initializeSubregionDisplays(mapModel, pane)
     {
         mapModel.on('subregion-activate', function(activeRegion) {
+            pane.set('activeSubregion', activeRegion);
+
             invokeOnPlugins(pane, 'subregionActivated', [activeRegion, pane]);
             invokeOnPlugins(pane, 'hibernate', [activeRegion]);
             setSidebarPluginVisibility(pane, activeRegion.availablePlugins);
         });
 
         mapModel.on('subregion-deactivate', function(deactivatedRegion) {
+            pane.set('activeSubregion', null);
+
             invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion, pane]);
             showAllSidebarPlugins(pane);
         });
@@ -120,25 +124,30 @@
 
         model.get('plugins').each(function(pluginModel) {
             pluginModel.initPluginObject(regionData, mapModel, esriMap);
-            model.setPluginState(pluginModel, savedState);
         });
+
+        activateScenario(model, savedState);
     }
 
-    function activateScenario(pane, scenarioState) {
-        var state = Backbone.HashModels.decodeStateObject(scenarioState);
+    function activateScenario(pane, state) {
 
         // Drop the plugin state setting until after the stack clears to prevent errors when the
         // map is not in a ready state.
         setTimeout(function() {
+            var activeSubregion = pane.get('activeSubregion');
+            if (activeSubregion) {
+                N.app.dispatcher.trigger('launchpad:activate-subregion', { 
+                    id: activeSubregion.id,
+                    preventZoom: true
+                });
+            }
+
             pane.get('plugins').each(function(pluginModel) {
 
                 // Set the state of the plugin involved in this scenario
-                var paneState = state['pane' + pane.get('paneNumber')];
-                if (paneState && paneState.stateOfPlugins) {
-                    var stateWasSet = pane.setPluginState(pluginModel, paneState.stateOfPlugins);
-                    if (stateWasSet) {
-                        pluginModel.get('pluginObject').activate();
-                    }
+                var stateWasSet = pane.setPluginState(pluginModel, state, activeSubregion);
+                if (stateWasSet) {
+                    pluginModel.get('pluginObject').activate();
                 }
 
             });
@@ -158,8 +167,16 @@
         initialize: function () { 
             var self = this;
 
-            N.app.dispatcher.on('launchpad:activate-scenario', function(savedState) {
-                activateScenario(self, savedState);
+            N.app.dispatcher.on('launchpad:activate-scenario', function(scenarioState) {
+                var state = Backbone.HashModels.decodeStateObject(scenarioState),
+                    paneState = state['pane' + self.get('paneNumber')],
+                    pluginState = {};
+
+                if (paneState && paneState.stateOfPlugins) {
+                    pluginState = paneState.stateOfPlugins;
+                }
+
+                activateScenario(self, paneState.stateOfPlugins);
             });
 
             return initialize(this); 
@@ -180,7 +197,7 @@
                         // Turn the plugin off in case it has currently loaded state
                         // which should be reset prior to setting the new state
                         pluginObject.hibernate();
-                        pluginModel.setState(pluginState);
+                        pluginModel.setState(pluginState, savedState.subregion);
                         stateWasSet = true;
                     } else {
                         pluginObject.hibernate();
@@ -417,6 +434,7 @@
 
             var savedState = {
                 selectedPlugin: selected,
+                activeSubregion: this.model.get('activeSubregion'),
                 plugins: stateOfPlugins
             };
             this.model.set('stateOfPlugins', savedState);

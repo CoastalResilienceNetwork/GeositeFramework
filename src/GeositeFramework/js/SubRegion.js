@@ -51,7 +51,7 @@
             // the active map or the first map in split screen view.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
             if (self.map.id === activeMapId) {
-                self.initializeSubregion(e.id, Polygon);
+                self.initializeSubregion(e.id, Polygon, e.preventZoom);
             }
         });
         
@@ -74,12 +74,12 @@
         this.deactivateCallbacks.push(callback);
     };
 
-    N.controllers.SubRegion.prototype.initializeSubregion = function(subRegionId, Polygon) {
+    N.controllers.SubRegion.prototype.initializeSubregion = function(subRegionId, Polygon, preventZoom) {
         var subRegionGraphic = getSubRegionById(subRegionId, this.subRegionLayer);
-        this.activateSubRegion(subRegionGraphic, Polygon);
+        this.activateSubRegion(subRegionGraphic, Polygon, preventZoom);
     };
 
-    N.controllers.SubRegion.prototype.activateSubRegion = function(subRegionGraphic, Polygon) {
+    N.controllers.SubRegion.prototype.activateSubRegion = function(subRegionGraphic, Polygon, preventZoom) {
         var newRegionId = subRegionGraphic.attributes.id,
             extentOnExit = this.map.extent;
 
@@ -97,8 +97,13 @@
         this.currentHeader = addSubRegionHeader(this, subRegionGraphic, extentOnExit);
 
         this.subRegionLayer.hide();
-        zoomToSubRegion(subRegionGraphic, this.map, Polygon);
         changeSubregionActivation(this.activateCallbacks, subRegionGraphic.attributes);
+        
+        // If activating a saved state, the map state bbox should take precedent over the
+        // configured subregion bbox
+        if (!preventZoom) {
+            zoomToSubRegion(subRegionGraphic, this.map, Polygon);
+        }
     }
 
     function deactivateSubRegion(subRegionManager, mapExtent, subRegionLayerAttributes) {
@@ -119,7 +124,9 @@
         });
 
         // Prevent the map click from getting to the map, so no identify
-        event.stopPropagation();
+        if (event) {
+            event.stopPropagation();
+        }
     }
 
     function parseExtent(coords) {

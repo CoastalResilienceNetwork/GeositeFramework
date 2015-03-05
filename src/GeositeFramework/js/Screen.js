@@ -99,7 +99,7 @@
 
             N.app.hashModels.addModel(pane, {
                 id: 'pane' + pane.get('paneNumber').toString(),
-                attributes: ['paneNumber', 'stateOfPlugins']
+                attributes: ['paneNumber', 'stateOfPlugins', 'activeSubregion']
             });
 
 
