@@ -89,7 +89,6 @@ require(['use!Geosite',
         createMap(view);
     }
 
-
     function createMap(view) {
         var esriMap = new esri.Map(view.$el.attr('id')),
             resizeMap = _.debounce(function () {

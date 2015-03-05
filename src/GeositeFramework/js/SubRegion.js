@@ -218,7 +218,7 @@
                     deactivateSubRegion,
                     subRegionManager,
                     extentOnExit
-                ),
+                )
             });
 
         $mapContainer.prepend(subRegionHeader.render().$el);
@@ -273,8 +273,8 @@
         },
 
         deactivateSubregion: function() {
-            if ('map-' + N.app.models.screen.get('mainPaneNumber')
-                    === this.subRegionManager.map.id) {
+            if ('map-' + N.app.models.screen.get('mainPaneNumber') ===
+                    this.subRegionManager.map.id) {
                 this.close();
             }
         },
