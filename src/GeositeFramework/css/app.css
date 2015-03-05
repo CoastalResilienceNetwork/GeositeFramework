@@ -939,6 +939,13 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
         width: 200px;
     }
 
+        .subregion-header .leave i {
+          padding-right: 5px;
+        }
+    .subregion-header .header-region-selection  {
+        width: 250px;
+    }
+
     .subregion-header a, a.visited, a.link, a.active {
         color: #fff;
-    }
+    } 

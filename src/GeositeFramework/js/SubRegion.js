@@ -12,6 +12,7 @@
         var self = this,
             tooltip;
         self.map = map;
+        self.subregions = subregions;
 
         // List of functions to call when a sub-region is de/activated
         self.activateCallbacks = [];
@@ -40,12 +41,11 @@
         });
 
         N.app.dispatcher.on('launchpad:activate-subregion', function (e) {
-            var subRegionGraphic = getSubRegionById(e.id, self.subRegionLayer);
             // Going to a subregion from the launchpad should only effect
             // the first map.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
             if (self.map.id === activeMapId) {
-                activateSubRegion(self, subRegionGraphic, Polygon);
+                self.initializeSubregion(e.id, Polygon);
             }
         });
         
@@ -66,6 +66,11 @@
 
     N.controllers.SubRegion.prototype.onDeactivated = function(callback) {
         this.deactivateCallbacks.push(callback);
+    };
+
+    N.controllers.SubRegion.prototype.initializeSubregion = function(subRegionId, Polygon) {
+        var subRegionGraphic = getSubRegionById(subRegionId, this.subRegionLayer);
+        activateSubRegion(this, subRegionGraphic, Polygon);
     };
 
     function activateSubRegion(subRegionManager, subRegionGraphic, Polygon) {
@@ -167,7 +172,10 @@
 
     function addSubRegionHeader(subRegionManager, subRegionGraphic) {
         var $mapContainer = $(subRegionManager.map.container),
-            subRegionModel = new N.models.SubRegion(subRegionGraphic.attributes),
+            subRegionModel = new N.models.SubRegion({
+                subregions: subRegionManager.subregions.areas,
+                selectedId: subRegionGraphic.attributes.id
+            }),
             subRegionHeader = new N.views.SubRegionHeader({
                 model: subRegionModel,
                 // We need to access to things in the container,
@@ -191,6 +199,7 @@
             this.template = N.app.templates['template-subregion'];
             this.$container = this.options.$container;
             this.deactivateFn = this.options.deactivateFn;
+            this.subRegionManager = this.options.subRegionManager;
             this.mapControlsToAdjust = [
                '.control-container',
                '.esriSimpleSlider'
@@ -198,7 +207,8 @@
         },
 
         events: {
-            'click .leave a': 'close'
+            'click .leave a': 'close',
+            'change .header-region-selection': 'activateSubregion'
         },
 
         render: function () {
@@ -219,10 +229,19 @@
             }, this);
         },
 
+        activateSubregion: function(e) {
+            this.close();
+            this.subRegionManager.initializeSubregion(e.target.value, Polygon);
+        },
+
         close: function () {
             this.remove();
             this.toggleMapControlPositions();
-            this.deactivateFn(this.model.attributes);
+
+            var oldRegion = _.findWhere(this.model.attributes.subregions,
+                { id: this.model.attributes.selectedId });
+
+            this.deactivateFn(oldRegion);
         }
     });
 });
