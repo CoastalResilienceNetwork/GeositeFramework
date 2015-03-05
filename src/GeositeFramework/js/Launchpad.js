@@ -28,6 +28,7 @@ require(['use!Geosite'], function (N) {
     N.views.Launchpad = Backbone.View.extend({
         initialize: function () {
             this.template = N.app.templates['template-launchpad'];
+            this.initialExtent = parseExtent(N.app.data.region.initialExtent);
 
             if (this.model.get('showByDefault')) {
                 this.render();
@@ -35,6 +36,7 @@ require(['use!Geosite'], function (N) {
         },
 
         events: {
+            'click .free-explore': 'freeExplore',
             'click .subregion': 'activateSubRegion',
             'click .lp-issue-btn': 'activateScenario'
         },
@@ -91,12 +93,22 @@ require(['use!Geosite'], function (N) {
                 this.activateLaunchpadEvent('launchpad:activate-scenario', saveCode);
             }
         },
+
+        freeExplore: function() {
+            this.activateLaunchpadEvent('launchpad:deactivate-subregion');
+            this.activateLaunchpadEvent('launchpad:free-explore', {
+                extent: this.initialExtent
+            });
+        },
         
         activateLaunchpadEvent: function(eventName, eventData) {
+            this.close();
+            N.app.dispatcher.trigger(eventName, eventData);
+        },
+
+        close: function() {
             this.remove();
             TINY.box.hide();
-            N.app.dispatcher.trigger(eventName, eventData);
-            
         }
     });
 
@@ -152,6 +164,16 @@ require(['use!Geosite'], function (N) {
 
            return N.app.hashModels.encodeStateObject(modifiedState);
         }
+    }
+
+    function parseExtent(extent) {
+        var x = N.app.data.region.initialExtent,
+            extent = new esri.geometry.Extent(
+                x[0], x[1], x[2], x[3],
+                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+            );
+
+        return extent;
     }
 
     // Get the pane number of the saved state.

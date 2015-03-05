@@ -48,7 +48,7 @@
 
         N.app.dispatcher.on('launchpad:activate-subregion', function (e) {
             // Going to a subregion from the launchpad should only effect
-            // the first map.
+            // the active map or the first map in split screen view.
             var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
             if (self.map.id === activeMapId) {
                 self.initializeSubregion(e.id, Polygon);
@@ -76,7 +76,7 @@
 
     N.controllers.SubRegion.prototype.initializeSubregion = function(subRegionId, Polygon) {
         var subRegionGraphic = getSubRegionById(subRegionId, this.subRegionLayer);
-        activateSubRegion(this, subRegionGraphic, Polygon);
+        this.activateSubRegion(subRegionGraphic, Polygon);
     };
 
     N.controllers.SubRegion.prototype.activateSubRegion = function(subRegionGraphic, Polygon) {
@@ -237,6 +237,8 @@
                '.control-container',
                '.esriSimpleSlider'
             ];
+            this.listenTo(N.app.dispatcher, 'launchpad:deactivate-subregion',
+                _.bind(this.deactivateSubregion, this));
         },
 
         events: {
@@ -270,8 +272,16 @@
             this.subRegionManager.initializeSubregion(e.target.value, Polygon);
         },
 
+        deactivateSubregion: function() {
+            if ('map-' + N.app.models.screen.get('mainPaneNumber') ===
+                    this.subRegionManager.map.id) {
+                this.close();
+            }
+        },
+
         close: function (resetCurrentRegionId) {
             this.remove();
+            this.stopListening();
             this.toggleMapControlPositions();
 
             var oldRegion = _.findWhere(this.model.attributes.subregions,
