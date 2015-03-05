@@ -113,6 +113,10 @@ define([
             },
 
             clearAll: function () {
+                if (! this._ui.isRendered()) {
+                    return;
+                }
+
                 this._layerManager.hideAllLayers(this.map);
                 this._ui.uncheckAndCollapse();
                 this._currentState = {};

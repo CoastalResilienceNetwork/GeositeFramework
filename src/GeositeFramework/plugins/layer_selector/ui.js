@@ -15,6 +15,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _tree = null,
                 _justClickedItemIcon = false,
                 _justClickedZoomIcon = false,
+                _isRendered = false,
 
                 renderExtTree;
 
@@ -35,8 +36,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _tree.on("itemclick", onItemClick, this);
                 removeSpinner();
                 renderUi();
+                _isRendered = true;
                 this.display();
             };
+
+            this.isRendered = function() {
+                return _isRendered;
+            }
 
             this.display = function () {
                 renderExtTree();
@@ -73,7 +79,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             };
 
             this.onContainerSizeChanged = function (dx, dy) {
-                // The ExtJS TreePanel can't be sized to fit its widest element, 
+                // The ExtJS TreePanel can't /be sized to fit its widest element, 
                 // nor can you discover those widths programatically.
                 // So we let users reveal more by resizing the container,
                 // setting here the tree panel width to the container's width.
