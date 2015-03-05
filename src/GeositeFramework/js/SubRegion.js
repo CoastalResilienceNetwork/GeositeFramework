@@ -13,10 +13,16 @@
             tooltip;
         self.map = map;
         self.subregions = subregions;
+        self.currentRegionId = null;
 
         // List of functions to call when a sub-region is de/activated
         self.activateCallbacks = [];
         self.deactivateCallbacks = [];
+
+        // Use the initial extent as the "last" extent when exiting after
+        // a series of subregion activations.  Otherwise, the most recent
+        // active region extent will be fit, which looks wrong.
+        self.initialExtent = parseExtent(N.app.data.region.initialExtent);
 
         // Graphics layer that will hold the sub-region vectors
         self.subRegionLayer = new esri.layers.GraphicsLayer();
@@ -55,7 +61,7 @@
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-out', 'default');
 
             self.subRegionLayer.on('click', function (e) {
-                activateSubRegion(self, e.graphic, Polygon);
+                self.activateSubRegion(e.graphic, Polygon);
             });
         };
     }
@@ -73,17 +79,36 @@
         activateSubRegion(this, subRegionGraphic, Polygon);
     };
 
-    function activateSubRegion(subRegionManager, subRegionGraphic, Polygon) {
-        subRegionManager.subRegionLayer.hide();
-        addSubRegionHeader(subRegionManager, subRegionGraphic);
-        zoomToSubRegion(subRegionGraphic, subRegionManager.map, Polygon);
-        changeSubregionActivation(subRegionManager.activateCallbacks, subRegionGraphic.attributes);
+    N.controllers.SubRegion.prototype.activateSubRegion = function(subRegionGraphic, Polygon) {
+        var newRegionId = subRegionGraphic.attributes.id,
+            extentOnExit = this.map.extent;
+
+        if (this.currentRegionId) {
+            if (this.currentRegionId === newRegionId) {
+                return;
+            }
+            var oldRegion = _.findWhere(this.subregions.areas, { id: this.currentRegionId });
+            // Use the full extent when exiting this subregion
+            extentOnExit = this.initialExtent;
+            deactivateSubRegion(this, this.map.extent, oldRegion);
+        }
+
+        this.currentRegionId = newRegionId;
+        this.currentHeader = addSubRegionHeader(this, subRegionGraphic, extentOnExit);
+
+        this.subRegionLayer.hide();
+        zoomToSubRegion(subRegionGraphic, this.map, Polygon);
+        changeSubregionActivation(this.activateCallbacks, subRegionGraphic.attributes);
     }
 
     function deactivateSubRegion(subRegionManager, mapExtent, subRegionLayerAttributes) {
         changeSubregionActivation(subRegionManager.deactivateCallbacks, subRegionLayerAttributes);
         subRegionManager.map.setExtent(mapExtent);
         subRegionManager.subRegionLayer.show();
+
+        if (subRegionManager.currentHeader) {
+            subRegionManager.currentHeader.remove();
+        }
     }
 
     function changeSubregionActivation(callbacks, subRegionLayerAttributes) {
@@ -95,6 +120,13 @@
 
         // Prevent the map click from getting to the map, so no identify
         event.stopPropagation();
+    }
+
+    function parseExtent(coords) {
+        return esri.geometry.Extent(
+            coords[0], coords[1], coords[2], coords[3],
+            new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+        );
     }
 
     function addSubRegionsToMap(subregions, layer) {
@@ -170,7 +202,7 @@
         map.setExtent(extent.expand(2));
     }
 
-    function addSubRegionHeader(subRegionManager, subRegionGraphic) {
+    function addSubRegionHeader(subRegionManager, subRegionGraphic, extentOnExit) {
         var $mapContainer = $(subRegionManager.map.container),
             subRegionModel = new N.models.SubRegion({
                 subregions: subRegionManager.subregions.areas,
@@ -185,11 +217,12 @@
                 deactivateFn: _.partial(
                     deactivateSubRegion,
                     subRegionManager,
-                    subRegionManager.map.extent
+                    extentOnExit
                 )
             });
 
         $mapContainer.prepend(subRegionHeader.render().$el);
+        return subRegionHeader;
     }
 
     N.models.SubRegion = Backbone.Model.extend({});
@@ -230,11 +263,14 @@
         },
 
         activateSubregion: function(e) {
-            this.close();
+            // Don't reset the current region id when activting a subregion
+            // when another is activated.  This is how we tell that the "last"
+            // extent should be the full extent, not this current regions extent
+            this.close(false);
             this.subRegionManager.initializeSubregion(e.target.value, Polygon);
         },
 
-        close: function () {
+        close: function (resetCurrentRegionId) {
             this.remove();
             this.toggleMapControlPositions();
 
@@ -242,6 +278,10 @@
                 { id: this.model.attributes.selectedId });
 
             this.deactivateFn(oldRegion);
+
+            if (resetCurrentRegionId) {
+                this.subRegionManager.currentRegionId = null;
+            }
         }
     });
 });
