@@ -33,16 +33,36 @@ define([
             /*
               Private methods
              */
-            function loadLayerData(layerSourcesJson, onLoadingComplete) {
+            function loadLayerData(layerSourcesJson, regionKey, onLoadingComplete) {
                 var layerData = parseLayerConfigData(layerSourcesJson);
 
                 _onLoadingComplete = onLoadingComplete;
 
                 if (layerData) {
+
+                    // layerData is now an array of layers to load, which may have `availableInRegion` keys
+                    // which restrict what subregions they are loaded for.  If no keys are present, make
+                    // no restriction.  If "main" is included in the list, the layer is available in the
+                    // main region, in addtion to any listed subregions.
+                    // ['a'] -> just subregion A, main
+                    // ['a', 'b'] -> both A and B, not main
+                    // ['b', 'main'] -> main region and B
+                    // []/null/undefined -> all regions
+                    var availableLayerData = _.filter(layerData, function(layer) {
+                        var layerRegions;
+                        if (layer.agsSource) {
+                            layerRegions = layer.agsSource.availableInRegions;
+                        } else if (layer.wmsSource) {
+                            layerRegions = layer.wmsSource.availableInRegions;
+                        }
+
+                        return !_.any(layerRegions) || _.contains(layerRegions, regionKey);
+                    });
+
                     _treeRootNode = makeRootNode();
 
                     // Load layer info from each source
-                    _.each(layerData, function (dataSourceContainer) {
+                    _.each(availableLayerData, function (dataSourceContainer) {
                         var loader = null, innerContainer = null, source = null, sourceRootNode = null;
 
                         // initialize layer data

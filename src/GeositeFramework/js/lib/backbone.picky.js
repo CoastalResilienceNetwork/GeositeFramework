@@ -137,6 +137,12 @@ Backbone.Picky = (function (Backbone, _) {
       this.selected = false;
       this.trigger("deselected");
 
+      // Return early because deselecting the model
+      // on the collection just deselects the model again, 
+      // this very function, which ends up triggering an 
+      // extra event.
+      return;
+      // Will never run ----->
       if (this.collection) {
         this.collection.deselect(this);
       }

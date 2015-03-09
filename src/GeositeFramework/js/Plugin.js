@@ -136,21 +136,71 @@ require(['use!Geosite',
 
             onSelectedChanged: function () {
                 if (this.selected) {
-                    if (!this.get('active') && this.getShowHelpOnStartup()) {
+                    var active = this.get('active')  
+                    if (!active && this.getShowHelpOnStartup()) {
                         this.set('displayHelp', true);
                     }
+
                     this.set('active', true);
-                    this.get('pluginObject').activate();
+
+                    if (!active) {
+                        this.get('pluginObject').activate();
+                    }
                 } else {
                     this.get('pluginObject').deactivate();
+                    this.trigger('plugin:deselected');
                 }
             },
 
-            turnOff: function () {
-                this.deselect();
-                this.set('active', false);
-                this.get('pluginObject').hibernate();
+            turnOff: function (callback) {
+                var self = this,
+                    initiallySelected = this.selected,
+                    // Clean up event listeners and execute the callback, 
+                    // we are done here.
+                    cleanUp = function () {
+                        self.off('plugin:deselected');
+                        if (_.isFunction(callback)) {
+                            callback(); 
+                        }
+                    },
+
+                    // Deselect the plugin.  This is an async trigger operation
+                    // within backbone.picky.  It will cause plugin:deselected
+                    // to fire.
+                    doDeselect = function() {
+                        if (self.selected) {
+                            self.deselect();
+                        }
+                    },
+
+                    // Make this plugin no longer active, and inform it of its
+                    // new status via the hibernate function    
+                    doDeactivate = function() {
+                        self.set('active', false);
+                        self.get('pluginObject').hibernate();
+                    }
+
+                // If the plugin was not being turned off while selected
+                // finish immediately and callback.  Otherwise, wait until
+                // we know that the plugin has finished its deactivation routine
+                // and then execute callback
+                if (!initiallySelected) { 
+                    doDeselect();
+                    doDeactivate();
+                    cleanUp();
+                } else {
+                    // When the plugin has fully be deselected, deactivate it
+                    // and stop listening for the event - execute the provided
+                    // callback that the async job is done
+                    this.on('plugin:deselected', function() {
+                        doDeactivate();
+                        cleanUp();
+                    });
+
+                    doDeselect();
+                }
             },
+
 
             identify: function (mapPoint, clickPoint, processResults) {
                 var active = this.get('active'),
@@ -210,17 +260,12 @@ require(['use!Geosite',
         function initialize(view) {
             var model = view.model;
             view.render();
+
             model.on('selected deselected', function () {
-                // Pushing this to the end of the call stack
-                // fixes an issue that caused the layer selector
-                // to not be handled properly as part of a picky
-                // collection until all it's layers were loaded.
-                // See #288
-                _.defer(function() {
-                    view.render();
-                    model.onSelectedChanged();
-                });
+                view.render();
+                model.onSelectedChanged();
             });
+
             model.on('change:active', function () {
                 view.render();
             });

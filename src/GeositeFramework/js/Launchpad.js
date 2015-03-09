@@ -10,6 +10,10 @@ require(['use!Geosite'], function (N) {
     };
 
     N.models.Launchpad = Backbone.Model.extend({
+        defaults: {
+            initial: true
+        },
+
         initialize: function() {
             var categories = this.get('categories');
             _.each(categories, function(category, catIdx) {
@@ -69,28 +73,45 @@ require(['use!Geosite'], function (N) {
         },
         
         activateScenario: function(e) {
-            var categories = _(this.model.get('categories')),
-                issueId = $(e.currentTarget).data('issue-id'),
-                issue;
+            var self = this,
+                categories = _(this.model.get('categories')),
+                $el = $(e.currentTarget),
+                issueId = $el.data('issue-id'),
+                issue,
+                waitBeforeLaunch = this.model.get('initial') ? 2000 : 500;
 
-            categories.each(function(category) {
-                if (issue) { return false; }
+            // Subsequent runs are no long the intial ones.
+            this.model.set('initial', false);
 
-                issue = _(category.issues).findWhere({id: issueId}) 
-            });
+            // Setup a spinner icon on this scenario button
+            $el.find('i')
+                .removeClass()
+                .addClass('fa fa-spinner fa-spin')
 
-            if (issue) {
-                var saveCode = issue.saveCode,
-                    decodedSaveCode = N.app.hashModels.decodeStateObject(saveCode);
+            // Wait a few seconds to launch the scenario, so the layer selector
+            // has time to hear back from all of the requested layers, sad but true.
+            _.delay(function() {
+                categories.each(function(category) {
+                    if (issue) { return false; }
 
-                // If the saved state contains only one map, we want to make
-                // sure to target the active map pane.
-                if (_.size(decodedSaveCode) === 2) {
-                    saveCode = modifyStateForActivePane(decodedSaveCode);
+                    issue = _(category.issues).findWhere({id: issueId}) 
+                });
+
+                if (issue) {
+                    var saveCode = issue.saveCode,
+                        decodedSaveCode = N.app.hashModels.decodeStateObject(saveCode);
+
+                    // If the saved state contains only one map, we want to make
+                    // sure to target the active map pane.
+                    if (_.size(decodedSaveCode) === 2) {
+                        saveCode = modifyStateForActivePane(decodedSaveCode);
+                    }
+
+                    self.activateLaunchpadEvent('launchpad:activate-scenario', saveCode);
                 }
 
-                this.activateLaunchpadEvent('launchpad:activate-scenario', saveCode);
-            }
+            }, waitBeforeLaunch);
+
         },
 
         freeExplore: function() {

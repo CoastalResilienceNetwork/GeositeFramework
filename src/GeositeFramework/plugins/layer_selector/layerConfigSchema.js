@@ -29,6 +29,7 @@ define(function () {
             required: ['url'],
             properties: {
                 url: { type: 'string' },
+                availableInRegions: { type: 'array' },
                 folderTitle: { type: 'string' },
                 isNew: isNew(),
                 folders: {
