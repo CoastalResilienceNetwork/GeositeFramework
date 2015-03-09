@@ -211,8 +211,15 @@ require(['use!Geosite',
             var model = view.model;
             view.render();
             model.on('selected deselected', function () {
-                view.render();
-                model.onSelectedChanged();
+                // Pushing this to the end of the call stack
+                // fixes an issue that caused the layer selector
+                // to not be handled properly as part of a picky
+                // collection until all it's layers were loaded.
+                // See #288
+                _.defer(function() {
+                    view.render();
+                    model.onSelectedChanged();
+                });
             });
             model.on('change:active', function () {
                 view.render();
