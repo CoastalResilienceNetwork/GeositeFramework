@@ -46,12 +46,22 @@
             toggleSubRegions(e, self.map.id, self.subRegionLayer);
         });
 
-        N.app.dispatcher.on('launchpad:activate-subregion', function (e) {
+        N.app.dispatcher.on('launchpad:activate-subregion', function(e) {
             // Going to a subregion from the launchpad should only effect
-            // the active map or the first map in split screen view.
-            var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
-            if (self.map.id === activeMapId) {
-                self.initializeSubregion(e.id, Polygon, e.preventZoom);
+            // the active map or the first map in split screen view, unless
+            // the map id/number has been provided (in the case of launching
+            // the scenario). Then the subregion should be activated on the
+            // map the state designates.
+            if (e.mapNumber) {
+                var savedMapId = 'map-' + e.mapNumber;
+                if (self.map.id === savedMapId) {
+                    self.initializeSubregion(e.id, Polygon, e.preventZoom);
+                }
+            } else {
+                var activeMapId = 'map-' + N.app.models.screen.get('mainPaneNumber');
+                if (self.map.id === activeMapId) {
+                    self.initializeSubregion(e.id, Polygon, e.preventZoom);
+                }
             }
         });
         
