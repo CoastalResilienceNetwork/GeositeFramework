@@ -132,11 +132,6 @@
                 callback(subRegionLayerAttributes);
             }
         });
-
-        // Prevent the map click from getting to the map, so no identify
-        if (event) {
-            event.stopPropagation();
-        }
     }
 
     function parseExtent(coords) {
