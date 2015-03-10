@@ -738,9 +738,14 @@ table.esriLegendLayerLabel tbody tr td {
 
 
 /* TinyBox overrides */
+.tbox{
+    top: 100px!important;
+}
+
 .tinner {
     overflow: hidden;
     padding: 0!important;
+    height: auto!important;
 }
 
 .tinner .tclose{
@@ -786,6 +791,10 @@ table.esriLegendLayerLabel tbody tr td {
     width: 100%;
     min-width: 100%;
     padding: 8px 16px;
+}
+
+.launchpad{
+    height: 450px!important;
 }
 
 .launchpad .row .well{
