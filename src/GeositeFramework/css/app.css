@@ -740,12 +740,15 @@ table.esriLegendLayerLabel tbody tr td {
 /* TinyBox overrides */
 .tbox{
     top: 100px!important;
+    min-width: 500px!important;
+    width: 60%!important;
 }
 
 .tinner {
     overflow: hidden;
     padding: 0!important;
-    height: auto!important;
+    min-height: 320px;
+    width: 100%!important;
 }
 
 .tinner .tclose{
@@ -767,6 +770,7 @@ table.esriLegendLayerLabel tbody tr td {
     background-color: #26648E;
     width: 100%;
     padding: 16px;
+    height: 50px;
 }
 
 .popover h2{
@@ -786,6 +790,7 @@ table.esriLegendLayerLabel tbody tr td {
     width: 100%;
     padding: 14px 0;
     overflow-y: auto;
+    height: 90%;
 }
 .popover .row{
     width: 100%;
@@ -794,7 +799,8 @@ table.esriLegendLayerLabel tbody tr td {
 }
 
 .launchpad{
-    height: 450px!important;
+    width: 100%;
+    height: 100%;
 }
 
 .launchpad .row .well{
@@ -804,20 +810,24 @@ table.esriLegendLayerLabel tbody tr td {
 }
 
 .launchpad .well .description{
+    width: 100%;
     display: inline-block;
-    width: 200px;
-    vertical-align: top;
 }
 
 .launchpad .well .description p{
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.launchpad .well .description h3{
+    font-size: 18px;
     line-height: 15px;
+    color: #333333;
 }
 
 .launchpad .well .thumbs{
-    width: 460px;
+    width: 100%;
     display: inline-block;
-    padding-left: 12px;
 }
 
 .launchpad .well ul{
@@ -834,17 +844,33 @@ table.esriLegendLayerLabel tbody tr td {
     display: inline-block;
     width: 120px;
     height: 120px;
-    background-color: rgba(150,150,150,.2);
+    background-color: #ffffff;
+    border: solid 1px #aaaaaa;
+    color: #444444;
     padding: 10px;
     border-radius: 6px;
     white-space: normal;
     vertical-align: top;
     margin-right: 4px;
     cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    transition: background-color 0.3s ease-out;
+}
+
+.launchpad .well ul li i{
+    color: #41a3a8;
 }
 
 .launchpad .well ul li:hover{
-    background-color: rgba(150,150,150,.4);
+    background-color: #41a3a8;
+    border: solid 1px #41a3a8;
+    color: #ffffff;
+}
+
+.launchpad .well ul li:hover i{
+    color: #ffffff;
 }
 
 .launchpad ul li i{
@@ -858,6 +884,19 @@ table.esriLegendLayerLabel tbody tr td {
     display: block;
     font-size: 12px;
     text-align: center;
+}
+
+/*Launchpad Media Queries*/
+
+@media(min-width: 960px){
+    .launchpad .well .description{
+        width: 28%;
+        vertical-align: top;
+    }
+    .launchpad .well .thumbs{
+        width: 68%;
+        margin-left: 2%;
+    }
 }
 
 .tinner iframe {
