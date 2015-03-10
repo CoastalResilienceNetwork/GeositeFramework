@@ -30,7 +30,7 @@ require(['use!Geosite'], function (N) {
             this.template = N.app.templates['template-launchpad'];
             this.initialExtent = parseExtent(N.app.data.region.initialExtent);
 
-            if (this.model.get('showByDefault')) {
+            if (this.model.get('showByDefault') && N.app.loadedWithState === false) {
                 this.render();
             }
         },

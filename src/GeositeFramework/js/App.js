@@ -19,6 +19,11 @@
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
 
+            N.app.loadedWithState = false;
+            if (location.hash !== '') {
+                N.app.loadedWithState = true;
+            }
+
             // Set up the google url shortener service
             gapi.client.load('urlshortener', 'v1');
             if (regionData.googleUrlShortenerApiKey) {
