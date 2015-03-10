@@ -957,4 +957,14 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 
     .subregion-header a, a.visited, a.link, a.active {
         color: #fff;
-    } 
+    }
+
+.subregion-border-box {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    border: solid 3px rgba(194, 32, 32, 0.5);
+    border-top: none;
+    top: 50px;
+    bottom: 0px;
+}

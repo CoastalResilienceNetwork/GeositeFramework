@@ -255,6 +255,7 @@
 
         render: function () {
             this.toggleMapControlPositions();
+            this.toggleMapBorder();
             this.$el.html(this.template(this.model.attributes));
             return this;
         },
@@ -269,6 +270,20 @@
                     $control.addClass('subregion-active');
                 }
             }, this);
+        },
+
+        toggleMapBorder: function () {
+            var mapContainer = this.subRegionManager.map.__container,
+                className = 'subregion-border-box',
+                $borderBox = $(mapContainer).find('.' + className);
+
+            if ($borderBox.length) {
+                $borderBox.remove();
+            } else {
+                $('<div/>', {
+                    'class': className
+                }).prependTo(mapContainer);
+            }
         },
 
         activateSubregion: function(e) {
@@ -290,6 +305,7 @@
             this.remove();
             this.stopListening();
             this.toggleMapControlPositions();
+            this.toggleMapBorder();
 
             var oldRegion = _.findWhere(this.model.attributes.subregions,
                 { id: this.model.attributes.selectedId });
