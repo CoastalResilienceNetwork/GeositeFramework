@@ -133,12 +133,15 @@
 
         // Drop the plugin state setting until after the stack clears to prevent errors when the
         // map is not in a ready state.
-        setTimeout(function() {
-            var activeSubregion = pane.get('activeSubregion');
+        _.defer(function() {
+            var activeSubregion = pane.get('activeSubregion'),
+                mapNumber = pane.get('mapModel').get('mapNumber');
+
             if (activeSubregion) {
                 N.app.dispatcher.trigger('launchpad:activate-subregion', { 
                     id: activeSubregion.id,
-                    preventZoom: true
+                    preventZoom: true,
+                    mapNumber: mapNumber
                 });
             }
 
@@ -151,7 +154,7 @@
                 }
 
             });
-        }, 0);
+        });
     }
 
     N.models = N.models || {};
