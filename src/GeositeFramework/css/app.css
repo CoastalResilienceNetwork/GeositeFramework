@@ -798,6 +798,10 @@ table.esriLegendLayerLabel tbody tr td {
     padding: 8px 16px;
 }
 
+#launchpad {
+    height: 80%!important;
+}
+
 .launchpad{
     width: 100%;
     height: 100%;
