@@ -46,9 +46,8 @@ require(['use!Geosite'], function (N) {
 
             TINY.box.show({
                 html: self.template(self.model.toJSON()),
-                boxid: '',
+                boxid: 'launchpad',
                 width: 750,
-                height: 450,
                 fixed: false,
                 maskopacity: 40,
                 openjs: function () {

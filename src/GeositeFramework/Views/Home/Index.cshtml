@@ -380,11 +380,12 @@
                         </div>
                         <div class="thumbs">
                             <ul>
-                                <li class="free-explore"><i class="fa fa-globe"></i><label>Explore the map</label>
+                                <li class="free-explore"><i class="fa fa-globe"></i>Explore the map
                                 <% _.each(subregions.areas, function(subregion) { %>
-                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
+                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><%= subregion.display %></li>
                                 <% }); %>
                             </ul>
+
                         </div>
                     </div> 
                 </div>
@@ -402,7 +403,7 @@
                                 <% _.each(category.issues, function(issue) { %>
                                     <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
                                         <i class="<%= issue.faIcon %>"></i>
-                                        <label> <%= issue.name %></label>
+                                         <%= issue.name %>
                                     </li>
                                 <% }); %>
                             </ul>
