@@ -20,7 +20,7 @@
             N.plugins = pluginClasses;
 
             N.app.loadedWithState = false;
-            if (location.hash !== '') {
+            if (location.hash !== '' && location.hash !== '#') {
                 N.app.loadedWithState = true;
             }
 
