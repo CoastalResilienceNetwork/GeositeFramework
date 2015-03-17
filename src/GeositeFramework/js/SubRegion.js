@@ -93,6 +93,7 @@
         var newRegionId = subRegionGraphic.attributes.id,
             extentOnExit = this.map.extent;
 
+        // Deactivate the current subregion if one is active
         if (this.currentRegionId) {
             if (this.currentRegionId === newRegionId) {
                 return;
@@ -101,6 +102,9 @@
             // Use the full extent when exiting this subregion
             extentOnExit = this.initialExtent;
             deactivateSubRegion(this, this.map.extent, oldRegion);
+            if (this.currentHeader) {
+                this.currentHeader.close();
+            }
         }
 
         this.currentRegionId = newRegionId;
@@ -120,10 +124,6 @@
         changeSubregionActivation(subRegionManager.deactivateCallbacks, subRegionLayerAttributes);
         subRegionManager.map.setExtent(mapExtent);
         subRegionManager.subRegionLayer.show();
-
-        if (subRegionManager.currentHeader) {
-            subRegionManager.currentHeader.remove();
-        }
     }
 
     function changeSubregionActivation(callbacks, subRegionLayerAttributes) {
