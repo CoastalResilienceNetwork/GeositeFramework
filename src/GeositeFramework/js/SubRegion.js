@@ -93,6 +93,7 @@
         var newRegionId = subRegionGraphic.attributes.id,
             extentOnExit = this.map.extent;
 
+        // Deactivate the current subregion if one is active
         if (this.currentRegionId) {
             if (this.currentRegionId === newRegionId) {
                 return;
@@ -100,7 +101,9 @@
             var oldRegion = _.findWhere(this.subregions.areas, { id: this.currentRegionId });
             // Use the full extent when exiting this subregion
             extentOnExit = this.initialExtent;
-            deactivateSubRegion(this, this.map.extent, oldRegion);
+            if (this.currentHeader) {
+                this.currentHeader.close();
+            }
         }
 
         this.currentRegionId = newRegionId;
@@ -120,10 +123,6 @@
         changeSubregionActivation(subRegionManager.deactivateCallbacks, subRegionLayerAttributes);
         subRegionManager.map.setExtent(mapExtent);
         subRegionManager.subRegionLayer.show();
-
-        if (subRegionManager.currentHeader) {
-            subRegionManager.currentHeader.remove();
-        }
     }
 
     function changeSubregionActivation(callbacks, subRegionLayerAttributes) {
@@ -292,17 +291,13 @@
         },
 
         activateSubregion: function(e) {
-            // Don't reset the current region id when activting a subregion
-            // when another is activated.  This is how we tell that the "last"
-            // extent should be the full extent, not this current regions extent
-            this.close(false);
             this.subRegionManager.initializeSubregion(e.target.value, Polygon);
         },
 
         deactivateSubregion: function() {
             if ('map-' + N.app.models.screen.get('mainPaneNumber') ===
                     this.subRegionManager.map.id) {
-                this.close();
+                this.close(true);
             }
         },
 
@@ -317,6 +312,9 @@
 
             this.deactivateFn(oldRegion);
 
+            // Don't reset the current region id when activting a subregion
+            // when another is activated.  This is how we tell that the "last"
+            // extent should be the full extent, not this current regions extent
             if (resetCurrentRegionId) {
                 this.subRegionManager.currentRegionId = null;
             }
