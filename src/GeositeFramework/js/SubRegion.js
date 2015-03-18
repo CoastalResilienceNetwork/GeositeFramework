@@ -72,6 +72,8 @@
 
             self.subRegionLayer.on('click', function (e) {
                 self.activateSubRegion(e.graphic, Polygon);
+
+                e.stopPropagation();
             });
         };
     }
