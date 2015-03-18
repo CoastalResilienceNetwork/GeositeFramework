@@ -235,7 +235,7 @@ define(["jquery", "use!underscore"],
                         node.cls = "pluginLayerSelector-layer";
                     }
                 } else {
-                    node.description = serviceData.description || serviceData.serviceDescription || "No description or metadata available for this map service.";
+                    node.description = serviceConfig.description || serviceData.description || serviceData.serviceDescription || "No description or metadata available for this map service.";
                     node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
                     node.params = { "opacity": node.opacity };
                     node.extent = new esri.geometry.Extent(serviceData.fullExtent);
