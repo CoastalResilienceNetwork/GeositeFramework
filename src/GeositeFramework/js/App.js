@@ -48,7 +48,8 @@
             });
 
             N.app.dispatcher.on('launchpad:activate-scenario', function(state) {
-                self.hashModels.triggerStateChange(state);
+                var forceHashChange = true;
+                self.hashModels.triggerStateChange(state, forceHashChange);
             });
 
             N.app.views.screen = new N.views.Screen({

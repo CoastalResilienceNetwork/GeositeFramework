@@ -31,6 +31,7 @@
 
             invokeOnPlugins(pane, 'subregionActivated', [activeRegion, pane]);
             invokeOnPlugins(pane, 'hibernate', [activeRegion]);
+            pane.get('plugins').each(function(plugin) { plugin.turnOff(); });
             setSidebarPluginVisibility(pane, activeRegion.availablePlugins);
         });
 
@@ -126,16 +127,14 @@
             pluginModel.initPluginObject(regionData, mapModel, esriMap);
         });
 
-        activateScenario(model, savedState);
+        activateScenario(model, savedState, model.get('activeSubregion'));
     }
 
-    function activateScenario(pane, state) {
-
+    function activateScenario(pane, stateOfPlugins, activeSubregion) {
         // Drop the plugin state setting until after the stack clears to prevent errors when the
         // map is not in a ready state.
         _.defer(function() {
-            var activeSubregion = pane.get('activeSubregion'),
-                mapNumber = pane.get('mapModel').get('mapNumber');
+            var mapNumber = pane.get('mapModel').get('mapNumber');
 
             if (activeSubregion) {
                 N.app.dispatcher.trigger('launchpad:activate-subregion', { 
@@ -143,12 +142,15 @@
                     preventZoom: true,
                     mapNumber: mapNumber
                 });
+            } else {
+                N.app.dispatcher.trigger('launchpad:deactivate-subregion');
             }
 
             pane.get('plugins').each(function(pluginModel) {
+                pluginModel.turnOff();
 
                 // Set the state of the plugin involved in this scenario
-                var stateWasSet = pane.setPluginState(pluginModel, state, activeSubregion);
+                var stateWasSet = pane.setPluginState(pluginModel, stateOfPlugins, activeSubregion);
                 if (stateWasSet) {
                     pluginModel.get('pluginObject').activate();
                 }
@@ -179,7 +181,7 @@
                     pluginState = paneState.stateOfPlugins;
                 }
 
-                activateScenario(self, pluginState);
+                activateScenario(self, pluginState, paneState.activeSubregion);
             });
 
             return initialize(this); 
