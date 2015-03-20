@@ -334,6 +334,7 @@ define(["jquery", "use!underscore"],
                         layerNodes[layerSpec.id].checked = false;
                         layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
                         layerNodes[layerSpec.id].layerId = layerSpec.id;
+						layerNodes[layerSpec.id].fetchMetadata = fetchMetadata;
                     }
                 }, this);
             }
