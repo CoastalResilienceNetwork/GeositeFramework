@@ -182,7 +182,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }());
 
             function setTreeWidthToContainerWidth() {
-                _tree.setWidth($(_container).width());
+                if (_tree) {
+                    _tree.setWidth($(_container).width());
+                }
             }
 
             function addSpinner() {
@@ -272,7 +274,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 // This makes the plugin panel's scrollbar work correctly.
                 // It also truncates too-wide tree node labels (adding "...").
                 _.defer(function () {
-                    var el = _tree.getEl();
+                    var el = _tree && _tree.getEl();
                     if (!el) { return; }
 
                     var innerElement = el.down('table.x-grid-table');

@@ -179,7 +179,7 @@
                     pluginState = paneState.stateOfPlugins;
                 }
 
-                activateScenario(self, paneState.stateOfPlugins);
+                activateScenario(self, pluginState);
             });
 
             return initialize(this); 

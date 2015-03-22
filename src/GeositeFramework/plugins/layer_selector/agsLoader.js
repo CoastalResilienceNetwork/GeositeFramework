@@ -555,7 +555,9 @@ define(["jquery", "use!underscore"],
                         if (serviceNode.type != "group-service") {
                             esriService = getServiceObject(serviceNode, map);
                             if (serviceNode.serviceType === "dynamic") {
-                                esriService.setVisibleLayers(myStateObject.visibleLayerIds);
+                                if (myStateObject.visibleLayerIds) {
+                                    esriService.setVisibleLayers(myStateObject.visibleLayerIds);
+                                }
                                 _.each(serviceNode.children, function(child) {
                                     if (_.contains(myStateObject.visibleLayerIds, child.layerId)) {
                                         child.checked = true;
