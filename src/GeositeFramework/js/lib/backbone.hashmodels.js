@@ -287,10 +287,10 @@ Backbone.HashModels = (function(Backbone, _, $){
         }
     };
 
-    var handleHashChanged = function (hash) {
+    var handleHashChanged = function (hash, force) {
         var newState = {};
         var newStateString = '';
-        if (hash === stateString) {
+        if (hash === stateString && !force) {
             return;
         }
         if (hash) {
@@ -413,12 +413,11 @@ Backbone.HashModels = (function(Backbone, _, $){
                 state = _.extend(state, pendingState);
                 stateString = encodeStateObject(state);
             }
-            updateHash(stateString);
-            HashModels.trigger('change', stateString);
+            this.triggerStateChange(stateString);
         },
 
-        triggerStateChange: function(hash) {
-            handleHashChanged(hash);
+        triggerStateChange: function(stateString, force) {
+            handleHashChanged(stateString, force);
         },
 
         decodeStateObject: decodeStateObject,

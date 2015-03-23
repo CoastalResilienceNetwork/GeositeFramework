@@ -104,7 +104,8 @@
             // Use the full extent when exiting this subregion
             extentOnExit = this.initialExtent;
             if (this.currentHeader) {
-                this.currentHeader.close();
+                var keepCurrentRegionId = true;
+                this.currentHeader.close(keepCurrentRegionId);
             }
         }
 
@@ -121,9 +122,8 @@
         }
     }
 
-    function deactivateSubRegion(subRegionManager, mapExtent, subRegionLayerAttributes) {
+    function deactivateSubRegion(subRegionManager, subRegionLayerAttributes) {
         changeSubregionActivation(subRegionManager.deactivateCallbacks, subRegionLayerAttributes);
-        subRegionManager.map.setExtent(mapExtent);
         subRegionManager.subRegionLayer.show();
     }
 
@@ -227,10 +227,10 @@
                 // but we don't want it to be the $el of the view.
                 $container: $mapContainer,
                 subRegionManager: subRegionManager,
+                extentOnExit: extentOnExit,
                 deactivateFn: _.partial(
                     deactivateSubRegion,
-                    subRegionManager,
-                    extentOnExit
+                    subRegionManager
                 )
             });
 
@@ -245,6 +245,7 @@
             this.template = N.app.templates['template-subregion'];
             this.$container = this.options.$container;
             this.deactivateFn = this.options.deactivateFn;
+            this.extentOnExit = this.options.extentOnExit;
             this.subRegionManager = this.options.subRegionManager;
             this.mapControlsToAdjust = [
                '.control-container',
@@ -255,7 +256,7 @@
         },
 
         events: {
-            'click .leave a': 'close',
+            'click .leave a': 'zoomOutAndClose',
             'change .header-region-selection': 'activateSubregion'
         },
 
@@ -299,11 +300,16 @@
         deactivateSubregion: function() {
             if ('map-' + N.app.models.screen.get('mainPaneNumber') ===
                     this.subRegionManager.map.id) {
-                this.close(true);
+                this.close();
             }
         },
 
-        close: function (resetCurrentRegionId) {
+        zoomOutAndClose: function() {
+            this.subRegionManager.map.setExtent(this.extentOnExit);
+            this.close();
+        },
+
+        close: function (keepCurrentRegionId) {
             this.remove();
             this.stopListening();
             this.toggleMapControlPositions();
@@ -317,7 +323,7 @@
             // Don't reset the current region id when activting a subregion
             // when another is activated.  This is how we tell that the "last"
             // extent should be the full extent, not this current regions extent
-            if (resetCurrentRegionId) {
+            if (!keepCurrentRegionId) {
                 this.subRegionManager.currentRegionId = null;
             }
         }

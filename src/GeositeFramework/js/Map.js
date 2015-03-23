@@ -107,7 +107,10 @@ require(['use!Geosite',
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
-        
+
+        view.esriMap.on('extent-change', function() {
+           view.model.set('extent', view.esriMap.extent, { 'silent': true });
+        });
 
         // Wait for the map to load
         dojo.connect(esriMap, "onLoad", function () {
