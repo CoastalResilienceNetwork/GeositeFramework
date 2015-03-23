@@ -747,7 +747,7 @@ table.esriLegendLayerLabel tbody tr td {
 .tinner {
     overflow: hidden;
     padding: 0!important;
-    min-height: 320px;
+    min-height: 380px!important;
     width: 100%!important;
 }
 
@@ -764,6 +764,7 @@ table.esriLegendLayerLabel tbody tr td {
 
 .popover, .tcontent, .popover-content{
     height: 100%;
+    max-height: 600px;
 }
 
 .popover-header{
@@ -791,6 +792,7 @@ table.esriLegendLayerLabel tbody tr td {
     padding: 14px 0;
     overflow-y: auto;
     height: 90%;
+    max-height: 548px;
 }
 .popover .row{
     width: 100%;
