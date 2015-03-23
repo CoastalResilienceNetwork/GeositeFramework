@@ -405,7 +405,11 @@
                             <ul>
                                 <% _.each(category.issues, function(issue) { %>
                                     <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
-                                        <i class="<%= issue.faIcon %>"></i>
+                                        <i class="<%= issue.faIcon %>" 
+                                            <% if (issue.faSize) { %>
+                                                style="font-size:<%= issue.faSize %>px"
+                                            <% } %>
+                                        ></i>
                                          <%= issue.name %>
                                     </li>
                                 <% }); %>
