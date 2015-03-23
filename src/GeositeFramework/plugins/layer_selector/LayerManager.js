@@ -27,6 +27,7 @@ define([
             this.hideAllLayers = function (map) { hideAllLayersForNode(_treeRootNode, map); };
             this.setServiceState = function (stateObject, map) { setServiceStateForNode(_treeRootNode, stateObject, map); };
             this.getServiceState = function () { return getServiceStateForNode (_treeRootNode); };
+            this.clearServiceState = function () { clearServiceStateForNode(_treeRootNode); };
 
 
             /*
@@ -153,6 +154,7 @@ define([
 
             function makeRootNode() {
                 var node = {
+                    name: 'root',
                     expanded: true,
                     children: []
                 };
@@ -240,6 +242,15 @@ define([
                 }
                 saveServiceStateForNodeInner(rootNode, stateObject);
                 return stateObject;
+            }
+
+            function clearServiceStateForNode(node) {
+                // You don't want to collapse the root node or nothing will be visible.
+                if (node !== _treeRootNode) {
+                    node.checked = false;
+                    node.expanded = false;
+                }
+                _.each(node.children, clearServiceStateForNode);
             }
         };
         return LayerManager;
