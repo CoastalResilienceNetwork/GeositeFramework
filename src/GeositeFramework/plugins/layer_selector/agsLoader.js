@@ -556,6 +556,7 @@ define(["jquery", "use!underscore"],
                             esriService = getServiceObject(serviceNode, map);
                             if (serviceNode.serviceType === "dynamic") {
                                 if (myStateObject.visibleLayerIds) {
+                                    serviceNode.visibleLayerIds = myStateObject.visibleLayerIds;
                                     esriService.setVisibleLayers(myStateObject.visibleLayerIds);
                                 }
                                 _.each(serviceNode.children, function(child) {

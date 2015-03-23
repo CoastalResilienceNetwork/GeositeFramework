@@ -118,6 +118,7 @@ define([
                 }
 
                 this._layerManager.hideAllLayers(this.map);
+                this._layerManager.clearServiceState();
                 this._ui.uncheckAndCollapse();
                 this._currentState = {};
             },
