@@ -12,7 +12,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _$filterInput = null,
                 _$treeContainer = null,
                 _$layerDialog = null,
+                _store = null,
                 _tree = null,
+                _treeRootNode = null,
                 _justClickedItemIcon = false,
                 _justClickedZoomIcon = false,
                 _isRendered = false,
@@ -30,7 +32,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 addZoomButtons(rootNode);
                 addDownloadButtons(rootNode);
                 wrapText(rootNode);
-                _tree = createTree(rootNode);
+                _store = createTreeStore(rootNode);
+                _tree = createTree(_store);
+                _treeRootNode = rootNode;
                 _tree.on("checkchange", onCheckboxChanged, this);
                 _tree.on("afteritemexpand", onItemExpanded, this);
                 _tree.on("itemclick", onItemClick, this);
@@ -46,6 +50,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             this.display = function () {
                 renderExtTree();
+                syncUI();
 
                 if (_$filterInput) {
                     _$filterInput.focus();
@@ -70,10 +75,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
 
             this.uncheckAndCollapse = function () {
                 _tree.collapseAll();
-                _tree.getRootNode().cascadeBy(function () {
-                    if (this.get('checked') === true) {
-                        this.set('checked', false);
-                    }
+                _store.getRootNode().cascadeBy(function() {
+                    this.set('checked', false);
                 });
                 onContentSizeChanged();
             };
@@ -229,16 +232,19 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 mixins: { treeFilter: 'layer_selector.lib.TreeFilter' }
             });
 
-            function createTree(rootNode) {
+            function createTreeStore(rootNode) {
                 var store = Ext.create('Ext.data.TreeStore', {
                     root: rootNode,
-                    fields: ['text', 'leaf', 'cls', 'url', 'layerId']
+                    fields: ['text', 'name', 'leaf', 'cls', 'url', 'layerId']
                 });
                 // Each TreeStore node's "raw" property has a copy of the node it was created from,
                 // but without the "children" property. Restore "children" so LayerManager can 
                 // continue to traverse and modify the "raw" tree.
                 restoreChildren(store.tree.root);
+                return store;
+            }
 
+            function createTree(store) {
                 var tree = Ext.create('FilteredTreePanel', {
                     store: store,
                     rootVisible: false,
@@ -411,6 +417,46 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     _tree.filterByText(text);
                 }
                 onContentSizeChanged();
+            }
+
+            function syncUI() {
+                if (_store) {
+                    var nodesByName = flattenTree(_treeRootNode);
+                    _store.getRootNode().cascadeBy(function(treeNode) {
+                        var layerName = treeNode.get('name'),
+                            dataNode = nodesByName[layerName];
+                        if (dataNode) {
+                            if (!!dataNode.expanded) {
+                                treeNode.expand();
+                            } else {
+                                treeNode.collapse();
+                            }
+
+                            if (dataNode.checked === true) {
+                                treeNode.set('checked', true);
+                            }
+
+                            if (dataNode.visibleLayerIds) {
+                                _.each(treeNode.childNodes, function(childNode) {
+                                    if (_.contains(dataNode.visibleLayerIds, childNode.get('layerId'))) {
+                                        childNode.set('checked', true);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Flatten hierarchy of nodes into a flat list indexed by name.
+            function flattenTree(node) {
+                var result = {};
+                if (node.name) {
+                    result[node.name] = node;
+                }
+                return _.reduce(node.children, function(acc, childNode) {
+                    return _.extend(acc, flattenTree(childNode));
+                }, result);
             }
 
             addSpinner();
