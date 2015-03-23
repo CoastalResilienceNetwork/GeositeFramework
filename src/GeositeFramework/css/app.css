@@ -124,6 +124,7 @@ input.code-like, textarea.code-like {
 .control-container {
     position: absolute;
     width: 100%;
+    z-index: 2;
 }
     .control-container.subregion-active {
         top: 40px;
