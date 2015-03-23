@@ -56,15 +56,6 @@
         },
         
         render: function () {
-            // iOS devices need setSelectionRange, IE does not have the method
-            function _doSelect($dom, el) {
-                el.focus();
-                if (el.setSelectionRange) {
-                    el.setSelectionRange(0, 99999);
-                } else {
-                    $dom.select();
-                }
-            }
 
             var view = this;
             
@@ -84,11 +75,8 @@
                     });
                     view.embedView.render();
 
-                    // Fancy DOM work to support iOS device "full text"
-                    // selection in the permalink box
-                    var $domElement = view.$('.permalink-textbox'),
-                        box = $domElement[0];
-                    _doSelect($domElement, box);
+                    var $domElement = view.$('.permalink-textbox');
+                    view.selectText($domElement);
 
                     $domElement.mouseup(
                         function() {
@@ -112,7 +100,28 @@
         },
 
         toggleLongPermalink: function() {
-            this.$el.find('#long-permalink-textbox').toggle();
+            var $textbox = this.$el.find('#long-permalink-textbox');
+            $textbox.toggle();
+            this.selectText($textbox)
+        },
+
+        // Fancy DOM work to support iOS device "full text"
+        // selection in the permalink box
+        selectText: function($dom) {
+            var el;
+            if ($dom.length) {
+                el = $dom[0];
+            } else {
+                return;
+            }
+
+            // iOS devices need setSelectionRange, IE does not have the method
+            el.focus();
+            if (el.setSelectionRange) {
+                el.setSelectionRange(0, 99999);
+            } else {
+                $dom.select();
+            }
         }
     }); 
 
