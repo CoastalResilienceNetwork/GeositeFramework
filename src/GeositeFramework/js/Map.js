@@ -78,7 +78,13 @@ require(['use!Geosite',
 
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
-        view.model.on('change:extent',               function () { loadExtent(view); });
+        view.model.on('change:extent', function () {
+            var currentExtent = view.model.get('extent');
+
+            if (!_.isEqual(currentExtent, view.esriMap.extent)) {
+                loadExtent(view);
+            }
+        });
         N.app.dispatcher.on('launchpad:free-explore', function (e) { freeExplore(e, view); });
 
         // Configure the esri proxy, for (at least) 2 cases:
@@ -108,8 +114,13 @@ require(['use!Geosite',
         loadExtent(view);
         selectBasemap(view);
 
-        view.esriMap.on('extent-change', function() {
-           view.model.set('extent', view.esriMap.extent);
+        var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
+        dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {
+            var currentExtent = view.model.get('extent');
+
+            if (!_.isEqual(currentExtent, newExtent)) {
+                throttledSet();
+            }
         });
 
         // Wait for the map to load
