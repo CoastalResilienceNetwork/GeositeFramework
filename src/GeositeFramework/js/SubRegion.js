@@ -146,7 +146,15 @@
         _.each(subregions.areas, function(subregion) {
             var geom = new esri.geometry.Polygon(subregion.shape);
             var symbol = new esri.symbol.SimpleFillSymbol();
+            var outline = new esri.symbol.SimpleLineSymbol(
+                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                    new dojo.Color(subregion.outlineColor || subregions.outlineColor), 2);
+
             symbol.setColor(new dojo.Color(subregion.color || subregions.color));
+            symbol.setOutline(outline);
+            if (subregion.noFill) {
+                symbol.setColor(new dojo.Color([0, 0, 0, 0]));
+            }
 
             var infoTemplate = new esri.InfoTemplate();
             // display is the field containing the subregion name
