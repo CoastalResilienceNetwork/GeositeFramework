@@ -171,7 +171,8 @@
                                             "name": { "type": "string" },
                                             "description": { "type": "string" },
                                             "saveCode": { "type": "string" },
-                                            "faIcon": { "type": "string" }
+                                            "faIcon": { "type": "string" },
+                                            "faSize": { "type": "number" }
                                         }
                                     }
                                 }
