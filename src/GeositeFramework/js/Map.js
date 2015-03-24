@@ -109,7 +109,7 @@ require(['use!Geosite',
         selectBasemap(view);
 
         view.esriMap.on('extent-change', function() {
-           view.model.set('extent', view.esriMap.extent, { 'silent': true });
+           view.model.set('extent', view.esriMap.extent);
         });
 
         // Wait for the map to load
