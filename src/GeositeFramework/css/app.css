@@ -864,6 +864,7 @@ table.esriLegendLayerLabel tbody tr td {
     line-height: 1;
     text-align: center;
     transition: background-color 0.3s ease-out;
+    position: relative;
 }
 
 .launchpad .well ul li i{
@@ -885,12 +886,21 @@ table.esriLegendLayerLabel tbody tr td {
     padding: 16px;
     font-size: 24px;
     text-align: center;
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
 }
 
 .launchpad ul li label{
     display: block;
     font-size: 12px;
     text-align: center;
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    right: 0;
+    color: inherit;
 }
 
 /*Launchpad Media Queries*/
@@ -982,28 +992,30 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     height: 50px;
     background-color: rgba(194, 32, 32, 0.5);
 }
-    .subregion-header p {
-        color: #fff;
-        opacity: 1.0;
-        padding: 15px;
-        display: inline-block;
-    }
+    
+.subregion-header p {
+    color: #fff;
+    opacity: 1.0;
+    padding: 11px;
+    display: inline-block;
+}
 
-    .subregion-header .leave {
-        float: right;
-        width: 200px;
-    }
+.subregion-header .leave {
+    float: right;
+    width: 200px;
+}
 
-        .subregion-header .leave i {
-          padding-right: 5px;
-        }
-    .subregion-header .header-region-selection  {
-        width: 250px;
-    }
+.subregion-header .leave i {
+  padding-right: 5px;
+}
 
-    .subregion-header a, a.visited, a.link, a.active {
-        color: #fff;
-    }
+.subregion-header .header-region-selection  {
+    width: 250px;
+}
+
+.subregion-header a, a.visited, a.link, a.active {
+    color: #fff;
+}
 
 .subregion-border-box {
     position: absolute;
@@ -1013,4 +1025,15 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     border-top: none;
     top: 50px;
     bottom: 0px;
+}
+
+.subregion-header select{
+    height: 28px;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 12px;
+    position: relative;
 }
