@@ -70,6 +70,7 @@
             "required": false,
             "properties": {
                 "color": {"type": "string", "required": false},
+                "outlineColor": {"type": "string", "required": false},
                 "opacity": {"type": "number", "required": false},
                 "clickToFocus": {"type": "boolean", "required": true},
                 "hideByDefault": {"type": "boolean", "required": false},
@@ -81,6 +82,8 @@
                         "details": {"type": "string", "required": true},
                         "shape": {"type": "array", "required": true},
                         "color": {"type": "string", "required": false},
+                        "outlineColor": {"type": "string", "required": false},
+                        "noFill": {"type": "boolean", "required": false},
                         "availablePlugins": {
                             "type": "array",
                             "required": false,
