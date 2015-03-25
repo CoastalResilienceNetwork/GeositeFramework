@@ -175,13 +175,15 @@
             N.app.dispatcher.on('launchpad:activate-scenario', function(scenarioState) {
                 var state = Backbone.HashModels.decodeStateObject(scenarioState),
                     paneState = state['pane' + self.get('paneNumber')],
-                    pluginState = {};
+                    pluginState = {},
+                    activeSubregion = null;
 
                 if (paneState && paneState.stateOfPlugins) {
                     pluginState = paneState.stateOfPlugins;
+                    activeSubregion = paneState.activeSubregion;
                 }
 
-                activateScenario(self, pluginState, paneState.activeSubregion);
+                activateScenario(self, pluginState, activeSubregion);
             });
 
             return initialize(this); 
