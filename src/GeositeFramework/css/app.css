@@ -222,6 +222,10 @@ input.code-like, textarea.code-like {
             border: none;
             color: transparent;
         }
+        .content .sidebar-plugin .plugin-launcher div {
+            padding: 0 12px;
+        }
+
     .content .plugin-container-outer {
         position: absolute;
         border: 5px #444 solid;
@@ -679,16 +683,16 @@ table.esriLegendLayerLabel tbody tr td {
 .mCSB_scrollTools .mCSB_draggerRail,
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
     float: right;
-    width: 5px;
+    width: 10px;
 }
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-    background: #62C5C9;
-    background: rgba(98,197,201,.65);
+    background: #fff;
+    background: rgba(255, 255, 255, .85);
 }
 .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar,
 .mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar {
-    background: #62C5C9;
-    background: rgba(98,197,201,.95);
+    background: #fff;
+    background: rgba(255, 255, 255, .95);
 }
 
 /* -----------------------------------------
