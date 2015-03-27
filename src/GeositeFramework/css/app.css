@@ -589,7 +589,7 @@ input.code-like, textarea.code-like {
     position: absolute;
     bottom: 45px;
     right: 105px;
-    width: 180px;
+    width: 250px;
     height: 200px;
     z-index: 1;
     font-weight: bold;
