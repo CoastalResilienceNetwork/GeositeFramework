@@ -101,9 +101,16 @@
                     pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
                 });
 
-            // Load plugin only if it passes a compliance check
+            // Load plugin only if it passes a compliance check ...
             if (plugin.isCompliant()) {
-                plugins.add(plugin);
+                // ... and if we're on map 2, and the plugin isn't on the blacklist
+                if (model.get('paneNumber') === 1) {
+                    if (getPluginMap2Availability(plugin.getId())) {
+                        plugins.add(plugin);
+                    }
+                } else {
+                    plugins.add(plugin);
+                }
             } else {
                 console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' + 
                     pluginObject.toolbarName +
@@ -112,6 +119,14 @@
         });
 
         model.set('plugins', plugins);
+    }
+
+    function getPluginMap2Availability(pluginId) {
+        if (_.indexOf(N.app.data.region.map2PluginBlacklist, pluginId) === -1) {
+            return true;
+        }
+
+        return false;
     }
 
     // initPlugins() is separate from createPlugins() because:
