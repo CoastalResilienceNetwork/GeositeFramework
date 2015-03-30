@@ -374,12 +374,12 @@
                 <div class="row">
                     <p><%= description %></p>
                 </div>
-                <% if (showSubRegions) { %>
+                <% if (typeof(showSubRegions) !== "undefined" && showSubRegions) { %>
                 <div class="row">
                     <div class="well">
                         <div class="description">
                             <h3>Pick a Geography</h3>
-                            <p>Picking a Geography allows you to Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt</p>
+                            <p><% if (typeof(subRegionDescription) !== "undefined") { %> <%= subRegionDescription %> <% } %></p>
                         </div>
                         <div class="thumbs">
                             <ul>

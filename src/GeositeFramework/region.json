@@ -96,6 +96,7 @@
             "title": "Getting Started",
             "description": "This is the launchpad description",
             "showSubRegions": true,
+            "subRegionDescription": "These are the subregions you can launch. Or you can just explore the map. It is up to you.",
             "showByDefault": true,
             "categories": [
               {
