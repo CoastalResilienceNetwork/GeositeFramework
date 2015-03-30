@@ -158,7 +158,9 @@
                     mapNumber: mapNumber
                 });
             } else {
-                N.app.dispatcher.trigger('launchpad:deactivate-subregion');
+                N.app.dispatcher.trigger('launchpad:deactivate-subregion', {
+                    mapNumber: mapNumber
+                });
             }
 
             pane.get('plugins').each(function(pluginModel) {

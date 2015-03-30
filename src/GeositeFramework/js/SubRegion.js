@@ -259,8 +259,7 @@
                '.control-container',
                '.esriSimpleSlider'
             ];
-            this.listenTo(N.app.dispatcher, 'launchpad:deactivate-subregion',
-                _.bind(this.deactivateSubregion, this));
+            this.listenTo(N.app.dispatcher, 'launchpad:deactivate-subregion', this.deactivateSubregion);
         },
 
         events: {
@@ -305,9 +304,14 @@
             this.subRegionManager.initializeSubregion(e.target.value, Polygon);
         },
 
-        deactivateSubregion: function() {
-            if ('map-' + N.app.models.screen.get('mainPaneNumber') ===
-                    this.subRegionManager.map.id) {
+        deactivateSubregion: function(e) {
+            var viewMapPane = this.subRegionManager.map.id,
+                activeMapPane = 'map-' + N.app.models.screen.get('mainPaneNumber'),
+                eventMapPane = 'map-' + e.mapNumber;
+
+            // Only deactivate the subregion if this view is managing the active pane and
+            // the event was triggered for the pane that this view is managing.
+            if (activeMapPane === viewMapPane && eventMapPane === viewMapPane) {
                 this.close();
             }
         },
