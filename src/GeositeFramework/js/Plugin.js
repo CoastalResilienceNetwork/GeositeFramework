@@ -525,6 +525,7 @@ require(['use!Geosite',
                     label: "Continue",
                     onClick: function() {
                         pluginModel.set('displayHelp', false);
+                        pluginObject.resize();
                     }
                 }, buttonnode);
             }
