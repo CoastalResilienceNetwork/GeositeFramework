@@ -383,9 +383,9 @@
                         </div>
                         <div class="thumbs">
                             <ul>
-                                <li class="free-explore"><i class="fa fa-globe"></i>Explore the map
+                                <li class="free-explore"><i class="fa fa-globe"></i><label>Explore the map</label></li>
                                 <% _.each(subregions.areas, function(subregion) { %>
-                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><%= subregion.display %></li>
+                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
                                 <% }); %>
                             </ul>
 
@@ -410,7 +410,7 @@
                                                 style="font-size:<%= issue.faSize %>px"
                                             <% } %>
                                         ></i>
-                                         <%= issue.name %>
+                                         <label><%= issue.name %></label>
                                     </li>
                                 <% }); %>
                             </ul>
