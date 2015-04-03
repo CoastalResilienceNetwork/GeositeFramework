@@ -114,6 +114,11 @@
             "type": "array",
             "items": {"type": "string"}
         },
+        "map2PluginBlacklist": {
+            "type": "array",
+            "items": {"type": "string"},
+            "required": false
+        },
         "print": {
             "type": "object",
             "properties": {
