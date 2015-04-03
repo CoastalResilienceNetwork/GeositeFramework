@@ -69,6 +69,7 @@
             "type": "object",
             "required": false,
             "properties": {
+                "hideAtZoomLevel": {"type": "number", "required": false},
                 "color": {"type": "string", "required": false},
                 "outlineColor": {"type": "string", "required": false},
                 "opacity": {"type": "number", "required": false},

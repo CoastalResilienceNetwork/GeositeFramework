@@ -27,6 +27,7 @@
         31.653381399664
     ],
     "subregions": {
+        "hideAtZoomLevel": 8,
         "color": "#00C5CD",
         "outlineColor": "#008000",
         "opacity": 0.2,
