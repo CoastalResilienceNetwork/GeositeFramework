@@ -27,7 +27,11 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             this.render = function (rootNode) {
                 $(_container).empty();
 
-                rootNode = deracinate(rootNode);
+                // Avoid deracinating the root node, because if there is only 1 layer
+                // in the layer selector it will become the new root node, and
+                // the tree will appear empty since we do not render the tree root.
+                rootNode.children = _.map(rootNode.children, deracinate);
+
                 highlightNewNodes(rootNode);
                 addZoomButtons(rootNode);
                 addDownloadButtons(rootNode);
