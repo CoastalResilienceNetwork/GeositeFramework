@@ -14,6 +14,7 @@
         self.map = map;
         self.subregions = subregions;
         self.currentRegionId = null;
+        self.hasBeenToggledOff = subregions.hideByDefault;
 
         // List of functions to call when a sub-region is de/activated
         self.activateCallbacks = [];
@@ -44,6 +45,10 @@
         // Event fired from the subregion-toggle plugin on click
         N.app.dispatcher.on('subregion-toggle:toggle', function(e) {
             toggleSubRegions(e, self.map.id, self.subRegionLayer);
+            self.hasBeenToggledOff = !self.subRegionLayer.visible;
+            self.hasBeenToggledOnWhileHidden =
+                self.subRegionLayer.visible &&
+                self.map.getZoom() >= self.subregions.hideAtZoomLevel;
         });
 
         N.app.dispatcher.on('launchpad:activate-subregion', function(e) {
@@ -76,6 +81,16 @@
                 e.stopPropagation();
             });
         };
+
+        if (subregions.hideAtZoomLevel) {
+            map.on('zoom-end', function(e) {
+                if (e.level >= subregions.hideAtZoomLevel && !self.hasBeenToggledOnWhileHidden) {
+                    self.subRegionLayer.hide();
+                } else if (!self.hasBeenToggledOff) {
+                    self.subRegionLayer.show();
+                }
+            });
+        }
     }
 
     N.controllers.SubRegion.prototype.onActivated = function(callback) {
