@@ -58,30 +58,49 @@ define([
             _ui: null,
             _currentState: {},
 
-            initialize: function (frameworkParameters) {
-                declare.safeMixin(this, frameworkParameters);
+            // Debouce the initialization in case a region switch happens rapidly, ie,
+            // Region A -> Deactivate -> Region B.  No need to reload data for "main"
+            // in that temporary Deactivation.
+            initialize: _.debounce(function (frameworkParameters, currentRegion) {
+                // Only mixin the params if they're initially supplied by the framework
+                var self = this;
+
+                if (frameworkParameters) {
+                    declare.safeMixin(this, frameworkParameters);
+                }
+
+                // If the layer exists and we are re-initializing, make sure no layers
+                // remain from the previous instance
+                if (this._layerManager) { 
+                    this._layerManager.hideAllLayers();
+                }
+
                 this._layerManager = new LayerManager(this.app);
+                $(this.container).empty();
                 this._ui = new Ui(this.container, this.map, templates);
 
                 // Load layer sources, then render UI passing the tree of layer nodes
                 var self = this;
-                this._layerManager.load(this.getLayersJson(), function (tree) {
-                    if (self._currentState) {
+                this._layerManager.load(this.getLayersJson(), (currentRegion || 'main'), function (tree) {
+
+                    if (!_.isEmpty(self._currentState)) {
                         self._layerManager.setServiceState(self._currentState, self.map);
                     }
                     self._ui.render(tree);
                     $('a.pluginLayerSelector-clear', self.container).click(function() {
                         self.clearAll();
                     });
-                });
-            },
 
-            getLayersJson: function() {
+                });
+
+            }, 300),
+
+            getLayersJson: function(){
                 return layerSourcesJson;
             },
 
-            activate: function () {
-                if (this._currentState) {
+            activate: function (activeSubregion) {
+                if (!_.isEmpty(this._currentState) && !activeSubregion) {
                     this._layerManager.setServiceState(this._currentState, this.map);
                 }
                 this._ui.display();
@@ -113,7 +132,7 @@ define([
             },
 
             clearAll: function () {
-                if (! this._ui.isRendered()) {
+                if (! this._ui || ! this._ui.isRendered()) {
                     return;
                 }
 
@@ -124,11 +143,12 @@ define([
             },
             
             subregionActivated: function(subregion) {
-                console.debug('now using subregion ' + subregion.display);
+                this.initialize(null, subregion.id);
             },
             
             subregionDeactivated: function(subregion) {
-                console.debug('now leaving subregion ' + subregion.display);
+                this.clearAll();
+                this.initialize(null, 'main');
             }
 
         });

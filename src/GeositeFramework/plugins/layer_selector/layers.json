@@ -1,6 +1,51 @@
 [
     {
         "agsSource": {
+            "availableInRegions": ["galveston"],
+            "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
+            "folderTitle": "Galvestone Local",
+            "folders": [
+                {
+                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
+                    "name": "",  // Don't show a folder for these services
+                    "services": [
+                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5,
+                            "layerMetadata": [
+                                {"id":4, "parentLayerId":3, "downloadUrl": "/static/global_cy_econ1.json"}
+                        ]}
+                    ]
+                },
+                {
+                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
+                    "name": "",
+                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
+                    "groupAsService": true,  // Show folder as if it were a service (with a description and a checkbox)
+                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
+                    "services": [
+                        { "name": "Families_in_Poverty_Percentage", "type":"tiled", "opacity": 0.75 }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "agsSource": {
+            "availableInRegions": ["the-ocean", "main"],
+            "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
+            "folderTitle": "The Ocean Local",
+            "folders": [
+                {
+                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
+                    "name": "",  // Don't show a folder for these services
+                    "services": [
+                        { "name": "Habitats", "type":"dynamic", "opacity": 0.5 }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "agsSource": {
             "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
             "folderTitle": "Coastal Resilience (National)",
             "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },

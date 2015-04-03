@@ -26,19 +26,21 @@
 
     function initializeSubregionDisplays(mapModel, pane)
     {
+        function turnOffPlugins() {
+            pane.get('plugins').invoke('turnOff');
+        }
+
         mapModel.on('subregion-activate', function(activeRegion) {
             pane.set('activeSubregion', activeRegion);
-
+            turnOffPlugins();
             invokeOnPlugins(pane, 'subregionActivated', [activeRegion, pane]);
-            invokeOnPlugins(pane, 'hibernate', [activeRegion]);
-            pane.get('plugins').each(function(plugin) { plugin.turnOff(); });
             setSidebarPluginVisibility(pane, activeRegion.availablePlugins);
         });
 
         mapModel.on('subregion-deactivate', function(deactivatedRegion) {
             pane.set('activeSubregion', null);
-
             invokeOnPlugins(pane, 'subregionDeactivated', [deactivatedRegion, pane]);
+            turnOffPlugins();
             showAllSidebarPlugins(pane);
         });
     }
@@ -142,36 +144,33 @@
             pluginModel.initPluginObject(regionData, mapModel, esriMap);
         });
 
-        activateScenario(model, savedState, model.get('activeSubregion'));
+        // Wait a second before activating a permaline (scenario) to ensure the map
+        // layer is loaded.
+        _.delay(function() {
+            activateScenario(model, savedState, model.get('activeSubregion'));
+        }, 1000);
     }
 
     function activateScenario(pane, stateOfPlugins, activeSubregion) {
-        // Drop the plugin state setting until after the stack clears to prevent errors when the
-        // map is not in a ready state.
-        _.defer(function() {
-            var mapNumber = pane.get('mapModel').get('mapNumber');
+        if (activeSubregion) {  
+            N.app.dispatcher.trigger('launchpad:activate-subregion', { 
+                id: activeSubregion.id,
+                preventZoom: true,
+                mapNumber: mapNumber
+            });
+        } else {
+            N.app.dispatcher.trigger('launchpad:deactivate-subregion');
+        }
 
-            if (activeSubregion) {
-                N.app.dispatcher.trigger('launchpad:activate-subregion', { 
-                    id: activeSubregion.id,
-                    preventZoom: true,
-                    mapNumber: mapNumber
-                });
-            } else {
-                N.app.dispatcher.trigger('launchpad:deactivate-subregion', {
-                    mapNumber: mapNumber
-                });
-            }
-
-            pane.get('plugins').each(function(pluginModel) {
-                pluginModel.turnOff();
-
-                // Set the state of the plugin involved in this scenario
+        // For each plugin, turn it off to remove any currently loaded state, then 
+        // once it is completely off, set the state of the plugin if it is participating
+        // in this scenario.  If it did have state, inform it that it is now active. 
+        pane.get('plugins').each(function(pluginModel) {
+            pluginModel.turnOff(function() {
                 var stateWasSet = pane.setPluginState(pluginModel, stateOfPlugins, activeSubregion);
                 if (stateWasSet) {
-                    pluginModel.get('pluginObject').activate();
+                    pluginModel.get('pluginObject').activate(activeSubregion);
                 }
-
             });
         });
     }
@@ -221,7 +220,7 @@
                         // Turn the plugin off in case it has currently loaded state
                         // which should be reset prior to setting the new state
                         pluginObject.hibernate();
-                        pluginModel.setState(pluginState, savedState.subregion);
+                        pluginModel.setState(pluginState, savedState.activeSubregion);
                         stateWasSet = true;
                     } else {
                         pluginObject.hibernate();
@@ -231,12 +230,7 @@
                 // If this plugin was selected, whether it set data or not,
                 // select the plugin to activate.
                 if (savedState.selectedPlugin === pluginModel.name()) {
-                    // Selecting the model immediately causes errors within 
-                    // backbone.picky so defer the selection.  I suspect this is
-                    // related to issue #288 as well.
-                    _.delay(function() {
-                        pluginModel.select();
-                    }, 0);
+                    pluginModel.select();
                 }
             }
 
