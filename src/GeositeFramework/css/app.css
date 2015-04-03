@@ -888,7 +888,7 @@ table.esriLegendLayerLabel tbody tr td {
 .launchpad ul li i{
     display: block;
     padding: 16px;
-    font-size: 24px;
+    font-size: 32px;
     text-align: center;
     position: absolute;
     top: 24px;
@@ -898,7 +898,8 @@ table.esriLegendLayerLabel tbody tr td {
 
 .launchpad ul li label{
     display: block;
-    font-size: 12px;
+    font-size: 14px;
+    padding: 0 2px;
     text-align: center;
     position: absolute;
     bottom: 6px;
