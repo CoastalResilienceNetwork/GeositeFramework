@@ -11,7 +11,8 @@ define(["jquery", "use!underscore"],
                 _makeContainerNode = null,
                 _makeLeafNode = null,
                 _onLayerSourceLoaded = null,
-                _onLayerSourceLoadError = null;
+                _onLayerSourceLoadError = null,
+                _currentStateCodeVersion = '1.1';
 
             // Load hierarchy of folders, services, and layers from an ArcGIS Server via its REST API.
             // The catalog root contains folders and/or services.
@@ -541,8 +542,36 @@ define(["jquery", "use!underscore"],
                 }
             }
 
+            // Service nodes can be added multiple times to a layer config, but with different
+            // children activated.  Create a unique key for a service+children combo so the
+            // state keys won't overwrite each other.  However, existing permalinks would break
+            // if they don't contain the hash based on child ids, so this function makes the
+            // decision on key name based on the presence of a version code embedded in the state.
+            // If no state is provided, it assumes you're generating a new code and will use 
+            // the current version.
+            function getServiceUniqueKey(serviceNode, stateObject) {
+                var childIds = _.pluck(serviceNode.children, 'layerId').join(''),
+                    comboKey = serviceNode.name + childIds;
+
+                if (stateObject && stateObject.version) {
+                    // State was passed in with a version
+                    if (stateObject.version === '1.1') {
+                        return comboKey;
+                    }
+                } else if (stateObject) {
+                    // State was passed in, but without a version.
+                    // Assume code predates versioning and give "original", just name
+                    return serviceNode.name; 
+                }
+                // State was not passed in, or the version was not 1.1 - use the new key
+                return comboKey;
+
+            }
+
             function setServiceState(serviceNode, stateObject, map) {
-                var myStateObject = stateObject[serviceNode.name], esriService;
+                var key = getServiceUniqueKey(serviceNode, stateObject),
+                    myStateObject = stateObject[key], esriService;
+
                 if (myStateObject) {
                     serviceNode.opacity = myStateObject.opacity;
                     serviceNode.checked = myStateObject.checked;
@@ -583,17 +612,23 @@ define(["jquery", "use!underscore"],
             }
 
             function saveServiceState(serviceNode, stateObject) {
-                stateObject[serviceNode.name] = {
+                var key = getServiceUniqueKey(serviceNode);
+
+                stateObject[key] = {
                     opacity: serviceNode.opacity,
                     checked: serviceNode.checked
                 };
                 if (serviceNode.esriService && !(_.isEqual(serviceNode.esriService.visibleLayers, [-1])) && (serviceNode.serviceType === "dynamic")) {
-                    stateObject[serviceNode.name].visibleLayerIds = getLayerIds(serviceNode.esriService);
+                    stateObject[key].visibleLayerIds = getLayerIds(serviceNode.esriService);
                 }
                 if (serviceNode.type === "group-service") {
-                    stateObject[serviceNode.name].visibleServices = _.map(serviceNode.children, function(child) {
+                    stateObject[key].visibleServices = _.map(serviceNode.children, function(child) {
                         return child.checked;
                     });
+                }
+
+                if (!stateObject.version) {
+                    stateObject.version = _currentStateCodeVersion;
                 }
             }
 
