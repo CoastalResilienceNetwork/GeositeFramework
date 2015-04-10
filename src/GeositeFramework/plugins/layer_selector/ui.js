@@ -20,7 +20,6 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _isRendered = false,
 
                 renderExtTree;
-
             // ------------------------------------------------------------------------
             // Public methods
 
@@ -47,6 +46,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 _isRendered = true;
                 this.display();
             };
+
+            this.cleanUp = function() {
+                if (_tree) {
+                    _tree.destroy();
+                    delete _tree;
+                }
+            }
 
             this.isRendered = function() {
                 return _isRendered;
@@ -428,7 +434,9 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     var nodesByName = flattenTree(_treeRootNode);
                     _store.getRootNode().cascadeBy(function(treeNode) {
                         var layerName = treeNode.get('name'),
-                            dataNode = nodesByName[layerName];
+                            uniqueName = layerName + _.pluck(treeNode.raw.children, 'layerId').join('.'),
+                            dataNode = nodesByName[uniqueName];
+
                         if (dataNode) {
                             if (!!dataNode.expanded) {
                                 treeNode.expand();
@@ -456,7 +464,8 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             function flattenTree(node) {
                 var result = {};
                 if (node.name) {
-                    result[node.name] = node;
+                    var unq = _.pluck(node.children, 'layerId').join('.');
+                    result[node.name + unq] = node;
                 }
                 return _.reduce(node.children, function(acc, childNode) {
                     return _.extend(acc, flattenTree(childNode));

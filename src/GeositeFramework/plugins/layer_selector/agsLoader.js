@@ -49,7 +49,7 @@ define(["jquery", "use!underscore"],
                         content: { f: "json" },
                         handleAs: "json",
                         callbackParamName: "callback",
-                        timeout: 3000
+                        timeout: 7000
                     }).then(function(results) {
                         return _.extend(result, { success: true, results: results });
                     }, function(error) {
@@ -189,7 +189,7 @@ define(["jquery", "use!underscore"],
                             content: { f: "json" },
                             handleAs: "json",
                             callbackParamName: "callback",
-                            timeout: 3000
+                            timeout: 7000
                         }).then(_.identity,
                             function(error) {
                                 return makeError("Error: Failed to load map service (" + error.message + ").");

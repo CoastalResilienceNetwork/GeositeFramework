@@ -58,13 +58,9 @@ define([
             _ui: null,
             _currentState: {},
 
-            // Debouce the initialization in case a region switch happens rapidly, ie,
-            // Region A -> Deactivate -> Region B.  No need to reload data for "main"
-            // in that temporary Deactivation.
-            initialize: _.debounce(function (frameworkParameters, currentRegion) {
+            initialize: function (frameworkParameters, currentRegion) {
                 // Only mixin the params if they're initially supplied by the framework
                 var self = this;
-
                 if (frameworkParameters) {
                     declare.safeMixin(this, frameworkParameters);
                 }
@@ -73,27 +69,52 @@ define([
                 // remain from the previous instance
                 if (this._layerManager) { 
                     this._layerManager.hideAllLayers();
+                    delete this._layerManager;
                 }
 
                 this._layerManager = new LayerManager(this.app);
                 $(this.container).empty();
-                this._ui = new Ui(this.container, this.map, templates);
 
-                // Load layer sources, then render UI passing the tree of layer nodes
-                var self = this;
-                this._layerManager.load(this.getLayersJson(), (currentRegion || 'main'), function (tree) {
+                // It's important to keep references of Ui locally scoped because
+                // it's possible to initialize the plugin again before the onLoaded
+                // function has been called, which might actually be swapping out the
+                // instance saved on this.  Give the version a unique id so to avoid
+                // confusion.  Also, the ext controls seem to hold on to memory so be
+                // explicit about removing references when re-initializing
+                if (this._ui) {
+                    this._ui.cleanUp();
+                    delete this._ui;
+                }
+
+                var ui = this._ui = new Ui(this.container, this.map, templates);
+                ui.instanceId = new Date().getTime();
+
+                var onLoaded = function (tree) {
 
                     if (!_.isEmpty(self._currentState)) {
                         self._layerManager.setServiceState(self._currentState, self.map);
                     }
-                    self._ui.render(tree);
+
+                    // Only render the tree when the local version is also the instance 
+                    // version.  This ignores earlier initializations if they haven't completed
+                    // yet.
+                    if (ui.instanceId == self._ui.instanceId) {
+                        ui.render(tree);
+                        delete ui;
+                    }
+
                     $('a.pluginLayerSelector-clear', self.container).click(function() {
                         self.clearAll();
                     });
+                };
 
-                });
+                // Load layer sources, then render UI passing the tree of layer nodes
+                var self = this,
+                    region = currentRegion || 'main';
+                    
+                this._layerManager.load(this.getLayersJson(), region, onLoaded);
 
-            }, 300),
+            },
 
             getLayersJson: function(){
                 return layerSourcesJson;
@@ -131,7 +152,7 @@ define([
                 this._currentState = state;
             },
 
-            clearAll: function () {
+            clearAll: _.debounce(function () {
                 if (! this._ui || ! this._ui.isRendered()) {
                     return;
                 }
@@ -140,7 +161,7 @@ define([
                 this._layerManager.clearServiceState();
                 this._ui.uncheckAndCollapse();
                 this._currentState = {};
-            },
+            }, 600, true),
             
             subregionActivated: function(subregion) {
                 this.initialize(null, subregion.id);
