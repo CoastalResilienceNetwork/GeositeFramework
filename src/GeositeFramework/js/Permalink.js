@@ -80,7 +80,7 @@
 
                     $domElement.mouseup(
                         function() {
-                            _doSelect($domElement, box);
+                            view.selectText($domElement);
                         }
                     );
                 },
