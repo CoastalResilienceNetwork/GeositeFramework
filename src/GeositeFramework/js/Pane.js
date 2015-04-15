@@ -152,6 +152,7 @@
     }
 
     function activateScenario(pane, stateOfPlugins, activeSubregion) {
+        var mapNumber = pane.get('mapModel').get('mapNumber');
         if (activeSubregion) {  
             N.app.dispatcher.trigger('launchpad:activate-subregion', { 
                 id: activeSubregion.id,
@@ -159,7 +160,7 @@
                 mapNumber: mapNumber
             });
         } else {
-            N.app.dispatcher.trigger('launchpad:deactivate-subregion');
+            N.app.dispatcher.trigger('launchpad:deactivate-subregion', {mapNumber: mapNumber});
         }
 
         // For each plugin, turn it off to remove any currently loaded state, then 

@@ -1,76 +1,76 @@
+
 [
     {
         "agsSource": {
             "availableInRegions": ["galveston"],
-            "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
-            "folderTitle": "Galvestone Local",
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Alabama",
             "folders": [
                 {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
-                    "name": "",  // Don't show a folder for these services
-                    "services": [
-                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5,
-                            "layerMetadata": [
-                                {"id":4, "parentLayerId":3, "downloadUrl": "/static/global_cy_econ1.json"}
-                        ]}
-                    ]
-                },
-                {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
                     "name": "",
-                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
-                    "groupAsService": true,  // Show folder as if it were a service (with a description and a checkbox)
-                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
                     "services": [
-                        { "name": "Families_in_Poverty_Percentage", "type":"tiled", "opacity": 0.75 }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "agsSource": {
-            "availableInRegions": ["the-ocean", "main"],
-            "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
-            "folderTitle": "The Ocean Local",
-            "folders": [
-                {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
-                    "name": "",  // Don't show a folder for these services
-                    "services": [
-                        { "name": "Habitats", "type":"dynamic", "opacity": 0.5 }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "agsSource": {
-            "url": "http://services.coastalresilience.org:6080/arcgis/rest/services",
-            "folderTitle": "Coastal Resilience (National)",
-            "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
-            "folders": [
-                {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/Global",
-                    "name": "",  // Don't show a folder for these services
-                    "services": [
-                        { "name": "Coastal_Hazards", "type":"dynamic", "opacity": 0.5,
-                            "layerMetadata": [
-                                {"id":4, "parentLayerId":3, "downloadUrl": "/static/global_cy_econ1.json"}
-                            ]},
-                        { "name": "Ecoregions_and_Provinces", "displayName": "Eco-regions and Provinces", "type":"dynamic", "opacity": 0.5 }
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Restore Coastal Alabama", "showLayers": [
+                                {"id":1, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://services.coastalresilience.org:6080/arcgis/rest/services/US",
                     "name": "",
-                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
-                    "groupAsService": true,  // Show folder as if it were a service (with a description and a checkbox)
-                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
                     "services": [
-                        { "name": "Families_in_Poverty", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Families_in_Poverty_Percentage", "type":"tiled", "opacity": 0.75 },
-                        { "name": "Median_Owner_Occupied_Home_Value", "displayName": "Median Owner-Occupied Home Value (1,000s of USD)", "type":"tiled", "opacity": 0.75 }
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Habitats", "description":"The Habitat map service features data including but not limited to salt marshes, sea grasses, and current and historical oyster reefs. A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":3, "parentLayerId":-1 },
+                                {"id":4, "parentLayerId":-1 },
+                                {"id":5, "parentLayerId":-1 },
+                                {"id":6, "parentLayerId":-1 },
+                                {"id":7, "parentLayerId":-1 },
+                                {"id":8, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Bathymetry", "description":"The Bathymetry map service features state bathymetry data. A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":10, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Salinity", "description":"The Salinity map service features information from the Salinity Zones in Estuaries along the Gulf of Mexico data set obtained from NOAA/NCDDC. In some cases, additional state specific salinity data sets are included. A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":12, "parentLayerId":-1 },
+                                {"id":13, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Coastal Management", "description":"The Coastal Management map service features data sets pertaining to the management of coastal lands, waters and natural resources. A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":15, "parentLayerId":-1 },
+                                {"id":16, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Alabama", "type":"dynamic", "displayName":"Social and Economic", "description":"The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":18, "parentLayerId":-1 },
+                                {"id":19, "parentLayerId":-1 },
+                                {"id":20, "parentLayerId":-1 },
+                                {"id":21, "parentLayerId":-1 },
+                                {"id":22, "parentLayerId":-1 },
+                                {"id":23, "parentLayerId":-1 },
+                                {"id":24, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 }
             ]
@@ -78,270 +78,488 @@
     },
     {
         "agsSource": {
-            "url": "http://olga.er.usgs.gov/stpgis/rest/services",
-            "folderTitle": "USGS",
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Florida",
             "folders": [
                 {
-                    "url": "http://olga.er.usgs.gov/stpgis/rest/services",
-                    "name": "Vulnerability",
-                    "displayName": "Hurricane-Induced Coastal Erosion Hazards",
-                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
+                    "name": "",
                     "services": [
-                        { "name": "NACCH_water_level", "displayName": "Water levels (m, NAVD88)", "type":"dynamic", "opacity": 0.5,
-                          "showLayers": [
-                              {"id":0, "parentLayerId":-1 },
-                              {"id":4, "parentLayerId":0, "downloadUrl": "http://coastal.er.usgs.gov/hurricanes/erosionhazards" },
-                              {"id":5, "parentLayerId":0 },
-                              {"id":6, "parentLayerId":-1 },
-                              {"id":10, "parentLayerId":6 },
-                              {"id":11, "parentLayerId":6 }
-                          ]
-                        },
-                        { "name": "NACCH_dune_features", "displayName": "Dune elevations (m, NAVD88)", "type":"dynamic", "opacity": 0.5,
-                          "showLayers": [
-                              {"id":3, "parentLayerId":-1 },
-                              {"id":4, "parentLayerId":-1 }                           
-                          ]
-                        }
+                        { "name": "Florida", "type":"dynamic", "displayName":"FEMA Repetitive Loss", "showLayers": [
+                                {"id":1, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://coastalmap.marine.usgs.gov/rest/services",
-                    "name": "National",
-                    "displayName": "National Assessment of Shoreline Change",
+                    "name": "",
                     "services": [
-                        // Shows all layers individually (with 2 identified as "new")
-                        { "name": "slc_HistoricShoreline", "displayName": "Historic Shorelines by State", "type":"dynamic", "opacity": 1,
-                          "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100", "layerIds": [4, 10] }
-                        },
-                        // Combines all layers
-                        { "name": "slc_LongTerm", "displayName": "Long-term Shoreline Change (m/yr)", "type":"dynamic", "opacity": 1,
-                          "showLayers": []
-                        },
-                        // Combines specified layers
-                        { "name": "slc_ShortTerm", "displayName": "Short-term Shoreline Change (m/yr)", "type":"dynamic", "opacity": 1,
-                          "showLayers": [], "visibleLayerIds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                        }
+                        { "name": "Florida", "type":"dynamic", "displayName":"Habitats", "showLayers": [
+                                {"id":3, "parentLayerId":-1 },
+                                {"id":4, "parentLayerId":-1 },
+                                {"id":5, "parentLayerId":-1 },
+                                {"id":6, "parentLayerId":-1 },
+                                {"id":7, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
-                }
-            ]
-        }
-    },
-    {
-        "wmsSource": {
-            "url": "http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs",
-            "folderTitle": "Near Real-Time Observations",
-            "groupFolder": "NOAA/nowCOAST",
-            "description": "The nowCOAST 'obs' Web Map Service (WMS) provides layers containing near real-time surface meteorological and oceanographic observations from various sources.  Some observations are updated as frequently as every six minutes, while others are updated hourly.  The 'obs' WMS is one of several map services provided by NOAA's nowCOAST project (http://nowcoast.noaa.gov).  For further layer information such as layer icons, legend graphics, layer descriptions, and valid timestamps, see the nowCOAST 'LayerInfo Web Service' description page at: http://nowcoast.noaa.gov/help/layerinfo.shtml.  For more information about nowCOAST's available Web Map Services, see the nowCOAST Map Services information page at: http://nowcoast.noaa.gov/help/mapservices.shtml.  nowCOAST is a product of the NOAA/NOS/OCS Coast Survey Development Laboratory.",
-            "opacity": 0.5,
-            "resourceInfo": true,  // Use configured layer info instead of asking the server for it
-            "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" },
-            "layerIds": [
-                { 
-                    "name": "RAS_RIDGE_NEXRAD",
-                    "displayName": "Radar Mosaic", 
-                    "description": "Radar Mosaic for CONUS, Puerto Rico, Hawaii, Alaska and Guam", 
-                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
-                    "downloadUrl": "http://nowcoast.noaa.gov/help/mapservices.shtml"
                 },
                 {
-                    "name": "OBS_MET_TEMP",
-                    "displayName": "Surface Air Temperature (Point Observations)", 
-                    "description": "Surface Air Temperature point observations (degrees Fahrenheit)", 
-                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  }
-                }
-            ]
-        }
-    },
-    {
-        "wmsSource": {
-            "url": "http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/forecasts",
-            "folderTitle": "Gridded Surface Forecasts",
-            "groupFolder": "NOAA/nowCOAST",
-            "description": "The nowCOAST 'forecasts' Web Map Service (WMS) provides layers containing gridded weather and oceanographic surface forecast products from the NOAA/NWS National Digital Forecast Database (NDFD).  The 'forecasts' WMS is one of several map services provided by NOAA's nowCOAST project (http://nowcoast.noaa.gov).  For further layer information such as layer icons, legend graphics, layer descriptions, and valid timestamps, see the nowCOAST 'LayerInfo Web Service' description page at: http://nowcoast.noaa.gov/help/layerinfo.shtml.  For more information about nowCOAST's available Web Map Services, see the nowCOAST Map Services information page at: http://nowcoast.noaa.gov/help/mapservices.shtml.  nowCOAST is a product of the NOAA/NOS/OCS Coast Survey Development Laboratory.",
-            "opacity": 0.5,
-            "resourceInfo": true,
-            "layerIds": [
-                {
-                    "name": "NDFD_RAS_MINT_1_00",
-                    "displayName": "Minimum Daily Surface Air Temperature (+24 hr)", 
-                    "description": "NDFD Gridded Minimum Daily Surface Air Temperature Forecast", 
-                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
-                    "isNew": { "startDate": "1/15/2014", "endDate": "1/1/2100" }
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Species", "showLayers": [
+                                {"id":9, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
                 },
                 {
-                    "name": "NDFD_RAS_MAXT_1_00",
-                    "displayName": "Maximum Daily Surface Air Temperature (+24 hr)", 
-                    "description": "NDFD Gridded Maximum Daily Surface Air Temperature Forecast", 
-                    "extent": { "xmin": -130, "ymin": 20, "xmax": -60, "ymax":55 , "sr": 4326  },
-                    "isNew": { "startDate": "1/1/2014", "endDate": "1/10/2014" }
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Bathymetry", "description":"This section is for highlighting geographies where we have finer scale data for illustrating potential oyser reef restoration. Note: Oyster data layers not visible when zooming out beyond the 1:500,000 scale.", "showLayers": [
+                                {"id":11, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Salinity", "description":"This section is for highlighting geographies where we have finer scale data for illustrating potential oyser reef restoration. Note: Oyster data layers not visible when zooming out beyond the 1:500,000 scale.", "showLayers": [
+                                {"id":13, "parentLayerId":-1 },
+                                {"id":14, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Coastal Management", "showLayers": [
+                                {"id":16, "parentLayerId":-1 },
+                                {"id":17, "parentLayerId":-1 },
+                                {"id":18, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Social and Economic", "description":"This section is for highlighting geographies where we have finer scale data for illustrating potential oyser reef restoration. Note: Oyster data layers not visible when zooming out beyond the 1:500,000 scale.", "showLayers": [
+                                {"id":20, "parentLayerId":-1 },
+                                {"id":21, "parentLayerId":-1 },
+                                {"id":22, "parentLayerId":-1 },
+                                {"id":23, "parentLayerId":-1 },
+                                {"id":24, "parentLayerId":-1 },
+                                {"id":25, "parentLayerId":-1 },
+                                {"id":26, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Florida Infrastructure", "showLayers": [
+                                {"id":28, "parentLayerId":-1 },
+                                {"id":29, "parentLayerId":28 },
+                                {"id":30, "parentLayerId":28 },
+                                {"id":31, "parentLayerId":28 },
+                                {"id":32, "parentLayerId":28 },
+                                {"id":33, "parentLayerId":-1 },
+                                {"id":34, "parentLayerId":33 },
+                                {"id":35, "parentLayerId":33 },
+                                {"id":36, "parentLayerId":33 },
+                                {"id":37, "parentLayerId":33 },
+                                {"id":38, "parentLayerId":33 },
+                                {"id":39, "parentLayerId":-1 },
+                                {"id":40, "parentLayerId":39 },
+                                {"id":41, "parentLayerId":39 },
+                                {"id":42, "parentLayerId":-1 },
+                                {"id":43, "parentLayerId":42 },
+                                {"id":44, "parentLayerId":42 },
+                                {"id":45, "parentLayerId":42 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Florida", "type":"dynamic", "displayName":"Oyster Restoration Suitability", "description":"This section is for highlighting geographies where we have finer scale data for illustrating potential oyser reef restoration. Note: Oyster data layers not visible when zooming out beyond the 1:500,000 scale.", "showLayers": [
+                                {"id":47, "parentLayerId":-1 },
+                                {"id":48, "parentLayerId":-1 },
+                                {"id":49, "parentLayerId":48 },
+                                {"id":50, "parentLayerId":48 },
+                                {"id":51, "parentLayerId":48 },
+                                {"id":52, "parentLayerId":-1 },
+                                {"id":53, "parentLayerId":52 },
+                                {"id":54, "parentLayerId":52 },
+                                {"id":55, "parentLayerId":52 }
+                            ]
+                        }   
+                    ]
                 }
             ]
         }
     },
     {
         "agsSource": {
-            "url": "http://csc.noaa.gov/arcgis/rest/services",
-            "folderTitle": "NOAA",
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Louisiana",
             "folders": [
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "AllHurricanes",
-                            "displayName": "Category 1-5", 
-                            "type":"tiled", 
-                            "opacity": 0.5
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Oyster Restoration Explorer", "showLayers": [
+                                {"id":1, "parentLayerId":-1 },
+                                {"id":2, "parentLayerId":-1 },
+                                {"id":3, "parentLayerId":2 },
+                                {"id":4, "parentLayerId":2 },
+                                {"id":5, "parentLayerId":2 },
+                                {"id":6, "parentLayerId":2 },
+                                {"id":7, "parentLayerId":-1 },
+                                {"id":8, "parentLayerId":7 },
+                                {"id":9, "parentLayerId":7 },
+                                {"id":10, "parentLayerId":7 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "AllStorms",
-                            "displayName": "Category 4",
-                            "id": "Category 4",
-                            "type": "feature-layer",
-                            "opacity": 0.9, 
-                            "layerIndex": 1,
-                            "mode": "ondemand",
-                            "autoGeneralize": true,
-                            "outFields": ["Display_SaffirSimpson"],
-                            "layerDefinition": "Display_SaffirSimpson = 'Category 4'",
-                            "symbology": { "line": { "type": "simple", "style": "solid", "color": [255,125,0], "width": 1 } }
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Habitats", "description":"The Habitat map service features data including but not limited to salt marshes, sea grasses, and current and historical oyster reefs.  A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":12, "parentLayerId":-1 },
+                                {"id":13, "parentLayerId":-1 },
+                                {"id":14, "parentLayerId":-1 },
+                                {"id":15, "parentLayerId":-1 },
+                                {"id":16, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
-                    "groupFolder": "NOAA/Storms",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "AllStorms",
-                            "displayName": "Category 5",
-                            "id": "Category 5",
-                            "type": "feature-layer",
-                            "opacity": 0.9, 
-                            "layerIndex": 1,
-                            "mode": "ondemand",
-                            "autoGeneralize": true,
-                            "outFields": ["Display_SaffirSimpson"],
-                            "layerDefinition": "Display_SaffirSimpson = 'Category 5'",
-                            "symbology": { "line": { "type": "simple", "style": "solid", "color": [255,0,0], "width": 1 } }
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Species", "showLayers": [
+                                {"id":18, "parentLayerId":-1 },
+                                {"id":19, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "conf_5ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (5 ft)", 
-                            "type": "tiled", 
-                            "opacity": 0.5
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Bathymetry", "showLayers": [
+                                {"id":21, "parentLayerId":-1 },
+                                {"id":22, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise/Mapping Confidence",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "conf_6ft",
-                            "displayName": "Sea Level Rise Mapping Confidence (6 ft)", 
-                            "type": "tiled", 
-                            "opacity": 0.5
-                        }
-                    ]
-                },              
-                {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
-                    "services": [
-                        { 
-                            "name": "slr_5ft",
-                            "displayName": "Sea Level Rise (5 ft)", 
-                            "type": "tiled", 
-                            "opacity": 0.5
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Salinity", "showLayers": [
+                                {"id":24, "parentLayerId":-1 },
+                                {"id":25, "parentLayerId":-1 },
+                                {"id":26, "parentLayerId":-1 },
+                                {"id":27, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "NOAA/Sea Level Rise",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "slr_6ft",
-                            "displayName": "Sea Level Rise (6 ft)", 
-                            "type": "tiled", 
-                            "opacity": 0.5
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Coastal Management", "showLayers": [
+                                {"id":29, "parentLayerId":-1 },
+                                {"id":30, "parentLayerId":-1 },
+                                {"id":31, "parentLayerId":-1 },
+                                {"id":32, "parentLayerId":-1 },
+                                {"id":33, "parentLayerId":-1 },
+                                {"id":34, "parentLayerId":-1 },
+                                {"id":35, "parentLayerId":-1 },
+                                {"id":36, "parentLayerId":-1 },
+                                {"id":37, "parentLayerId":-1 },
+                                {"id":38, "parentLayerId":-1 },
+                                {"id":39, "parentLayerId":-1 },
+                                {"id":40, "parentLayerId":-1 },
+                                {"id":41, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 },
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "dc_slr",
-                    "groupFolder": "Coastal Flood Hazards",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "Flood_Frequency",
-                            "displayName": "Coastal Flood Frequency", 
-                            "type": "tiled", 
-                            "opacity": 0.5
-                        }
+                        { "name": "Louisiana", "type":"dynamic", "displayName":"Social and Economic", "showLayers": [
+                                {"id":43, "parentLayerId":-1 },
+                                {"id":44, "parentLayerId":-1 },
+                                {"id":45, "parentLayerId":-1 },
+                                {"id":46, "parentLayerId":-1 },
+                                {"id":47, "parentLayerId":-1 },
+                                {"id":48, "parentLayerId":-1 },
+                                {"id":49, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 }
             ]
         }
     },
     {
-        "wmsSource": {
-            "url": "http://thisWmsServerDoesNotExist.com",
-            "folderTitle": "Imposter WMS server",
-            "layerIds": [ { "name": "no" } ]
-        }
-    },
-/*
-Causes the layer selector to hang
-    {
-        "wmsSource": {
-            "url": "http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/forecasts",
-            "folderTitle": "WMS server with a missing layer",
-            "resourceInfo": true,
-            "layerIds": [ { "name": "Forecast for December 2039" } ]
-        }
-    },
-*/
-    {
         "agsSource": {
-            "url": "http://thisAgsServerDoesNotExist.com",
-            "folderTitle": "Imposter AGS server"
-        }
-    },
-    {
-        "agsSource": {
-            "url": "http://csc.noaa.gov/arcgis/rest/services",
-            "folderTitle": "AGS server with a missing service",
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Mississippi",
             "folders": [
                 {
-                    "url": "http://csc.noaa.gov/arcgis/rest/services",
-                    "name": "Hurricanes",
+                    "name": "",
                     "services": [
-                        { 
-                            "name": "Hurricanes on the moon",
-                            "type": "dynamic"
-                        }
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Restoration Projects", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":1, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Oyster Restoration Explorer", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":3, "parentLayerId":-1 },
+                                {"id":4, "parentLayerId":-1 },
+                                {"id":5, "parentLayerId":4 },
+                                {"id":6, "parentLayerId":4 },
+                                {"id":7, "parentLayerId":4 },
+                                {"id":8, "parentLayerId":4 },
+                                {"id":9, "parentLayerId":-1 },
+                                {"id":10, "parentLayerId":9 },
+                                {"id":11, "parentLayerId":9 },
+                                {"id":12, "parentLayerId":9 },
+                                {"id":13, "parentLayerId":9 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Habitats", "description":"The Habitat map service features data including but not limited to salt marshes, sea grasses, and current and historical oyster reefs.  A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":15, "parentLayerId":-1 },
+                                {"id":16, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Bathymetry", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":18, "parentLayerId":-1 },
+                                {"id":19, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Salinity", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":21, "parentLayerId":-1 },
+                                {"id":22, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Coastal Management", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":24, "parentLayerId":-1 },
+                                {"id":25, "parentLayerId":-1 },
+                                {"id":26, "parentLayerId":-1 },
+                                {"id":27, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Social and Economic", "showLayers": [
+                                {"id":29, "parentLayerId":-1 },
+                                {"id":30, "parentLayerId":-1 },
+                                {"id":31, "parentLayerId":-1 },
+                                {"id":32, "parentLayerId":-1 },
+                                {"id":33, "parentLayerId":-1 },
+                                {"id":34, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Mississippi", "type":"dynamic", "displayName":"Built Infrastructure", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":36, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "agsSource": {
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Texas",
+            "folders": [
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Restoration Projects", "description":"Test Description", "showLayers": [
+                                {"id":1, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Habitats", "showLayers": [
+                                {"id":3, "parentLayerId":-1 },
+                                {"id":4, "parentLayerId":-1 },
+                                {"id":5, "parentLayerId":-1 },
+                                {"id":6, "parentLayerId":-1 },
+                                {"id":7, "parentLayerId":-1 },
+                                {"id":8, "parentLayerId":-1 },
+                                {"id":9, "parentLayerId":-1 },
+                                {"id":10, "parentLayerId":9 },
+                                {"id":11, "parentLayerId":9 },
+                                {"id":12, "parentLayerId":9 },
+                                {"id":13, "parentLayerId":9 },
+                                {"id":14, "parentLayerId":9 },
+                                {"id":15, "parentLayerId":9 },
+                                {"id":16, "parentLayerId":9 },
+                                {"id":17, "parentLayerId":9 },
+                                {"id":18, "parentLayerId":9 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Bathymetry", "description":"The Nature Conservancy in collaboration with multiple partners has developed a robust Gulf of Mexico spatial database to help our state programs, their partners, and the region identify oyster reef restoration projects that consider ecological, social and economic benefits.  The Oyster Restoration Dashboard allows users to explore this database to identify potential restoration investments within each of the Gulf states of Florida, Alabama, Mississippi, Louisiana and Texas.", "showLayers": [
+                                {"id":20, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Salinity", "showLayers": [
+                                {"id":22, "parentLayerId":-1 },
+                                {"id":23, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Coastal Management", "showLayers": [
+                                {"id":25, "parentLayerId":-1 },
+                                {"id":26, "parentLayerId":-1 },
+                                {"id":27, "parentLayerId":-1 },
+                                {"id":28, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Texas", "type":"dynamic", "displayName":"Social and Economic", "showLayers": [
+                                {"id":30, "parentLayerId":-1 },
+                                {"id":31, "parentLayerId":-1 },
+                                {"id":32, "parentLayerId":-1 },
+                                {"id":33, "parentLayerId":-1 },
+                                {"id":34, "parentLayerId":-1 },
+                                {"id":35, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "agsSource": {
+            "url": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico",
+            "folderTitle": "Gulf of Mexico",
+            "folders": [
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Gulf_of_Mexico", "type":"dynamic", "displayName":"Habitats", "description":"The Habitat map service features data including but not limited to salt marshes, sea grasses, and current and historical oyster reefs.  A brief description and metadata appear when you click on each layer.", "showLayers": [
+                                {"id":1, "parentLayerId":-1 },
+                                {"id":2, "parentLayerId":-1 },
+                                {"id":3, "parentLayerId":-1 },
+                                {"id":4, "parentLayerId":-1 },
+                                {"id":5, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Gulf_of_Mexico", "type":"dynamic", "displayName":"Salinity", "showLayers": [
+                                {"id":7, "parentLayerId":-1 },
+                                {"id":8, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Gulf_of_Mexico", "type":"dynamic", "displayName":"Coastal Management", "showLayers": [
+                                {"id":10, "parentLayerId":-1 },
+                                {"id":11, "parentLayerId":-1 },
+                                {"id":12, "parentLayerId":-1 },
+                                {"id":13, "parentLayerId":-1 }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Gulf_of_Mexico", "type":"dynamic", "displayName":"Coastal Hazards", "showLayers": [
+                                {"id":15, "parentLayerId":-1 },
+                                {"id":16, "parentLayerId":-1, "downloadUrl": "/gulfmex/docs/download/cumulative_oil.zip" }
+                            ]
+                        }   
+                    ]
+                },
+                {
+                    "name": "",
+                    "services": [
+                        { "name": "Gulf_of_Mexico", "type":"dynamic", "displayName":"Social and Economic", "showLayers": [
+                                {"id":18, "parentLayerId":-1 },
+                                {"id":19, "parentLayerId":-1 },
+                                {"id":20, "parentLayerId":-1 },
+                                {"id":21, "parentLayerId":-1 },
+                                {"id":22, "parentLayerId":-1 },
+                                {"id":23, "parentLayerId":-1 },
+                                {"id":24, "parentLayerId":-1 }
+                            ]
+                        }   
                     ]
                 }
             ]
