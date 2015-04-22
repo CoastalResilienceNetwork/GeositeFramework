@@ -142,10 +142,7 @@ require(['use!Geosite',
                     }
 
                     this.set('active', true);
-
-                    if (!active) {
-                        this.get('pluginObject').activate();
-                    }
+                    this.get('pluginObject').activate();
                 } else {
                     this.get('pluginObject').deactivate();
                     this.trigger('plugin:deselected');
