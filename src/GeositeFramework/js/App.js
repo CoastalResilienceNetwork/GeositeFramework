@@ -47,6 +47,16 @@
                 attributes: ['splitScreen', 'syncMaps']
             });
 
+            // Unless a saved state has specifically been added to set split screen to
+            // true, set it to false to trigger hashmodels to pick up the changed
+            // attribute.  This will encode the value of split screen in the state when
+            // executed, with the side effect that Scenarios from launchpad will include
+            // whether or not split screen should be active.  Can't be put in init since
+            // has to be after addModel above.
+            if (!N.app.models.screen.get('splitScreen')) {
+                N.app.models.screen.set('splitScreen', false);
+            }
+
             N.app.dispatcher.on('launchpad:activate-scenario', function(state) {
                 var forceHashChange = true;
                 self.hashModels.triggerStateChange(state, forceHashChange);

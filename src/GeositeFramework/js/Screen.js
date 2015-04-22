@@ -11,7 +11,7 @@
         defaults: {
             helpUrl: null,
             mainPaneNumber: 0,
-            splitScreen: false,
+            splitScreen: null,
             showExportButton: false,
             syncMaps: false
         },
