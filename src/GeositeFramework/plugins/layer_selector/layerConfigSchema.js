@@ -110,7 +110,7 @@ define(function () {
                 displayName: { type: 'string' },
                 parentLayerId: { type: 'integer' },
                 downloadUrl: { type: 'string' },
-				visibleSubLayerIds:  { type: 'array', items: { type: 'integer' } }
+				visibleSubLayerIds:  { type: 'array', items: { type: 'integer' } } 
             }
         };
     }

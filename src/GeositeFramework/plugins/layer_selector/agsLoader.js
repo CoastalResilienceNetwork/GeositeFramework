@@ -305,6 +305,9 @@ define(["jquery", "use!underscore"],
                             if (_.has(layerConfig, "downloadUrl")) {
                                 layer.downloadUrl = layerConfig.downloadUrl;
                             }
+							if (_.has(layerConfig, "visibleSubLayerIds")) {
+                                layer.visibleSubLayerIds = layerConfig.visibleSubLayerIds;
+                            }
                             return layer;
                         });
                         loadLayers(layers, node);
@@ -325,16 +328,16 @@ define(["jquery", "use!underscore"],
                 _.each(layerSpecs, function (layerSpec) {
                     // A layer might specify a parent layer; otherwise it hangs off the service
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
-                    if (layerSpec.subLayerIds === null) {
-                        // This is an actual layer
+                    if (layerSpec.subLayerIds === null || _.has(layerSpec,"visibleSubLayerIds")) {
+                        // This is an actual layer or has visibleSubLayerIds and should be treated as an actual layer
                         var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode, layerSpec);
                         node.fetchMetadata = fetchMetadata;
                     } else {
                         // This is a layer group
-                        layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
-                        layerNodes[layerSpec.id].checked = false;
-                        layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
-                        layerNodes[layerSpec.id].layerId = layerSpec.id;
+						layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
+						layerNodes[layerSpec.id].checked = false;
+						layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
+						layerNodes[layerSpec.id].layerId = layerSpec.id;
 						layerNodes[layerSpec.id].fetchMetadata = fetchMetadata;
                     }
                 }, this);
@@ -662,6 +665,7 @@ define(["jquery", "use!underscore"],
                                 }
                             });
                         }
+						if (layerNode.visibleSubLayerIds) { layerIds = _.union(layerIds, layerNode.visibleSubLayerIds); }
                     } else {
                         //remove unchecked layer from the visible layers array
                         if (layerNode.type === "layer") {
@@ -672,6 +676,11 @@ define(["jquery", "use!underscore"],
                                 layerIds = _.without(layerIds, this.raw.layerId);
                             });
                         }
+						if (layerNode.visibleSubLayerIds) { 
+							_.each(layerNode.visibleSubLayerIds, function(subLayer) {
+								layerIds = _.without(layerIds, subLayer);
+							});
+						}
                     }
                     //set visible layers in the dynamic map service based on checked layerIds
                     if (layerIds.length === 0) {
