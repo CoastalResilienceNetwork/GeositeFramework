@@ -214,6 +214,7 @@ define([
                     isNew: config ? config.isNew : undefined,
                     downloadUrl: config ? config.downloadUrl : undefined
                 };
+				if (_.has(config,"visibleSubLayerIds")) { node.visibleSubLayerIds = config.visibleSubLayerIds;  }
                 if (!parentNode.children) { parentNode.children = []; }
                 parentNode.children.push(node);
                 return node;

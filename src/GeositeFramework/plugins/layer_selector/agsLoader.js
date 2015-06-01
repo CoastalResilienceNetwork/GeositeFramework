@@ -305,6 +305,9 @@ define(["jquery", "use!underscore"],
                             if (_.has(layerConfig, "downloadUrl")) {
                                 layer.downloadUrl = layerConfig.downloadUrl;
                             }
+							if (_.has(layerConfig, "visibleSubLayerIds")) {
+                                layer.visibleSubLayerIds = layerConfig.visibleSubLayerIds;
+                            }
                             return layer;
                         });
                         loadLayers(layers, node);
@@ -662,6 +665,7 @@ define(["jquery", "use!underscore"],
                                 }
                             });
                         }
+						if (layerNode.visibleSubLayerIds) { layerIds = _.union(layerIds, layerNode.visibleSubLayerIds); }
                     } else {
                         //remove unchecked layer from the visible layers array
                         if (layerNode.type === "layer") {
@@ -672,6 +676,11 @@ define(["jquery", "use!underscore"],
                                 layerIds = _.without(layerIds, this.raw.layerId);
                             });
                         }
+						if (layerNode.visibleSubLayerIds) { 
+							_.each(layerNode.visibleSubLayerIds, function(subLayer) {
+								layerIds = _.without(layerIds, subLayer);
+							});
+						}
                     }
                     //set visible layers in the dynamic map service based on checked layerIds
                     if (layerIds.length === 0) {

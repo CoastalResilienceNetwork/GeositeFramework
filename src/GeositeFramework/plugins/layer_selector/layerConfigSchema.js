@@ -109,7 +109,8 @@ define(function () {
                 id: { type: 'integer' },
                 displayName: { type: 'string' },
                 parentLayerId: { type: 'integer' },
-                downloadUrl: { type: 'string' }
+                downloadUrl: { type: 'string' },
+				visibleSubLayerIds:  { type: 'array', items: { type: 'integer' } } 
             }
         };
     }
