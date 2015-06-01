@@ -114,11 +114,13 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                   click into multiple generations of a tree to get to
                   the services they want to use.
                  */
-                if (rootNode.children && rootNode.children.length === 1) {
+                /* if (rootNode.children && rootNode.children.length === 1) {
                     return rootNode.children[0];
                 } else {
                     return rootNode;
-                }
+                } */
+				
+				return rootNode;
             }
 
             function addZoomButtons(node) {
