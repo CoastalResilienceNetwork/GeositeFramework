@@ -328,16 +328,16 @@ define(["jquery", "use!underscore"],
                 _.each(layerSpecs, function (layerSpec) {
                     // A layer might specify a parent layer; otherwise it hangs off the service
                     var parentNode = (layerSpec.parentLayerId === -1 ? serviceNode : layerNodes[layerSpec.parentLayerId]);
-                    if (layerSpec.subLayerIds === null) {
-                        // This is an actual layer
+                    if (layerSpec.subLayerIds === null || _.has(layerSpec,"visibleSubLayerIds")) {
+                        // This is an actual layer or has visibleSubLayerIds and should be treated as an actual layer
                         var node = _makeLeafNode(layerSpec.name, layerSpec.id, showOrHideLayer, parentNode, layerSpec);
                         node.fetchMetadata = fetchMetadata;
                     } else {
                         // This is a layer group
-                        layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
-                        layerNodes[layerSpec.id].checked = false;
-                        layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
-                        layerNodes[layerSpec.id].layerId = layerSpec.id;
+						layerNodes[layerSpec.id] = _makeContainerNode(layerSpec.name, "layer-group", parentNode);
+						layerNodes[layerSpec.id].checked = false;
+						layerNodes[layerSpec.id].showOrHideLayer = showOrHideLayer;
+						layerNodes[layerSpec.id].layerId = layerSpec.id;
 						layerNodes[layerSpec.id].fetchMetadata = fetchMetadata;
                     }
                 }, this);
