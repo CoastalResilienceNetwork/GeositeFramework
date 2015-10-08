@@ -1,0 +1,21 @@
+﻿@media print {
+    /* For testing, the body of a plugin container 
+       can be made visible for printing using CSS specificity */
+    #map-0 div.plugin-container-inner {
+        visibility: visible;
+    }
+
+    /* Hide all body an map elements */
+    body { 
+        visibility: hidden;
+    }
+
+
+    /* Override the map tiles which have inline styles.
+       This avoids having to have an !important on the broader
+       selectors for the rest of the page elements */
+    #map-0_root, #map-0_root img.layerTile,
+    #map-1_root, #map-1_root img.layerTile {
+        visibility: hidden !important;
+    }
+}
