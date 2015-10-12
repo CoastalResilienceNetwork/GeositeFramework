@@ -12,4 +12,10 @@
     #map-1_root, #map-1_root img.layerTile {
         visibility: hidden !important;
     }
+
+    /* Plugin print will only be one side of a split view map ever, so
+       allow that side to take up the entire width of the screen */
+    body.view-split .content {
+        width: 100%;
+    }
 }
