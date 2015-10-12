@@ -9,6 +9,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             resizable: false,
             width: 320,
             height: 'auto',
+            hasCustomPrint: true,
 
             initialize: function(args) {
                 declare.safeMixin(this, args);
@@ -19,6 +20,11 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 var text = "You clicked on latitude " + mapPoint.getLatitude() + " longitude " + mapPoint.getLongitude(),
                     identifyWidth = 300;
                 processResults(text, identifyWidth);
+            },
+
+            beforePrint: function(printDeferred) {
+                // Prepare plugin markup for print...
+                printDeferred.resolve();
             }
         });
     }
