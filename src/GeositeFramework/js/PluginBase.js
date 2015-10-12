@@ -29,6 +29,8 @@ define(["dojo/_base/declare",
             toolbarType: "sidebar",
             showServiceLayersInLegend: true,
             allowIdentifyWhenActive: false,
+            // Allow the framework to put a custom print button for this plugin
+            hasCustomPrint: false,
 
             // This option changes the default launch behavior and is only applicable to topbar plugins.
             // If true, this will deselect other active plugins when launched. If false, this will
@@ -50,6 +52,7 @@ define(["dojo/_base/declare",
             subregionActivated: function() {},
             subregionDeactivated: function() {},
             validate: function () { return true; },
+            beforePrint: function () {},
 
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},
