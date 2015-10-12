@@ -1,10 +1,4 @@
 ﻿@media print {
-    /* For testing, the body of a plugin container 
-       can be made visible for printing using CSS specificity */
-    #map-0 div.plugin-container-inner {
-        visibility: visible;
-    }
-
     /* Hide all body an map elements */
     body { 
         visibility: hidden;

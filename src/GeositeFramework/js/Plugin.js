@@ -402,13 +402,31 @@ require(['use!Geosite',
                     model.set('displayHelp', true);
                 }).end()
                 .find('.plugin-print').on('click', function() {
-                    var deferred = $.Deferred();
+                    var pluginDeferred = $.Deferred(),
+                        parseDeferred = $.Deferred(),
+                        pluginPath = model.get('pluginSrcFolder') + '/print.css',
+                        printCssClass = 'plugin-print-css';
 
-                    deferred.then(function() {
+                    // Clear all .plugin-print-css
+                    $('.' + printCssClass).remove();
+
+                    // Add the plugin css
+                    $('<link>', {
+                        rel: 'stylesheet',
+                        href: pluginPath,
+                        className: printCssClass
+                    }).appendTo('head');
+
+                    // Give some time for the browser to parse the new CSS, 
+                    // if this wasn't slightly delayed, occasionally the override would
+                    // not be present and print features wouldn't show up.
+                    _.delay(parseDeferred.resolve, 200);
+
+                    $.when(pluginDeferred, parseDeferred).then(function() {
                         window.print();
                     });
 
-                    pluginObject.beforePrint(deferred);
+                    pluginObject.beforePrint(pluginDeferred);
                 }).end()
                 .hide();
 
