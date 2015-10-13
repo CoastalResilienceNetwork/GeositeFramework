@@ -251,6 +251,11 @@
                     <h6><%- title %></h6>
                     <a class="plugin-off" href="javascript:;">&#10006;</a>
                     <a class="plugin-close" href="javascript:;">&#95;</a>
+
+                    <% if (hasCustomPrint) { %>
+                        <a class="plugin-print" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
+                    <% } %>
+
                     <% if (isHelpButtonVisible) { %>
                         <a class="plugin-help" href="javascript:;" title="View the info-graphic">?</a>
                     <% } %>

@@ -374,7 +374,8 @@ require(['use!Geosite',
                 bindings = {
                     title: pluginObject.toolbarName,
                     id: containerId,
-                    isHelpButtonVisible: isHelpButtonVisible(view)
+                    isHelpButtonVisible: isHelpButtonVisible(view),
+                    hasCustomPrint: pluginObject.hasCustomPrint
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
                 calculatePosition = function ($el) {
@@ -384,7 +385,6 @@ require(['use!Geosite',
                     };
                 };
 
-            $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
             view.$uiContainer = $uiContainer;
 
             $uiContainer
@@ -400,6 +400,15 @@ require(['use!Geosite',
                 }).end()
                 .find('.plugin-help').on('click', function () {
                     model.set('displayHelp', true);
+                }).end()
+                .find('.plugin-print').on('click', function() {
+                    var deferred = $.Deferred();
+
+                    deferred.then(function() {
+                        window.print();
+                    });
+
+                    pluginObject.beforePrint(deferred);
                 }).end()
                 .hide();
 
