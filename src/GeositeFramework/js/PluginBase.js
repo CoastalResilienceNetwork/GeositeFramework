@@ -52,7 +52,9 @@ define(["dojo/_base/declare",
             subregionActivated: function() {},
             subregionDeactivated: function() {},
             validate: function () { return true; },
-            beforePrint: function () {},
+
+            // Auto-resolve the print deferred if the plugin does not implement the function
+            beforePrint: function (printDeferred) { printDeferred.resolve();  },
 
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},
