@@ -1,10 +1,4 @@
 ﻿@media print {
-    /* For testing, the body of a plugin container 
-       can be made visible for printing using CSS specificity */
-    #map-0 div.plugin-container-inner {
-        visibility: visible;
-    }
-
     /* Hide all body an map elements */
     body { 
         visibility: hidden;
@@ -17,5 +11,11 @@
     #map-0_root, #map-0_root img.layerTile,
     #map-1_root, #map-1_root img.layerTile {
         visibility: hidden !important;
+    }
+
+    /* Plugin print will only be one side of a split view map ever, so
+       allow that side to take up the entire width of the screen */
+    body.view-split .content {
+        width: 100%;
     }
 }

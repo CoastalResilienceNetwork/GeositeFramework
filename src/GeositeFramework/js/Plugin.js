@@ -402,13 +402,33 @@ require(['use!Geosite',
                     model.set('displayHelp', true);
                 }).end()
                 .find('.plugin-print').on('click', function() {
-                    var deferred = $.Deferred();
+                    var pluginDeferred = $.Deferred(),
+                        parseDeferred = $.Deferred(),
+                        pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
+                        printCssClass = 'plugin-print-css',
+                        oppositePaneHideCssPath = 'css/print-hide-map' +
+                            (paneNumber === 0 ? 1 : 0) + '.css';
 
-                    deferred.then(function() {
+                    // Any previous plugin-prints may have left their print CSS loaded
+                    // clear them and any pane hiding css prior to this new print operation
+                    $('.' + printCssClass).remove();
+
+                    // Add the plugin css
+                    addCss(pluginCssPath, printCssClass);
+
+                    // Hide the possible same plugin from the opposite map pane
+                    addCss(oppositePaneHideCssPath, printCssClass);
+
+                    // Give some time for the browser to parse the new CSS, 
+                    // if this wasn't slightly delayed, occasionally the override would
+                    // not be present and print features wouldn't show up.
+                    _.delay(parseDeferred.resolve, 200);
+
+                    pluginObject.beforePrint(pluginDeferred);
+
+                    $.when(pluginDeferred, parseDeferred).then(function() {
                         window.print();
                     });
-
-                    pluginObject.beforePrint(deferred);
                 }).end()
                 .hide();
 
@@ -424,6 +444,14 @@ require(['use!Geosite',
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
+        }
+
+        function addCss(path, className) {
+            $('<link>', {
+                rel: 'stylesheet',
+                href: path,
+                'class': className
+            }).appendTo('head');
         }
 
         function onContainerResize(view, resizeHandle, event) {
