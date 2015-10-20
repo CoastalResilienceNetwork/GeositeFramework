@@ -10,12 +10,12 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             width: 320,
             height: 'auto',
             hasCustomPrint: true,
+            usePrintPreviewMap: true,
 
             initialize: function(args) {
                 declare.safeMixin(this, args);
                 $(this.container).append(
-                    '<h4 style="padding: 5px;">Click any point on the map to display Latitude and Longitude</h4>' + 
-                    '<img id="sample-graphic-print" src="' + this.infoGraphic + '" >');
+                    '<h4 style="padding: 5px;">Click any point on the map to display Latitude and Longitude</h4>');
             },
 
             identify: function(mapPoint, clickPoint, processResults) {
@@ -24,8 +24,17 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 processResults(text, identifyWidth);
             },
 
-            beforePrint: function(printDeferred) {
-                // Prepare plugin markup for print...
+            beforePrint: function(printDeferred, $printArea, mapObject) {
+                var layer = new esri.layers.ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
+                        "opacity": 0.8
+                    });
+                
+                mapObject.addLayer(layer);
+                mapObject.centerAt(new esri.geometry.Point(-118.15, 33.80));
+                mapObject.setZoom(5);
+
+                $printArea.append('<img id="sample-graphic-print" src="' + this.infoGraphic + '" >');
+
                 printDeferred.resolve();
             }
         });
