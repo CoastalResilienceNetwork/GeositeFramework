@@ -138,6 +138,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="css\print-hide-map1.css" />
+    <Content Include="css\print-hide-map0.css" />
     <Content Include="css\jquery.dropdown.css" />
     <Content Include="css\jquery.mCustomScrollbar.css" />
     <Content Include="css\pageguide.min.css" />
@@ -237,6 +239,7 @@
     <Content Include="sample_plugins\identify_point\icon.png" />
     <Content Include="sample_plugins\identify_point\icon_active.png" />
     <Content Include="sample_plugins\identify_point\main.js" />
+    <Content Include="sample_plugins\identify_point\print.css" />
     <Content Include="sample_plugins\identify_point\splash.png" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />

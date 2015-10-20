@@ -32,6 +32,9 @@ define(["dojo/_base/declare",
             // Allow the framework to put a custom print button for this plugin
             hasCustomPrint: false,
 
+            // Show a print preview map for plugin printing
+            usePrintPreviewMap: false,
+
             // This option changes the default launch behavior and is only applicable to topbar plugins.
             // If true, this will deselect other active plugins when launched. If false, this will
             // not call the Picky select/deselect methods. Instead, only the plugin 'activate' method

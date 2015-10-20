@@ -1042,3 +1042,19 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     font-size: 12px;
     position: relative;
 }
+
+#plugin-print-sandbox {
+    position: absolute;
+    visibility: hidden;
+}
+
+.print-preview-container {
+    padding: 10px;
+}
+#print-preview-container p {
+    padding: 5px; 
+}
+
+#print-preview-print {
+    float: right;
+}
