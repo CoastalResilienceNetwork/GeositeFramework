@@ -35,6 +35,9 @@ define(["dojo/_base/declare",
             // Show a print preview map for plugin printing
             usePrintPreviewMap: false,
 
+            // The [width, height] of the print preview map
+            previewMapSize: [500, 400],
+
             // This option changes the default launch behavior and is only applicable to topbar plugins.
             // If true, this will deselect other active plugins when launched. If false, this will
             // not call the Picky select/deselect methods. Instead, only the plugin 'activate' method

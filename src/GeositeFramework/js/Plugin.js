@@ -464,7 +464,9 @@ require(['use!Geosite',
             var mapMarkup = N.app.templates['template-map-preview']({ pluginName: pluginObject.toolbarName }),
                 $mapPrint = $($.trim(mapMarkup)),
                 $printPreview = $('#print-preview-sandbox'),
-                mapReadyDeferred = $.Deferred();
+                mapReadyDeferred = $.Deferred(),
+                mapHeight = pluginObject.previewMapSize[1],
+                mapWidth = pluginObject.previewMapSize[0];
 
             // If the plugin is not set up for map print preview, don't set up a map
             // and resolve any pending print-preview map operations
@@ -476,16 +478,20 @@ require(['use!Geosite',
 
             // Setup a print-preview window for the user to select an extent and zoom level
             // that will be persisted at print due to its fixed size.
-            $mapPrint.css({ height: 500, width: 500 });
-
             TINY.box.show({
                 animate: false,
                 html: $mapPrint[0].outerHTML,
                 boxid: 'print-preview-container',
-                width: 500,
+                width: _.max([mapWidth, 500]),
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
+                    // Remove any calculated size so that it contains the full map
+                    $('#print-preview-container').css({ height: 'initial', width: 'initial' });
+
+                    // Set the supplied height & width on the map
+                    $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
+
                     var map = new esri.Map('plugin-print-preview-map', { basemap: 'topo' });
 
                     mapReadyDeferred.resolve(map);
