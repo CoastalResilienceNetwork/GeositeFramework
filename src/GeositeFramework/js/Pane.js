@@ -420,8 +420,6 @@
 
             TINY.box.show({
                 html: view.render().el,
-                width: 450,
-                height: 275,
                 fixed: true,
                 maskopacity:50,
                 closejs: function () { view.remove(); }

@@ -746,14 +746,13 @@ table.esriLegendLayerLabel tbody tr td {
 .tbox{
     top: 100px!important;
     min-width: 500px!important;
-    width: 60%!important;
 }
 
 .tinner {
     overflow: hidden;
     padding: 0!important;
     min-height: 380px!important;
-    width: 100%!important;
+    width: 100%;
 }
 
 .tinner .tclose{
