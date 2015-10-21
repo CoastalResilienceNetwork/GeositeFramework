@@ -33,7 +33,7 @@ require(['use!Geosite',
                 $uiContainer = model.get('$uiContainer'),
                 $legendContainer = model.get('$legendContainer'),
                 logger = new Logger(pluginName);
-            
+
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
@@ -48,8 +48,9 @@ require(['use!Geosite',
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
-                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
-            });
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
+                printButton: ($uiContainer ? $uiContainer.find('.plugin-print'): undefined )
+        });
         }
 
         function requestCsvDownload(filename, content) {
