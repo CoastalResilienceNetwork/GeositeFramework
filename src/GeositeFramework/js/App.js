@@ -118,8 +118,6 @@
             TINY.box.show({
                 iframe: url,
                 boxid: 'frameless',
-                width: 750,
-                height: 450,
                 fixed: false,
                 maskopacity: 40
             });

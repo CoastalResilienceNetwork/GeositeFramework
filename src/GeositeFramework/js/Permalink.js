@@ -61,8 +61,6 @@
             
             TINY.box.show({
                 html: this.template(view.model.toJSON()),
-                width: 500,
-                height: 435,
                 fixed: true,
                 openjs: function () {
                     view.setElement($('#permalink-dialog'));

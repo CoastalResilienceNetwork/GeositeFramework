@@ -1,9 +1,16 @@
 ﻿@media print {
-    /* Hide all body an map elements */
-    body { 
+    /* Hide all body an map elements and print preview map controls */
+    body,
+    #plugin-print-preview-map_zoom_slider {
         visibility: hidden;
     }
 
+
+    /* An issue in Chrome for Windows would display the borders of this
+       element in print media, despite it being selected by the clause above.*/
+    .plugin-launcher {
+        display: none; 
+    }
 
     /* Override the map tiles which have inline styles.
        This avoids having to have an !important on the broader
@@ -17,5 +24,13 @@
        allow that side to take up the entire width of the screen */
     body.view-split .content {
         width: 100%;
+    }
+
+    #plugin-print-sandbox {
+        visibility: visible;
+    }
+
+    #plugin-print-preview-map_container img { 
+        visibility: visible;
     }
 }
