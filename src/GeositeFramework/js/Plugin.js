@@ -501,7 +501,7 @@ require(['use!Geosite',
                     mapReadyDeferred.resolve(map);
 
                     $('#print-preview-print').on('click', function() {
-                        // Move the map from the print preview dialog to the sandbox where
+                        // Move the map from the plugin print preview dialog to the sandbox where
                         // the plugin can mess with it's positioning among its other elements
                         $(map.container).detach().appendTo($printSandbox);
                         TINY.box.hide();
