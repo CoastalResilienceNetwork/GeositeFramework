@@ -492,7 +492,11 @@ require(['use!Geosite',
                     // Set the supplied height & width on the map
                     $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
 
-                    var map = new esri.Map('plugin-print-preview-map', { basemap: 'topo' });
+                    var originalMap = pluginObject.app._unsafeMap,
+                        map = new esri.Map('plugin-print-preview-map', { extent: originalMap.extent }),
+                        currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
+
+                    map.addLayer(new esri.layers.ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
 
                     mapReadyDeferred.resolve(map);
 

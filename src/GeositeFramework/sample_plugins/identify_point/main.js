@@ -31,8 +31,6 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                     });
                 
                 mapObject.addLayer(layer);
-                mapObject.centerAt(new esri.geometry.Point(-118.15, 33.80));
-                mapObject.setZoom(5);
 
                 $printArea.append('<img id="sample-graphic-print" src="' + this.infoGraphic + '" >');
 
