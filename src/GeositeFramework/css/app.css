@@ -801,7 +801,7 @@ table.esriLegendLayerLabel tbody tr td {
 .popover .row{
     width: 100%;
     min-width: 100%;
-    padding: 8px 16px;
+    padding: 2px 16px;
 }
 
 #launchpad {
