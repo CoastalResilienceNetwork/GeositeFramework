@@ -60,7 +60,10 @@ define(["dojo/_base/declare",
             validate: function () { return true; },
 
             // Auto-resolve the print deferred if the plugin does not implement the function
-            beforePrint: function (printDeferred) { printDeferred.resolve();  },
+            // printDeferred: deferred object to resolve when the printing can commence
+            // $printSandbox: DOM element which the framework provides for printable element arrangement
+            // previewMap: an ESRI map object for the print preview, if `usePrintPreviewMap` is true
+            beforePrint: function (printDeferred, $printSandbox, previewMap) { printDeferred.resolve();  },
 
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},

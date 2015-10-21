@@ -53,6 +53,7 @@ define([
             fullName: "Configure and control layers to be overlayed on the base map.",
             toolbarType: "sidebar",
             allowIdentifyWhenActive: true,
+            hasCustomPrint: true,
 
             _layerManager: null,
             _ui: null,
@@ -170,6 +171,15 @@ define([
             subregionDeactivated: function(subregion) {
                 this.clearAll();
                 this.initialize(null, 'main');
+            },
+
+            beforePrint: function(printDeferred) {
+                // We can short circuit the plugin print chain by simply
+                // rejecting this deferred object.  
+                printDeferred.reject();
+
+                // Trigger an export dialog for this pane.
+                this.app.dispatcher.trigger('export-map:pane-' + this.app.paneNumber);
             }
 
         });
