@@ -17,12 +17,19 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 declare.safeMixin(this, args);
                 $(this.container).append(
                     '<h4 style="padding: 5px;">Click any point on the map to display Latitude and Longitude</h4>');
+
+                // Hide the print button until the identify feature has been used.
+                $(this.printButton).hide();
             },
 
             identify: function(mapPoint, clickPoint, processResults) {
                 var text = "You clicked on latitude " + mapPoint.getLatitude() + " longitude " + mapPoint.getLongitude(),
                     identifyWidth = 300;
                 processResults(text, identifyWidth);
+
+                // Make the print button available now.
+                $(this.printButton).show();
+
             },
 
             beforePrint: function(printDeferred, $printArea, mapObject) {
