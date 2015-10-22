@@ -38,6 +38,7 @@ require(['use!Geosite',
                 app: {
                     version: N.app.version,
                     regionConfig: regionData,
+                    paneNumber: mapModel.get('mapNumber'),
                     info: _.bind(logger.info, logger),
                     warn: _.bind(logger.warn, logger),
                     error: _.bind(logger.error, logger),
