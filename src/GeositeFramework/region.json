@@ -96,6 +96,7 @@
         "secondary": "#26648E"
     },
     "identifyBlacklist": ["OBJECTID", "OBJECTID_1"],
+    "identifyEnabled": true,
     "launchpads": [
         {
             "id": "get-started",

@@ -329,8 +329,12 @@
             // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
 
-            // Clicking the map means "Identify" contents at a point
-            dojo.connect(esriMap, "onClick", tryIdentify);
+            // Framework level support for identify is off by default and must
+            // be enabled in the region config
+            if (view.model.get('regionData').identifyEnabled) {
+                // Clicking the map means "Identify" contents at a point
+                dojo.connect(esriMap, "onClick", tryIdentify);
+            }
             
             adjustToolPositions(view, esriMap);
         });
