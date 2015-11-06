@@ -500,7 +500,9 @@ require(['use!Geosite',
 
                     map.addLayer(new esri.layers.ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
 
-                    mapReadyDeferred.resolve(map);
+                    dojo.connect(map, 'onLoad', function() {
+                        mapReadyDeferred.resolve(map);
+                    });
 
                     $('#print-preview-print').on('click', function() {
                         // Move the map from the plugin print preview dialog to the sandbox where
