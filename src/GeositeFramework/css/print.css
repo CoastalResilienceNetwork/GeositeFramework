@@ -5,6 +5,9 @@
         visibility: hidden;
     }
 
+    html, body {
+        overflow: visible !important;
+    }
 
     /* An issue in Chrome for Windows would display the borders of this
        element in print media, despite it being selected by the clause above.*/
