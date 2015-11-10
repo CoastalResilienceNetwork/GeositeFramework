@@ -267,6 +267,12 @@
         window.onorientationchange = function() {
             view.$('.side-nav.top').mCustomScrollbar('update');
         };
+
+        // For on demand export initialization. See Layer Selector print, for example.
+        var paneNumber = view.model.get('paneNumber');
+        N.app.dispatcher.on('export-map:pane-' + paneNumber, function() {
+            view.exportMap();
+        });
     }
 
     function render(view) {
@@ -323,8 +329,12 @@
             // Initialize plugins now that all map properties are available (e.g. extent)
             view.model.initPlugins(esriMap);
 
-            // Clicking the map means "Identify" contents at a point
-            dojo.connect(esriMap, "onClick", tryIdentify);
+            // Framework level support for identify is off by default and must
+            // be enabled in the region config
+            if (view.model.get('regionData').identifyEnabled) {
+                // Clicking the map means "Identify" contents at a point
+                dojo.connect(esriMap, "onClick", tryIdentify);
+            }
             
             adjustToolPositions(view, esriMap);
         });
@@ -411,7 +421,7 @@
             'click .export-button': 'exportMap'
         },
 
-        exportMap: function exportMap(selectedPaneNumber) {
+        exportMap: function exportMap() {
             var model = new N.models.ExportTool({
                     esriMap: this.mapView.esriMap,
                     paneNumber: this.model.get('paneNumber')
@@ -420,8 +430,6 @@
 
             TINY.box.show({
                 html: view.render().el,
-                width: 450,
-                height: 275,
                 fixed: true,
                 maskopacity:50,
                 closejs: function () { view.remove(); }

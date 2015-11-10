@@ -116,13 +116,13 @@
         $('a.framework-popup').click(function() {
             var url = $(this).data('url');
             TINY.box.show({
+                width: 600,
                 iframe: url,
                 boxid: 'frameless',
-                width: 750,
-                height: 450,
                 fixed: false,
                 maskopacity: 40
             });
+
         });
     };
 

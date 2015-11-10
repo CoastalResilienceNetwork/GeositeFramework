@@ -33,11 +33,12 @@ require(['use!Geosite',
                 $uiContainer = model.get('$uiContainer'),
                 $legendContainer = model.get('$legendContainer'),
                 logger = new Logger(pluginName);
-            
+
             pluginObject.initialize({
                 app: {
                     version: N.app.version,
                     regionConfig: regionData,
+                    paneNumber: mapModel.get('mapNumber'),
                     info: _.bind(logger.info, logger),
                     warn: _.bind(logger.warn, logger),
                     error: _.bind(logger.error, logger),
@@ -48,8 +49,9 @@ require(['use!Geosite',
                 },
                 map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                 container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
-                legendContainer: ($legendContainer ? $legendContainer[0] : undefined)
-            });
+                legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
+                printButton: ($uiContainer ? $uiContainer.find('.plugin-print'): undefined )
+        });
         }
 
         function requestCsvDownload(filename, content) {
@@ -374,7 +376,8 @@ require(['use!Geosite',
                 bindings = {
                     title: pluginObject.toolbarName,
                     id: containerId,
-                    isHelpButtonVisible: isHelpButtonVisible(view)
+                    isHelpButtonVisible: isHelpButtonVisible(view),
+                    hasCustomPrint: pluginObject.hasCustomPrint
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
                 calculatePosition = function ($el) {
@@ -384,7 +387,6 @@ require(['use!Geosite',
                     };
                 };
 
-            $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
             view.$uiContainer = $uiContainer;
 
             $uiContainer
@@ -401,6 +403,49 @@ require(['use!Geosite',
                 .find('.plugin-help').on('click', function () {
                     model.set('displayHelp', true);
                 }).end()
+                .find('.plugin-print').on('click', function() {
+                    var pluginDeferred = $.Deferred(),
+                        parseDeferred = $.Deferred(),
+                        previewDeferred = $.Deferred(),
+                        pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
+                        printCssClass = 'plugin-print-css',
+                        oppositePaneHideCssPath = 'css/print-hide-map' +
+                            (paneNumber === 0 ? 1 : 0) + '.css',
+                        $printSandbox = $('#plugin-print-sandbox');
+                    
+                    // Any previous plugin-prints may have left specific print css
+                    // or sandbox elements.  Clear all so that this new print routine
+                    // has no conflicts with other plugins.
+                    $('.' + printCssClass).remove();
+                    $printSandbox.empty();
+
+                    // Add the plugin css
+                    addCss(pluginCssPath, printCssClass);
+
+                    // Hide the possible same plugin from the opposite map pane
+                    addCss(oppositePaneHideCssPath, printCssClass);
+
+                    // Give some time for the browser to parse the new CSS, 
+                    // if this wasn't slightly delayed, occasionally the override would
+                    // not be present and print features wouldn't show up.
+                    _.delay(parseDeferred.resolve, 200);
+
+                    var mapReadyDeferred = setupPrintableMap(pluginObject, $printSandbox, previewDeferred);
+
+                    mapReadyDeferred.then(function(previewMap) {
+                        // The plugin is given a deferred object to resolve when the page is ready
+                        // to be printed, a reference to an element where it can place printable
+                        // elements outside of its container and a reference to an esriMap which
+                        // is used as a print preview box.
+                        pluginObject.beforePrint(pluginDeferred, $printSandbox, previewMap);
+
+                        // Exectue the browser print when the plugin and print preview (if used)
+                        // have responded, as well as a slight delay for css parsing.
+                        $.when(pluginDeferred, parseDeferred, previewDeferred).then(function() {
+                            window.print();
+                        });
+                    });
+                }).end()
                 .hide();
 
             // Attach to top pane element
@@ -415,6 +460,70 @@ require(['use!Geosite',
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
+        }
+
+        function setupPrintableMap(pluginObject, $printSandbox, previewDeferred) {
+            var mapMarkup = N.app.templates['template-map-preview']({ pluginName: pluginObject.toolbarName }),
+                $mapPrint = $($.trim(mapMarkup)),
+                $printPreview = $('#print-preview-sandbox'),
+                mapReadyDeferred = $.Deferred(),
+                mapHeight = pluginObject.previewMapSize[1],
+                mapWidth = pluginObject.previewMapSize[0];
+
+            // If the plugin is not set up for map print preview, don't set up a map
+            // and resolve any pending print-preview map operations
+            if (!pluginObject.usePrintPreviewMap) {
+                previewDeferred.resolve();
+                mapReadyDeferred.resolve();
+                return mapReadyDeferred;
+            }
+
+            // Setup a print-preview window for the user to select an extent and zoom level
+            // that will be persisted at print due to its fixed size.
+            TINY.box.show({
+                animate: false,
+                html: $mapPrint[0].outerHTML,
+                boxid: 'print-preview-container',
+                width: _.max([mapWidth, 500]),
+                fixed: true,
+                maskopacity: 40,
+                openjs: function () {
+                    // Remove any calculated size so that it contains the full map
+                    $('#print-preview-container').css({ height: 'initial', width: 'initial' });
+
+                    // Set the supplied height & width on the map
+                    $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
+
+                    var originalMap = pluginObject.app._unsafeMap,
+                        map = new esri.Map('plugin-print-preview-map', { extent: originalMap.extent }),
+                        currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
+
+                    map.addLayer(new esri.layers.ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
+
+                    dojo.connect(map, 'onLoad', function() {
+                        mapReadyDeferred.resolve(map);
+                    });
+
+                    $('#print-preview-print').on('click', function() {
+                        // Move the map from the plugin print preview dialog to the sandbox where
+                        // the plugin can mess with it's positioning among its other elements
+                        $(map.container).detach().appendTo($printSandbox);
+                        TINY.box.hide();
+                        $printPreview.hide();
+                        previewDeferred.resolve();
+                    });
+                }
+            });
+
+            return mapReadyDeferred;
+        }
+
+        function addCss(path, className) {
+            $('<link>', {
+                rel: 'stylesheet',
+                href: path,
+                'class': className
+            }).appendTo('head');
         }
 
         function onContainerResize(view, resizeHandle, event) {

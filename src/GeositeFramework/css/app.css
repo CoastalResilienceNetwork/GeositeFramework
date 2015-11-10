@@ -746,14 +746,13 @@ table.esriLegendLayerLabel tbody tr td {
 .tbox{
     top: 100px!important;
     min-width: 500px!important;
-    width: 60%!important;
 }
 
 .tinner {
     overflow: hidden;
     padding: 0!important;
     min-height: 380px!important;
-    width: 100%!important;
+    width: 100%;
 }
 
 .tinner .tclose{
@@ -802,7 +801,7 @@ table.esriLegendLayerLabel tbody tr td {
 .popover .row{
     width: 100%;
     min-width: 100%;
-    padding: 8px 16px;
+    padding: 2px 16px;
 }
 
 #launchpad {
@@ -1041,4 +1040,20 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     font-weight: bold;
     font-size: 12px;
     position: relative;
+}
+
+#plugin-print-sandbox {
+    position: absolute;
+    visibility: hidden;
+}
+
+.print-preview-container {
+    padding: 10px;
+}
+#print-preview-container p {
+    padding: 5px; 
+}
+
+#print-preview-print {
+    float: right;
 }

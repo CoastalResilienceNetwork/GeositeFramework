@@ -75,6 +75,7 @@
     <link rel="stylesheet" href="//js.arcgis.com/3.10/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css">
 
+    <link rel="stylesheet" href="css/print.css">
     <link rel="stylesheet" href="css/foundation.min.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
@@ -250,6 +251,11 @@
                     <h6><%- title %></h6>
                     <a class="plugin-off" href="javascript:;">&#10006;</a>
                     <a class="plugin-close" href="javascript:;">&#95;</a>
+
+                    <% if (hasCustomPrint) { %>
+                        <a class="plugin-print" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
+                    <% } %>
+
                     <% if (isHelpButtonVisible) { %>
                         <a class="plugin-help" href="javascript:;" title="View the info-graphic">?</a>
                     <% } %>
@@ -437,6 +443,19 @@
         </div>
     </script>
 
+    <script type="text/template" id="template-map-preview">
+        <div id="plugin-print-preview">
+            <div class="popover popover-header">
+                <h2><%= pluginName %> - Print Preview</h2>
+            </div>
+            <div class="print-preview-container">
+                <button id="print-preview-print" class="button radius">Print</button>
+                <p class="instructions">Zoom to the view that you want printed in your map.</p>
+                <div id="plugin-print-preview-map"></div>
+            </div>
+        </div>
+    </script>
+
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <div class="fixed">
         <nav class="top-bar">
@@ -458,6 +477,10 @@
     
     @Html.Partial("TourInfo")
     
+    <!-- Area for plugins to arrange their markup independent
+        of their container -->
+    <div id="plugin-print-sandbox"></div>
+
     <!-- LEFT CONTENT AREA -->
     <div id="left-pane" class="content"></div>
     
