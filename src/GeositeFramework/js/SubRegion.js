@@ -303,15 +303,17 @@
 
         toggleMapBorder: function () {
             var mapContainer = this.subRegionManager.map.__container,
-                className = 'subregion-border-box',
-                $borderBox = $(mapContainer).find('.' + className);
+                baseClassName = 'subregion-border-box',
+                $borderBoxes = $(mapContainer).find('.' + baseClassName);
 
-            if ($borderBox.length) {
-                $borderBox.remove();
+            if ($borderBoxes.length) {
+                $borderBoxes.remove();
             } else {
-                $('<div/>', {
-                    'class': className
-                }).prependTo(mapContainer);
+                _.each(['bottom', 'left', 'right'], function(borderClass) {
+                  $('<div/>', {
+                      'class': baseClassName + ' ' + borderClass
+                  }).prependTo(mapContainer);
+                });
             }
         },
 
