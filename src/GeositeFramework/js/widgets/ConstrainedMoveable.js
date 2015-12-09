@@ -45,6 +45,32 @@ define(['use!Geosite',
             this.docked = false;
         },
 
+        // Handle cases where the element is large enough that
+        // it can potentially get hidden behind the app title bar
+        // or the resize handle gets moved outside the window. #438
+        onMoved: function(e) {
+            // If the element title bar gets moved behind the app title
+            // bar because of Dojo snapping behavior, move the element
+            // vertically so it's just under the app title bar.
+            var leftTop = domGeom.getMarginBox(this.node);
+
+            if (leftTop.t < 0) {
+                this.node.style.top = '0px';
+            }
+
+            // If the size of the element has been expanded
+            // to be bigger than the window, shorten it so it
+            // fits and the resize handle is visible.
+            var elSize = domGeom.getContentBox(this.node),
+                appTitleBarHeight = 45,
+                bottomPadding = 35; // Enough to make resize handle visible.
+
+            if (window.innerHeight - (elSize.h + appTitleBarHeight) < 0) {
+                var newHeight = elSize.h + ((window.innerHeight - elSize.h) - bottomPadding);
+                domGeom.setMarginBox(this.node, { h: newHeight });
+            }
+        },
+
         onWindowResize: function(e) {
             if (this.docked || !this.isVisible()) {
                 return;
