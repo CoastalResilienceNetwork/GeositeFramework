@@ -559,7 +559,33 @@
                                 {"id":23, "parentLayerId":-1 },
                                 {"id":24, "parentLayerId":-1 }
                             ]
-                        }   
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "agsSource": {
+            "url": "http://services.coastalresilience.org/arcgis/rest/services",
+            "folderTitle": "Coastal Resilience (National)",
+            "folders": [
+                {
+                    "url": "http://services.coastalresilience.org/arcgis/rest/services/US",
+                    "name": "",
+                    "groupFolder": "Coastal Resilience (National)/Social_and_Economic",
+                    "groupAsService": true,
+                    "description": "The Social and Economic map service features data concerning the social vulnerability of coastal communities and indicators of local dependence on coastal natural resources. A brief description appears when you click on each layer.",
+                    "services": [
+                        { "id": "1", "name": "Population", "displayName": "Population", "type":"tiled", "opacity": 0.75 },
+                        { "id": "2", "name": "Population_Density", "displayName": "Population Density", "type":"tiled", "opacity": 0.75 },
+                        { "id": "3", "name": "Children_Under_5", "displayName": "Children Under 5", "type":"tiled", "opacity": 0.75 },
+                        { "id": "4", "name": "Children_Under_5_Percentage", "displayName": "Children Under 5 (% of total pop)", "type":"tiled", "opacity": 0.75 },
+                        { "id": "5", "name": "People_Over_65", "displayName": "People Over 65", "type":"tiled", "opacity": 0.75 },
+                        { "id": "6", "name": "People_Over_65_Percentage", "displayName": "People Over 65 (% of total pop)", "type":"tiled", "opacity": 0.75 },
+                        { "id": "7", "name": "Families_in_Poverty", "displayName": "Families in Poverty", "type":"tiled", "opacity": 0.75 },
+                        { "id": "8", "name": "Families_in_Poverty_Percentage", "displayName": "Families in Poverty (% of total families)", "type":"tiled", "opacity": 0.75 },
+                        { "id": "9", "name": "Median_Owner_Occupied_Home_Value", "displayName": "Median Owner-Occupied Home Value (1,000s of USD)", "type":"tiled", "opacity": 0.75 }
                     ]
                 }
             ]
