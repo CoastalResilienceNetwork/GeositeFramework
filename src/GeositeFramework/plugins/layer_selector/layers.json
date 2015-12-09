@@ -590,5 +590,28 @@
                 }
             ]
         }
+    },
+    {
+        "wmsSource": {
+            "url": "http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer/WMSServer",
+            "folderTitle": "Sample WMS Service",
+            "layerIds": [
+                {
+                    "name": "0",
+                    "displayName": "States",
+                    "extent": { "sr": 4326, "xmin": 19.416377, "ymin": -125.192865, "xmax": 54.318281, "ymax": -66.105824 }
+                },
+                {
+                    "name": "1",
+                    "displayName": "Rivers",
+                    "extent": { "sr": 4326, "xmin": 19.416377, "ymin": -125.192865, "xmax": 54.318281, "ymax": -66.105824 }
+                },
+                {
+                    "name": "2",
+                    "displayName": "Cities",
+                    "extent": { "sr": 4326, "xmin": 19.416377, "ymin": -125.192865, "xmax": 54.318281, "ymax": -66.105824 }
+                }
+            ]
+        }
     }
 ]

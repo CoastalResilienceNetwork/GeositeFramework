@@ -39,7 +39,7 @@ define(["use!underscore"],
                 } else {
                     // Create a WMSLayer object and wait for it to load.
                     // (Internally it's doing "GetCapabilities" on the WMS service.)
-                    var wmsLayer = new esri.layers.WMSLayer(_url);
+                    var wmsLayer = new esri.layers.WMSLayer(_url, { visibleLayers: _.pluck(_config, 'name')});
                     dojo.connect(wmsLayer, "onLoad", function () {
                         loadLayers(wmsLayer, rootNode, layerConfigs);
                     });
