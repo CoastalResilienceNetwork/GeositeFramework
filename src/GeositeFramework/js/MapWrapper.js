@@ -28,7 +28,7 @@
         function rememberLayer(layer) {
             if (!isMyLayer(layer)) {
                 _myLayers.push(layer);
-                if (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") {
+                if (_.contains(["esri.layers.ArcGISDynamicMapServiceLayer", "esri.layers.ArcGISTiledMapServiceLayer"], layer.declaredClass)) {
                     mapModel.addService(layer, pluginObject);
                 }
             }
@@ -38,7 +38,7 @@
             _myLayers = _.reject(_myLayers, function (l) {
                 return l.id === layer.id;
             });
-            if (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") {
+            if (_.contains(["esri.layers.ArcGISDynamicMapServiceLayer", "esri.layers.ArcGISTiledMapServiceLayer"], layer.declaredClass)) {
                 mapModel.removeService(layer);
             }
         }
