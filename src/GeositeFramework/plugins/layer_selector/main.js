@@ -16,7 +16,7 @@ require({
         },
         {
             name: "underscore",
-            location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4",
+            location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3",
             main: "underscore-min"
         },
         {

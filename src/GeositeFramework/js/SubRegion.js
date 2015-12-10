@@ -264,7 +264,8 @@
     N.models.SubRegion = Backbone.Model.extend({});
 
     N.views.SubRegionHeader = Backbone.View.extend({
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options;
             this.template = N.app.templates['template-subregion'];
             this.$container = this.options.$container;
             this.deactivateFn = this.options.deactivateFn;

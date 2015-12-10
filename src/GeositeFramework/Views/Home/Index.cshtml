@@ -490,13 +490,15 @@
     <script src="js/polyfill.js"></script>
     
     <script src="//apis.google.com/js/client.js"></script>
+    <!-- Scripts that will change their behavior in undesirable ways if they find an AMD
+         environment should be loaded before the jsapi -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
     <script src="//js.arcgis.com/3.11/"></script>
     <script src="Scripts/json2.min.js"></script>
     <script src="js/lib/foundation/foundation.min.js"></script>
     <script src="js/lib/foundation/app.js"></script>
     <script src="js/lib/jquery.dropdown.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
