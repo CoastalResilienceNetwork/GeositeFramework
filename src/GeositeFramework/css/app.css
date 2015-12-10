@@ -1023,12 +1023,27 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 
 .subregion-border-box {
     position: absolute;
-    width: 100%;
     z-index: 1;
-    border: solid 3px rgba(194, 32, 32, 0.5);
+    border: solid 2px rgba(194, 32, 32, 0.5);
     border-top: none;
-    top: 50px;
     bottom: 0px;
+}
+
+.subregion-border-box.bottom {
+    width: 100%;
+    border-width: 3px;
+    left: 4px;
+}
+
+.subregion-border-box.right {
+    right: 0px;
+    top: 50px;
+    bottom: 3px;
+}
+
+.subregion-border-box.left {
+    left: 0px;
+    top: 50px;
 }
 
 .subregion-header select{
