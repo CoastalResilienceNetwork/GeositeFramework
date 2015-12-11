@@ -1,9 +1,19 @@
 ﻿
-define(["jquery", "use!underscore"],
-    function ($, _) {
-        dojo.require("esri.tasks.geometry");
-        dojo.require("esri.dijit.InfoWindow");
-        
+define(["jquery",
+        "use!underscore",
+        "esri/geometry/Polyline",
+        "esri/geometry/Polygon",
+        "esri/geometry/geodesicUtils",
+        "esri/geometry/webMercatorUtils",
+        "esri/tasks/GeometryService",
+        "esri/dijit/InfoWindow"],
+    function($, _,
+              Polyline,
+              Polygon,
+              geodesicUtils,
+              webMercatorUtils,
+              GeometryService,
+              InfoWindow) {
         var AgsMeasure = function (opts) {
 
             var options = _.extend({
@@ -75,7 +85,7 @@ define(["jquery", "use!underscore"],
 
                 // Create a new info window at the starting measure node
                 var $infoWindow = $('<div>').appendTo($parent),
-                    infoWindow = new esri.dijit.InfoWindow({ map: map }, $infoWindow.get(0));
+                    infoWindow = new InfoWindow({ map: map }, $infoWindow.get(0));
                 infoWindow.startup();
                 map.infoWindow = infoWindow;
                 $(infoWindow.domNode).addClass('measure-info-window'); // style it ourselves
@@ -144,12 +154,12 @@ define(["jquery", "use!underscore"],
 
             calculateDistance = function (points) {
                 // Calculate the total distance from a series of ordered points
-                var polyline = new esri.geometry.Polyline();
+                var polyline = new Polyline();
                 polyline.setSpatialReference(options.map.spatialReference);
                 polyline.addPath(points);
 
-                var geoLine = esri.geometry.webMercatorToGeographic(polyline);
-                return esri.geometry.geodesicLengths([geoLine], options.esriLengthUnits)[0];
+                var geoLine = webMercatorUtils.webMercatorToGeographic(polyline);
+                return geodesicUtils.geodesicLengths([geoLine], options.esriLengthUnits)[0];
             },
 
             handleMapDoubleClick = function (evt) {
@@ -179,7 +189,7 @@ define(["jquery", "use!underscore"],
                 // Use the last entered point, and the hover point to 
                 // create a temporary line which follows the mouse cursor
                 var path = _.last(_points, 1),
-                    line = new esri.geometry.Polyline(),
+                    line = new Polyline(),
                     geographicLine = null,
                     tipText = '';
 
@@ -190,8 +200,8 @@ define(["jquery", "use!underscore"],
                 _hoverLine.setGeometry(line);
 
                 // Calculate the length of the line, using a geographic coordindate system
-                geographicLine = esri.geometry.webMercatorToGeographic(line);
-                var geoLineLength = esri.geometry.geodesicLengths([geographicLine], options.esriLengthUnits)[0];
+                geographicLine = webMercatorUtils.webMercatorToGeographic(line);
+                var geoLineLength = geodesicUtils.geodesicLengths([geographicLine], options.esriLengthUnits)[0];
 
                 // Format the segment and line lengths
                 tipText = formatTooltip(geoLineLength, _renderedLength + geoLineLength);
@@ -212,10 +222,10 @@ define(["jquery", "use!underscore"],
 
             handleMapClick = function (evt) {
                 if (pointsMakeValidPolygon()) {
-                    var originP = new esri.geometry.ScreenPoint(_originPointEvent.x,
+                    var originP = new Geometry.ScreenPoint(_originPointEvent.x,
                                                                 _originPointEvent.y),
-                        bufferP = new esri.geometry.ScreenPoint(evt.clientX, evt.clientY),
-                        len = esri.geometry.getLength(originP, bufferP);
+                        bufferP = new Geometry.ScreenPoint(evt.clientX, evt.clientY),
+                        len = Geometry.getLength(originP, bufferP);
                     if (len < _firstNodeClickBuffer) {
                         finishMeasureAsPolygon();
                     } else {
@@ -260,7 +270,7 @@ define(["jquery", "use!underscore"],
                 } else {
                     // An additional point has been added to the measurement,
                     // take the two most recent points, and draw a line from them
-                    var line = new esri.geometry.Polyline();
+                    var line = new Polyline();
                     line.setSpatialReference(options.map.spatialReference);
                     line.addPath(_.last(_points, 2));
 
@@ -339,17 +349,17 @@ define(["jquery", "use!underscore"],
                 // Make the last point be the same coordinates of the first point
                 // and create a polygon out of it
                 _points.push(_points[0]);
-                var polygon = new esri.geometry.Polygon(options.map.spatialReference);
+                var polygon = new Polygon(options.map.spatialReference);
                 
                 // If the user has drawn the polygon ring anti-clockwise, reverse the ring
                 // to make it a valid esri geometry.
-                if (!esri.geometry.isClockwise(_points)) {
+                if (!Geometry.isClockwise(_points)) {
                     _points = _points.reverse();
                 }
                 polygon.addRing(_points);
                 
                 // If the polygon self interesects, simplify it using the geometry service
-                if (esri.geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
+                if (Geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
                     _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
                         setMeasureOutput(simplifiedPolygons[0]);
                     });
@@ -361,8 +371,8 @@ define(["jquery", "use!underscore"],
             // Assumes polygon is valid at this point
             setMeasureOutput = function (polygon)
             {
-                var geoPolygon = esri.geometry.webMercatorToGeographic(polygon),
-                        area = esri.geometry.geodesicAreas([geoPolygon],
+                var geoPolygon = webMercatorUtils.webMercatorToGeographic(polygon),
+                        area = geodesicUtils.geodesicAreas([geoPolygon],
                             options.esriAreaUnits)[0];
 
                 // Remove our lines for the outline layer and replace them
@@ -396,7 +406,7 @@ define(["jquery", "use!underscore"],
                     _tooltipTemplate = _.template(options.tooltipTemplate);
 
                     if (options.geomServiceUrl) {
-                        _geometrySvc = new esri.tasks.GeometryService(options.geomServiceUrl);
+                        _geometrySvc = new GeometryService(options.geomServiceUrl);
                     }
                 },
 

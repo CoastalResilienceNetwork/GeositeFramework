@@ -1,8 +1,7 @@
 ﻿// Module WmsLoader.js
 
-define(["use!underscore"],
+define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
     function (_) {
-        dojo.require("esri.layers.wms");
         var WmsLoader = function (url, folderName, config, extent) {
             var _url = url,
                 _folderName = folderName,
@@ -28,7 +27,7 @@ define(["use!underscore"],
                         loadCatalogUsingResourceInfo(rootNode, layerConfigs);
                     } else {
                         // Config file specifies this WMS source should not be loaded
-                        var wmsLayer = new esri.layers.WMSLayer(_url);
+                        var wmsLayer = new WMSLayer(_url);
                         dojo.connect(wmsLayer, "onLoad", function () {});
                         dojo.connect(wmsLayer, "onError", function () {
                             getOrMakeContainerNode(_folderName + " (Unavailable)", rootNode, "service");
@@ -39,7 +38,7 @@ define(["use!underscore"],
                 } else {
                     // Create a WMSLayer object and wait for it to load.
                     // (Internally it's doing "GetCapabilities" on the WMS service.)
-                    var wmsLayer = new esri.layers.WMSLayer(_url);
+                    var wmsLayer = new WMSLayer(_url);
                     dojo.connect(wmsLayer, "onLoad", function () {
                         loadLayers(wmsLayer, rootNode, layerConfigs);
                     });
@@ -61,7 +60,7 @@ define(["use!underscore"],
                         ymax: layerConfig.extent.ymax,
                         spatialReference: { wkid: layerConfig.extent.sr }
                     });
-                    return new esri.layers.WMSLayerInfo({
+                    return new WMSLayerInfo({
                         name: layerConfig.name,
                         title: displayName,
                         description: layerConfig.description,
@@ -74,7 +73,7 @@ define(["use!underscore"],
                     layerInfos: layerInfos,
                     description: description
                 };
-                var wmsLayer = new esri.layers.WMSLayer(_url, {
+                var wmsLayer = new WMSLayer(_url, {
                     resourceInfo: resourceInfo,
                     visibleLayers: _.pluck(layerConfigs, 'name')
                 });
