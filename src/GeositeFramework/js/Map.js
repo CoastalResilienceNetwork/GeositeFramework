@@ -262,7 +262,7 @@ require(['use!Geosite',
             // which makes having a re-flow layout impossible.  We re-render the legend
             // list by removing each legend and sub-legend 'nugget' and moving them into
             // a flat list, which we can do a simple css based reflow on.
-            var legendNuggets = [];
+            /*var legendNuggets = [];
             view.$legendEl.find('.esriLegendService').each(function(idx, legendParent) {
                 $(legendParent).children('div').each(function(idx, legendItem) {
                     var $legend = $(legendItem);
@@ -293,7 +293,7 @@ require(['use!Geosite',
 
             if (totalVisibleLayers !== legendNuggets.length) {
                 _.delay(updateLegend, 1000);
-            }
+            }*/
         }
     }
 
