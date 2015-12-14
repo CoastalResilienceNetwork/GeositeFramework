@@ -627,7 +627,8 @@ require(['use!Geosite',
             $uiContainer: null,
             $legendContainer: null,
 
-            initialize: function() {
+            initialize: function(options) {
+                this.options = options;
                 initialize(this, this.options.$parent, this.options.paneNumber);
             },
 
@@ -713,7 +714,8 @@ require(['use!Geosite',
         N.views = N.views || {};
         N.views.TopbarPlugin = N.views.BasePlugin.extend({
             className: 'topbar-plugin',
-            initialize: function() {
+            initialize: function(options) {
+                this.options = options;
                 this.options.$parent.append(this.$el);
                 N.views.BasePlugin.prototype.initialize.call(this);
             },
