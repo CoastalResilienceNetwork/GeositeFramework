@@ -3,11 +3,13 @@
 
 require(['use!Geosite',
          'esri/dijit/Legend',
+         'esri/map',
          'dojox/layout/ResizeHandle',
          'framework/widgets/ConstrainedMoveable'
         ],
     function(N,
              Legend,
+             Map,
              ResizeHandle,
              ConstrainedMoveable) {
     'use strict';
@@ -213,11 +215,13 @@ require(['use!Geosite',
         var $legendContainer = $('#' + view.legendContainerId);
 
         // Make the legend resizable and moveable
-        new ResizeHandle({
+        var handle = new ResizeHandle({
             targetId: view.legendContainerId,
             activeResize: true,
             animateSizing: false
-        }).placeAt(view.legendContainerId);
+        });
+            
+        handle.placeAt(view.legendContainerId);
 
         new ConstrainedMoveable(
             document.getElementById(view.legendContainerId), {

@@ -1,10 +1,18 @@
 ﻿// Module AgsLoader.js
 
-define(["jquery", "use!underscore"],
-    function ($, _) {
-        dojo.require("esri.layers.FeatureLayer");
-        dojo.require("esri.utils");
-        dojo.require("dojo.DeferredList");
+define(["jquery",
+        "use!underscore",
+        "esri/layers/FeatureLayer",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/geometry/Extent",
+        "dojo/DeferredList"],
+    function ($, _,
+              FeatureLayer,
+              ArcGISDynamicMapServiceLayer,
+              ArcGISTiledMapServiceLayer,
+              Extent,
+              DeferredList) {
         var AgsLoader = function(baseUrl) {
             var _baseUrl = baseUrl,
                 _folderConfigs = null,
@@ -57,7 +65,7 @@ define(["jquery", "use!underscore"],
                     });
                 });
 
-                new dojo.DeferredList(folderDeferreds).then(function(data) {
+                new DeferredList(folderDeferreds).then(function(data) {
                     var serviceSpecs = _.map(data, function(result) {
                         var item = result[1];
                         if (item.success) {
@@ -209,7 +217,7 @@ define(["jquery", "use!underscore"],
                     }
                 });
 
-                new dojo.DeferredList(serviceDeferreds).then(function(results) {
+                new DeferredList(serviceDeferreds).then(function(results) {
                     _.each(results, function(result, i) {
                         var serviceData = result[1],
                             serviceSpec = serviceSpecs[i];
@@ -239,7 +247,7 @@ define(["jquery", "use!underscore"],
                     node.description = serviceConfig.description || serviceData.description || serviceData.serviceDescription || "No description or metadata available for this map service.";
                     node.opacity = (_.has(serviceConfig, "opacity")) ? serviceConfig.opacity : 0.7;
                     node.params = { "opacity": node.opacity };
-                    node.extent = new esri.geometry.Extent(serviceData.fullExtent);
+                    node.extent = new Extent(serviceData.fullExtent);
                     node.checked = false;
                     node.serviceType = serviceConfig.type;
                     node.setOpacity = setOpacity;
@@ -358,9 +366,9 @@ define(["jquery", "use!underscore"],
                 node.leaf = true;
                 if (_.has(serviceConfig, "mode")) {
                     var modes = {
-                        "snapshot": esri.layers.FeatureLayer.MODE_SNAPSHOT,
-                        "ondemand": esri.layers.FeatureLayer.MODE_ONDEMAND,
-                        "selection": esri.layers.FeatureLayer.MODE_SELECTION
+                        "snapshot": FeatureLayer.MODE_SNAPSHOT,
+                        "ondemand": FeatureLayer.MODE_ONDEMAND,
+                        "selection": FeatureLayer.MODE_SELECTION
                     };
                     var mode = modes[serviceConfig.mode];
                     node.params.mode = mode;
@@ -750,7 +758,7 @@ define(["jquery", "use!underscore"],
                 if (serviceNode.esriService === undefined) {
                     // This node's service has no layer object yet, so make one and cache it
                     if (serviceNode.serviceType === "dynamic") {
-                        serviceNode.esriService = new esri.layers.ArcGISDynamicMapServiceLayer(serviceNode.url, serviceNode.params);
+                        serviceNode.esriService = new ArcGISDynamicMapServiceLayer(serviceNode.url, serviceNode.params);
                         if (_.has(serviceNode, "children")) {
                             serviceNode.esriService.setVisibleLayers([-1]);
                         }
@@ -758,9 +766,9 @@ define(["jquery", "use!underscore"],
                             serviceNode.esriService.setVisibleLayers(serviceNode.visibleLayerIds);
                         }
                     } else if (serviceNode.serviceType === "tiled") {
-                        serviceNode.esriService = new esri.layers.ArcGISTiledMapServiceLayer(serviceNode.url, serviceNode.params);
+                        serviceNode.esriService = new ArcGISTiledMapServiceLayer(serviceNode.url, serviceNode.params);
                     } else if (serviceNode.serviceType === "feature-layer") {
-                        serviceNode.esriService = new esri.layers.FeatureLayer(serviceNode.url, serviceNode.params);
+                        serviceNode.esriService = new FeatureLayer(serviceNode.url, serviceNode.params);
                         if (_.has(serviceNode, "symbology")) {
                             serviceNode.esriService.setRenderer(new esri.renderer.SimpleRenderer(serviceNode.symbology));
                         }
@@ -797,7 +805,7 @@ define(["jquery", "use!underscore"],
                     url: url + "?f=json",
                     success: function(metadata) {
                         layerNode.description = metadata.description || "No description or metadata available for this layer.";
-                        layerNode.extent = new esri.geometry.Extent(metadata.extent);
+                        layerNode.extent = new Extent(metadata.extent);
                         layerNode.url = url;
                         layerNode.opacity = "setByService";
                         callback();
