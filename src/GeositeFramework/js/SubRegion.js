@@ -264,7 +264,8 @@
     N.models.SubRegion = Backbone.Model.extend({});
 
     N.views.SubRegionHeader = Backbone.View.extend({
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options;
             this.template = N.app.templates['template-subregion'];
             this.$container = this.options.$container;
             this.deactivateFn = this.options.deactivateFn;
@@ -303,15 +304,17 @@
 
         toggleMapBorder: function () {
             var mapContainer = this.subRegionManager.map.__container,
-                className = 'subregion-border-box',
-                $borderBox = $(mapContainer).find('.' + className);
+                baseClassName = 'subregion-border-box',
+                $borderBoxes = $(mapContainer).find('.' + baseClassName);
 
-            if ($borderBox.length) {
-                $borderBox.remove();
+            if ($borderBoxes.length) {
+                $borderBoxes.remove();
             } else {
-                $('<div/>', {
-                    'class': className
-                }).prependTo(mapContainer);
+                _.each(['bottom', 'left', 'right'], function(borderClass) {
+                  $('<div/>', {
+                      'class': baseClassName + ' ' + borderClass
+                  }).prependTo(mapContainer);
+                });
             }
         },
 

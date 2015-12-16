@@ -6,9 +6,11 @@
 // and ask each active plugin to return any relevant information
 // about that point.
 
-(function (N) {
-
-    dojo.require("esri.dijit.Popup");
+require(['use!Geosite',
+         'esri/dijit/Popup'],
+    function(N,
+             Popup) {
+    'use strict';
 
     var IDENTIFY_TIMEOUT = 5000,
         TIMEOUT_MESSAGE = 'Failed to return results within ' + IDENTIFY_TIMEOUT / 1000 + ' seconds',
@@ -84,4 +86,4 @@
         infoWindow.setContent($resultsContainer.get(0));
     }
 
-}(Geosite));
+});
