@@ -238,8 +238,13 @@ require(['use!Geosite',
         // body of `updateLegend` immediately looks at visible layers, while some may
         // still asynchronously be in queue to become visible. As a protection, call
         // `updateLegend` explicitly when a layer has finished adding.
-        dojo.connect(esriMap, 'onUpdateEnd', updateLegend);
-        dojo.connect(esriMap, 'onLayerAdd', updateLegend);
+        //
+        // Add legends for tile layers fires both of these events, which results in
+        // the legend flickering (because of our manual redraw), so make sure the
+        // function is not called repetitively.
+        var debouncedUpdateLegend = _.debounce(updateLegend, 100);
+        dojo.connect(esriMap, 'onUpdateEnd', debouncedUpdateLegend);
+        dojo.connect(esriMap, 'onLayerAdd', debouncedUpdateLegend);
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -266,16 +271,22 @@ require(['use!Geosite',
             // which makes having a re-flow layout impossible.  We re-render the legend
             // list by removing each legend and sub-legend 'nugget' and moving them into
             // a flat list, which we can do a simple css based reflow on.
-            var legendNuggets = [];
+            var legendNuggets = [],
+                nuggetCount = 0;
+
+            // Each map service returns a .esriLegendService element with legend elements
+            // for each layer in the service. Only those layers that are on the map have
+            // visible legend elements.
             view.$legendEl.find('.esriLegendService').each(function(idx, legendParent) {
-                $(legendParent).children('div').each(function(idx, legendItem) {
-                    var $legend = $(legendItem);
-                    if ($legend.hasClass('esriLegendGroupLayer')) {
-                        legendNuggets.push.apply(legendNuggets, $legend.children('div'));
-                    } else {
-                        legendNuggets.push(legendItem);
-                    }
-                });
+                var $groupLayers = $(legendParent).find('.esriLegendGroupLayer:visible');
+                if ($groupLayers.length > 0) {
+                    legendNuggets.push($groupLayers);
+                    nuggetCount += $groupLayers.length;
+                } else {
+                    // Tile layer legends are rendered outside of a .esriLegendService element.
+                    legendNuggets.push($(legendParent).find('div:visible'));
+                    nuggetCount += 1;
+                }
             });
 
             legendNuggets.sort(heightComparator);
@@ -283,20 +294,22 @@ require(['use!Geosite',
             view.$legendEl.empty()
                 .append.apply(view.$legendEl, legendNuggets);
 
-            // compare the total number of visible layers on the map to the number
+            // Compare the total number of visible layers on the map to the number
             // of legendNuggets to determine if the legend has gotten info for all
             // visible layers. If not, recur with a delay.
-            // this is a hack, because sometimes when loading from browser cache,
+            //
+            // This is a hack, because sometimes when loading from browser cache,
             // layerAdd events don't fire.
-            function countVisibleLayers(count, layerInfo) {
-                var vl = layerInfo.layer.visibleLayers,
-                    shouldAdd = !(vl.length === 1 && vl[0] === -1);
-                return count += shouldAdd ? vl.length : 0;
-            }
-            var totalVisibleLayers =_.reduce(layerInfos, countVisibleLayers, 0);
 
-            if (totalVisibleLayers !== legendNuggets.length) {
-                _.delay(updateLegend, 1000);
+            // Get all the layers on the map, and filter out graphic layers (i.e. subregion boundaries)
+            // and layers that aren't visible;
+            var totalVisibleLayers =_.filter(esriMap.getLayersVisibleAtScale(), function(layer) {
+                return !layer.graphics && layer.visible;
+            });
+
+            // Subtract one for the base layer.
+            if ((totalVisibleLayers.length - 1) !== nuggetCount) {
+                _.delay(updateLegend, 250);
             }
         }
     }
