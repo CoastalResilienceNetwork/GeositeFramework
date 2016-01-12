@@ -2,16 +2,16 @@
 /*global Backbone, _, $, Geosite, esri, Azavea, setTimeout, dojo, dojox */
 
 require(['use!Geosite',
-         'esri/dijit/Legend',
-         'esri/map',
-         'dojox/layout/ResizeHandle',
-         'framework/widgets/ConstrainedMoveable'
+         'dojo/Deferred',
+         'dojo/request/xhr',
+         'framework/Legend',
+         'esri/map'
         ],
     function(N,
+             Deferred,
+             xhr,
              Legend,
-             Map,
-             ResizeHandle,
-             ConstrainedMoveable) {
+             Map) {
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
@@ -201,132 +201,88 @@ require(['use!Geosite',
     }
 
     function initLegend(view, esriMap) {
-        // Create default legend section
         var mapNumber =  view.model.get('mapNumber'),
-            id = 'legend-' + mapNumber,
-            legendDijit = new Legend({ map: esriMap, layerInfos: [] }, id);
+            regionData = N.app.data.region,
+            id = 'legend-container-' + mapNumber,
+            legend = new Legend(regionData, id);
 
-        legendDijit.startup();
-
-        view.$legendEl = $(legendDijit.domNode);
-        view.$legendEl.addClass('esriLegendService');
-        view.legendContainerId = "legend-container-" + mapNumber;
-
-        var $legendContainer = $('#' + view.legendContainerId);
-
-        // Make the legend resizable and moveable
-        var handle = new ResizeHandle({
-            targetId: view.legendContainerId,
-            activeResize: true,
-            animateSizing: false
-        });
-            
-        handle.placeAt(view.legendContainerId);
-
-        new ConstrainedMoveable(
-            document.getElementById(view.legendContainerId), {
-                handle: $legendContainer.find('.legend-header')[0],
-                within: true
+        var getServiceLegend = (function() {
+            var cache = {};
+            // Memoize so only 1 request is generated per service.
+            var fetch = _.memoize(function(url) {
+                xhr(url, {
+                        query: 'f=json',
+                        method: 'GET',
+                        handleAs: 'json',
+                        headers: {
+                            // Fixes: "Request header field X-Requested-With is not allowed by Access-Control-Allow-Headers in preflight response."
+                            'X-Requested-With': null
+                        }
+                    })
+                    .then(function(data) {
+                        cache[url] = data.layers;
+                    })
+                    .then(redraw);
             });
+            return function(serviceUrl) {
+                var url = serviceUrl + '/legend';
+                if (cache[url]) {
+                    return cache[url];
+                }
+                fetch(url);
+                return null;
+            };
+        }());
 
-        $legendContainer.find('.legend-close').click(function() {
-            $legendContainer.hide();
-        });
-
-        // Update the legend whenever the map changes. Certain layer events can only
-        // be captured by the catchall `onUpdateEnd`, so bind to that. However, the
-        // body of `updateLegend` immediately looks at visible layers, while some may
-        // still asynchronously be in queue to become visible. As a protection, call
-        // `updateLegend` explicitly when a layer has finished adding.
-        //
-        // Add legends for tile layers fires both of these events, which results in
-        // the legend flickering (because of our manual redraw), so make sure the
-        // function is not called repetitively.
-        var debouncedUpdateLegend = _.debounce(updateLegend, 100);
-        dojo.connect(esriMap, 'onUpdateEnd', debouncedUpdateLegend);
-        dojo.connect(esriMap, 'onLayerAdd', debouncedUpdateLegend);
-
-        function updateLegend() {
+        function getVisibleLayers() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
-                layerInfos = [];
+                result = [];
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
-                if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
-                    // This service was added by a plugin, and the plugin wants it in the legend
-                    var layer;
-                    if (serviceInfo.service.declaredClass === "esri.layers.FeatureLayer") {
-                        layer = { layer: serviceInfo.service, title: serviceInfo.service.id };
-                    } else {
-                        layer = { layer: serviceInfo.service };
-                    }
-                    layerInfos.push(layer);
+                if (serviceInfo && service.visible && serviceInfo.pluginObject.showServiceLayersInLegend) {
+                    service.visibleLayers.sort();
+                    _.each(service.visibleLayers, function(layerId) {
+                        var layer = _.findWhere(service.layerInfos, {id: layerId});
+                        if (!layer) {
+                            return;
+                        }
+                        var serviceLegend = getServiceLegend(service.url);
+                        if (!serviceLegend) {
+                            return;
+                        }
+                        var legend = _.findWhere(serviceLegend, {layerId: layerId});
+                        if (isLayerInScale(service, layer)) {
+                            result.push({
+                                service: service,
+                                layer: layer,
+                                legend: legend
+                            });
+                        }
+                    });
                 }
             });
-            if (view.arrangedLegend) {
-                view.arrangedLegend.destroy();
-            }
-            legendDijit.refresh(layerInfos);
-
-            // The ESRI Legend Dijit renders as a series of nested tables and divs
-            // which makes having a re-flow layout impossible.  We re-render the legend
-            // list by removing each legend and sub-legend 'nugget' and moving them into
-            // a flat list, which we can do a simple css based reflow on.
-            var legendNuggets = [],
-                nuggetCount = 0;
-
-            // Each map service returns a .esriLegendService element with legend elements
-            // for each layer in the service. Only those layers that are on the map have
-            // visible legend elements.
-            view.$legendEl.find('.esriLegendService').each(function(idx, legendParent) {
-                var $groupLayers = $(legendParent).find('.esriLegendGroupLayer:visible');
-                if ($groupLayers.length > 0) {
-                    legendNuggets.push($groupLayers);
-                    nuggetCount += $groupLayers.length;
-                } else {
-                    // Tile layer legends are rendered outside of a .esriLegendService element.
-                    legendNuggets.push($(legendParent).find('div:visible'));
-                    nuggetCount += 1;
-                }
-            });
-
-            legendNuggets.sort(heightComparator);
-
-            view.$legendEl.empty()
-                .append.apply(view.$legendEl, legendNuggets);
-
-            // Compare the total number of visible layers on the map to the number
-            // of legendNuggets to determine if the legend has gotten info for all
-            // visible layers. If not, recur with a delay.
-            //
-            // This is a hack, because sometimes when loading from browser cache,
-            // layerAdd events don't fire.
-
-            // Get all the layers on the map, and filter out graphic layers (i.e. subregion boundaries)
-            // and layers that aren't visible;
-            var totalVisibleLayers =_.filter(esriMap.getLayersVisibleAtScale(), function(layer) {
-                return !layer.graphics && layer.visible;
-            });
-
-            // Subtract one for the base layer.
-            if ((totalVisibleLayers.length - 1) !== nuggetCount) {
-                _.delay(updateLegend, 250);
-            }
+            return result;
         }
+
+        // Filter out layers that are not visible at the current map scale.
+        // Adapted from the ESRI dijit legend source code. (Ref: _isLayerInScale)
+        function isLayerInScale(service, layer) {
+            var scale = esriMap.getScale();
+            var minScale = Math.min(service.minScale, layer.minScale) || service.minScale || layer.minScale;
+            var maxScale = Math.max(service.maxScale, layer.maxScale);
+            return minScale === 0 || minScale > scale && maxScale < scale;
+        }
+
+        // Debounce to reduce flickering when called repeatedly.
+        var redraw = _.debounce(function() {
+            legend.render(getVisibleLayers());
+        }, 100);
+
+        dojo.connect(esriMap, 'onUpdateEnd', redraw);
+        dojo.connect(esriMap, 'onLayerAdd', redraw);
+        dojo.connect(esriMap, 'onLayerRemove', redraw);
+        dojo.connect(esriMap, 'onLayerSuspend', redraw);
     }
-
-    // Compare DOM elements by their computed height
-    function heightComparator(a, b) {
-        var ha = $(a).height(), 
-            hb = $(b).height();
-
-        if (ha < hb) {
-            return -1;
-        }
-        if (ha > hb) {
-            return 1;
-        }
-        return 0;
-    };
 
     N.views = N.views || {};
     N.views.Map = Backbone.View.extend({
