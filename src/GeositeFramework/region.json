@@ -159,5 +159,14 @@
               }
             ]
         }
-    ]
+    ],
+    "legend": {
+        "layers": [
+            {
+                "serviceUrl": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico/Florida/MapServer",
+                "layerName": "Bathymetry (m)",
+                "legendType": "scale"
+            }
+        ]
+    }
 }
