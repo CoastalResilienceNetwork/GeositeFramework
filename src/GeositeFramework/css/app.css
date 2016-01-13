@@ -619,63 +619,30 @@ input.code-like, textarea.code-like {
         width: 100%;
         min-height: 200px;
     }
-    .content .legend #legend-0_msg,
-    .content .legend #legend-1_msg {
-        color: #888;
-        font-weight: 400;
-    }
 
-    .content .legend #legend-0_msg {
-        display: none;
-    }
-
-#legend-0 > div, #legend-1 > div, .custom-legend {
-    padding-bottom: 8px;
+.legend-layer {
     float: left;
     width: 215px;
+    margin-bottom: 10px;
+    background-color: #fff;
     }
-    .legend-body .esriLegendService {
-        padding-bottom: 0;
+    .legend-layer .item {
+        float: left;
+        clear: left;
     }
-    .esriLegendService table {
-        margin: 0;
+    .legend-layer.scale .item {
+        clear: none;
+    }
+    .legend-layer img {
         border: none;
-        }
-        .esriLegendService table tbody tr {
-            background-color: #FFF;
-            }
-            .esriLegendService td {
-                padding: 0;
-                vertical-align: middle;
-                line-height: normal;
-                font-weight: 300;
-            }
-            .esriLegendService img {
-                height: 18px;
-                border: 1px solid #DDD;
-            }
-
-.esriLegendLayerLabel {
-    position: relative;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    height: 25px;
-}
-
-/* This span displays the raw name of a map layer.
-   The nicely-formatted name is also displayed, so
-   there's no harm in hiding this.*/
-span.esriLegendServiceLabel {
-    font-size: 1.2em;
-    display: none;
-}
-
-/* Bold the nicely-formatted layer name */
-table.esriLegendLayerLabel tbody tr td {
-    font-weight: bold;
-    padding-top: 4px;
-    padding-bottom: 1px;
-}
+    }
+    .legend-layer .item-label {
+        position: relative;
+        top: -4px;
+    }
+    .legend-layer .legend-title {
+        margin-bottom: 5px;
+    }
 
 .mCSB_container {
     margin-right: 0 !important;
