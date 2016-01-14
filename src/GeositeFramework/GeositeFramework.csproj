@@ -218,6 +218,12 @@
     <Content Include="plugins\layer_selector\main.css" />
     <Content Include="plugins\layer_selector\main.js" />
     <Content Include="plugins\layer_selector\Ui.js" />
+    <Content Include="plugins\layer_selector_v2\icon.png" />
+    <Content Include="plugins\layer_selector_v2\icon_active.png" />
+    <Content Include="plugins\layer_selector_v2\main.css" />
+    <Content Include="plugins\layer_selector_v2\main.js" />
+    <Content Include="plugins\layer_selector_v2\print.css" />
+    <Content Include="plugins\layer_selector_v2\templates.html" />
     <Content Include="plugins\legend_display\legend_display.css" />
     <Content Include="plugins\legend_display\icon-active.png" />
     <Content Include="plugins\legend_display\icon.png" />
@@ -302,6 +308,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\subregion_toggle\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\layer_selector_v2\layers.json" />
+    <Content Include="plugins\layer_selector_v2\plugin.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

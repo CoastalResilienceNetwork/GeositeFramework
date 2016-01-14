@@ -1,0 +1,122 @@
+[
+    {
+        "displayName": "Coastal Resilience (NJ)",
+        "server": {
+            "type": "ags",
+            "layerType": "dynamic",
+            "url": "http://services.coastalresilience.org/arcgis/rest/services/New_Jersey/",
+            "serviceName": "New_Jersey"
+        },
+        "layers": [
+            {
+                "layerName": "Boundaries",
+                "displayName": "Boundaries",
+                "includeLayers": [
+                    {
+                        "layerName": "Study Area",
+                        "server": {
+                            "type": "ags",
+                            "layerType": "dynamic",
+                            "url": "http://services.coastalresilience.org/arcgis/rest/services/New_Jersey/",
+                            "serviceName": "New_Jersey"
+                        }
+                    },
+                    {
+                        "layerName": "Congressional Districts"
+                    },
+                    {
+                        "layerName": "Town,city, village"
+                    },
+                    {
+                        "layerName": "Counties"
+                    },
+                    {
+                        "layerName": "Watershed Regions"
+                    }
+                ]
+            },
+            {
+                "layerName": "Demographics",
+                "displayName": "Demographics",
+                "includeAllLayers": true
+            },
+            {
+                "layerName": "Ecological",
+                "displayName": "Ecological",
+                "blacklist": []
+            },
+            {
+                "layerName": "Critical Facilities",
+                "displayName": "Critical Facilities",
+                "blacklist": []
+            },
+            {
+                "layerName": "Coastal Hazards",
+                "whitelist": [
+                    {
+                        "layerName": "Sea Level Rise Impact Analysis",
+                        "whitelist": [
+                            {
+                                "layerName": "Current Sea Level",
+                                "displayName": "Sea Level (Current)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (1 ft.)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (2 ft.)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (3 ft.)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (4 ft.)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (5 ft.)"
+                            },
+                            {
+                                "layerName": "Sea Level Rise (6 ft.)"
+                            }
+                        ]
+                    },
+                    {
+                        "layerName": "Storm Surge Scenario Analysis",
+                        "blacklist": []
+                    }
+                ]
+            },
+            {
+                "layerName": "Land Use",
+                "displayName": "Land Use",
+                "blacklist": []
+            }
+        ]
+    },
+    {
+        "displayName": "Hurricane Sandy",
+        "server": {
+            "type": "ags",
+            "layerType": "dynamic",
+            "url": "http://services.femadata.com/arcgis/rest/services/2012_Sandy/"
+        },
+        "layers": [
+            {
+                "server": {
+                    "serviceName": "SurgeBoundaries_Final_0214"
+                },
+                "layerName": "FINAL - High Resolution Storm Surge Extent",
+                "displayName": "Final FEMA Surge Area - February 2013",
+                "combine": true,
+                "blacklist": []
+            },
+            {
+                "server": {
+                    "serviceName": "2012_Sandy"
+                },
+                "layerName": "Hurricane Sandy - County Impact Analysis (click county for summary)",
+                "displayName": "Hurricane Sandy - County Impact Analysis"
+            }
+        ]
+    }
+]
