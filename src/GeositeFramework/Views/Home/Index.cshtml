@@ -177,12 +177,53 @@
                 <div id="legend-container-<%= paneNumber %>" class="legend">
                     <div class="legend-header">Map Legend
                         <a class="legend-close" title="Hide Legend" href="javascript:;">_</a></div>
-                    <div class="legend-body">
-                        <div id="legend-<%= paneNumber %>"></div>
-                    </div>
+                    <div class="legend-body"></div>
                 </div>
                 <div class="subregion-tooltip"></div>
             </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-legend-item-single">
+        <div class="legend-layer single">
+            <div class="item">
+                <img src="data:<%= legend[0].contentType %>;base64,<%= legend[0].imageData %>"
+                    width="<%- legend[0].width %>"
+                    height="<%- legend[0].height %>"
+                    title="<%- legend[0].label %>" alt="" />
+                <span class="item-label"><%- layerName %></span>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-legend-item-multiple">
+        <div class="legend-layer multiple">
+            <div class="legend-title"><%- layerName %></div>
+            <% _.each(legend, function(item) { %>
+                <div class="item">
+                    <img src="data:<%= item.contentType %>;base64,<%= item.imageData %>"
+                        width="<%- item.width %>"
+                        height="<%- item.height %>"
+                        title="<%- item.label %>" alt="" />
+                    <span class="item-label"><%- item.label %></span>
+                </div>
+            <% }) %>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-legend-item-scale">
+        <div class="legend-layer scale">
+            <div class="legend-title"><%- layerName %></div>
+            <% _.each(legend, function(item, i) { %>
+                <div class="item">
+                    <% if (i === 0) { %><%- item.label %><% } %>
+                    <img src="data:<%= item.contentType %>;base64,<%= item.imageData %>"
+                        width="<%- item.width %>"
+                        height="<%- item.height %>"
+                        title="<%- item.label %>" alt="" />
+                    <% if (i === legend.length - 1) { %><%- item.label %><% } %>
+                </div>
+            <% }) %>
         </div>
     </script>
 
