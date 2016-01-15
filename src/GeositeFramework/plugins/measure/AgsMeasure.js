@@ -1,4 +1,4 @@
-﻿
+
 define(["jquery",
         "use!underscore",
         "esri/geometry/Polyline",
@@ -6,6 +6,8 @@ define(["jquery",
         "esri/geometry/geodesicUtils",
         "esri/geometry/webMercatorUtils",
         "esri/tasks/GeometryService",
+	"esri/geometry/ScreenPoint",
+	"esri/geometry/mathUtils",
         "esri/dijit/InfoWindow"],
     function($, _,
               Polyline,
@@ -13,6 +15,8 @@ define(["jquery",
               geodesicUtils,
               webMercatorUtils,
               GeometryService,
+	      ScreenPoint,
+	      mathUtils,
               InfoWindow) {
         var AgsMeasure = function (opts) {
 
@@ -141,7 +145,9 @@ define(["jquery",
                 _eventHandles.doubleClick =
                     dojo.connect(options.map, "onDblClick", handleMapDoubleClick);
 
-                _eventHandles.graphicMouseOver =                    dojo.connect(_pointLayer, 'onMouseOver', handleMarkerMouseOver);
+                _eventHandles.graphicMouseOver =
+                    dojo.connect(_pointLayer, 'onMouseOver', handleMarkerMouseOver);
+
                 _eventHandles.graphicMouseOut =
                     dojo.connect(_pointLayer, 'onMouseOut', handleMarkerMouseOut);
 
@@ -222,10 +228,10 @@ define(["jquery",
 
             handleMapClick = function (evt) {
                 if (pointsMakeValidPolygon()) {
-                    var originP = new Geometry.ScreenPoint(_originPointEvent.x,
+                    var originP = new ScreenPoint(_originPointEvent.x,
                                                                 _originPointEvent.y),
-                        bufferP = new Geometry.ScreenPoint(evt.clientX, evt.clientY),
-                        len = Geometry.getLength(originP, bufferP);
+                        bufferP = new ScreenPoint(evt.clientX, evt.clientY),
+                        len = mathUtils.getLength(originP, bufferP);
                     if (len < _firstNodeClickBuffer) {
                         finishMeasureAsPolygon();
                     } else {
@@ -353,13 +359,13 @@ define(["jquery",
                 
                 // If the user has drawn the polygon ring anti-clockwise, reverse the ring
                 // to make it a valid esri geometry.
-                if (!Geometry.isClockwise(_points)) {
-                    _points = _points.reverse();
-                }
+                //if (!Polygon.isClockwise(_points)) {
+                //   _points = _points.reverse();
+                //}
                 polygon.addRing(_points);
                 
                 // If the polygon self interesects, simplify it using the geometry service
-                if (Geometry.polygonSelfIntersecting(polygon) && _geometrySvc) {
+                if (polygon.isSelfIntersecting(polygon) && _geometrySvc) {
                     _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
                         setMeasureOutput(simplifiedPolygons[0]);
                     });
