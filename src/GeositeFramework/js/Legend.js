@@ -21,6 +21,7 @@ define(['use!Geosite',
                     layerName: layer.name
                 });
             }
+
             return null;
         }
     });
@@ -57,6 +58,7 @@ define(['use!Geosite',
 
         getLayerTemplate: function(legend, service, layer) {
             var layerSettings = this.config.getLayerSettings(service, layer);
+
             if (layerSettings) {
                 if (layerSettings.legendType === 'single') {
                     return this.tmplLegendItemSingle;
@@ -66,22 +68,27 @@ define(['use!Geosite',
                     return this.tmplLegendItemScale;
                 }
             }
+
             if (legend.legend.length === 1) {
                 return this.tmplLegendItemSingle;
             }
+
             return this.tmplLegendItemMultiple;
         },
 
         render: function(legendGroups) {
             var self = this,
                 $container = $('<div>');
+
             _.each(legendGroups, function(legendGroup) {
                 var service = legendGroup.service,
                     layer = legendGroup.layer,
                     legend = legendGroup.legend,
                     tmpl = self.getLayerTemplate(legend, service, layer);
-                    $container.append(tmpl(legend));
+
+                $container.append(tmpl(legend));
             });
+
             this.$el.find('.legend-body').html($container.html());
         }
     });
