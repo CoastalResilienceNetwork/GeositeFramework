@@ -199,15 +199,28 @@
     <script type="text/template" id="template-legend-item-multiple">
         <div class="legend-layer multiple">
             <div class="legend-title"><%- layerName %></div>
-            <% _.each(legend, function(item) { %>
-                <div class="item">
+            <% _.each(legend, function(item, index) { %>
+                <div class="item <% if (index > 2 && index <= (legend.length - 3)) { %>extra<% } %>">
                     <img src="data:<%= item.contentType %>;base64,<%= item.imageData %>"
                         width="<%- item.width %>"
                         height="<%- item.height %>"
                         title="<%- item.label %>" alt="" />
                     <span class="item-label"><%- item.label %></span>
                 </div>
+                <% if (legend.length > 5 && index === 3) { %>
+                    <div class="item expand">
+                        <span>...</span>
+                    </div>
+                <% } %>
             <% }) %>
+            <% if (legend.length > 5) { %>
+                <div class="item expand">
+                    <a href="#" class="expand-legend">View <% print(legend.length - 5) %> more</a>
+                </div>
+                <div class="item extra collapse">
+                    <a href="#" class="expand-legend">View less</a>
+                </div>
+            <% } %>
         </div>
     </script>
 

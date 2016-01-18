@@ -90,6 +90,20 @@ define(['use!Geosite',
             });
 
             this.$el.find('.legend-body').html($container.html());
+            this.assignLegendEvents();
+        },
+
+        assignLegendEvents: function() {
+            this.$el.find('.expand-legend').on('click', $.proxy(function(e) {
+                this.toggleExtraLegendItems(e);
+            }, this));
+        },
+
+        toggleExtraLegendItems: function(e) {
+            var $extraLegendControl = $(e.target),
+                $extraLegendItems = $extraLegendControl.parents('.legend-layer');
+
+            $extraLegendItems.toggleClass('show-extras');
         }
     });
 

@@ -630,6 +630,15 @@ input.code-like, textarea.code-like {
         float: left;
         clear: left;
     }
+    .legend-layer .extra {
+        display: none;
+    }
+    .legend-layer.show-extras .extra {
+        display: block;
+    }
+    .legend-layer.show-extras .expand {
+        display: none;
+    }
     .legend-layer.scale .item {
         clear: none;
     }
