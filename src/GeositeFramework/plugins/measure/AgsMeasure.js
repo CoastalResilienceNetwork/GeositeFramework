@@ -359,9 +359,11 @@ define(["jquery",
                 
                 // If the user has drawn the polygon ring anti-clockwise, reverse the ring
                 // to make it a valid esri geometry.
-                //if (!Polygon.isClockwise(_points)) {
-                //   _points = _points.reverse();
-                //}
+
+				if (!polygon.isClockwise(_points)) {
+				_points = _points.reverse();
+				}
+				
                 polygon.addRing(_points);
                 
                 // If the polygon self interesects, simplify it using the geometry service
