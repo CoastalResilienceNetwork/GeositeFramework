@@ -141,7 +141,9 @@ define(["jquery",
                 _eventHandles.doubleClick =
                     dojo.connect(options.map, "onDblClick", handleMapDoubleClick);
 
-                _eventHandles.graphicMouseOver =                    dojo.connect(_pointLayer, 'onMouseOver', handleMarkerMouseOver);
+                _eventHandles.graphicMouseOver =
+                    dojo.connect(_pointLayer, 'onMouseOver', handleMarkerMouseOver);
+
                 _eventHandles.graphicMouseOut =
                     dojo.connect(_pointLayer, 'onMouseOut', handleMarkerMouseOut);
 
