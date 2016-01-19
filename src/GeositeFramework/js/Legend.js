@@ -52,7 +52,7 @@ define(['use!Geosite',
                 });
 
             this.$el.find('.legend-close').click(function() {
-                self.$el.hide();
+                self.toggleMinimize();
             });
         },
 
@@ -79,6 +79,12 @@ define(['use!Geosite',
         render: function(legendGroups) {
             var self = this,
                 $container = $('<div>');
+                
+            if (legendGroups.length === 0) {
+                this.$el.hide();
+            } else {
+                this.$el.show();
+            }
 
             _.each(legendGroups, function(legendGroup) {
                 var service = legendGroup.service,
@@ -104,6 +110,72 @@ define(['use!Geosite',
                 $extraLegendItems = $extraLegendControl.parents('.legend-layer');
 
             $extraLegendItems.toggleClass('show-extras');
+        },
+        
+        toggleMinimize: function() {
+            if (this.$el.hasClass('minimized')) {
+                this.restore();
+            } else {
+                this.minimize();
+            }
+        },
+        
+        minimize: function() {
+            var dims = this._calcDimensions(),
+                // An element with a ResizeHandle gets an inlined height
+                // once it's been resized, so we have to hold on these
+                // values so we can restore them later.
+                height = this.height = parseInt(this.$el.css('height')),
+                // We need to move the header to where the bottom of the legend
+                // was so that the header doesn't look like it's floating.
+                top = dims.top + height - dims.headerHeight;
+
+            this.$el.css({ 
+                height: 0,
+                top: top
+            });
+
+            // Hide the legend body or else it maintains it's
+            // height despite the above css changes.
+            this.$el.find('.legend-body').hide();
+            
+            // Hide the resize handle or else the user can resize the
+            // minimized legend.
+            this.$el.find('.dojoxResizeHandle').hide();
+            
+            this.$el.addClass('minimized');
+        },
+        
+        restore: function() {
+            // If the legend was dragged while minimized,
+            // the value of top may have changed.
+            var dims = this._calcDimensions(),
+                // We need to move the header to where it was previously.
+                // Without this math, the element will slowly creep upward
+                // after toggling. We also have to protect against the header
+                // going under the app title bar.
+                calculatedTop = dims.top - this.height + dims.headerHeight,
+                top = calculatedTop < 0 ? 0 : calculatedTop;
+
+            this.$el.css({ 
+                height: this.height,
+                top: top
+            });
+
+            this.$el.find('.legend-body').show();
+            this.$el.find('.dojoxResizeHandle').show();
+
+            this.$el.removeClass('minimized');
+        },
+
+        _calcDimensions: function() {
+            var top = parseInt(this.$el.css('top')),
+                headerHeight = parseInt(this.$el.find('.legend-header').css('height'));
+
+            return {
+                top: top,
+                headerHeight: headerHeight
+            };
         }
     });
 
