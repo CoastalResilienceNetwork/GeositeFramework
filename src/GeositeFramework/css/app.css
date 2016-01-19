@@ -593,14 +593,14 @@ input.code-like, textarea.code-like {
     position: absolute;
     bottom: 45px;
     right: 105px;
-    width: 250px;
     height: 200px;
+    width: 250px;
+    min-width: 250px;
     z-index: 2;
     font-weight: bold;
     background: #FFF;
     font-size: 12px;
     border-radius: 4px;
-    min-height: 240px;
     box-shadow: 0 0 12px #666;
     box-shadow: 0 0 12px rgba(0,0,0,.25);
     padding-bottom: 36px; /* header offset */
