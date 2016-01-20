@@ -55,6 +55,14 @@ define([
 
                 // Trigger an export dialog for this pane.
                 this.app.dispatcher.trigger('export-map:pane-' + this.app.paneNumber);
+            },
+
+            activate: function() {
+                $(this.legendContainer).show().html('Layer Selector V2');
+            },
+
+            deactivate: function() {
+                $(this.legendContainer).hide().html();
             }
 
         });

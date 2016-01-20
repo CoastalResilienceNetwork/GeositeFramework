@@ -95,7 +95,7 @@ define(['use!Geosite',
                 $container.append(tmpl(legend));
             });
 
-            this.$el.find('.legend-body').html($container.html());
+            this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
             this.autoResize();
         },
@@ -199,8 +199,8 @@ define(['use!Geosite',
                 legendHeight = parseInt(legend.outerHeight()) - legendHeaderHeight,
                 legendWidth = parseInt(legend.css('width'));
 
-            // Add up the height of the all of the layer legends.
-            legend.find('.legend-body .legend-layer').each(function(i, el) {
+            // Add up the height of the all of the layer legends and plugin legends.
+            legend.find('.legend-body .legend-layer, .legend-body .custom-legend').each(function(i, el) {
                 // True indicates margin should be included.
                 contentHeight += $(el).outerHeight(true);
             });
