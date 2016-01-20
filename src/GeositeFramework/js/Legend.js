@@ -15,7 +15,7 @@ define(['use!Geosite',
         },
 
         getLayerSettings: function(service, layer) {
-            if (this.config.layers) {
+            if (this.config && this.config.layers) {
                 return _.findWhere(this.config.layers, {
                     serviceUrl: service.url,
                     layerName: layer.name
