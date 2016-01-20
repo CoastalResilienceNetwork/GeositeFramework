@@ -97,7 +97,10 @@ define(['use!Geosite',
 
             this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
-            this.autoResize();
+
+            if (!this.$el.hasClass('minimized')) {
+                this.autoResize();
+            }
         },
 
         assignLegendEvents: function() {
@@ -116,6 +119,7 @@ define(['use!Geosite',
         toggleMinimize: function() {
             if (this.$el.hasClass('minimized')) {
                 this.restore();
+                this.autoResize();
             } else {
                 this.minimize();
             }
