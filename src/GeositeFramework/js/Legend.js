@@ -1,10 +1,14 @@
 define(['use!Geosite',
          'dojo/_base/declare',
+         'dojo/window',
+         'dojo/dom-geometry',
          'dojox/layout/ResizeHandle',
          'framework/widgets/ConstrainedMoveable'
         ],
     function(N,
              declare,
+             win,
+             domGeom,
              ResizeHandle,
              ConstrainedMoveable) {
     'use strict';
@@ -219,6 +223,39 @@ define(['use!Geosite',
                 legend.css({ width: MAX_WIDTH });
             } else if (contentHeight < MAX_HEIGHT && legendHeight <= MAX_HEIGHT) {
                 legend.css({ width: MIN_WIDTH });
+            }
+
+            // If the legend was minimized or moved by the user,
+            // it's possible that resizing it will push part of
+            // the element off the screen.
+            this.checkAndSetPosition();
+        },
+
+        checkAndSetPosition: function() {
+            // Checks if the legend is outside of the viewport on
+            // the bottom and right sides. If so, the legend is
+            // repositioned to be completely in the viewport, plus
+            // a small buffer so that it's not flush with the edge.
+            var VIEWPORT_BUFFER = 30;
+
+            var viewportSize = win.getBox(),
+                legend = this.$el,
+                legendDimensions = domGeom.position(legend.attr('id')),
+                legendRight = legendDimensions.x + legendDimensions.w,
+                legendBottom = legendDimensions.y + legendDimensions.h;
+
+            if (legendRight > viewportSize.w) {
+                var currentLeft = parseInt(legend.css('left')),
+                    newLeft = (currentLeft - (legendRight - viewportSize.w)) - VIEWPORT_BUFFER;
+
+                legend.css({ left: newLeft });
+            }
+
+            if (legendBottom > viewportSize.h) {
+                var currentTop = parseInt(legend.css('top')),
+                    newTop = (currentTop - (legendBottom - viewportSize.h)) - VIEWPORT_BUFFER;
+
+                legend.css({ top: newTop });
             }
         }
     });
