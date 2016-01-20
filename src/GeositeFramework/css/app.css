@@ -606,6 +606,10 @@ input.code-like, textarea.code-like {
     padding-bottom: 36px; /* header offset */
     overflow:visible;
     }
+    .content .legend.minimized {
+        height: 0;
+        min-height: 0;
+    }
     .content .legend .legend-header {
         padding: 10px;
         background: #444;
