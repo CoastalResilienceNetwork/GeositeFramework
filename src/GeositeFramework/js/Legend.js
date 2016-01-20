@@ -97,6 +97,7 @@ define(['use!Geosite',
 
             this.$el.find('.legend-body').html($container.html());
             this.assignLegendEvents();
+            this.autoResize();
         },
 
         assignLegendEvents: function() {
@@ -130,7 +131,7 @@ define(['use!Geosite',
                 // was so that the header doesn't look like it's floating.
                 top = dims.top + height - dims.headerHeight;
 
-            this.$el.css({ 
+            this.$el.css({
                 height: 0,
                 top: top
             });
@@ -176,6 +177,45 @@ define(['use!Geosite',
                 top: top,
                 headerHeight: headerHeight
             };
+        },
+        
+        autoResize: function() {
+            // Attempts to resize the legend element to more
+            // conveniently  display (i.e. no scrollbar) the layer
+            // legends. It will do so until the hard-coded limits
+            // here are reached.
+            var MAX_HEIGHT = 400, // Somewhat arbitrary
+                MAX_WIDTH = 480, // Just enough to fit two columns
+                MIN_WIDTH = 250, // Just enough to fit one column
+                LEGEND_BODY_PADDING = 22;
+
+            // We use $el.css('property') instead of $el.property() in most
+            // cases because it returns a more accurate number. I think this
+            // is due to inline style rules.
+            var legend = this.$el,
+                contentHeight = LEGEND_BODY_PADDING,
+                contentWidth = parseInt(legend.find('.legend-body').css('width')),
+                legendHeaderHeight = this._calcDimensions().headerHeight,
+                legendHeight = parseInt(legend.outerHeight()) - legendHeaderHeight,
+                legendWidth = parseInt(legend.css('width'));
+
+            // Add up the height of the all of the layer legends.
+            legend.find('.legend-body .legend-layer').each(function(i, el) {
+                // True indicates margin should be included.
+                contentHeight += $(el).outerHeight(true);
+            });
+
+            // Height
+            if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT && contentHeight < MAX_HEIGHT) {
+                legend.css({ height: (contentHeight + legendHeaderHeight) });
+            }
+
+            // Width
+            if (contentHeight > MAX_HEIGHT && legendHeight <= MAX_HEIGHT && legendWidth < MAX_WIDTH) {
+                legend.css({ width: MAX_WIDTH });
+            } else if (contentHeight < MAX_HEIGHT && legendHeight <= MAX_HEIGHT) {
+                legend.css({ width: MIN_WIDTH });
+            }
         }
     });
 
