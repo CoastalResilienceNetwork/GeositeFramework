@@ -6,6 +6,9 @@
 
 <script type="text/template" id="layer">
     <li><span class="ls-node"><%= layer.getDisplayName() %></span>
+    <% if (layer.getServer()) { %>
+    (Server name: <%- layer.getServer().name %>)
+    <% } %>
     <% if (layer.hasChildren()) { %>
         <ul>
             <% if (layer.isLoading()) { %>

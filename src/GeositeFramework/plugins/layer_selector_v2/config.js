@@ -42,6 +42,13 @@ define([
             },
             isLoading: function() {
                 return false;
+            },
+            getServer: function() {
+                if (this.parent) {
+                    // The current node value should take precedence over the parent node.
+                    return _.assign({}, this.parent.getServer(), this.node.server);
+                }
+                return this.node.server;
             }
         });
 
