@@ -16,12 +16,12 @@
 define([
         "dojo/_base/declare",
         "framework/PluginBase",
-        "dojo/text!./layers.json",
         "dojo/text!./templates.html",
+        "./config",
         "jquery",
         "underscore"
     ],
-    function (declare, PluginBase, layerSourcesJson, templates, $, _) {
+    function (declare, PluginBase, templates, Config, $, _) {
 
         return declare(PluginBase, {
             toolbarName: "Map Layers v2",
@@ -32,7 +32,8 @@ define([
 
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
-                var nodes = { nodes: JSON.parse(layerSourcesJson) };
+                this.config = new Config();
+                var nodes = { nodes: this.config.getLayers() };
                 var test = _.template(this.getTemplateByName('main'))(nodes);
                 $(this.container).html(test);
 
