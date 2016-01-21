@@ -622,7 +622,6 @@ input.code-like, textarea.code-like {
         overflow: auto;
         height: 100%;
         width: 100%;
-        min-height: 200px;
     }
 
 .legend-layer {

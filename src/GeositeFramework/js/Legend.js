@@ -214,15 +214,21 @@ define(['use!Geosite',
             });
 
             // Height
-            if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT && contentHeight < MAX_HEIGHT) {
-                legend.css({ height: (contentHeight + legendHeaderHeight) });
+            if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT) {
+                if (contentHeight < MAX_HEIGHT) {
+                    legend.css({ height: (contentHeight + legendHeaderHeight) });
+                } else if (contentHeight > MAX_HEIGHT) {
+                    legend.css({ height: MAX_HEIGHT });
+                }
             }
 
             // Width
-            if (contentHeight > MAX_HEIGHT && legendHeight <= MAX_HEIGHT && legendWidth < MAX_WIDTH) {
-                legend.css({ width: MAX_WIDTH });
-            } else if (contentHeight < MAX_HEIGHT && legendHeight <= MAX_HEIGHT) {
-                legend.css({ width: MIN_WIDTH });
+            if (legendHeight <= MAX_HEIGHT) {
+                if (contentHeight > MAX_HEIGHT && legendWidth < MAX_WIDTH) {
+                    legend.css({ width: MAX_WIDTH });
+                } else if (contentHeight < MAX_HEIGHT) {
+                    legend.css({ width: MIN_WIDTH });
+                }
             }
 
             // If the legend was minimized or moved by the user,
