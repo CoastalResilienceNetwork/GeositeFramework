@@ -5,91 +5,86 @@
             "type": "ags",
             "layerType": "dynamic",
             "url": "http://services.coastalresilience.org/arcgis/rest/services/New_Jersey/",
-            "serviceName": "New_Jersey"
+            "name": "New_Jersey"
         },
-        "layers": [
+        "includeLayers": [
             {
-                "layerName": "Boundaries",
+                "name": "Boundaries",
                 "displayName": "Boundaries",
                 "includeLayers": [
                     {
-                        "layerName": "Study Area",
+                        "name": "Study Area",
                         "server": {
                             "type": "ags",
                             "layerType": "dynamic",
                             "url": "http://services.coastalresilience.org/arcgis/rest/services/New_Jersey/",
-                            "serviceName": "New_Jersey"
+                            "name": "New_Jersey"
                         }
                     },
                     {
-                        "layerName": "Congressional Districts"
+                        "name": "Congressional Districts"
                     },
                     {
-                        "layerName": "Town,city, village"
+                        "name": "Town,city, village"
                     },
                     {
-                        "layerName": "Counties"
+                        "name": "Counties"
                     },
                     {
-                        "layerName": "Watershed Regions"
+                        "name": "Watershed Regions"
                     }
                 ]
             },
             {
-                "layerName": "Demographics",
-                "displayName": "Demographics",
-                "includeAllLayers": true
+                "name": "Demographics",
+                "displayName": "Demographics"
             },
             {
-                "layerName": "Ecological",
-                "displayName": "Ecological",
-                "blacklist": []
+                "name": "Ecological",
+                "displayName": "Ecological"
             },
             {
-                "layerName": "Critical Facilities",
-                "displayName": "Critical Facilities",
-                "blacklist": []
+                "name": "Critical Facilities",
+                "displayName": "Critical Facilities"
             },
             {
-                "layerName": "Coastal Hazards",
-                "whitelist": [
+                "name": "Coastal Hazards",
+                "includeLayers": [
                     {
-                        "layerName": "Sea Level Rise Impact Analysis",
-                        "whitelist": [
+                        "name": "Sea Level Rise Impact Analysis",
+                        "includeLayers": [
                             {
-                                "layerName": "Current Sea Level",
+                                "name": "Current Sea Level",
                                 "displayName": "Sea Level (Current)"
                             },
                             {
-                                "layerName": "Sea Level Rise (1 ft.)"
+                                "name": "Sea Level Rise (1 ft.)"
                             },
                             {
-                                "layerName": "Sea Level Rise (2 ft.)"
+                                "name": "Sea Level Rise (2 ft.)"
                             },
                             {
-                                "layerName": "Sea Level Rise (3 ft.)"
+                                "name": "Sea Level Rise (3 ft.)"
                             },
                             {
-                                "layerName": "Sea Level Rise (4 ft.)"
+                                "name": "Sea Level Rise (4 ft.)"
                             },
                             {
-                                "layerName": "Sea Level Rise (5 ft.)"
+                                "name": "Sea Level Rise (5 ft.)"
                             },
                             {
-                                "layerName": "Sea Level Rise (6 ft.)"
+                                "name": "Sea Level Rise (6 ft.)"
                             }
                         ]
                     },
                     {
-                        "layerName": "Storm Surge Scenario Analysis",
-                        "blacklist": []
+                        "name": "Storm Surge Scenario Analysis"
                     }
                 ]
             },
             {
-                "layerName": "Land Use",
-                "displayName": "Land Use",
-                "blacklist": []
+                "name": "Land Use",
+                "displayName": "Land Use"
             }
         ]
     },
@@ -100,21 +95,20 @@
             "layerType": "dynamic",
             "url": "http://services.femadata.com/arcgis/rest/services/2012_Sandy/"
         },
-        "layers": [
+        "includeLayers": [
             {
                 "server": {
-                    "serviceName": "SurgeBoundaries_Final_0214"
+                    "name": "SurgeBoundaries_Final_0214"
                 },
-                "layerName": "FINAL - High Resolution Storm Surge Extent",
+                "name": "FINAL - High Resolution Storm Surge Extent",
                 "displayName": "Final FEMA Surge Area - February 2013",
-                "combine": true,
-                "blacklist": []
+                "combine": true
             },
             {
                 "server": {
-                    "serviceName": "2012_Sandy"
+                    "name": "2012_Sandy"
                 },
-                "layerName": "Hurricane Sandy - County Impact Analysis (click county for summary)",
+                "name": "Hurricane Sandy - County Impact Analysis (click county for summary)",
                 "displayName": "Hurricane Sandy - County Impact Analysis"
             }
         ]
