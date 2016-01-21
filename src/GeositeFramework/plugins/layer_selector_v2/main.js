@@ -50,7 +50,7 @@ define([
 
             beforePrint: function(printDeferred) {
                 // We can short circuit the plugin print chain by simply
-                // rejecting this deferred object.  
+                // rejecting this deferred object.
                 printDeferred.reject();
 
                 // Trigger an export dialog for this pane.
