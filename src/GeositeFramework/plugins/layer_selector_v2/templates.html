@@ -1,12 +1,19 @@
 ﻿<script type="text/template" id="tree">
-    <fieldset>
-        <legend>Layer Selector</legend>
-        <ul>
-            <%= _.map(layers, renderLayer).join('') %>
-        </ul>
-    </fieldset>
+    <ul>
+        <%= _.map(layers, renderLayer).join('') %>
+    </ul>
 </script>
 
 <script type="text/template" id="layer">
-    <li><span class="ls-node"><%= layer.displayName %></span></li>
+    <li><span class="ls-node"><%= layer.getDisplayName() %></span>
+    <% if (layer.hasChildren()) { %>
+        <ul>
+            <% if (layer.isLoading()) { %>
+            <li>Loading...</li>
+            <% } else { %>
+            <%= _.map(layer.getChildren(), renderLayer).join('') %>
+            <% } %>
+        </ul>
+    <% } %>
+    </li>
 </script>

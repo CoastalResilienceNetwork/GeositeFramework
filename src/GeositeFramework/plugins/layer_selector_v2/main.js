@@ -52,7 +52,8 @@ define([
 
             renderLayer: function(layer) {
                 return this.layerTmpl({
-                    layer: layer
+                    layer: layer,
+                    renderLayer: _.bind(this.renderLayer, this)
                 });
             },
 
