@@ -1,5 +1,12 @@
-﻿<script type="text/template" id="main">
-    <% _.each(nodes, function(node) { %>
-        <div class="ls-node"><%= node.displayName %></div>
-    <% }) %>
+﻿<script type="text/template" id="tree">
+    <fieldset>
+        <legend>Layer Selector</legend>
+        <ul>
+            <%= _.map(layers, renderLayer).join('') %>
+        </ul>
+    </fieldset>
+</script>
+
+<script type="text/template" id="layer">
+    <li><span class="ls-node"><%= layer.displayName %></span></li>
 </script>

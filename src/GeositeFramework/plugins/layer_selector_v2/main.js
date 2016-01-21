@@ -33,10 +33,27 @@ define([
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
                 this.config = new Config();
-                var nodes = { nodes: this.config.getLayers() };
-                var test = _.template(this.getTemplateByName('main'))(nodes);
-                $(this.container).html(test);
+                this.treeTmpl = _.template(this.getTemplateByName('tree'));
+                this.layerTmpl = _.template(this.getTemplateByName('layer'));
+            },
 
+            render: function() {
+                var layers = this.config.getLayers(),
+                    html = this.renderTree(layers);
+                $(this.container).html(html);
+            },
+
+            renderTree: function(layers) {
+                return this.treeTmpl({
+                    layers: layers,
+                    renderLayer: _.bind(this.renderLayer, this)
+                });
+            },
+
+            renderLayer: function(layer) {
+                return this.layerTmpl({
+                    layer: layer
+                });
             },
 
             getTemplateByName: function(name) {
@@ -60,6 +77,7 @@ define([
 
             activate: function() {
                 $(this.legendContainer).show().html('Layer Selector V2');
+                this.render();
             },
 
             deactivate: function() {
