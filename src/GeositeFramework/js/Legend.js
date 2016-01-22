@@ -1,10 +1,14 @@
 define(['use!Geosite',
          'dojo/_base/declare',
+         'dojo/window',
+         'dojo/dom-geometry',
          'dojox/layout/ResizeHandle',
          'framework/widgets/ConstrainedMoveable'
         ],
     function(N,
              declare,
+             win,
+             domGeom,
              ResizeHandle,
              ConstrainedMoveable) {
     'use strict';
@@ -97,7 +101,10 @@ define(['use!Geosite',
 
             this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
-            this.autoResize();
+
+            if (!this.$el.hasClass('minimized')) {
+                this.autoResize();
+            }
         },
 
         assignLegendEvents: function() {
@@ -116,6 +123,7 @@ define(['use!Geosite',
         toggleMinimize: function() {
             if (this.$el.hasClass('minimized')) {
                 this.restore();
+                this.autoResize();
             } else {
                 this.minimize();
             }
@@ -185,8 +193,8 @@ define(['use!Geosite',
             // legends. It will do so until the hard-coded limits
             // here are reached.
             var MAX_HEIGHT = 400, // Somewhat arbitrary
-                MAX_WIDTH = 480, // Just enough to fit two columns
-                MIN_WIDTH = 250, // Just enough to fit one column
+                MAX_WIDTH = 485, // Just enough to fit two columns
+                MIN_WIDTH = 255, // Just enough to fit one column
                 LEGEND_BODY_PADDING = 22;
 
             // We use $el.css('property') instead of $el.property() in most
@@ -206,15 +214,54 @@ define(['use!Geosite',
             });
 
             // Height
-            if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT && contentHeight < MAX_HEIGHT) {
-                legend.css({ height: (contentHeight + legendHeaderHeight) });
+            if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT) {
+                if (contentHeight < MAX_HEIGHT) {
+                    legend.css({ height: (contentHeight + legendHeaderHeight) });
+                } else if (contentHeight > MAX_HEIGHT) {
+                    legend.css({ height: MAX_HEIGHT });
+                }
             }
 
             // Width
-            if (contentHeight > MAX_HEIGHT && legendHeight <= MAX_HEIGHT && legendWidth < MAX_WIDTH) {
-                legend.css({ width: MAX_WIDTH });
-            } else if (contentHeight < MAX_HEIGHT && legendHeight <= MAX_HEIGHT) {
-                legend.css({ width: MIN_WIDTH });
+            if (legendHeight <= MAX_HEIGHT) {
+                if (contentHeight > MAX_HEIGHT && legendWidth < MAX_WIDTH) {
+                    legend.css({ width: MAX_WIDTH });
+                } else if (contentHeight < MAX_HEIGHT) {
+                    legend.css({ width: MIN_WIDTH });
+                }
+            }
+
+            // If the legend was minimized or moved by the user,
+            // it's possible that resizing it will push part of
+            // the element off the screen.
+            this.checkAndSetPosition();
+        },
+
+        checkAndSetPosition: function() {
+            // Checks if the legend is outside of the viewport on
+            // the bottom and right sides. If so, the legend is
+            // repositioned to be completely in the viewport, plus
+            // a small buffer so that it's not flush with the edge.
+            var VIEWPORT_BUFFER = 30;
+
+            var viewportSize = win.getBox(),
+                legend = this.$el,
+                legendDimensions = domGeom.position(legend.attr('id')),
+                legendRight = legendDimensions.x + legendDimensions.w,
+                legendBottom = legendDimensions.y + legendDimensions.h;
+
+            if (legendRight > viewportSize.w) {
+                var currentLeft = parseInt(legend.css('left')),
+                    newLeft = (currentLeft - (legendRight - viewportSize.w)) - VIEWPORT_BUFFER;
+
+                legend.css({ left: newLeft });
+            }
+
+            if (legendBottom > viewportSize.h) {
+                var currentTop = parseInt(legend.css('top')),
+                    newTop = (currentTop - (legendBottom - viewportSize.h)) - VIEWPORT_BUFFER;
+
+                legend.css({ top: newTop });
             }
         }
     });

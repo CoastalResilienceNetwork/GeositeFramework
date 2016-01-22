@@ -594,9 +594,9 @@ input.code-like, textarea.code-like {
     bottom: 45px;
     right: 105px;
     height: 200px;
-    width: 250px;
-    min-width: 250px;
-    z-index: 2;
+    width: 255px;
+    min-width: 255px;
+    z-index: 101; /* show over plugin-container */
     font-weight: bold;
     background: #FFF;
     font-size: 12px;
@@ -605,6 +605,7 @@ input.code-like, textarea.code-like {
     box-shadow: 0 0 12px rgba(0,0,0,.25);
     padding-bottom: 36px; /* header offset */
     overflow:visible;
+    display: none;
     }
     .content .legend.minimized {
         height: 0;
@@ -621,7 +622,6 @@ input.code-like, textarea.code-like {
         overflow: auto;
         height: 100%;
         width: 100%;
-        min-height: 200px;
     }
 
 .legend-layer {
