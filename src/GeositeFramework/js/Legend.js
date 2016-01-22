@@ -193,8 +193,8 @@ define(['use!Geosite',
             // legends. It will do so until the hard-coded limits
             // here are reached.
             var MAX_HEIGHT = 400, // Somewhat arbitrary
-                MAX_WIDTH = 480, // Just enough to fit two columns
-                MIN_WIDTH = 250, // Just enough to fit one column
+                MAX_WIDTH = 485, // Just enough to fit two columns
+                MIN_WIDTH = 255, // Just enough to fit one column
                 LEGEND_BODY_PADDING = 22;
 
             // We use $el.css('property') instead of $el.property() in most

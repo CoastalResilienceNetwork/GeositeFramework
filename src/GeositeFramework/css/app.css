@@ -594,8 +594,8 @@ input.code-like, textarea.code-like {
     bottom: 45px;
     right: 105px;
     height: 200px;
-    width: 250px;
-    min-width: 250px;
+    width: 255px;
+    min-width: 255px;
     z-index: 101; /* show over plugin-container */
     font-weight: bold;
     background: #FFF;
