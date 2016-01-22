@@ -126,8 +126,8 @@ define(["jquery",
                 _outlineLayer.clear();
 
                 _points = [];
-                _originPointEvent = null,
-                _defaultOriginPointGraphic = null,
+                _originPointEvent = null;
+                _defaultOriginPointGraphic = null;
                 _renderedLength = 0;
                 _hoverLine = null;
                 _eventHandles = {};
