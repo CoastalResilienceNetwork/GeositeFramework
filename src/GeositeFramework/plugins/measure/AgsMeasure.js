@@ -5,8 +5,9 @@ define(["jquery",
         "esri/geometry/geodesicUtils",
         "esri/geometry/webMercatorUtils",
         "esri/tasks/GeometryService",
-	    "esri/geometry/ScreenPoint",
-	    "esri/geometry/mathUtils",
+        "esri/geometry/ScreenPoint",
+        "esri/geometry/mathUtils",
+        "esri/units",
         "esri/dijit/InfoWindow"],
     function($, _,
               Polyline,
@@ -16,6 +17,7 @@ define(["jquery",
               GeometryService,
               ScreenPoint,
               mathUtils,
+              units,
               InfoWindow) {
         var AgsMeasure = function (opts) {
 
@@ -53,8 +55,8 @@ define(["jquery",
                         new dojo.Color([255, 0, 0]), 1),
                         new dojo.Color([255, 0, 0, 0.35])),
 
-                esriLengthUnits: esri.Units.MILES,
-                esriAreaUnits: esri.Units.SQUARE_MILES
+                esriLengthUnits: units.MILES,
+                esriAreaUnits: units.SQUARE_MILES
 
             }, opts),
 
