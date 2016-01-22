@@ -34,24 +34,29 @@ require(['use!Geosite',
                 $legendContainer = model.get('$legendContainer'),
                 logger = new Logger(pluginName);
 
-            pluginObject.initialize({
-                app: {
-                    version: N.app.version,
-                    regionConfig: regionData,
-                    paneNumber: mapModel.get('mapNumber'),
-                    info: _.bind(logger.info, logger),
-                    warn: _.bind(logger.warn, logger),
-                    error: _.bind(logger.error, logger),
-                    _unsafeMap: esriMap,
-                    downloadAsCsv: requestCsvDownload,
-                    downloadAsPlainText: requestTextDownload,
-                    dispatcher: N.app.dispatcher
-                },
-                map: N.createMapWrapper(esriMap, mapModel, pluginObject),
-                container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
-                legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
-                printButton: ($uiContainer ? $uiContainer.find('.plugin-print'): undefined )
-        });
+            try {
+                pluginObject.initialize({
+                    app: {
+                        version: N.app.version,
+                        regionConfig: regionData,
+                        paneNumber: mapModel.get('mapNumber'),
+                        info: _.bind(logger.info, logger),
+                        warn: _.bind(logger.warn, logger),
+                        error: _.bind(logger.error, logger),
+                        _unsafeMap: esriMap,
+                        downloadAsCsv: requestCsvDownload,
+                        downloadAsPlainText: requestTextDownload,
+                        dispatcher: N.app.dispatcher
+                    },
+                    map: N.createMapWrapper(esriMap, mapModel, pluginObject),
+                    container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
+                    legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
+                    printButton: ($uiContainer ? $uiContainer.find('.plugin-print') : undefined)
+                });
+            } catch (e) {
+                // Prevent the malfunctioning plugin from stopping the rest of the code execution
+                console.error(e);
+            }
         }
 
         function requestCsvDownload(filename, content) {
