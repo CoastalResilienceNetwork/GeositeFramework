@@ -37,15 +37,20 @@
             },
             {
                 "name": "Demographics",
-                "displayName": "Demographics"
+                "displayName": "Demographics",
+                "excludeLayers": [
+                    "Social Vulnerability Index"
+                ]
             },
             {
                 "name": "Ecological",
-                "displayName": "Ecological"
+                "displayName": "Ecological",
+                "includeAllLayers": true
             },
             {
                 "name": "Critical Facilities",
-                "displayName": "Critical Facilities"
+                "displayName": "Critical Facilities",
+                "includeAllLayers": true
             },
             {
                 "name": "Coastal Hazards",
@@ -84,7 +89,8 @@
             },
             {
                 "name": "Land Use",
-                "displayName": "Land Use"
+                "displayName": "Land Use",
+                "includeAllLayers": true
             }
         ]
     },

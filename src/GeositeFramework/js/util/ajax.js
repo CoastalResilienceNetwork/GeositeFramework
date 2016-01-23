@@ -43,6 +43,7 @@ define(['esri/request'],
         return {
             get: get,
             fetch: fetch,
+            isCached: isCached,
             shouldFetch: shouldFetch
         };
     }

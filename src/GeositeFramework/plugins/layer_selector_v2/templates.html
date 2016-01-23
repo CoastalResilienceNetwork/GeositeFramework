@@ -5,17 +5,14 @@
 </script>
 
 <script type="text/template" id="layer">
-    <li><span class="ls-node"><%= layer.getDisplayName() %></span>
-    <% if (layer.getServer()) { %>
-    (Server name: <%- layer.getServer().name %>)
-    <% } %>
+    <li>
+        <input type="checkbox" data-layer-id="<%- layer.id() %>"
+            <% if (state.isSelected(layer.id())) { %>checked="checked"<% } %> />
+        <span class="ls-node"><%= layer.getDisplayName() %></span>
+        <% if (serviceLayer) { %><%- serviceLayer.id %><% } %>
     <% if (layer.hasChildren()) { %>
         <ul>
-            <% if (layer.isLoading()) { %>
-            <li>Loading...</li>
-            <% } else { %>
-            <%= _.map(layer.getChildren(), renderLayer).join('') %>
-            <% } %>
+            <%= _.map(state.getChildren(layer), renderLayer).join('') %>
         </ul>
     <% } %>
     </li>

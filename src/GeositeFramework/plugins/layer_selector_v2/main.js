@@ -15,13 +15,27 @@
 
 define([
         "dojo/_base/declare",
-        "framework/PluginBase",
-        "dojo/text!./templates.html",
-        "./config",
         "jquery",
-        "underscore"
+        "underscore",
+        "dojo/text!./templates.html",
+        "esri/layers/FeatureLayer",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "framework/PluginBase",
+        "./state",
+        "./config"
     ],
-    function (declare, PluginBase, templates, Config, $, _) {
+    function(declare,
+             $,
+             _,
+             templates,
+             FeatureLayer,
+             ArcGISDynamicMapServiceLayer,
+             ArcGISTiledMapServiceLayer,
+             PluginBase,
+             State,
+             Config) {
+        "use strict";
 
         return declare(PluginBase, {
             toolbarName: "Map Layers v2",
@@ -35,6 +49,101 @@ define([
                 this.config = new Config();
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
+                this.bindEvents();
+            },
+
+            bindEvents: function() {
+                var self = this;
+                $(this.container).on('click', 'input[data-layer-id]', function() {
+                    var $el = $(this),
+                        layerId = $el.attr('data-layer-id');
+                    self.state.toggleLayer(layerId);
+                });
+            },
+
+            onStateChanged: function() {
+                this.updateMap();
+                this.render();
+            },
+
+            updateMap: function() {
+                var self = this,
+                    visibleLayerIds = {},
+                    layers = this.state.getSelectedLayers();
+
+                // Default existing layers to empty so that deselecting
+                // all layers in a service will work correctly.
+                _.each(this.map.getMyLayers(), function(mapLayer) {
+                    visibleLayerIds[mapLayer.id] = [];
+                });
+
+                _.each(layers, function(layer) {
+                    if (!layer) {
+                        return;
+                    }
+
+                    var serviceUrl = layer.getServiceUrl(),
+                        serviceData = self.state.getServiceData(layer),
+                        serviceLayer = self.state.findServiceLayer(serviceData, layer);
+
+                    // Map service isn't loaded yet.
+                    if (!serviceLayer) {
+                        return;
+                    }
+
+                    self.addServiceMapLayerIfNotExists(layer);
+
+                    if (!visibleLayerIds[serviceUrl]) {
+                        visibleLayerIds[serviceUrl] = [];
+                    }
+                    visibleLayerIds[serviceUrl].push(serviceLayer.id);
+                });
+
+                _.each(visibleLayerIds, function(layerIds, serviceUrl) {
+                    var mapLayer = self.map.getLayer(serviceUrl);
+                    if (layerIds.length === 0) {
+                        mapLayer.setVisibleLayers([-1]);
+                    } else {
+                        mapLayer.setVisibleLayers(layerIds);
+                    }
+                });
+            },
+
+            // Create service layer and add it to the map if it doesn't already exist.
+            addServiceMapLayerIfNotExists: function(layer) {
+                var server = layer.getServer(),
+                    serviceUrl = layer.getServiceUrl(),
+                    mapLayer = this.map.getLayer(serviceUrl);
+
+                // There's nothing to do if the service layer already exists.
+                if (mapLayer) {
+                    return;
+                }
+
+                mapLayer = this.createServiceMapLayer(server, serviceUrl);
+
+                // Need to assign a deterministic ID, otherwise, the ESRI
+                // JSAPI will generate a unique ID for us.
+                mapLayer.id = serviceUrl;
+                this.map.addLayer(mapLayer);
+            },
+
+            createServiceMapLayer: function(server, serviceUrl) {
+                if (server.type === 'ags') {
+                    if (server.layerType === 'dynamic') {
+                        return new ArcGISDynamicMapServiceLayer(serviceUrl);
+                    } else if (server.layerType === 'tiled') {
+                        return new ArcGISTiledMapServiceLayer(serviceUrl);
+                    } else if (server.layerType === 'feature-layer') {
+                        return new FeatureLayer(serviceUrl);
+                    } else {
+                        throw new Error('AGS service layer type is not supported: ' + server.layerType);
+                    }
+                } else if (server.type === 'wms') {
+                    throw new Error('WMS server type is not implemented yet');
+                } else {
+                    throw new Error('Service type not supported: ' + server.type);
+                }
             },
 
             render: function() {
@@ -51,8 +160,12 @@ define([
             },
 
             renderLayer: function(layer) {
+                var serviceData = this.state.getServiceData(layer),
+                    serviceLayer = this.state.findServiceLayer(serviceData, layer);
                 return this.layerTmpl({
                     layer: layer,
+                    serviceLayer: serviceLayer,
+                    state: this.state,
                     renderLayer: _.bind(this.renderLayer, this)
                 });
             },
@@ -63,9 +176,23 @@ define([
                     .html().trim();
             },
 
-            getState: function () {},
+            getState: function() {
+                return this.state.serialize();
+            },
 
-            setState: function (state) {},
+            setState: function(data) {
+                if (this._cleanupPreviousState) {
+                    this._cleanupPreviousState();
+                }
+
+                this.state = new State(this.config, data);
+                this.render();
+
+                var handle = this.state.on('update', _.bind(this.onStateChanged, this));
+                this._cleanupPreviousState = function() {
+                    handle.remove();
+                };
+            },
 
             beforePrint: function(printDeferred) {
                 // We can short circuit the plugin print chain by simply
@@ -78,13 +205,18 @@ define([
 
             activate: function() {
                 $(this.legendContainer).show().html('Layer Selector V2');
-                this.render();
             },
 
             deactivate: function() {
                 $(this.legendContainer).hide().html();
-            }
+            },
 
+            hibernate: function() {
+                if (this.state) {
+                    this.state.clearAllLayers();
+                }
+                this.setState(null);
+            }
         });
     }
 );
