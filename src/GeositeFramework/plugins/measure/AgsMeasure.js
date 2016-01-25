@@ -1,4 +1,3 @@
-﻿
 define(["jquery",
         "use!underscore",
         "esri/geometry/Polyline",
@@ -6,8 +5,9 @@ define(["jquery",
         "esri/geometry/geodesicUtils",
         "esri/geometry/webMercatorUtils",
         "esri/tasks/GeometryService",
-	"esri/geometry/ScreenPoint",
-	"esri/geometry/mathUtils",
+        "esri/geometry/ScreenPoint",
+        "esri/geometry/mathUtils",
+        "esri/units",
         "esri/dijit/InfoWindow"],
     function($, _,
               Polyline,
@@ -15,8 +15,9 @@ define(["jquery",
               geodesicUtils,
               webMercatorUtils,
               GeometryService,
-	      ScreenPoint,
-	      mathUtils,
+              ScreenPoint,
+              mathUtils,
+              units,
               InfoWindow) {
         var AgsMeasure = function (opts) {
 
@@ -27,7 +28,7 @@ define(["jquery",
                 // It is preferable to provide a custom geometry server, but 
                 // this url is non-warranty "production" ready
                 geomServiceUrl: 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
-                
+
                 pointSymbol: new esri.symbol.SimpleMarkerSymbol(
                     esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
                     new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
@@ -54,8 +55,8 @@ define(["jquery",
                         new dojo.Color([255, 0, 0]), 1),
                         new dojo.Color([255, 0, 0, 0.35])),
 
-                esriLengthUnits: esri.Units.MILES,
-                esriAreaUnits: esri.Units.SQUARE_MILES
+                esriLengthUnits: units.MILES,
+                esriAreaUnits: units.SQUARE_MILES
 
             }, opts),
 
@@ -96,7 +97,6 @@ define(["jquery",
                 map.infoWindow.setContent(_popupTemplate(results));
                 map.infoWindow.setTitle(""); // hides title div
                 map.infoWindow.show(_points[0]);
-                
             },
 
             finish = function (results) {
@@ -128,8 +128,8 @@ define(["jquery",
                 _outlineLayer.clear();
 
                 _points = [];
-                _originPointEvent = null,
-                _defaultOriginPointGraphic = null,
+                _originPointEvent = null;
+                _defaultOriginPointGraphic = null;
                 _renderedLength = 0;
                 _hoverLine = null;
                 _eventHandles = {};
@@ -183,7 +183,6 @@ define(["jquery",
             },
 
             formatTooltip = function (segment, line) {
-
                 return _tooltipTemplate({
                     segmentLength: Azavea.numberToString(segment, 0),
                     totalLength: Azavea.numberToString(line, 0),
@@ -228,8 +227,7 @@ define(["jquery",
 
             handleMapClick = function (evt) {
                 if (pointsMakeValidPolygon()) {
-                    var originP = new ScreenPoint(_originPointEvent.x,
-                                                                _originPointEvent.y),
+                    var originP = new ScreenPoint(_originPointEvent.x, _originPointEvent.y),
                         bufferP = new ScreenPoint(evt.clientX, evt.clientY),
                         len = mathUtils.getLength(originP, bufferP);
                     if (len < _firstNodeClickBuffer) {
@@ -243,7 +241,6 @@ define(["jquery",
             },
 
             continueMeasureAndAddPoint = function (evt) {
-
                 // Track each point clicked to create a line segment for 
                 // measuring length
                 _points.push(evt.mapPoint);
@@ -283,7 +280,7 @@ define(["jquery",
                     var lineGraphic = new esri.Graphic(line, options.lineSymbol);
                     _outlineLayer.add(lineGraphic);
                 }
-                
+
                 // Cache a copy of the total line length so far, so we don't
                 // have to recalculate frequently on mouse move events
                 var calculated = calculateDistance(_points);
@@ -339,7 +336,7 @@ define(["jquery",
                     dojo.stopEvent(evt);
                 }
             },
-                
+
             tryToFinishMeasureAsPolygon = function (evt) {
                 if (isFirstNode(evt) && pointsMakeValidPolygon()) {
                     dojo.stopEvent(evt);
@@ -356,16 +353,16 @@ define(["jquery",
                 // and create a polygon out of it
                 _points.push(_points[0]);
                 var polygon = new Polygon(options.map.spatialReference);
-                
+
                 // If the user has drawn the polygon ring anti-clockwise, reverse the ring
                 // to make it a valid esri geometry.
 
-				if (!polygon.isClockwise(_points)) {
-				_points = _points.reverse();
-				}
-				
+                if (!polygon.isClockwise(_points)) {
+                    _points = _points.reverse();
+                }
+
                 polygon.addRing(_points);
-                
+
                 // If the polygon self interesects, simplify it using the geometry service
                 if (polygon.isSelfIntersecting(polygon) && _geometrySvc) {
                     _geometrySvc.simplify([polygon], function (simplifiedPolygons) {
@@ -375,13 +372,12 @@ define(["jquery",
                     setMeasureOutput(polygon);
                 }
             }, 
-            
+
             // Assumes polygon is valid at this point
             setMeasureOutput = function (polygon)
             {
                 var geoPolygon = webMercatorUtils.webMercatorToGeographic(polygon),
-                        area = geodesicUtils.geodesicAreas([geoPolygon],
-                            options.esriAreaUnits)[0];
+                    area = geodesicUtils.geodesicAreas([geoPolygon], options.esriAreaUnits)[0];
 
                 // Remove our lines for the outline layer and replace them
                 // with the new polygon area
@@ -433,4 +429,3 @@ define(["jquery",
         return AgsMeasure;
     }
 );
-
