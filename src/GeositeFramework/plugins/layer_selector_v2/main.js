@@ -16,12 +16,12 @@
 define([
         "dojo/_base/declare",
         "framework/PluginBase",
-        "dojo/text!./layers.json",
         "dojo/text!./templates.html",
+        "./config",
         "jquery",
         "underscore"
     ],
-    function (declare, PluginBase, layerSourcesJson, templates, $, _) {
+    function (declare, PluginBase, templates, Config, $, _) {
 
         return declare(PluginBase, {
             toolbarName: "Map Layers v2",
@@ -32,10 +32,29 @@ define([
 
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
-                var nodes = { nodes: JSON.parse(layerSourcesJson) };
-                var test = _.template(this.getTemplateByName('main'))(nodes);
-                $(this.container).html(test);
+                this.config = new Config();
+                this.treeTmpl = _.template(this.getTemplateByName('tree'));
+                this.layerTmpl = _.template(this.getTemplateByName('layer'));
+            },
 
+            render: function() {
+                var layers = this.config.getLayers(),
+                    html = this.renderTree(layers);
+                $(this.container).html(html);
+            },
+
+            renderTree: function(layers) {
+                return this.treeTmpl({
+                    layers: layers,
+                    renderLayer: _.bind(this.renderLayer, this)
+                });
+            },
+
+            renderLayer: function(layer) {
+                return this.layerTmpl({
+                    layer: layer,
+                    renderLayer: _.bind(this.renderLayer, this)
+                });
             },
 
             getTemplateByName: function(name) {
@@ -50,7 +69,7 @@ define([
 
             beforePrint: function(printDeferred) {
                 // We can short circuit the plugin print chain by simply
-                // rejecting this deferred object.  
+                // rejecting this deferred object.
                 printDeferred.reject();
 
                 // Trigger an export dialog for this pane.
@@ -59,6 +78,7 @@ define([
 
             activate: function() {
                 $(this.legendContainer).show().html('Layer Selector V2');
+                this.render();
             },
 
             deactivate: function() {
