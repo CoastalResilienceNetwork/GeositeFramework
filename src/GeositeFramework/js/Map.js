@@ -2,15 +2,13 @@
 /*global Backbone, _, $, Geosite, esri, Azavea, setTimeout, dojo, dojox */
 
 require(['use!Geosite',
-         'dojo/Deferred',
-         'dojo/request/xhr',
          'framework/Legend',
+         'framework/util/ajax',
          'esri/map'
         ],
     function(N,
-             Deferred,
-             xhr,
              Legend,
+             ajaxUtil,
              Map) {
     'use strict';
 
@@ -206,33 +204,25 @@ require(['use!Geosite',
             id = 'legend-container-' + mapNumber,
             legend = new Legend(regionData, id);
 
-        var getServiceLegend = (function() {
-            var cache = {};
-            // Memoize so only 1 request is generated per service.
-            var fetch = _.memoize(function(url) {
-                xhr(url, {
-                        query: 'f=json',
-                        method: 'GET',
-                        handleAs: 'json',
-                        headers: {
-                            // Fixes: "Request header field X-Requested-With is not allowed by Access-Control-Allow-Headers in preflight response."
-                            'X-Requested-With': null
-                        }
-                    })
-                    .then(function(data) {
-                        cache[url] = data.layers;
-                    })
-                    .then(redraw);
-            });
-            return function(serviceUrl) {
-                var url = serviceUrl + '/legend';
-                if (cache[url]) {
-                    return cache[url];
-                }
-                fetch(url);
-                return null;
-            };
-        }());
+        var redraw = function() {
+            legend.render(getVisibleLayers());
+        };
+
+        // Ensure that redraw is executed only once per service.
+        // So if there are a dozen layers in a service, the layer selector
+        // is only redrawn once instead of a dozen times.
+        var redrawOnce = _.memoize(function() {
+            return _.once(redraw);
+        });
+
+        function getServiceLegend(service) {
+            var legendUrl = service.url + '/legend',
+                data = ajaxUtil.get(legendUrl);
+            if (ajaxUtil.shouldFetch(legendUrl)) {
+                ajaxUtil.fetch(legendUrl).then(redrawOnce(legendUrl));
+            }
+            return data && data.layers;
+        }
 
         function getVisibleLayers() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -246,10 +236,12 @@ require(['use!Geosite',
                         if (!layer) {
                             return;
                         }
-                        var serviceLegend = getServiceLegend(service.url);
+
+                        var serviceLegend = getServiceLegend(service);
                         if (!serviceLegend) {
                             return;
                         }
+
                         var legend = _.findWhere(serviceLegend, {layerId: layerId});
                         if (isLayerInScale(service, layer)) {
                             result.push({
@@ -272,11 +264,6 @@ require(['use!Geosite',
             var maxScale = Math.max(service.maxScale, layer.maxScale);
             return minScale === 0 || minScale > scale && maxScale < scale;
         }
-
-        // Debounce to reduce flickering when called repeatedly.
-        var redraw = _.debounce(function() {
-            legend.render(getVisibleLayers());
-        }, 100);
 
         dojo.connect(esriMap, 'onUpdateEnd', redraw);
         dojo.connect(esriMap, 'onLayerAdd', redraw);
