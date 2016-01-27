@@ -100,7 +100,7 @@ require(['use!Geosite',
     function createMap(view) {
         var esriMap = new esri.Map(view.$el.attr('id')),
             resizeMap = _.debounce(function () {
-                // When the element containing the map resizes, the 
+                // When the element containing the map resizes, the
                 // map needs to be notified.  Do a slight delay so that
                 // the browser has time to actually make the element visible.
                     if (view.$el.is(':visible')) {
@@ -135,10 +135,10 @@ require(['use!Geosite',
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
-            
+
             // Cache the parent of the infowindow rather than re-select it every time.
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
-            // would be detached from the body and the parent would not be accessible 
+            // would be detached from the body and the parent would not be accessible
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
 
             setupSubregions(N.app.data.region.subregions, esriMap);
