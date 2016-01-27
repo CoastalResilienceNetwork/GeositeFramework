@@ -208,18 +208,11 @@ require(['use!Geosite',
             legend.render(getVisibleLayers());
         };
 
-        // Ensure that redraw is executed only once per service.
-        // So if there are a dozen layers in a service, the layer selector
-        // is only redrawn once instead of a dozen times.
-        var redrawOnce = _.memoize(function() {
-            return _.once(redraw);
-        });
-
         function getServiceLegend(service) {
             var legendUrl = service.url + '/legend',
                 data = ajaxUtil.get(legendUrl);
             if (ajaxUtil.shouldFetch(legendUrl)) {
-                ajaxUtil.fetch(legendUrl).then(redrawOnce(legendUrl));
+                ajaxUtil.fetch(legendUrl).then(redraw);
             }
             return data && data.layers;
         }
