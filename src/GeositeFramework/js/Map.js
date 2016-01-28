@@ -2,15 +2,13 @@
 /*global Backbone, _, $, Geosite, esri, Azavea, setTimeout, dojo, dojox */
 
 require(['use!Geosite',
-         'dojo/Deferred',
-         'dojo/request/xhr',
          'framework/Legend',
+         'framework/util/ajax',
          'esri/map'
         ],
     function(N,
-             Deferred,
-             xhr,
              Legend,
+             ajaxUtil,
              Map) {
     'use strict';
 
@@ -100,7 +98,7 @@ require(['use!Geosite',
     function createMap(view) {
         var esriMap = new esri.Map(view.$el.attr('id')),
             resizeMap = _.debounce(function () {
-                // When the element containing the map resizes, the 
+                // When the element containing the map resizes, the
                 // map needs to be notified.  Do a slight delay so that
                 // the browser has time to actually make the element visible.
                     if (view.$el.is(':visible')) {
@@ -135,10 +133,10 @@ require(['use!Geosite',
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
-            
+
             // Cache the parent of the infowindow rather than re-select it every time.
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
-            // would be detached from the body and the parent would not be accessible 
+            // would be detached from the body and the parent would not be accessible
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
 
             setupSubregions(N.app.data.region.subregions, esriMap);
@@ -206,33 +204,18 @@ require(['use!Geosite',
             id = 'legend-container-' + mapNumber,
             legend = new Legend(regionData, id);
 
-        var getServiceLegend = (function() {
-            var cache = {};
-            // Memoize so only 1 request is generated per service.
-            var fetch = _.memoize(function(url) {
-                xhr(url, {
-                        query: 'f=json',
-                        method: 'GET',
-                        handleAs: 'json',
-                        headers: {
-                            // Fixes: "Request header field X-Requested-With is not allowed by Access-Control-Allow-Headers in preflight response."
-                            'X-Requested-With': null
-                        }
-                    })
-                    .then(function(data) {
-                        cache[url] = data.layers;
-                    })
-                    .then(redraw);
-            });
-            return function(serviceUrl) {
-                var url = serviceUrl + '/legend';
-                if (cache[url]) {
-                    return cache[url];
-                }
-                fetch(url);
-                return null;
-            };
-        }());
+        var redraw = function() {
+            legend.render(getVisibleLayers());
+        };
+
+        function getServiceLegend(service) {
+            var legendUrl = service.url + '/legend',
+                data = ajaxUtil.get(legendUrl);
+            if (ajaxUtil.shouldFetch(legendUrl)) {
+                ajaxUtil.fetch(legendUrl).then(redraw);
+            }
+            return data && data.layers;
+        }
 
         function getVisibleLayers() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
@@ -246,10 +229,12 @@ require(['use!Geosite',
                         if (!layer) {
                             return;
                         }
-                        var serviceLegend = getServiceLegend(service.url);
+
+                        var serviceLegend = getServiceLegend(service);
                         if (!serviceLegend) {
                             return;
                         }
+
                         var legend = _.findWhere(serviceLegend, {layerId: layerId});
                         if (isLayerInScale(service, layer)) {
                             result.push({
@@ -272,11 +257,6 @@ require(['use!Geosite',
             var maxScale = Math.max(service.maxScale, layer.maxScale);
             return minScale === 0 || minScale > scale && maxScale < scale;
         }
-
-        // Debounce to reduce flickering when called repeatedly.
-        var redraw = _.debounce(function() {
-            legend.render(getVisibleLayers());
-        }, 100);
 
         dojo.connect(esriMap, 'onUpdateEnd', redraw);
         dojo.connect(esriMap, 'onLayerAdd', redraw);
