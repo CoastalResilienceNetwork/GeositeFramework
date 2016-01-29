@@ -21,16 +21,21 @@ require({
 });
 
 define(
-    ["dojo/_base/declare", "framework/PluginBase"],
-    function (declare, PluginBase) {
+    [
+    "dojo/_base/declare",
+    "framework/PluginBase",
+    "esri/geometry/Extent",
+    "esri/SpatialReference"],
+
+    function (declare, PluginBase, Extent, SpatialReference) {
         var _extent;
         
         function fullExtent (regionConfig)
         {
             var x = regionConfig.initialExtent,
-                extent = new esri.geometry.Extent(
+                extent = new Extent(
                     x[0], x[1], x[2], x[3],
-                    new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+                    new SpatialReference({ wkid: 4326 /*lat-long*/ })
                 );
             return extent;   
         }

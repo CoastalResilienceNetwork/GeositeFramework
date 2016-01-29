@@ -4,6 +4,8 @@
 // A plugin wraps around a plugin object and manages it in backbone
 
 require(['use!Geosite',
+         'esri/map',
+         'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
          'framework/widgets/ConstrainedMoveable',
@@ -12,6 +14,8 @@ require(['use!Geosite',
          'dijit/form/Button'
         ],
     function(N,
+             Map,
+             ArcGISDynamicMapServiceLayer,
              Logger,
              domStyle,
              ConstrainedMoveable,
@@ -500,10 +504,10 @@ require(['use!Geosite',
                     $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
 
                     var originalMap = pluginObject.app._unsafeMap,
-                        map = new esri.Map('plugin-print-preview-map', { extent: originalMap.extent }),
+                        map = new Map('plugin-print-preview-map', { extent: originalMap.extent }),
                         currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
 
-                    map.addLayer(new esri.layers.ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
+                    map.addLayer(new ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
 
                     dojo.connect(map, 'onLoad', function() {
                         mapReadyDeferred.resolve(map);
