@@ -1,7 +1,7 @@
 ﻿/*global _, $, esri, Backbone */
 
-define([],
-    function () {
+define(['esri/geometry/Extent'],
+    function (Extent) {
 
         ////////////////////////////////
         // TEMPLATES
@@ -189,7 +189,7 @@ define([],
             },
 
             centerAndZoom: function (x, y, rawExtentObj) {
-                var extent = new esri.geometry.Extent(rawExtentObj);
+                var extent = new Extent(rawExtentObj);
                 this.model.locator.map.setExtent(extent);
             },
 
