@@ -2,11 +2,17 @@
 
 require(['use!Geosite',
          'esri/tasks/PrintTask',
+         'esri/tasks/PrintParameters',
+         'esri/tasks/PrintTemplate',
+         'esri/tasks/LegendLayer',
          'dojo/Deferred',
          'dojo/request',
          'framework/Logger'],
     function(N,
              PrintTask,
+             PrintParameters,
+             PrintTemplate,
+             LegendLayer,
              Deferred,
              request,
              Logger) {
@@ -110,9 +116,9 @@ require(['use!Geosite',
         },
 
         getExportParams: function() {
-            var params = new esri.tasks.PrintParameters();
+            var params = new PrintParameters();
             params.map = this.get('esriMap');
-            params.template = new esri.tasks.PrintTemplate();
+            params.template = new PrintTemplate();
             params.template.format = "PDF";
             params.template.preserveScale = false;
             params.template.showAttribution = false;
@@ -146,7 +152,7 @@ require(['use!Geosite',
                 result = [];
             _.each(map.getLayersVisibleAtScale(), function(layer) {
                 if (layer.visibleLayers && layer.visibleLayers.length > 0 && layer.visibleLayers[0] !== -1) {
-                    var legendLayer = new esri.tasks.LegendLayer();
+                    var legendLayer = new LegendLayer();
                     legendLayer.layerId = layer.id;
                     legendLayer.subLayerIds = model.getLayerParents(layer, layer.visibleLayers);
                     result.push(legendLayer);
