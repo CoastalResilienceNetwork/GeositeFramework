@@ -322,7 +322,7 @@ require(['use!Geosite',
                 expectedMissingLayerCount = 1 + customLegendsActive + serviceOptOut;
 
             if ((totalVisibleLayers.length - expectedMissingLayerCount) !== nuggetCount) {
-                _.delay(updateLegend, 250);
+                _.delay(updateLegend, 750);
             }
         }
     }
