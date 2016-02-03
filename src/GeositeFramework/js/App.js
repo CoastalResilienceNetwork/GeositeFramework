@@ -126,6 +126,9 @@
                     // to match other popups
                     var headerHtml = '<div class="popover-header"></div>';
                     $('#'+this.boxid).prepend(headerHtml);
+                },
+                closejs: function() {
+                    $('#'+this.boxid).find('.popover-header').remove();
                 }
             });
 
