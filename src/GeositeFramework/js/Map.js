@@ -248,7 +248,9 @@ require(['use!Geosite',
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
-                layerInfos = [];
+                layerInfos = [],
+                serviceOptOut = 0;
+
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
                 if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
@@ -260,7 +262,13 @@ require(['use!Geosite',
                         layer = { layer: serviceInfo.service };
                     }
                     layerInfos.push(layer);
+                } else if (serviceInfo &&
+                    serviceInfo.service.declaredClass !== "esri.layers.FeatureLayer") {
+                    // Track layers that have opted out of having their 
+                    // services shown in the legend
+                    serviceOptOut++;
                 }
+
             });
             if (view.arrangedLegend) {
                 view.arrangedLegend.destroy();
@@ -311,7 +319,7 @@ require(['use!Geosite',
             // custom legend that is visible and has children
             var customLegendsActive = view.$legendEl.parent()
                     .find('.custom-legend:visible').has('*').length,
-                expectedMissingLayerCount = 1 + customLegendsActive;
+                expectedMissingLayerCount = 1 + customLegendsActive + serviceOptOut;
 
             if ((totalVisibleLayers.length - expectedMissingLayerCount) !== nuggetCount) {
                 _.delay(updateLegend, 250);
