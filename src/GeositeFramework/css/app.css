@@ -1072,3 +1072,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 #print-preview-print {
     float: right;
 }
+
+.esriLegendMsg {
+    display: none;
+}
