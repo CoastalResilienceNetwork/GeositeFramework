@@ -307,8 +307,13 @@ require(['use!Geosite',
                 return !layer.graphics && layer.visible;
             });
 
-            // Subtract one for the base layer.
-            if ((totalVisibleLayers.length - 1) !== nuggetCount) {
+            // Subtract one for the base layer and one for each 
+            // custom legend that is visible and has children
+            var customLegendsActive = view.$legendEl.parent()
+                    .find('.custom-legend:visible').has('*').length,
+                expectedMissingLayerCount = 1 + customLegendsActive;
+
+            if ((totalVisibleLayers.length - expectedMissingLayerCount) !== nuggetCount) {
                 _.delay(updateLegend, 250);
             }
         }
