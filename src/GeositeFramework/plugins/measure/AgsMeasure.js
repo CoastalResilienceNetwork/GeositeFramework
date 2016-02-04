@@ -8,7 +8,13 @@ define(["jquery",
         "esri/geometry/ScreenPoint",
         "esri/geometry/mathUtils",
         "esri/units",
-        "esri/dijit/InfoWindow"],
+        "esri/dijit/InfoWindow",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/graphic",
+        "esri/layers/GraphicsLayer"
+],
     function($, _,
               Polyline,
               Polygon,
@@ -18,7 +24,13 @@ define(["jquery",
               ScreenPoint,
               mathUtils,
               units,
-              InfoWindow) {
+              InfoWindow,
+              SimpleFillSymbol,
+              SimpleLineSymbol,
+              SimpleMarkerSymbol,
+              Graphic,
+              GraphicsLayer) {
+
         var AgsMeasure = function (opts) {
 
             var options = _.extend({
@@ -29,29 +41,29 @@ define(["jquery",
                 // this url is non-warranty "production" ready
                 geomServiceUrl: 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
 
-                pointSymbol: new esri.symbol.SimpleMarkerSymbol(
-                    esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
-                    new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                pointSymbol: new SimpleMarkerSymbol(
+                    SimpleMarkerSymbol.STYLE_CIRCLE, 10,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                         new dojo.Color([105, 105, 105]), 1),
                         new dojo.Color([80, 80, 80, 0.35])),
 
-                lineSymbol: new esri.symbol.SimpleLineSymbol(
+                lineSymbol: new SimpleLineSymbol(
                         esri.symbol.SimpleLineSymbol.STYLE_DASH,
                         new dojo.Color([105, 105, 105]), 2),
 
-                polygonSymbol: new esri.symbol.SimpleFillSymbol(
-                    esri.symbol.SimpleFillSymbol.STYLE_SOLID,
-                    new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASH,
+                polygonSymbol: new SimpleFillSymbol(
+                    SimpleFillSymbol.STYLE_SOLID,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH,
                         new dojo.Color([105, 105, 105]), 2),
                         new dojo.Color([105, 105, 105, 0.25])),
 
-                hoverLineSymbol: new esri.symbol.SimpleLineSymbol(
-                        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                hoverLineSymbol: new SimpleLineSymbol(
+                        SimpleLineSymbol.STYLE_SOLID,
                         new dojo.Color([105, 105, 105]), 2),
 
-                hoverPointSymbol: new esri.symbol.SimpleMarkerSymbol(
-                    esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
-                    new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                hoverPointSymbol: new SimpleMarkerSymbol(
+                    SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                         new dojo.Color([255, 0, 0]), 1),
                         new dojo.Color([255, 0, 0, 0.35])),
 
@@ -247,7 +259,7 @@ define(["jquery",
 
                 // Add the graphic of the line node to the map.  An index attribute
                 // is added to the graphic to enable querying of node-added order
-                var pointGraphic = new esri.Graphic(evt.mapPoint, options.pointSymbol,
+                var pointGraphic = new Graphic(evt.mapPoint, options.pointSymbol,
                     { index: _points.length });
                 _pointLayer.add(pointGraphic);
 
@@ -266,7 +278,7 @@ define(["jquery",
                     options.map.disableDoubleClickZoom();
 
                     // Setup the hover line symbology and add to the map
-                    _hoverLine = new esri.Graphic();
+                    _hoverLine = new Graphic();
                     _hoverLine.setSymbol(options.hoverLineSymbol);
                     _outlineLayer.add(_hoverLine);
 
@@ -277,7 +289,7 @@ define(["jquery",
                     line.setSpatialReference(options.map.spatialReference);
                     line.addPath(_.last(_points, 2));
 
-                    var lineGraphic = new esri.Graphic(line, options.lineSymbol);
+                    var lineGraphic = new Graphic(line, options.lineSymbol);
                     _outlineLayer.add(lineGraphic);
                 }
 
@@ -382,7 +394,7 @@ define(["jquery",
                 // Remove our lines for the outline layer and replace them
                 // with the new polygon area
                 _outlineLayer.clear();
-                _outlineLayer.add(new esri.Graphic(polygon, options.polygonSymbol));
+                _outlineLayer.add(new Graphic(polygon, options.polygonSymbol));
 
                 // Change the first node symbol to the default as we finish
                 setDefaultOriginPointSymbol(_defaultOriginPointGraphic);
@@ -396,8 +408,8 @@ define(["jquery",
             // Public methods
             return {
                 initialize: function () {
-                    _outlineLayer = new esri.layers.GraphicsLayer();
-                    _pointLayer = new esri.layers.GraphicsLayer();
+                    _outlineLayer = new GraphicsLayer();
+                    _pointLayer = new GraphicsLayer();
 
                     // Ordering of layers is important to not get hover-out events
                     // from a point when a line graphic is intersects it.

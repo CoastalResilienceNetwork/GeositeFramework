@@ -120,7 +120,16 @@
                 iframe: url,
                 boxid: 'frameless',
                 fixed: false,
-                maskopacity: 40
+                maskopacity: 40,
+                openjs: function() {
+                    // Insert a header after iframe is open to get the look
+                    // to match other popups
+                    var headerHtml = '<div class="popover-header"></div>';
+                    $('#'+this.boxid).prepend(headerHtml);
+                },
+                closejs: function() {
+                    $('#'+this.boxid).find('.popover-header').remove();
+                }
             });
 
         });

@@ -4,12 +4,18 @@
 require(['use!Geosite',
          'esri/dijit/Legend',
          'esri/map',
+         'esri/layers/ArcGISTiledMapServiceLayer',
+         'esri/geometry/Extent',
+         'esri/SpatialReference',
          'dojox/layout/ResizeHandle',
          'framework/widgets/ConstrainedMoveable'
         ],
     function(N,
              Legend,
              Map,
+             ArcGISTiledMapServiceLayer,
+             Extent,
+             SpatialReference,
              ResizeHandle,
              ConstrainedMoveable) {
     'use strict';
@@ -19,7 +25,7 @@ require(['use!Geosite',
         var basemap = getSelectedBasemap(model);
         if (basemap.layer === undefined) {
             // This basemap has no layer yet, so make one and cache it
-            basemap.layer = new esri.layers.ArcGISTiledMapServiceLayer(basemap.url);
+            basemap.layer = new ArcGISTiledMapServiceLayer(basemap.url);
             esriMap.addLayer(basemap.layer);
         }
         return basemap.layer;
@@ -98,7 +104,7 @@ require(['use!Geosite',
     }
 
     function createMap(view) {
-        var esriMap = new esri.Map(view.$el.attr('id')),
+        var esriMap = Map(view.$el.attr('id')),
             resizeMap = _.debounce(function () {
                 // When the element containing the map resizes, the 
                 // map needs to be notified.  Do a slight delay so that
@@ -178,9 +184,9 @@ require(['use!Geosite',
 
     function loadExtent(view) {
         var x = view.model.get('extent'),
-            extent = new esri.geometry.Extent(
+            extent = Extent(
                 x.xmin, x.ymin, x.xmax, x.ymax,
-                new esri.SpatialReference({ wkid: x.spatialReference.wkid })
+                new SpatialReference({ wkid: x.spatialReference.wkid })
             );
         view.esriMap.setExtent(extent);
     }
@@ -248,7 +254,9 @@ require(['use!Geosite',
 
         function updateLegend() {
             var services = esriMap.getLayersVisibleAtScale(esriMap.getScale()),
-                layerInfos = [];
+                layerInfos = [],
+                serviceOptOut = 0;
+
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
                 if (serviceInfo && serviceInfo.pluginObject.showServiceLayersInLegend) {
@@ -260,7 +268,13 @@ require(['use!Geosite',
                         layer = { layer: serviceInfo.service };
                     }
                     layerInfos.push(layer);
+                } else if (serviceInfo &&
+                    serviceInfo.service.declaredClass !== "esri.layers.FeatureLayer") {
+                    // Track layers that have opted out of having their 
+                    // services shown in the legend
+                    serviceOptOut++;
                 }
+
             });
             if (view.arrangedLegend) {
                 view.arrangedLegend.destroy();
@@ -307,9 +321,14 @@ require(['use!Geosite',
                 return !layer.graphics && layer.visible;
             });
 
-            // Subtract one for the base layer.
-            if ((totalVisibleLayers.length - 1) !== nuggetCount) {
-                _.delay(updateLegend, 250);
+            // Subtract one for the base layer and one for each 
+            // custom legend that is visible and has children
+            var customLegendsActive = view.$legendEl.parent()
+                    .find('.custom-legend:visible').has('*').length,
+                expectedMissingLayerCount = 1 + customLegendsActive + serviceOptOut;
+
+            if ((totalVisibleLayers.length - expectedMissingLayerCount) !== nuggetCount) {
+                _.delay(updateLegend, 750);
             }
         }
     }

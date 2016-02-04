@@ -1,7 +1,12 @@
 /*jslint nomen:true, devel:true */
 /*global Geosite, $, _, gapi*/
 
-require(['use!Geosite'], function (N) {
+require([
+    'use!Geosite',
+    'esri/geometry/Extent',
+    'esri/SpatialReference'
+    ],
+    function (N, Extent, SpatialReference) {
     'use strict';
 
     N.controllers.Launchpads = function (launchpadsConfig) {
@@ -187,9 +192,9 @@ require(['use!Geosite'], function (N) {
 
     function parseExtent(extent) {
         var x = N.app.data.region.initialExtent,
-            extent = new esri.geometry.Extent(
+            extent = new Extent(
                 x[0], x[1], x[2], x[3],
-                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+                new SpatialReference({ wkid: 4326 /*lat-long*/ })
             );
 
         return extent;
