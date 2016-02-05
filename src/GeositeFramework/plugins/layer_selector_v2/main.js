@@ -54,7 +54,7 @@ define([
 
             bindEvents: function() {
                 var self = this;
-                $(this.container).on('click', 'input[data-layer-id]', function() {
+                $(this.container).on('click', 'a[data-layer-id]', function() {
                     var $el = $(this),
                         layerId = $el.attr('data-layer-id');
                     self.state.toggleLayer(layerId);

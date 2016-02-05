@@ -6,11 +6,17 @@
 
 <script type="text/template" id="layer">
     <li>
-        <input type="checkbox" data-layer-id="<%- layer.id() %>"
-            <% if (state.isSelected(layer.id())) { %>checked="checked"<% } %> />
-        <span class="ls-node"><%= layer.getDisplayName() %></span>
-        <% if (serviceLayer) { %><%- serviceLayer.id %><% } %>
-    <% if (layer.hasChildren()) { %>
+        <% if (layer.hasChildren()) { %>
+            <% if (state.isSelected(layer.id())) { %>&boxminus;<% } else { %>&boxplus;<% } %>
+        <% } %>
+
+        <a href="javascript:;" data-layer-id="<%- layer.id() %>">
+            <span class="ls-node"><%= layer.getDisplayName() %></span>
+            <% if (serviceLayer) { %><%- serviceLayer.id %><% } %></a>
+
+        <% if (!layer.hasChildren() && state.isSelected(layer.id())) { %>&#10004;<% } %>
+
+    <% if (layer.hasChildren() && state.isSelected(layer.id())) { %>
         <ul>
             <%= _.map(state.getChildren(layer), renderLayer).join('') %>
         </ul>
