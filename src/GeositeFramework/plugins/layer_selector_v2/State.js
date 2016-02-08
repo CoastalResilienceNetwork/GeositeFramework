@@ -144,8 +144,13 @@ define([
             },
 
             getSelectedLayers: function() {
-                var findLayer = _.bind(this.findLayer, this);
-                return _.map(this.savedState.selectedLayers, this.findLayer, this);
+                var result = _.map(this.savedState.selectedLayers, this.findLayer, this);
+                result = _.filter(result, function(layer) {
+                    // Only allow leaf nodes to be added to the map, for now.
+                    return !layer.hasChildren() &&
+                        this.allParentsSelected(layer.id());
+                }, this);
+                return result;
             },
 
             clearAllLayers: function() {
@@ -155,6 +160,19 @@ define([
 
             isSelected: function(layerId) {
                 return _.contains(this.savedState.selectedLayers, layerId);
+            },
+
+            // Return true if the target layer and all of its parent nodes are selected.
+            allParentsSelected: function(layerId) {
+                var layer = this.findLayer(layerId);
+                if (layer) {
+                    if (layer.parent) {
+                        return this.isSelected(layerId) && this.allParentsSelected(layer.parent.id());
+                    } else {
+                        return this.isSelected(layerId);
+                    }
+                }
+                return false;
             },
 
             toggleLayer: function(layerId) {
