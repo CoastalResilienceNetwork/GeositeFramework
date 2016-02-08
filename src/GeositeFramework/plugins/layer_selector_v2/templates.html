@@ -1,4 +1,17 @@
-﻿<script type="text/template" id="tree">
+﻿<script type="text/template" id="plugin">
+    <div class="filter-container"></div>
+    <div class="tree-container"></div>
+</script>
+
+<script type="text/template" id="filter">
+    <p class="pluginLayerSelector-search">
+        <input type="text" placeholder="Filter Map Layers" class="filter"
+            value="<%- filterText %>" />
+        <a class="pluginLayerSelector-clear" href="javascript:;">Clear All</a>
+    </p>
+</script>
+
+<script type="text/template" id="tree">
     <ul>
         <%= _.map(layers, renderLayer).join('') %>
     </ul>

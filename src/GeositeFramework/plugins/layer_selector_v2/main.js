@@ -47,6 +47,8 @@ define([
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
                 this.config = new Config();
+                this.pluginTmpl = _.template(this.getTemplateByName('plugin'));
+                this.filterTmpl = _.template(this.getTemplateByName('filter'));
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
                 this.bindEvents();
@@ -59,11 +61,11 @@ define([
                         layerId = $el.attr('data-layer-id');
                     self.state.toggleLayer(layerId);
                 });
-            },
-
-            onStateChanged: function() {
-                this.updateMap();
-                this.render();
+                $(this.container).on('keyup', 'input.filter', function() {
+                    var $el = $(this),
+                        filterText = $el.val();
+                    self.state.filterTree(filterText);
+                });
             },
 
             updateMap: function() {
@@ -139,16 +141,24 @@ define([
             },
 
             render: function() {
-                var layers = this.state.getLayers(),
-                    html = this.renderTree(layers);
-                $(this.container).html(html);
+                $(this.container).html(this.pluginTmpl());
+                this.renderFilter();
+                this.renderTree();
             },
 
-            renderTree: function(layers) {
-                return this.treeTmpl({
-                    layers: layers,
+            renderFilter: function() {
+                var html = this.filterTmpl({
+                    filterText: this.state.getFilterText()
+                });
+                $(this.container).find('.filter-container').html(html);
+            },
+
+            renderTree: function() {
+                var html = this.treeTmpl({
+                    layers: this.state.getLayers(),
                     renderLayer: _.bind(this.renderLayer, this)
                 });
+                $(this.container).find('.tree-container').html(html);
             },
 
             renderLayer: function(layer) {
@@ -170,6 +180,8 @@ define([
             },
 
             setState: function(data) {
+                var self = this;
+
                 if (this._cleanupPreviousState) {
                     this._cleanupPreviousState();
                 }
@@ -177,9 +189,23 @@ define([
                 this.state = new State(this.config, data);
                 this.render();
 
-                var handle = this.state.on('update', _.bind(this.onStateChanged, this));
+                var eventHandles = [
+                    this.state.on('change:filter', function() {
+                        self.renderTree();
+                    }),
+
+                    this.state.on('change:layers', function() {
+                        self.renderTree();
+                    }),
+
+                    this.state.on('change:selectedLayers', function() {
+                        self.updateMap();
+                        self.renderTree();
+                    })
+                ];
+
                 this._cleanupPreviousState = function() {
-                    handle.remove();
+                    _.invoke(eventHandles, 'remove');
                 };
             },
 

@@ -18,6 +18,10 @@ define([
              LayerNode) {
         "use strict";
 
+        var LAYERS_CHANGED = 'change:layers',
+            SELECTED_LAYERS_CHANGED = 'change:selectedLayers',
+            FILTER_CHANGED = 'change:filter';
+
         // Fetch layer data and return promise.
         function fetch(layer) {
             if (layer.isFolder()) {
@@ -70,12 +74,13 @@ define([
 
         return declare([Evented], {
             constructor: function(config, data) {
-                this.config = config;
-                this.layers = this.coalesceLayers();
                 this.savedState = _.defaults({}, data, {
+                    filterText: '',
                     // List of activated layer IDs (in-order).
                     selectedLayers: []
                 });
+                this.config = config;
+                this.rebuildLayers();
             },
 
             // Combine config layer nodes with map service data.
@@ -125,16 +130,40 @@ define([
                 return result;
             },
 
+            filterLayers: function(layers) {
+                var searchTerm = this.savedState.filterText.trim().toLowerCase();
+
+                // Include all leaf nodes that partially match `filterText` and
+                // include all parent nodes that have at least one child.
+                function filterLayer(layer) {
+                    if (!layer.hasChildren()) {
+                        return layer.getDisplayName().toLowerCase().indexOf(searchTerm) !== -1;
+                    } else {
+                        layer.children = _.filter(layer.children, filterLayer);
+                        return layer.getChildren().length > 0;
+                    }
+                }
+
+                if (searchTerm.length > 0) {
+                    return _.filter(layers, filterLayer);
+                } else {
+                    return layers;
+                }
+            },
+
             // Called every time a map service has been loaded, so that
             // `layers` always reflects the union of configuration data
             // and data fetched from map services.
-            onLayerFetched: function() {
+            rebuildLayers: function() {
                 this.layers = this.coalesceLayers();
-                this.emit('update');
+                // Unfortunately, we need to execute `coalesceLayers` twice because
+                // `filterLayers` mutates the list of layers.
+                this.filteredLayers = this.filterLayers(this.coalesceLayers());
+                this.emit(LAYERS_CHANGED);
             },
 
             getLayers: function() {
-                return this.layers;
+                return this.filteredLayers;
             },
 
             findLayer: function(layerId) {
@@ -154,8 +183,8 @@ define([
             },
 
             clearAllLayers: function() {
-                this.savedState.selectedLayers = [];
-                this.emit('update');
+                this.filterTree('');
+                this.setSelectedLayers([]);
             },
 
             isSelected: function(layerId) {
@@ -184,20 +213,25 @@ define([
             },
 
             selectLayer: function(layerId) {
-                this.savedState.selectedLayers.push(layerId);
+                var selectedLayers = this.savedState.selectedLayers.concat(layerId);
+                this.setSelectedLayers(selectedLayers);
                 this.fetchLayerData(layerId);
-                this.emit('update');
             },
 
             deselectLayer: function(layerId) {
-                this.savedState.selectedLayers = _.without(this.savedState.selectedLayers, layerId);
-                this.emit('update');
+                var selectedLayers = _.without(this.savedState.selectedLayers, layerId);
+                this.setSelectedLayers(selectedLayers);
+            },
+
+            setSelectedLayers: function(selectedLayers) {
+                this.savedState.selectedLayers = selectedLayers;
+                this.emit(SELECTED_LAYERS_CHANGED);
             },
 
             // Request layer data from map service in the background.
             fetchLayerData: function(layerId) {
                 var layer = this.config.findLayer(layerId),
-                    onLayerFetched = _.bind(this.onLayerFetched, this);
+                    rebuildLayers = _.bind(this.rebuildLayers, this);
 
                 // If `layerId` couldn't be located in `config`, it means
                 // that it's probably a layer loaded on-demand, so there
@@ -206,7 +240,17 @@ define([
                     return;
                 }
 
-                return fetch(layer).then(onLayerFetched);
+                return fetch(layer).then(rebuildLayers);
+            },
+
+            getFilterText: function() {
+                return this.savedState.filterText;
+            },
+
+            filterTree: function(filterText) {
+                this.savedState.filterText = filterText;
+                this.emit(FILTER_CHANGED);
+                this.rebuildLayers();
             },
 
             serialize: function() {
