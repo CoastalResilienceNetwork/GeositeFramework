@@ -17,25 +17,40 @@ define([
                 this.children = [];
             },
 
+            getData: function() {
+                return this.node;
+            },
+
             addChild: function(layerNode) {
-                this.children.push(layerNode);
+                if (!_.contains(this.excludeLayers(), layerNode.getName())) {
+                    this.children.push(layerNode);
+                }
             },
 
             getChildren: function() {
                 return this.children;
             },
 
+            // Return true if layer should have children (even if they haven't loaded yet).
             hasChildren: function() {
                 return this.children.length > 0 ||
                     this.node.includeAllLayers ||
                     !!this.node.excludeLayers;
             },
 
+            // Return full path to leaf node in the tree.
             id: function() {
                 if (this.parent) {
                     return this.parent.id() + '/' + this.getDisplayName();
                 }
+                // Use "display name" instead of "name" because not all layers
+                // have names (ex. folder nodes).
                 return this.getDisplayName();
+            },
+
+            // Return layer ID defined in the map service.
+            getServiceId: function() {
+                return this.node.id;
             },
 
             getServer: function() {

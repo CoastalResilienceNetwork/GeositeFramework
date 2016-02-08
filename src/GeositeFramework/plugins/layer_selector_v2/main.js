@@ -67,9 +67,7 @@ define([
             },
 
             updateMap: function() {
-                var self = this,
-                    visibleLayerIds = {},
-                    layers = this.state.getSelectedLayers();
+                var visibleLayerIds = {};
 
                 // Default existing layers to empty so that deselecting
                 // all layers in a service will work correctly.
@@ -77,36 +75,30 @@ define([
                     visibleLayerIds[mapLayer.id] = [];
                 });
 
-                _.each(layers, function(layer) {
-                    if (!layer) {
-                        return;
-                    }
-
+                _.each(this.state.getSelectedLayers(), function(layer) {
                     var serviceUrl = layer.getServiceUrl(),
-                        serviceData = self.state.getServiceData(layer),
-                        serviceLayer = self.state.findServiceLayer(serviceData, layer);
+                        serviceId = layer.getServiceId();
 
-                    // Map service isn't loaded yet.
-                    if (!serviceLayer) {
+                    if (_.isUndefined(serviceId)) {
                         return;
                     }
 
-                    self.addServiceMapLayerIfNotExists(layer);
+                    this.addServiceMapLayerIfNotExists(layer);
 
                     if (!visibleLayerIds[serviceUrl]) {
                         visibleLayerIds[serviceUrl] = [];
                     }
-                    visibleLayerIds[serviceUrl].push(serviceLayer.id);
-                });
+                    visibleLayerIds[serviceUrl].push(layer.getServiceId());
+                }, this);
 
                 _.each(visibleLayerIds, function(layerIds, serviceUrl) {
-                    var mapLayer = self.map.getLayer(serviceUrl);
+                    var mapLayer = this.map.getLayer(serviceUrl);
                     if (layerIds.length === 0) {
                         mapLayer.setVisibleLayers([-1]);
                     } else {
                         mapLayer.setVisibleLayers(layerIds);
                     }
-                });
+                }, this);
             },
 
             // Create service layer and add it to the map if it doesn't already exist.
@@ -147,7 +139,7 @@ define([
             },
 
             render: function() {
-                var layers = this.config.getLayers(),
+                var layers = this.state.getLayers(),
                     html = this.renderTree(layers);
                 $(this.container).html(html);
             },
@@ -160,11 +152,8 @@ define([
             },
 
             renderLayer: function(layer) {
-                var serviceData = this.state.getServiceData(layer),
-                    serviceLayer = this.state.findServiceLayer(serviceData, layer);
                 return this.layerTmpl({
                     layer: layer,
-                    serviceLayer: serviceLayer,
                     state: this.state,
                     renderLayer: _.bind(this.renderLayer, this)
                 });

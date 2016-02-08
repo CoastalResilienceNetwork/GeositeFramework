@@ -12,13 +12,13 @@
 
         <a href="javascript:;" data-layer-id="<%- layer.id() %>">
             <span class="ls-node"><%= layer.getDisplayName() %></span>
-            <% if (serviceLayer) { %><%- serviceLayer.id %><% } %></a>
+            <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %></a>
 
         <% if (!layer.hasChildren() && state.isSelected(layer.id())) { %>&#10004;<% } %>
 
     <% if (layer.hasChildren() && state.isSelected(layer.id())) { %>
         <ul>
-            <%= _.map(state.getChildren(layer), renderLayer).join('') %>
+            <%= _.map(layer.getChildren(), renderLayer).join('') %>
         </ul>
     <% } %>
     </li>
