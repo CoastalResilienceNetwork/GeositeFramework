@@ -56,16 +56,20 @@ define([
 
             bindEvents: function() {
                 var self = this;
-                $(this.container).on('click', 'a[data-layer-id]', function() {
-                    var $el = $(this),
-                        layerId = $el.attr('data-layer-id');
-                    self.state.toggleLayer(layerId);
-                });
-                $(this.container).on('keyup', 'input.filter', function() {
-                    var $el = $(this),
-                        filterText = $el.val();
-                    self.state.filterTree(filterText);
-                });
+                $(this.container)
+                    .on('click', 'a[data-layer-id]', function() {
+                        var $el = $(this),
+                            layerId = $el.attr('data-layer-id');
+                        self.state.toggleLayer(layerId);
+                    })
+                    .on('keyup', '.pluginLayerSelector-search input', function() {
+                        var $el = $(this),
+                            filterText = $el.val();
+                        self.state.filterTree(filterText);
+                    })
+                    .on('click', 'a.pluginLayerSelector-clear', function() {
+                        self.state.clearAll();
+                    });
             },
 
             updateMap: function() {
@@ -190,14 +194,15 @@ define([
                 this.render();
 
                 var eventHandles = [
+                    this.state.on('change:all', function() {
+                        self.render();
+                    }),
                     this.state.on('change:filter', function() {
                         self.renderTree();
                     }),
-
                     this.state.on('change:layers', function() {
                         self.renderTree();
                     }),
-
                     this.state.on('change:selectedLayers', function() {
                         self.updateMap();
                         self.renderTree();
@@ -228,7 +233,7 @@ define([
 
             hibernate: function() {
                 if (this.state) {
-                    this.state.clearAllLayers();
+                    this.state.clearAll();
                 }
                 this.setState(null);
             }

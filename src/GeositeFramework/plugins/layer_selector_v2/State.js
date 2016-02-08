@@ -20,7 +20,8 @@ define([
 
         var LAYERS_CHANGED = 'change:layers',
             SELECTED_LAYERS_CHANGED = 'change:selectedLayers',
-            FILTER_CHANGED = 'change:filter';
+            FILTER_CHANGED = 'change:filter',
+            EVERYTHING_CHANGED = 'change:all';
 
         // Fetch layer data and return promise.
         function fetch(layer) {
@@ -182,9 +183,10 @@ define([
                 return result;
             },
 
-            clearAllLayers: function() {
+            clearAll: function() {
                 this.filterTree('');
                 this.setSelectedLayers([]);
+                this.emit(EVERYTHING_CHANGED);
             },
 
             isSelected: function(layerId) {
