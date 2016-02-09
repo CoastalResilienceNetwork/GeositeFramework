@@ -57,17 +57,17 @@ define([
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a[data-layer-id]', function() {
+                    .on('click', 'a.layer-row', function() {
                         var $el = $(this),
-                            layerId = $el.attr('data-layer-id');
+                            layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
                     })
-                    .on('keyup', '.pluginLayerSelector-search input', function() {
+                    .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
                         self.state.filterTree(filterText);
                     })
-                    .on('click', 'a.pluginLayerSelector-clear', function() {
+                    .on('click', 'a.reset', function() {
                         self.state.clearAll();
                     });
             },
@@ -160,16 +160,27 @@ define([
             renderTree: function() {
                 var html = this.treeTmpl({
                     layers: this.state.getLayers(),
-                    renderLayer: _.bind(this.renderLayer, this)
+                    renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
             },
 
-            renderLayer: function(layer) {
+            renderLayer: function(indent, layer) {
+                var cssClass = [],
+                    isSelected = this.state.isSelected(layer.id());
+                if (isSelected) {
+                    cssClass.push('selected');
+                }
+                cssClass.push(layer.hasChildren() ? 'parent-node' : 'leaf-node');
+                cssClass = cssClass.join(' ');
+
                 return this.layerTmpl({
                     layer: layer,
                     state: this.state,
-                    renderLayer: _.bind(this.renderLayer, this)
+                    cssClass: cssClass,
+                    isSelected: isSelected,
+                    indent: indent,
+                    renderLayer: _.bind(this.renderLayer, this, indent + 1)
                 });
             },
 

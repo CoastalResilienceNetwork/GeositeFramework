@@ -1,38 +1,50 @@
 ﻿<script type="text/template" id="plugin">
-    <div class="filter-container"></div>
-    <div class="tree-container"></div>
+    <div class="layer-selector2">
+        <div class="filter-container"></div>
+        <div class="tree-container"></div>
+    </div>
 </script>
 
 <script type="text/template" id="filter">
-    <p class="pluginLayerSelector-search">
-        <input type="text" placeholder="Filter Map Layers" class="filter"
-            value="<%- filterText %>" />
-        <a class="pluginLayerSelector-clear" href="javascript:;">Clear All</a>
-    </p>
+    <input type="text" class="filter" placeholder="Filter Map Layers" value="<%- filterText %>" />
+    <a href="javascript:;" class="reset">Reset Layers</a>
 </script>
 
 <script type="text/template" id="tree">
-    <ul>
-        <%= _.map(layers, renderLayer).join('') %>
-    </ul>
+    <ul><%= _.map(layers, renderLayer).join('') %></ul>
 </script>
 
 <script type="text/template" id="layer">
-    <li>
+    <li class="<%- cssClass %>" data-layer-id="<%- layer.id() %>">
+        <a href="javascript:;" class="layer-row" style="padding-left: <%- indent * 10 %>px">
+
+        <span class="node-icon">
         <% if (layer.hasChildren()) { %>
-            <% if (state.isSelected(layer.id())) { %>&boxminus;<% } else { %>&boxplus;<% } %>
+            <% if (isSelected) { %>
+                <i class="icon-down-dir"></i>
+            <% } else { %>
+                <i class="icon-right-dir"></i>
+            <% } %>
+        <% } else { %>
+            <i class="icon-database"></i>
+        <% } %>
+        </span>
+
+        <%= layer.getDisplayName() %>
+        <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %>
+
+        </a>
+
+        <% if (!layer.hasChildren()) { %>
+        <div class="layer-tools">
+            <a href="javascript:;" class="show"><i class="icon-eye<% if (!isSelected) { %>-off<% } %>"></i></a>
+            <a href="javascript:;" class="info"><i class="icon-info-circled"></i></a>
+            <a href="javascript:;" class="more"><i class="icon-ellipsis"></i></a>
+        </div>
         <% } %>
 
-        <a href="javascript:;" data-layer-id="<%- layer.id() %>">
-            <span class="ls-node"><%= layer.getDisplayName() %></span>
-            <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %></a>
-
-        <% if (!layer.hasChildren() && state.isSelected(layer.id())) { %>&#10004;<% } %>
-
-    <% if (layer.hasChildren() && state.isSelected(layer.id())) { %>
-        <ul>
-            <%= _.map(layer.getChildren(), renderLayer).join('') %>
-        </ul>
+    <% if (layer.hasChildren() && isSelected) { %>
+        <ul><%= _.map(layer.getChildren(), renderLayer).join('') %></ul>
     <% } %>
     </li>
 </script>

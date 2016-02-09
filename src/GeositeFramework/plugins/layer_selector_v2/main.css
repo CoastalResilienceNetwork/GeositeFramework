@@ -1,1 +1,54 @@
-﻿div.ls-node { color: blue; }
+﻿
+.layer-selector2 ul li ul {
+    margin-left: 0;
+}
+
+.layer-selector2 .filter-container {
+    padding: 6px 4px;
+    }
+    .layer-selector2 input.filter {
+        width: 60%;
+        display: inline;
+        margin-right: 15px;
+    }
+
+.layer-selector2 .tree-container li {
+    position: relative;
+    color: #666;
+    }
+    .layer-selector2 .tree-container li .icon-database {
+        color: #59C3CD;
+    }
+    .layer-selector2 .tree-container li a {
+        color: inherit;
+    }
+    .layer-selector2 .tree-container li > a {
+        display: inline-block;
+        width: 100%;
+        padding: 2px 0;
+        border-top: 1px solid #f8f8f8;
+    }
+    .layer-selector2 .tree-container li:hover > a,
+    .layer-selector2 .tree-container li:hover > .layer-tools {
+        background: #f5f5f5;
+    }
+    .layer-selector2 .tree-container li.leaf-node.selected > a,
+    .layer-selector2 .tree-container li.leaf-node.selected:hover > a,
+    .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
+    .layer-selector2 .tree-container li.leaf-node.selected:hover > .layer-tools {
+        color: #fff;
+        background: #23618C;
+    }
+    .layer-selector2 .tree-container li > .layer-tools {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        display: none;
+        }
+        .layer-selector2 .tree-container li > .layer-tools a {
+            width: auto;
+        }
+        .layer-selector2 .tree-container li.leaf-node:hover > .layer-tools,
+        .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools {
+            display: block;
+        }
