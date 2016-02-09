@@ -201,6 +201,7 @@ define([
                         self.renderTree();
                     }),
                     this.state.on('change:layers', function() {
+                        self.updateMap();
                         self.renderTree();
                     }),
                     this.state.on('change:selectedLayers', function() {
