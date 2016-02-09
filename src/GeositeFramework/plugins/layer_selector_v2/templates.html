@@ -1,21 +1,37 @@
-﻿<script type="text/template" id="tree">
+﻿<script type="text/template" id="plugin">
+    <div class="filter-container"></div>
+    <div class="tree-container"></div>
+</script>
+
+<script type="text/template" id="filter">
+    <p class="pluginLayerSelector-search">
+        <input type="text" placeholder="Filter Map Layers" class="filter"
+            value="<%- filterText %>" />
+        <a class="pluginLayerSelector-clear" href="javascript:;">Clear All</a>
+    </p>
+</script>
+
+<script type="text/template" id="tree">
     <ul>
         <%= _.map(layers, renderLayer).join('') %>
     </ul>
 </script>
 
 <script type="text/template" id="layer">
-    <li><span class="ls-node"><%= layer.getDisplayName() %></span>
-    <% if (layer.getServer()) { %>
-    (Server name: <%- layer.getServer().name %>)
-    <% } %>
-    <% if (layer.hasChildren()) { %>
+    <li>
+        <% if (layer.hasChildren()) { %>
+            <% if (state.isSelected(layer.id())) { %>&boxminus;<% } else { %>&boxplus;<% } %>
+        <% } %>
+
+        <a href="javascript:;" data-layer-id="<%- layer.id() %>">
+            <span class="ls-node"><%= layer.getDisplayName() %></span>
+            <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %></a>
+
+        <% if (!layer.hasChildren() && state.isSelected(layer.id())) { %>&#10004;<% } %>
+
+    <% if (layer.hasChildren() && state.isSelected(layer.id())) { %>
         <ul>
-            <% if (layer.isLoading()) { %>
-            <li>Loading...</li>
-            <% } else { %>
             <%= _.map(layer.getChildren(), renderLayer).join('') %>
-            <% } %>
         </ul>
     <% } %>
     </li>

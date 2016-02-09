@@ -61,6 +61,11 @@ define(['use!Geosite',
         },
 
         getLayerTemplate: function(legend, service, layer) {
+            // Not all layers have legends.
+            if (!legend) {
+                return null;
+            }
+
             var layerSettings = this.config.getLayerSettings(service, layer);
 
             if (layerSettings) {
@@ -96,7 +101,9 @@ define(['use!Geosite',
                     legend = legendGroup.legend,
                     tmpl = self.getLayerTemplate(legend, service, layer);
 
-                $container.append(tmpl(legend));
+                if (tmpl) {
+                    $container.append(tmpl(legend));
+                }
             });
 
             this.$el.find('.legend-body .layer-legends').html($container.html());

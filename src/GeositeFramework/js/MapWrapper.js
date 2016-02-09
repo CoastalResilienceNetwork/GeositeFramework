@@ -55,6 +55,10 @@
             return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : undefined);
         };
 
+        _wrapper.getMyLayers = function() {
+            return _myLayers;
+        };
+
         _wrapper.getLayersVisibleAtScaleRange = function (scale) {
             // Get whichever visible layers are mine
             var layers = esriMap.getLayersVisibleAtScaleRange(scale);

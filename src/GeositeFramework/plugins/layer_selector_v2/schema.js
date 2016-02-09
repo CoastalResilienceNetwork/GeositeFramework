@@ -1,4 +1,6 @@
 ﻿define(function() {
+    "use strict";
+
     // Schema for validating layers.config file (see http://json-schema.org)
     function schema() {
         return {
@@ -20,6 +22,7 @@
                 name: { type: 'string' },
                 displayName: { type: 'string' },
                 server: { '$ref': '#/definitions/server' },
+                includeAllLayers: { type: 'boolean' },
                 includeLayers: { type: 'array', items: { '$ref': '#/definitions/layer' } },
                 excludeLayers: { type: 'array', items: { type: 'string' } },
                 combine: { type: 'boolean' }
