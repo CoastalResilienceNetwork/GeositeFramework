@@ -3,6 +3,7 @@
         <div class="filter-container"></div>
         <div class="tree-container"></div>
         <div class="info-box-container"></div>
+        <div class="layer-menu-container"></div>
     </div>
 </script>
 
@@ -59,5 +60,16 @@
                 <div class="info-value"><%- layer.getInfo() %></div>
             </div>
         </div>
+    </div>
+</script>
+
+<script type="text/template" id="layer-menu">
+    <div class="layer-selector2-layer-menu" data-layer-id="<%- layer.id() %>">
+        <ul>
+            <li><a href="javascript:;" class="download"><i class="icon-download"></i> Download</a></li>
+            <li><a href="javascript:;" class="zoom"><i class="icon-zoom-in"></i> Zoom to Extent</a></li>
+            <li><a><i class="icon-ajust"></i> Opacity</a></li>
+            <li class="slider"><input type="range" min="0" max="255" step="1" /></li>
+        </ul>
     </div>
 </script>
