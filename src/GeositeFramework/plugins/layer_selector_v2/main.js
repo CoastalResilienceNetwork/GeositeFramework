@@ -60,24 +60,17 @@ define([
                 var self = this;
                 $(this.container)
                     .on('click', 'a.layer-row', function() {
-                        var $el = $(this),
-                            $parent = $el.closest('li'),
-                            layerId = $parent.attr('data-layer-id');
-                        self.state.toggleLayer(layerId);
+                        self.state.toggleLayer(self.getClosestLayerId(this));
                     })
                     .on('click', 'a.info', function() {
-                        var $el = $(this),
-                            $parent = $el.closest('li'),
-                            layerId = $parent.attr('data-layer-id');
-                        self.showLayerInfo(layerId);
+                        self.showLayerInfo(self.getClosestLayerId(this));
                     })
                     .on('click', '.info-box .close', function() {
                         self.hideLayerInfo();
                     })
                     .on('click', 'a.more', function() {
                         var $el = $(this),
-                            $parent = $el.closest('li'),
-                            layerId = $parent.attr('data-layer-id'),
+                            layerId = self.getClosestLayerId(this),
                             $menu = self.createLayerMenu(layerId),
                             $shadow = self.createLayerMenuShadow(),
                             pos = $el.offset();
@@ -95,21 +88,25 @@ define([
                     .on('click', 'a.reset', function() {
                         self.state.clearAll();
                     });
+
                 $('body')
                     .on('click', '.layer-selector2-layer-menu a.download', function() {
-                        var $el = $(this),
-                            $parent = $el.closest('[data-layer-id]'),
-                            layerId = $parent.attr('data-layer-id');
+                        var layerId = self.getClosestLayerId(this);
                         console.log('Download', layerId);
                         self.destroyLayerMenu();
                     })
                     .on('click', '.layer-selector2-layer-menu a.zoom', function() {
-                        var $el = $(this),
-                            $parent = $el.closest('[data-layer-id]'),
-                            layerId = $parent.attr('data-layer-id');
-                        console.log('Zoom', layerId);
+                        self.zoomToLayerExtent(self.getClosestLayerId(this));
                         self.destroyLayerMenu();
                     });
+            },
+
+            getClosestLayerId: function(el) {
+                var $el = $(el),
+                    $parent = $el.closest('[data-layer-id]'),
+                    layerId = $parent.attr('data-layer-id');
+
+                return layerId;
             },
 
             showLayerInfo: function(layerId) {
@@ -329,6 +326,19 @@ define([
                     this.state.clearAll();
                 }
                 this.setState(null);
+            },
+
+            zoomToLayerExtent: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    self = this;
+
+                this.state.fetchLayerDetails(layer)
+                    .then(function(newLayer) {
+                        self.map.setExtent(newLayer.getExtent());
+                    })
+                    .otherwise(function(err) {
+                        console.error(err);
+                    });
             }
         });
     }
