@@ -57,19 +57,29 @@ define([
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a[data-layer-id]', function() {
+                    .on('click', 'a.row', function() {
                         var $el = $(this),
-                            layerId = $el.attr('data-layer-id');
+                            layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
+                    })
+                    .on('click', 'a.info', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.displayLayerInfo(layerId);
                     })
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
                         self.state.filterTree(filterText);
                     })
-                    .on('click', 'a.clear', function() {
+                    .on('click', 'a.reset', function() {
                         self.state.clearAll();
                     });
+            },
+
+            displayLayerInfo: function(layerId) {
+                var layer = this.state.findLayer(layerId);
+                console.debug(layer);
             },
 
             updateMap: function() {
