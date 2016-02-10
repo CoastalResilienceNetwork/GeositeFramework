@@ -52,6 +52,7 @@ define([
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
                 this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
+                this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
                 this.bindEvents();
             },
 
@@ -70,6 +71,11 @@ define([
                     })
                     .on('click', '.info-box .close', function() {
                         self.hideLayerInfo();
+                    })
+                    .on('click', 'a.more', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.showLayerMenu(layerId);
                     })
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
@@ -91,6 +97,14 @@ define([
 
             hideLayerInfo: function() {
                 $(this.container).find('.info-box-container').empty();
+            },
+
+            showLayerMenu: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    html = this.layerMenuTmpl({
+                        layer: layer
+                    });
+                $(this.container).find('.layer-menu-container').html(html);
             },
 
             updateMap: function() {

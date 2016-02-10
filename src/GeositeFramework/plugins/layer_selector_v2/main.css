@@ -104,3 +104,14 @@
         .layer-selector2 .info-box td {
             padding: 0;
         }
+
+.layer-selector2 .layer-menu {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #bebebe;
+        color: #414141;
+    }
+    .layer-selector2 .layer-menu a {
+        color: inherit;
+    }
