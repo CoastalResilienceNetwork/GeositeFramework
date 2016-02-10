@@ -51,25 +51,66 @@ define([
                 this.filterTmpl = _.template(this.getTemplateByName('filter'));
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
+                this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
+                this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
                 this.bindEvents();
             },
 
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a[data-layer-id]', function() {
+                    .on('click', 'a.layer-row', function() {
                         var $el = $(this),
-                            layerId = $el.attr('data-layer-id');
+                            layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
                     })
-                    .on('keyup', '.pluginLayerSelector-search input', function() {
+                    .on('click', 'a.info', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.showLayerInfo(layerId);
+                    })
+                    .on('click', '.info-box .close', function() {
+                        self.hideLayerInfo();
+                    })
+                    .on('click', 'a.more', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.showLayerMenu(layerId);
+                    })
+                    .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
                         self.state.filterTree(filterText);
                     })
-                    .on('click', 'a.pluginLayerSelector-clear', function() {
+                    .on('click', 'a.reset', function() {
                         self.state.clearAll();
+                    })
+                    .on('click', '.layer-tools .more', function(e) {
+                        var layerEl = $(e.target).closest('[data-layer-id]'),
+                            layerId = layerEl.attr('data-layer-id');
+
+                        self.zoomToLayerExtent(layerId);
                     });
+            },
+
+            showLayerInfo: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    html = this.infoBoxTmpl({
+                        layer: layer
+                    });
+                $(this.container).find('.info-box-container').html(html);
+            },
+
+            hideLayerInfo: function() {
+                $(this.container).find('.info-box-container').empty();
+            },
+
+            showLayerMenu: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    html = this.layerMenuTmpl({
+                        layer: layer
+                    });
+                $(this.container).find('.layer-menu-container').html(html);
             },
 
             updateMap: function() {
@@ -160,16 +201,27 @@ define([
             renderTree: function() {
                 var html = this.treeTmpl({
                     layers: this.state.getLayers(),
-                    renderLayer: _.bind(this.renderLayer, this)
+                    renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
             },
 
-            renderLayer: function(layer) {
+            renderLayer: function(indent, layer) {
+                var cssClass = [],
+                    isSelected = this.state.isSelected(layer.id());
+                if (isSelected) {
+                    cssClass.push('selected');
+                }
+                cssClass.push(layer.hasChildren() ? 'parent-node' : 'leaf-node');
+                cssClass = cssClass.join(' ');
+
                 return this.layerTmpl({
                     layer: layer,
                     state: this.state,
-                    renderLayer: _.bind(this.renderLayer, this)
+                    cssClass: cssClass,
+                    isSelected: isSelected,
+                    indent: indent,
+                    renderLayer: _.bind(this.renderLayer, this, indent + 1)
                 });
             },
 
@@ -237,6 +289,19 @@ define([
                     this.state.clearAll();
                 }
                 this.setState(null);
+            },
+
+            zoomToLayerExtent: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    self = this;
+
+                this.state.fetchLayerDetails(layer)
+                    .then(function(newLayer) {
+                        self.map.setExtent(newLayer.getExtent());
+                    })
+                    .otherwise(function(err) {
+                        console.error(err);
+                    });
             }
         });
     }
