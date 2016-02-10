@@ -49,8 +49,14 @@
             },
             {
                 "name": "Critical Facilities",
-                "displayName": "Critical Facilities",
-                "includeAllLayers": true
+                "displayName": "Planes, Trains, &amp; Automobiles",
+                "combine": true,
+                "includeLayers": [
+                    { "name": "Airport" },
+                    { "name": "Rail Station" },
+                    { "name": "NJ_Railroad" },
+                    { "name": "Evacuation Routes" }
+                ]
             },
             {
                 "name": "Coastal Hazards",
@@ -107,8 +113,7 @@
                     "name": "SurgeBoundaries_Final_0214"
                 },
                 "name": "FINAL - High Resolution Storm Surge Extent",
-                "displayName": "Final FEMA Surge Area - February 2013",
-                "combine": true
+                "displayName": "Final FEMA Surge Area - February 2013"
             },
             {
                 "server": {

@@ -189,7 +189,7 @@ define([
 
             toggleLayer: function(layerId) {
                 var layer = this.findLayer(layerId);
-                if (layer.hasChildren()) {
+                if (layer.isFolder()) {
                     if (this.isExpanded(layerId)) {
                         this.collapseLayer(layerId);
                     } else {

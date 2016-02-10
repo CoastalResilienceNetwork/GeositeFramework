@@ -165,7 +165,14 @@ define([
                     if (!visibleLayerIds[serviceUrl]) {
                         visibleLayerIds[serviceUrl] = [];
                     }
-                    visibleLayerIds[serviceUrl].push(layer.getServiceId());
+
+                    if (layer.isCombined()) {
+                        _.each(layer.getChildren(), function(child) {
+                            visibleLayerIds[serviceUrl].push(child.getServiceId());
+                        });
+                    } else {
+                        visibleLayerIds[serviceUrl].push(layer.getServiceId());
+                    }
                 }, this);
 
                 _.each(visibleLayerIds, function(layerIds, serviceUrl) {
@@ -244,7 +251,7 @@ define([
                 if (isSelected) {
                     cssClass.push('selected');
                 }
-                cssClass.push(layer.hasChildren() ? 'parent-node' : 'leaf-node');
+                cssClass.push(layer.isFolder() ? 'parent-node' : 'leaf-node');
                 cssClass = cssClass.join(' ');
 
                 return this.layerTmpl({

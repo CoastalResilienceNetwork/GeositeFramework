@@ -120,8 +120,11 @@ define([
             },
 
             isFolder: function() {
-                // If there is no valid service URL this is probably a "folder" node.
-                return !this.getServiceUrl();
+                return this.hasChildren() && !this.isCombined();
+            },
+
+            isCombined: function() {
+                return this.node.combine;
             }
         });
     }
