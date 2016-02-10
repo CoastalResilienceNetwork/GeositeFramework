@@ -58,7 +58,7 @@ define([
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a.row', function() {
+                    .on('click', 'a.layer-row', function() {
                         var $el = $(this),
                             layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
