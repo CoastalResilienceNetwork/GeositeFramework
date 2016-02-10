@@ -21,10 +21,19 @@ define([
                 return this.node;
             },
 
-            addChild: function(layerNode) {
-                if (!_.contains(this.excludeLayers(), layerNode.getName())) {
-                    this.children.push(layerNode);
+            addChild: function(layer) {
+                if (this.canAddChild(layer)) {
+                    this.children.push(layer);
                 }
+            },
+
+            canAddChild: function(layer) {
+                var blacklist = this.getExcludedLayers();
+                if (blacklist) {
+                    return !_.contains(blacklist, layer.getName());
+                }
+                return this.includeAllLayers() ||
+                    _.contains(this.getIncludedLayers(), layer.getName());
             },
 
             getChildren: function() {
@@ -34,8 +43,8 @@ define([
             // Return true if layer should have children (even if they haven't loaded yet).
             hasChildren: function() {
                 return this.children.length > 0 ||
-                    this.node.includeAllLayers ||
-                    !!this.node.excludeLayers;
+                    !!this.getExcludedLayers() ||
+                    this.includeAllLayers();
             },
 
             // Depth-first node traversal.
@@ -100,7 +109,13 @@ define([
                 return this.node.includeAllLayers;
             },
 
-            excludeLayers: function() {
+            // Return names of layers to include.
+            getIncludedLayers: function() {
+                return _.pluck(this.node.includeLayers, 'name');
+            },
+
+            // Return names of layers to exclude.
+            getExcludedLayers: function() {
                 return this.node.excludeLayers;
             },
 
