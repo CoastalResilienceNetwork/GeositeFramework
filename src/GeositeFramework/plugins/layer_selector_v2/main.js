@@ -228,13 +228,13 @@ define([
                 $(this.container).find('.filter-container').html(html);
             },
 
-            renderTree: function() {
+            renderTree: _.debounce(function() {
                 var html = this.treeTmpl({
                     layers: this.state.getLayers(),
                     renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
-            },
+            }, 5),
 
             renderLayer: function(indent, layer) {
                 var isSelected = this.state.isSelected(layer.id()),
