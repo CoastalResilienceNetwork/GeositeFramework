@@ -73,6 +73,14 @@ define([
             return _.findWhere(serviceData.layers, { id: layerId });
         }
 
+        function findLayerDetails(layer, layerId) {
+            if (!layer || !layerId) { return; }
+
+            var url = util.urljoin(layer.getServiceUrl(), layerId);
+
+            return ajaxUtil.get(url);
+        }
+
         return declare([PausableEvented], {
             constructor: function(config, data) {
                 this.savedState = _.defaults({}, data, {
@@ -96,9 +104,10 @@ define([
             // Combine layer node objects with service data.
             coalesceLayerNode: function(parent, layer) {
                 var serviceData = getServiceData(layer),
-                    serviceLayer = findServiceLayer(serviceData, layer);
+                    serviceLayer = findServiceLayer(serviceData, layer),
+                    layerDetails = findLayerDetails(parent, layer.getServiceId());
 
-                var node = _.assign({}, layer.getData(), serviceLayer || {}),
+                var node = _.assign({}, serviceLayer || {}, layerDetails || {}, layer.getData()),
                     result = new LayerNode(parent, node);
 
                 // Include layers loaded on-demand (overrides layers defined in layers.json).
@@ -121,7 +130,10 @@ define([
             coalesceSubLayer: function(parent, subLayerId) {
                 var serviceData = getServiceData(parent),
                     serviceLayer = findServiceLayerById(serviceData, subLayerId),
-                    result = new LayerNode(parent, serviceLayer);
+                    layerDetails = findLayerDetails(parent, subLayerId);
+
+                var node = _.assign({}, serviceLayer || {}, layerDetails || {}),
+                    result = new LayerNode(parent, node);
 
                 if (serviceLayer.subLayerIds) {
                     _.each(serviceLayer.subLayerIds, function(subLayerId) {
@@ -243,10 +255,33 @@ define([
                 // that it's probably a layer loaded on-demand, so there
                 // is no need to fetch anything.
                 if (!layer) {
-                    return;
+                    return new Deferred().resolve();
                 }
 
                 return fetch(layer).then(rebuildLayers);
+            },
+
+            // Gets details for one layer. Returns a promise with
+            // the provided layer and details.
+            fetchLayerDetails: function(layer) {
+                var self = this,
+                    rebuildLayers = _.bind(self.rebuildLayers, self);
+
+                // We need to fetch the service before we can fetch
+                // the details.
+                return this.fetchMapService(layer.id())
+                        .then(function() {
+                            var newLayer = self.findLayer(layer.id()),
+                                url = util.urljoin(newLayer.getServiceUrl(), newLayer.getServiceId());
+
+                            return ajaxUtil.fetch(url);
+                        })
+                        .then(function() {
+                            rebuildLayers();
+                        })
+                        .then(function() {
+                            return self.findLayer(layer.id());
+                        });
             },
 
             getFilterText: function() {

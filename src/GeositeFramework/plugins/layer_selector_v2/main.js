@@ -74,6 +74,12 @@ define([
                     })
                     .on('click', 'a.reset', function() {
                         self.state.clearAll();
+                    })
+                    .on('click', '.layer-tools .more', function(e) {
+                        var layerEl = $(e.target).closest('[data-layer-id]'),
+                            layerId = layerEl.attr('data-layer-id');
+
+                        self.zoomToLayerExtent(layerId);
                     });
             },
 
@@ -261,6 +267,25 @@ define([
                     this.state.clearAll();
                 }
                 this.setState(null);
+            },
+
+            zoomToLayerExtent: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    extent = layer.getExtent();
+
+                if (extent) {
+                    this.map.setExtent(extent);
+                } else {
+                    var self = this;
+
+                    this.state.fetchLayerDetails(layer)
+                        .then(function(newLayer) {
+                            self.map.setExtent(newLayer.getExtent());
+                        })
+                        .otherwise(function(err) {
+                            console.error(err);
+                        });
+                }
             }
         });
     }
