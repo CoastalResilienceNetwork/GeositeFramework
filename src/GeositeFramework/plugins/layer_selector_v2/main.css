@@ -52,3 +52,55 @@
         .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools {
             display: block;
         }
+
+.layer-selector2 .info-box-container {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 10px;
+    }
+    .layer-selector2 .info-box .body {
+        width: 300px;
+        max-height: 400px;
+        background: #fff;
+        border: 5px solid gray;
+        border-radius: 5px;
+        padding: 10px 10px 0 10px;
+        overflow: auto;
+    }
+    .layer-selector2 .info-box .close {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        cursor: pointer;
+        padding: 6px;
+        background: #fff;
+        border-radius: 4px;
+        color: #ccc;
+        font-weight: 700;
+        z-index: 99;
+        height: 24px;
+        line-height: 10px;
+        width: 24px;
+        font-size: 14px;
+    }
+    .layer-selector2 .info-box .close:hover {
+        background: #f1f2f2;
+        color: #333;
+    }
+    .layer-selector2 .info-box .info-label {
+        font-weight: bold;
+        padding-bottom: 3px;
+    }
+    .layer-selector2 .info-box .info-value {
+        padding-bottom: 10px;
+    }
+    /* Neutralize Foundation's zealous table styling so the slider won't look terrible */
+    .layer-selector2 .info-box table {
+        background-color: transparent;
+        border-width: 0;
+        margin: 0;
+        }
+        .layer-selector2 .info-box td {
+            padding: 0;
+        }

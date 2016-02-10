@@ -51,25 +51,46 @@ define([
                 this.filterTmpl = _.template(this.getTemplateByName('filter'));
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
+                this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
                 this.bindEvents();
             },
 
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a[data-layer-id]', function() {
+                    .on('click', 'a.row', function() {
                         var $el = $(this),
-                            layerId = $el.attr('data-layer-id');
+                            layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
+                    })
+                    .on('click', 'a.info', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.showLayerInfo(layerId);
+                    })
+                    .on('click', '.info-box .close', function() {
+                        self.hideLayerInfo();
                     })
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
                         self.state.filterTree(filterText);
                     })
-                    .on('click', 'a.clear', function() {
+                    .on('click', 'a.reset', function() {
                         self.state.clearAll();
                     });
+            },
+
+            showLayerInfo: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    html = this.infoBoxTmpl({
+                        layer: layer
+                    });
+                $(this.container).find('.info-box-container').html(html);
+            },
+
+            hideLayerInfo: function() {
+                $(this.container).find('.info-box-container').empty();
             },
 
             updateMap: function() {

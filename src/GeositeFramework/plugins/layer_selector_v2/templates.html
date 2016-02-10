@@ -2,12 +2,13 @@
     <div class="layer-selector2">
         <div class="filter-container"></div>
         <div class="tree-container"></div>
+        <div class="info-box-container"></div>
     </div>
 </script>
 
 <script type="text/template" id="filter">
     <input type="text" class="filter" placeholder="Filter Map Layers" value="<%- filterText %>" />
-    <a href="javascript:;" class="clear">Reset Layers</a>
+    <a href="javascript:;" class="reset">Reset Layers</a>
 </script>
 
 <script type="text/template" id="tree">
@@ -15,8 +16,8 @@
 </script>
 
 <script type="text/template" id="layer">
-    <li class="<%- cssClass %>">
-        <a href="javascript:;" data-layer-id="<%- layer.id() %>" style="padding-left: <%- indent * 10 %>px">
+    <li class="<%- cssClass %>" data-layer-id="<%- layer.id() %>">
+        <a href="javascript:;" class="row" style="padding-left: <%- indent * 10 %>px">
 
         <span class="node-icon">
         <% if (layer.hasChildren()) { %>
@@ -47,4 +48,16 @@
         <ul><%= _.map(layer.getChildren(), renderLayer).join('') %></ul>
     <% } %>
     </li>
+</script>
+
+<script type="text/template" id="info-box">
+    <div class="info-box">
+        <div class="close">&#10006;</div>
+        <div class="body">
+            <div class="description">
+                <div class="info-label"><%- layer.getDisplayName() %></div>
+                <div class="info-value"><%- layer.getInfo() %></div>
+            </div>
+        </div>
+    </div>
 </script>
