@@ -1,18 +1,18 @@
 define([
         "dojo/_base/declare",
-        "dojo/Evented",
         "dojo/Deferred",
         "esri/request",
         "underscore",
+        "framework/PausableEvented",
         "framework/util/ajax",
         "./util",
         "./LayerNode"
     ],
     function(declare,
-             Evented,
              Deferred,
              request,
              _,
+             PausableEvented,
              ajaxUtil,
              util,
              LayerNode) {
@@ -73,7 +73,7 @@ define([
             return _.findWhere(serviceData.layers, { id: layerId });
         }
 
-        return declare([Evented], {
+        return declare([PausableEvented], {
             constructor: function(config, data) {
                 this.savedState = _.defaults({}, data, {
                     filterText: '',
@@ -256,8 +256,12 @@ define([
             filterTree: function(filterText) {
                 var self = this;
 
+                if (filterText === this.savedState.filterText) {
+                    return;
+                }
+
                 this.savedState.filterText = filterText;
-                this.emit(FILTER_CHANGED);
+                this.pauseEvents();
 
                 // Apply filter.
                 this.rebuildLayers();
@@ -269,6 +273,9 @@ define([
                         self.expandLayer(layer.id());
                     });
                 });
+
+                this.resumeEvents();
+                this.emit(FILTER_CHANGED);
             },
 
             serialize: function() {
