@@ -57,19 +57,35 @@ define([
             bindEvents: function() {
                 var self = this;
                 $(this.container)
-                    .on('click', 'a[data-layer-id]', function() {
+                    .on('click', 'a.row', function() {
                         var $el = $(this),
-                            layerId = $el.attr('data-layer-id');
+                            layerId = $el.parents('li').attr('data-layer-id');
                         self.state.toggleLayer(layerId);
                     })
-                    .on('keyup', '.pluginLayerSelector-search input', function() {
+                    .on('click', 'a.info', function() {
+                        var $el = $(this),
+                            layerId = $el.parents('li').attr('data-layer-id');
+                        self.displayLayerInfo(layerId);
+                    })
+                    .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
                         self.state.filterTree(filterText);
                     })
-                    .on('click', 'a.pluginLayerSelector-clear', function() {
+                    .on('click', 'a.reset', function() {
                         self.state.clearAll();
+                    })
+                    .on('click', '.layer-tools .more', function(e) {
+                        var layerEl = $(e.target).closest('[data-layer-id]'),
+                            layerId = layerEl.attr('data-layer-id');
+
+                        self.zoomToLayerExtent(layerId);
                     });
+            },
+
+            displayLayerInfo: function(layerId) {
+                var layer = this.state.findLayer(layerId);
+                console.debug(layer);
             },
 
             updateMap: function() {
@@ -157,19 +173,33 @@ define([
                 $(this.container).find('.filter-container').html(html);
             },
 
-            renderTree: function() {
+            renderTree: _.debounce(function() {
                 var html = this.treeTmpl({
                     layers: this.state.getLayers(),
-                    renderLayer: _.bind(this.renderLayer, this)
+                    renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
-            },
+            }, 5),
 
-            renderLayer: function(layer) {
+            renderLayer: function(indent, layer) {
+                var isSelected = this.state.isSelected(layer.id()),
+                    isExpanded = this.state.isExpanded(layer.id());
+
+                var cssClass = [];
+                if (isSelected) {
+                    cssClass.push('selected');
+                }
+                cssClass.push(layer.hasChildren() ? 'parent-node' : 'leaf-node');
+                cssClass = cssClass.join(' ');
+
                 return this.layerTmpl({
                     layer: layer,
                     state: this.state,
-                    renderLayer: _.bind(this.renderLayer, this)
+                    cssClass: cssClass,
+                    isSelected: isSelected,
+                    isExpanded: isExpanded,
+                    indent: indent,
+                    renderLayer: _.bind(this.renderLayer, this, indent + 1)
                 });
             },
 
@@ -237,6 +267,25 @@ define([
                     this.state.clearAll();
                 }
                 this.setState(null);
+            },
+
+            zoomToLayerExtent: function(layerId) {
+                var layer = this.state.findLayer(layerId),
+                    extent = layer.getExtent();
+
+                if (extent) {
+                    this.map.setExtent(extent);
+                } else {
+                    var self = this;
+
+                    this.state.fetchLayerDetails(layer)
+                        .then(function(newLayer) {
+                            self.map.setExtent(newLayer.getExtent());
+                        })
+                        .otherwise(function(err) {
+                            console.error(err);
+                        });
+                }
             }
         });
     }
