@@ -19,6 +19,9 @@
     .layer-selector2 .tree-container li .icon-database {
         color: #59C3CD;
     }
+    .layer-selector2 .tree-container .parent-node .layer-name {
+        margin-left: -4px;
+    }
     .layer-selector2 .tree-container li a {
         color: inherit;
     }
@@ -37,13 +40,14 @@
     .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
     .layer-selector2 .tree-container li.leaf-node.selected:hover > .layer-tools {
         color: #fff;
-        background: #23618C;
+        background: #23618c;
     }
     .layer-selector2 .tree-container li > .layer-tools {
+        display: none;
         position: absolute;
         top: 2px;
         right: 0;
-        display: none;
+        padding-right: 5px;
         }
         .layer-selector2 .tree-container li > .layer-tools a {
             width: auto;
@@ -107,13 +111,22 @@
 
 .layer-selector2-layer-menu {
         position: absolute;
-        margin-top: -125px;
-        margin-left: -121px;
+        margin-top: -129px;
+        margin-left: -115px;
         background: #bebebe;
         color: #414141;
         width: 140px;
-        border-radius: 3px;
         z-index: 1000;
+    }
+    .layer-selector2-layer-menu:after {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 8px 0 8px;
+        border-color: #bebebe transparent transparent transparent;
+        position: absolute;
+        content: "";
+        right: 6px;
     }
     .layer-selector2-layer-menu-shadow {
         position: absolute;

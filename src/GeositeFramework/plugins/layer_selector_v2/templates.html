@@ -18,9 +18,9 @@
 
 <script type="text/template" id="layer">
     <li class="<%- cssClass %>" data-layer-id="<%- layer.id() %>">
-        <a href="javascript:;" class="layer-row" style="padding-left: <%- indent * 10 %>px">
+        <a href="javascript:;" class="layer-row" style="padding-left: <%- indent * 15 %>px">
 
-        <span class="node-icon">
+        <span class="layer-icon">
         <% if (layer.hasChildren()) { %>
             <% if (isSelected) { %>
                 <i class="icon-down-dir"></i>
@@ -32,8 +32,10 @@
         <% } %>
         </span>
 
-        <%= layer.getDisplayName() %>
-        <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %>
+        <span class="layer-name">
+            <%= layer.getDisplayName() %>
+            <% if (layer.getServiceId()) { %><%- layer.getServiceId() %><% } %>
+        </span>
 
         </a>
 
@@ -46,7 +48,7 @@
         <% } %>
 
     <% if (layer.hasChildren() && isSelected) { %>
-        <ul><%= _.map(layer.getChildren(), renderLayer).join('') %></ul>
+        <%= _.map(layer.getChildren(), renderLayer).join('') %>
     <% } %>
     </li>
 </script>
