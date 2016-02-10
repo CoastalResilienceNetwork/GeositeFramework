@@ -2,6 +2,7 @@
     <div class="layer-selector2">
         <div class="filter-container"></div>
         <div class="tree-container"></div>
+        <div class="info-box-container"></div>
     </div>
 </script>
 
@@ -47,4 +48,16 @@
         <ul><%= _.map(layer.getChildren(), renderLayer).join('') %></ul>
     <% } %>
     </li>
+</script>
+
+<script type="text/template" id="info-box">
+    <div class="info-box">
+        <div class="close">&#10006;</div>
+        <div class="body">
+            <div class="description">
+                <div class="info-label"><%- layer.getDisplayName() %></div>
+                <div class="info-value"><%- layer.getInfo() %></div>
+            </div>
+        </div>
+    </div>
 </script>

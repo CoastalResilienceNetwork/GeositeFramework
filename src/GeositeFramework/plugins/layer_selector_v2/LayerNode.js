@@ -86,6 +86,10 @@ define([
                 return this.node.displayName || this.node.name;
             },
 
+            getInfo: function() {
+                return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pharetra aliquam nunc vel malesuada. Nunc ultricies laoreet ipsum, vel aliquam mi maximus vitae. Quisque consequat eros orci, nec porta purus suscipit nec. Nulla sed tincidunt ipsum. Etiam in sem viverra, aliquet lacus sed, lobortis purus. Suspendisse accumsan, lectus eu commodo malesuada, erat turpis blandit massa, quis fringilla tellus sem non augue. Integer non mauris non lacus ultricies euismod. Pellentesque eget molestie metus. Proin sem mi, vulputate id orci ac, laoreet euismod justo. Nunc eu placerat ex, vitae semper dui. Etiam tristique lorem quis iaculis luctus. Mauris quis hendrerit quam, in sodales urna. Quisque posuere vel nunc ac fringilla. In hac habitasse platea dictumst. Phasellus nibh lectus, congue sit amet leo efficitur, malesuada faucibus quam. Nullam velit sapien, pharetra et elit quis, convallis vehicula lectus.';
+            },
+
             includeAllLayers: function() {
                 return this.node.includeAllLayers;
             },
