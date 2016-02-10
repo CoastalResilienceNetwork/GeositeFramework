@@ -237,8 +237,10 @@ define([
             },
 
             renderLayer: function(indent, layer) {
-                var cssClass = [],
-                    isSelected = this.state.isSelected(layer.id());
+                var isSelected = this.state.isSelected(layer.id()),
+                    isExpanded = this.state.isExpanded(layer.id());
+
+                var cssClass = [];
                 if (isSelected) {
                     cssClass.push('selected');
                 }
@@ -250,6 +252,7 @@ define([
                     state: this.state,
                     cssClass: cssClass,
                     isSelected: isSelected,
+                    isExpanded: isExpanded,
                     indent: indent,
                     renderLayer: _.bind(this.renderLayer, this, indent + 1)
                 });

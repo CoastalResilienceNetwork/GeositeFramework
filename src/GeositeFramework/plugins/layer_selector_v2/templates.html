@@ -22,7 +22,7 @@
 
         <span class="layer-icon">
         <% if (layer.hasChildren()) { %>
-            <% if (isSelected) { %>
+            <% if (isExpanded) { %>
                 <i class="icon-down-dir"></i>
             <% } else { %>
                 <i class="icon-right-dir"></i>
@@ -47,7 +47,7 @@
         </div>
         <% } %>
 
-    <% if (layer.hasChildren() && isSelected) { %>
+    <% if (layer.hasChildren() && isExpanded) { %>
         <%= _.map(layer.getChildren(), renderLayer).join('') %>
     <% } %>
     </li>
