@@ -282,7 +282,7 @@ define([
                 }
 
                 return fetch(layer)
-                        .then(self.rebuildLayers())
+                        .then(_.bind(this.rebuildLayers, this))
                         .then(function() {
                             return self.findLayer(layerId);
                         });
@@ -307,9 +307,7 @@ define([
 
                             return ajaxUtil.fetch(url);
                         })
-                        .then(function() {
-                            self.rebuildLayers();
-                        })
+                        .then(_.bind(this.rebuildLayers, this))
                         .then(function() {
                             return self.findLayer(layer.id());
                         });
