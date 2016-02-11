@@ -38,6 +38,12 @@ define([
                     !!this.node.excludeLayers;
             },
 
+            // Depth-first node traversal.
+            walk: function(callback) {
+                callback(this);
+                _.invoke(this.children, 'walk', callback);
+            },
+
             // Return full path to leaf node in the tree.
             id: function() {
                 if (this.parent) {
