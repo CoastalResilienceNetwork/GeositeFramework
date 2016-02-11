@@ -103,7 +103,7 @@ define([
                 return this.node.displayName || this.node.name;
             },
 
-            getInfo: function() {
+            getDescription: function() {
                 return this.node.description || '';
             },
 

@@ -21,6 +21,7 @@
             properties: {
                 name: { type: 'string' },
                 displayName: { type: 'string' },
+                description: { type: 'string' },
                 server: { '$ref': '#/definitions/server' },
                 includeAllLayers: { type: 'boolean' },
                 includeLayers: { type: 'array', items: { '$ref': '#/definitions/layer' } },
