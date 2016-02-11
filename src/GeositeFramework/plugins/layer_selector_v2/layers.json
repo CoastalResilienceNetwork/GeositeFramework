@@ -22,7 +22,8 @@
                         }
                     },
                     {
-                        "name": "Congressional Districts"
+                        "name": "Congressional Districts",
+                        "description": "This polygon layer delineates the US Congressional District boundaries in New Jersey, 2012 - 2022."
                     },
                     {
                         "name": "Town,city, village"
@@ -65,7 +66,7 @@
                         "name": "Sea Level Rise Impact Analysis",
                         "includeLayers": [
                             {
-                                "name": "Current Sea Level",
+                                "name": "Current sea level",
                                 "displayName": "Sea Level (Current)"
                             },
                             {

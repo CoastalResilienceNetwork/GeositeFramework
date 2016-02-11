@@ -118,7 +118,7 @@ define([
                     result = new LayerNode(parent, node);
 
                 // Include layers loaded on-demand (overrides layers defined in layers.json).
-                if (serviceLayer && serviceLayer.subLayerIds) {
+                if (layer.includeAllLayers() && serviceLayer && serviceLayer.subLayerIds) {
                     _.each(serviceLayer.subLayerIds, function(subLayerId) {
                         var childLayer = this.coalesceSubLayer(result, subLayerId);
                         result.addChild(childLayer);

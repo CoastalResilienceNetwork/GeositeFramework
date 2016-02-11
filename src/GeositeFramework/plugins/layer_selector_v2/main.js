@@ -109,18 +109,6 @@ define([
                 return layerId;
             },
 
-            showLayerInfo: function(layerId) {
-                var layer = this.state.findLayer(layerId),
-                    html = this.infoBoxTmpl({
-                        layer: layer
-                    });
-                return $(this.container).find('.info-box-container').html(html);
-            },
-
-            hideLayerInfo: function() {
-                $(this.container).find('.info-box-container').empty();
-            },
-
             createLayerMenu: function(layerId) {
                 var layer = this.state.findLayer(layerId),
                     html = this.layerMenuTmpl({
@@ -339,6 +327,26 @@ define([
                     .otherwise(function(err) {
                         console.error(err);
                     });
+            },
+
+            showLayerInfo: function(layerId) {
+                var self = this,
+                    layer = this.state.findLayer(layerId);
+
+                this.state.fetchLayerDetails(layer)
+                    .then(function(newLayer) {
+                        var html = self.infoBoxTmpl({
+                                layer: newLayer
+                            });
+                        $(self.container).find('.info-box-container').html(html);
+                    })
+                    .otherwise(function(err) {
+                        console.error(err);
+                    });
+            },
+
+            hideLayerInfo: function() {
+                $(this.container).find('.info-box-container').empty();
             }
         });
     }
