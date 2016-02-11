@@ -35,7 +35,7 @@ define([
                     return !_.contains(blacklist, layer.getName());
                 }
                 return this.includeAllLayers() ||
-                    _.contains(this.getIncludedLayers(), layer.getName());
+                    _.contains(this.getIncludedLayerNames(), layer.getName());
             },
 
             getChildren: function() {
@@ -116,12 +116,20 @@ define([
             },
 
             includeAllLayers: function() {
-                return this.node.includeAllLayers;
+                return this.node.includeAllLayers ||
+                    // This may seem counter-intuitive, but *all* sublayers must
+                    // be loaded in order to satisfy a blacklist. So the `excludeLayers`
+                    // property can be thought of as a subset of `includeLayers`.
+                    !!this.getExcludedLayers();
             },
 
             // Return names of layers to include.
             getIncludedLayers: function() {
-                return _.pluck(this.node.includeLayers, 'name');
+                return this.node.includeLayers;
+            },
+
+            getIncludedLayerNames: function() {
+                return _.pluck(this.getIncludedLayers(), 'name');
             },
 
             // Return names of layers to exclude.
