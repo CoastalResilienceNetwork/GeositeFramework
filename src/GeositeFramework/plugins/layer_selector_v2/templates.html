@@ -21,7 +21,7 @@
         <a href="javascript:;" class="layer-row" style="padding-left: <%- indent * 15 %>px">
 
         <span class="layer-icon">
-        <% if (layer.hasChildren()) { %>
+        <% if (layer.isFolder()) { %>
             <% if (isExpanded) { %>
                 <i class="icon-down-dir"></i>
             <% } else { %>
@@ -39,7 +39,7 @@
 
         </a>
 
-        <% if (!layer.hasChildren()) { %>
+        <% if (!layer.isFolder()) { %>
         <div class="layer-tools">
             <a href="javascript:;" class="show"><i class="icon-eye<% if (!isSelected) { %>-off<% } %>"></i></a>
             <a href="javascript:;" class="info"><i class="icon-info-circled"></i></a>
@@ -47,7 +47,7 @@
         </div>
         <% } %>
 
-    <% if (layer.hasChildren() && isExpanded) { %>
+    <% if (layer.isFolder() && isExpanded) { %>
         <%= _.map(layer.getChildren(), renderLayer).join('') %>
     <% } %>
     </li>
