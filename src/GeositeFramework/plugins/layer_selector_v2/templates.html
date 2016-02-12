@@ -70,8 +70,10 @@
         <ul>
             <li><a href="javascript:;" class="download"><i class="icon-download"></i> Download</a></li>
             <li><a href="javascript:;" class="zoom"><i class="icon-zoom-in"></i> Zoom to Extent</a></li>
-            <li><a><i class="icon-ajust"></i> Opacity</a></li>
-            <li class="slider"><input type="range" min="0" max="255" step="1" /></li>
+            <% if (supportsOpacity) { %>
+                <li><a><i class="icon-ajust"></i> Opacity</a></li>
+                <li class="slider"><input type="range" min="0" max="1" step=".1" value="<%= opacity %>"/></li>
+            <% } %>
         </ul>
     </div>
 </script>

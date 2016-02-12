@@ -21,7 +21,8 @@ define([
         var LAYERS_CHANGED = 'change:layers',
             SELECTED_LAYERS_CHANGED = 'change:selectedLayers',
             FILTER_CHANGED = 'change:filter',
-            EVERYTHING_CHANGED = 'change:all';
+            EVERYTHING_CHANGED = 'change:all',
+            OPACITY_CHANGED = 'change:opacity';
 
         // Fetch layer data and return promise.
         function fetch(layer) {
@@ -88,7 +89,9 @@ define([
                     // Selected layerIds (in-order).
                     selectedLayers: [],
                     // Expanded layerIds.
-                    expandedLayers: []
+                    expandedLayers: [],
+                    // List of objects as { layerId: opacityValue }.
+                    layerOpacity: []
                 });
                 this.config = config;
                 this.rebuildLayers();
@@ -209,6 +212,17 @@ define([
 
             getSelectedLayers: function() {
                 return _.map(this.savedState.selectedLayers, this.findLayer, this);
+            },
+
+            getSelectedLayersForService: function(serviceUrl) {
+                var self = this;
+                return _.reduce(this.savedState.selectedLayers, function(memo, layer) {
+                    var layerNode = self.findLayer(layer);
+                    if (layerNode && layerNode.getServiceUrl() === serviceUrl) {
+                        memo.push(layer);
+                    }
+                    return memo;
+                }, []);
             },
 
             clearAll: function() {
@@ -344,6 +358,49 @@ define([
 
             serialize: function() {
                 return this.savedState;
+            },
+
+            getLayerOpacity: function(layerId) {
+                var savedLayerOpacity = _.findWhere(this.savedState.layerOpacity, { layerId: layerId });
+
+                if (savedLayerOpacity) {
+                    return savedLayerOpacity.opacity;
+                } else {
+                    var layer = this.findLayer(layerId),
+                        configOpacity = layer.getOpacity();
+
+                    if (configOpacity) {
+                        return configOpacity;
+                    }
+                }
+
+                return 1;
+            },
+
+            setLayerOpacity: function(layerId, opacity) {
+                var layerItem = _.findWhere(this.savedState.layerOpacity, { layerId: layerId });
+
+                if (layerItem) {
+                    layerItem.opacity = opacity;
+                } else {
+                    this.savedState.layerOpacity.push({
+                        layerId: layerId,
+                        opacity: opacity
+                    });
+                }
+
+                this.emit(OPACITY_CHANGED);
+            },
+
+            serviceSupportsOpacity: function(layerId) {
+                var layer = this.findLayer(layerId),
+                    serviceData = getServiceData(layer);
+
+                if (serviceData && serviceData.supportsDynamicLayers) {
+                    return true;
+                }
+
+                return false;
             }
         });
     }
