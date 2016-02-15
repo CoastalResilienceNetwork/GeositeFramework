@@ -23,6 +23,7 @@ define([
         "esri/layers/ArcGISTiledMapServiceLayer",
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
+        //"./tests",
         "./state",
         "./config"
     ],
@@ -35,6 +36,7 @@ define([
              ArcGISTiledMapServiceLayer,
              LayerDrawingOptions,
              PluginBase,
+             //unitTests,
              State,
              Config) {
         "use strict";
