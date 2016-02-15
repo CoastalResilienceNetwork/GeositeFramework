@@ -19,18 +19,8 @@
             constructor: function () {
                 var rawNodes = this.parse(layerSourcesJson);
                 this.layers = _.map(rawNodes, function(node) {
-                    return this.createLayerNode(null, node);
-                }, this);
-            },
-
-            // Recursively wrap raw layer nodes.
-            createLayerNode: function(parent, node) {
-                var self = this,
-                    result = new LayerNode(parent, node);
-                _.each(node.includeLayers || [], function(childNode) {
-                    result.addChild(self.createLayerNode(result, childNode));
+                    return LayerNode.fromJS(node);
                 });
-                return result;
             },
 
             parse: function(json) {
