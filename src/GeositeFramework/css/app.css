@@ -624,6 +624,9 @@ input.code-like, textarea.code-like {
         width: 100%;
     }
 
+.layer-legends {
+    overflow: hidden;
+}
 .legend-layer {
     float: left;
     width: 215px;
