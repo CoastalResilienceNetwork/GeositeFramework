@@ -85,11 +85,19 @@ define(['use!Geosite',
             return this.tmplLegendItemMultiple;
         },
 
+        getCustomLegendCount: function() {
+            return this.$el.find('.plugin-legends')
+                .children()
+                .not('[style="display: none;"]')
+                .not(':empty')
+                .length;
+        },
+
         render: function(legendGroups) {
             var self = this,
                 $container = $('<div>');
 
-            if (legendGroups.length === 0) {
+            if (legendGroups.length === 0 && this.getCustomLegendCount() === 0) {
                 this.$el.hide();
             } else {
                 this.$el.show();
