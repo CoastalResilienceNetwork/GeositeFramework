@@ -215,10 +215,12 @@ define(['use!Geosite',
                 legendWidth = parseInt(legend.css('width'));
 
             // Add up the height of the all of the layer legends and plugin legends.
-            legend.find('.legend-body .legend-layer, .legend-body .custom-legend').each(function(i, el) {
-                // True indicates margin should be included.
-                contentHeight += $(el).outerHeight(true);
-            });
+            legend.find('.legend-body .legend-layer, .legend-body .custom-legend')
+                    .filter(':visible')
+                    .each(function(i, el) {
+                        // True indicates margin should be included.
+                        contentHeight += $(el).outerHeight(true);
+                    });
 
             // Height
             if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT) {
