@@ -24,15 +24,6 @@ define([
             EVERYTHING_CHANGED = 'change:all',
             OPACITY_CHANGED = 'change:opacity';
 
-        // Fetch layer data and return promise.
-        function fetch(layer) {
-            if (layer.isFolder()) {
-                return new Deferred().resolve();
-            } else {
-                return ajaxUtil.fetch(layer.getServiceUrl());
-            }
-        }
-
         // Return true if layer data has been fetched.
         function isLoaded(layer) {
             if (layer.isFolder()) {
@@ -84,6 +75,9 @@ define([
 
         return declare([PausableEvented], {
             constructor: function(config, data, currentRegion) {
+                this.config = config;
+                this.currentRegion = currentRegion;
+
                 this.savedState = _.defaults({}, data, {
                     filterText: '',
                     // Selected layerIds (in-order).
@@ -93,9 +87,14 @@ define([
                     // List of objects as { layerId: opacityValue }.
                     layerOpacity: []
                 });
-                this.config = config;
-                this.currentRegion = currentRegion;
+
+                // Create initial working layer objects.
                 this.rebuildLayers();
+
+                // Restore saved state.
+                this.filterTree(this.savedState.filterText);
+                this.setSelectedLayers(this.savedState.selectedLayers);
+                this.setExpandedLayers(this.savedState.expandedLayers);
             },
 
             // Combine config layer nodes with map service data.
@@ -238,7 +237,6 @@ define([
 
             selectLayer: function(layerId) {
                 this.setSelectedLayers(this.savedState.selectedLayers.concat(layerId));
-                this.fetchMapService(layerId);
             },
 
             deselectLayer: function(layerId) {
@@ -247,6 +245,7 @@ define([
 
             setSelectedLayers: function(selectedLayers) {
                 this.savedState.selectedLayers = selectedLayers;
+                _.each(selectedLayers, _.bind(this.fetchMapService, this));
                 this.emit(SELECTED_LAYERS_CHANGED);
             },
 
@@ -268,21 +267,23 @@ define([
             },
 
             fetchMapService: function(layerId) {
-                var layer = this.config.findLayer(layerId),
-                    self = this;
+                var self = this,
+                    layer = this.config.findLayer(layerId),
+                    done = function() {
+                        return self.findLayer(layerId);
+                    };
 
-                // If `layerId` couldn't be located in `config`, it means
-                // that it's probably a layer loaded on-demand, so there
-                // is no need to fetch anything.
-                if (!layer) {
-                    return new Deferred().resolve(self.findLayer(layerId));
+                // Only fetch map service data for layers defined in the
+                // layers.json config and only if it hasn't already been fetched.
+                // Otherwise, `rebuildLayers` will get called more often
+                // than it needs to be.
+                if (layer && ajaxUtil.shouldFetch(layer.getServiceUrl())) {
+                    return ajaxUtil.fetch(layer.getServiceUrl())
+                            .then(_.bind(this.rebuildLayers, this))
+                            .then(done);
                 }
 
-                return fetch(layer)
-                        .then(_.bind(this.rebuildLayers, this))
-                        .then(function() {
-                            return self.findLayer(layerId);
-                        });
+                return new Deferred().resolve(done());
             },
 
             // Gets details for one layer. Returns a promise with

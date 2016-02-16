@@ -332,6 +332,7 @@ define([
                 }
 
                 this.state = new State(this.config, data, this.currentRegion);
+                this.updateMap();
                 this.render();
 
                 var eventHandles = [
