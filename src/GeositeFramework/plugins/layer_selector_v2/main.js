@@ -203,14 +203,11 @@ define([
                     });
 
                 _.each(layerByService, function(layers, serviceUrl) {
-                    // If the state hasn't been updated with the layer service data,
-                    // we can't proceed.
-                    if (_.isUndefined(_.first(layers).getServiceId())) { return; }
-
-                    var drawingOptions = this.getDrawingOptions(layers),
-                        mapLayer = this.map.getLayer(serviceUrl);
-
-                    mapLayer.setLayerDrawingOptions(drawingOptions);
+                    if (this.state.serviceSupportsOpacity(serviceUrl)) {
+                        var drawingOptions = this.getDrawingOptions(layers),
+                            mapLayer = this.map.getLayer(serviceUrl);
+                        mapLayer.setLayerDrawingOptions(drawingOptions);
+                    }
                 }, this);
             },
 
@@ -229,7 +226,6 @@ define([
 
                         return memo;
                     }, []);
-
                 return drawingOptions;
             },
 
