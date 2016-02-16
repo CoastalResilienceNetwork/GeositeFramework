@@ -22,6 +22,7 @@
                 name: { type: 'string' },
                 displayName: { type: 'string' },
                 description: { type: 'string' },
+                availableInRegions: { type: 'array', items: { type: 'string' } },
                 server: { '$ref': '#/definitions/server' },
                 includeAllLayers: { type: 'boolean' },
                 includeLayers: { type: 'array', items: { '$ref': '#/definitions/layer' } },

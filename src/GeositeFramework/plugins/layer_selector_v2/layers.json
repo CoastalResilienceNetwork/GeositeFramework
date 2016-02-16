@@ -32,7 +32,8 @@
                         "name": "Counties"
                     },
                     {
-                        "name": "Watershed Regions"
+                        "name": "Watershed Regions",
+                        "availableInRegions": ["galveston"]
                     }
                 ]
             },
@@ -64,6 +65,7 @@
                 "includeLayers": [
                     {
                         "name": "Sea Level Rise Impact Analysis",
+                        "availableInRegions": ["the-ocean", "main"],
                         "includeLayers": [
                             {
                                 "name": "Current sea level",

@@ -145,6 +145,10 @@ define([
                 return this.node.combine;
             },
 
+            isAvailableInRegion: function(regionId) {
+                return _.contains(this.node.availableInRegions || [], regionId);
+            },
+
             getOpacity: function() {
                 return this.node.opacity;
             }
