@@ -83,7 +83,7 @@ define([
         }
 
         return declare([PausableEvented], {
-            constructor: function(config, data) {
+            constructor: function(config, data, currentRegion) {
                 this.savedState = _.defaults({}, data, {
                     filterText: '',
                     // Selected layerIds (in-order).
@@ -94,6 +94,7 @@ define([
                     layerOpacity: []
                 });
                 this.config = config;
+                this.currentRegion = currentRegion;
                 this.rebuildLayers();
             },
 
@@ -166,6 +167,18 @@ define([
                 });
             },
 
+            filterByRegion: function(layers, currentRegion) {
+                return _.filter(layers, function filterLayer(layer) {
+                    if (!layer.isAvailableInRegion(currentRegion)) {
+                        return false;
+                    } else if (layer.isFolder()) {
+                        layer.children = _.filter(layer.children, filterLayer);
+                        return layer.getChildren().length > 0;
+                    }
+                    return true;
+                });
+            },
+
             // Ensure that `layers` always reflects the union of configuration
             // data with data fetched from map services.
             rebuildLayers: function() {
@@ -174,6 +187,7 @@ define([
                 // `coalesceLayers` needs to be executed again because the filter
                 // logic mutates the data and we don't want to alter `layers`.
                 var filteredLayers = this.coalesceLayers();
+                filteredLayers = this.filterByRegion(filteredLayers, this.currentRegion);
                 filteredLayers = this.filterByName(filteredLayers, this.getFilterText());
                 this.filteredLayers = filteredLayers;
 

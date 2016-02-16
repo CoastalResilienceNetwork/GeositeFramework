@@ -146,7 +146,10 @@ define([
             },
 
             isAvailableInRegion: function(regionId) {
-                return _.contains(this.node.availableInRegions || [], regionId);
+                if (_.isEmpty(this.node.availableInRegions)) {
+                    return true;
+                }
+                return _.contains(this.node.availableInRegions, regionId || 'main');
             },
 
             getOpacity: function() {
