@@ -111,9 +111,10 @@ define([
             showLayerMenu: function(el) {
                 var $el = $(el),
                     layerId = this.getClosestLayerId(el),
+                    layer = this.state.findLayer(layerId),
+                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
                     $menu = this._createLayerMenu(layerId),
                     $shadow = this._createLayerMenuShadow(),
-                    supportsOpacity = this.state.serviceSupportsOpacity(layerId),
                     pos = $el.offset(),
                     top = supportsOpacity ? pos.top : pos.top + 55;
 
@@ -127,7 +128,7 @@ define([
 
             _createLayerMenu: function(layerId) {
                 var layer = this.state.findLayer(layerId),
-                    supportsOpacity = this.state.serviceSupportsOpacity(layerId),
+                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
                     opacity = this.state.getLayerOpacity(layerId),
                     html = this.layerMenuTmpl({
                         layer: layer,

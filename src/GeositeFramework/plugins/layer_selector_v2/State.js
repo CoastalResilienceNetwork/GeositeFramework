@@ -43,8 +43,8 @@ define([
         }
 
         // Return map service data for the corresponding layer.
-        function getServiceData(layer) {
-            return ajaxUtil.get(layer.getServiceUrl());
+        function getServiceData(serviceUrl) {
+            return ajaxUtil.get(serviceUrl);
         }
 
         // Find the corresponding data for `layer` in the map service.
@@ -106,7 +106,7 @@ define([
 
             // Combine layer node objects with service data.
             coalesceLayerNode: function(parent, layer) {
-                var serviceData = getServiceData(layer),
+                var serviceData = getServiceData(layer.getServiceUrl()),
                     serviceLayer = findServiceLayer(serviceData, layer),
                     layerDetails = getLayerDetails(layer, serviceLayer),
                     node = _.assign({}, serviceLayer || {}, layerDetails || {}, layer.getData()),
@@ -130,7 +130,7 @@ define([
 
             // Wrap service data in layer node objects.
             coalesceSubLayer: function(parent, subLayerId) {
-                var serviceData = getServiceData(parent),
+                var serviceData = getServiceData(parent.getServiceUrl()),
                     serviceLayer = findServiceLayerById(serviceData, subLayerId),
                     layerDetails = getLayerDetails(parent, serviceLayer),
                     node = _.assign({}, serviceLayer || {}, layerDetails || {}),
@@ -361,15 +361,9 @@ define([
                 this.emit(OPACITY_CHANGED);
             },
 
-            serviceSupportsOpacity: function(layerId) {
-                var layer = this.findLayer(layerId),
-                    serviceData = getServiceData(layer);
-
-                if (serviceData && serviceData.supportsDynamicLayers) {
-                    return true;
-                }
-
-                return false;
+            serviceSupportsOpacity: function(serviceUrl) {
+                var serviceData = getServiceData(serviceUrl);
+                return serviceData && serviceData.supportsDynamicLayers;
             }
         });
     }
