@@ -26,7 +26,8 @@
                 includeAllLayers: { type: 'boolean' },
                 includeLayers: { type: 'array', items: { '$ref': '#/definitions/layer' } },
                 excludeLayers: { type: 'array', items: { type: 'string' } },
-                combine: { type: 'boolean' }
+                combine: { type: 'boolean' },
+                opacity: { type: 'number' }
             }
         };
     }

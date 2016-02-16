@@ -124,5 +124,27 @@
                 "displayName": "Hurricane Sandy - County Impact Analysis"
             }
         ]
+    },
+    {
+        "displayName": "Alabama",
+        "server": {
+            "type": "ags",
+            "layerType": "dynamic",
+            "url": "http://dev.services2.coastalresilience.org/arcgis/rest/services/Gulf_of_Mexico/",
+            "name": "Alabama"
+        },
+        "includeLayers": [
+            {
+                "name": "1880 Oyster Reefs",
+                "opacity": 0.8
+            },
+            {
+                "name": "1968 Oyster Reefs"
+            },
+            {
+                "name": "1995 Oyster Reefs",
+                "opacity": 0.2
+            }
+        ]
     }
 ]

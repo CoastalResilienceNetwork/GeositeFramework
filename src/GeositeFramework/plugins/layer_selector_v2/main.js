@@ -21,6 +21,7 @@ define([
         "esri/layers/FeatureLayer",
         "esri/layers/ArcGISDynamicMapServiceLayer",
         "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
         "./state",
         "./config"
@@ -32,6 +33,7 @@ define([
              FeatureLayer,
              ArcGISDynamicMapServiceLayer,
              ArcGISTiledMapServiceLayer,
+             LayerDrawingOptions,
              PluginBase,
              State,
              Config) {
@@ -70,16 +72,7 @@ define([
                         self.hideLayerInfo();
                     })
                     .on('click', 'a.more', function() {
-                        var $el = $(this),
-                            layerId = self.getClosestLayerId(this),
-                            $menu = self.createLayerMenu(layerId),
-                            $shadow = self.createLayerMenuShadow(),
-                            pos = $el.offset();
-                        $menu.css({
-                            top: pos.top,
-                            left: pos.left
-                        });
-                        $('body').append($shadow).append($menu);
+                        self.showLayerMenu(this);
                     })
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
@@ -99,6 +92,11 @@ define([
                     .on('click', '#' + this.layerMenuId + ' a.zoom', function() {
                         self.zoomToLayerExtent(self.getClosestLayerId(this));
                         self.destroyLayerMenu();
+                    })
+                    .on('change', '#' + this.layerMenuId + ' .slider', function() {
+                        var layerId = self.getClosestLayerId(this),
+                            opacity = parseFloat($(this).find('input').val());
+                        self.setLayerOpacity(layerId, opacity);
                     });
             },
 
@@ -110,16 +108,37 @@ define([
                 return layerId;
             },
 
-            createLayerMenu: function(layerId) {
+            showLayerMenu: function(el) {
+                var $el = $(el),
+                    layerId = this.getClosestLayerId(el),
+                    $menu = this._createLayerMenu(layerId),
+                    $shadow = this._createLayerMenuShadow(),
+                    supportsOpacity = this.state.serviceSupportsOpacity(layerId),
+                    pos = $el.offset(),
+                    top = supportsOpacity ? pos.top : pos.top + 55;
+
+                $menu.css({
+                    top: top,
+                    left: pos.left
+                });
+
+                $('body').append($shadow).append($menu);
+            },
+
+            _createLayerMenu: function(layerId) {
                 var layer = this.state.findLayer(layerId),
+                    supportsOpacity = this.state.serviceSupportsOpacity(layerId),
+                    opacity = this.state.getLayerOpacity(layerId),
                     html = this.layerMenuTmpl({
                         layer: layer,
-                        id: this.layerMenuId
+                        id: this.layerMenuId,
+                        opacity: opacity,
+                        supportsOpacity: supportsOpacity
                     });
                 return $(html);
             },
 
-            createLayerMenuShadow: function() {
+            _createLayerMenuShadow: function() {
                 var $shadow = $('<div class="layer-selector2-layer-menu-shadow">');
                 $shadow.on('click', _.bind(this.destroyLayerMenu, this));
                 return $shadow;
@@ -162,14 +181,55 @@ define([
                     }
                 }, this);
 
-                _.each(visibleLayerIds, function(layerIds, serviceUrl) {
+                _.each(visibleLayerIds, function(layerServiceIds, serviceUrl) {
                     var mapLayer = this.map.getLayer(serviceUrl);
-                    if (layerIds.length === 0) {
+                    if (layerServiceIds.length === 0) {
                         mapLayer.setVisibleLayers([-1]);
                     } else {
-                        mapLayer.setVisibleLayers(layerIds);
+                        mapLayer.setVisibleLayers(layerServiceIds);
                     }
                 }, this);
+
+                this.setOpacityForSelectedLayers(this.state.getSelectedLayers());
+            },
+
+            setOpacityForSelectedLayers: function(layers) {
+                // If the layers haven't been added to the map yet we can't proceed.
+                if (_.isEmpty(layers)) { return; }
+
+                var layerByService = _.groupBy(layers, function(layer) {
+                        return layer.getServiceUrl();
+                    });
+
+                _.each(layerByService, function(layers, serviceUrl) {
+                    // If the state hasn't been updated with the layer service data,
+                    // we can't proceed.
+                    if (_.isUndefined(_.first(layers).getServiceId())) { return; }
+
+                    var drawingOptions = this.getDrawingOptions(layers),
+                        mapLayer = this.map.getLayer(serviceUrl);
+
+                    mapLayer.setLayerDrawingOptions(drawingOptions);
+                }, this);
+            },
+
+            getDrawingOptions: function(layers) {
+                var self = this,
+                    drawingOptions = _.reduce(layers, function(memo, layer) {
+                        var layerOpacity = self.state.getLayerOpacity(layer.id()),
+                            drawingOption = new LayerDrawingOptions({
+                                // 0 is totally opaque, 100 is 100% transparent.
+                                // Opacity is stored as a decimal from 0 (transparent)
+                                // to 1 (opaque) so we convert it and invert it here.
+                                transparency: 100 - (layerOpacity * 100)
+                            });
+
+                        memo[layer.getServiceId()] = drawingOption;
+
+                        return memo;
+                    }, []);
+
+                return drawingOptions;
             },
 
             // Create service layer and add it to the map if it doesn't already exist.
@@ -286,6 +346,9 @@ define([
                     this.state.on('change:selectedLayers', function() {
                         self.updateMap();
                         self.renderTree();
+                    }),
+                    this.state.on('change:opacity', function() {
+                        self.updateMap();
                     })
                 ];
 
@@ -349,6 +412,10 @@ define([
 
             hideLayerInfo: function() {
                 $(this.container).find('.info-box-container').empty();
+            },
+
+            setLayerOpacity: function(layerId, opacity) {
+                this.state.setLayerOpacity(layerId, opacity);
             }
         });
     }

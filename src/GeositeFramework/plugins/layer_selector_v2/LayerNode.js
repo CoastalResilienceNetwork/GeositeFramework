@@ -143,6 +143,10 @@ define([
 
             isCombined: function() {
                 return this.node.combine;
+            },
+
+            getOpacity: function() {
+                return this.node.opacity;
             }
         });
     }
