@@ -28,7 +28,8 @@
                 includeLayers: { type: 'array', items: { '$ref': '#/definitions/layer' } },
                 excludeLayers: { type: 'array', items: { type: 'string' } },
                 combine: { type: 'boolean' },
-                opacity: { type: 'number' }
+                opacity: { type: 'number' },
+                downloadUrl: { type: 'string' }
             }
         };
     }

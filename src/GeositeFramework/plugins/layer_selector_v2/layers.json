@@ -26,7 +26,8 @@
                         "description": "This polygon layer delineates the US Congressional District boundaries in New Jersey, 2012 - 2022."
                     },
                     {
-                        "name": "Town,city, village"
+                        "name": "Town,city, village",
+                        "downloadUrl": "http://www2.census.gov/geo/tiger/GENZ2014/shp/cb_2014_us_ua10_500k.zip"
                     },
                     {
                         "name": "Counties"
