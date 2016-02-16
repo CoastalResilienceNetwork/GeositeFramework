@@ -62,10 +62,6 @@ define(
             renderLauncher: function () {
                 this._initializeViews();
                 return this.inputView.render().$el;
-            },
-
-            hibernate: function() {
-                this.inputView.clear();
             }
         });
     }
