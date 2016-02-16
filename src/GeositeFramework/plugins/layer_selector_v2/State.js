@@ -156,7 +156,7 @@ define([
                 // Include all leaf nodes that partially match `filterText` and
                 // include all parent nodes that have at least one child.
                 return _.filter(layers, function filterLayer(layer) {
-                    if (!layer.hasChildren()) {
+                    if (!layer.isFolder()) {
                         // TODO: Fuzzy match?
                         return layer.getDisplayName().toLowerCase().indexOf(filterText) !== -1;
                     } else {
