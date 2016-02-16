@@ -53,6 +53,7 @@ define([
                 this.layerTmpl = _.template(this.getTemplateByName('layer'));
                 this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
                 this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
+                this.layerMenuId = _.uniqueId('layer-selector2-layer-menu-');
                 this.bindEvents();
             },
 
@@ -90,12 +91,12 @@ define([
                     });
 
                 $('body')
-                    .on('click', '.layer-selector2-layer-menu a.download', function() {
+                    .on('click', '#' + this.layerMenuId + ' a.download', function() {
                         var layerId = self.getClosestLayerId(this);
                         console.log('Download', layerId);
                         self.destroyLayerMenu();
                     })
-                    .on('click', '.layer-selector2-layer-menu a.zoom', function() {
+                    .on('click', '#' + this.layerMenuId + ' a.zoom', function() {
                         self.zoomToLayerExtent(self.getClosestLayerId(this));
                         self.destroyLayerMenu();
                     });
@@ -112,7 +113,8 @@ define([
             createLayerMenu: function(layerId) {
                 var layer = this.state.findLayer(layerId),
                     html = this.layerMenuTmpl({
-                        layer: layer
+                        layer: layer,
+                        id: this.layerMenuId
                     });
                 return $(html);
             },
