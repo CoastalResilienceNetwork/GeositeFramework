@@ -146,7 +146,8 @@
             },
             {
                 "name": "1995 Oyster Reefs",
-                "opacity": 0.2
+                "opacity": 0.2,
+                "downloadUrl": "http://www.tceq.texas.gov/assets/public/gis/exports/au_oysterwaters.zip"
             }
         ]
     }

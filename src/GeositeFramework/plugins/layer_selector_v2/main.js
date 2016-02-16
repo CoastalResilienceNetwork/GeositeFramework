@@ -120,12 +120,11 @@ define([
                     supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
                     $menu = this._createLayerMenu(layerId),
                     $shadow = this._createLayerMenuShadow(),
-                    pos = $el.offset(),
-                    top = supportsOpacity ? pos.top : pos.top + 55;
+                    position = this.determineLayerMenuPosition($el, layerId);
 
                 $menu.css({
-                    top: top,
-                    left: pos.left
+                    top: position.top,
+                    left: position.left
                 });
 
                 $('body').append($shadow).append($menu);
@@ -425,6 +424,30 @@ define([
 
             setLayerOpacity: function(layerId, opacity) {
                 this.state.setLayerOpacity(layerId, opacity);
+            },
+
+            // Depending on what features are supported by the selected layer,
+            // the top of the layer menu should be positioned differently.
+            determineLayerMenuPosition: function($el, layerId) {
+                var offset = $el.offset(),
+                    layer = this.state.findLayer(layerId),
+                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
+                    top = offset.top;
+
+                // Account for the height of the layer menu option if
+                // the option won't be shown in the menu.
+                if (!supportsOpacity) {
+                    top = top + 59;
+                }
+
+                if (!layer.getDownloadUrl()) {
+                    top = top + 32;
+                }
+
+                return {
+                    top: top,
+                    left: offset.left
+                };
             }
         });
     }
