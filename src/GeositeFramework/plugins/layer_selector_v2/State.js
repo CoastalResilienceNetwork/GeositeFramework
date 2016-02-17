@@ -43,8 +43,8 @@ define([
         }
 
         // Return map service data for the corresponding layer.
-        function getServiceData(layer) {
-            return ajaxUtil.get(layer.getServiceUrl());
+        function getServiceData(serviceUrl) {
+            return ajaxUtil.get(serviceUrl);
         }
 
         // Find the corresponding data for `layer` in the map service.
@@ -74,11 +74,11 @@ define([
             return _.findWhere(serviceData.layers, { id: layerId });
         }
 
-        function getLayerDetails(layer, layerId) {
-            if (!layer || !layerId) { return; }
-
-            var url = util.urljoin(layer.getServiceUrl(), layerId);
-
+        function getLayerDetails(layer, serviceLayer) {
+            if (!serviceLayer) {
+                return;
+            }
+            var url = util.urljoin(layer.getServiceUrl(), serviceLayer.id);
             return ajaxUtil.get(url);
         }
 
@@ -106,17 +106,9 @@ define([
 
             // Combine layer node objects with service data.
             coalesceLayerNode: function(parent, layer) {
-                var serviceData = getServiceData(layer),
+                var serviceData = getServiceData(layer.getServiceUrl()),
                     serviceLayer = findServiceLayer(serviceData, layer),
-                    layerServiceId = layer.getServiceId();
-
-                // Layers not loaded on-demand don't have a service Id until after
-                // this function completes, so we have to manually get the ID.
-                if (!layer.getServiceId() && serviceData) {
-                    layerServiceId = this.getServiceIdForLayer(layer);
-                }
-
-                var layerDetails = getLayerDetails(layer, layerServiceId),
+                    layerDetails = getLayerDetails(layer, serviceLayer),
                     node = _.assign({}, serviceLayer || {}, layerDetails || {}, layer.getData()),
                     result = new LayerNode(parent, node);
 
@@ -138,11 +130,10 @@ define([
 
             // Wrap service data in layer node objects.
             coalesceSubLayer: function(parent, subLayerId) {
-                var serviceData = getServiceData(parent),
+                var serviceData = getServiceData(parent.getServiceUrl()),
                     serviceLayer = findServiceLayerById(serviceData, subLayerId),
-                    layerDetails = getLayerDetails(parent, subLayerId);
-
-                var node = _.assign({}, serviceLayer || {}, layerDetails || {}),
+                    layerDetails = getLayerDetails(parent, serviceLayer),
+                    node = _.assign({}, serviceLayer || {}, layerDetails || {}),
                     result = new LayerNode(parent, node);
 
                 if (serviceLayer.subLayerIds) {
@@ -182,22 +173,6 @@ define([
                 // out a better way to do a recursive copy.
                 this.filteredLayers = this.filterLayers(this.coalesceLayers());
                 this.emit(LAYERS_CHANGED);
-            },
-
-            // For layers not loaded on-demand, we sometimes need to manually
-            // retrieve the layer ID from the service data depending on the
-            // state of the state (if it's currently being rebuilt, for example).
-            getServiceIdForLayer: function(layer) {
-                var serviceData = getServiceData(layer),
-                    layerData = _.first(_.filter(serviceData.layers, function(item) {
-                        return item.name === layer.getName();
-                    }));
-
-                if (layerData) {
-                    return layerData.id;
-                }
-
-                return null;
             },
 
             getLayers: function() {
@@ -311,14 +286,8 @@ define([
                 // the details.
                 return this.fetchMapService(layer.id())
                         .then(function(newLayer) {
-                            var layerId = newLayer.getServiceId();
-
-                            if (!layerId) {
-                                layerId = self.getServiceIdForLayer(newLayer);
-                            }
-
-                            var url = util.urljoin(newLayer.getServiceUrl(), layerId);
-
+                            var layerId = newLayer.getServiceId(),
+                                url = util.urljoin(newLayer.getServiceUrl(), layerId);
                             return ajaxUtil.fetch(url);
                         })
                         .then(_.bind(this.rebuildLayers, this))
@@ -392,15 +361,9 @@ define([
                 this.emit(OPACITY_CHANGED);
             },
 
-            serviceSupportsOpacity: function(layerId) {
-                var layer = this.findLayer(layerId),
-                    serviceData = getServiceData(layer);
-
-                if (serviceData && serviceData.supportsDynamicLayers) {
-                    return true;
-                }
-
-                return false;
+            serviceSupportsOpacity: function(serviceUrl) {
+                var serviceData = getServiceData(serviceUrl);
+                return serviceData && serviceData.supportsDynamicLayers;
             }
         });
     }
