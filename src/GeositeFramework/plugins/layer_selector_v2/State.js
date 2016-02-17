@@ -208,17 +208,6 @@ define([
                 return _.map(this.savedState.selectedLayers, this.findLayer, this);
             },
 
-            getSelectedLayersForService: function(serviceUrl) {
-                var self = this;
-                return _.reduce(this.savedState.selectedLayers, function(memo, layer) {
-                    var layerNode = self.findLayer(layer);
-                    if (layerNode && layerNode.getServiceUrl() === serviceUrl) {
-                        memo.push(layer);
-                    }
-                    return memo;
-                }, []);
-            },
-
             clearAll: function() {
                 this.filterTree('');
                 this.setSelectedLayers([]);
