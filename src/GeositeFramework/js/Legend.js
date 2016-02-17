@@ -85,11 +85,19 @@ define(['use!Geosite',
             return this.tmplLegendItemMultiple;
         },
 
+        getCustomLegendCount: function() {
+            return this.$el.find('.plugin-legends')
+                .children()
+                .not('[style="display: none;"]')
+                .not(':empty')
+                .length;
+        },
+
         render: function(legendGroups) {
             var self = this,
                 $container = $('<div>');
-                
-            if (legendGroups.length === 0) {
+
+            if (legendGroups.length === 0 && this.getCustomLegendCount() === 0) {
                 this.$el.hide();
             } else {
                 this.$el.show();
@@ -126,7 +134,7 @@ define(['use!Geosite',
 
             $extraLegendItems.toggleClass('show-extras');
         },
-        
+
         toggleMinimize: function() {
             if (this.$el.hasClass('minimized')) {
                 this.restore();
@@ -135,7 +143,7 @@ define(['use!Geosite',
                 this.minimize();
             }
         },
-        
+
         minimize: function() {
             var dims = this._calcDimensions(),
                 // An element with a ResizeHandle gets an inlined height
@@ -154,14 +162,14 @@ define(['use!Geosite',
             // Hide the legend body or else it maintains it's
             // height despite the above css changes.
             this.$el.find('.legend-body').hide();
-            
+
             // Hide the resize handle or else the user can resize the
             // minimized legend.
             this.$el.find('.dojoxResizeHandle').hide();
-            
+
             this.$el.addClass('minimized');
         },
-        
+
         restore: function() {
             // If the legend was dragged while minimized,
             // the value of top may have changed.
@@ -173,7 +181,7 @@ define(['use!Geosite',
                 calculatedTop = dims.top - this.height + dims.headerHeight,
                 top = calculatedTop < 0 ? 0 : calculatedTop;
 
-            this.$el.css({ 
+            this.$el.css({
                 height: this.height,
                 top: top
             });
@@ -193,7 +201,7 @@ define(['use!Geosite',
                 headerHeight: headerHeight
             };
         },
-        
+
         autoResize: function() {
             // Attempts to resize the legend element to more
             // conveniently  display (i.e. no scrollbar) the layer
@@ -215,10 +223,12 @@ define(['use!Geosite',
                 legendWidth = parseInt(legend.css('width'));
 
             // Add up the height of the all of the layer legends and plugin legends.
-            legend.find('.legend-body .legend-layer, .legend-body .custom-legend').each(function(i, el) {
-                // True indicates margin should be included.
-                contentHeight += $(el).outerHeight(true);
-            });
+            legend.find('.legend-body .legend-layer, .legend-body .custom-legend')
+                    .filter(':visible')
+                    .each(function(i, el) {
+                        // True indicates margin should be included.
+                        contentHeight += $(el).outerHeight(true);
+                    });
 
             // Height
             if (contentHeight != legendHeight && legendHeight < MAX_HEIGHT) {
