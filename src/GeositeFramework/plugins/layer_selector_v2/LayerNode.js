@@ -12,8 +12,8 @@ define([
 
         // This structure wraps each node in layers.json, preserving the
         // parent/child relationship to support property inheritance.
-        return declare(null, {
-            constructor: function(parent, node) {
+        var LayerNode = declare(null, {
+            constructor: function(node, parent) {
                 this.node = node;
                 this.parent = parent;
                 this.children = [];
@@ -149,5 +149,17 @@ define([
                 return this.node.opacity;
             }
         });
+
+        // Recursively wraps each raw layer node with an instance of LayerNode.
+        // `node` may represent a single layer from layers.json
+        LayerNode.fromJS = function(node, parent) {
+            var result = new LayerNode(node, parent);
+            _.each(node.includeLayers || [], function(childNode) {
+                result.addChild(LayerNode.fromJS(childNode, result));
+            }, this);
+            return result;
+        };
+
+        return LayerNode;
     }
 );

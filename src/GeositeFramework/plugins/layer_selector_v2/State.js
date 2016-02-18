@@ -110,7 +110,7 @@ define([
                     serviceLayer = findServiceLayer(serviceData, layer),
                     layerDetails = getLayerDetails(layer, serviceLayer),
                     node = _.assign({}, serviceLayer || {}, layerDetails || {}, layer.getData()),
-                    result = new LayerNode(parent, node);
+                    result = new LayerNode(node, parent);
 
                 // Include layers loaded on-demand (overrides layers defined in layers.json).
                 if (layer.includeAllLayers() && serviceLayer && serviceLayer.subLayerIds) {
@@ -134,7 +134,7 @@ define([
                     serviceLayer = findServiceLayerById(serviceData, subLayerId),
                     layerDetails = getLayerDetails(parent, serviceLayer),
                     node = _.assign({}, serviceLayer || {}, layerDetails || {}),
-                    result = new LayerNode(parent, node);
+                    result = new LayerNode(node, parent);
 
                 if (serviceLayer.subLayerIds) {
                     _.each(serviceLayer.subLayerIds, function(subLayerId) {
