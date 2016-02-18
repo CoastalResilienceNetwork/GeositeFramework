@@ -50,7 +50,9 @@ define([
 
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
+
                 this.config = new Config();
+
                 this.pluginTmpl = _.template(this.getTemplateByName('plugin'));
                 this.filterTmpl = _.template(this.getTemplateByName('filter'));
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
@@ -58,6 +60,7 @@ define([
                 this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
                 this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
                 this.layerMenuId = _.uniqueId('layer-selector2-layer-menu-');
+
                 this.bindEvents();
             },
 
@@ -328,7 +331,7 @@ define([
                     this._cleanupPreviousState();
                 }
 
-                this.state = new State(this.config, data);
+                this.state = new State(this.config, data, this.currentRegion);
                 this.render();
 
                 var eventHandles = [
@@ -374,6 +377,16 @@ define([
                     this.state.clearAll();
                 }
                 this.setState(null);
+            },
+
+            subregionActivated: function(currentRegion) {
+                this.currentRegion = currentRegion.id;
+                this.setState(this.getState());
+            },
+
+            subregionDeactivated: function(currentRegion) {
+                this.currentRegion = null;
+                this.setState(this.getState());
             },
 
             zoomToLayerExtent: function(layerId) {

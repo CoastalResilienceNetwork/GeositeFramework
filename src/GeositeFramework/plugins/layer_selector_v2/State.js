@@ -83,7 +83,7 @@ define([
         }
 
         return declare([PausableEvented], {
-            constructor: function(config, data) {
+            constructor: function(config, data, currentRegion) {
                 this.savedState = _.defaults({}, data, {
                     filterText: '',
                     // Selected layerIds (in-order).
@@ -94,6 +94,7 @@ define([
                     layerOpacity: []
                 });
                 this.config = config;
+                this.currentRegion = currentRegion;
                 this.rebuildLayers();
             },
 
@@ -146,15 +147,17 @@ define([
                 return result;
             },
 
-            filterLayers: function(layers) {
-                var filterText = this.getFilterText();
+            filterByName: function(layers, filterText) {
                 if (filterText.length === 0) {
                     return layers;
                 }
+
+                filterText = filterText.toLowerCase();
+
                 // Include all leaf nodes that partially match `filterText` and
                 // include all parent nodes that have at least one child.
                 return _.filter(layers, function filterLayer(layer) {
-                    if (!layer.hasChildren()) {
+                    if (!layer.isFolder()) {
                         // TODO: Fuzzy match?
                         return layer.getDisplayName().toLowerCase().indexOf(filterText) !== -1;
                     } else {
@@ -164,14 +167,30 @@ define([
                 });
             },
 
+            filterByRegion: function(layers, currentRegion) {
+                return _.filter(layers, function filterLayer(layer) {
+                    if (!layer.isAvailableInRegion(currentRegion)) {
+                        return false;
+                    } else if (layer.isFolder()) {
+                        layer.children = _.filter(layer.children, filterLayer);
+                        return layer.getChildren().length > 0;
+                    }
+                    return true;
+                });
+            },
+
             // Ensure that `layers` always reflects the union of configuration
             // data with data fetched from map services.
             rebuildLayers: function() {
                 this.layers = this.coalesceLayers();
-                // Unfortunately, we need to execute `coalesceLayers` twice because
-                // `filterLayers` mutates the data and I couldn't figure
-                // out a better way to do a recursive copy.
-                this.filteredLayers = this.filterLayers(this.coalesceLayers());
+
+                // `coalesceLayers` needs to be executed again because the filter
+                // logic mutates the data and we don't want to alter `layers`.
+                var filteredLayers = this.coalesceLayers();
+                filteredLayers = this.filterByRegion(filteredLayers, this.currentRegion);
+                filteredLayers = this.filterByName(filteredLayers, this.getFilterText());
+                this.filteredLayers = filteredLayers;
+
                 this.emit(LAYERS_CHANGED);
             },
 
@@ -297,7 +316,7 @@ define([
             },
 
             getFilterText: function() {
-                return this.savedState.filterText.trim().toLowerCase();
+                return this.savedState.filterText.trim();
             },
 
             filterTree: function(filterText) {
