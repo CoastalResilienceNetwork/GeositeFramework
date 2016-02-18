@@ -81,6 +81,7 @@ define([
                     })
                     .on('click', 'a.more', function() {
                         self.showLayerMenu(this);
+                        self.setActiveStateForLayerTools(this, '.more');
                     })
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
@@ -155,6 +156,7 @@ define([
             destroyLayerMenu: function() {
                 $('body').find('.layer-selector2-layer-menu').remove();
                 $('body').find('.layer-selector2-layer-menu-shadow').remove();
+                this.clearActiveStateForLayerTools('.more');
             },
 
             updateMap: function() {
@@ -451,6 +453,20 @@ define([
                     top: top,
                     left: offset.left
                 };
+            },
+
+            setActiveStateForLayerTools: function(el, selector) {
+                this.clearActiveStateForLayerTools(selector);
+                $(el).find('i').addClass('active');
+                $(el).closest('[data-layer-id]').addClass('active');
+            },
+
+            clearActiveStateForLayerTools: function(selector) {
+                var completeSelector = '[data-layer-id].active ' + selector + ' i.active',
+                    $el = $(this.container).find(completeSelector);
+
+                $el.removeClass('active');
+                $el.closest('[data-layer-id]').removeClass('active');
             }
         });
     }

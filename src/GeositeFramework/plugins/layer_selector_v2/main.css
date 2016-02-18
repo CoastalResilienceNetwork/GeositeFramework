@@ -32,8 +32,13 @@
         border-top: 1px solid #f8f8f8;
     }
     .layer-selector2 .tree-container li:hover > a,
-    .layer-selector2 .tree-container li:hover > .layer-tools {
+    .layer-selector2 .tree-container li:hover > .layer-tools,
+    .layer-selector2 .tree-container li.leaf-node.active > a {
         background: #f5f5f5;
+    }
+    .layer-selector2 .tree-container li.leaf-node .layer-tools i:hover,
+    .layer-selector2 .tree-container li.leaf-node .layer-tools i.active {
+        color: #23618c;
     }
     .layer-selector2 .tree-container li.leaf-node.selected > a,
     .layer-selector2 .tree-container li.leaf-node.selected:hover > a,
@@ -52,7 +57,8 @@
             width: auto;
         }
         .layer-selector2 .tree-container li.leaf-node:hover > .layer-tools,
-        .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools {
+        .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
+        .layer-selector2 .tree-container li.leaf-node.active > .layer-tools {
             display: block;
         }
 
