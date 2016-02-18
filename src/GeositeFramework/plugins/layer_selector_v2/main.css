@@ -39,8 +39,7 @@
     .layer-selector2 .tree-container li.leaf-node.selected:hover > a,
     .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
     .layer-selector2 .tree-container li.leaf-node.selected:hover > .layer-tools {
-        color: #fff;
-        background: #23618c;
+        background: #ccc;
     }
     .layer-selector2 .tree-container li > .layer-tools {
         display: none;
