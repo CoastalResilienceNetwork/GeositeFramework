@@ -70,6 +70,9 @@ define([
                     .on('click', 'a.layer-row', function() {
                         self.state.toggleLayer(self.getClosestLayerId(this));
                     })
+                    .on('click', 'a.show', function() {
+                        self.state.toggleLayer(self.getClosestLayerId(this));
+                    })
                     .on('click', 'a.info', function() {
                         self.showLayerInfo(self.getClosestLayerId(this));
                     })
