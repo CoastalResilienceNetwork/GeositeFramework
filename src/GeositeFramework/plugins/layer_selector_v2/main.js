@@ -74,10 +74,10 @@ define([
                         self.state.toggleLayer(self.getClosestLayerId(this));
                     })
                     .on('click', 'a.info', function() {
-                        self.showLayerInfo(self.getClosestLayerId(this));
+                        self.state.setInfoBoxLayerId(self.getClosestLayerId(this));
                     })
                     .on('click', '.info-box .close', function() {
-                        self.hideLayerInfo();
+                        self.state.clearInfoBoxLayerId();
                     })
                     .on('click', 'a.more', function() {
                         self.showLayerMenu(this);
@@ -279,6 +279,7 @@ define([
                 $(this.container).html(this.pluginTmpl());
                 this.renderFilter();
                 this.renderTree();
+                this.showLayerInfo();
             },
 
             renderFilter: function() {
@@ -298,11 +299,15 @@ define([
 
             renderLayer: function(indent, layer) {
                 var isSelected = this.state.isSelected(layer.id()),
-                    isExpanded = this.state.isExpanded(layer.id());
+                    isExpanded = this.state.isExpanded(layer.id()),
+                    infoBoxIsDisplayed = this.state.infoIsDisplayed(layer.id());
 
                 var cssClass = [];
                 if (isSelected) {
                     cssClass.push('selected');
+                }
+                if (infoBoxIsDisplayed) {
+                    cssClass.push('active');
                 }
                 cssClass.push(layer.isFolder() ? 'parent-node' : 'leaf-node');
                 cssClass = cssClass.join(' ');
@@ -313,6 +318,7 @@ define([
                     cssClass: cssClass,
                     isSelected: isSelected,
                     isExpanded: isExpanded,
+                    infoBoxIsDisplayed: infoBoxIsDisplayed,
                     indent: indent,
                     renderLayer: _.bind(this.renderLayer, this, indent + 1)
                 });
@@ -356,6 +362,9 @@ define([
                     }),
                     this.state.on('change:opacity', function() {
                         self.updateMap();
+                    }),
+                    this.state.on('change:layerInfoId', function() {
+                        self.render();
                     })
                 ];
 
@@ -407,7 +416,10 @@ define([
                     });
             },
 
-            showLayerInfo: function(layerId) {
+            showLayerInfo: function() {
+                var layerId = this.state.getInfoBoxLayerId();
+                if (!layerId) { return; }
+
                 var self = this,
                     layer = this.state.findLayer(layerId);
 
@@ -425,6 +437,7 @@ define([
 
             hideLayerInfo: function() {
                 $(this.container).find('.info-box-container').empty();
+                this.state.clearInfoBoxState();
             },
 
             setLayerOpacity: function(layerId, opacity) {

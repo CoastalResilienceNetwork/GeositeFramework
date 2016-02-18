@@ -22,7 +22,8 @@ define([
             SELECTED_LAYERS_CHANGED = 'change:selectedLayers',
             FILTER_CHANGED = 'change:filter',
             EVERYTHING_CHANGED = 'change:all',
-            OPACITY_CHANGED = 'change:opacity';
+            OPACITY_CHANGED = 'change:opacity',
+            LAYER_INFO_ID_CHANGED = 'change:layerInfoId';
 
         // Return true if layer data has been fetched.
         function isLoaded(layer) {
@@ -85,7 +86,9 @@ define([
                     // Expanded layerIds.
                     expandedLayers: [],
                     // List of objects as { layerId: opacityValue }.
-                    layerOpacity: []
+                    layerOpacity: [],
+                    // Layer id that infobox is display for.
+                    infoBoxLayerId: null
                 });
 
                 // Create initial working layer objects.
@@ -373,6 +376,24 @@ define([
             serviceSupportsOpacity: function(serviceUrl) {
                 var serviceData = getServiceData(serviceUrl);
                 return serviceData && serviceData.supportsDynamicLayers;
+            },
+
+            setInfoBoxLayerId: function(layerId) {
+                this.savedState.infoBoxLayerId = layerId;
+                this.emit(LAYER_INFO_ID_CHANGED);
+            },
+
+            clearInfoBoxLayerId: function() {
+                this.savedState.infoBoxLayerId = null;
+                this.emit(LAYER_INFO_ID_CHANGED);
+            },
+
+            getInfoBoxLayerId: function() {
+                return this.savedState.infoBoxLayerId;
+            },
+
+            infoIsDisplayed: function(layerId) {
+                return this.savedState.infoBoxLayerId === layerId;
             }
         });
     }

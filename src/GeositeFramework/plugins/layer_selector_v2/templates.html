@@ -42,7 +42,7 @@
         <% if (!layer.isFolder()) { %>
         <div class="layer-tools">
             <a href="javascript:;" class="show"><i class="icon-eye<% if (!isSelected) { %>-off<% } else { %> active <% } %>"></i></a>
-            <a href="javascript:;" class="info"><i class="icon-info-circled"></i></a>
+            <a href="javascript:;" class="info"><i class="icon-info-circled <% if (infoBoxIsDisplayed) { %> active <% } %>"></i></a>
             <a href="javascript:;" class="more"><i class="icon-ellipsis"></i></a>
         </div>
         <% } %>
