@@ -223,7 +223,7 @@ require(['use!Geosite',
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
                 if (serviceInfo && service.visible && serviceInfo.pluginObject.showServiceLayersInLegend) {
-                    service.visibleLayers.sort();
+                    service.visibleLayers.sort(function(a, b) { return a - b; });
                     _.each(service.visibleLayers, function(layerId) {
                         var layer = _.findWhere(service.layerInfos, {id: layerId});
                         if (!layer) {
