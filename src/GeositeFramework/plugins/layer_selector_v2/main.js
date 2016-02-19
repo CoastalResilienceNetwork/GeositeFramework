@@ -81,7 +81,7 @@ define([
                     .on('click', 'a.layer-row', toggleLayer)
                     .on('click', 'a.show', toggleLayer)
                     .on('click', 'a.info', function() {
-                        self.state.setInfoBoxLayerId(self.getClosestLayerId(this));
+                        self.state = self.state.setInfoBoxLayerId(self.getClosestLayerId(this));
                         self.showLayerInfo();
                     })
                     .on('click', '.info-box .close', function() {
@@ -355,7 +355,7 @@ define([
             setState: function(data) {
                 var self = this;
 
-                this.state.setState(data);
+                this.state = new State(data);
                 this.rebuildTree();
                 this.render();
 
@@ -393,11 +393,11 @@ define([
             },
 
             subregionActivated: function(currentRegion) {
-                this.state.setCurrentRegion(currentRegion.id);
+                this.state = this.state.setCurrentRegion(currentRegion.id);
             },
 
             subregionDeactivated: function(currentRegion) {
-                this.state.setCurrentRegion(null);
+                this.state = this.state.setCurrentRegion(null);
             },
 
             zoomToLayerExtent: function(layerId) {
@@ -442,12 +442,12 @@ define([
 
             hideLayerInfo: function() {
                 $(this.container).find('.info-box-container').empty();
-                this.state.clearInfoBoxLayerId();
+                this.state = this.state.clearInfoBoxLayerId();
             },
 
             toggleLayer: function(layer) {
                 var self = this;
-                this.state.toggleLayer(layer);
+                this.state = this.state.toggleLayer(layer);
                 layer.getService().fetchMapService().then(function() {
                     self.rebuildTree();
                 });
@@ -456,25 +456,24 @@ define([
             applyFilter: function(filterText) {
                 var self = this;
 
-                this.state.setFilterText(filterText);
+                this.state = this.state.setFilterText(filterText).collapseAllLayers();
                 this.rebuildTree();
 
                 // Expand all layers that passed the filter.
-                this.state.collapseAllLayers();
                 this.tree.walk(function(layer) {
-                    self.state.expandLayer(layer.id());
+                    self.state = self.state.expandLayer(layer.id());
                 });
                 this.rebuildTree();
             },
 
             clearAll: function() {
-                this.state.clearAll();
+                this.state = new State();
                 this.rebuildTree();
                 this.render();
             },
 
             setLayerOpacity: function(layerId, opacity) {
-                this.state.setLayerOpacity(layerId, opacity);
+                this.state = this.state.setLayerOpacity(layerId, opacity);
                 this.rebuildTree();
             },
 

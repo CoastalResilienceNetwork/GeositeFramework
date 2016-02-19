@@ -2,21 +2,13 @@ define([
         "dojo/_base/declare",
         "underscore"
     ],
-    function(declare,
-             _) {
+    function(declare, _) {
         "use strict";
 
-        return declare(null, {
+        var State = declare(null, {
             constructor: function(data) {
-                this.setState(data);
-            },
-
-            getState: function() {
-                return this.savedState;
-            },
-
-            setState: function(data) {
                 this.savedState = _.defaults({}, data, {
+                    currentRegion: null,
                     filterText: '',
                     // Selected layerIds (in-order).
                     selectedLayers: [],
@@ -29,23 +21,23 @@ define([
                 });
             },
 
-            clearAll: function() {
-                this.setState(null);
+            getState: function() {
+                return this.savedState;
             },
 
             toggleLayer: function(layer) {
                 var layerId = layer.id();
                 if (layer.isFolder()) {
                     if (this.isExpanded(layerId)) {
-                        this.collapseLayer(layerId);
+                        return this.collapseLayer(layerId);
                     } else {
-                        this.expandLayer(layerId);
+                        return this.expandLayer(layerId);
                     }
                 } else {
                     if (this.isSelected(layerId)) {
-                        this.deselectLayer(layerId);
+                        return this.deselectLayer(layerId);
                     } else {
-                        this.selectLayer(layerId);
+                        return this.selectLayer(layerId);
                     }
                 }
             },
@@ -59,11 +51,15 @@ define([
             },
 
             selectLayer: function(layerId) {
-                this.savedState.selectedLayers.push(layerId);
+                return this.clone({
+                    selectedLayers: this.savedState.selectedLayers.concat(layerId)
+                });
             },
 
             deselectLayer: function(layerId) {
-                this.savedState.selectedLayers = _.without(this.savedState.selectedLayers, layerId);
+                return this.clone({
+                    selectedLayers: _.without(this.savedState.selectedLayers, layerId)
+                });
             },
 
             isExpanded: function(layerId) {
@@ -71,15 +67,19 @@ define([
             },
 
             expandLayer: function(layerId) {
-                this.savedState.expandedLayers.push(layerId);
+                return this.clone({
+                    expandedLayers: this.savedState.expandedLayers.concat(layerId)
+                });
             },
 
             collapseLayer: function(layerId) {
-                this.savedState.expandedLayers = _.without(this.savedState.expandedLayers, layerId);
+                return this.clone({
+                    expandedLayers: _.without(this.savedState.expandedLayers, layerId)
+                });
             },
 
             collapseAllLayers: function() {
-                this.savedState.expandedLayers = [];
+                return this.clone({ expandedLayers: [] });
             },
 
             getFilterText: function() {
@@ -87,7 +87,7 @@ define([
             },
 
             setFilterText: function(filterText) {
-                this.savedState.filterText = filterText;
+                return this.clone({ filterText: filterText });
             },
 
             getLayerOpacity: function(layerId) {
@@ -96,24 +96,25 @@ define([
             },
 
             setLayerOpacity: function(layerId, opacity) {
-                var layerItem = _.findWhere(this.savedState.layerOpacity, { layerId: layerId });
-
-                if (layerItem) {
-                    layerItem.opacity = opacity;
-                } else {
-                    this.savedState.layerOpacity.push({
+                var layerOpacity = _.filter(this.savedState.layerOpacity, function(item) {
+                    return item.layerId !== layerId;
+                });
+                return this.clone({
+                    layerOpacity: layerOpacity.concat({
                         layerId: layerId,
                         opacity: opacity
-                    });
-                }
+                    })
+                });
             },
 
             setInfoBoxLayerId: function(layerId) {
-                this.savedState.infoBoxLayerId = layerId;
+                return this.clone({
+                    infoBoxLayerId: layerId
+                });
             },
 
             clearInfoBoxLayerId: function() {
-                this.savedState.infoBoxLayerId = null;
+                return this.setInfoBoxLayerId(null);
             },
 
             getInfoBoxLayerId: function() {
@@ -125,12 +126,21 @@ define([
             },
 
             setCurrentRegion: function(currentRegion) {
-                this.currentRegion = currentRegion;
+                return this.clone({
+                    currentRegion: currentRegion
+                });
             },
 
             getCurrentRegion: function() {
-                return this.currentRegion || 'main';
+                return this.savedState.currentRegion || 'main';
+            },
+
+            // Return new State combined with `data`.
+            clone: function(data) {
+                return new State(_.assign({}, this.getState(), data));
             }
         });
+
+        return State;
     }
 );
