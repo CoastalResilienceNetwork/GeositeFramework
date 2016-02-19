@@ -27,7 +27,7 @@ define(
             
             validate: function(regionData) {
                 // This plugin is only valid if there are subregions present in the config
-                return !!regionData.subregions;
+                return !!regionData.subregions || !_.isEmpty(regionData.subregions);
             },
 
             getClassName: function() {
