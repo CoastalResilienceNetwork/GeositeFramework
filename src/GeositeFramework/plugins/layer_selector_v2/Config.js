@@ -6,21 +6,24 @@
         "./LayerNode",
         "./schema",
         "dojo/text!./layers.json",
-        "./util"
+        "./util",
+        "./Tree"
     ],
     function(declare, JSON, tv4, _,
              LayerNode,
              layerConfigSchema,
              layerSourcesJson,
-             util) {
+             util,
+             Tree) {
         "use strict";
 
         return declare(null, {
             constructor: function () {
-                var rawNodes = this.parse(layerSourcesJson);
-                this.layers = _.map(rawNodes, function(node) {
-                    return LayerNode.fromJS(node);
-                });
+                var rawNodes = this.parse(layerSourcesJson),
+                    layers = _.map(rawNodes, function(node) {
+                        return LayerNode.fromJS(node);
+                    });
+                this.tree = new Tree(layers);
             },
 
             parse: function(json) {
@@ -40,14 +43,8 @@
                 return null;
             },
 
-            getLayers: function() {
-                return this.layers;
-            },
-
-            findLayer: function(layerId) {
-                return util.find(this.layers, function(layer) {
-                    return layer.findLayer(layerId);
-                });
+            getTree: function() {
+                return this.tree;
             }
         });
     }

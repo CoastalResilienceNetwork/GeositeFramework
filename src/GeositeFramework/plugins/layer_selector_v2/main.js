@@ -63,7 +63,7 @@ define([
 
                 this.state = new State();
                 this.config = new Config();
-                this.tree = new Tree(this.config, this.state);
+                this.rebuildTree();
 
                 this.bindEvents();
             },
@@ -310,7 +310,7 @@ define([
 
             renderTree: _.debounce(function() {
                 var html = this.treeTmpl({
-                    tree: this.tree,
+                    tree: this.filteredTree,
                     renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
@@ -519,8 +519,14 @@ define([
                 this.rebuildTree();
             },
 
+            // Rebuild tree from scratch.
             rebuildTree: function() {
-                this.tree.rebuildLayers();
+                this.tree = this.config.getTree().update(this.state);
+                // Need to maintain a separate filtered tree so that map
+                // layers remain visible even after applying a filter.
+                this.filteredTree = this.tree
+                    .filterByRegion(this.state.getCurrentRegion())
+                    .filterByName(this.state.getFilterText());
                 this.renderTree();
                 this.updateMap();
             }
