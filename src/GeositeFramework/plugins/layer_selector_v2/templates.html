@@ -13,7 +13,7 @@
 </script>
 
 <script type="text/template" id="tree">
-    <ul><%= _.map(tree.getLayers(), renderLayer).join('') %></ul>
+    <ul><%= _.map(tree.getChildren(), renderLayer).join('') %></ul>
 </script>
 
 <script type="text/template" id="layer">
