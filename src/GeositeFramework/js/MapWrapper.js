@@ -110,7 +110,7 @@
         _wrapper.centerAndZoom = function() {
             esriMap.centerAndZoom.apply(esriMap, arguments);
         };
-        
+
         // ------------------------------------------------------------------------
         // Event overrides
 

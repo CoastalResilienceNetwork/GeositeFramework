@@ -15,7 +15,7 @@
     {
         @link.Text
     }
-        
+
 }
 
 
@@ -52,7 +52,7 @@
             {
                 <a target="_blank" href="@link.Url">@link.Text</a>
             }
-                                
+
         </li>
     }
 
@@ -71,7 +71,7 @@
         <link rel="stylesheet" href="@url">
     }
 
-    <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css"> 
+    <link rel="stylesheet" href="//js.arcgis.com/3.11/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="//js.arcgis.com/3.10/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="//js.arcgis.com/o/232546/geosite-v1.0.8/esri/css/esri.css">
 
@@ -83,12 +83,12 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/jquery.dropdown.css"/>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    
+
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
         .top-bar {
             background: @Model.PrimaryColor;
-        } 
+        }
 
         .top-bar ul > li.name h1 a {
             color: @Model.SecondaryColor;
@@ -102,11 +102,11 @@
         {
             background: @Model.SecondaryColor;
         }
-        body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_right:after, 
-        body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_left:after, 
+        body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_right:after,
+        body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_left:after,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_top:after,
-        body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_right:after, 
-        body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_left:after, 
+        body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_right:after,
+        body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_left:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_top:after {
             border-top: 15px solid @Model.SecondaryColor;
         }
@@ -284,7 +284,7 @@
     <script type="text/template" id="template-topbar-plugin">
             <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;"></a>
     </script>
-    
+
     <script type="text/template" id="template-topbar-tools">
         <span class="topbar-tools">
             <a class="plugin-clear" href="javascript:;">&#10006;</a>
@@ -388,7 +388,7 @@
                 </div>
             </div>
         </div>
-      
+
     </script>
 
     <script type="text/template" id="template-export-url">
@@ -398,7 +398,7 @@
     <!-- Adding any white space between the textarea and the iframe
         will result in whitespace within the rendered textarea, which looks strange. -->
     <script type="text/template" id="embed-iframe">
-       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>        
+       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
        </textarea>
     </script>
 
@@ -453,10 +453,10 @@
                             </ul>
 
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <% } %>
-                
+
                 <% _.each(categories, function(category) { %>
                 <div class="row">
                     <div class="well">
@@ -468,7 +468,7 @@
                             <ul>
                                 <% _.each(category.issues, function(issue) { %>
                                     <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
-                                        <i class="<%= issue.faIcon %>" 
+                                        <i class="<%= issue.faIcon %>"
                                             <% if (issue.faSize) { %>
                                                 style="font-size:<%= issue.faSize %>px"
                                             <% } %>
@@ -531,24 +531,24 @@
             </section>
         </nav>
     </div>
-    
+
     @Html.Partial("TourInfo")
-    
+
     <!-- Area for plugins to arrange their markup independent
         of their container -->
     <div id="plugin-print-sandbox"></div>
 
     <!-- LEFT CONTENT AREA -->
     <div id="left-pane" class="content"></div>
-    
+
     <!-- RIGHT CONTENT AREA -->
     <div id="right-pane" class="content"></div>
-    
+
     <script src="js/polyfill.js"></script>
-    
+
     <script src="//apis.google.com/js/client.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    
+
     <!-- Scripts that will change their behavior in undesirable ways if they find an AMD
          environment should be loaded before the jsapi -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
@@ -568,11 +568,11 @@
     <script src="js/lib/pageguide.min.js"></script>
 
     <script type="text/javascript">
-            // Configure the Dojo module loader so that module identifiers starting with "plugins/" 
+            // Configure the Dojo module loader so that module identifiers starting with "plugins/"
             // will be loaded from the site's root "plugins" folder.
             // (This usage of require() is mentioned in http://dojotoolkit.org/documentation/tutorials/1.7/modules)
             //
-            // The calls to location.pathname.replace() below prepend the app's root path to library locations. 
+            // The calls to location.pathname.replace() below prepend the app's root path to library locations.
             // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
             // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
 
@@ -626,7 +626,7 @@
     <script src="js/Screen.js"></script>
     <script src="js/SyncedMapManager.js"></script>
     <script src="js/App.js"></script>
-    
+
     <script type="text/javascript">
 
         require(['use!Azavea'], function(Azavea) {
@@ -637,7 +637,7 @@
         // Our require() call below for loading plugins shouldn't fail, since:
         //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
         //     * require() succeeds even if main.js has errors. (It passes an empty object for that module.)
-        // 
+        //
         // However, plugins can trigger a Dojo module loading error by mis-configuring their define() calls.
         // Do our best to report a useful message.
 
@@ -653,7 +653,7 @@
 
         // Load the plugins and launch the app.
         // We're using server-generated data to build this JavaScript block. Example result:
-        // 
+        //
         //     require(['plugins/layer_selector/main', 'plugins/measure/main'], function(p0, p1) {
         //         $(document).ready(function() {
         //             var regionData = {
