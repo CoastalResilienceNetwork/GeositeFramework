@@ -2,12 +2,16 @@ define([
         "dojo/_base/declare",
         "underscore",
         "esri/geometry/Extent",
-        "./util"
+        "./util",
+        "./AgsService",
+        "./NullService"
     ],
     function(declare,
              _,
              Extent,
-             util) {
+             util,
+             AgsService,
+             NullService) {
         "use strict";
 
         // This structure wraps each node in layers.json, preserving the
@@ -27,6 +31,12 @@ define([
                 if (this.canAddChild(layer)) {
                     this.children.push(layer);
                 }
+            },
+
+            addChildren: function(layers) {
+                _.each(layers, function(layer) {
+                    this.addChild(layer);
+                }, this);
             },
 
             canAddChild: function(layer) {
@@ -57,12 +67,7 @@ define([
 
             // Return full path to leaf node in the tree.
             id: function() {
-                if (this.parent) {
-                    return this.parent.id() + '/' + this.getDisplayName();
-                }
-                // Use "display name" instead of "name" because not all layers
-                // have names (ex. folder nodes).
-                return this.getDisplayName();
+                return this.node.uid;
             },
 
             // Return layer ID defined in the map service.
@@ -78,12 +83,12 @@ define([
                 return this.node.server;
             },
 
-            getServiceUrl: function() {
+            getService: function() {
                 var server = this.getServer();
-                if (server && server.url && server.name) {
-                    return util.urljoin(server.url, server.name, 'MapServer');
+                if (server) {
+                    return new AgsService(server);
                 }
-                return null;
+                return new NullService();
             },
 
             findLayer: function(layerId) {
@@ -146,14 +151,29 @@ define([
             },
 
             isAvailableInRegion: function(regionId) {
+                if (this.parent && !this.parent.isAvailableInRegion(regionId)) {
+                    return false;
+                }
                 if (_.isEmpty(this.node.availableInRegions)) {
                     return true;
                 }
-                return _.contains(this.node.availableInRegions, regionId || 'main');
+                return _.contains(this.node.availableInRegions, regionId);
+            },
+
+            isSelected: function() {
+                return this.node.isSelected;
+            },
+
+            isExpanded: function() {
+                return this.node.isExpanded;
+            },
+
+            infoIsDisplayed: function() {
+                return this.node.infoIsDisplayed;
             },
 
             getOpacity: function() {
-                return this.node.opacity;
+                return _.isNumber(this.node.opacity) ? this.node.opacity : 1;
             },
 
             getDownloadUrl: function() {

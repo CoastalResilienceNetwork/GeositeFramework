@@ -71,7 +71,7 @@ define([
                     ]
                 });
                 var child = parent.findLayer('foo/bar');
-                assertTrue(child.getServiceUrl() === 'http://service/xyz/MapServer');
+                assertTrue(child.getService().getServiceUrl() === 'http://service/xyz/MapServer');
             }
         ]);
     }

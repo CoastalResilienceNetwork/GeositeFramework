@@ -24,8 +24,9 @@ define([
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
         //"./tests",
-        "./state",
-        "./config"
+        "./State",
+        "./Config",
+        "./Tree"
     ],
     function(declare,
              $,
@@ -38,7 +39,8 @@ define([
              PluginBase,
              //unitTests,
              State,
-             Config) {
+             Config,
+             Tree) {
         "use strict";
 
         return declare(PluginBase, {
@@ -51,8 +53,6 @@ define([
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
 
-                this.config = new Config();
-
                 this.pluginTmpl = _.template(this.getTemplateByName('plugin'));
                 this.filterTmpl = _.template(this.getTemplateByName('filter'));
                 this.treeTmpl = _.template(this.getTemplateByName('tree'));
@@ -60,6 +60,10 @@ define([
                 this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
                 this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
                 this.layerMenuId = _.uniqueId('layer-selector2-layer-menu-');
+
+                this.state = new State();
+                this.config = new Config();
+                this.tree = new Tree(this.config, this.state);
 
                 this.bindEvents();
             },
@@ -90,10 +94,10 @@ define([
                     .on('keyup', 'input.filter', function() {
                         var $el = $(this),
                             filterText = $el.val();
-                        self.state.filterTree(filterText);
+                        self.applyFilter(filterText);
                     })
                     .on('click', 'a.reset', function() {
-                        self.state.clearAll();
+                        self.clearAll();
                     });
 
                 $('body')
@@ -117,15 +121,15 @@ define([
                 var $el = $(el),
                     $parent = $el.closest('[data-layer-id]'),
                     layerId = $parent.attr('data-layer-id');
-
                 return layerId;
             },
 
             showLayerMenu: function(el) {
                 var $el = $(el),
                     layerId = this.getClosestLayerId(el),
-                    layer = this.state.findLayer(layerId),
-                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
+                    layer = this.tree.findLayer(layerId),
+                    service = layer.getService(),
+                    supportsOpacity = service.supportsOpacity(),
                     $menu = this._createLayerMenu(layerId),
                     $shadow = this._createLayerMenuShadow(),
                     position = this.determineLayerMenuPosition($el, layerId);
@@ -139,9 +143,10 @@ define([
             },
 
             _createLayerMenu: function(layerId) {
-                var layer = this.state.findLayer(layerId),
-                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
-                    opacity = this.state.getLayerOpacity(layerId),
+                var layer = this.tree.findLayer(layerId),
+                    service = layer.getService(),
+                    supportsOpacity = service.supportsOpacity(),
+                    opacity = layer.getOpacity(),
                     html = this.layerMenuTmpl({
                         layer: layer,
                         id: this.layerMenuId,
@@ -164,6 +169,24 @@ define([
             },
 
             updateMap: function() {
+                var selectedLayers = this.tree.findLayers(this.state.getSelectedLayers()),
+                    visibleLayerIds = this.getVisibleLayers(selectedLayers);
+
+                _.each(visibleLayerIds, function(layerServiceIds, serviceUrl) {
+                    var mapLayer = this.map.getLayer(serviceUrl);
+                    if (layerServiceIds.length === 0) {
+                        mapLayer.setVisibleLayers([-1]);
+                    } else {
+                        mapLayer.setVisibleLayers(layerServiceIds);
+                    }
+                }, this);
+
+                this.setOpacityForSelectedLayers(selectedLayers);
+            },
+
+            // Return array of layer service IDs grouped by service URL.
+            // ex. { serviceUrl: [id, ...], ... }
+            getVisibleLayers: function(layers) {
                 var visibleLayerIds = {};
 
                 // Default existing layers to empty so that deselecting
@@ -172,8 +195,9 @@ define([
                     visibleLayerIds[mapLayer.id] = [];
                 });
 
-                _.each(this.state.getSelectedLayers(), function(layer) {
-                    var serviceUrl = layer.getServiceUrl(),
+                _.each(layers, function(layer) {
+                    var service = layer.getService(),
+                        serviceUrl = service.getServiceUrl(),
                         serviceId = layer.getServiceId();
 
                     if (_.isUndefined(serviceId)) {
@@ -195,16 +219,7 @@ define([
                     }
                 }, this);
 
-                _.each(visibleLayerIds, function(layerServiceIds, serviceUrl) {
-                    var mapLayer = this.map.getLayer(serviceUrl);
-                    if (layerServiceIds.length === 0) {
-                        mapLayer.setVisibleLayers([-1]);
-                    } else {
-                        mapLayer.setVisibleLayers(layerServiceIds);
-                    }
-                }, this);
-
-                this.setOpacityForSelectedLayers(this.state.getSelectedLayers());
+                return visibleLayerIds;
             },
 
             setOpacityForSelectedLayers: function(layers) {
@@ -212,11 +227,12 @@ define([
                 if (_.isEmpty(layers)) { return; }
 
                 var layerByService = _.groupBy(layers, function(layer) {
-                        return layer.getServiceUrl();
+                        return layer.getService().getServiceUrl();
                     });
 
                 _.each(layerByService, function(layers, serviceUrl) {
-                    if (this.state.serviceSupportsOpacity(serviceUrl)) {
+                    var service = layers[0].getService();
+                    if (service.supportsOpacity()) {
                         var drawingOptions = this.getDrawingOptions(layers),
                             mapLayer = this.map.getLayer(serviceUrl);
                         mapLayer.setLayerDrawingOptions(drawingOptions);
@@ -227,12 +243,11 @@ define([
             getDrawingOptions: function(layers) {
                 var self = this,
                     drawingOptions = _.reduce(layers, function(memo, layer) {
-                        var layerOpacity = self.state.getLayerOpacity(layer.id()),
-                            drawingOption = new LayerDrawingOptions({
+                        var drawingOption = new LayerDrawingOptions({
                                 // 0 is totally opaque, 100 is 100% transparent.
                                 // Opacity is stored as a decimal from 0 (transparent)
                                 // to 1 (opaque) so we convert it and invert it here.
-                                transparency: 100 - (layerOpacity * 100)
+                                transparency: 100 - (layer.getOpacity() * 100)
                             });
 
                         memo[layer.getServiceId()] = drawingOption;
@@ -245,7 +260,7 @@ define([
             // Create service layer and add it to the map if it doesn't already exist.
             addServiceMapLayerIfNotExists: function(layer) {
                 var server = layer.getServer(),
-                    serviceUrl = layer.getServiceUrl(),
+                    serviceUrl = layer.getService().getServiceUrl(),
                     mapLayer = this.map.getLayer(serviceUrl);
 
                 // There's nothing to do if the service layer already exists.
@@ -295,16 +310,16 @@ define([
 
             renderTree: _.debounce(function() {
                 var html = this.treeTmpl({
-                    layers: this.state.getLayers(),
+                    tree: this.tree,
                     renderLayer: _.bind(this.renderLayer, this, 0)
                 });
                 $(this.container).find('.tree-container').html(html);
             }, 5),
 
             renderLayer: function(indent, layer) {
-                var isSelected = this.state.isSelected(layer.id()),
-                    isExpanded = this.state.isExpanded(layer.id()),
-                    infoBoxIsDisplayed = this.state.infoIsDisplayed(layer.id());
+                var isSelected = layer.isSelected(),
+                    isExpanded = layer.isExpanded(),
+                    infoBoxIsDisplayed = layer.infoIsDisplayed();
 
                 var cssClass = [];
                 if (isSelected) {
@@ -318,7 +333,6 @@ define([
 
                 return this.layerTmpl({
                     layer: layer,
-                    state: this.state,
                     cssClass: cssClass,
                     isSelected: isSelected,
                     isExpanded: isExpanded,
@@ -335,46 +349,26 @@ define([
             },
 
             getState: function() {
-                return this.state.serialize();
+                return this.state.getState();
             },
 
             setState: function(data) {
                 var self = this;
 
-                if (this._cleanupPreviousState) {
-                    this._cleanupPreviousState();
-                }
-
-                this.state = new State(this.config, data, this.currentRegion);
-                this.updateMap();
+                this.state.setState(data);
+                this.rebuildTree();
                 this.render();
 
-                var eventHandles = [
-                    this.state.on('change:all', function() {
-                        self.render();
-                    }),
-                    this.state.on('change:filter', function() {
-                        self.renderTree();
-                    }),
-                    this.state.on('change:layers', function() {
-                        self.updateMap();
-                        self.renderTree();
-                    }),
-                    this.state.on('change:selectedLayers', function() {
-                        self.updateMap();
-                        self.renderTree();
-                    }),
-                    this.state.on('change:opacity', function() {
-                        self.updateMap();
-                    }),
-                    this.state.on('change:layerInfoId', function() {
-                        self.render();
-                    })
-                ];
-
-                this._cleanupPreviousState = function() {
-                    _.invoke(eventHandles, 'remove');
-                };
+                // Restore map service data.
+                _.each(this.state.getSelectedLayers(), function(layerId) {
+                    var layer = this.tree.findLayer(layerId);
+                    // TODO: If layer not found... load service from parent node
+                    if (layer) {
+                        layer.getService().fetchMapService().then(function() {
+                            self.rebuildTree();
+                        });
+                    }
+                }, this);
             },
 
             beforePrint: function(printDeferred) {
@@ -386,34 +380,37 @@ define([
                 this.app.dispatcher.trigger('export-map:pane-' + this.app.paneNumber);
             },
 
+            activate: function() {
+                this.render();
+            },
+
             deactivate: function() {
                 $(this.legendContainer).hide().html();
             },
 
             hibernate: function() {
-                if (this.state) {
-                    this.state.clearAll();
-                }
-                this.setState(null);
+                this.clearAll();
             },
 
             subregionActivated: function(currentRegion) {
-                this.currentRegion = currentRegion.id;
-                this.setState(this.getState());
+                this.state.setCurrentRegion(currentRegion.id);
             },
 
             subregionDeactivated: function(currentRegion) {
-                this.currentRegion = null;
-                this.setState(this.getState());
+                this.state.setCurrentRegion(null);
             },
 
             zoomToLayerExtent: function(layerId) {
-                var layer = this.state.findLayer(layerId),
-                    self = this;
+                var self = this,
+                    layer = this.tree.findLayer(layerId),
+                    service = layer.getService();
 
-                this.state.fetchLayerDetails(layer)
-                    .then(function(newLayer) {
-                        self.map.setExtent(newLayer.getExtent());
+                service.fetchLayerDetails(this.tree, layerId)
+                    .then(function() {
+                        self.rebuildTree();
+
+                        var layer = self.tree.findLayer(layerId);
+                        self.map.setExtent(layer.getExtent());
                     })
                     .otherwise(function(err) {
                         console.error(err);
@@ -425,12 +422,16 @@ define([
                 if (!layerId) { return; }
 
                 var self = this,
-                    layer = this.state.findLayer(layerId);
+                    layer = this.tree.findLayer(layerId),
+                    service = layer.getService();
 
-                this.state.fetchLayerDetails(layer)
-                    .then(function(newLayer) {
-                        var html = self.infoBoxTmpl({
-                                layer: newLayer
+                service.fetchLayerDetails(this.tree, layerId)
+                    .then(function() {
+                        self.rebuildTree();
+
+                        var layer = self.tree.findLayer(layerId),
+                            html = self.infoBoxTmpl({
+                                layer: layer
                             });
                         $(self.container).find('.info-box-container').html(html);
                     })
@@ -444,16 +445,46 @@ define([
                 this.state.clearInfoBoxLayerId();
             },
 
+            toggleLayer: function(layer) {
+                var self = this;
+                this.state.toggleLayer(layer);
+                layer.getService().fetchMapService().then(function() {
+                    self.rebuildTree();
+                });
+            },
+
+            applyFilter: function(filterText) {
+                var self = this;
+
+                this.state.setFilterText(filterText);
+                this.rebuildTree();
+
+                // Expand all layers that passed the filter.
+                this.state.collapseAllLayers();
+                this.tree.walk(function(layer) {
+                    self.state.expandLayer(layer.id());
+                });
+                this.rebuildTree();
+            },
+
+            clearAll: function() {
+                this.state.clearAll();
+                this.rebuildTree();
+                this.render();
+            },
+
             setLayerOpacity: function(layerId, opacity) {
                 this.state.setLayerOpacity(layerId, opacity);
+                this.rebuildTree();
             },
 
             // Depending on what features are supported by the selected layer,
             // the top of the layer menu should be positioned differently.
             determineLayerMenuPosition: function($el, layerId) {
                 var offset = $el.offset(),
-                    layer = this.state.findLayer(layerId),
-                    supportsOpacity = this.state.serviceSupportsOpacity(layer.getServiceUrl()),
+                    layer = this.tree.findLayer(layerId),
+                    service = layer.getService(),
+                    supportsOpacity = service.supportsOpacity(),
                     top = offset.top;
 
                 // Account for the height of the layer menu option if
@@ -476,6 +507,7 @@ define([
                 this.clearActiveStateForLayerTools(selector);
                 $(el).find('i').addClass('active');
                 $(el).closest('[data-layer-id]').addClass('active');
+                this.rebuildTree();
             },
 
             clearActiveStateForLayerTools: function(selector) {
@@ -484,6 +516,13 @@ define([
 
                 $el.removeClass('active');
                 $el.closest('[data-layer-id]').removeClass('active');
+                this.rebuildTree();
+            },
+
+            rebuildTree: function() {
+                this.tree.rebuildLayers();
+                this.renderTree();
+                this.updateMap();
             }
         });
     }
