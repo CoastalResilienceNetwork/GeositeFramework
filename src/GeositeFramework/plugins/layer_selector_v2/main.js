@@ -66,18 +66,22 @@ define([
 
             bindEvents: function() {
                 var self = this;
+
+                function toggleLayer() {
+                    var layerId = self.getClosestLayerId(this),
+                        layer = self.tree.findLayer(layerId);
+                    self.toggleLayer(layer);
+                }
+
                 $(this.container)
-                    .on('click', 'a.layer-row', function() {
-                        self.state.toggleLayer(self.getClosestLayerId(this));
-                    })
-                    .on('click', 'a.show', function() {
-                        self.state.toggleLayer(self.getClosestLayerId(this));
-                    })
+                    .on('click', 'a.layer-row', toggleLayer)
+                    .on('click', 'a.show', toggleLayer)
                     .on('click', 'a.info', function() {
                         self.state.setInfoBoxLayerId(self.getClosestLayerId(this));
+                        self.showLayerInfo();
                     })
                     .on('click', '.info-box .close', function() {
-                        self.state.clearInfoBoxLayerId();
+                        self.hideLayerInfo();
                     })
                     .on('click', 'a.more', function() {
                         self.showLayerMenu(this);
@@ -437,7 +441,7 @@ define([
 
             hideLayerInfo: function() {
                 $(this.container).find('.info-box-container').empty();
-                this.state.clearInfoBoxState();
+                this.state.clearInfoBoxLayerId();
             },
 
             setLayerOpacity: function(layerId, opacity) {
