@@ -3,6 +3,16 @@
     margin-left: 0;
 }
 
+.layer-selector2 .loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.75) url(spinner.gif) 50% 50% no-repeat;
+}
+
 .layer-selector2 .filter-container {
     padding: 6px 4px;
     }
