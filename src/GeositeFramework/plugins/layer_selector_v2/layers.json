@@ -23,7 +23,7 @@
                     },
                     {
                         "name": "Congressional Districts",
-                        "description": "This polygon layer delineates the US Congressional District boundaries in New Jersey, 2012 - 2022."
+                        "description": "(Custom) This polygon layer delineates the US Congressional District boundaries in New Jersey, 2012 - 2022."
                     },
                     {
                         "name": "Town,city, village",
