@@ -154,6 +154,10 @@ define([
 
             getOpacity: function() {
                 return this.node.opacity;
+            },
+
+            getDownloadUrl: function() {
+                return this.node.downloadUrl;
             }
         });
 

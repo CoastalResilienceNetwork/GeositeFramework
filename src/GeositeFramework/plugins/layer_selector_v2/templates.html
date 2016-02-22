@@ -68,7 +68,9 @@
 <script type="text/template" id="layer-menu">
     <div class="layer-selector2-layer-menu" id="<%= id %>" data-layer-id="<%- layer.id() %>">
         <ul>
-            <li><a href="javascript:;" class="download"><i class="icon-download"></i> Download</a></li>
+            <% if (layer.getDownloadUrl()) { %>
+                <li><a href="<%- layer.getDownloadUrl() %>" target="_blank" class="download"><i class="icon-download"></i> Download</a></li>
+            <% } %>
             <li><a href="javascript:;" class="zoom"><i class="icon-zoom-in"></i> Zoom to Extent</a></li>
             <% if (supportsOpacity) { %>
                 <li><a><i class="icon-ajust"></i> Opacity</a></li>
