@@ -11,14 +11,20 @@ define(['esri/request'],
         }
 
         // Fetch data from `url` and store the result in `cache` (memoized).
-        var fetch = function(url) {
+        var fetch = function(url, options) {
+            var options = options || {},
+                settings = _.defaults(options, {
+                    format: 'json',
+                    content: {f: 'json'}
+                });
+
             if (typeof promises[url] === 'undefined') {
                 promises[url] = request({
                     url: url,
-                    content: {f: 'json'},
-                    handleAs: 'json',
+                    content: settings.content,
+                    handleAs: settings.format,
                     callbackParamName: 'callback',
-                    timeout: 7000
+                    timeout: 20000
                 }).then(function(data) {
                     cache[url] = data;
                 }, function(error) {
