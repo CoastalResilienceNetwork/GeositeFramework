@@ -1,13 +1,11 @@
 define([
         "dojo/_base/declare",
-        "dojo/Deferred",
         "underscore",
         "framework/util/ajax",
         "./util",
         "./LayerNode"
     ],
     function(declare,
-             Deferred,
              _,
              ajaxUtil,
              util,
