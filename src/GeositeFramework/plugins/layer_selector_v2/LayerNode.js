@@ -69,7 +69,13 @@ define([
 
             // Return full path to leaf node in the tree.
             id: function() {
-                return this.node.uid;
+                // Default to `displayName` instead of `name` because not
+                // all layers have names (ex. folder nodes).
+                var displayName = this.node.displayName || this.node.name;
+                if (this.parent) {
+                    return this.parent.id() + '/' + displayName;
+                }
+               return displayName;
             },
 
             // Return layer ID defined in the map service.
