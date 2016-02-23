@@ -9,7 +9,7 @@ define([
         "use strict";
 
         function runAllTests(tests) {
-            var promise = all(_.map(tests, function(test) {
+            var defers = _.map(tests, function(test) {
                 var defer = new Deferred(),
                     done = function() {
                         defer.resolve();
@@ -32,11 +32,12 @@ define([
                 }
 
                 return defer;
-            }));
+            });
+            var promise = all(defers);
             promise.then(function() {
-                console.debug('All tests passed!');
+                console.debug(defers.length + ' tests passed');
             }, function() {
-                console.debug('Some tests failed.');
+                console.debug('Some tests failed');
             });
         }
 
