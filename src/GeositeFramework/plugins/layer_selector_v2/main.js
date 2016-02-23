@@ -448,6 +448,7 @@ define([
             toggleLayer: function(layer) {
                 var self = this;
                 this.state = this.state.toggleLayer(layer);
+                self.rebuildTree();
                 layer.getService().fetchMapService().then(function() {
                     self.rebuildTree();
                 });
