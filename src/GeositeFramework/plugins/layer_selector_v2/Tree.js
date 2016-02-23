@@ -140,7 +140,7 @@ define([
                 return new Tree(_.filter(_.map(this.layers, filterLayer)));
             },
 
-            getLayers: function() {
+            getChildren: function() {
                 return this.layers;
             },
 

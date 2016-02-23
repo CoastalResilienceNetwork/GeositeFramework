@@ -15,6 +15,8 @@
 
 define([
         "dojo/_base/declare",
+        "dojo/Deferred",
+        "dojo/promise/all",
         "jquery",
         "underscore",
         "dojo/text!./templates.html",
@@ -23,12 +25,15 @@ define([
         "esri/layers/ArcGISTiledMapServiceLayer",
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
+        "framework/util/ajax",
         //"./tests",
         "./State",
         "./Config",
         "./Tree"
     ],
     function(declare,
+             Deferred,
+             all,
              $,
              _,
              templates,
@@ -37,6 +42,7 @@ define([
              ArcGISTiledMapServiceLayer,
              LayerDrawingOptions,
              PluginBase,
+             ajaxUtil,
              //unitTests,
              State,
              Config,
@@ -380,12 +386,50 @@ define([
                 this.app.dispatcher.trigger('export-map:pane-' + this.app.paneNumber);
             },
 
-            activate: function() {
-                this.render();
+            // Fetch all map services so that on-demand layers are available
+            // for filtering. (See issue #555)
+            preload: function() {
+                var self = this,
+                    defer = new Deferred();
+
+                if (this._preloaded) {
+                    return new Deferred().resolve();
+                }
+
+                // Create list of distinct service urls.
+                var serviceUrls = {};
+                this.tree.walk(function(layer) {
+                    var service = layer.getService(),
+                        serviceUrl = service.getServiceUrl();
+                    serviceUrls[serviceUrl] = true;
+                });
+
+                var self = this,
+                    $el = $(this.container).find('.loading');
+                $el.show();
+
+                // Fetch all map services found.
+                var promise = all(_.map(serviceUrls, function(v, serviceUrl) {
+                    // Cache map service response.
+                    return ajaxUtil.fetch(serviceUrl);
+                }));
+
+                promise.always(function() {
+                    self._preloaded = true;
+                    // Let the loading animation play for at least 1 second
+                    // before hiding to prevent flashing.
+                    self.rebuildTree();
+                    _.delay(defer.resolve, 1000);
+                });
+
+                return defer.promise;
             },
 
-            deactivate: function() {
-                $(this.legendContainer).hide().html();
+            activate: function() {
+                var self = this;
+                this.preload().then(function() {
+                    self.render();
+                });
             },
 
             hibernate: function() {

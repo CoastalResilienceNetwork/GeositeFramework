@@ -22,7 +22,6 @@ define(['esri/request'],
                 }).then(function(data) {
                     cache[url] = data;
                 }, function(error) {
-                    console.debug('ajaxUtil', error);
                     cache[url] = error;
                 }).then(function() {
                     return cache[url];
