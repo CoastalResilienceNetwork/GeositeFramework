@@ -39,6 +39,7 @@ define(['use!Geosite',
             this.tmplLegendItemSingle = _.template($('#template-legend-item-single').html());
             this.tmplLegendItemMultiple = _.template($('#template-legend-item-multiple').html());
             this.tmplLegendItemScale = _.template($('#template-legend-item-scale').html());
+            this.tmplLegendItemImage = _.template($('#template-legend-item-image').html());
 
             // Make the legend resizeable and moveable
             var handle = new ResizeHandle({
@@ -75,10 +76,16 @@ define(['use!Geosite',
                     return this.tmplLegendItemMultiple;
                 } else if (layerSettings.legendType === 'scale') {
                     return this.tmplLegendItemScale;
+                } else if (layerSettings.legendType === 'image') {
+                    return this.tmplLegendItemImage;
                 }
             }
 
-            if (legend.legend.length === 1) {
+            // A string indicates we have a legend URL that returns an image
+            // instead of a JSON representation
+            if (typeof legend === 'string') {
+                return this.tmplLegendItemImage;
+            } else if (legend.legend.length === 1) {
                 return this.tmplLegendItemSingle;
             }
 
@@ -110,7 +117,11 @@ define(['use!Geosite',
                     tmpl = self.getLayerTemplate(legend, service, layer);
 
                 if (tmpl) {
-                    $container.append(tmpl(legend));
+                    if (typeof legend === 'string') {
+                        $container.append(tmpl({ legend: legend, layer: layer }));
+                    } else {
+                        $container.append(tmpl(legend));
+                    }
                 }
             });
 

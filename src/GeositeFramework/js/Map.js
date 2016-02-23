@@ -225,17 +225,19 @@ require(['use!Geosite',
                 if (serviceInfo && service.visible && serviceInfo.pluginObject.showServiceLayersInLegend) {
                     service.visibleLayers.sort(function(a, b) { return a - b; });
                     _.each(service.visibleLayers, function(layerId) {
-                        var layer = _.findWhere(service.layerInfos, {id: layerId});
-                        if (!layer) {
-                            return;
+                        var layer,
+                            legend;
+
+                        if (isWms(service)) {
+                            layer = _getWMSLayer(service, layerId);
+                            if (!layer) { return; }
+                            legend = _getWMSLegend(layer);
+                        } else {
+                            layer = _getAGSLayer(service, layerId);
+                            if (!layer) { return; }
+                            legend = _getAGSLegend(service, layerId);
                         }
 
-                        var serviceLegend = getServiceLegend(service);
-                        if (!serviceLegend) {
-                            return;
-                        }
-
-                        var legend = _.findWhere(serviceLegend, {layerId: layerId});
                         if (isLayerInScale(service, layer)) {
                             result.push({
                                 service: service,
@@ -249,12 +251,41 @@ require(['use!Geosite',
             return result;
         }
 
+        function isWms(service) {
+            if (service.description && service.description.match(/WMS/i)) {
+                return true;
+            }
+            return false;
+        }
+
+        function _getWMSLayer(service, layerId) {
+            return _.findWhere(service.layerInfos, {name: layerId});
+        }
+
+        function _getWMSLegend(layer) {
+            return layer.legendURL;
+        }
+
+        function _getAGSLayer(service, layerId) {
+            return _.findWhere(service.layerInfos, {id: layerId});
+        }
+
+        function _getAGSLegend(service, layerId) {
+            var serviceLegend = getServiceLegend(service);
+
+            if (!serviceLegend) {
+                return;
+            }
+
+            return _.findWhere(serviceLegend, {layerId: layerId});
+        }
+
         // Filter out layers that are not visible at the current map scale.
         // Adapted from the ESRI dijit legend source code. (Ref: _isLayerInScale)
         function isLayerInScale(service, layer) {
             var scale = esriMap.getScale();
-            var minScale = Math.min(service.minScale, layer.minScale) || service.minScale || layer.minScale;
-            var maxScale = Math.max(service.maxScale, layer.maxScale);
+            var minScale = Math.min(service.minScale, layer.minScale) || service.minScale || layer.minScale || 0;
+            var maxScale = Math.max(service.maxScale, layer.maxScale) || 0;
             return minScale === 0 || minScale > scale && maxScale < scale;
         }
 
