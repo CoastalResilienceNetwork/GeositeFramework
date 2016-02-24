@@ -413,7 +413,13 @@ define([
                 // Fetch all map services found.
                 var promise = all(_.map(serviceUrls, function(v, serviceUrl) {
                     // Cache map service response.
-                    return ajaxUtil.fetch(serviceUrl);
+                    var options = {};
+                    if (serviceUrl.match(/WMS/i)) {
+                        options.format = 'text';
+                        options.content = '';
+                    }
+
+                    return ajaxUtil.fetch(serviceUrl, options);
                 }));
 
                 promise.always(function() {
