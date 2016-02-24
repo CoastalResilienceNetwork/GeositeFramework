@@ -23,6 +23,7 @@ define([
         "esri/layers/FeatureLayer",
         "esri/layers/ArcGISDynamicMapServiceLayer",
         "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/layers/WMSLayer",
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
         "framework/util/ajax",
@@ -40,6 +41,7 @@ define([
              FeatureLayer,
              ArcGISDynamicMapServiceLayer,
              ArcGISTiledMapServiceLayer,
+             WMSLayer,
              LayerDrawingOptions,
              PluginBase,
              ajaxUtil,
@@ -181,7 +183,7 @@ define([
                 _.each(visibleLayerIds, function(layerServiceIds, serviceUrl) {
                     var mapLayer = this.map.getLayer(serviceUrl);
                     if (layerServiceIds.length === 0) {
-                        mapLayer.setVisibleLayers([-1]);
+                        mapLayer.setVisibleLayers([]);
                     } else {
                         mapLayer.setVisibleLayers(layerServiceIds);
                     }
@@ -294,7 +296,7 @@ define([
                         throw new Error('AGS service layer type is not supported: ' + server.layerType);
                     }
                 } else if (server.type === 'wms') {
-                    throw new Error('WMS server type is not implemented yet');
+                    return new WMSLayer(serviceUrl);
                 } else {
                     throw new Error('Service type not supported: ' + server.type);
                 }

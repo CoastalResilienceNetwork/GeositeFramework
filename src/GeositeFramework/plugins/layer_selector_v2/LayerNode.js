@@ -4,6 +4,7 @@ define([
         "esri/geometry/Extent",
         "./util",
         "./AgsService",
+        "./WmsService",
         "./NullService"
     ],
     function(declare,
@@ -11,6 +12,7 @@ define([
              Extent,
              util,
              AgsService,
+             WmsService,
              NullService) {
         "use strict";
 
@@ -85,8 +87,10 @@ define([
 
             getService: function() {
                 var server = this.getServer();
-                if (server) {
+                if (server.type === "ags") {
                     return new AgsService(server);
+                } else if (server.type === "wms") {
+                    return new WmsService(server);
                 }
                 return new NullService();
             },

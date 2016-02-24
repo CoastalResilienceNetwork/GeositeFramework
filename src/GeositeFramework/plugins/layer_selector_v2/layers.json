@@ -150,5 +150,43 @@
                 "downloadUrl": "http://www.tceq.texas.gov/assets/public/gis/exports/au_oysterwaters.zip"
             }
         ]
+    },
+    {
+        "displayName": "WMS Example Layers",
+        "server": {
+            "type": "wms",
+            "layerType": "dynamic",
+            "url": "http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/",
+            "name": "ESRI_StatesCitiesRivers_USA"
+        },
+        "includeLayers": [
+            {
+                "name": "States"
+            },
+            {
+                "name": "Cities"
+            },
+            {
+                "name": "Rivers"
+            }
+        ]
+    },
+    {
+        "displayName": "Global Risk Data Platform",
+        "server": {
+            "type": "wms",
+            "layerType": "dynamic",
+            "url": "http://preview.grid.unep.ch:8080/geoserver/wms"
+        },
+        "includeLayers": [
+            {
+                "name": "Cities_esri",
+                "displayName": "Cities"
+            },
+            {
+                "name": "Lakes_glwd1",
+                "displayName": "Lakes"
+            }
+        ]
     }
 ]
