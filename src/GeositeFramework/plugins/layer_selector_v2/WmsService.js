@@ -113,7 +113,8 @@ define([
             // Maps the WMS XML service data to JSON that closely
             // matches the JSON returned by the ESRI JS API.
             _transformServiceData: function(serviceData) {
-                var output = {
+                var self = this,
+                    output = {
                         layers: []
                     },
                     jsonServiceData = xmlToJSON.parseString(serviceData, {
@@ -132,25 +133,48 @@ define([
                     };
 
                     // Set Extent
-                    var boundingBox = _.isArray(layer.BoundingBox) ? layer.BoundingBox[0] : layer.BoundingBox;
-                    if (boundingBox) {
-                        jsonLayer.extent = {
-                            spatialReference: {
-                                latestWkid: boundingBox._attr.CRS._value.split(':')[1],
-                                wkid: boundingBox._attr.CRS._value.split(':')[1]
-                            },
-                            xmax: boundingBox._attr.maxx._value,
-                            xmin: boundingBox._attr.minx._value,
-                            ymax: boundingBox._attr.maxy._value,
-                            ymin: boundingBox._attr.miny._value,
-                        };
-                    }
+                    jsonLayer.extent = self._getLayerExtent(layer);
 
                     output.layers.push(jsonLayer);
                 });
 
                 return output;
             },
+
+            _getLayerExtent: function(layer) {
+                var output = {},
+                    boundingBox = _.find(layer.BoundingBox, function(bb) {
+                        // Some bounding boxes are strings that can't be used.
+                        if (!_.isObject(bb)) { return false; }
+                        var crs = bb.CRS || bb._attr.CRS;
+                        return !_.isNull(crs._value.match(/EPSG/i));
+                    });
+
+                if (boundingBox) {
+                    // Depending on how the XML is structure, the bounding box
+                    // values may be direct properties or nested under the _attr key
+                    var extent = boundingBox.CRS ? boundingBox : boundingBox._attr,
+                        crs = extent.CRS._value,
+                        epsg = parseInt(crs.split(':')[1]);
+
+                    // ESRI extent object structure
+                    output = {
+                        spatialReference: {
+                            latestWkid: epsg,
+                            wkid: epsg
+                        },
+                        // These are intentionally reversed.
+                        // WMS defines them in the opposite way
+                        // of the AGS REST API.
+                        xmax: extent.maxy._value,
+                        xmin: extent.miny._value,
+                        ymax: extent.maxx._value,
+                        ymin: extent.minx._value
+                    };
+                }
+
+                return output;
+            }
         });
     }
 );
