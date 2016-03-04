@@ -27,7 +27,7 @@ define([
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
         "framework/util/ajax",
-        //"./tests",
+        //"./tests/index",
         "./State",
         "./Config",
         "./Tree"

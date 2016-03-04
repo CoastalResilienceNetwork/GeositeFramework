@@ -34,7 +34,7 @@ define([
                 return defer;
             });
             var promise = all(defers);
-            promise.then(function() {
+            return promise.then(function() {
                 console.debug(defers.length + ' tests passed');
             }, function() {
                 console.debug('Some tests failed');
