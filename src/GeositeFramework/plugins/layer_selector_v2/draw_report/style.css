@@ -1,0 +1,42 @@
+﻿.map .tooltip {
+    /* Foundation CSS hides tooltips by default */
+    display: block;
+    color: #000;
+}
+
+.layer-selector2 .tab-report {
+    padding: 12px;
+}
+.layer-selector2 .tab-report h5 {
+    margin-bottom: 7px;
+}
+.layer-selector2 .tab-report h6 {
+    margin: 0 0 8px;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.layer-selector2 .tab-report table {
+    width: 100%;
+}
+
+.layer-selector2 .tab-report .cancel {
+    background-color: #cb2b2b;
+    border-color: #8c1e1e;
+}
+.layer-selector2 .tab-report .cancel:hover,
+.layer-selector2 .tab-report .cancel:focus {
+    background-color: #a12222;
+}
+
+.layer-selector2 .tab-report .loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.75) url(../spinner.gif) 50% 50% no-repeat;
+}

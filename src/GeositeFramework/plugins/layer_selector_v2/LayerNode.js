@@ -54,7 +54,8 @@ define([
                 return this.children;
             },
 
-            // Return true if layer should have children (even if they haven't loaded yet).
+            // Return true if layer should have children (even if they
+            // haven't loaded yet).
             hasChildren: function() {
                 return this.children.length > 0 ||
                     !!this.getExcludedLayers() ||
@@ -85,7 +86,8 @@ define([
 
             getServer: function() {
                 if (this.parent) {
-                    // The current node value should take precedence over the parent node.
+                    // The current node value should take precedence over
+                    // the parent node.
                     return _.assign({}, this.parent.getServer(), this.node.server);
                 }
                 return this.node.server;
@@ -100,6 +102,39 @@ define([
                         return new WmsService(server);
                 }
                 return new NullService();
+            },
+
+            getReportDbLayerName: function() {
+                var defaultValue = this.parent &&
+                        this.parent.getReportDbLayerName() || '';
+                return this.node.reportDbLayerName || defaultValue;
+            },
+
+            // Return all configured reports for this layer, NOT including
+            // the report layer name.
+            getReports: function() {
+                var reports = this.parent && this.parent.getReports() || [];
+                return reports.concat(this.node.reports || []);
+            },
+
+            // Return all configured reports for this layer, including
+            // the report layer name.
+            getReportLayers: function() {
+                var server = this.getServer(),
+                    reportDbPath = server && server.reportDbPath,
+                    reportDbLayerName = this.getReportDbLayerName(),
+                    reportLayer = reportDbPath + '/' + reportDbLayerName,
+                    reports = this.getReports();
+
+                if (reportDbPath && reportDbLayerName) {
+                    return _.map(reports, function(report) {
+                        return _.assign({}, report, {
+                            layer: reportLayer
+                        });
+                    });
+                }
+
+                return [];
             },
 
             findLayer: function(layerId) {

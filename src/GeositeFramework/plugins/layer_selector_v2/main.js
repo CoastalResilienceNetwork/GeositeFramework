@@ -28,6 +28,7 @@ define([
         "framework/PluginBase",
         "framework/util/ajax",
         //"./tests/index",
+        "./draw_report/main",
         "./State",
         "./Config",
         "./Tree"
@@ -46,6 +47,7 @@ define([
              PluginBase,
              ajaxUtil,
              //unitTests,
+             DrawAndReport,
              State,
              Config,
              Tree) {
@@ -61,12 +63,15 @@ define([
             initialize: function (frameworkParameters, currentRegion) {
                 declare.safeMixin(this, frameworkParameters);
 
-                this.pluginTmpl = _.template(this.getTemplateByName('plugin'));
-                this.filterTmpl = _.template(this.getTemplateByName('filter'));
-                this.treeTmpl = _.template(this.getTemplateByName('tree'));
-                this.layerTmpl = _.template(this.getTemplateByName('layer'));
-                this.infoBoxTmpl = _.template(this.getTemplateByName('info-box'));
-                this.layerMenuTmpl = _.template(this.getTemplateByName('layer-menu'));
+                this.drawReport = new DrawAndReport(this, $('<div>').get(0));
+
+                this.pluginTmpl = _.template(this.getTemplateById('plugin'));
+                this.layersPluginTmpl = _.template(this.getTemplateById('layers-plugin'));
+                this.filterTmpl = _.template(this.getTemplateById('filter'));
+                this.treeTmpl = _.template(this.getTemplateById('tree'));
+                this.layerTmpl = _.template(this.getTemplateById('layer'));
+                this.infoBoxTmpl = _.template(this.getTemplateById('info-box'));
+                this.layerMenuTmpl = _.template(this.getTemplateById('layer-menu'));
                 this.layerMenuId = _.uniqueId('layer-selector2-layer-menu-');
 
                 this.state = new State();
@@ -77,6 +82,22 @@ define([
             },
 
             bindEvents: function() {
+                this.bindTabEvents();
+                this.bindTreeEvents();
+                this.bindLayerMenuEvents();
+            },
+
+            bindTabEvents: function() {
+                var self = this,
+                    $el = $(this.container);
+                $el.on('click', 'dl.tabs a', function() {
+                    var tab = $(this).attr('data-tab');
+                    self.state = self.state.setTab(tab);
+                    self.render();
+                });
+            },
+
+            bindTreeEvents: function() {
                 var self = this;
 
                 function toggleLayer() {
@@ -107,7 +128,10 @@ define([
                     .on('click', 'a.reset', function() {
                         self.clearAll();
                     });
+            },
 
+            bindLayerMenuEvents: function() {
+                var self = this;
                 $('body')
                     .on('click', '#' + this.layerMenuId + ' a.download', function() {
                         var layerId = self.getClosestLayerId(this);
@@ -182,6 +206,12 @@ define([
 
                 _.each(visibleLayerIds, function(layerServiceIds, serviceUrl) {
                     var mapLayer = this.map.getLayer(serviceUrl);
+
+                    // Ignore feature group added by Draw & Report.
+                    if (mapLayer instanceof esri.layers.GraphicsLayer) {
+                        return;
+                    }
+
                     if (layerServiceIds.length === 0) {
                         mapLayer.setVisibleLayers([]);
                     } else {
@@ -303,7 +333,18 @@ define([
             },
 
             render: function() {
-                $(this.container).html(this.pluginTmpl());
+                var $el = $(this.pluginTmpl({
+                    tab: this.state.getTab()
+                }));
+
+                $el.find('.tab-layers').append($(this.layersPluginTmpl()));
+                $el.find('.tab-report').append(this.drawReport.render());
+
+                $(this.container).empty().append($el);
+                this.renderLayerSelector();
+            },
+
+            renderLayerSelector: function() {
                 this.renderFilter();
                 this.renderTree();
                 this.showLayerInfo();
@@ -350,22 +391,28 @@ define([
                 });
             },
 
-            getTemplateByName: function(name) {
+            getTemplateById: function(id) {
                 return $('<div>').append(templates)
-                    .find('#' + name)
+                    .find('#' + id)
                     .html().trim();
             },
 
             getState: function() {
-                return this.state.getState();
+                return {
+                    layers: this.state.getState(),
+                    drawReport: this.drawReport.getState()
+                };
             },
 
             setState: function(data) {
                 var self = this;
 
+                var layerData = data.layers,
+                    drawReportData = data.drawReport;
+
                 this.state = new State(data);
                 this.rebuildTree();
-                this.render();
+                this.renderLayerSelector();
 
                 // Restore map service data.
                 _.each(this.state.getSelectedLayers(), function(layerId) {
@@ -377,6 +424,8 @@ define([
                         });
                     }
                 }, this);
+
+                this.drawReport.setState(drawReportData);
             },
 
             beforePrint: function(printDeferred) {
@@ -386,6 +435,14 @@ define([
 
                 // Trigger an export dialog for this pane.
                 this.app.dispatcher.trigger('export-map:pane-' + this.app.paneNumber);
+            },
+
+            showSpinner: function() {
+                $(this.container).find('.tab-layers .loading').show();
+            },
+
+            hideSpinner: function() {
+                $(this.container).find('.tab-layers .loading').hide();
             },
 
             // Fetch all map services so that on-demand layers are available
@@ -404,9 +461,9 @@ define([
                 });
 
                 var self = this,
-                    defer = new Deferred(),
-                    $el = $(this.container).find('.loading');
-                $el.show();
+                    defer = new Deferred();
+
+                this.showSpinner();
 
                 // Fetch all map services found.
                 var promise = all(_.map(serviceUrls, function(v, serviceUrl) {
@@ -422,10 +479,14 @@ define([
 
                 promise.always(function() {
                     self._preloaded = true;
+                    self.rebuildTree();
+
                     // Let the loading animation play for at least 1 second
                     // before hiding to prevent flashing.
-                    self.rebuildTree();
-                    _.delay(defer.resolve, 1000);
+                    _.delay(function() {
+                        self.hideSpinner();
+                        defer.resolve();
+                    }, 1000);
                 });
 
                 return defer.promise;
@@ -433,13 +494,21 @@ define([
 
             activate: function() {
                 var self = this;
+
+                this.render();
+
                 this.preload().then(function() {
-                    self.render();
+                    self.renderLayerSelector();
                 });
+            },
+
+            deactivate: function() {
+                this.drawReport.deactivate();
             },
 
             hibernate: function() {
                 this.clearAll();
+                this.drawReport.hibernate();
             },
 
             subregionActivated: function(currentRegion) {
@@ -498,10 +567,11 @@ define([
             toggleLayer: function(layer) {
                 var self = this;
                 this.state = this.state.toggleLayer(layer);
-                self.rebuildTree();
+                this.rebuildTree();
                 layer.getService().fetchMapService().then(function() {
                     self.rebuildTree();
                 });
+                this.drawReport.update();
             },
 
             applyFilter: function(filterText) {
@@ -520,7 +590,8 @@ define([
             clearAll: function() {
                 this.state = new State();
                 this.rebuildTree();
-                this.render();
+                this.renderLayerSelector();
+                this.drawReport.update();
             },
 
             setLayerOpacity: function(layerId, opacity) {
