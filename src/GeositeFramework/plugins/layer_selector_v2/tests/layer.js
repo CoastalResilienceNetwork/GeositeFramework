@@ -59,6 +59,7 @@ define([
                 var parent = LayerNode.fromJS({
                     name: 'foo',
                     server: {
+                        type: 'ags',
                         url: 'http://service/'
                     },
                     includeLayers: [

@@ -93,10 +93,11 @@ define([
 
             getService: function() {
                 var server = this.getServer();
-                if (server.type === "ags") {
-                    return new AgsService(server);
-                } else if (server.type === "wms") {
-                    return new WmsService(server);
+                switch (server && server.type) {
+                    case 'ags':
+                        return new AgsService(server);
+                    case 'wms':
+                        return new WmsService(server);
                 }
                 return new NullService();
             },
