@@ -27,7 +27,7 @@ define([
         "esri/layers/LayerDrawingOptions",
         "framework/PluginBase",
         "framework/util/ajax",
-        //"./tests",
+        //"./tests/index",
         "./State",
         "./Config",
         "./Tree"
@@ -391,9 +391,6 @@ define([
             // Fetch all map services so that on-demand layers are available
             // for filtering. (See issue #555)
             preload: function() {
-                var self = this,
-                    defer = new Deferred();
-
                 if (this._preloaded) {
                     return new Deferred().resolve();
                 }
@@ -407,6 +404,7 @@ define([
                 });
 
                 var self = this,
+                    defer = new Deferred(),
                     $el = $(this.container).find('.loading');
                 $el.show();
 

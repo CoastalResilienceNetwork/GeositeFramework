@@ -1,7 +1,7 @@
 define([
         "underscore",
         "framework/unittest",
-        "./LayerNode"
+        "../LayerNode"
     ],
     function(_,
              unittest,
@@ -59,6 +59,7 @@ define([
                 var parent = LayerNode.fromJS({
                     name: 'foo',
                     server: {
+                        type: 'ags',
                         url: 'http://service/'
                     },
                     includeLayers: [

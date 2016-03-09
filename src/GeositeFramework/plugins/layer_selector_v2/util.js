@@ -16,6 +16,8 @@ define(['underscore'], function(_) {
 
     function urljoin() {
         return _.reduce(arguments, function(a, b) {
+            a = a + '';
+            b = b + '';
             if (a.endsWith('/')) {
                 return a + b;
             }

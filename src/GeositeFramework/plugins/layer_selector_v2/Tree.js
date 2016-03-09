@@ -32,7 +32,6 @@ define([
                     layerId = this.createLayerId(parent, layerData),
                     opacity = state.getLayerOpacity(layerId),
                     node = _.assign(layerData, {
-                        uid: layerId,
                         isSelected: state.isSelected(layerId),
                         isExpanded: state.isExpanded(layerId),
                         infoIsDisplayed: state.infoIsDisplayed(layerId),
@@ -64,7 +63,6 @@ define([
                     layerData = _.assign({}, serviceLayer || {}, layerDetails || {}),
                     layerId = this.createLayerId(parent, layerData),
                     node = _.assign(layerData, {
-                        uid: layerId,
                         isSelected: state.isSelected(layerId),
                         isExpanded: state.isExpanded(layerId),
                         infoIsDisplayed: state.infoIsDisplayed(layerId),
@@ -84,14 +82,11 @@ define([
 
             // `node` should contain the minimum amount of information needed
             // to generate a unique layer ID (name & optionally displayName).
-            createLayerId: function(parent, node) {
-                // Default to `displayName` instead of `name` because not all layers
-                // have names (ex. folder nodes).
-                var displayName = node.displayName || node.name;
-                if (parent) {
-                    return parent.id() + '/' + displayName;
-                }
-               return displayName;
+            createLayerId: function(parent, layerData) {
+                return LayerNode.prototype.id.call({
+                    parent: parent,
+                    node: layerData
+                });
             },
 
             // Return new tree filtered by region.

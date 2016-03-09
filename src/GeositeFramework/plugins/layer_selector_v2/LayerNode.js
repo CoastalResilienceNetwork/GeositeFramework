@@ -69,7 +69,13 @@ define([
 
             // Return full path to leaf node in the tree.
             id: function() {
-                return this.node.uid;
+                // Default to `displayName` instead of `name` because not
+                // all layers have names (ex. folder nodes).
+                var displayName = this.node.displayName || this.node.name;
+                if (this.parent) {
+                    return this.parent.id() + '/' + displayName;
+                }
+               return displayName;
             },
 
             // Return layer ID defined in the map service.
@@ -87,10 +93,11 @@ define([
 
             getService: function() {
                 var server = this.getServer();
-                if (server.type === "ags") {
-                    return new AgsService(server);
-                } else if (server.type === "wms") {
-                    return new WmsService(server);
+                switch (server && server.type) {
+                    case 'ags':
+                        return new AgsService(server);
+                    case 'wms':
+                        return new WmsService(server);
                 }
                 return new NullService();
             },
