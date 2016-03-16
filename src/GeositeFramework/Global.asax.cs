@@ -12,9 +12,13 @@ using log4net;
 using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
+using Newtonsoft.Json;
 
 namespace GeositeFramework
 {
+    // Translation dictionary where key is language and value is a dictionary of translations for that language
+    using Translations = Dictionary<string, Dictionary<string, string>>;
+
     public class MvcApplication : System.Web.HttpApplication
     {
         public static Geosite GeositeData { get; private set; }
@@ -42,6 +46,9 @@ namespace GeositeFramework
             {
                 CreateLogger(pluginName);
             }
+
+            // Prepare Languages for Internationalization
+            PrepareLanguages(GeositeData);
         }
 
         private Geosite LoadGeositeData()
@@ -101,5 +108,76 @@ namespace GeositeFramework
             }
         }
 
+        private void PrepareLanguages(Geosite data)
+        {
+            var translations = new Translations();
+
+            foreach (var plugin in data.PluginFolderNames)
+            {
+                var pluginLocalesPath = HostingEnvironment.MapPath(String.Format("~/{0}/locales", plugin));
+
+                if (Directory.Exists(pluginLocalesPath))
+                {
+                    var pluginTranslations = Directory
+                        .GetFiles(pluginLocalesPath, "*.json")
+                        .ToDictionary(Path.GetFileNameWithoutExtension, toTranslationDictionary);
+
+                    translations = mergeTranslations(pluginTranslations, translations);
+                }
+            }
+
+            var coreLocalesPath = HostingEnvironment.MapPath("~/locales");
+            var coreTranslations = Directory
+                .GetFiles(coreLocalesPath, "*.json")
+                .ToDictionary(Path.GetFileNameWithoutExtension, toTranslationDictionary);
+
+            translations = mergeTranslations(coreTranslations, translations);
+
+            // Create final languages folder, deleting old one if exists
+            var finalLocalesPath = HostingEnvironment.MapPath("~/languages");
+            if (Directory.Exists(finalLocalesPath))
+            {
+                Directory.Delete(finalLocalesPath, true);
+            }
+            Directory.CreateDirectory(finalLocalesPath);
+
+            // Write combined translations to disk
+            translations.ToList().ForEach(t =>
+            {
+                var lang = t.Key;
+                var json = JsonConvert.SerializeObject(t.Value);
+
+                File.WriteAllText(String.Format("{0}/{1}.json", finalLocalesPath, lang), json);
+            });
+        }
+
+        private Dictionary<string, string> toTranslationDictionary(string filename)
+        {
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
+        }
+
+        /// <summary>
+        /// Merges translations from ts1 into ts2 and returns the result.
+        /// Source translations will overwrite target ones if there is a collision.
+        /// </summary>
+        /// <param name="ts1">Source Translations</param>
+        /// <param name="ts2">Target Translations</param>
+        /// <returns>Merged Translations</returns>
+        private Translations mergeTranslations(Translations ts1, Translations ts2)
+        {
+            ts1.ToList().ForEach(t =>
+            {
+                if (ts2.ContainsKey(t.Key))
+                {
+                    t.Value.ToList().ForEach(kv => ts2[t.Key][kv.Key] = kv.Value);
+                }
+                else
+                {
+                    ts2[t.Key] = t.Value;
+                }
+            });
+
+            return ts2;
+        }
     }
 }

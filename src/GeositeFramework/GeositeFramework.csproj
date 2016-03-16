@@ -307,6 +307,9 @@
   <ItemGroup>
     <Content Include="plugins\subregion_toggle\plugin.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="locales\en.json" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

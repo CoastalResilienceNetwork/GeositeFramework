@@ -302,6 +302,11 @@ require([
                 html = sidebarTemplate(data);
 
             view.$('.bottom.side-nav').empty().append(html);
+
+            // Internationalization
+            if ($.i18n) {
+                $(view.$el).localize();
+            }
         }
 
         // TODO: Sidebar links aren't in the prototype - do we have anything for them?

@@ -74,6 +74,8 @@
             N.app.syncedMapManager = new N.SyncedMapManager(N.app.models.screen);
 
             registerPopupHandlers();
+
+            internationalize(N.app.data.region.language);
         },
 
         showHashUrlPopup: function (hash) {
@@ -134,6 +136,25 @@
 
         });
     };
+
+    function internationalize(lng) {
+        var options = {
+                lng: lng,
+                fallbackLng: false,
+                keySeparator: false,
+                nsSeparator: false,
+                overloadTranslationOptionHandler: i18nextSprintfPostProcessor.overloadTranslationOptionHandler,
+                backend: {
+                    loadPath: 'languages/{{lng}}.json'
+                }
+            },
+            callback = function() {
+                i18nextJquery.init(i18next, $);
+                $('.i18n').localize();
+            };
+
+        i18next.use(i18nextXHRBackend).use(i18nextSprintfPostProcessor).init(options, callback);
+    }
 
     new N.TemplateLoader().load(N.app.templates);
 
