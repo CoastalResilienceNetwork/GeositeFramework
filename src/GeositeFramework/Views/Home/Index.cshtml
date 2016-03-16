@@ -175,8 +175,10 @@
                     </div>
                 </div>
                 <div id="legend-container-<%= paneNumber %>" class="legend">
-                    <div class="legend-header">Map Legend
-                        <a class="legend-close" title="Hide Legend" href="javascript:;">_</a></div>
+                    <div class="legend-header">
+                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    </div>
                     <div class="legend-body">
                         <div id="legend-<%= paneNumber %>"></div>
                     </div>
@@ -190,29 +192,29 @@
         <li class="divider"></li>
         <% if (isMain) { %>
             <% if (splitScreen) { %>
-                <li><a class="switch-screen" data-screen="0" title="View only Map 1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/>Full Map</a></li>
-                <li><a class="switch-screen" data-screen="1" title="View only Map 2" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/>Full Map</a></li>
+                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 1" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
+                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 2" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
             <% } else { %>
                 <li><a class="switch-screen" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
                     <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/>Switch To Map <%= alternatePaneNumber + 1 %>
                 </a></li>
-                <li><a class="split-screen" href="javascript:;" title="Split the current workspace into two workspaces"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
+                <li><a class="split-screen i18n" data-i18n="[title]Split the current workspace into two workspaces" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/><span class="i18n" data-i18n="Split View">Split View</span></a><li>
             <% } %>
             <li class="divider"></li>
-            <li><a href="javascript:;" class="permalink-button hide-for-tablet" title="Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
+            <li><a href="javascript:;" class="permalink-button hide-for-tablet i18n" data-i18n="[title]Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/><span class="i18n" data-i18n="Save & Share">Save &amp; Share</span></a></li>
             <% if (helpUrl) { %>
-                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet" title="Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help</a></li>
+                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet i18n" data-i18n="[title]Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/><span class="i18n" data-i18n="Help">Help</span></a></li>
             <% } %>
         <% } else { %>
             <li>
-                <a href="javascript:;" class="hide-for-tablet map-sync" title=<%= syncMaps ? '"Allow maps to show different extents"' : '"Force maps to show the same extent"' %>>
+                <a href="javascript:;" class="hide-for-tablet map-sync i18n" data-i18n=<%= syncMaps ? '"[title]Allow maps to show different extents"' : '"[title]Force maps to show the same extent"' %>>
                     <img class="icon" src="img/icons/icon_<%= syncMaps ? '' : 'un' %>link-views_up.png"/>
-                    <%= syncMaps ? 'Unlink' : 'Link' %> Maps
+                    <span class="i18n" data-i18n="<%= syncMaps ? 'Unlink Maps' : 'Link Maps' %>"><%= syncMaps ? 'Unlink' : 'Link' %> Maps</span>
                 </a>
             </li>
         <% } %>
         <% if (showExportButton) { %>
-            <li><a href="javascript:;" class="export-button hide-for-tablet" title="Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Export Page">Export Page</span></a></li>
         <% } %>
 
     </script>
