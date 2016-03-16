@@ -163,22 +163,23 @@
                         { "name": "Florida", "type":"dynamic", "displayName":"Florida Infrastructure", "showLayers": [
                                 {"id":28, "parentLayerId":-1 },
                                 {"id":29, "parentLayerId":28 },
-                                {"id":30, "parentLayerId":28 },
-                                {"id":31, "parentLayerId":28 },
-                                {"id":32, "parentLayerId":28 },
-                                {"id":33, "parentLayerId":-1 },
-                                {"id":34, "parentLayerId":33 },
-                                {"id":35, "parentLayerId":33 },
-                                {"id":36, "parentLayerId":33 },
-                                {"id":37, "parentLayerId":33 },
-                                {"id":38, "parentLayerId":33 },
-                                {"id":39, "parentLayerId":-1 },
-                                {"id":40, "parentLayerId":39 },
-                                {"id":41, "parentLayerId":39 },
-                                {"id":42, "parentLayerId":-1 },
-                                {"id":43, "parentLayerId":42 },
-                                {"id":44, "parentLayerId":42 },
-                                {"id":45, "parentLayerId":42 }
+                                {"id":30, "parentLayerId":29 },
+                                {"id":31, "parentLayerId":29 },
+                                {"id":32, "parentLayerId":29 },
+                                {"id":33, "parentLayerId":29 },
+                                {"id":34, "parentLayerId":28 },
+                                {"id":35, "parentLayerId":34 },
+                                {"id":36, "parentLayerId":34 },
+                                {"id":37, "parentLayerId":34 },
+                                {"id":38, "parentLayerId":34 },
+                                {"id":39, "parentLayerId":34 },
+                                {"id":40, "parentLayerId":28 },
+                                {"id":41, "parentLayerId":40 },
+                                {"id":42, "parentLayerId":40 },
+                                {"id":43, "parentLayerId":28 },
+                                {"id":44, "parentLayerId":43 },
+                                {"id":45, "parentLayerId":43 },
+                                {"id":46, "parentLayerId":43 }
                             ]
                         }   
                     ]
@@ -188,14 +189,15 @@
                     "services": [
                         { "name": "Florida", "type":"dynamic", "displayName":"Oyster Restoration Suitability", "description":"This section is for highlighting geographies where we have finer scale data for illustrating potential oyser reef restoration. Note: Oyster data layers not visible when zooming out beyond the 1:500,000 scale.", "showLayers": [
                                 {"id":47, "parentLayerId":-1 },
-                                {"id":48, "parentLayerId":-1 },
-                                {"id":49, "parentLayerId":48 },
-                                {"id":50, "parentLayerId":48 },
-                                {"id":51, "parentLayerId":48 },
-                                {"id":52, "parentLayerId":-1 },
-                                {"id":53, "parentLayerId":52 },
-                                {"id":54, "parentLayerId":52 },
-                                {"id":55, "parentLayerId":52 }
+                                {"id":48, "parentLayerId":47 },
+                                {"id":49, "parentLayerId":47 },
+                                {"id":50, "parentLayerId":49 },
+                                {"id":51, "parentLayerId":49 },
+                                {"id":52, "parentLayerId":49 },
+                                {"id":53, "parentLayerId":47 },
+                                {"id":54, "parentLayerId":53 },
+                                {"id":55, "parentLayerId":53 },
+                                {"id":56, "parentLayerId":53 }
                             ]
                         }   
                     ]
