@@ -112,6 +112,7 @@ namespace GeositeFramework
         {
             var translations = new Translations();
 
+            // Add all plugin translation files
             foreach (var plugin in data.PluginFolderNames)
             {
                 var pluginLocalesPath = HostingEnvironment.MapPath(String.Format("~/{0}/locales", plugin));
@@ -126,6 +127,7 @@ namespace GeositeFramework
                 }
             }
 
+            // Add core translation files
             var coreLocalesPath = HostingEnvironment.MapPath("~/locales");
             var coreTranslations = Directory
                 .GetFiles(coreLocalesPath, "*.json")
@@ -151,6 +153,12 @@ namespace GeositeFramework
             });
         }
 
+        /// <summary>
+        /// Reads a translation JSON file and returns a dictionary where
+        /// key is original phrase and value is translated phrase.
+        /// </summary>
+        /// <param name="filename">Translation File</param>
+        /// <returns>Dictionary of phrases and their translations</returns>
         private Dictionary<string, string> toTranslationDictionary(string filename)
         {
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));

@@ -303,8 +303,9 @@ require([
 
             view.$('.bottom.side-nav').empty().append(html);
 
-            // Internationalization
+            // If i18n has been initialized,
             if ($.i18n) {
+                // Internationalize everything with a data-i18n attribute
                 $(view.$el).localize();
             }
         }

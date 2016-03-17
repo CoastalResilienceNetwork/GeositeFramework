@@ -139,17 +139,28 @@
 
     function internationalize(lng) {
         var options = {
+                // The language to internationalize for
                 lng: lng,
+                // No fallback language necessary since we fallback to keyphrases
                 fallbackLng: false,
+                // Following two required for using gettext() style keyphrases
                 keySeparator: false,
                 nsSeparator: false,
+                // Allows the use of sprintf arguments in the main .t() function,
+                // e.g. i18next.t('Longitude %f, Latitude %f', lng, lat)
                 overloadTranslationOptionHandler: i18nextSprintfPostProcessor.overloadTranslationOptionHandler,
+                // Path to load translations from
                 backend: {
                     loadPath: 'languages/{{lng}}.json'
                 }
             },
             callback = function() {
+                // Once i18next is initialized, initialize the jQuery plugin
+                // which allows the use of data-i18n attributes
                 i18nextJquery.init(i18next, $);
+
+                // Internationalize everything tagged with .i18n by replacing
+                // its contents with that of the data-i18n attribute
                 $('.i18n').localize();
             };
 
