@@ -47,7 +47,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                         _onLayerSourceLoadError.apply(null, arguments);
                         _onLayerSourceLoaded(_url);
                     });
-                } 
+                }
             }
 
             function loadCatalogUsingResourceInfo(rootNode, layerConfigs) {
@@ -108,7 +108,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                 }
                 return node;
             }
-            
+
             function getOrMakeContainerNode(name, parentNode, type, config) {
                 var node;
                 if ((parentNode.children) && (parentNode.children.length > 0)) {
@@ -150,7 +150,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                 });
             }
 
-            // To show/hide an individual layer we have to specify all visible layers for the service. 
+            // To show/hide an individual layer we have to specify all visible layers for the service.
             // So we keep track of the visible layer ids on the folder node.
 
             function showOrHideLayer(node, shouldShow, map) {
@@ -175,7 +175,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                     }
                     wmsLayer.setVisibleLayers(visibleLayerIds);
                     serviceNode.visibleLayerIds = visibleLayerIds;
-                    
+
                     //check parent nodes if they are unchecked and show wms service layer
                     if ((serviceNode.checked == false) && (node.get('checked'))) {
                         node.parentNode.set('checked', true);
@@ -195,7 +195,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
 
             function setServiceState (folderNode, stateObject, map) {
                 var myStateObject = stateObject[folderNode.name];
-               
+
                if (myStateObject) {
                     if (folderNode.visibleLayerIds === undefined) {
                         map.addLayer(folderNode.wmsLayer);
@@ -228,7 +228,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                  stateObject[folderNode.name] = {
                     opacity: folderNode.opacity,
                     checked: folderNode.checked
-                };   
+                };
                 if (folderNode.visibleLayerIds && folderNode.visibleLayerIds.length > 0) {
                     stateObject[folderNode.name].visibleLayerIds = folderNode.visibleLayerIds;
                 }
@@ -238,7 +238,7 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                 folderNode.wmsLayer.setVisibleLayers([]);
                 folderNode.visibleLayerIds = [];
             }
-            
+
             function setOpacity(serviceNode, map, opacity) {
                 var wmsLayer = serviceNode.wmsLayer;
                 wmsLayer.setOpacity(opacity);

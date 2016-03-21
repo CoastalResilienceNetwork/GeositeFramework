@@ -558,7 +558,7 @@ define(["jquery",
             // state keys won't overwrite each other.  However, existing permalinks would break
             // if they don't contain the hash based on child ids, so this function makes the
             // decision on key name based on the presence of a version code embedded in the state.
-            // If no state is provided, it assumes you're generating a new code and will use 
+            // If no state is provided, it assumes you're generating a new code and will use
             // the current version.
             function getServiceUniqueKey(serviceNode, stateObject) {
                 var childIds = _.pluck(serviceNode.children, 'layerId').join(''),
@@ -572,7 +572,7 @@ define(["jquery",
                 } else if (stateObject) {
                     // State was passed in, but without a version.
                     // Assume code predates versioning and give "original", just name
-                    return serviceNode.name; 
+                    return serviceNode.name;
                 }
                 // State was not passed in, or the version was not 1.1 - use the new key
                 return comboKey;
@@ -647,7 +647,7 @@ define(["jquery",
                 return (!esriService || !esriService.visibleLayers || esriService.visibleLayers[0] === -1 ? [] : esriService.visibleLayers);
             }
 
-            // To show/hide an individual layer we have to specify all visible layers for the service. 
+            // To show/hide an individual layer we have to specify all visible layers for the service.
             // So we keep track of the visible layer ids on the service-level data node.
 
             function showOrHideLayer(node, shouldShow, map) {
@@ -684,7 +684,7 @@ define(["jquery",
                                 layerIds = _.without(layerIds, this.raw.layerId);
                             });
                         }
-						if (layerNode.visibleSubLayerIds) { 
+						if (layerNode.visibleSubLayerIds) {
 							_.each(layerNode.visibleSubLayerIds, function(subLayer) {
 								layerIds = _.without(layerIds, subLayer);
 							});

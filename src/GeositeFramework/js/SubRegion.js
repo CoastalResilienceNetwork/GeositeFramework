@@ -81,7 +81,7 @@
                 }
             }
         });
-        
+
         // If click-activation is enabled, wire up the event
         if (subregions.clickToFocus) {
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-over', 'pointer');
@@ -141,7 +141,7 @@
 
         this.subRegionLayer.hide();
         changeSubregionActivation(this.activateCallbacks, subRegionGraphic.attributes);
-        
+
         // If activating a saved state, the map state bbox should take precedent over the
         // configured subregion bbox
         if (!preventZoom) {

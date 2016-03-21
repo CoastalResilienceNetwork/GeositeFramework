@@ -74,7 +74,7 @@ define(['esri/geometry/Extent'],
                 // This is a separate method because it can be called:
                 // 1) When a new request is made.
                 // 2) When the input box is cleared.
-                
+
                 if (this._activeRequest !== null) {
                     this._activeRequest.abort();
                 } else {
@@ -84,7 +84,7 @@ define(['esri/geometry/Extent'],
 
 
             geocodeAddress: function () {
-                // Make an ajax request to the geocoder URL provided by 
+                // Make an ajax request to the geocoder URL provided by
                 // the plugin conf. Returns an array of candidates with
                 // latlng values on success, an error on failure.
                 var model = this,
@@ -98,10 +98,10 @@ define(['esri/geometry/Extent'],
 
                 model.set('showingLocationBox', true);
 
-                model._activeRequest = $.jsonp({ 
+                model._activeRequest = $.jsonp({
                     url: url,
                     timeout: 12000,
-                    success: function (results) { 
+                    success: function (results) {
                         if (results.locations.length > 0) {
                             model.set('addressCandidates', results.locations);
                         } else {
@@ -121,7 +121,7 @@ define(['esri/geometry/Extent'],
         var UiInputView = Backbone.View.extend({
 
             className: "pluginZoomTo",    // CSS class for div autocreated by this view
-            
+
             // required for ALL click events
             _cancelEventBubble: function(event) {
                 if (event.stopPropagation) {
@@ -134,7 +134,7 @@ define(['esri/geometry/Extent'],
             events: {
                 // Because this plugin renders some extra UI features into
                 // the <a> tag used as the plugin icon, click events do not
-                // behave quite as expected. For example, a click event on 
+                // behave quite as expected. For example, a click event on
                 // the plugin will try to take focus, but the subsequent
                 // click event that registers on the <a> tag will rerender
                 // the dom elements and lose focus. Therefore, for this plugin
@@ -167,7 +167,7 @@ define(['esri/geometry/Extent'],
 
                         var x = candidate.feature.geometry.x,
                             y = candidate.feature.geometry.y,
-                            $fragment = $(_.template(locationTemplate)({ 
+                            $fragment = $(_.template(locationTemplate)({
                                 address: candidate.name,
                                 x: x,
                                 y: y
@@ -178,7 +178,7 @@ define(['esri/geometry/Extent'],
                         });
                         return $fragment;
                     };
-                
+
                     return _.map(candidates, $wrapHtml);
             },
 
@@ -198,7 +198,7 @@ define(['esri/geometry/Extent'],
 
                 if (event.which === 13) {
                     this.model.geocodeAddress();
-                    
+
                     // I'm not entirely sure what the default action of IE is
                     // when the user presses the enter key in a text box, but
                     // whatever it is, it makes this plugin break.  So don't
@@ -251,6 +251,7 @@ define(['esri/geometry/Extent'],
                     view.$('.pluginZoomTo-tool').prop('title', view.$el.parent().prop('title'));
                     view.$el.parent().prop('title', '');
                 });
+
                 return view;
             },
 
@@ -265,5 +266,5 @@ define(['esri/geometry/Extent'],
 
         // This enables the plugin to use these backbone classes
         return { UiInput: UiInput, UiInputView: UiInputView };
-        
+
     });

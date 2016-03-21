@@ -75,7 +75,7 @@ require([
 
             this.activateLaunchpadEvent('launchpad:activate-subregion', eventData);
         },
-        
+
         activateScenario: function(e) {
             var self = this,
                 categories = _(this.model.get('categories')),
@@ -98,7 +98,7 @@ require([
                 categories.each(function(category) {
                     if (issue) { return false; }
 
-                    issue = _(category.issues).findWhere({id: issueId}) 
+                    issue = _(category.issues).findWhere({id: issueId})
                 });
 
                 if (issue) {
@@ -124,7 +124,7 @@ require([
                 extent: this.initialExtent
             });
         },
-        
+
         activateLaunchpadEvent: function(eventName, eventData) {
             this.close();
             N.app.dispatcher.trigger(eventName, eventData);

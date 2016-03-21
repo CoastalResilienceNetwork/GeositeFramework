@@ -33,11 +33,11 @@ require(['use!Geosite',
             // the AGS to achieve better export results.  Check the region.json to
             // enable the custom template.
             printLayoutTemplatePrefix: 'Letter ANSI A',
-            // By default, the ESRI print task reserves space in the 
+            // By default, the ESRI print task reserves space in the
             // template for the legend, which doesn't resize.  To reclaim
             // the space we use a different template for Legend/No Legend
             // but this won't work if you are not using a custom layout
-            useDifferentTemplateWithLegend: false,    
+            useDifferentTemplateWithLegend: false,
             exportIncludeLegend: false,
             // set internally, listened by view
             submitEnabled: true,
@@ -45,12 +45,12 @@ require(['use!Geosite',
             // Pane number of map to export
             paneNumber: 0
         },
-        
+
         initialize: function () {
             var model = this;
             model.setupDependencies();
         },
-        
+
         submitExport: function() {
             if (this.submissionIsValid()) {
                 this.set('submitEnabled', false);
@@ -63,7 +63,7 @@ require(['use!Geosite',
         submissionIsValid: function () {
             return _.contains(["Portrait", "Landscape"], this.get('exportOrientation'));
         },
-        
+
         setupDependencies: function () {
             /*
               Creates an interface for the rest of the model to interact
@@ -279,11 +279,11 @@ require(['use!Geosite',
 
         initialize: function () {
             var view = this;
-            
+
             // show/hide indicator when search is in progress
             view.listenTo(view.model, "change:submitEnabled", function () {
-                if (view.model.get("submitEnabled") === true) { 
-                    view.enableSubmit(); 
+                if (view.model.get("submitEnabled") === true) {
+                    view.enableSubmit();
                 } else {
                     view.waitForPrintRequest();
                 }
