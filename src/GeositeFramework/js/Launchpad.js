@@ -60,6 +60,10 @@ require([
                 maskopacity: 40,
                 openjs: function () {
                     self.setElement($('.launchpad'));
+
+                    if ($.i18n) {
+                        $(self.$el).localize();
+                    }
                 },
                 closejs: function () {
                     self.remove();

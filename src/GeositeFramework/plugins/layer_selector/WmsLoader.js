@@ -83,7 +83,8 @@ define(["use!underscore", "esri/layers/WMSLayer", "esri/layers/WMSLayerInfo"],
                 });
                 dojo.connect(wmsLayer, "onError", function(err) {
                     esri.config.defaults.io.timeout = 60000;
-                    alert("Error: Unable to load data from this service. Either the service is unavailable or <br> the request can't be completed at the current map scale or browser size.");
+                    var alertMsg = i18next.t("Error: Unable to load data from this service. Either the service is unavailable or the request can't be completed at the current map scale or browser size.");
+                    alert(alertMsg);
                 });
             }
 

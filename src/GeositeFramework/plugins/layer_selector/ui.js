@@ -75,6 +75,10 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 this.onContainerSizeChanged();
 
                 enableIconClick();
+
+                if ($.i18n) {
+                    $(_container).localize();
+                }
             };
 
             this.hideAll = function () {

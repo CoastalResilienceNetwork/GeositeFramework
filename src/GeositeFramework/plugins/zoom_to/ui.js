@@ -8,12 +8,12 @@ define(['esri/geometry/Extent'],
         ////////////////////////////////
 
         var inputTemplate = ['<div class="pluginZoomTo-tool"></div>',
-                             '<input type="text" placeholder="Search by Address" value="<%= inputValue %>" />',
+                             '<input type="text" class="i18n" data-i18n="[placeholder]Search by Address" placeholder="Search by Address" value="<%= inputValue %>" />',
                              '<div id="pluginZoomTo-clearSearch">&#10006;</div>',
                              '<div id="pluginZoomTo-choices"></div>'
                              ].join(""),
             locationTemplate = '<a href="javascript:;"><%= address %></a>',
-            searchErrorText = "There was an error completing your request.";
+            searchErrorText = i18next.t("There was an error completing your request.");
 
 
         ////////////////////////////////
@@ -186,6 +186,10 @@ define(['esri/geometry/Extent'],
                 this.$("#pluginZoomTo-choices")
                     .empty()
                     .append(content);
+
+                if ($.i18n) {
+                    $(this.$el).localize();
+                }
             },
 
             centerAndZoom: function (x, y, rawExtentObj) {

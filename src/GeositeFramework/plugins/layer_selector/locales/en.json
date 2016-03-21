@@ -1,0 +1,11 @@
+{
+    "Map Layers": "Map Layers",
+    "Configure and control layers to be overlayed on the base map.": "Configure and control layers to be overlayed on the base map.",
+    "No description or metadata available for this map service.": "No description or metadata available for this map service.",
+    "No description or metadata available for this layer.": "No description or metadata available for this layer.",
+    "Clear All": "Clear All",
+    "Filter Map Layers": "Filter Map Layers",
+    "Description:": "Description:",
+    "Opacity:": "Opacity",
+    "Error: Unable to load data from this service. Either the service is unavailable or the request can't be completed at the current map scale or browser size.": "Error: Unable to load data from this service. Either the service is unavailable or the request can't be completed at the current map scale or browser size."
+}

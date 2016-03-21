@@ -299,6 +299,11 @@
             this.toggleMapControlPositions();
             this.toggleMapBorder();
             this.$el.html(this.template(this.model.attributes));
+
+            if ($.i18n) {
+                $(this.$el).localize();
+            }
+
             return this;
         },
 

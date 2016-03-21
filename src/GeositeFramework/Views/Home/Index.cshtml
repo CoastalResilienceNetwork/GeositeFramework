@@ -195,8 +195,8 @@
                 <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 1" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
                 <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 2" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
             <% } else { %>
-                <li><a class="switch-screen" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
-                    <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/>Switch To Map <%= alternatePaneNumber + 1 %>
+                <li><a class="switch-screen i18n" data-i18n="[title]Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
+                    <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/><span class="i18n" data-i18n="Switch to Map <%= alternatePaneNumber + 1 %>">Switch To Map <%= alternatePaneNumber + 1 %>
                 </a></li>
                 <li><a class="split-screen i18n" data-i18n="[title]Split the current workspace into two workspaces" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/><span class="i18n" data-i18n="Split View">Split View</span></a><li>
             <% } %>
@@ -250,16 +250,16 @@
                                                                                              Position:absolute to eliminate jump in dojo drag. -->
             <div class="plugin-container">
                 <div class="plugin-container-header">
-                    <h6><%- title %></h6>
+                    <h6 class="i18n" data-i18n="<%- title %>"><%- title %></h6>
                     <a class="plugin-off" href="javascript:;">&#10006;</a>
                     <a class="plugin-close" href="javascript:;">&#95;</a>
 
                     <% if (hasCustomPrint) { %>
-                        <a class="plugin-print" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
+                        <a class="plugin-print i18n" data-i18n="[title]Print Contents" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
                     <% } %>
 
                     <% if (isHelpButtonVisible) { %>
-                        <a class="plugin-help" href="javascript:;" title="View the info-graphic">?</a>
+                        <a class="plugin-help i18n" data-i18n="[title]View the info-graphic" href="javascript:;" title="View the info-graphic">?</a>
                     <% } %>
                 </div>
                 <div class="plugin-container-inner"></div>
@@ -269,7 +269,7 @@
 
     <script type="text/template" id="template-result-of-identify">
         <div>
-            <div class="identify-section"><%- pluginTitle %></div>
+            <div class="identify-section i18n" data-i18n="<%- pluginTitle %>"><%- pluginTitle %></div>
             <div class="identify-result"></div>
         </div>
     </script>
@@ -278,7 +278,7 @@
     <script type="text/template" id="plugin-result-of-identify">
         <div class="result-of-identify collapsed">
             <div data-class="result-of-identify-inner">
-                <div class="identify-header-label"><span>Layer:</span><%= layerName %></div>
+                <div class="identify-header-label"><span class="i18n" data-i18n="Layer:">Layer:</span><%= layerName %></div>
                 <% if (value) { %>
                     <div class="identify-header-label">
                         <span><%= displayFieldName || 'Value'%>:</span><%= value %>
@@ -305,19 +305,19 @@
     <script type="text/template" id="template-export-window">
         <div class="popover">
             <div class="popover-header">
-                <h2>Map <span class="export-pane-number"></span> Export</h2>
+                <h2><span class="i18n" data-i18n="Map">Map</span> <span class="export-pane-number"></span> <span class="i18n" data-i18n="Export">Export</span></h2>
             </div>
             <div class="popover-content">
                 <div class="row">
-                    <h5>Title (Optional):</h5> <input type="text" id="export-title"/>
+                    <h5 class="i18n" data-i18n="Title (Optional):">Title (Optional):</h5> <input type="text" id="export-title"/>
                     <div class="small-4 columns">
-                        <h5>Orientation</h5>
-                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/>Landscape</label>
-                        <label><input type="radio" name="export-orientation" value="Portrait"/>Portrait</label>
+                        <h5 class="i18n" data-i18n="Orientation">Orientation</h5>
+                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/><span class="i18n" data-i18n="Landscape">Landscape</label>
+                        <label><input type="radio" name="export-orientation" value="Portrait"/><span class="i18n" data-i18n="Portrait">Portrait</label>
                     </div>
                     <div class="small-4 columns">
-                         <h5>Legend</h5>
-                        <label><input type="checkbox" name="export-include-legend" />Include Layer Legend</label>
+                         <h5 class="i18n" data-i18n="Legend">Legend</h5>
+                        <label><input type="checkbox" name="export-include-legend" /><span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
                     </div>
                     <div class="small-4 columns">
                         <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
@@ -328,7 +328,7 @@
                         <div class="export-output-area"></div>
                     </div>
                     <div class="right-col">
-                        <a href="#" id="export-button" class="button radius" disabled="disabled">Generate Map Export</a>
+                        <a href="#" id="export-button" class="button radius i18n" data-i18n="Generate Map Export" disabled="disabled">Generate Map Export</a>
                     </div>
                 </div>
             </div>
@@ -337,7 +337,7 @@
     </script>
 
     <script type="text/template" id="template-export-url">
-            <a target="_blank" class="export-output-url" href="<%= url %>">View your printable document.</a>
+            <a target="_blank" class="export-output-url i18n" data-i18n="View your printable document." href="<%= url %>">View your printable document.</a>
     </script>
 
     <!-- Adding any white space between the textarea and the iframe
@@ -350,20 +350,20 @@
     <script type="text/template" id="permalink-share-window">
         <div class="popover">
             <div class="popover-header">
-                <h2>Save & Share</h2>
+                <h2 class="i18n" data-i18n="Save & Share">Save & Share</h2>
             </div>
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
-                  <label>Permalink:<input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
-                  <p>Share your map with friends or family, or just bookmark the link for later.</p>
-                  <label>Embed this map in your website:</label>
+                  <label><span class="i18n" data-i18n="Permalink:">Permalink:</span><input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
+                  <p class="i18n" data-i18n="Share your map with friends or family, or just bookmark the link for later.">Share your map with friends or family, or just bookmark the link for later.</p>
+                  <label class="i18n" data-i18n="Embed this map in your website:">Embed this map in your website:</label>
                   <div id="iframe-embed"></div>
-                  <label>Embed Width (px)
+                  <label><span class="i18n" data-i18n="Embed Width (px)">Embed Width (px)</span>
                     <input type="number" class="embed-size width" value="<%= width %>" /></label>
-                  <label>Embed Height (px)
+                  <label><span class="i18n" data-i18n="Embed Height (px)">Embed Height (px)</span>
                     <input type="number" class="embed-size height" value="<%= height %>" /></label>
                   <em>
-                    <label>Need the save code for this map? <a href="javascript:void(0);" class="show-long-permalink">Get it here.</a>
+                    <label><span class="i18n" data-i18n="Need the save code for this map?">Need the save code for this map?</span> <a href="javascript:void(0);" class="show-long-permalink i18n" data-i18n="Get it here.">Get it here.</a>
                       <input class="code-like" id="long-permalink-textbox" type="text" value="<%= hash %>"/>
                     </label>
                   </em>
@@ -386,12 +386,12 @@
                 <div class="row">
                     <div class="well">
                         <div class="description">
-                            <h3>Pick a Geography</h3>
+                            <h3 class="i18n" data-i18n="Pick a Geography">Pick a Geography</h3>
                             <p><% if (typeof(subRegionDescription) !== "undefined") { %> <%= subRegionDescription %> <% } %></p>
                         </div>
                         <div class="thumbs">
                             <ul>
-                                <li class="free-explore"><i class="fa fa-globe"></i><label>Explore the map</label></li>
+                                <li class="free-explore"><i class="fa fa-globe"></i><label class="i18n" data-i18n="Explore the map">Explore the map</label></li>
                                 <% _.each(subregions.areas, function(subregion) { %>
                                 <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
                                 <% }); %>
@@ -432,7 +432,7 @@
 
     <script type="text/template" id="template-subregion">
         <div class="subregion-header">
-            <p>You are currently in
+            <p><span class="i18n" data-i18n="You are currently in">You are currently in</span>
                 <select class="header-region-selection">
                     <% _.each(subregions, function(region) { %>
                         <option <%= region.id=== selectedId ? "selected" : "" %>
@@ -441,18 +441,18 @@
                     <% }); %>
                 </select>
             </p>
-            <p class="leave"><a href="javascript:void(0);"><i class="fa fa-times-circle"></i>Leave Region</a></p>
+            <p class="leave"><a href="javascript:void(0);"><i class="fa fa-times-circle"></i><span class="i18n" data-i18n="Leave Region">Leave Region</span></a></p>
         </div>
     </script>
 
     <script type="text/template" id="template-map-preview">
         <div id="plugin-print-preview">
             <div class="popover popover-header">
-                <h2><%= pluginName %> - Print Preview</h2>
+                <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Preview">Print Preview</span></h2>
             </div>
             <div class="print-preview-container">
-                <button id="print-preview-print" class="button radius">Print</button>
-                <p class="instructions">Zoom to the view that you want printed in your map.</p>
+                <button id="print-preview-print" class="button radius i18n" data-class="Print">Print</button>
+                <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
                 <div id="plugin-print-preview-map"></div>
             </div>
         </div>

@@ -80,6 +80,10 @@
                             view.selectText($domElement);
                         }
                     );
+
+                    if ($.i18n) {
+                        $(view.$el).localize();
+                    }
                 },
                 closejs: function() {
                     view.remove();

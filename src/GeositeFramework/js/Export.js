@@ -56,7 +56,7 @@ require(['use!Geosite',
                 this.set('submitEnabled', false);
                 this.createPDF();
             } else {
-                this.set('outputText', "Please enter all required fields.");
+                this.set('outputText', i18next.t("Please enter all required fields."));
             }
         },
 
@@ -104,7 +104,7 @@ require(['use!Geosite',
                     }
                 },
                 onFailure = function() {
-                    new Logger('export').warn(null, 'Failed to load service config');
+                    new Logger('export').warn(null, i18next.t('Failed to load service config'));
                 },
                 onFinish = function() {
                     defer.resolve(config);
@@ -194,7 +194,7 @@ require(['use!Geosite',
                 },
                 onFailure = _.debounce(function() {
                     var result = [];
-                    result.push('There was an error processing your request.');
+                    result.push(i18next.t('There was an error processing your request.'));
                     if (attempts > 0) {
                         var s = attempts == 1 ? '' : 's';
                         result.push('Trying again ' + attempts + ' more time' + s + '...');
@@ -300,6 +300,11 @@ require(['use!Geosite',
                 .append(body);
             var paneNumber = (+this.model.get('paneNumber')) + 1;
             this.$('.export-pane-number').text(paneNumber);
+
+            if ($.i18n) {
+                $(this.$el).localize();
+            }
+
             return this;
         }
     });

@@ -13,7 +13,7 @@ require(['use!Geosite',
     'use strict';
 
     var IDENTIFY_TIMEOUT = 5000,
-        TIMEOUT_MESSAGE = 'Failed to return results within ' + IDENTIFY_TIMEOUT / 1000 + ' seconds',
+        TIMEOUT_MESSAGE = i18next.t('Failed to return results within %f seconds', IDENTIFY_TIMEOUT / 1000),
         DEFAULT_WINDOW_WIDTH = 300,
         DEFAULT_WINDOW_HEIGHT = 600;
 
@@ -80,10 +80,14 @@ require(['use!Geosite',
     function showIdentifyResults(infoWindow, $resultsContainer, width, height) {
         $(infoWindow.domNode).find('.spinner').addClass('hidden');
         if ($resultsContainer.children().length === 0) {
-            $resultsContainer.append($('<div>').text('No information is available for this location.'));
+            $resultsContainer.append($('<div>').text(i18next.t('No information is available for this location.')));
         }
         infoWindow.resize(width, height);
         infoWindow.setContent($resultsContainer.get(0));
+
+        if ($.i18n) {
+            $(infoWindow.domNode).localize();
+        }
     }
 
 });

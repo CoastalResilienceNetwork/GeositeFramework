@@ -371,6 +371,12 @@ require(['use!Geosite',
                     view.$legendContainer.hide();
                 }
             }
+
+            if ($.i18n) {
+                $(view.$uiContainer).localize();
+                $(view.$el).localize();
+            }
+
             return view;
         }
 
@@ -675,7 +681,7 @@ require(['use!Geosite',
                     }
                 }, checkboxnode);
 
-                var lbl = $("<label>Don't Show This on Start</label>")
+                var lbl = $("<label>" + i18next.t("Don't Show This on Start") + "</label>")
                     .attr('for', nscheckBox.id);
                 this.$el.append(lbl);
 
@@ -689,6 +695,10 @@ require(['use!Geosite',
                         pluginObject.resize();
                     }
                 }, buttonnode);
+
+                if ($.i18n) {
+                    $(this.$el).localize();
+                }
             }
         });
     }());
@@ -715,6 +725,10 @@ require(['use!Geosite',
                     .empty()
                     .append($container.append(pluginObject.renderLauncher()))
                     .append(toolsMarkup);
+            }
+
+            if ($.i18n) {
+                $(view.$el).localize();
             }
 
             return view;

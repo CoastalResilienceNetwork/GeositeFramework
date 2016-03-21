@@ -41,7 +41,7 @@ define(
         }
 
         return declare(PluginBase, {
-            toolbarName: "FullExtent",
+            toolbarName: "Full Extent",
             fullName: "Zoom out to the default map extent",
             toolbarType: "map",
             allowIdentifyWhenActive: true,

@@ -87,7 +87,7 @@ define(["jquery",
                         node = makeGroupContainerNode(folderConfig, parentNode.parent, "service");
                         node.checked = false;
                         node.type = "group-service";
-                        node.description = folderConfig.description || "No description or metadata available for this map service.";
+                        node.description = folderConfig.description || i18next.t("No description or metadata available for this map service.");
                         node.groupAsService = true;
                     } else {
                         node = makeGroupContainerNode(folderConfig, parentNode.parent, "folder");
@@ -804,7 +804,7 @@ define(["jquery",
                     dataType: 'jsonp',
                     url: url + "?f=json",
                     success: function(metadata) {
-                        layerNode.description = metadata.description || "No description or metadata available for this layer.";
+                        layerNode.description = metadata.description || i18next.t("No description or metadata available for this layer.");
                         layerNode.extent = new Extent(metadata.extent);
                         layerNode.url = url;
                         layerNode.opacity = "setByService";
