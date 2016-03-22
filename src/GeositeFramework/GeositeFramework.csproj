@@ -176,6 +176,10 @@
     <Content Include="js\BasemapSelector.js" />
     <Content Include="js\HelpOverlay.js" />
     <Content Include="js\Launchpad.js" />
+    <Content Include="js\lib\i18next-2.2.0.min.js" />
+    <Content Include="js\lib\i18next-jquery-0.0.14.min.js" />
+    <Content Include="js\lib\i18next-SprintfPostProcessor-0.2.2.min.js" />
+    <Content Include="js\lib\i18next-XHRBackend-0.3.0.min.js" />
     <Content Include="js\lib\pageguide.min.js" />
     <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
@@ -302,6 +306,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\subregion_toggle\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="locales\en.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

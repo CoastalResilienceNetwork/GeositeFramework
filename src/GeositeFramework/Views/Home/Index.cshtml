@@ -175,8 +175,10 @@
                     </div>
                 </div>
                 <div id="legend-container-<%= paneNumber %>" class="legend">
-                    <div class="legend-header">Map Legend
-                        <a class="legend-close" title="Hide Legend" href="javascript:;">_</a></div>
+                    <div class="legend-header">
+                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    </div>
                     <div class="legend-body">
                         <div id="legend-<%= paneNumber %>"></div>
                     </div>
@@ -190,42 +192,42 @@
         <li class="divider"></li>
         <% if (isMain) { %>
             <% if (splitScreen) { %>
-                <li><a class="switch-screen" data-screen="0" title="View only Map 1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/>Full Map</a></li>
-                <li><a class="switch-screen" data-screen="1" title="View only Map 2" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/>Full Map</a></li>
+                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 1" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
+                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 2" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
             <% } else { %>
                 <li><a class="switch-screen" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
                     <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/>Switch To Map <%= alternatePaneNumber + 1 %>
                 </a></li>
-                <li><a class="split-screen" href="javascript:;" title="Split the current workspace into two workspaces"><img class="icon" src="img/icons/icon_split_up.png"/>Split View</a><li>
+                <li><a class="split-screen i18n" data-i18n="[title]Split the current workspace into two workspaces" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/><span class="i18n" data-i18n="Split View">Split View</span></a><li>
             <% } %>
             <li class="divider"></li>
-            <li><a href="javascript:;" class="permalink-button hide-for-tablet" title="Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/>Save &amp; Share</a></li>
+            <li><a href="javascript:;" class="permalink-button hide-for-tablet i18n" data-i18n="[title]Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/><span class="i18n" data-i18n="Save & Share">Save &amp; Share</span></a></li>
             <% if (helpUrl) { %>
-                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet" title="Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/>Help</a></li>
+                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet i18n" data-i18n="[title]Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/><span class="i18n" data-i18n="Help">Help</span></a></li>
             <% } %>
         <% } else { %>
             <li>
-                <a href="javascript:;" class="hide-for-tablet map-sync" title=<%= syncMaps ? '"Allow maps to show different extents"' : '"Force maps to show the same extent"' %>>
+                <a href="javascript:;" class="hide-for-tablet map-sync i18n" data-i18n=<%= syncMaps ? '"[title]Allow maps to show different extents"' : '"[title]Force maps to show the same extent"' %>>
                     <img class="icon" src="img/icons/icon_<%= syncMaps ? '' : 'un' %>link-views_up.png"/>
-                    <%= syncMaps ? 'Unlink' : 'Link' %> Maps
+                    <span class="i18n" data-i18n="<%= syncMaps ? 'Unlink Maps' : 'Link Maps' %>"><%= syncMaps ? 'Unlink' : 'Link' %> Maps</span>
                 </a>
             </li>
         <% } %>
         <% if (showExportButton) { %>
-            <li><a href="javascript:;" class="export-button hide-for-tablet" title="Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/>Export Page</a></li>
+            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Export Page">Export Page</span></a></li>
         <% } %>
 
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-            <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;">
+            <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;">
                 <img src="<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
-                <div><%- pluginObject.toolbarName %></div>
+                <div class="i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></div>
             </a>
     </script>
 
     <script type="text/template" id="template-topbar-plugin">
-            <a class="plugin-launcher" title="<%=fullName%>" href="javascript:;"></a>
+            <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;"></a>
     </script>
 
     <script type="text/template" id="template-topbar-tools">
@@ -498,6 +500,10 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
     <script src="js/lib/jquery.mousewheel.min.js"></script>
     <script src="js/lib/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/lib/i18next-2.2.0.min.js"></script>
+    <script src="js/lib/i18next-XHRBackend-0.3.0.min.js"></script>
+    <script src="js/lib/i18next-jquery-0.0.14.min.js"></script>
+    <script src="js/lib/i18next-SprintfPostProcessor-0.2.2.min.js"></script>
 
     <script src="//js.arcgis.com/o/232546/geosite-v1.0.9/dojo/dojo.js"></script>
     <script src="Scripts/json2.min.js"></script> <!-- Can be removed when IE8 support is dropped -->
