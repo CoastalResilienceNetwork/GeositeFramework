@@ -3,7 +3,7 @@
     function (declare, PluginBase) {
 
         return declare(PluginBase, {
-            toolbarName: "LegendDisplay",
+            toolbarName: "Legend Display",
             fullName: "Show/Hide the map legend",
             toolbarType: "map",
             allowIdentifyWhenActive: true,
@@ -13,7 +13,7 @@
                 declare.safeMixin(this, args);
                 this.$legendEl = $(this.legendContainer).parents('.legend');
             },
-            
+
             renderLauncher: function () {
                 return '<div class="legend-display"></div>';
             },
