@@ -152,40 +152,37 @@
         ]
     },
     {
-        "displayName": "WMS Example Layers",
+        "displayName": "LA Map Layers",
         "server": {
-            "type": "wms",
+            "type": "ags",
             "layerType": "dynamic",
-            "url": "http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/",
-            "name": "ESRI_StatesCitiesRivers_USA"
+            "url": "http://54.241.26.242/arcgis/rest/services/LA_Freshwater",
+            "name": "LA_Map_Layers",
+            "reportGpUrl": "http://50.18.215.52/arcgis/rest/services/Louisiana_Freshwater/DrawAndReport/GPServer/getDrawAndReportDataPath",
+            "reportDbPath": "D:/arcgisserver/directories/arcgissystem/arcgisinput/Louisiana_Freshwater/Managed_Areas2.MapServer/extracted/v101/lfa.gdb"
         },
         "includeLayers": [
             {
-                "name": "States"
-            },
-            {
-                "name": "Cities"
-            },
-            {
-                "name": "Rivers"
-            }
-        ]
-    },
-    {
-        "displayName": "Global Risk Data Platform",
-        "server": {
-            "type": "wms",
-            "layerType": "dynamic",
-            "url": "http://preview.grid.unep.ch:8080/geoserver/wms"
-        },
-        "includeLayers": [
-            {
-                "name": "Cities_esri",
-                "displayName": "Cities"
-            },
-            {
-                "name": "Lakes_glwd1",
-                "displayName": "Lakes"
+                "name": "Managed Areas",
+                "includeLayers": [
+                    {
+                        "name": "Wildlife Management Areas",
+                        "includeAllLayers": true,
+                        "reportDbLayerName": "All_WMA",
+                        "reports": [
+                            {
+                                "display": "Wildlife Management Area Total Area",
+                                "units": "sq km",
+                                "field": ""
+                            },
+                            {
+                                "display": "Wildlife Management Areas",
+                                "units": "sq km",
+                                "field": "NAME"
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }

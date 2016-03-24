@@ -1,0 +1,78 @@
+﻿<script type="text/template" id="plugin">
+<% if (reportData && reportData.length > 0) { %>
+    <p>
+      <button class="start-drawing button radius"
+          <%= (isDrawing ? 'disabled="disabled"' : '') %>>Redraw area of interest</button>
+    </p>
+
+    <p><button class="button radius small download">Download Results</button></p>
+
+    <% _.each(reportData, function(item) { %>
+      <h4><%- item.layer.getDisplayName() %></h4>
+      <% if (item.reports.error) { %>
+        <p><%- item.reports.error %></p>
+
+      <% } else { %>
+        <% _.each(item.reports, function(report) { %>
+          <h5><%- report.reportLayer.display %></h5>
+          <h6 class="plugin-report-clean-text"><%- report.reportLayer.field %></h6>
+          <% if (report.rows.length) { %>
+            <table class="report-plugin-result-table">
+            <% _.each(report.rows, function(row) { %>
+              <tr>
+                <td class="plugin-report-clean-text">
+                  <% if (row.Category) { %>
+                    <%- row.Category %>
+                  <% } else { %>
+                    <span class="muted">Unknown</span>
+                  <% } %>
+                </td>
+                <td><%- Azavea.numberToString(row.Amount, 2) %>
+                          <%- report.reportLayer.units %></td>
+              </tr>
+            <% }) %>
+            </table>
+          <% } else { %>
+            <p>No values for this layer in your area of interest.</p>
+          <% } %>
+        <% }) %>
+
+      <% } %>
+    <% }) %>
+
+  <% } else { %>
+    <p>
+      Draw and report is a way to view specific data by drawing a custom
+      shape on the map. Your report will contain:
+    </p>
+
+    <% if (!layers.length) { %>
+      <p><em>No layers have been selected yet.</em></p>
+
+    <% } else { %>
+      <ul>
+        <% _.each(layers, function(layer) { %>
+          <li>
+            <strong><%- layer.getDisplayName() %></strong>
+            <% if (layer.getReports().length > 0) { %>
+              <ul>
+                <% _.each(layer.getReports(), function(report) { %>
+                  <li><%- report.display %></li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p><em>No reports have been configured for this layer.</em></p>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+
+      <p>
+        <button class="start-drawing button radius"
+            <%= (isDrawing ? 'disabled="disabled"' : '') %>>Draw area of interest</button>
+      </p>
+
+    <% } %>
+  <% } %>
+  <div class="loading" <%= (isLoading ? 'style="display:block"' : '') %>></div>
+</script>

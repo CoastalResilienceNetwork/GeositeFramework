@@ -135,6 +135,16 @@ define([
                 return this.savedState.currentRegion || 'main';
             },
 
+            setTab: function(tabName) {
+                return this.clone({
+                    tabName: tabName
+                });
+            },
+
+            getTab: function() {
+                return this.savedState.tabName || 'layers';
+            },
+
             // Return new State combined with `data`.
             clone: function(data) {
                 return new State(_.assign({}, this.getState(), data));

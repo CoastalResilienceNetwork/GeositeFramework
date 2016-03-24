@@ -139,6 +139,17 @@ define([
                 return this.layers;
             },
 
+            // Return flat list of selected layers (leaf nodes only).
+            getSelectedLeafNodes: function() {
+                var result = [];
+                this.walk(function(layer) {
+                    if (!layer.isFolder() && layer.isSelected()) {
+                        result.push(layer);
+                    }
+                });
+                return result;
+            },
+
             findLayer: function(layerId) {
                 return util.find(this.layers, function(layer) {
                     return layer.findLayer(layerId);

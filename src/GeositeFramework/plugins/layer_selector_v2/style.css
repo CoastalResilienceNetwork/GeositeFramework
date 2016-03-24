@@ -3,7 +3,12 @@
     margin-left: 0;
 }
 
-.layer-selector2 .loading {
+.layer-selector2 .tab-layers,
+.layer-selector2 .tab-report {
+    position: relative;
+}
+
+.layer-selector2 .tab-layers .loading {
     display: none;
     position: absolute;
     top: 0;
@@ -175,3 +180,27 @@
         text-align: center;
         border: none;
     }
+
+.layer-selector2 dl.tabs dd {
+        cursor: pointer;
+    }
+    .layer-selector2 .tabs {
+        margin-bottom: 0px;
+    }
+    .layer-selector2 .tabs dd, .layer-selector2 .tabs. li {
+        font-weight: 700;
+    }
+    .layer-selector2 .tabs dd.active, .layer-selector2 .tabs li.active {
+        border-top: 2px solid #2ba6cb;
+        margin-top: -2px;
+    }
+    .layer-selector2 .tab-body {
+        display: none;
+    }
+    .layer-selector2 .tab-body.active {
+        display: block;
+    }
+
+.layer-selector2 .muted {
+    color: #999;
+}

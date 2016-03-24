@@ -1,5 +1,7 @@
 {
     "css": [
         "plugins/layer_selector_v2/fontello-8ae227d1/css/layer-selector-v2.css",
-        "plugins/layer_selector_v2/style.css"
-    ]}
+        "plugins/layer_selector_v2/style.css",
+        "plugins/layer_selector_v2/draw_report/style.css"
+    ]
+}
