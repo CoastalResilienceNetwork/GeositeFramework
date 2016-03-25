@@ -68,13 +68,17 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 if (_$layerDialog) {
                     _$layerDialog.show();
                 }
-               
+
                 // Size to contents of window when displaying
                 // the form initially.  If it was resized while
                 // the container was hidden, w/h are equal to 0
                 this.onContainerSizeChanged();
 
                 enableIconClick();
+
+                if ($.i18n) {
+                    $(_container).localize();
+                }
             };
 
             this.hideAll = function () {
@@ -92,7 +96,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             };
 
             this.onContainerSizeChanged = function (dx, dy) {
-                // The ExtJS TreePanel can't /be sized to fit its widest element, 
+                // The ExtJS TreePanel can't /be sized to fit its widest element,
                 // nor can you discover those widths programatically.
                 // So we let users reveal more by resizing the container,
                 // setting here the tree panel width to the container's width.
@@ -109,7 +113,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                   has one child. If so, it promotes the child of the
                   rootNode to the new rootNode, discarding the previous
                   rootNode.
-                  
+
                   This is done in order to avoid forcing the user to
                   click into multiple generations of a tree to get to
                   the services they want to use.
@@ -119,7 +123,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 } else {
                     return rootNode;
                 } */
-				
+
 				return rootNode;
             }
 
@@ -250,7 +254,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     fields: ['text', 'name', 'leaf', 'cls', 'url', 'layerId']
                 });
                 // Each TreeStore node's "raw" property has a copy of the node it was created from,
-                // but without the "children" property. Restore "children" so LayerManager can 
+                // but without the "children" property. Restore "children" so LayerManager can
                 // continue to traverse and modify the "raw" tree.
                 restoreChildren(store.tree.root);
                 return store;
@@ -287,7 +291,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
             }
 
             function onContentSizeChanged() {
-                // Set size of tree element using size of expanded tree nodes, via hack from 
+                // Set size of tree element using size of expanded tree nodes, via hack from
                 // http://stackoverflow.com/questions/8362022/ext-tree-panel-automatic-height-in-extjs-4
                 // This makes the plugin panel's scrollbar work correctly.
                 // It also truncates too-wide tree node labels (adding "...").
@@ -325,7 +329,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                     // An icon was clicked -- set flag for item click handler
                     _justClickedItemIcon = true;
                 });
-                
+
                 $('.pluginLayer-extent-zoom').off('click').on('click', function () {
                     // extent icon was clicked -- set flag for item click handler
                     _justClickedZoomIcon = true;
@@ -420,7 +424,7 @@ define(["jquery", "use!underscore", "use!extjs", "./treeFilter"],
                 }
                 _$layerDialog.find('.pluginLayerSelector-spinner').hide();
             }
-            
+
             function onFilterBoxKeyup(event) {
                 var text = _$filterInput.val();
                 if (text === "") {

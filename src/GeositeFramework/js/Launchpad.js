@@ -1,7 +1,12 @@
 /*jslint nomen:true, devel:true */
 /*global Geosite, $, _, gapi*/
 
-require(['use!Geosite'], function (N) {
+require([
+    'use!Geosite',
+    'esri/geometry/Extent',
+    'esri/SpatialReference'
+    ],
+    function (N, Extent, SpatialReference) {
     'use strict';
 
     N.controllers.Launchpads = function (launchpadsConfig) {
@@ -55,6 +60,10 @@ require(['use!Geosite'], function (N) {
                 maskopacity: 40,
                 openjs: function () {
                     self.setElement($('.launchpad'));
+
+                    if ($.i18n) {
+                        $(self.$el).localize();
+                    }
                 },
                 closejs: function () {
                     self.remove();
@@ -70,7 +79,7 @@ require(['use!Geosite'], function (N) {
 
             this.activateLaunchpadEvent('launchpad:activate-subregion', eventData);
         },
-        
+
         activateScenario: function(e) {
             var self = this,
                 categories = _(this.model.get('categories')),
@@ -93,7 +102,7 @@ require(['use!Geosite'], function (N) {
                 categories.each(function(category) {
                     if (issue) { return false; }
 
-                    issue = _(category.issues).findWhere({id: issueId}) 
+                    issue = _(category.issues).findWhere({id: issueId})
                 });
 
                 if (issue) {
@@ -119,7 +128,7 @@ require(['use!Geosite'], function (N) {
                 extent: this.initialExtent
             });
         },
-        
+
         activateLaunchpadEvent: function(eventName, eventData) {
             this.close();
             N.app.dispatcher.trigger(eventName, eventData);
@@ -187,9 +196,9 @@ require(['use!Geosite'], function (N) {
 
     function parseExtent(extent) {
         var x = N.app.data.region.initialExtent,
-            extent = new esri.geometry.Extent(
+            extent = new Extent(
                 x[0], x[1], x[2], x[3],
-                new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+                new SpatialReference({ wkid: 4326 /*lat-long*/ })
             );
 
         return extent;

@@ -1,10 +1,22 @@
 ﻿require(['use!Geosite',
          'esri/dijit/Popup',
-         'esri/geometry/Polygon'
+         'esri/geometry/Polygon',
+         'esri/SpatialReference',
+         'esri/layers/GraphicsLayer',
+         'esri/symbols/SimpleFillSymbol',
+         'esri/symbols/SimpleLineSymbol',
+         'esri/InfoTemplate',
+         'esri/graphic'
         ],
     function(N,
              Popup,
-             Polygon) {
+             Polygon,
+             SpatialReference,
+             GraphicsLayer,
+             SimpleFillSymbol,
+             SimpleLineSymbol,
+             InfoTemplate,
+             Graphic) {
 
     'use strict';
 
@@ -26,7 +38,7 @@
         self.initialExtent = parseExtent(N.app.data.region.initialExtent);
 
         // Graphics layer that will hold the sub-region vectors
-        self.subRegionLayer = new esri.layers.GraphicsLayer();
+        self.subRegionLayer = GraphicsLayer();
         self.subRegionLayer.setOpacity(subregions.opacity);
         self.map.addLayer(self.subRegionLayer);
 
@@ -69,7 +81,7 @@
                 }
             }
         });
-        
+
         // If click-activation is enabled, wire up the event
         if (subregions.clickToFocus) {
             setMouseCursor(self.map, self.subRegionLayer, 'mouse-over', 'pointer');
@@ -129,7 +141,7 @@
 
         this.subRegionLayer.hide();
         changeSubregionActivation(this.activateCallbacks, subRegionGraphic.attributes);
-        
+
         // If activating a saved state, the map state bbox should take precedent over the
         // configured subregion bbox
         if (!preventZoom) {
@@ -153,16 +165,16 @@
     function parseExtent(coords) {
         return esri.geometry.Extent(
             coords[0], coords[1], coords[2], coords[3],
-            new esri.SpatialReference({ wkid: 4326 /*lat-long*/ })
+            new SpatialReference({ wkid: 4326 /*lat-long*/ })
         );
     }
 
     function addSubRegionsToMap(subregions, layer) {
         _.each(subregions.areas, function(subregion) {
-            var geom = new esri.geometry.Polygon(subregion.shape);
-            var symbol = new esri.symbol.SimpleFillSymbol();
-            var outline = new esri.symbol.SimpleLineSymbol(
-                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+            var geom = new Polygon(subregion.shape);
+            var symbol = SimpleFillSymbol();
+            var outline = new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
                     new dojo.Color(subregion.outlineColor || subregions.outlineColor), 2);
 
             symbol.setColor(new dojo.Color(subregion.color || subregions.color));
@@ -171,11 +183,11 @@
                 symbol.setColor(new dojo.Color([0, 0, 0, 0]));
             }
 
-            var infoTemplate = new esri.InfoTemplate();
+            var infoTemplate = new InfoTemplate();
             // display is the field containing the subregion name
             infoTemplate.setContent("${display}");
 
-            var graphic = new esri.Graphic(geom, symbol, subregion, infoTemplate);
+            var graphic = new Graphic(geom, symbol, subregion, infoTemplate);
 
             layer.add(graphic);
         });
@@ -287,6 +299,11 @@
             this.toggleMapControlPositions();
             this.toggleMapBorder();
             this.$el.html(this.template(this.model.attributes));
+
+            if ($.i18n) {
+                $(this.$el).localize();
+            }
+
             return this;
         },
 

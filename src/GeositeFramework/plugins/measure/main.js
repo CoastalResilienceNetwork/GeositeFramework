@@ -1,8 +1,8 @@
 ﻿// "measure" plugin, main module
 
 
-// Plugins should load their own versions of any libraries used even if those libraries are also used 
-// by the GeositeFramework, in case a future framework version uses a different library version. 
+// Plugins should load their own versions of any libraries used even if those libraries are also used
+// by the GeositeFramework, in case a future framework version uses a different library version.
 
 require({
     // Specify library locations.
@@ -40,7 +40,7 @@ define(
 
                 this.agsMeasure.initialize();
             },
-            
+
             renderLauncher: function renderLauncher() {
                 return this.$templates.find('#template-measure-launcher').html();
             },
@@ -55,7 +55,7 @@ define(
 
             hibernate: function () {
                 this.deactivate();
-                if (this._pointLayer)  this._pointLayer.clear(); 
+                if (this._pointLayer)  this._pointLayer.clear();
                 if (this._lineLayer) this._lineLayer.clear();
             }
         });

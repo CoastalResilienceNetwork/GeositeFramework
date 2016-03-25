@@ -3,6 +3,7 @@
     "title": "Geosite configuration",
     "type": "object",
     "properties": {
+        "language": {"type": "string", "required": false},
         "googleAnalyticsPropertyId": {"type": "string", "required": false},
         "googleUrlShortenerApiKey": {"type": "string", "required": false},
         "titleMain": {

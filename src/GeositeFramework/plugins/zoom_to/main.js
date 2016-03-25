@@ -14,11 +14,14 @@ require({
 define(
     ["dojo/_base/declare",
      "framework/PluginBase",
-     "./ui", 
+     "./ui",
      "dojo/text!plugins/zoom_to/zoom_to.json",
-     "jquery"
+     "jquery",
+     "esri/SpatialReference",
+     "esri/geometry/Point"
     ],
-    function (declare, PluginBase, ui, configString, $) {
+    function (declare, PluginBase, ui, configString, $,
+        SpatialReference, Point) {
 
 // Had trouble getting jquery-jsonp to load using AMD.
 // Because jquery-jsonp is executed on jquery, rather
@@ -43,10 +46,10 @@ define(
                     this.inputView = new ui.UiInputView({ model: this.input });
                 }
             },
-            
+
             initialize: function (args) {
-                var spatialReference = new esri.SpatialReference({ wkid: 4326 /* lat-lng */ }),
-                    point = function (x, y) { return new esri.geometry.Point(x, y, spatialReference); };
+                var spatialReference = new SpatialReference({ wkid: 4326 /* lat-lng */ }),
+                    point = function (x, y) { return new Point(x, y, spatialReference); };
 
                 declare.safeMixin(this, args);
                 this.config = JSON.parse(configString);
@@ -59,12 +62,7 @@ define(
             renderLauncher: function () {
                 this._initializeViews();
                 return this.inputView.render().$el;
-            },
-            
-            hibernate: function() {
-                this.inputView.clear();
             }
-
         });
     }
 );

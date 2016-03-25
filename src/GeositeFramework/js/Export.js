@@ -2,11 +2,17 @@
 
 require(['use!Geosite',
          'esri/tasks/PrintTask',
+         'esri/tasks/PrintParameters',
+         'esri/tasks/PrintTemplate',
+         'esri/tasks/LegendLayer',
          'dojo/Deferred',
          'dojo/request',
          'framework/Logger'],
     function(N,
              PrintTask,
+             PrintParameters,
+             PrintTemplate,
+             LegendLayer,
              Deferred,
              request,
              Logger) {
@@ -27,11 +33,11 @@ require(['use!Geosite',
             // the AGS to achieve better export results.  Check the region.json to
             // enable the custom template.
             printLayoutTemplatePrefix: 'Letter ANSI A',
-            // By default, the ESRI print task reserves space in the 
+            // By default, the ESRI print task reserves space in the
             // template for the legend, which doesn't resize.  To reclaim
             // the space we use a different template for Legend/No Legend
             // but this won't work if you are not using a custom layout
-            useDifferentTemplateWithLegend: false,    
+            useDifferentTemplateWithLegend: false,
             exportIncludeLegend: false,
             // set internally, listened by view
             submitEnabled: true,
@@ -39,25 +45,25 @@ require(['use!Geosite',
             // Pane number of map to export
             paneNumber: 0
         },
-        
+
         initialize: function () {
             var model = this;
             model.setupDependencies();
         },
-        
+
         submitExport: function() {
             if (this.submissionIsValid()) {
                 this.set('submitEnabled', false);
                 this.createPDF();
             } else {
-                this.set('outputText', "Please enter all required fields.");
+                this.set('outputText', i18next.t("Please enter all required fields."));
             }
         },
 
         submissionIsValid: function () {
             return _.contains(["Portrait", "Landscape"], this.get('exportOrientation'));
         },
-        
+
         setupDependencies: function () {
             /*
               Creates an interface for the rest of the model to interact
@@ -98,7 +104,7 @@ require(['use!Geosite',
                     }
                 },
                 onFailure = function() {
-                    new Logger('export').warn(null, 'Failed to load service config');
+                    new Logger('export').warn(null, i18next.t('Failed to load service config'));
                 },
                 onFinish = function() {
                     defer.resolve(config);
@@ -110,9 +116,9 @@ require(['use!Geosite',
         },
 
         getExportParams: function() {
-            var params = new esri.tasks.PrintParameters();
+            var params = new PrintParameters();
             params.map = this.get('esriMap');
-            params.template = new esri.tasks.PrintTemplate();
+            params.template = new PrintTemplate();
             params.template.format = "PDF";
             params.template.preserveScale = false;
             params.template.showAttribution = false;
@@ -146,7 +152,7 @@ require(['use!Geosite',
                 result = [];
             _.each(map.getLayersVisibleAtScale(), function(layer) {
                 if (layer.visibleLayers && layer.visibleLayers.length > 0 && layer.visibleLayers[0] !== -1) {
-                    var legendLayer = new esri.tasks.LegendLayer();
+                    var legendLayer = new LegendLayer();
                     legendLayer.layerId = layer.id;
                     legendLayer.subLayerIds = model.getLayerParents(layer, layer.visibleLayers);
                     result.push(legendLayer);
@@ -188,7 +194,7 @@ require(['use!Geosite',
                 },
                 onFailure = _.debounce(function() {
                     var result = [];
-                    result.push('There was an error processing your request.');
+                    result.push(i18next.t('There was an error processing your request.'));
                     if (attempts > 0) {
                         var s = attempts == 1 ? '' : 's';
                         result.push('Trying again ' + attempts + ' more time' + s + '...');
@@ -273,11 +279,11 @@ require(['use!Geosite',
 
         initialize: function () {
             var view = this;
-            
+
             // show/hide indicator when search is in progress
             view.listenTo(view.model, "change:submitEnabled", function () {
-                if (view.model.get("submitEnabled") === true) { 
-                    view.enableSubmit(); 
+                if (view.model.get("submitEnabled") === true) {
+                    view.enableSubmit();
                 } else {
                     view.waitForPrintRequest();
                 }
@@ -294,6 +300,11 @@ require(['use!Geosite',
                 .append(body);
             var paneNumber = (+this.model.get('paneNumber')) + 1;
             this.$('.export-pane-number').text(paneNumber);
+
+            if ($.i18n) {
+                $(this.$el).localize();
+            }
+
             return this;
         }
     });
