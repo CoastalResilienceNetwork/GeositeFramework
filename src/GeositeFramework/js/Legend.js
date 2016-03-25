@@ -174,6 +174,11 @@ define(['use!Geosite',
             // height despite the above css changes.
             this.$el.find('.legend-body').hide();
 
+            // Toggle the text of the minimize button
+            this.$el.find('.legend-close')
+                .attr({title: 'Restore Legend'})
+                .text('+');
+
             // Hide the resize handle or else the user can resize the
             // minimized legend.
             this.$el.find('.dojoxResizeHandle').hide();
@@ -199,6 +204,11 @@ define(['use!Geosite',
 
             this.$el.find('.legend-body').show();
             this.$el.find('.dojoxResizeHandle').show();
+
+            // Toggle the text of the minimize button
+            this.$el.find('.legend-close')
+                .attr({title: 'Hide Legend'})
+                .text('_');
 
             this.$el.removeClass('minimized');
         },
