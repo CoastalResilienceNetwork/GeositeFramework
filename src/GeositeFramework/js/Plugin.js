@@ -681,20 +681,27 @@ require(['use!Geosite',
                     }
                 }, checkboxnode);
 
-                var lbl = $("<label>" + i18next.t("Don't Show This on Start") + "</label>")
-                    .attr('for', nscheckBox.id);
+                var lbl = $("<label>Don't show this on start</label>")
+                    .addClass('i18n')
+                    .attr({
+                        'for': nscheckBox.id,
+                        'data-i18n': "Don't show this on start"
+                    });
+
                 this.$el.append(lbl);
 
                 var buttonnode = $('<span>').get(0);
                 this.$el.append(buttonnode);
 
-                var closeinfo = new Button({
-                    label: "Continue",
-                    onClick: function() {
+                $('<a>')
+                    .text('Continue')
+                    .attr('data-i18n', 'Continue')
+                    .addClass('button radius i18n')
+                    .click(function() {
                         pluginModel.set('displayHelp', false);
                         pluginObject.resize();
-                    }
-                }, buttonnode);
+                    })
+                    .appendTo(buttonnode);
 
                 if ($.i18n) {
                     $(this.$el).localize();

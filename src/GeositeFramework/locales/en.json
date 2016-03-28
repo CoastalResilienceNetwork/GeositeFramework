@@ -53,5 +53,6 @@
     "Failed to return results within %f seconds": "Failed to return results within %f seconds",
     "No information is available for this location": "No information is available for this location",
     "Permalink:": "Permalink:",
-    "Don't Show This on Start": "Don't Show This on Start"
+    "Don't show this on start": "Don't show this on start",
+	"Continue": "Continue"
 }

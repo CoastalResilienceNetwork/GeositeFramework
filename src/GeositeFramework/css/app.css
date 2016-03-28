@@ -298,6 +298,10 @@ input.code-like, textarea.code-like {
             display: inline;
         }
 
+        .plugin-infographic a {
+            margin: 5px;
+        }
+
 .tinner .tclose {
     font-size: 14px;
     padding: 6px;
