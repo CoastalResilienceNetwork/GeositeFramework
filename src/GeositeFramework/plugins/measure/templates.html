@@ -4,12 +4,12 @@
 
 <script type="text/template" id="template-measure-tooltip">
     <div class="measure-tooltip">
-        <p class="i18n" data-i18n="Double-click to end a line segment. Single-click the first node to end a polygon.">Double-click to end a line segment. Single-click the first node to end a polygon.</p>
+        <p><%= instructions %></p>
         <div>
-            <div class="measure-label i18n" data-i18n="Segment Length:">Segment Length:</div><%= segmentLength %> <%= units%>
+            <div class="measure-label"><%= segmentLabel %></div><%= segmentLength %> <%= units%>
         </div>
         <div>
-            <div class="measure-label i18n" data-i18n="Total Length:">Total Length:</div><%= totalLength %> <%= units%>
+            <div class="measure-label"><%= lengthLabel %>:</div><%= totalLength %> <%= units%>
         </div>
     </div>
 </script>
