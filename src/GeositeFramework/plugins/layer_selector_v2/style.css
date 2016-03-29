@@ -1,4 +1,7 @@
-﻿
+﻿.x-body .layer-selector2 {
+    color: #666;
+}
+
 .layer-selector2 ul li ul {
     margin-left: 0;
 }
@@ -200,7 +203,3 @@
     .layer-selector2 .tab-body.active {
         display: block;
     }
-
-.layer-selector2 .muted {
-    color: #999;
-}

@@ -7,6 +7,32 @@
 .layer-selector2 .tab-report {
     padding: 12px;
 }
+
+/* Display report layers as a normal list */
+.layer-selector2 .tab-report ul li ul {
+    margin-left: 20px;
+}
+.layer-selector2 .tab-report ul li ul li {
+    list-style: inherit;
+}
+
+.layer-selector2 .tab-report .result-header {
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding: 14px 10px;
+    margin: -12px -12px 10px;
+}
+.layer-selector2 .tab-report .result-header .button-download {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    color: inherit;
+}
+
+.layer-selector2 .tab-report h4 {
+    font-size: 19px;
+    margin-bottom: 6px;
+}
 .layer-selector2 .tab-report h5 {
     margin-bottom: 7px;
 }
@@ -21,13 +47,18 @@
 .layer-selector2 .tab-report table {
     width: 100%;
 }
+.layer-selector2 .tab-report th {
+    text-transform: uppercase;
+    font-size: smaller;
+    font-weight: normal;
+}
 
-.layer-selector2 .tab-report .cancel {
+.layer-selector2 .tab-report .cancel-drawing {
     background-color: #cb2b2b;
     border-color: #8c1e1e;
 }
-.layer-selector2 .tab-report .cancel:hover,
-.layer-selector2 .tab-report .cancel:focus {
+.layer-selector2 .tab-report .cancel-drawing:hover,
+.layer-selector2 .tab-report .cancel-drawing:focus {
     background-color: #a12222;
 }
 
