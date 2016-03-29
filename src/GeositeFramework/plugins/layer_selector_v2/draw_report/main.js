@@ -86,10 +86,8 @@ define(["dojo/_base/declare",
             },
 
             hibernate: function() {
+                this.clearAll();
                 this.deactivate();
-                this.setReportData(null);
-                this.setAreaOfInterest(null);
-                this.featureGroup.clear();
             },
 
             // Return area of interest as JSON.
@@ -145,7 +143,9 @@ define(["dojo/_base/declare",
                 this.isDrawing = false;
                 this.parentPlugin.allowIdentifyWhenActive = true;
                 this.editBar.deactivate();
+                this.setAreaOfInterest(null);
                 this.setReportData(null);
+                this.render();
             },
 
             // Format: [ { layer: {...},
@@ -324,9 +324,15 @@ define(["dojo/_base/declare",
 
             // Called when layers are toggled.
             update: function() {
-                this.setReportData(null);
+                this.clearAll();
                 this.queueRequestReport();
                 this.render();
+            },
+
+            clearAll: function() {
+                this.setReportData(null);
+                this.setAreaOfInterest(null);
+                this.featureGroup.clear();
             },
 
             render: function() {

@@ -591,7 +591,7 @@ define([
                 this.state = new State();
                 this.rebuildTree();
                 this.renderLayerSelector();
-                this.drawReport.update();
+                this.drawReport.clearAll();
             },
 
             setLayerOpacity: function(layerId, opacity) {
