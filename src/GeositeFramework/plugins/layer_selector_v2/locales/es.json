@@ -1,0 +1,21 @@
+{
+    "Layers": "Capas",
+    "Draw & Report": "Draw & Informe",
+    "Filter Map Layers": "Filtro de mapa de capas",
+    "Reset Layers": "Reset Capas",
+    "Download": "Descargar",
+    "Zoom to Extent": "Zoom a la",
+    "Opacity": "Opacidad",
+    "Draw and report is a way to view specific data by drawing a custom shape on the map. Your report will contain:": "Dibuje y el informe es una forma de ver los datos específicos mediante la elaboración de una forma personalizada en el mapa Su informe. Contiene:",
+    "No reports have been configured for this layer": "No hay informes se han configurado para esta capa",
+    "No layers have been selected yet": "No hay capas se han seleccionado todavía",
+    "No values for this layer in your area of interest": "No existen valores para esta capa en su área de interés",
+    "Draw area of interest": "Área de interés Dibujo",
+    "Redraw area of interest": "Zona de Interés Volver a dibujar",
+    "Download Results": "Descarga de los resultados",
+    "Click to start drawing": "Haga clic para empezar a dibujar",
+    "Click to continue drawing": "Haga clic para seguir dibujando",
+    "Double-click to complete": "Haga doble clic para completar",
+    "Unknown": "Desconocido",
+    "Cancel": "Cancelar"
+}

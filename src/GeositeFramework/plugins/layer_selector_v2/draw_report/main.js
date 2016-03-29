@@ -23,7 +23,8 @@ define(["dojo/_base/declare",
         "esri/tasks/Geoprocessor",
         "esri/tasks/FeatureSet",
         "esri/toolbars/draw",
-        "dojo/text!./templates.html"
+        "dojo/text!./templates.html",
+        "dojo/i18n!esri/nls/jsapi"
     ],
     function(declare,
              Deferred,
@@ -35,7 +36,8 @@ define(["dojo/_base/declare",
              Geoprocessor,
              FeatureSet,
              Draw,
-             templates) {
+             templates,
+             esriText) {
         "use strict";
 
         return declare(null, {
@@ -56,6 +58,16 @@ define(["dojo/_base/declare",
                 this.editBar = new Draw(this.map);
 
                 this.bindEvents();
+            },
+
+            // Translate the built-in draw tool text
+            setupDrawingText: function() {
+                var drawText = esriText.toolbars.draw,
+                    props = ['start', 'resume', 'complete'];
+
+                _.each(props, function(prop) {
+                    drawText[prop] = i18next.t(drawText[prop]);
+                });
             },
 
             bindEvents: function() {
@@ -124,6 +136,7 @@ define(["dojo/_base/declare",
             },
 
             onDrawStart: function() {
+                this.setupDrawingText();
                 this.onDrawCancel();
                 this.isDrawing = true;
                 this.parentPlugin.allowIdentifyWhenActive = false;
@@ -346,6 +359,10 @@ define(["dojo/_base/declare",
                 });
 
                 $(this.container).html(html);
+
+                if ($.i18n) {
+                    $(this.container).localize();
+                }
                 return this.container;
             },
 

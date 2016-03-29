@@ -171,6 +171,10 @@ define([
                     left: position.left
                 });
 
+                if ($.i18n) {
+                    $menu.localize();
+                }
+
                 $('body').append($shadow).append($menu);
             },
 
@@ -348,6 +352,11 @@ define([
                 this.renderFilter();
                 this.renderTree();
                 this.showLayerInfo();
+
+                // Localize
+                if ($.i18n) {
+                    $(this.container).localize();
+                }
             },
 
             renderFilter: function() {

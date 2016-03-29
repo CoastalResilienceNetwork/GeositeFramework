@@ -1,12 +1,13 @@
 ﻿<script type="text/template" id="plugin">
 <% if (reportData && reportData.length > 0) { %>
-
   <div class="result-header">
-    <a href="javascript:;" class="start-drawing"
-      <%= (isDrawing ? 'disabled="disabled"' : '') %>><i class="icon-angle-left"></i>Redraw area of interest</a>
+    <a href="javascript:;" class="start-drawing i18n" data-i18n="Redraw area of interest"
+      <%= (isDrawing ? 'disabled="disabled"' : '') %>>
+        <i class="icon-angle-left"></i>Redraw area of interest
+    </a>
 
-        <a href="javascript:;" class="button-download"><i class="icon-download"></i></a>
-    </div>
+    <a href="javascript:;" class="button-download"><i class="icon-download"></i></a>
+  </div>
 
     <% _.each(reportData, function(item) { %>
       <h4><%- item.layer.getDisplayName() %></h4>
@@ -32,7 +33,7 @@
                   <% if (row.Category) { %>
                     <%- row.Category %>
                   <% } else { %>
-                    <span class="muted">Unknown</span>
+                    <span class="muted i18n" data-i18n="Unknown">Unknown</span>
                   <% } %>
                 </td>
                 <td><%- Azavea.numberToString(row.Amount, 2) %>
@@ -41,7 +42,7 @@
             <% }) %>
             </table>
           <% } else { %>
-            <p>No values for this layer in your area of interest.</p>
+            <p class="i18n" data-i18n="No values for this layer in your area of interest">No values for this layer in your area of interest.</p>
           <% } %>
         <% }) %>
 
@@ -49,13 +50,13 @@
     <% }) %>
 
   <% } else { %>
-    <p>
+    <p class="i18n" data-i18n="Draw and report is a way to view specific data by drawing a custom shape on the map. Your report will contain:">
       Draw and report is a way to view specific data by drawing a custom
       shape on the map. Your report will contain:
     </p>
 
     <% if (!layers.length) { %>
-      <p><em>No layers have been selected yet.</em></p>
+      <p><em class="i18n" data-i18n="No layers have been selected yet">No layers have been selected yet.</em></p>
 
     <% } else { %>
       <ul>
@@ -69,17 +70,18 @@
                 <% }) %>
               </ul>
             <% } else { %>
-              <p><em>No reports have been configured for this layer.</em></p>
+              <p><em class="i18n" data-i18n="No reports have been configured for this layer">No reports have been configured for this layer.</em></p>
             <% } %>
           </li>
         <% }) %>
       </ul>
 
       <p class="text-center">
-        <button class="start-drawing button radius"
+        <button class="start-drawing button radius i18n" data-i18n="Draw area of interest"
             <%= (isDrawing ? 'disabled="disabled"' : '') %>>Draw area of interest</button>
 
-        <button class="cancel-drawing button radius<%= (isDrawing ? '' : ' hidden') %>">Cancel</button>
+        <button class="cancel-drawing button radius i18n<%= (isDrawing ? '' : ' hidden') %>"
+            data-i18n="Cancel">Cancel</button>
       </p>
 
     <% } %>
