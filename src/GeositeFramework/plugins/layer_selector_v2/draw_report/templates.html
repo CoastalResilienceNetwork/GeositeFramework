@@ -78,6 +78,8 @@
       <p class="text-center">
         <button class="start-drawing button radius"
             <%= (isDrawing ? 'disabled="disabled"' : '') %>>Draw area of interest</button>
+
+        <button class="cancel-drawing button radius<%= (isDrawing ? '' : ' hidden') %>">Cancel</button>
       </p>
 
     <% } %>

@@ -65,6 +65,9 @@ define(["dojo/_base/declare",
                     .on('click', '.start-drawing', function() {
                         self.onDrawStart();
                     })
+                    .on('click', '.cancel-drawing', function() {
+                        self.onDrawCancel();
+                    })
                     .on('click', '.button-download', function() {
                         var report = self.generateReport();
                         self.app.downloadAsCsv(report.filename, report.rows);
