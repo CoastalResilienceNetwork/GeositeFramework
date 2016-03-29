@@ -521,3 +521,5 @@ dojox/charting/plot2d/Grid
 dojox/charting/action2d/Tooltip
 dojox/charting/axis2d/Default
 esri/dijit/Attribution
+esri/tasks/LegendLayer
+esri/tasks/PrintParameters
