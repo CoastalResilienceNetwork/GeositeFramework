@@ -1,5 +1,6 @@
 ﻿<script type="text/template" id="plugin">
     <div class="layer-selector2">
+        <div class="info-box-container"></div>
         <dl class="tabs">
           <dd<%= (tab === 'layers' ? ' class="active"' : '') %>><a data-tab="layers">Layers</a></dd>
           <dd<%= (tab === 'report' ? ' class="active"' : '') %>><a data-tab="report">Draw &amp; Report</a></dd>
@@ -12,7 +13,6 @@
 <script type="text/template" id="layers-plugin">
     <div class="filter-container"></div>
     <div class="tree-container"></div>
-    <div class="info-box-container"></div>
     <div class="layer-menu-container"></div>
     <div class="loading"></div>
 </script>
