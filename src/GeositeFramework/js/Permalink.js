@@ -82,7 +82,9 @@
                     );
 
                     if ($.i18n) {
-                        $(view.$el).localize();
+                        // Localize dialog, including the header which isn't a
+                        // part of this view.
+                        $(view.$el.parents('.popover')).localize();
                     }
                 },
                 closejs: function() {
