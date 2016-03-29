@@ -73,6 +73,18 @@ define([
                 });
                 var child = parent.findLayer('foo/bar');
                 assertTrue(child.getService().getServiceUrl() === 'http://service/xyz/MapServer');
+            },
+
+            function testExtractParentPaths() {
+                var layerIds;
+
+                layerIds = LayerNode.extractParentPaths('Foo');
+                assertTrue(layerIds.length === 0);
+
+                layerIds = LayerNode.extractParentPaths('Foo/Bar/Baz');
+                assertTrue(layerIds.length === 2);
+                assertTrue(layerIds[0] === 'Foo');
+                assertTrue(layerIds[1] === 'Foo/Bar');
             }
         ]);
     }
