@@ -40,6 +40,10 @@ input.code-like, textarea.code-like {
     padding: 0px;
 }
 
+.x-body {
+    color: #444;
+}
+
 /* -----------------------------------------
    Top Bar Styling
 ----------------------------------------- */
