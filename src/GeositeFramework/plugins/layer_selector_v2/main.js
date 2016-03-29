@@ -410,22 +410,33 @@ define([
                 var layerData = data.layers,
                     drawReportData = data.drawReport;
 
-                this.state = new State(data);
+                this.state = new State(layerData);
                 this.rebuildTree();
                 this.renderLayerSelector();
-
-                // Restore map service data.
-                _.each(this.state.getSelectedLayers(), function(layerId) {
-                    var layer = this.tree.findLayer(layerId);
-                    // TODO: If layer not found... load service from parent node
-                    if (layer) {
-                        layer.getService().fetchMapService().then(function() {
-                            self.rebuildTree();
-                        });
-                    }
-                }, this);
+                this.restoreSelectedLayers();
 
                 this.drawReport.setState(drawReportData);
+            },
+
+            // Restore map service data for each selected layer
+            // loaded from a saved state.
+            restoreSelectedLayers: function() {
+                var selectedLayers = this.state.getSelectedLayers(),
+                    layerIds = _.reduce(selectedLayers, function(acc, layerId) {
+                        // Map service data will be unavailable for on-demand
+                        // layers that were persisted to state. Resolve this by
+                        // also loading each parent layer.
+                        return acc.concat(LayerNode.extractParentPaths(layerId));
+                    }, []);
+
+                _.each(layerIds, function(layerId) {
+                    var layer = this.tree.findLayer(layerId);
+                    if (layer) {
+                        layer.getService().fetchMapService()
+                            .then(this.requestReport.bind(this))
+                            .then(this.rebuildTree.bind(this));
+                    }
+                }, this);
             },
 
             beforePrint: function(printDeferred) {
@@ -591,7 +602,7 @@ define([
                 this.state = new State();
                 this.rebuildTree();
                 this.renderLayerSelector();
-                this.drawReport.update();
+                this.drawReport.clearAll();
             },
 
             setLayerOpacity: function(layerId, opacity) {
@@ -650,6 +661,10 @@ define([
                     .filterByName(this.state.getFilterText());
                 this.renderTree();
                 this.updateMap();
+            },
+
+            requestReport: function() {
+                this.drawReport.queueRequestReport();
             }
         });
     }

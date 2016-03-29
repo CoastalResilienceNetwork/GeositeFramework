@@ -16,6 +16,8 @@ define([
              NullService) {
         "use strict";
 
+        var LAYER_ID_DELIM = '/';
+
         // This structure wraps each node in layers.json, preserving the
         // parent/child relationship to support property inheritance.
         var LayerNode = declare(null, {
@@ -74,7 +76,7 @@ define([
                 // all layers have names (ex. folder nodes).
                 var displayName = this.node.displayName || this.node.name;
                 if (this.parent) {
-                    return this.parent.id() + '/' + displayName;
+                    return this.parent.id() + LAYER_ID_DELIM + displayName;
                 }
                return displayName;
             },
@@ -123,7 +125,7 @@ define([
                 var server = this.getServer(),
                     reportDbPath = server && server.reportDbPath,
                     reportDbLayerName = this.getReportDbLayerName(),
-                    reportLayer = reportDbPath + '/' + reportDbLayerName,
+                    reportLayer = reportDbPath + LAYER_ID_DELIM + reportDbLayerName,
                     reports = this.getReports();
 
                 if (reportDbPath && reportDbLayerName) {
@@ -234,6 +236,22 @@ define([
             _.each(node.includeLayers || [], function(childNode) {
                 result.addChild(LayerNode.fromJS(childNode, result));
             }, this);
+            return result;
+        };
+
+        // Return path to each parent layer as an array.
+        LayerNode.extractParentPaths = function(layerId) {
+            // Split layerId into separate parts then
+            // queue each part starting with the root node.
+            // For example, a layerId like "A/B/C" should queue
+            // "A", and "A/B".
+            var result = [],
+                parts = layerId.split(LAYER_ID_DELIM);
+
+            for (var i = 0; i < parts.length - 1; i++) {
+                result.push(parts.slice(0, i + 1).join(LAYER_ID_DELIM));
+            }
+
             return result;
         };
 

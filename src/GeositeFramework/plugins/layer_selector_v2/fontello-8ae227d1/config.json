@@ -65,6 +65,12 @@
       "css": "right-dir",
       "code": 59393,
       "src": "modernpics"
+    },
+    {
+      "uid": "f3f90c8c89795da30f7444634476ea4f",
+      "css": "angle-left",
+      "code": 59402,
+      "src": "fontawesome"
     }
   ]
 }

@@ -65,7 +65,10 @@ define(["dojo/_base/declare",
                     .on('click', '.start-drawing', function() {
                         self.onDrawStart();
                     })
-                    .on('click', '.download', function() {
+                    .on('click', '.cancel-drawing', function() {
+                        self.onDrawCancel();
+                    })
+                    .on('click', '.button-download', function() {
                         var report = self.generateReport();
                         self.app.downloadAsCsv(report.filename, report.rows);
                     });
@@ -83,10 +86,8 @@ define(["dojo/_base/declare",
             },
 
             hibernate: function() {
+                this.clearAll();
                 this.deactivate();
-                this.setReportData(null);
-                this.setAreaOfInterest(null);
-                this.featureGroup.clear();
             },
 
             // Return area of interest as JSON.
@@ -142,7 +143,9 @@ define(["dojo/_base/declare",
                 this.isDrawing = false;
                 this.parentPlugin.allowIdentifyWhenActive = true;
                 this.editBar.deactivate();
+                this.setAreaOfInterest(null);
                 this.setReportData(null);
+                this.render();
             },
 
             // Format: [ { layer: {...},
@@ -173,9 +176,10 @@ define(["dojo/_base/declare",
                             result.push([
                                 layer.getDisplayName(),
                                 reportLayer.display,
+                                reportLayer.field,
+                                reportLayer.units,
                                 row.Category,
-                                row.Amount,
-                                reportLayer.units
+                                row.Amount
                             ]);
                         });
                     });
@@ -320,9 +324,15 @@ define(["dojo/_base/declare",
 
             // Called when layers are toggled.
             update: function() {
-                this.setReportData(null);
+                this.clearAll();
                 this.queueRequestReport();
                 this.render();
+            },
+
+            clearAll: function() {
+                this.setReportData(null);
+                this.setAreaOfInterest(null);
+                this.featureGroup.clear();
             },
 
             render: function() {
