@@ -22,6 +22,7 @@ namespace GeositeFramework
     public class MvcApplication : System.Web.HttpApplication
     {
         public static Geosite GeositeData { get; private set; }
+        public static Translations Languages { get; private set; }
 
         private static readonly string _geositeFrameworkVersion = "0.1.0";
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -40,7 +41,7 @@ namespace GeositeFramework
 
             // Load geosite configuration data (which loads and validates all config files)
             GeositeData = LoadGeositeData();
-            
+
             // Create a logger for each plugin
             foreach (string pluginName in GeositeData.PluginFolderNames)
             {
@@ -48,7 +49,7 @@ namespace GeositeFramework
             }
 
             // Prepare Languages for Internationalization
-            PrepareLanguages(GeositeData);
+            Languages = PrepareLanguages(GeositeData);
         }
 
         private Geosite LoadGeositeData()
@@ -108,7 +109,7 @@ namespace GeositeFramework
             }
         }
 
-        private void PrepareLanguages(Geosite data)
+        private Translations PrepareLanguages(Geosite data)
         {
             var translations = new Translations();
 
@@ -135,22 +136,7 @@ namespace GeositeFramework
 
             translations = mergeTranslations(coreTranslations, translations);
 
-            // Create final languages folder, deleting old one if exists
-            var finalLocalesPath = HostingEnvironment.MapPath("~/languages");
-            if (Directory.Exists(finalLocalesPath))
-            {
-                Directory.Delete(finalLocalesPath, true);
-            }
-            Directory.CreateDirectory(finalLocalesPath);
-
-            // Write combined translations to disk
-            translations.ToList().ForEach(t =>
-            {
-                var lang = t.Key;
-                var json = JsonConvert.SerializeObject(t.Value);
-
-                File.WriteAllText(String.Format("{0}/{1}.json", finalLocalesPath, lang), json);
-            });
+            return translations;
         }
 
         /// <summary>

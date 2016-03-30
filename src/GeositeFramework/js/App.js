@@ -69,7 +69,7 @@
 
             initResizeHandler();
 
-            // Setup a manager for synced maps.  As maps are created, 
+            // Setup a manager for synced maps.  As maps are created,
             // they will be added to it.
             N.app.syncedMapManager = new N.SyncedMapManager(N.app.models.screen);
 
@@ -90,7 +90,7 @@
             // function, then clear it. This is done instead of the
             // typical behavior of HashModels which is to continue
             // listening for changes in the location.hash
-            
+
             // IE8 will throw a syntax error if the hash contains a single
             // # character before entering hashmodels
             handleHashChangedFn(location.hash === '#' ? '' : location.hash);
@@ -104,7 +104,7 @@
             var bottomHeight         = $('.side-nav.bottom:visible').height(),
                 sidebarHeight        = $('.sidebar:visible').height(),
                 rightBottomHeight    = $('#right-pane:visible .side-nav.bottom').height();
-            
+
             $('.side-nav.top:visible').height(sidebarHeight - bottomHeight);
             $('#right-pane .side-nav.top').height(sidebarHeight - rightBottomHeight);
             $(N).trigger('resize');
@@ -151,7 +151,7 @@
                 overloadTranslationOptionHandler: i18nextSprintfPostProcessor.overloadTranslationOptionHandler,
                 // Path to load translations from
                 backend: {
-                    loadPath: 'languages/{{lng}}.json'
+                    loadPath: 'languages/{{lng}}'
                 }
             },
             callback = function() {
