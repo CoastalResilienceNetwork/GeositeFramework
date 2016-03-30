@@ -2,8 +2,12 @@
     <div class="layer-selector2">
         <div class="info-box-container"></div>
         <dl class="tabs">
-          <dd<%= (tab === 'layers' ? ' class="active"' : '') %>><a data-tab="layers">Layers</a></dd>
-          <dd<%= (tab === 'report' ? ' class="active"' : '') %>><a data-tab="report">Draw &amp; Report</a></dd>
+          <dd<%= (tab === 'layers' ? ' class="active"' : '') %>>
+            <a data-tab="layers" class="i18n" data-i18n="Layers">Layers</a>
+          </dd>
+          <dd<%= (tab === 'report' ? ' class="active"' : '') %>>
+            <a data-tab="report" class="i18n" data-i18n="Draw &amp; Report">Draw &amp; Report</a>
+          </dd>
         </dl>
         <div class="tab-body tab-layers<%= (tab === 'layers' ? ' active' : '') %>"></div>
         <div class="tab-body tab-report<%= (tab === 'report' ? ' active' : '' ) %>"></div>
@@ -18,8 +22,9 @@
 </script>
 
 <script type="text/template" id="filter">
-    <input type="text" class="filter" placeholder="Filter Map Layers" value="<%- filterText %>" />
-    <a href="javascript:;" class="reset">Reset Layers</a>
+    <input type="text" class="filter i18n" data-i18n="[placeholder]Filter Map Layers"
+           placeholder="Filter Map Layers" value="<%- filterText %>" />
+    <a href="javascript:;" class="reset i18n" data-i18n="Reset Layers">Reset Layers</a>
 </script>
 
 <script type="text/template" id="tree">
@@ -79,11 +84,13 @@
     <div class="layer-selector2-layer-menu" id="<%= id %>" data-layer-id="<%- layer.id() %>">
         <ul>
             <% if (layer.getDownloadUrl()) { %>
-                <li><a href="<%- layer.getDownloadUrl() %>" target="_blank" class="download"><i class="icon-download"></i> Download</a></li>
+                <li><a href="<%- layer.getDownloadUrl() %>" target="_blank" class="download i18n" data-i18n="Download">
+                    <i class="icon-download"></i> Download</a></li>
             <% } %>
-            <li><a href="javascript:;" class="zoom"><i class="icon-zoom-in"></i> Zoom to Extent</a></li>
+            <li><a href="javascript:;" class="zoom i18n" data-i18n="Zoom to Extent">
+                <i class="icon-zoom-in"></i>Zoom to Extent</a></li>
             <% if (supportsOpacity) { %>
-                <li><a><i class="icon-ajust"></i> Opacity</a></li>
+                <li><a class="i18n" data-i18n="Opacity"><i class="icon-ajust"></i> Opacity</a></li>
                 <li class="slider"><input type="range" min="0" max="1" step=".1" value="<%= opacity %>"/></li>
             <% } %>
         </ul>
