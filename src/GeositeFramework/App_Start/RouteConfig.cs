@@ -24,6 +24,12 @@ namespace GeositeFramework
             );
 
             routes.MapRoute(
+                name: "Language",
+                url: "languages/{locale}",
+                defaults: new { controller = "Language", action = "GetLocale"}
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
