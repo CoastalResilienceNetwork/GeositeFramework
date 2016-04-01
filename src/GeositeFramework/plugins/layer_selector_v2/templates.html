@@ -43,7 +43,7 @@
                 <i class="icon-right-dir"></i>
             <% } %>
         <% } else { %>
-            <i class="icon-database"></i>
+            <i class="icon-circle<% if (!isSelected) { %>-empty<% } %>"></i>
         <% } %>
         </span>
 
@@ -56,7 +56,6 @@
 
         <% if (!layer.isFolder()) { %>
         <div class="layer-tools">
-            <a href="javascript:;" class="show"><i class="icon-eye<% if (!isSelected) { %>-off<% } else { %> active <% } %>"></i></a>
             <a href="javascript:;" class="info"><i class="icon-info-circled <% if (infoBoxIsDisplayed) { %> active <% } %>"></i></a>
             <a href="javascript:;" class="more"><i class="icon-ellipsis"></i></a>
         </div>
