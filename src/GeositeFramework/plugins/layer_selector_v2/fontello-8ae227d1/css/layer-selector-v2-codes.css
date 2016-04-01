@@ -8,5 +8,6 @@
 .icon-download:before { content: '\e806'; } /* '' */
 .icon-ellipsis:before { content: '\e807'; } /* '' */
 .icon-ajust:before { content: '\e808'; } /* '' */
-.icon-database:before { content: '\e809'; } /* '' */
+.icon-circle:before { content: '\e809'; } /* '' */
 .icon-angle-left:before { content: '\e80a'; } /* '' */
+.icon-circle-empty:before { content: '\e80b'; } /* '' */
