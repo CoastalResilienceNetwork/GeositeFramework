@@ -32,9 +32,9 @@
 
 .layer-selector2 .tree-container li {
     position: relative;
-    color: #666;
+    color: #222;
     }
-    .layer-selector2 .tree-container li .icon-database {
+    .layer-selector2 .tree-container li .icon-circle, .icon-circle-empty {
         color: #59C3CD;
     }
     .layer-selector2 .tree-container .parent-node .layer-name {

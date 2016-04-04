@@ -108,7 +108,6 @@ define([
 
                 $(this.container)
                     .on('click', 'a.layer-row', toggleLayer)
-                    .on('click', 'a.show', toggleLayer)
                     .on('click', 'a.info', function() {
                         self.state = self.state.setInfoBoxLayerId(self.getClosestLayerId(this));
                         self.showLayerInfo();
