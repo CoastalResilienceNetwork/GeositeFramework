@@ -9,6 +9,7 @@
     <a href="javascript:;" class="button-download"><i class="icon-download"></i></a>
   </div>
 
+  <div class="results">
     <% _.each(reportData, function(item) { %>
       <h4><%- item.layer.getDisplayName() %></h4>
       <% if (item.reports.error) { %>
@@ -48,42 +49,44 @@
 
       <% } %>
     <% }) %>
+  </div>
 
   <% } else { %>
-    <p class="i18n" data-i18n="Draw and report is a way to view specific data by drawing a custom shape on the map. Your report will contain:">
-      Draw and report is a way to view specific data by drawing a custom
-      shape on the map. Your report will contain:
-    </p>
-
-    <% if (!layers.length) { %>
-      <p><em class="i18n" data-i18n="No layers have been selected yet">No layers have been selected yet.</em></p>
-
-    <% } else { %>
-      <ul>
-        <% _.each(layers, function(layer) { %>
-          <li>
-            <h4><%- layer.getDisplayName() %></h4>
-            <% if (layer.getReports().length > 0) { %>
-              <ul>
-                <% _.each(layer.getReports(), function(report) { %>
-                  <li><%- report.display %></li>
-                <% }) %>
-              </ul>
-            <% } else { %>
-              <p><em class="i18n" data-i18n="No reports have been configured for this layer">No reports have been configured for this layer.</em></p>
-            <% } %>
-          </li>
-        <% }) %>
-      </ul>
-
-      <p class="text-center">
-        <button class="start-drawing button radius i18n" data-i18n="Draw area of interest"
-            <%= (isDrawing ? 'disabled="disabled"' : '') %>>Draw area of interest</button>
-
-        <button class="cancel-drawing button radius i18n<%= (isDrawing ? '' : ' hidden') %>"
-            data-i18n="Cancel">Cancel</button>
+    <div class="report-intro">
+      <p class="i18n" data-i18n="Draw and report is a way to view specific data by drawing a custom shape on the map. Your report will contain:">
+        Draw and report is a way to view specific data by drawing a custom
+        shape on the map. Your report will contain:
       </p>
 
+      <% if (!layers.length) { %>
+        <p><em class="i18n" data-i18n="No layers have been selected yet">No layers have been selected yet.</em></p>
+
+      <% } else { %>
+        <ul>
+          <% _.each(layers, function(layer) { %>
+            <li>
+              <h4><%- layer.getDisplayName() %></h4>
+              <% if (layer.getReports().length > 0) { %>
+                <ul>
+                  <% _.each(layer.getReports(), function(report) { %>
+                    <li><%- report.display %></li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                <p><em class="i18n" data-i18n="No reports have been configured for this layer">No reports have been configured for this layer.</em></p>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+
+        <p class="text-center">
+          <button class="start-drawing button radius i18n" data-i18n="Draw area of interest"
+              <%= (isDrawing ? 'disabled="disabled"' : '') %>>Draw area of interest</button>
+
+          <button class="cancel-drawing button radius i18n<%= (isDrawing ? '' : ' hidden') %>"
+              data-i18n="Cancel">Cancel</button>
+        </p>
+      </div>
     <% } %>
   <% } %>
   <div class="loading" <%= (isLoading ? 'style="display:block"' : '') %>></div>
