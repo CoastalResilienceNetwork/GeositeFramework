@@ -1,0 +1,205 @@
+﻿.x-body .layer-selector2 {
+    color: #666;
+}
+
+.layer-selector2 ul li ul {
+    margin-left: 0;
+}
+
+.layer-selector2 .tab-layers,
+.layer-selector2 .tab-report {
+    position: relative;
+}
+
+.layer-selector2 .tab-layers .loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.75) url(spinner.gif) 50% 50% no-repeat;
+}
+
+.layer-selector2 .filter-container {
+    padding: 6px 4px;
+    }
+    .layer-selector2 input.filter {
+        width: 60%;
+        display: inline;
+        margin-right: 15px;
+    }
+
+.layer-selector2 .tree-container li {
+    position: relative;
+    color: #222;
+    }
+    .layer-selector2 .tree-container li .icon-circle, .icon-circle-empty {
+        color: #59C3CD;
+    }
+    .layer-selector2 .tree-container .parent-node .layer-name {
+        margin-left: -4px;
+    }
+    .layer-selector2 .tree-container li a {
+        color: inherit;
+    }
+    .layer-selector2 .tree-container li > a {
+        display: inline-block;
+        width: 100%;
+        padding: 2px 0;
+        border-top: 1px solid #f8f8f8;
+    }
+    .layer-selector2 .tree-container li:hover > a,
+    .layer-selector2 .tree-container li:hover > .layer-tools,
+    .layer-selector2 .tree-container li.leaf-node.active > a {
+        background: #f5f5f5;
+    }
+    .layer-selector2 .tree-container li.leaf-node .layer-tools i:hover,
+    .layer-selector2 .tree-container li.leaf-node .layer-tools i.active {
+        color: #23618c;
+    }
+    .layer-selector2 .tree-container li.leaf-node.selected > a,
+    .layer-selector2 .tree-container li.leaf-node.selected:hover > a,
+    .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
+    .layer-selector2 .tree-container li.leaf-node.selected:hover > .layer-tools {
+        background: #ccc;
+    }
+    .layer-selector2 .tree-container li > .layer-tools {
+        display: none;
+        position: absolute;
+        top: 2px;
+        right: 0;
+        padding-right: 5px;
+        }
+        .layer-selector2 .tree-container li > .layer-tools a {
+            width: auto;
+        }
+        .layer-selector2 .tree-container li.leaf-node:hover > .layer-tools,
+        .layer-selector2 .tree-container li.leaf-node.selected > .layer-tools,
+        .layer-selector2 .tree-container li.leaf-node.active > .layer-tools {
+            display: block;
+        }
+
+.layer-selector2 .info-box-container {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 10px;
+    }
+    .layer-selector2 .info-box .body {
+        width: 300px;
+        max-height: 400px;
+        background: #fff;
+        border: 5px solid gray;
+        border-radius: 5px;
+        padding: 10px 10px 0 10px;
+        overflow: auto;
+    }
+    .layer-selector2 .info-box .close {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        cursor: pointer;
+        padding: 6px;
+        background: #fff;
+        border-radius: 4px;
+        color: #ccc;
+        font-weight: 700;
+        z-index: 99;
+        height: 24px;
+        line-height: 10px;
+        width: 24px;
+        font-size: 14px;
+    }
+    .layer-selector2 .info-box .close:hover {
+        background: #f1f2f2;
+        color: #333;
+    }
+    .layer-selector2 .info-box .info-label {
+        font-weight: bold;
+        padding-bottom: 3px;
+    }
+    .layer-selector2 .info-box .info-value {
+        padding-bottom: 10px;
+    }
+    /* Neutralize Foundation's zealous table styling so the slider won't look terrible */
+    .layer-selector2 .info-box table {
+        background-color: transparent;
+        border-width: 0;
+        margin: 0;
+        }
+        .layer-selector2 .info-box td {
+            padding: 0;
+        }
+
+.layer-selector2-layer-menu {
+        position: absolute;
+        margin-top: -129px;
+        margin-left: -115px;
+        background: #bebebe;
+        color: #414141;
+        width: 140px;
+        z-index: 1000;
+    }
+    .layer-selector2-layer-menu:after {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 8px 0 8px;
+        border-color: #bebebe transparent transparent transparent;
+        position: absolute;
+        content: "";
+        right: 6px;
+    }
+    .layer-selector2-layer-menu-shadow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0;
+        z-index: 900;
+    }
+    .layer-selector2-layer-menu ul {
+        margin: 0;
+    }
+    .layer-selector2-layer-menu li {
+        border-top: 1px solid #999;
+    }
+    .layer-selector2-layer-menu li:first-child {
+        border: none;
+    }
+    .layer-selector2-layer-menu li > a {
+        display: inline-block;
+        width: 100%;
+        color: inherit;
+        padding: 5px;
+    }
+    .layer-selector2-layer-menu li > a[href]:hover {
+        background: #f5f5f5;
+    }
+    .layer-selector2-layer-menu li.slider {
+        text-align: center;
+        border: none;
+    }
+
+.layer-selector2 dl.tabs dd {
+        cursor: pointer;
+    }
+    .layer-selector2 .tabs {
+        margin-bottom: 0px;
+    }
+    .layer-selector2 .tabs dd, .layer-selector2 .tabs. li {
+        font-weight: 700;
+    }
+    .layer-selector2 .tabs dd.active, .layer-selector2 .tabs li.active {
+        border-top: 2px solid #2ba6cb;
+        margin-top: -2px;
+    }
+    .layer-selector2 .tab-body {
+        display: none;
+    }
+    .layer-selector2 .tab-body.active {
+        display: block;
+    }
