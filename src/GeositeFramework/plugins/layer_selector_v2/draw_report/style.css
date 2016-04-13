@@ -8,6 +8,13 @@
     padding: 12px;
 }
 
+.layer-selector2 .tab-report .report-intro {
+    overflow: auto;
+    position: absolute;
+    top: 0px;
+    bottom: 40px;
+}
+
 /* Display report layers as a normal list */
 .layer-selector2 .tab-report ul li ul {
     margin-left: 20px;
@@ -70,4 +77,14 @@
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.75) url(../spinner.gif) 50% 50% no-repeat;
+}
+
+.layer-selector2 .tab-report .results {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 41px;
+    top: 43px;
+    overflow: auto;
+    padding: 0 10px;
 }

@@ -1,5 +1,7 @@
 ﻿.x-body .layer-selector2 {
     color: #666;
+    height: 100%;
+    overflow: hidden;
 }
 
 .layer-selector2 ul li ul {
@@ -23,13 +25,23 @@
 
 .layer-selector2 .filter-container {
     padding: 6px 4px;
+    border-bottom: 1px solid #f8f8f8;
     }
     .layer-selector2 input.filter {
         width: 60%;
         display: inline;
         margin-right: 15px;
+        margin-bottom: 0;
     }
 
+.layer-selector2 .tree-container {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 40px;
+    top: 44px;
+    overflow: auto;
+}
 .layer-selector2 .tree-container li {
     position: relative;
     color: #222;
@@ -202,4 +214,5 @@
     }
     .layer-selector2 .tab-body.active {
         display: block;
+        height: 100%;
     }
