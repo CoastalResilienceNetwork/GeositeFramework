@@ -668,8 +668,13 @@ require(['use!Geosite',
                 var pluginModel = this.model,
                     pluginObject = pluginModel.get('pluginObject');
 
-                var img = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
-                this.$el.append(img);
+	       if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
+		var snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
+	       } else {
+		var snippit = $(pluginObject.infoGraphic);
+	       }				
+				
+                this.$el.append(snippit);
 
                 var checkboxnode = $('<span>').get(0);
                 this.$el.append(checkboxnode);
