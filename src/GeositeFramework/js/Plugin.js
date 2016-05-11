@@ -700,8 +700,9 @@ require(['use!Geosite',
                 this.$el.append(buttonnode);
 
                 $('<a>')
-                    .text('Continue')
+                    .text('Next')
                     .attr('data-i18n', 'Continue')
+                    .attr('style', 'background:#F5EB75;color:#000')
                     .addClass('button radius i18n')
                     .click(function() {
                         pluginModel.set('displayHelp', false);
