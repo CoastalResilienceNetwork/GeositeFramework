@@ -41,7 +41,7 @@
                 "display": "Flower Garden Banks Marine Sanctuary",
                 "details": "The sanctuary protects a productive...",
                 "shape": [[-94.7900390625,27.780771643348196],[-94.7900390625,28.497660832963472],[-93.724365234375,28.497660832963472],[-93.724365234375,27.780771643348196],[-94.7900390625,27.780771643348196]],
-                "availablePlugins": ["layer_selector"],
+                "availablePlugins": ["zoom_to"],
                 "outlineColor": "#000",
                 "noFill": true
             },
@@ -77,15 +77,13 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "layer_selector",
-        "custom_layer_selector",
         "zoom_to",
         "measure",
         "full_extent",
         "subregion_toggle"
     ],
     "map2PluginBlacklist": [
-        "custom_layer_selector"
+        "identify_point"
     ],
     "print": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
