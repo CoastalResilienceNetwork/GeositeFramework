@@ -672,8 +672,8 @@ require(['use!Geosite',
 		var snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
 	       } else {
 		var snippit = $(pluginObject.infoGraphic);
-	       }				
-				
+	       }
+
                 this.$el.append(snippit);
 
                 var checkboxnode = $('<span>').get(0);
@@ -701,7 +701,7 @@ require(['use!Geosite',
 
                 $('<a>')
                     .text('Next')
-                    .attr('data-i18n', 'Continue')
+                    .attr('data-i18n', 'Next')
                     .attr('style', 'background:#F5EB75;color:#000')
                     .addClass('button radius i18n')
                     .click(function() {
