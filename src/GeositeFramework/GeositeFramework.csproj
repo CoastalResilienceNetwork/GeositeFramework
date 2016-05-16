@@ -196,15 +196,6 @@
     <Content Include="plugins\full_extent\icon.png" />
     <Content Include="plugins\full_extent\main.js" />
     <Content Include="plugins\full_extent\full_extent.css" />
-    <Content Include="plugins\layer_selector\stripJsonComments.js" />
-    <Content Include="plugins\layer_selector\icon.png" />
-    <Content Include="plugins\layer_selector\icon_active.png" />
-    <Content Include="plugins\layer_selector\images\gear.png" />
-    <Content Include="plugins\layer_selector\images\layer.png" />
-    <Content Include="plugins\layer_selector\images\layers.png" />
-    <Content Include="plugins\layer_selector\images\spinner.gif" />
-    <Content Include="plugins\layer_selector\layerConfigSchema.js" />
-    <Content Include="plugins\layer_selector\LayerManager.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
     <Content Include="js\lib\jquery.placeholder.js" />
@@ -214,17 +205,8 @@
     <Content Include="js\Plugin.js" />
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
-    <Content Include="plugins\layer_selector\AgsLoader.js" />
-    <Content Include="plugins\layer_selector\lib\jquery.placeholder.amd.min.js" />
-    <Content Include="plugins\layer_selector\lib\tv4.min.js" />
     <Content Include="js\lib\use.js" />
-    <Content Include="plugins\layer_selector\templates.html" />
-    <Content Include="plugins\layer_selector\treeFilter.js" />
-    <Content Include="plugins\layer_selector\main.css" />
-    <Content Include="plugins\layer_selector\main.js" />
-    <Content Include="plugins\layer_selector\Ui.js" />
     <Content Include="plugins\measure\AgsMeasure.js" />
-    <Content Include="plugins\layer_selector\WmsLoader.js" />
     <Content Include="plugins\measure\main.js" />
     <Content Include="plugins\measure\measure.css" />
     <Content Include="plugins\measure\templates.html" />
@@ -234,9 +216,6 @@
     <Content Include="plugins\subregion_toggle\subregion-toggle.css" />
     <Content Include="plugins\zoom_to\main.js" />
     <Content Include="plugins\zoom_to\ui.js" />
-    <Content Include="sample_plugins\custom_layer_selector\icon.png" />
-    <Content Include="sample_plugins\custom_layer_selector\icon_active.png" />
-    <Content Include="sample_plugins\custom_layer_selector\main.js" />
     <Content Include="sample_plugins\identify_point\icon.png" />
     <Content Include="sample_plugins\identify_point\icon_active.png" />
     <Content Include="sample_plugins\identify_point\main.js" />
@@ -268,17 +247,11 @@
     <Content Include="img\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="plugins\layer_selector\layers.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\regionSchema.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="plugins\layer_selector\plugin.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\measure\plugin.json" />
@@ -294,9 +267,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\TourInfo.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="sample_plugins\custom_layer_selector\layers.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\subregion_toggle\plugin.json" />
