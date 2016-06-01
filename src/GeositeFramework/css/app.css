@@ -1,4 +1,4 @@
-/* -------------------------------------------------- 
+/* --------------------------------------------------
    Table of Contents
 -----------------------------------------------------
 :: Shared Styles
@@ -38,6 +38,10 @@ input.code-like, textarea.code-like {
 .x-grid-cell
 {
     padding: 0px;
+}
+
+.x-body {
+    color: #444;
 }
 
 /* -----------------------------------------
@@ -81,26 +85,26 @@ input.code-like, textarea.code-like {
         margin-left: 22px;
         color: white;
         text-transform: uppercase;
-        
+
     }
     .top-bar ul > li.name h2 a {
         font-size: inherit;
         line-height: normal;
     }
-        
-    .top-bar ul > li:not(.name):hover, 
-    .top-bar ul > li:not(.name).active, 
+
+    .top-bar ul > li:not(.name):hover,
+    .top-bar ul > li:not(.name).active,
     .top-bar ul > li:not(.name):focus {
         background: white;
         background: rgba(255,255,255,.25);
         }
-        .top-bar ul > li:not(.name):hover a, 
-        .top-bar ul > li:not(.name).active a, 
+        .top-bar ul > li:not(.name):hover a,
+        .top-bar ul > li:not(.name).active a,
         .top-bar ul > li:not(.name):focus a {
             color: rgb(14, 133, 138);
             color: rgba(255,255,255,1);
         }
-    
+
     .top-bar ul.left {
         margin-left: 26px;
         font-size: 16px;
@@ -133,7 +137,7 @@ input.code-like, textarea.code-like {
 /* -----------------------------------------
    Content Area - Helpers
 ----------------------------------------- */
-    
+
 .content {
     position: relative;
     height: 100%;
@@ -204,7 +208,7 @@ input.code-like, textarea.code-like {
                     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
                     color: #FFF;
                 }
-        
+
         .content .sidebar ul.side-nav.bottom {
             position: absolute;
             bottom: 0;
@@ -213,7 +217,7 @@ input.code-like, textarea.code-like {
             .content .sidebar ul.side-nav.bottom > li.divider {
                 border-top: #808285 solid 1px;
             }
-            
+
         .content .sidebar img.icon {
             width: 32px;
             height: 32px;
@@ -257,7 +261,7 @@ input.code-like, textarea.code-like {
                 color: white;
             }
             .content .plugin-container-header a,
-            .content .legend .legend-header a {  
+            .content .legend .legend-header a {
                 float: right;
                 color: #CCC;
                 font-weight: bold;
@@ -273,13 +277,13 @@ input.code-like, textarea.code-like {
                     border-left: 1px solid #666;
                 }
                 .content .plugin-container-header a:hover,
-                .content .legend .legend-header a:hover {  
+                .content .legend .legend-header a:hover {
                     background: black;
                     color: white;
                 }
 
         .content .plugin-container-inner {
-            height: 100%; 
+            height: 100%;
             padding-top: 2px;
             overflow: auto;
         }
@@ -296,6 +300,10 @@ input.code-like, textarea.code-like {
 
         .content  .plugin-infographic label {
             display: inline;
+        }
+
+        .plugin-infographic a {
+            margin: 5px;
         }
 
 .tinner .tclose {
@@ -328,7 +336,7 @@ input.code-like, textarea.code-like {
     margin-top: 4px;
 }
 
-       
+
 
 /* -----------------------------------------
    Content Area - Map
@@ -341,7 +349,7 @@ input.code-like, textarea.code-like {
         margin-left: 0;
         display: inline-block;
         position: absolute;
-    }        
+    }
     .content .map {
         width: 100%;
         height: 100%;
@@ -434,7 +442,7 @@ input.code-like, textarea.code-like {
             .esriSimpleSlider.subregion-active {
                 top: 103px !important;
             }
-            
+
         .content .map .basemap-selector {
             position: absolute;
             top: 16px;
@@ -593,18 +601,23 @@ input.code-like, textarea.code-like {
     position: absolute;
     bottom: 45px;
     right: 105px;
-    width: 250px;
     height: 200px;
-    z-index: 2;
+    width: 255px;
+    min-width: 255px;
+    z-index: 101; /* show over plugin-container */
     font-weight: bold;
     background: #FFF;
     font-size: 12px;
     border-radius: 4px;
-    min-height: 240px;
     box-shadow: 0 0 12px #666;
     box-shadow: 0 0 12px rgba(0,0,0,.25);
     padding-bottom: 36px; /* header offset */
     overflow:visible;
+    display: none;
+    }
+    .content .legend.minimized {
+        height: 0;
+        min-height: 0;
     }
     .content .legend .legend-header {
         padding: 10px;
@@ -617,65 +630,43 @@ input.code-like, textarea.code-like {
         overflow: auto;
         height: 100%;
         width: 100%;
-        min-height: 200px;
-    }
-    .content .legend #legend-0_msg,
-    .content .legend #legend-1_msg {
-        color: #888;
-        font-weight: 400;
     }
 
-    .content .legend #legend-0_msg {
-        display: none;
-    }
-
-#legend-0 > div, #legend-1 > div, .custom-legend {
-    padding-bottom: 8px;
+.layer-legends {
+    overflow: hidden;
+}
+.legend-layer {
     float: left;
     width: 215px;
+    margin-bottom: 10px;
+    background-color: #fff;
     }
-    .legend-body .esriLegendService {
-        padding-bottom: 0;
+    .legend-layer .item {
+        float: left;
+        clear: left;
     }
-    .esriLegendService table {
-        margin: 0;
+    .legend-layer .extra {
+        display: none;
+    }
+    .legend-layer.show-extras .extra {
+        display: block;
+    }
+    .legend-layer.show-extras .expand {
+        display: none;
+    }
+    .legend-layer.scale .item {
+        clear: none;
+    }
+    .legend-layer img {
         border: none;
-        }
-        .esriLegendService table tbody tr {
-            background-color: #FFF;
-            }
-            .esriLegendService td {
-                padding: 0;
-                vertical-align: middle;
-                line-height: normal;
-                font-weight: 300;
-            }
-            .esriLegendService img {
-                height: 18px;
-                border: 1px solid #DDD;
-            }
-
-.esriLegendLayerLabel {
-    position: relative;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    height: 25px;
-}
-
-/* This span displays the raw name of a map layer.
-   The nicely-formatted name is also displayed, so
-   there's no harm in hiding this.*/
-span.esriLegendServiceLabel {
-    font-size: 1.2em;
-    display: none;
-}
-
-/* Bold the nicely-formatted layer name */
-table.esriLegendLayerLabel tbody tr td {
-    font-weight: bold;
-    padding-top: 4px;
-    padding-bottom: 1px;
-}
+    }
+    .legend-layer .item-label {
+        position: relative;
+        top: -4px;
+    }
+    .legend-layer .legend-title {
+        margin-bottom: 5px;
+    }
 
 .mCSB_container {
     margin-right: 0 !important;
@@ -954,7 +945,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 ----------------------------------------- */
 
 .lt-ie9 {
-    
+
 }
 
 /* ----------------------------------------
@@ -966,7 +957,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
 /* ----------------------------------------
     Subregions
 ------------------------------------------- */
-.subregion-tooltip.esriPopup .titlePane, .subregion-tooltip.esriPopup .actionsPane { 
+.subregion-tooltip.esriPopup .titlePane, .subregion-tooltip.esriPopup .actionsPane {
     display: none;
 }
 
@@ -996,7 +987,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     height: 50px;
     background-color: rgba(194, 32, 32, 0.5);
 }
-    
+
 .subregion-header p {
     color: #fff;
     opacity: 1.0;
@@ -1066,7 +1057,7 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     padding: 10px;
 }
 #print-preview-container p {
-    padding: 5px; 
+    padding: 5px;
 }
 
 #print-preview-print {

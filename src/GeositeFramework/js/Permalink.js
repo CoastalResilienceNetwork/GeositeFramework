@@ -9,7 +9,7 @@
             url: null,
             shortUrl: null
         },
-        
+
         initialize: function () {
             // Sometimes location.href will have a trailing #, sometimes it
             // won't. This makes sure to always append when missing.
@@ -18,7 +18,7 @@
 
             this.set('url', cleanHref + this.get('hash'));
         },
-        
+
         shorten: function() {
             var model = this,
                 request = gapi.client.urlshortener.url.insert({
@@ -41,7 +41,7 @@
     N.views.Permalink = Backbone.View.extend({
         dialogTemplate: null,
         embedView: null,
-        
+
         initialize: function () {
             this.template = N.app.templates['permalink-share-window'];
             this.model.on('change:height change:width', this.renderEmbedCode, this);
@@ -54,11 +54,10 @@
             'change .embed-size.height': function () { this.updateSize('height'); },
             'click .show-long-permalink': 'toggleLongPermalink'
         },
-        
-        render: function () {
 
+        render: function () {
             var view = this;
-            
+
             TINY.box.show({
                 html: this.template(view.model.toJSON()),
                 fixed: true,
@@ -81,6 +80,12 @@
                             view.selectText($domElement);
                         }
                     );
+
+                    if ($.i18n) {
+                        // Localize dialog, including the header which isn't a
+                        // part of this view.
+                        $(view.$el.parents('.popover')).localize();
+                    }
                 },
                 closejs: function() {
                     view.remove();
@@ -121,7 +126,7 @@
                 $dom.select();
             }
         }
-    }); 
+    });
 
     N.views.EmbedCode = Backbone.View.extend({
         template: null,
@@ -136,5 +141,5 @@
             );
         }
     });
-    
+
 }(Geosite));

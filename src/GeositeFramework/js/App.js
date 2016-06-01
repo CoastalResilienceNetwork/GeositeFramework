@@ -69,11 +69,13 @@
 
             initResizeHandler();
 
-            // Setup a manager for synced maps.  As maps are created, 
+            // Setup a manager for synced maps.  As maps are created,
             // they will be added to it.
             N.app.syncedMapManager = new N.SyncedMapManager(N.app.models.screen);
 
             registerPopupHandlers();
+
+            internationalize(N.app.data.region.language);
         },
 
         showHashUrlPopup: function (hash) {
@@ -88,7 +90,7 @@
             // function, then clear it. This is done instead of the
             // typical behavior of HashModels which is to continue
             // listening for changes in the location.hash
-            
+
             // IE8 will throw a syntax error if the hash contains a single
             // # character before entering hashmodels
             handleHashChangedFn(location.hash === '#' ? '' : location.hash);
@@ -102,7 +104,7 @@
             var bottomHeight         = $('.side-nav.bottom:visible').height(),
                 sidebarHeight        = $('.sidebar:visible').height(),
                 rightBottomHeight    = $('#right-pane:visible .side-nav.bottom').height();
-            
+
             $('.side-nav.top:visible').height(sidebarHeight - bottomHeight);
             $('#right-pane .side-nav.top').height(sidebarHeight - rightBottomHeight);
             $(N).trigger('resize');
@@ -134,6 +136,36 @@
 
         });
     };
+
+    function internationalize(lng) {
+        var options = {
+                // The language to internationalize for
+                lng: lng,
+                // No fallback language necessary since we fallback to keyphrases
+                fallbackLng: false,
+                // Following two required for using gettext() style keyphrases
+                keySeparator: false,
+                nsSeparator: false,
+                // Allows the use of sprintf arguments in the main .t() function,
+                // e.g. i18next.t('Longitude %f, Latitude %f', lng, lat)
+                overloadTranslationOptionHandler: i18nextSprintfPostProcessor.overloadTranslationOptionHandler,
+                // Path to load translations from
+                backend: {
+                    loadPath: 'languages/{{lng}}'
+                }
+            },
+            callback = function() {
+                // Once i18next is initialized, initialize the jQuery plugin
+                // which allows the use of data-i18n attributes
+                i18nextJquery.init(i18next, $);
+
+                // Internationalize everything tagged with .i18n by replacing
+                // its contents with that of the data-i18n attribute
+                $('.i18n').localize();
+            };
+
+        i18next.use(i18nextXHRBackend).use(i18nextSprintfPostProcessor).init(options, callback);
+    }
 
     new N.TemplateLoader().load(N.app.templates);
 

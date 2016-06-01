@@ -94,7 +94,7 @@ define(["jquery",
             _tooltipTemplate,
             _geometrySvc,
                 
-            showResultPopup = function (results) {
+            showResultPopup = function(results) {
                 // Delete the current info window (after grabbing its parent DOM node)
                 var map = options.map,
                     $parent = $(map.infoWindow.domNode).parent();
@@ -109,6 +109,10 @@ define(["jquery",
                 map.infoWindow.setContent(_popupTemplate(results));
                 map.infoWindow.setTitle(""); // hides title div
                 map.infoWindow.show(_points[0]);
+
+                if ($.i18n) {
+                    $parent.localize();
+                }
             },
 
             finish = function (results) {
@@ -196,6 +200,9 @@ define(["jquery",
 
             formatTooltip = function (segment, line) {
                 return _tooltipTemplate({
+                    instructions: i18next.t('Double-click to end a line segment. Single-click the first node to end a polygon.'),
+                    lengthLabel: i18next.t('Total Length'),
+                    segmentLabel: i18next.t('Segment Length'),
                     segmentLength: Azavea.numberToString(segment, 0),
                     totalLength: Azavea.numberToString(line, 0),
                     units: _unitsLookup[options.esriLengthUnits]

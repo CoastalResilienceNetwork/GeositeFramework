@@ -59,6 +59,7 @@ require(['use!Geosite',
                 });
             } catch (e) {
                 // Prevent the malfunctioning plugin from stopping the rest of the code execution
+                console.error(e.stack);
                 console.error(e);
             }
         }
@@ -107,7 +108,7 @@ require(['use!Geosite',
         Check that the plugin implements the minimal viable interface.
         Plugin code can just assume the plugin is valid if it has been loaded
         */
-        function checkPluginCompliance(model) { 
+        function checkPluginCompliance(model) {
             var pluginObject = model.get('pluginObject');
             return (_.isFunction(pluginObject.initialize));
         }
@@ -117,7 +118,7 @@ require(['use!Geosite',
         //     (This is implemented via a Backbone.Picky SingleSelect collection.)
         //   * Several plugins may be "active" -- toolbar icon highlighted, and possibly showing map layers.
         //     (This is represented by the plugin model's "active" attribute)
-        // 
+        //
         // Note that our JavaScript plugin object method names don't match this terminology -- specifically,
         // when a plugin is deselected it remains "active" in the UI sense, but we call the plugin deactivate()
         // method.
@@ -147,7 +148,7 @@ require(['use!Geosite',
 
             onSelectedChanged: function () {
                 if (this.selected) {
-                    var active = this.get('active')  
+                    var active = this.get('active')
                     if (!active && this.getShowHelpOnStartup()) {
                         this.set('displayHelp', true);
                     }
@@ -163,12 +164,12 @@ require(['use!Geosite',
             turnOff: function (callback) {
                 var self = this,
                     initiallySelected = this.selected,
-                    // Clean up event listeners and execute the callback, 
+                    // Clean up event listeners and execute the callback,
                     // we are done here.
                     cleanUp = function () {
                         self.off('plugin:deselected');
                         if (_.isFunction(callback)) {
-                            callback(); 
+                            callback();
                         }
                     },
 
@@ -182,7 +183,7 @@ require(['use!Geosite',
                     },
 
                     // Make this plugin no longer active, and inform it of its
-                    // new status via the hibernate function    
+                    // new status via the hibernate function
                     doDeactivate = function() {
                         self.set('active', false);
                         self.get('pluginObject').hibernate();
@@ -192,7 +193,7 @@ require(['use!Geosite',
                 // finish immediately and callback.  Otherwise, wait until
                 // we know that the plugin has finished its deactivation routine
                 // and then execute callback
-                if (!initiallySelected) { 
+                if (!initiallySelected) {
                     doDeselect();
                     doDeactivate();
                     cleanUp();
@@ -284,7 +285,7 @@ require(['use!Geosite',
         function createLegendContainer(view) {
             // Create container for custom legend and attach to legend element
             var $legendContainer = $('<div>', {'class': 'custom-legend'}).hide()
-                .appendTo(view.$el.parents('.content').find('.legend .legend-body'));
+                .appendTo(view.$el.parents('.content').find('.legend .legend-body .plugin-legends'));
 
             // Tell the model about $legendContainer so it can pass it to the plugin object
             view.model.set('$legendContainer', $legendContainer);
@@ -294,7 +295,7 @@ require(['use!Geosite',
         N.views = N.views || {};
         N.views.BasePlugin = Backbone.View.extend({
             // If your plugin happens to have clickable elements
-            // inside of the 'a' tag of the button container, 
+            // inside of the 'a' tag of the button container,
             // you should reduce the scope of this target by
             // doing a .stopPropagation() on your element.
             // A better solution would be to not include clickable
@@ -320,7 +321,7 @@ require(['use!Geosite',
             // The base class is a no-op for now, but the function must be declared.
             // Implementing classes will override this event
             handleClear: function handleClear() {}
-            
+
         });
     }());
 
@@ -371,6 +372,12 @@ require(['use!Geosite',
                     view.$legendContainer.hide();
                 }
             }
+
+            if ($.i18n) {
+                $(view.$uiContainer).localize();
+                $(view.$el).localize();
+            }
+
             return view;
         }
 
@@ -421,7 +428,7 @@ require(['use!Geosite',
                         oppositePaneHideCssPath = 'css/print-hide-map' +
                             (paneNumber === 0 ? 1 : 0) + '.css',
                         $printSandbox = $('#plugin-print-sandbox');
-                    
+
                     // Any previous plugin-prints may have left specific print css
                     // or sandbox elements.  Clear all so that this new print routine
                     // has no conflicts with other plugins.
@@ -434,7 +441,7 @@ require(['use!Geosite',
                     // Hide the possible same plugin from the opposite map pane
                     addCss(oppositePaneHideCssPath, printCssClass);
 
-                    // Give some time for the browser to parse the new CSS, 
+                    // Give some time for the browser to parse the new CSS,
                     // if this wasn't slightly delayed, occasionally the override would
                     // not be present and print features wouldn't show up.
                     _.delay(parseDeferred.resolve, 200);
@@ -661,8 +668,13 @@ require(['use!Geosite',
                 var pluginModel = this.model,
                     pluginObject = pluginModel.get('pluginObject');
 
-                var img = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
-                this.$el.append(img);
+	       if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
+		var snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
+	       } else {
+		var snippit = $(pluginObject.infoGraphic);
+	       }
+
+                this.$el.append(snippit);
 
                 var checkboxnode = $('<span>').get(0);
                 this.$el.append(checkboxnode);
@@ -675,26 +687,38 @@ require(['use!Geosite',
                     }
                 }, checkboxnode);
 
-                var lbl = $("<label>Don't Show This on Start</label>")
-                    .attr('for', nscheckBox.id);
+                var lbl = $("<label>Don't show this on start</label>")
+                    .addClass('i18n')
+                    .attr({
+                        'for': nscheckBox.id,
+                        'data-i18n': "Don't show this on start"
+                    });
+
                 this.$el.append(lbl);
 
                 var buttonnode = $('<span>').get(0);
                 this.$el.append(buttonnode);
 
-                var closeinfo = new Button({
-                    label: "Continue",
-                    onClick: function() {
+                $('<a>')
+                    .text('Next')
+                    .attr('data-i18n', 'Next')
+                    .attr('style', 'background:#F5EB75;color:#000')
+                    .addClass('button radius i18n')
+                    .click(function() {
                         pluginModel.set('displayHelp', false);
                         pluginObject.resize();
-                    }
-                }, buttonnode);
+                    })
+                    .appendTo(buttonnode);
+
+                if ($.i18n) {
+                    $(this.$el).localize();
+                }
             }
         });
     }());
 
     (function topbarPluginView() {
-        
+
         function render() {
             // Topbar plugins don't render into any predefined context,
             // simply provide a div, render a template containg an anchor
@@ -715,6 +739,10 @@ require(['use!Geosite',
                     .empty()
                     .append($container.append(pluginObject.renderLauncher()))
                     .append(toolsMarkup);
+            }
+
+            if ($.i18n) {
+                $(view.$el).localize();
             }
 
             return view;
