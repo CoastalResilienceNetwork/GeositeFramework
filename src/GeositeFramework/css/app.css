@@ -668,6 +668,16 @@ input.code-like, textarea.code-like {
         margin-bottom: 5px;
     }
 
+/* ESRI dijit content is put in the legend from some plugins */
+.esriLegendService table {
+    margin: 0;
+    border: none;
+}
+
+.esriLegendService td {
+    padding: 0;
+}
+
 .mCSB_container {
     margin-right: 0 !important;
 }
