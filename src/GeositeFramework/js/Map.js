@@ -232,7 +232,8 @@ require(['use!Geosite',
                     service.visibleLayers.sort(function(a, b) { return a - b; });
                     _.each(service.visibleLayers, function(layerId) {
                         var layer,
-                            legend;
+                            legend,
+                            layerId = parseInt(layerId);
 
                         if (isWms(service)) {
                             layer = _getWMSLayer(service, layerId);
