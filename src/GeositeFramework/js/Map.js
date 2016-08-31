@@ -301,6 +301,8 @@ require(['use!Geosite',
         dojo.connect(esriMap, 'onLayerAdd', redraw);
         dojo.connect(esriMap, 'onLayerRemove', redraw);
         dojo.connect(esriMap, 'onLayerSuspend', redraw);
+        // Allow plugins to trigger a legend redraw by calling map.resize()
+        dojo.connect(esriMap, 'resize', redraw);
     }
 
     N.views = N.views || {};
