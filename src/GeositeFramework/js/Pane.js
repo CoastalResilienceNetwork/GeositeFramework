@@ -104,26 +104,34 @@ require([
             var plugins = new N.collections.Plugins();
 
             _.each(N.plugins, function(PluginClass, i) {
-                var pluginObject = new PluginClass(),
-                    plugin = new N.models.Plugin({
-                        pluginObject: pluginObject,
-                        pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
-                    });
+                try {
+                    var pluginObject = new PluginClass(),
+                        plugin = new N.models.Plugin({
+                            pluginObject: pluginObject,
+                            pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                        });
 
-                // Load plugin only if it passes a compliance check ...
-                if (plugin.isCompliant()) {
-                    // ... and if we're on map 2, and the plugin isn't on the blacklist
-                    if (model.get('paneNumber') === 1) {
-                        if (getPluginMap2Availability(plugin.getId())) {
+                    // Load plugin only if it passes a compliance check ...
+                    if (plugin.isCompliant()) {
+                        // ... and if we're on map 2, and the plugin isn't on the blacklist
+                        if (model.get('paneNumber') === 1) {
+                            if (getPluginMap2Availability(plugin.getId())) {
+                                plugins.add(plugin);
+                            }
+                        } else {
                             plugins.add(plugin);
                         }
                     } else {
-                        plugins.add(plugin);
+                        console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
+                            pluginObject.toolbarName +
+                            ' is not loaded due to improper interface');
                     }
-                } else {
-                    console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
-                        pluginObject.toolbarName +
-                        ' is not loaded due to improper interface');
+                } catch(e) {
+                    console.error("/ --------------------");
+                    console.error("There was a problem creating a plugin.");
+                    console.error("The plugin launcher for this plugin will not appear in the sidebar.");
+                    console.error(e.stack);
+                    console.error("-------------------- /");
                 }
             });
 
