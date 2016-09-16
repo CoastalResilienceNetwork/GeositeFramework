@@ -140,7 +140,7 @@ require([
 
         // initPlugins() is separate from createPlugins() because:
         //     - We need to create plugin objects before rendering (so we can render their toolbar names).
-        //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
+        //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering.
 
         function initPlugins(model, esriMap) {
             var mapModel = model.get('mapModel'),
@@ -170,9 +170,9 @@ require([
                 N.app.dispatcher.trigger('launchpad:deactivate-subregion', { mapNumber: mapNumber });
             }
 
-            // For each plugin, turn it off to remove any currently loaded state, then 
+            // For each plugin, turn it off to remove any currently loaded state, then
             // once it is completely off, set the state of the plugin if it is participating
-            // in this scenario.  If it did have state, inform it that it is now active. 
+            // in this scenario.  If it did have state, inform it that it is now active.
             pane.get('plugins').each(function(pluginModel) {
                 pluginModel.turnOff(function() {
                     var stateWasSet = pane.setPluginState(pluginModel, stateOfPlugins, activeSubregion);
