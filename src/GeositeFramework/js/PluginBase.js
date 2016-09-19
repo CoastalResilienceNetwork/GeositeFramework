@@ -29,6 +29,7 @@ define(["dojo/_base/declare",
             toolbarType: "sidebar",
             showServiceLayersInLegend: true,
             allowIdentifyWhenActive: false,
+            showInfographicOnStart: false,
             // Allow the framework to put a custom print button for this plugin
             hasCustomPrint: false,
 
