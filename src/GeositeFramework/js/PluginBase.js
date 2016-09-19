@@ -142,6 +142,7 @@ define(["dojo/_base/declare",
                         identifyParams.height = map.height;
                         identifyParams.geometry = mapPoint;
                         identifyParams.mapExtent = map.extent;
+                        identifyParams.returnGeometry = true;
 
                         var identifyTask = new dIdentifyTask(service.url),
                             deferred = identifyTask.execute(identifyParams);
@@ -337,7 +338,10 @@ define(["dojo/_base/declare",
                     return identifiedFeatures;
                 }
 
-                function isThinFeature(feature) { return _.contains(['Point', 'Line', 'Polyline'], feature.attributes.Shape); }
+                function isThinFeature(feature) {
+                    return _.contains(['point', 'line', 'polyline'], feature.geometry.type);
+                }
+
                 function isAreaFeature(feature) { return !isThinFeature(feature); }
             }
 
