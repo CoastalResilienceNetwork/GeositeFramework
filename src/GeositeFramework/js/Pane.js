@@ -104,26 +104,34 @@ require([
             var plugins = new N.collections.Plugins();
 
             _.each(N.plugins, function(PluginClass, i) {
-                var pluginObject = new PluginClass(),
-                    plugin = new N.models.Plugin({
-                        pluginObject: pluginObject,
-                        pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
-                    });
+                try {
+                    var pluginObject = new PluginClass(),
+                        plugin = new N.models.Plugin({
+                            pluginObject: pluginObject,
+                            pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                        });
 
-                // Load plugin only if it passes a compliance check ...
-                if (plugin.isCompliant()) {
-                    // ... and if we're on map 2, and the plugin isn't on the blacklist
-                    if (model.get('paneNumber') === 1) {
-                        if (getPluginMap2Availability(plugin.getId())) {
+                    // Load plugin only if it passes a compliance check ...
+                    if (plugin.isCompliant()) {
+                        // ... and if we're on map 2, and the plugin isn't on the blacklist
+                        if (model.get('paneNumber') === 1) {
+                            if (getPluginMap2Availability(plugin.getId())) {
+                                plugins.add(plugin);
+                            }
+                        } else {
                             plugins.add(plugin);
                         }
                     } else {
-                        plugins.add(plugin);
+                        console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
+                            pluginObject.toolbarName +
+                            ' is not loaded due to improper interface');
                     }
-                } else {
-                    console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
-                        pluginObject.toolbarName +
-                        ' is not loaded due to improper interface');
+                } catch(e) {
+                    console.error("/ --------------------");
+                    console.error("There was a problem creating a plugin.");
+                    console.error("The plugin launcher for this plugin will not appear in the sidebar.");
+                    console.error(e.stack);
+                    console.error("-------------------- /");
                 }
             });
 
@@ -140,7 +148,7 @@ require([
 
         // initPlugins() is separate from createPlugins() because:
         //     - We need to create plugin objects before rendering (so we can render their toolbar names).
-        //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering. 
+        //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering.
 
         function initPlugins(model, esriMap) {
             var mapModel = model.get('mapModel'),
@@ -170,9 +178,9 @@ require([
                 N.app.dispatcher.trigger('launchpad:deactivate-subregion', { mapNumber: mapNumber });
             }
 
-            // For each plugin, turn it off to remove any currently loaded state, then 
+            // For each plugin, turn it off to remove any currently loaded state, then
             // once it is completely off, set the state of the plugin if it is participating
-            // in this scenario.  If it did have state, inform it that it is now active. 
+            // in this scenario.  If it did have state, inform it that it is now active.
             pane.get('plugins').each(function(pluginModel) {
                 pluginModel.turnOff(function() {
                     var stateWasSet = pane.setPluginState(pluginModel, stateOfPlugins, activeSubregion);
