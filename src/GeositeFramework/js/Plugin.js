@@ -236,8 +236,7 @@ require(['use!Geosite',
                 if (typeof localStorage[showValueKey] !== 'undefined') {
                     return localStorage[showValueKey] === 'true';
                 } else {
-					localStorage.setItem(showValueKey,pluginObject.showInfographicOnStart);
-					return localStorage[showValueKey] === 'true';
+					return pluginObject.showInfographicOnStart;
 				}
             },
 
