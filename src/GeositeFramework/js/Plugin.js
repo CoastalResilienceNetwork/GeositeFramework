@@ -1,4 +1,4 @@
-﻿/*jslint nomen:true, devel:true */
+/*jslint nomen:true, devel:true */
 /*global Backbone, _, $ */
 
 // A plugin wraps around a plugin object and manages it in backbone
@@ -237,8 +237,9 @@ require(['use!Geosite',
                     showValueKey = pluginObject.toolbarName + " showinfographic";
                 if (typeof localStorage[showValueKey] !== 'undefined') {
                     return localStorage[showValueKey] === 'true';
-                }
-                return true;
+                } else {
+					return pluginObject.showInfographicOnStart;
+				}
             },
 
             setShowHelpOnStartup: function(val) {
