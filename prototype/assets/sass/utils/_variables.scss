@@ -1,0 +1,208 @@
+/* * * *
+ * Screen Sizes
+ * Used in _mixins.scss > @mixin respond-to($breakpoint)
+ * * * */
+$breakpoints: (
+
+  'xxs': (max-width: 480px),
+
+  'xs': (max-width: 767px),
+
+  'sm': "(min-width: 768px) and (max-width: 991px)",
+  'sm-up': (min-width: 768px),
+  'sm-down': (max-width: 991px),
+
+  'md': "(min-width: 992px) and (max-width: 1200px)",
+  'md-up': (min-width: 992px),
+  'md-down': (max-width: 1200px),
+
+  'lg': (min-width: 1201px),
+);
+
+
+/* * * *
+ * Settings
+ *
+ * * * */
+$leaflet-control-attribution-on: false;
+
+
+/* * * *
+ * Colors
+ *
+ * * * */
+$brand-primary: #3BB3BE;
+$brand-secondary: #529CAD;
+$brand-danger: #DA4460;
+$brand-warning: #E7A938;
+$brand-color-1: #0F1C27;
+$brand-color-2: #27343E;
+
+$border-color: #ddd;
+
+$gray-1: #D9DBDE;
+$gray-2: #cdd5d5;
+$gray-3: #999;
+$gray-4: #666;
+$gray-5: #222;
+
+
+/* * * *
+ * Layout
+ *
+ * * * */
+
+ $padding-unit: 12px;
+
+
+/* * * *
+ * z-index
+ *
+ * * * */
+$zindex-popover: 1060;
+$zindex-map-attribution: 2040;
+
+/* * * *
+ * Columns
+ * * * */
+$column-count: 12;
+$column-padding: 1rem;
+
+
+/* * * *
+ * Typography
+ *
+ * * * */
+
+$modular-scale: 1.25;
+
+$font-size-base: 1.5rem;
+
+$link-color: $brand-primary;
+
+$font-size-body: $font-size-base;
+$body-line-height: 1.5;
+$body-font-color: #73787d;
+$body-font-weight: 500;
+$body-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+
+$monospace-font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+
+$font-size-h1: 18px;
+$font-size-h2: 24px;
+$font-size-h3: 15px;
+$font-size-h4: 13px;
+$font-size-h5: 11px;
+$font-size-h6: 11px;
+$heading-line-height: 1.2;
+$heading-font-color: #101D28;
+$heading-font-weight: 900;
+$heading-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+$heading-margin-top: 1rem;
+$heading-margin-bottom: 1rem;
+
+$paragraph-margin: 1rem;
+
+/* * * *
+ * Header
+ *
+ * * * */
+
+$header-height: 60px;
+
+/* * * *
+ * Map Components
+ *
+ * * * */
+$map-attribution-font-size: 12px;
+$map-attribution-font-color: $body-font-color;
+
+
+/* * * *
+ * Loading
+ *
+ * * * */
+$loading-dimension: 3rem;
+$loading-dimension-large: 8rem;
+$loading-dimension-small: 1.7rem;
+
+
+/* * * *
+ * Button
+ *
+ * * * */
+$button-border-radius: 3px;
+$button-padding-vertical: 0.6rem;
+$button-padding-horizontal: 1.4rem;
+
+/* * * *
+ * Sidebar
+ *
+ * * * */
+
+$sidebar-width: 350px;
+
+/* * * *
+ * Dropdown
+ *
+ * * * */
+$dropdown-menu-border-radius: $button-border-radius;
+
+
+/* * * *
+ * Tooltip
+ *
+ * * * */
+$tooltip-font-family: $body-font-family;
+$tooltip-font-size: $font-size-h6;
+$tooltip-padding-vertical: 0.4rem;
+$tooltip-padding-horizontal: 0.8rem;
+$tooltip-color: #000;
+$tooltip-arrow-width: 0.4rem;
+$tooltip-arrow-height: 0.5rem;
+
+
+/* * * *
+ * Modal
+ *
+ * * * */
+$modal-font-size: $font-size-h6;
+$modal-width: 60rem;
+$modal-width-large: 80rem;
+$modal-width-small: 50rem;
+$modal-heading-padding: 1.5rem;
+$modal-body-padding: 2.5rem;
+$modal-footer-padding: 1.5rem;
+$modal-border-radius: 4px;
+
+
+/* * * *
+ * Alert
+ *
+ * * * */
+$alert-padding-vertical: 1.4rem;
+$alert-padding-horizontal: 1.8rem;
+$alert-border-radius: 3px;
+$alert-ghost-style: true;
+$alert-font-size: $font-size-body;
+$alert-heading-font-size: $font-size-body;
+$alert-heading-font-weight: $heading-font-weight;
+$alert-font-color: #fff;
+
+
+/* * * *
+ * Popover
+ *
+ * * * */
+$popover-padding-vertical: 0.9rem;
+$popover-padding-horizontal: 1.4rem;
+$popover-border-radius: 3px;
+$popover-font-size: $font-size-body;
+$popover-heading-font-size: $font-size-body;
+$popover-font-color: $heading-font-color;
+$popover-background-color: #fff;
+$popover-margin: 7px;
+$popover-max-width: 28rem;
+$popover-box-shadow: 2px 2px 20px rgba(0,0,0,.09);
+$popover-border: 1px solid rgba(0,0,0,.15);
+$popover-arrow: 8px;
