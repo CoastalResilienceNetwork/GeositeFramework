@@ -35,7 +35,7 @@
         },
 
         toggleMapSync: function (forceSyncTo) {
-            // Toggle the value of the sync property, or if forceSyncTo is set, 
+            // Toggle the value of the sync property, or if forceSyncTo is set,
             // to the value provided
             var sync = (forceSyncTo === undefined ? !this.get('syncMaps') : forceSyncTo);
             this.set('syncMaps', sync);
@@ -56,7 +56,7 @@
 (function (N) {
     'use strict';
 
-    var paneSelectors = ["#left-pane", "#right-pane"],
+    var paneSelectors = [".flex-container", "#right-pane"],
         paneViews = [null, null],
         $body = $('body'),
         bodyClasses = {

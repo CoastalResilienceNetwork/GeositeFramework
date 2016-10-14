@@ -468,7 +468,7 @@ require(['use!Geosite',
                 .hide();
 
             // Attach to top pane element
-            view.$el.parents('.content').find('.map-outer > .map').append($uiContainer);
+            view.$el.parents().find('.map').append($uiContainer);
 
             setResizable(view, pluginObject.resizable);
 

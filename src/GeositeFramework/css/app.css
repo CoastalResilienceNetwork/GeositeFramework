@@ -12,16 +12,10 @@
    Shared Styles
 ----------------------------------------- */
 
-@import url(http://fonts.googleapis.com/css?family=Archivo+Narrow:400,700);
-
 html, body {
     height: 100%;
     min-height: 100%;
     overflow: hidden;
-    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif !important;
-}
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
 }
 
 input.code-like, textarea.code-like {
@@ -342,21 +336,6 @@ input.code-like, textarea.code-like {
    Content Area - Map
 ----------------------------------------- */
 
-    .content .map-outer {
-        width: 100%;
-        height: 100%;
-        margin-left: 85px;
-        margin-left: 0;
-        display: inline-block;
-        position: absolute;
-    }
-    .content .map {
-        width: 100%;
-        height: 100%;
-        padding-right: 85px;
-        background: #EEE;
-        position: relative;
-        }
         .content .map .top-tools {
             position: absolute;
             top: 20px;
@@ -444,9 +423,10 @@ input.code-like, textarea.code-like {
             }
 
         .content .map .basemap-selector {
+            color: #444;
             position: absolute;
             top: 16px;
-            right: 105px;
+            right: 16px;
             cursor: pointer;
             z-index: 9;
             display: block;
@@ -539,7 +519,6 @@ input.code-like, textarea.code-like {
 .identify-results {
     font-weight: 300;
     font-size: 13px;
-    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
     padding-bottom: 6px;
 }
 
@@ -975,7 +954,6 @@ body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide_left:after {
     display: block;
     color: #fff !important;
     background-color: #444 !important;
-    font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
     border-bottom: none !important;
     border-radius: 12px;
     width: 100px;
