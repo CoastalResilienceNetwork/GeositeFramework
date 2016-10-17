@@ -669,13 +669,14 @@ require(['use!Geosite',
 
             render: function() {
                 var pluginModel = this.model,
-                    pluginObject = pluginModel.get('pluginObject');
+                    pluginObject = pluginModel.get('pluginObject'),
+                    snippit;
 
-	       if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
-		var snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
-	       } else {
-		var snippit = $(pluginObject.infoGraphic);
-	       }
+                if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
+                    snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
+                } else {
+                    snippit = $(pluginObject.infoGraphic);
+                }
 
                 this.$el.append(snippit);
 
