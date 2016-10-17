@@ -53,7 +53,7 @@ require(['use!Geosite',
                         dispatcher: N.app.dispatcher
                     },
                     map: N.createMapWrapper(esriMap, mapModel, pluginObject),
-                    container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
+                    container: ($uiContainer ? $uiContainer.find('.sidebar-content')[0] : undefined),
                     legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
                     printButton: ($uiContainer ? $uiContainer.find('.plugin-print') : undefined)
                 });
@@ -306,8 +306,8 @@ require(['use!Geosite',
             // into. Make your UI separate from the button that
             // launches it.
             events: {
-                'click a.plugin-launcher': 'handleLaunch',
-                'click a.plugin-clear': 'handleClear'
+                'click button.plugin-launcher': 'handleLaunch',
+                'click button.plugin-clear': 'handleClear'
             },
 
             initialize: function () { initialize(this); },
@@ -338,8 +338,6 @@ require(['use!Geosite',
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
             createHelpScreen(view);
-            setWidth(view, pluginObject.width);
-            setHeight(view, pluginObject.height);
             view.listenTo(model, 'change:displayHelp', onDisplayHelpChanged);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
@@ -358,12 +356,12 @@ require(['use!Geosite',
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.model.selected === true) {
-                view.$el.addClass("selected-plugin");
+                view.$el.find('button').addClass("active");
                 if (view.$uiContainer) {
                     view.$uiContainer.show();
                 }
             } else {
-                view.$el.removeClass("selected-plugin");
+                view.$el.find('button').removeClass("active");
                 if (view.$uiContainer) {
                     view.$uiContainer.hide();
                 }
@@ -398,19 +396,11 @@ require(['use!Geosite',
                     isHelpButtonVisible: isHelpButtonVisible(view),
                     hasCustomPrint: pluginObject.hasCustomPrint
                 },
-                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
-                calculatePosition = function ($el) {
-                    return {
-                        top: 64,
-                        left: 70
-                    };
-                };
+                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
             view.$uiContainer = $uiContainer;
 
             $uiContainer
-                // Position the dialog
-                .css(calculatePosition(view.$el))
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
@@ -468,12 +458,12 @@ require(['use!Geosite',
                 .hide();
 
             // Attach to top pane element
-            view.$el.parents().find('.map').append($uiContainer);
+            view.$el.parents().find('.content .nav-apps').after($uiContainer);
 
             setResizable(view, pluginObject.resizable);
 
             new ConstrainedMoveable($uiContainer[0], {
-                handle: $uiContainer.find('.plugin-container-header')[0],
+                handle: $uiContainer.find('.sidebar-nav')[0],
                 within: true
             });
 
@@ -554,7 +544,7 @@ require(['use!Geosite',
         function createHelpScreen(view) {
             var model = view.model,
                 pluginObject = model.get('pluginObject'),
-                pluginContainer = view.$uiContainer.find('.plugin-container');
+                pluginContainer = view.$uiContainer;
 
             if (pluginObject.infoGraphic) {
                 view.helpScreen = new N.views.InfoGraphicView({
@@ -576,7 +566,7 @@ require(['use!Geosite',
                 model = view.model,
                 pluginObject = model.get('pluginObject'),
                 $uiContainer = view.$uiContainer,
-                $mainPanel = $uiContainer.find('.plugin-container-inner'),
+                $mainPanel = $uiContainer.find('.sidebar-content'),
                 showInfoGraphic = !!model.get('displayHelp');
 
             if (!view.helpScreen) {
@@ -593,15 +583,6 @@ require(['use!Geosite',
 
             // Disable resizing when infographic is active
             setResizable(this, pluginObject.resizable && !showInfoGraphic);
-
-            // Expand plugin panel to fit content when infographic is active
-            if (showInfoGraphic) {
-                setWidth(this, null);
-                setHeight(this, null);
-            } else {
-                setWidth(this, pluginObject.width);
-                setHeight(this, pluginObject.height);
-            }
 
             var primaryContainerVisible = !showInfoGraphic;
             pluginObject.onContainerVisibilityChanged(primaryContainerVisible);
@@ -629,19 +610,9 @@ require(['use!Geosite',
             view.$uiContainer.toggleClass('resizable', resizable);
         }
 
-        function setWidth(view, width) {
-            var $uiContainer = view.$uiContainer[0];
-            domStyle.set($uiContainer, 'width', width == null ? 'auto' : width + 'px');
-        }
-
-        function setHeight(view, height) {
-            var $uiContainer = view.$uiContainer[0];
-            domStyle.set($uiContainer, 'height', height == null ? 'auto' : height + 'px');
-        }
-
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
-            tagName: 'li',
+            tagName: 'div',
             className: 'sidebar-plugin',
             $uiContainer: null,
             $legendContainer: null,
@@ -705,7 +676,7 @@ require(['use!Geosite',
 
                 $('<a>')
                     .text('Next')
-                    .attr('data-i18n', 'Next')
+                    .attr('data-i18n', 'Get started')
                     .attr('style', 'background:#F5EB75;color:#000')
                     .addClass('button radius i18n')
                     .click(function() {

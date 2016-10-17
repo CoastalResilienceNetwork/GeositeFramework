@@ -140,89 +140,9 @@ input.code-like, textarea.code-like {
     float: left;
     display: none;
 }
-.view-left #left-pane,
-.view-right #right-pane,
-.view-split .content {
-    display: block;
-}
 .view-split .content {
     width: 50%;
 }
-
-/* -----------------------------------------
-   Content Area - Sidebar
------------------------------------------ */
-    .content .sidebar {
-        width: 85px;
-        height: 100%;
-        background: #333;
-        position: relative;
-        float: left;
-
-        box-shadow: 0 0 20px #666;
-        box-shadow: 0 0 20px rgba(0,0,0,.5);
-        z-index: 9;
-        }
-        .content .sidebar ul.side-nav {
-            padding: 0;
-            }
-            .content .sidebar ul.side-nav li {
-                margin: 0;
-                }
-                .content .sidebar ul.side-nav li:hover a {
-                    background: #222;
-                    color: #FFF;
-                }
-                .content .sidebar ul.side-nav li a {
-                    text-align: center;
-                    color: #939598;
-                    min-height: 75px;
-                    padding: 8px 0 8px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    line-height: 16px;
-                }
-            .content .sidebar ul.side-nav.top {
-                overflow: hidden;
-                box-shadow: 0 0 15px black inset;
-            }
-            .content .sidebar ul.side-nav.top li {
-                border-bottom: #808285 solid 1px;
-                }
-                .content .sidebar ul.side-nav.top li:last-child {
-                    border-bottom: none;
-                }
-                .content .sidebar ul.side-nav.top li.active a {
-                    background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
-                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
-                    background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-                    background: -o-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-                    background: -ms-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-                    background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
-                    color: #FFF;
-                }
-
-        .content .sidebar ul.side-nav.bottom {
-            position: absolute;
-            bottom: 0;
-            background: #444;
-            }
-            .content .sidebar ul.side-nav.bottom > li.divider {
-                border-top: #808285 solid 1px;
-            }
-
-        .content .sidebar img.icon {
-            width: 32px;
-            height: 32px;
-            display: block;
-            margin: 0 auto 7px;
-            border: none;
-            color: transparent;
-        }
-        .content .sidebar-plugin .plugin-launcher div {
-            padding: 0 12px;
-        }
 
     .content .plugin-container-outer {
         position: absolute;
@@ -577,6 +497,7 @@ input.code-like, textarea.code-like {
 ----------------------------------------- */
 
 .content .legend {
+    color: #000;
     position: absolute;
     bottom: 45px;
     right: 105px;

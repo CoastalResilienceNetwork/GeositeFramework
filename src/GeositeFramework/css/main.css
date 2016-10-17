@@ -924,7 +924,8 @@ nav {
     font-size: 13px
 }
 .sidebar-content {
-    padding: 36px 12px
+    padding: 36px 12px;
+    height: 100%;
 }
 .sidebar-content section {
     padding: 10px 0

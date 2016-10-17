@@ -48,6 +48,7 @@ define(["dojo/_base/declare",
             resizable: true,
             width: 300,
             height: 400,
+            icon: "globe",
 
             initialize: function() {},
             activate: function () {},

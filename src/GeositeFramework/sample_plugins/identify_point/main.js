@@ -12,6 +12,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             hasCustomPrint: true,
             usePrintPreviewMap: true,
             previewMapSize: [500, 350],
+            icon: 'info-2',
 
             initialize: function(args) {
                 declare.safeMixin(this, args);
