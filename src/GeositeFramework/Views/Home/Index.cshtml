@@ -61,8 +61,9 @@
 <!--[if IE 8]>          <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-    <meta http-equiv="x-ua-compatible" content="IE=9"/>
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@Model.TitleMain.Text | @Model.TitleDetail.Text</title>
 
     <!-- Load CSS for plugins -->
@@ -82,8 +83,9 @@
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/jquery.dropdown.css"/>
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
 
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
@@ -146,7 +148,7 @@
 
 
 <!-- EX.: view-split, view-left, view-right -->
-<body class="view-left" style="zoom: 0 !important;">
+<body class="app-fullscreen" style="zoom: 0 !important;">
 
     <!-- iframe and form are used in tandem to facilitate a non-reloading
         POST to the download URL.  The form targets the iframe, making it reload
@@ -158,34 +160,34 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        <div class="sidebar">
-            <ul class="plugins side-nav twelve top"></ul>
-            <ul class="side-nav twelve bottom"></ul>
-        </div>
-        <div class="map-outer">
-            <div id="map-<%= paneNumber %>" class="map">
-                <div class="control-container">
-                    <div class="top-tools"></div>
-                    <div class="tools"></div>
-                    <div class="basemap-selector">
-                        <div class="basemap-selector-title"></div>
-                        <div class="basemap-selector-list">
-                            <ul>
-                            </ul>
+        <nav class="nav-apps plugins">
+        </nav>
+        <div class="flex-expand">
+            <div class="flex-container">
+                <div id="map-0" class="map">
+                    <div class="control-container">
+                        <div class="top-tools"></div>
+                        <div class="tools"></div>
+                        <div class="basemap-selector">
+                            <div class="basemap-selector-title"></div>
+                            <div class="basemap-selector-list">
+                                <ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="legend-container-<%= paneNumber %>" class="legend">
-                    <div class="legend-header">
-                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    <div id="legend-container-<%= paneNumber %>" class="legend">
+                        <div class="legend-header">
+                            <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                        </div>
+                        <div class="legend-body">
+                            <div class="layer-legends"></div>
+                            <div class="plugin-legends"></div>
+                        </div>
                     </div>
-                    <div class="legend-body">
-                        <div class="layer-legends"></div>
-                        <div class="plugin-legends"></div>
-                    </div>
+                    <div class="subregion-tooltip"></div>
                 </div>
-                <div class="subregion-tooltip"></div>
             </div>
         </div>
     </script>
@@ -286,10 +288,10 @@
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-            <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;">
-                <img src="<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
-                <div class="i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></div>
-            </a>
+        <button class="nav-apps-button" i18n" data-i18n="[title]<%=fullName%>">
+            <span class="button-icon"><i class="icon-bell"></i></span>
+            <span class="button-text i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></span>
+        </button
     </script>
 
     <script type="text/template" id="template-topbar-plugin">
@@ -525,23 +527,42 @@
     </script>
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
-    <div class="fixed">
-        <nav class="top-bar">
-            <ul>
-                <li class="name">
-                    <h1>@OptionalLinkText(@Model.TitleMain)</h1>
-                    <h2>@OptionalLinkText(@Model.TitleDetail)</h2>
-                </li>
-                <!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
-                <li class="toggle-topbar"><a href="javascript:;"></a></li>
+    <header>
+        <div class="dropdown header-dropdown nav-main-dropdown">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="nav-main-title">
+                        <h1>@OptionalLinkText(@Model.TitleMain)</h1>
+                    </div>
+                    <i class="dropdown-icon icon-menu"></i>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
+                @RenderLinks(Model.HeaderLinks)
             </ul>
-            <section>
-                <ul class="right">
-                    @RenderLinks(Model.HeaderLinks)
-                </ul>
-            </section>
-        </nav>
-    </div>
+        </div>
+        <div class="dropdown header-dropdown nav-locations">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="installation-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="nav-locations-content">
+                    New York City<i class="dropdown-icon icon-angle-down"></i>
+                </span>
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="installation-menu">
+                <li><a href="#">California</a></li>
+                <li><a href="#">Connecticut</a></li>
+                <li><a href="#">Gulf of Mexico</a></li>
+                <li><a href="#">Grenada, St. Vincent &amp; the Grenadines</a></li>
+                <li><a href="#">MesoAmerican Reef</a></li>
+                <li><a href="#">New York</a></li>
+                <li><a href="#">New Jersey</a></li>
+                <li><a href="#">Southeast Florida</a></li>
+                <li><a href="#">United States</a></li>
+                <li><a href="#">U.S. Virgin Islands</a></li>
+                <li><a href="#">Washington</a></li>
+            </ul>
+        </div>
+    </header>
 
     @Html.Partial("TourInfo")
 
@@ -550,7 +571,7 @@
     <div id="plugin-print-sandbox"></div>
 
     <!-- LEFT CONTENT AREA -->
-    <div id="left-pane" class="content"></div>
+    <div class="flex-container content"></div>
 
     <!-- RIGHT CONTENT AREA -->
     <div id="right-pane" class="content"></div>
@@ -575,12 +596,13 @@
     <script src="Scripts/json2.min.js"></script> <!-- Can be removed when IE8 support is dropped -->
     <script src="js/lib/foundation/foundation.min.js"></script>
     <script src="js/lib/foundation/app.js"></script>
-    <script src="js/lib/jquery.dropdown.min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
     <script src="js/lib/TinyBox2.js"></script>
     <script src="js/lib/pageguide.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
             // Configure the Dojo module loader so that module identifiers starting with "plugins/"
