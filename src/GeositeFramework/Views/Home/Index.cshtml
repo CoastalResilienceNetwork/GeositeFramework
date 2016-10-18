@@ -57,6 +57,15 @@
     }
 
 }
+
+@helper RenderRegionLinks(IList<Geosite.Link> links) {
+    foreach (var link in links) {
+        <li id="@link.ElementId">
+            <a target="_blank" href="@link.Url">@link.Text</a>
+        </li>
+    }
+}
+
 <!DOCTYPE html>
 <!--[if IE 8]>          <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
@@ -543,23 +552,14 @@
         </div>
         <div class="dropdown header-dropdown nav-locations">
             <button class="button dropdown-toggle nav-main-button" type="button" id="installation-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="nav-locations-content">
-                    New York City<i class="dropdown-icon icon-angle-down"></i>
-                </span>
+                <div class="nav-locations-content">
+                    @OptionalLinkText(@Model.TitleDetail)
+                    <i class="dropdown-icon icon-angle-down"></i>
+                </div>
             </button>
 
             <ul class="dropdown-menu" aria-labelledby="installation-menu">
-                <li><a href="#">California</a></li>
-                <li><a href="#">Connecticut</a></li>
-                <li><a href="#">Gulf of Mexico</a></li>
-                <li><a href="#">Grenada, St. Vincent &amp; the Grenadines</a></li>
-                <li><a href="#">MesoAmerican Reef</a></li>
-                <li><a href="#">New York</a></li>
-                <li><a href="#">New Jersey</a></li>
-                <li><a href="#">Southeast Florida</a></li>
-                <li><a href="#">United States</a></li>
-                <li><a href="#">U.S. Virgin Islands</a></li>
-                <li><a href="#">Washington</a></li>
+                @RenderRegionLinks(Model.RegionLinks)
             </ul>
         </div>
     </header>

@@ -70,6 +70,9 @@ namespace GeositeFramework.Tests
             Expect(geosite.HeaderLinks.Count, EqualTo(2));
             Expect(geosite.HeaderLinks[0].Url, EqualTo("http://www.azavea.com/"));
             Expect(geosite.HeaderLinks[1].Text, EqualTo("GIS"));
+            Expect(geosite.RegionLinks.Count, EqualTo(11));
+            Expect(geosite.RegionLinks[10].Text, EqualTo("Washington"));
+            Expect(geosite.RegionLinks[3].Url, EqualTo("http://maps.coastalresilience.org/gsvg/"));
             Expect(geosite.PluginModuleIdentifiers, EqualTo("'layer_selector/main', 'measure/main', 'nearshore_waves/main', 'explode/main'"));
             Expect(geosite.PluginVariableNames, EqualTo("p0, p1, p2, p3"));
             Expect(geosite.PluginCssUrls, Contains("main.css"));
