@@ -130,7 +130,9 @@ require(['use!Geosite',
             defaults: {
                 pluginObject: null,
                 active: false,
-                displayHelp: false
+                displayHelp: false,
+                pluginLayers: {},
+                pluginLayersVisible: true
             },
             initialize: function () { initialize(this); },
 
@@ -160,6 +162,21 @@ require(['use!Geosite',
                 } else {
                     this.get('pluginObject').deactivate();
                     this.trigger('plugin:deselected');
+                }
+            },
+
+            toggleLayers: function () {
+                var currentPlugin = this.get('pluginObject'),
+                    pluginLayersVisible = this.get('pluginLayersVisible');
+
+                if (pluginLayersVisible) {
+                    this.set('pluginLayers', currentPlugin.map.getMyLayers());
+                    currentPlugin.map.removeAllLayers();
+                    this.set('pluginLayersVisible', false);
+                } else {
+                    currentPlugin.map.addLayers(this.get('pluginLayers'));
+                    this.set('pluginLayers', {});
+                    this.set('pluginLayersVisible', true);
                 }
             },
 
@@ -401,6 +418,10 @@ require(['use!Geosite',
             view.$uiContainer = $uiContainer;
 
             $uiContainer
+                // Toggle plugin layers on and off when eye-icon button's clicked
+                .find('.plugin-eye').on('click', function () {
+                    model.toggleLayers();
+                }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
