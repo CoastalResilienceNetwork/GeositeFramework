@@ -163,6 +163,10 @@ require(['use!Geosite',
                 }
             },
 
+            hibernate: function () {
+                this.get('pluginObject').hibernate();
+            },
+
             turnOff: function (callback) {
                 var self = this,
                     initiallySelected = this.selected,
@@ -401,6 +405,10 @@ require(['use!Geosite',
             view.$uiContainer = $uiContainer;
 
             $uiContainer
+                // Call `hibernate` method on plugin when the eye icon is clicked
+                .find('.plugin-eye').on('click', function () {
+                    model.hibernate();
+                }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
