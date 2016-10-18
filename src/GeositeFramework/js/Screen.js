@@ -56,8 +56,8 @@
 (function (N) {
     'use strict';
 
-    var paneSelectors = [".flex-container", "#right-pane"],
-        paneViews = [null, null],
+    var paneSelectors = ["#left-pane"],
+        paneViews = [null],
         $body = $('body'),
         bodyClasses = {
             split: 'view-split',

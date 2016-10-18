@@ -288,8 +288,8 @@
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-        <button class="nav-apps-button" i18n" data-i18n="[title]<%=fullName%>">
-            <span class="button-icon"><i class="icon-bell"></i></span>
+        <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]<%=fullName%>">
+            <span class="button-icon"><i class="icon-<%- pluginObject.icon %>"></i></span>
             <span class="button-text i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></span>
         </button
     </script>
@@ -314,23 +314,28 @@
     </script>
 
     <script type="text/template" id="template-plugin-container">
-        <div class="plugin-container-outer" id="<%= id %>" style="position: absolute;"> <!-- Extra outer div to minimize mis-alignment of dojo resize "ghost".
-                                                                                             Position:absolute to eliminate jump in dojo drag. -->
-            <div class="plugin-container">
-                <div class="plugin-container-header">
-                    <h6 class="i18n" data-i18n="<%- title %>"><%- title %></h6>
-                    <a class="plugin-off" href="javascript:;">&#10006;</a>
-                    <a class="plugin-close" href="javascript:;">&#95;</a>
-
+        <div class="sidebar sidebar-width-small content-scrollable" id="<%= id %>">
+            <div class="sidebar-nav">
+                <h2 class="nav-title" class="i18n" data-i18n="<%- title %>">
+                    <%- title %>
+                </h2>
+                <div class="nav-buttons">
                     <% if (hasCustomPrint) { %>
-                        <a class="plugin-print i18n" data-i18n="[title]Print Contents" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
+                        <button class="button-link plugin-print i18n" data-i18n="[title]Print Contents" title="Print Contents">
+                            <i class="icon-print"></i>
+                        </button>
                     <% } %>
 
                     <% if (isHelpButtonVisible) { %>
-                        <a class="plugin-help i18n" data-i18n="[title]View the info-graphic" href="javascript:;" title="View the info-graphic">?</a>
+                        <button class="button-link plugin-help i18n" data-i18n="[title]View the info-graphic" title="View the info-graphic">
+                            <i class="icon-info-circled-1"></i>
+                        </button>
                     <% } %>
+
+                    <button class="button-link"><i class="icon-eye"></i></button>
                 </div>
-                <div class="plugin-container-inner"></div>
+            </div>
+            <div class="sidebar-content">
             </div>
         </div>
     </script>
@@ -571,10 +576,7 @@
     <div id="plugin-print-sandbox"></div>
 
     <!-- LEFT CONTENT AREA -->
-    <div class="flex-container content"></div>
-
-    <!-- RIGHT CONTENT AREA -->
-    <div id="right-pane" class="content"></div>
+    <div id="left-pane" class="flex-container content"></div>
 
     <script src="js/polyfill.js"></script>
 
