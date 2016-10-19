@@ -420,7 +420,6 @@ require([
                 var $zoomButtons = view.$('#' + esriMap.id + '_zoom_slider'),
                     $mapbar = view.$('.tools');
                 lowerTool($zoomButtons, nMapTopPlugins);
-                lowerTool($mapbar, nMapTopPlugins);
             }
         }
 

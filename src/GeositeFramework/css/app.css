@@ -262,8 +262,8 @@ input.code-like, textarea.code-like {
             }
         .content .map .tools {
             position: absolute;
-            top: 92px;
-            left: 20px;
+            top: 75px;
+            right: 20px;
             z-index: 1;
             }
             .content .map .topbar-plugin {
