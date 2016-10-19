@@ -8,7 +8,6 @@ require(['use!Geosite',
          'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
-         'framework/widgets/ConstrainedMoveable',
          'dojox/layout/ResizeHandle',
          'dijit/form/CheckBox',
          'dijit/form/Button'
@@ -18,7 +17,6 @@ require(['use!Geosite',
              ArcGISDynamicMapServiceLayer,
              Logger,
              domStyle,
-             ConstrainedMoveable,
              ResizeHandle,
              CheckBox,
              Button) {
@@ -469,11 +467,6 @@ require(['use!Geosite',
             view.$el.parents().find('.content .nav-apps').after($uiContainer);
 
             setResizable(view, pluginObject.resizable);
-
-            new ConstrainedMoveable($uiContainer[0], {
-                handle: $uiContainer.find('.sidebar-nav')[0],
-                within: true
-            });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
