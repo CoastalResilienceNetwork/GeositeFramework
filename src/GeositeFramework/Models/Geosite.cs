@@ -53,6 +53,7 @@ namespace GeositeFramework.Models
         public Link TitleMain { get; private set; }
         public Link TitleDetail { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
+        public List<Link> RegionLinks { get; private set; }
         public string RegionDataJson { get; private set; }
         public List<string> PluginFolderNames { get; private set; }
         public string PluginModuleIdentifiers { get; private set; }
@@ -152,6 +153,12 @@ namespace GeositeFramework.Models
             if (jsonObj["headerLinks"] != null)
             {
                 HeaderLinks = jsonObj["headerLinks"]
+                    .Select(ExtractLinkFromJson).ToList();
+            }
+
+            if (jsonObj["regionLinks"] != null)
+            {
+                RegionLinks = jsonObj["regionLinks"]
                     .Select(ExtractLinkFromJson).ToList();
             }
 

@@ -48,6 +48,17 @@
                 "additionalProperties": false
             }
         },
+        "regionLinks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "required": true},
+                    "url": {"type": "string", "required": true},
+                },
+                "additionalProperties": false
+            }
+        },
         "sidebarLinks": {
             "type": "array",
             "items": {
