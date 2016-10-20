@@ -45,9 +45,8 @@ define(["dojo/_base/declare",
             // will be called.
             closeOthersWhenActive: true,
 
-            resizable: true,
-            width: 300,
-            height: 400,
+            size: 'small', // small, large, or custom
+            width: 300, // only used if 'custom' is specified for size
             icon: "globe",
 
             initialize: function() {},

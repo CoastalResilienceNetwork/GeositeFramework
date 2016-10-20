@@ -8,7 +8,6 @@ require(['use!Geosite',
          'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
-         'dojox/layout/ResizeHandle',
          'dijit/form/CheckBox',
          'dijit/form/Button'
         ],
@@ -17,7 +16,6 @@ require(['use!Geosite',
              ArcGISDynamicMapServiceLayer,
              Logger,
              domStyle,
-             ResizeHandle,
              CheckBox,
              Button) {
     "use strict";
@@ -409,7 +407,9 @@ require(['use!Geosite',
                     title: pluginObject.toolbarName,
                     id: containerId,
                     isHelpButtonVisible: isHelpButtonVisible(view),
-                    hasCustomPrint: pluginObject.hasCustomPrint
+                    hasCustomPrint: pluginObject.hasCustomPrint,
+                    sizeClassName: getPluginSizeClassName(pluginObject.size),
+                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
@@ -479,8 +479,6 @@ require(['use!Geosite',
             // Attach to top pane element
             view.$el.parents().find('.content .nav-apps').after($uiContainer);
 
-            setResizable(view, pluginObject.resizable);
-
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
         }
@@ -549,12 +547,6 @@ require(['use!Geosite',
             }).appendTo('head');
         }
 
-        function onContainerResize(view, resizeHandle, event) {
-            var dx = event.x - resizeHandle.startPoint.x,
-                dy = event.y - resizeHandle.startPoint.y;
-            view.model.get("pluginObject").resize(dx, dy);
-        }
-
         function createHelpScreen(view) {
             var model = view.model,
                 pluginObject = model.get('pluginObject'),
@@ -566,6 +558,18 @@ require(['use!Geosite',
                 });
                 pluginContainer.append(view.helpScreen.el);
                 view.helpScreen.$el.hide();
+            }
+        }
+
+        function getPluginSizeClassName(size) {
+            return 'sidebar-width-' + size;
+        }
+
+        function getCustomPluginWidth(size, width) {
+            if (size === 'custom') {
+                return 'width: ' + width + 'px;';
+            } else {
+                return '';
             }
         }
 
@@ -595,33 +599,8 @@ require(['use!Geosite',
                 $mainPanel.show();
             }
 
-            // Disable resizing when infographic is active
-            setResizable(this, pluginObject.resizable && !showInfoGraphic);
-
             var primaryContainerVisible = !showInfoGraphic;
             pluginObject.onContainerVisibilityChanged(primaryContainerVisible);
-        }
-
-        // Draw resize handle if resizable, destroy it if not resizable.
-        function setResizable(view, resizable) {
-            var handle = view.resizeHandle,
-                handleExists = typeof handle !== 'undefined' && handle != null,
-                containerId = getContainerId(view);
-            if (resizable && !handleExists) {
-                // Make the container resizable and moveable
-                handle = new ResizeHandle({
-                    targetId: containerId,
-                    activeResize: true,
-                    animateSizing: false
-                });
-                handle.placeAt(containerId)
-                handle.on('resize', function (e) { onContainerResize(view, this, e); });
-                view.resizeHandle = handle;
-            } else if (!resizable && handleExists) {
-                handle.destroy();
-                view.resizeHandle = null;
-            }
-            view.$uiContainer.toggleClass('resizable', resizable);
         }
 
         N.views = N.views || {};
@@ -695,7 +674,6 @@ require(['use!Geosite',
                     .addClass('button radius i18n')
                     .click(function() {
                         pluginModel.set('displayHelp', false);
-                        pluginObject.resize();
                     })
                     .appendTo(buttonnode);
 
