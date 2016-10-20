@@ -59,10 +59,12 @@
 }
 
 @helper RenderRegionLinks(IList<Geosite.Link> links) {
-    foreach (var link in links) {
-        <li id="@link.ElementId">
-            <a target="_blank" href="@link.Url">@link.Text</a>
-        </li>
+    if (links != null) {
+        foreach (var link in links) {
+            <li id="@link.ElementId">
+                <a target="_blank" href="@link.Url">@link.Text</a>
+            </li>
+        }
     }
 }
 
@@ -555,6 +557,7 @@
                 @RenderLinks(Model.HeaderLinks)
             </ul>
         </div>
+        @if(Model.RegionLinks != null) {
         <div class="dropdown header-dropdown nav-locations">
             <button class="button dropdown-toggle nav-main-button" type="button" id="installation-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-locations-content">
@@ -567,6 +570,7 @@
                 @RenderRegionLinks(Model.RegionLinks)
             </ul>
         </div>
+        }
     </header>
 
     @Html.Partial("TourInfo")
