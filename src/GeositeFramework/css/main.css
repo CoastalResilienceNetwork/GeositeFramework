@@ -936,6 +936,9 @@ nav {
 .sidebar.sidebar-width-small {
     width: 350px
 }
+.sidebar.sidebar-width-large {
+    width: 700px
+}
 .nav-apps {
     text-align: left;
     width: 240px;

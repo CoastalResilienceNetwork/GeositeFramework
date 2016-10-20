@@ -407,7 +407,9 @@ require(['use!Geosite',
                     title: pluginObject.toolbarName,
                     id: containerId,
                     isHelpButtonVisible: isHelpButtonVisible(view),
-                    hasCustomPrint: pluginObject.hasCustomPrint
+                    hasCustomPrint: pluginObject.hasCustomPrint,
+                    sizeClassName: getPluginSizeClassName(pluginObject.size),
+                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
@@ -556,6 +558,18 @@ require(['use!Geosite',
                 });
                 pluginContainer.append(view.helpScreen.el);
                 view.helpScreen.$el.hide();
+            }
+        }
+
+        function getPluginSizeClassName(size) {
+            return 'sidebar-width-' + size;
+        }
+
+        function getCustomPluginWidth(size, width) {
+            if (size === 'custom') {
+                return 'width: ' + width + 'px;';
+            } else {
+                return '';
             }
         }
 
