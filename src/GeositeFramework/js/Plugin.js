@@ -8,7 +8,6 @@ require(['use!Geosite',
          'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
-         'framework/widgets/ConstrainedMoveable',
          'dojox/layout/ResizeHandle',
          'dijit/form/CheckBox',
          'dijit/form/Button'
@@ -18,7 +17,6 @@ require(['use!Geosite',
              ArcGISDynamicMapServiceLayer,
              Logger,
              domStyle,
-             ConstrainedMoveable,
              ResizeHandle,
              CheckBox,
              Button) {
@@ -130,7 +128,9 @@ require(['use!Geosite',
             defaults: {
                 pluginObject: null,
                 active: false,
-                displayHelp: false
+                displayHelp: false,
+                pluginLayers: {},
+                pluginLayersVisible: true
             },
             initialize: function () { initialize(this); },
 
@@ -160,6 +160,21 @@ require(['use!Geosite',
                 } else {
                     this.get('pluginObject').deactivate();
                     this.trigger('plugin:deselected');
+                }
+            },
+
+            toggleLayers: function () {
+                var currentPlugin = this.get('pluginObject'),
+                    pluginLayersVisible = this.get('pluginLayersVisible');
+
+                if (pluginLayersVisible) {
+                    this.set('pluginLayers', currentPlugin.map.getMyLayers());
+                    currentPlugin.map.removeAllLayers();
+                    this.set('pluginLayersVisible', false);
+                } else {
+                    currentPlugin.map.addLayers(this.get('pluginLayers'));
+                    this.set('pluginLayers', {});
+                    this.set('pluginLayersVisible', true);
                 }
             },
 
@@ -401,6 +416,10 @@ require(['use!Geosite',
             view.$uiContainer = $uiContainer;
 
             $uiContainer
+                // Toggle plugin layers on and off when eye-icon button's clicked
+                .find('.plugin-eye').on('click', function () {
+                    model.toggleLayers();
+                }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
@@ -461,11 +480,6 @@ require(['use!Geosite',
             view.$el.parents().find('.content .nav-apps').after($uiContainer);
 
             setResizable(view, pluginObject.resizable);
-
-            new ConstrainedMoveable($uiContainer[0], {
-                handle: $uiContainer.find('.sidebar-nav')[0],
-                within: true
-            });
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
