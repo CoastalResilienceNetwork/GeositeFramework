@@ -1001,7 +1001,7 @@ nav {
         border-top: 5px solid transparent
     }
 }
-.map {
+#map-0.map {
     position: absolute;
     top: 0;
     bottom: 0;
