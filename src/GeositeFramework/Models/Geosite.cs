@@ -14,7 +14,7 @@ namespace GeositeFramework.Models
     /// </summary>
     public class Geosite
     {
-        // For backwards compatibility with V1 region.json files, 
+        // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
         private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#26648E");
         private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#26648E");
@@ -103,7 +103,7 @@ namespace GeositeFramework.Models
         }
 
         /// <summary>
-        /// Make a Geosite object given the specified configuration info. 
+        /// Make a Geosite object given the specified configuration info.
         /// Note this is public only for testing purposes.
         /// </summary>
         /// <param name="jsonDataRegion">JSON configuration data (e.g. from a "region.json" configuration file)</param>
@@ -190,8 +190,8 @@ namespace GeositeFramework.Models
         {
             try
             {
-                // Run the values through the type system to provide meaningful 
-                // errors to syntax problems, since these values are essentially 
+                // Run the values through the type system to provide meaningful
+                // errors to syntax problems, since these values are essentially
                 // getting tossed into the web page as code
                 var color =  ColorTranslator.FromHtml(json[key].ToString());
                 return ColorTranslator.ToHtml(color);

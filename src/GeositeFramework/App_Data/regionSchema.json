@@ -107,7 +107,7 @@
             }
         },
         "basemaps": {
-            "type": "array", 
+            "type": "array",
             "required": true,
             "minItems": 1,
             "items": {
