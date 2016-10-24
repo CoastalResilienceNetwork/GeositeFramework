@@ -14,14 +14,16 @@ define([
     'framework/PluginBase',
     'dojo/text!./templates.html',
     './measure/main',
-    './full_extent/main'
+    './full_extent/main',
+    './export/main'
     ],
     function(N,
              declare,
              PluginBase,
              templates,
              MeasureCommand,
-             FullExtentCommand) {
+             FullExtentCommand,
+             ExportCommand) {
     'use strict';
 
     var $templates = $('<div>').append($($.trim(templates)));
@@ -105,6 +107,8 @@ define([
                     return new MeasureCommand(this.options);
                 case 'zoom':
                    return new FullExtentCommand(this.options);
+                case 'export':
+                   return new ExportCommand(this.options);
             }
             throw new Error('Command not supported');
         },
