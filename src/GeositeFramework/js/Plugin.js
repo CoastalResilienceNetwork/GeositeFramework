@@ -319,8 +319,8 @@ require(['use!Geosite',
             // into. Make your UI separate from the button that
             // launches it.
             events: {
-                'click button.plugin-launcher': 'handleLaunch',
-                'click button.plugin-clear': 'handleClear'
+                'click .plugin-launcher': 'handleLaunch',
+                'click .plugin-clear': 'handleClear'
             },
 
             initialize: function () { initialize(this); },
