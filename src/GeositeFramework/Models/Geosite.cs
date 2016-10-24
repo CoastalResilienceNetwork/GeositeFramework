@@ -16,8 +16,9 @@ namespace GeositeFramework.Models
     {
         // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
-        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#26648E");
-        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#26648E");
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
+        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
+        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
 
         public class Link
         {
@@ -62,6 +63,7 @@ namespace GeositeFramework.Models
         public string ConfigurationForUseJs { get; private set; }
         public String PrimaryColor { get; private set; }
         public String SecondaryColor { get; private set; }
+        public String TertiaryColor { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -137,11 +139,13 @@ namespace GeositeFramework.Models
             {
                 PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
                 SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
+                TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
             }
             else
             {
                 PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
                 SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
+                TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
             }
 
 

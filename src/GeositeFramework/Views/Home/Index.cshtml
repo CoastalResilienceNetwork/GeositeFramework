@@ -100,12 +100,47 @@
 
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
-        .top-bar {
+        header {
             background: @Model.PrimaryColor;
         }
 
-        .top-bar ul > li.name h1 a {
+        .nav-apps {
+            background-color: @Model.TertiaryColor;
+        }
+
+        .color-primary,
+        .button,
+        .alert-primary {
             color: @Model.SecondaryColor;
+        }
+
+        .background-primary,
+        .button-primary,
+        .nav-apps-button.active,
+        .header-dropdown .dropdown-menu,
+        .dropdown-menu>.active>a:hover,
+        .loading.loading-pulse.loading-primary,
+        .loading.loading-blink.loading-primary>div,
+        .alert-primary {
+            background-color: @Model.SecondaryColor;
+        }
+
+        .button:focus,
+        .button-primary:focus,
+        .button-secondary:focus,
+        .button-danger:focus,
+        .button-warning:focus {
+            box-shadow: 0 1px 2px -1px @Model.SecondaryColor;
+        }
+
+        .header-dropdown .dropdown-menu:after {
+            border-bottom: 7px solid @Model.SecondaryColor;
+        }
+
+        .loading.loading-spinner.loading-primary {
+            border-left: 1.1em solid @Model.SecondaryColor;
+            border-bottom: 1.1em solid @Model.SecondaryColor;
+            border-right: 1.1em solid @Model.SecondaryColor;
         }
 
         /* Use custom colors for overlay */
@@ -132,12 +167,6 @@
         body .tlypageguide_shadow:after {
             background-color: @Model.SecondaryColor;
             opacity: 0.2;
-        }
-
-        /* Site color for header dropdown menu selection */
-        .top-bar .dropdown .dropdown-menu LI > A:hover,
-        .top-bar .dropdown .dropdown-menu LABEL:hover {
-            background-color: @Model.SecondaryColor;
         }
     </style>
 

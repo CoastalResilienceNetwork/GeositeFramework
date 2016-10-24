@@ -103,8 +103,9 @@
         "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework"
     },
     "colors": {
-        "primary": "#26648E",
-        "secondary": "#26648E"
+        "primary": "#29658C",
+        "secondary": "#3BBDC2",
+        "tertiary": "#333"
     },
     "identifyBlacklist": ["OBJECTID", "OBJECTID_1"],
     "identifyEnabled": true,
