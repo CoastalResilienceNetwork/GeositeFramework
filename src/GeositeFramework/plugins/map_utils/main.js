@@ -15,7 +15,8 @@ define([
     'dojo/text!./templates.html',
     './measure/main',
     './full_extent/main',
-    './export/main'
+    './export/main',
+    './share/main'
     ],
     function(N,
              declare,
@@ -23,7 +24,8 @@ define([
              templates,
              MeasureCommand,
              FullExtentCommand,
-             ExportCommand) {
+             ExportCommand,
+             ShareCommand) {
     'use strict';
 
     var $templates = $('<div>').append($($.trim(templates)));
@@ -109,6 +111,8 @@ define([
                    return new FullExtentCommand(this.options);
                 case 'export':
                    return new ExportCommand(this.options);
+                case 'share':
+                   return new ShareCommand(this.options);
             }
             throw new Error('Command not supported');
         },

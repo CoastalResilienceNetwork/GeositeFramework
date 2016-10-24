@@ -70,6 +70,9 @@
         view.model.on(
             'change:splitScreen change:syncMaps change:mainPaneNumber',
             function () { render(view); });
+        N.app.dispatcher.on('save-share', function() {
+            view.makePermalink();
+        });
     }
 
     function render(view) {
