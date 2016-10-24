@@ -12,12 +12,14 @@ define([
     'use!Geosite',
     'dojo/_base/declare',
     'framework/PluginBase',
-    'dojo/text!./templates.html'
+    'dojo/text!./templates.html',
+    './full_extent/main'
     ],
     function(N,
              declare,
              PluginBase,
-             templates) {
+             templates,
+             FullExtentCommand) {
     'use strict';
 
     var $templates = $('<div>').append($($.trim(templates)));
@@ -94,6 +96,8 @@ define([
 
         initializeCommand: function(command) {
             switch (command) {
+                case 'zoom':
+                   return new FullExtentCommand(this.options);
             }
             throw new Error('Command not supported');
         },

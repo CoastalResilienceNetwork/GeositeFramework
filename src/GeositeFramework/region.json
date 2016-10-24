@@ -90,7 +90,6 @@
     ],
     "pluginOrder": [
         "measure",
-        "full_extent",
         "subregion_toggle",
         "map_utils"
     ],
