@@ -13,12 +13,14 @@ define([
     'dojo/_base/declare',
     'framework/PluginBase',
     'dojo/text!./templates.html',
+    './measure/main',
     './full_extent/main'
     ],
     function(N,
              declare,
              PluginBase,
              templates,
+             MeasureCommand,
              FullExtentCommand) {
     'use strict';
 
@@ -28,6 +30,9 @@ define([
         toolbarName: 'Map Utilities',
         fullName: 'Map Utilities',
         toolbarType: 'map',
+
+        // Prevent identify from conflicting with "measure" commmand.
+        allowIdentifyWhenActive: false,
 
         initialize: function(args) {
             declare.safeMixin(this, args);
@@ -96,6 +101,8 @@ define([
 
         initializeCommand: function(command) {
             switch (command) {
+                case 'measure':
+                    return new MeasureCommand(this.options);
                 case 'zoom':
                    return new FullExtentCommand(this.options);
             }

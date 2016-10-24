@@ -89,7 +89,6 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "measure",
         "subregion_toggle",
         "map_utils"
     ],

@@ -1,5 +1,6 @@
 {
     "css": [
-        "plugins/map_utils/style.css"
+        "plugins/map_utils/style.css",
+        "plugins/map_utils/measure/style.css"
     ]
 }

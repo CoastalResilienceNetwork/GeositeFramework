@@ -1,8 +1,0 @@
-{
-    "css": [
-        "plugins/measure/measure.css"
-    ],
-    "use": {
-        "underscore": { "attach": "_" }
-    }
-}
