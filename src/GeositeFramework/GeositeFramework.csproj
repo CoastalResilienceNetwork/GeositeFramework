@@ -148,9 +148,6 @@
     <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
     <Content Include="Error404.html" />
-    <Content Include="css\app.css" />
-    <Content Include="css\foundation.css" />
-    <Content Include="css\foundation.min.css" />
     <Content Include="Global.asax" />
     <Content Include="img\foundation\orbit\bullets.jpg" />
     <Content Include="img\foundation\orbit\left-arrow-small.png" />
