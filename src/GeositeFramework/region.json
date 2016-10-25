@@ -54,7 +54,6 @@
                 "display": "Flower Garden Banks Marine Sanctuary",
                 "details": "The sanctuary protects a productive...",
                 "shape": [[-94.7900390625,27.780771643348196],[-94.7900390625,28.497660832963472],[-93.724365234375,28.497660832963472],[-93.724365234375,27.780771643348196],[-94.7900390625,27.780771643348196]],
-                "availablePlugins": ["zoom_to"],
                 "outlineColor": "#000",
                 "noFill": true
             },
@@ -90,7 +89,6 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "zoom_to",
         "measure",
         "full_extent",
         "subregion_toggle"

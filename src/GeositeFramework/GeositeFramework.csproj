@@ -214,8 +214,6 @@
     <Content Include="plugins\subregion_toggle\icon.png" />
     <Content Include="plugins\subregion_toggle\main.js" />
     <Content Include="plugins\subregion_toggle\subregion-toggle.css" />
-    <Content Include="plugins\zoom_to\main.js" />
-    <Content Include="plugins\zoom_to\ui.js" />
     <Content Include="sample_plugins\identify_point\icon.png" />
     <Content Include="sample_plugins\identify_point\icon_active.png" />
     <Content Include="sample_plugins\identify_point\main.js" />
@@ -255,12 +253,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\measure\plugin.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="plugins\zoom_to\plugin.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="plugins\zoom_to\zoom_to.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\full_extent\plugin.json" />

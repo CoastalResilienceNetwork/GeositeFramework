@@ -1628,3 +1628,7 @@ header .nav-main {
     padding: 1rem 2rem;
     border-radius: .5rem
 }
+#search {
+    position: absolute;
+    right: 10px;
+}

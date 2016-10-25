@@ -7,7 +7,8 @@ require(['use!Geosite',
          'esri/map',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
-         'esri/SpatialReference'
+         'esri/SpatialReference',
+         'esri/dijit/Search'
         ],
     function(N,
              Legend,
@@ -15,7 +16,8 @@ require(['use!Geosite',
              Map,
              ArcGISTiledMapServiceLayer,
              Extent,
-             SpatialReference) {
+             SpatialReference,
+             Search) {
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
@@ -119,6 +121,7 @@ require(['use!Geosite',
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+        initSearch(view);
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {
@@ -161,6 +164,17 @@ require(['use!Geosite',
             subRegionManager.onDeactivated(function(subregion) {
                 view.model.trigger('subregion-deactivate', subregion);
             });
+        }
+
+        function initSearch(view) {
+            // Add search control
+            var search = new Search({
+                map: view.esriMap,
+                showInfoWindowOnSelect: false,
+                enableHighlight: false,
+            }, "search");
+
+            search.startup();
         }
 
         // On IE8, the map.onload event will often not fire at all, which breaks
