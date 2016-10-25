@@ -2327,3 +2327,9 @@ a.active {
 .esriLegendMsg {
     display: none;
 }
+.measure-tooltip {
+    color: #73787d;
+}
+.claro .infowindow .sprite {
+    background-image: none;
+}
