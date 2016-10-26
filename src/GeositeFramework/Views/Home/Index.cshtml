@@ -545,7 +545,7 @@
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
                     <div class="nav-main-title">
-                        <h1>@OptionalLinkText(@Model.TitleMain)</h1>
+                        @Model.TitleMain.Text
                     </div>
                     <i class="dropdown-icon icon-menu"></i>
                 </div>
@@ -558,7 +558,7 @@
         <div class="dropdown header-dropdown nav-locations">
             <button class="button dropdown-toggle nav-main-button" type="button" id="installation-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-locations-content">
-                    @OptionalLinkText(@Model.TitleDetail)
+                    @Model.TitleDetail.Text
                     <i class="dropdown-icon icon-angle-down"></i>
                 </div>
             </button>
