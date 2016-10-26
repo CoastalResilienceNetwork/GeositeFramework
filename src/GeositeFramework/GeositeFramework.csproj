@@ -192,10 +192,6 @@
     <Content Include="js\polyfill.js" />
     <Content Include="js\Screen.js" />
     <Content Include="js\SubRegion.js" />
-    <Content Include="plugins\full_extent\icon-active.png" />
-    <Content Include="plugins\full_extent\icon.png" />
-    <Content Include="plugins\full_extent\main.js" />
-    <Content Include="plugins\full_extent\full_extent.css" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
     <Content Include="js\lib\jquery.placeholder.js" />
@@ -206,11 +202,16 @@
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="js\lib\use.js" />
-    <Content Include="plugins\measure\AgsMeasure.js" />
-    <Content Include="plugins\measure\main.js" />
-    <Content Include="plugins\measure\measure.css" />
-    <Content Include="plugins\measure\templates.html" />
-    <Content Include="plugins\measure\icon.png" />
+    <Content Include="plugins\map_utils\export\main.js" />
+    <Content Include="plugins\map_utils\full_extent\main.js" />
+    <Content Include="plugins\map_utils\main.js" />
+    <Content Include="plugins\map_utils\measure\AgsMeasure.js" />
+    <Content Include="plugins\map_utils\measure\main.js" />
+    <Content Include="plugins\map_utils\measure\style.css" />
+    <Content Include="plugins\map_utils\measure\templates.html" />
+    <Content Include="plugins\map_utils\share\main.js" />
+    <Content Include="plugins\map_utils\style.css" />
+    <Content Include="plugins\map_utils\templates.html" />
     <Content Include="plugins\subregion_toggle\icon.png" />
     <Content Include="plugins\subregion_toggle\main.js" />
     <Content Include="plugins\subregion_toggle\subregion-toggle.css" />
@@ -252,12 +253,6 @@
     <Content Include="App_Data\regionSchema.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="plugins\measure\plugin.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="plugins\full_extent\plugin.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\TourInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +260,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="locales\en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\map_utils\full_extent\locales\en.json" />
+    <Content Include="plugins\map_utils\full_extent\locales\es.json" />
+    <Content Include="plugins\map_utils\measure\locales\en.json" />
+    <Content Include="plugins\map_utils\measure\locales\es.json" />
+    <Content Include="plugins\map_utils\plugin.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
