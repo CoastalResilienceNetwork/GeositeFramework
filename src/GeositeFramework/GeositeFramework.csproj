@@ -142,7 +142,6 @@
     <Content Include="css\print-hide-map1.css" />
     <Content Include="css\print-hide-map0.css" />
     <Content Include="css\jquery.dropdown.css" />
-    <Content Include="css\jquery.mCustomScrollbar.css" />
     <Content Include="css\pageguide.min.css" />
     <Content Include="css\print.css" />
     <Content Include="css\TinyBox2.css" />
@@ -182,7 +181,6 @@
     <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
     <Content Include="js\Geosite.js" />
-    <Content Include="js\lib\jquery.mCustomScrollbar.min.js" />
     <Content Include="js\lib\jquery.mousewheel.min.js" />
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
