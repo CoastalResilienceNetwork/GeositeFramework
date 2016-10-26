@@ -122,7 +122,6 @@ input.code-like, textarea.code-like {
 .control-container {
     position: absolute;
     width: 100%;
-    z-index: 2;
 }
     .control-container.subregion-active {
         top: 40px;
@@ -262,7 +261,7 @@ input.code-like, textarea.code-like {
             }
         .content .map .tools {
             position: absolute;
-            top: 75px;
+            top: 145px;
             right: 20px;
             z-index: 1;
             }
@@ -326,6 +325,8 @@ input.code-like, textarea.code-like {
                     opacity: 1;
                 }
             .esriSimpleSlider {
+                /* Position under basemap-selector */
+                top: 70px;
                 box-shadow: 0 0 12px black;
                 box-shadow: 0 0 12px rgba(0,0,0,.25);
                 border: 1px solid #999;
@@ -350,6 +351,8 @@ input.code-like, textarea.code-like {
             display: block;
             background: white;
             background: rgba(255,255,255,.0);
+            /* Display basemap-selector above esri zoom controls */
+            z-index: 40;
             }
             .content .map .basemap-selector:hover .basemap-selector-list {
                 display: block;
