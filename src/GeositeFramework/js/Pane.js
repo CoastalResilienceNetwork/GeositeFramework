@@ -356,8 +356,6 @@ require([
                     // Clicking the map means "Identify" contents at a point
                     dojo.connect(esriMap, "onClick", tryIdentify);
                 }
-
-                adjustToolPositions(view, esriMap);
             });
 
             function tryIdentify(event) {
@@ -411,25 +409,6 @@ require([
                     });
                 }
             });
-        }
-
-        function adjustToolPositions(view, esriMap) {
-            // If there are tools above the "+/-" zoom buttons, move everything down
-            var nMapTopPlugins = view.$('.top-tools').children().length;
-            if (nMapTopPlugins > 0) {
-                var $zoomButtons = view.$('#' + esriMap.id + '_zoom_slider'),
-                    $mapbar = view.$('.tools');
-                lowerTool($zoomButtons, nMapTopPlugins);
-                lowerTool($mapbar, nMapTopPlugins);
-            }
-        }
-
-        function lowerTool($el, toolCount) {
-            // Move $el lower on the page by "toolCount" slots
-            var pluginButtonHeight = 44,
-                offset = $el.offset();
-            offset.top += toolCount * pluginButtonHeight;
-            $el.offset(offset);
         }
 
         N.views = N.views || {};

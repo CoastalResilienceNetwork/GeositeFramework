@@ -48,6 +48,9 @@ require(['use!Geosite',
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher
                     },
+                    plugin: {
+                        turnOff: model.turnOff.bind(model)
+                    },
                     map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                     container: ($uiContainer ? $uiContainer.find('.sidebar-content')[0] : undefined),
                     legendContainer: ($legendContainer ? $legendContainer[0] : undefined),

@@ -1,5 +1,8 @@
-define(["jquery",
+define([
+        "use!Geosite",
+        "jquery",
         "use!underscore",
+        "dojo/Deferred",
         "esri/geometry/Polyline",
         "esri/geometry/Polygon",
         "esri/geometry/geodesicUtils",
@@ -14,22 +17,25 @@ define(["jquery",
         "esri/symbols/SimpleMarkerSymbol",
         "esri/graphic",
         "esri/layers/GraphicsLayer"
-],
-    function($, _,
-              Polyline,
-              Polygon,
-              geodesicUtils,
-              webMercatorUtils,
-              GeometryService,
-              ScreenPoint,
-              mathUtils,
-              units,
-              InfoWindow,
-              SimpleFillSymbol,
-              SimpleLineSymbol,
-              SimpleMarkerSymbol,
-              Graphic,
-              GraphicsLayer) {
+    ],
+    function(N,
+             $,
+             _,
+             Deferred,
+             Polyline,
+             Polygon,
+             geodesicUtils,
+             webMercatorUtils,
+             GeometryService,
+             ScreenPoint,
+             mathUtils,
+             units,
+             InfoWindow,
+             SimpleFillSymbol,
+             SimpleLineSymbol,
+             SimpleMarkerSymbol,
+             Graphic,
+             GraphicsLayer) {
 
         var AgsMeasure = function (opts) {
 
@@ -37,7 +43,7 @@ define(["jquery",
                 map: null,
                 tooltipTemplate: '',
                 infoBubbleTemplate: '',
-                // It is preferable to provide a custom geometry server, but 
+                // It is preferable to provide a custom geometry server, but
                 // this url is non-warranty "production" ready
                 geomServiceUrl: 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
 
@@ -93,7 +99,7 @@ define(["jquery",
             _popupTemplate,
             _tooltipTemplate,
             _geometrySvc,
-                
+
             showResultPopup = function(results) {
                 // Delete the current info window (after grabbing its parent DOM node)
                 var map = options.map,
@@ -210,7 +216,7 @@ define(["jquery",
             },
 
             handleMapMouseMove = function (evt) {
-                // Use the last entered point, and the hover point to 
+                // Use the last entered point, and the hover point to
                 // create a temporary line which follows the mouse cursor
                 var path = _.last(_points, 1),
                     line = new Polyline(),
@@ -230,7 +236,7 @@ define(["jquery",
                 // Format the segment and line lengths
                 tipText = formatTooltip(geoLineLength, _renderedLength + geoLineLength);
 
-                // Update the popup to also track the mouse cursor, with the 
+                // Update the popup to also track the mouse cursor, with the
                 // formatted text
                 _$tooltip
                     .html(tipText)
@@ -260,7 +266,7 @@ define(["jquery",
             },
 
             continueMeasureAndAddPoint = function (evt) {
-                // Track each point clicked to create a line segment for 
+                // Track each point clicked to create a line segment for
                 // measuring length
                 _points.push(evt.mapPoint);
 
@@ -323,7 +329,7 @@ define(["jquery",
             },
 
             handleMarkerMouseOver = function (evt) {
-                // Check if the graphic the mouse is on was the first 
+                // Check if the graphic the mouse is on was the first
                 // node added to the measure line
                 if (isFirstNode(evt) && pointsMakeValidPolygon()) {
                     // Change the style of the node to demonstrate that it
@@ -343,7 +349,7 @@ define(["jquery",
             handleMarkerDblClick = function (evt) {
                 finishPolygonOrStopProp(evt);
             },
-                
+
             handleMarkerClick = function (evt) {
                 finishPolygonOrStopProp(evt);
             },
@@ -365,7 +371,7 @@ define(["jquery",
 
             finishMeasureAsPolygon = function() {
                 // If the first measurement node was clicked, and there
-                // has already been a line drawn, close the line into a 
+                // has already been a line drawn, close the line into a
                 // polygon
 
                 // Make the last point be the same coordinates of the first point
@@ -390,7 +396,7 @@ define(["jquery",
                 } else {
                     setMeasureOutput(polygon);
                 }
-            }, 
+            },
 
             // Assumes polygon is valid at this point
             setMeasureOutput = function (polygon)
@@ -441,6 +447,15 @@ define(["jquery",
 
                     _eventHandles.click =
                         dojo.connect(options.map, "onClick", handleMapClick);
+
+                    // Return promise that will never be resolved or rejected.
+                    // The purpose of this is to keep the map_utils plugin
+                    // active after the measure interaction is completed.
+                    // If the deferred is resolved after completing the
+                    // drawing, map_utils would immediately deactivate,
+                    // and erase the measurement that was just drawn.
+                    var defer = new Deferred();
+                    return defer.promise;
                 }
             };
         };

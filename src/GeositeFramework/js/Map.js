@@ -104,7 +104,9 @@ require(['use!Geosite',
     }
 
     function createMap(view) {
-        var esriMap = Map(view.$el.attr('id')),
+        var esriMap = Map(view.$el.attr('id'), {
+                sliderPosition: 'top-right'
+            }),
             resizeMap = _.debounce(function () {
                 // When the element containing the map resizes, the
                 // map needs to be notified.  Do a slight delay so that

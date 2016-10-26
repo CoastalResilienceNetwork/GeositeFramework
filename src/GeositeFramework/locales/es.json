@@ -41,6 +41,7 @@
     "Currently viewing Map 1, switch to view Map 2": "Actualmente viendo el mapa 1, cambiar a ver Mapa 2",
     "Currently viewing Map 2, switch to view Map 1": "Actualmente viendo el mapa 2, cambiar a ver Mapa 1",
     "Map": "Mapa",
+    "Map Utilities": "Utilidad Mapa",
     "Export": "Exportar",
     "Embed Width (px)": "Insertar Ancho (px)",
     "Embed Height (px)": "Insertar Altura (px)",
@@ -54,5 +55,6 @@
     "Permalink:": "Enlace Permanente:",
     "Don't show this on start": "No mostrar esto al iniciar",
     "Continue": "Continuar",
-    "Next": "Siguiente"
+    "Next": "Siguiente",
+    "Measure": "Mediciones"
 }

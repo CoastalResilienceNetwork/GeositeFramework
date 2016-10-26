@@ -89,9 +89,8 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "measure",
-        "full_extent",
-        "subregion_toggle"
+        "subregion_toggle",
+        "map_utils"
     ],
     "map2PluginBlacklist": [
         "identify_point"
