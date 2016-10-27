@@ -264,24 +264,7 @@ require([
             initBasemapSelector(view);
             initMapView(view);
             initPluginViews(view);
-            view.$('.side-nav.top').mCustomScrollbar({
-                advanced: { updateOnContentResize: true },
-                mouseWheelPixels: 75,
-                autoHideScrollbar: false,
-                contentTouchScroll: true
-            });
             N.app.models.screen.on('change', function() { renderSidebar(view); });
-
-            // The scrollbar is inconsistent in showing up, and I suspect that it is
-            // due to the content height not being specified when it calculates if it
-            // needs to be displayed or not.  Wait a little while and then update the
-            // scrollbar to let it determine visibility post render.
-            setTimeout(function() { view.$('.side-nav.top').mCustomScrollbar("update"); }, 1000);
-
-            // Detects orientation change and updates the scrollbar
-            window.onorientationchange = function() {
-                view.$('.side-nav.top').mCustomScrollbar('update');
-            };
 
             // For on demand export initialization. See Layer Selector print, for example.
             var paneNumber = view.model.get('paneNumber');

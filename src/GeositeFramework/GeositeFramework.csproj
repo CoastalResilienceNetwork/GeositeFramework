@@ -142,15 +142,11 @@
     <Content Include="css\print-hide-map1.css" />
     <Content Include="css\print-hide-map0.css" />
     <Content Include="css\jquery.dropdown.css" />
-    <Content Include="css\jquery.mCustomScrollbar.css" />
     <Content Include="css\pageguide.min.css" />
     <Content Include="css\print.css" />
     <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
     <Content Include="Error404.html" />
-    <Content Include="css\app.css" />
-    <Content Include="css\foundation.css" />
-    <Content Include="css\foundation.min.css" />
     <Content Include="Global.asax" />
     <Content Include="img\foundation\orbit\bullets.jpg" />
     <Content Include="img\foundation\orbit\left-arrow-small.png" />
@@ -185,7 +181,6 @@
     <Content Include="js\Permalink.js" />
     <Content Include="js\Export.js" />
     <Content Include="js\Geosite.js" />
-    <Content Include="js\lib\jquery.mCustomScrollbar.min.js" />
     <Content Include="js\lib\jquery.mousewheel.min.js" />
     <Content Include="js\lib\TinyBox2.js" />
     <Content Include="js\PluginBase.js" />
