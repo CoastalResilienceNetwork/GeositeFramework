@@ -2335,3 +2335,8 @@ a.active {
 .claro .infowindow .sprite {
     background-image: none;
 }
+body.x-body {
+    font-size: 1.5rem;
+    color: #73787d;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+}
