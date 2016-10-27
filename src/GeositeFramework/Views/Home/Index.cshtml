@@ -554,20 +554,22 @@
                 @RenderLinks(Model.HeaderLinks)
             </ul>
         </div>
-        @if(Model.RegionLinks != null) {
         <div class="dropdown header-dropdown nav-locations">
             <button class="button dropdown-toggle nav-main-button" type="button" id="installation-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-locations-content">
                     @Model.TitleDetail.Text
-                    <i class="dropdown-icon icon-angle-down"></i>
+                    @if(Model.RegionLinks != null) {
+                        <i class="dropdown-icon icon-angle-down"></i>
+                    }
                 </div>
             </button>
 
-            <ul class="dropdown-menu" aria-labelledby="installation-menu">
-                @RenderRegionLinks(Model.RegionLinks)
-            </ul>
+            @if(Model.RegionLinks != null) {
+                <ul class="dropdown-menu" aria-labelledby="installation-menu">
+                    @RenderRegionLinks(Model.RegionLinks)
+                </ul>
+            }
         </div>
-        }
         <div id="search"></div>
     </header>
 
