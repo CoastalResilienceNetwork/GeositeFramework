@@ -14,10 +14,11 @@ namespace GeositeFramework.Models
     /// </summary>
     public class Geosite
     {
-        // For backwards compatibility with V1 region.json files, 
+        // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
-        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#26648E");
-        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#26648E");
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
+        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
+        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
 
         public class Link
         {
@@ -62,6 +63,7 @@ namespace GeositeFramework.Models
         public string ConfigurationForUseJs { get; private set; }
         public String PrimaryColor { get; private set; }
         public String SecondaryColor { get; private set; }
+        public String TertiaryColor { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -103,7 +105,7 @@ namespace GeositeFramework.Models
         }
 
         /// <summary>
-        /// Make a Geosite object given the specified configuration info. 
+        /// Make a Geosite object given the specified configuration info.
         /// Note this is public only for testing purposes.
         /// </summary>
         /// <param name="jsonDataRegion">JSON configuration data (e.g. from a "region.json" configuration file)</param>
@@ -137,11 +139,13 @@ namespace GeositeFramework.Models
             {
                 PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
                 SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
+                TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
             }
             else
             {
                 PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
                 SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
+                TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
             }
 
 
@@ -190,8 +194,8 @@ namespace GeositeFramework.Models
         {
             try
             {
-                // Run the values through the type system to provide meaningful 
-                // errors to syntax problems, since these values are essentially 
+                // Run the values through the type system to provide meaningful
+                // errors to syntax problems, since these values are essentially
                 // getting tossed into the web page as code
                 var color =  ColorTranslator.FromHtml(json[key].ToString());
                 return ColorTranslator.ToHtml(color);

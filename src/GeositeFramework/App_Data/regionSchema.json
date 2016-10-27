@@ -107,7 +107,7 @@
             }
         },
         "basemaps": {
-            "type": "array", 
+            "type": "array",
             "required": true,
             "minItems": 1,
             "items": {
@@ -154,7 +154,8 @@
             "type": "object",
             "properties": {
                 "primary": {"type": "string", "required": true},
-                "secondary": {"type": "string", "required": true}
+                "secondary": {"type": "string", "required": true},
+                "tertiary": {"type": "string", "required": true}
             },
             "required": false,
             "additionalProperties": false
