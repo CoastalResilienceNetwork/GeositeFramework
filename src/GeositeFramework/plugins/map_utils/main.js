@@ -4,6 +4,11 @@
             name: 'jquery',
             location: '//ajax.googleapis.com/ajax/libs/jquery/1.9.0',
             main: 'jquery.min'
+        },
+        {
+            name: 'underscore',
+            location: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3',
+            main: 'underscore-min'
         }
     ]
 });
