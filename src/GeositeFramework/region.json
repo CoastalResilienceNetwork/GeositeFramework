@@ -10,17 +10,17 @@
         "url": "http://www.azavea.com/"
     },
     "headerLinks": [
-       { "text": "Getting started", "launchpadId": "get-started", "url": "" },
-       { "text": "Menu", "url":"#", "items": [
+        { "text": "Getting started", "launchpadId": "get-started", "url": "" },
+        { "text": "Menu", "url":"#", "items": [
                 { "text": "Cat", "url": "https://en.wikipedia.org/wiki/Cat" },
                 { "text": "Dog", "popup": true, "url": "https://en.wikipedia.org/wiki/Dog" },
                 { "text": "Fish", "url": "https://en.wikipedia.org/wiki/Fish" },
                 { "text": "Tour Again", "url": "javascript:;", "elementId": "help-overlay-start"}
             ]
-       },
+        },
         { "text": "Azavea", "url": "http://www.azavea.com/" },
         { "text": "GIS", "popup": true, "url": "http://en.wikipedia.org/wiki/Geographic_information_system" },
-        { "text": "Tour", "url": "javascript:;", "elementId": "help-overlay-start"},
+        { "text": "Tour", "url": "javascript:;", "elementId": "help-overlay-start"}
     ],
     "regionLinks": [
         { "text": "California", "url": "http://maps.coastalresilience.org/california/" },
@@ -97,7 +97,8 @@
     ],
     "print": {
         "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
-        "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework"
+        "customPrintTemplatePrefix": "Letter ANSI A GeositeFramework",
+        "headerLogoPath": "http://maps.coastalresilience.org/network/img/TNCLogoPrimary_RGB2.jpg",
     },
     "colors": {
         "primary": "#29658C",

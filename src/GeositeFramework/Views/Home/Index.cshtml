@@ -88,10 +88,10 @@
     <link rel="stylesheet" href="//js.arcgis.com/3.10/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="//js.arcgis.com/o/232546/geosite-v1.0.9/esri/css/esri.css">
 
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/print.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
-    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
 
@@ -415,7 +415,7 @@
     <script type="text/template" id="template-export-window">
         <div class="popover">
             <div class="popover-header">
-                <h2><span class="i18n" data-i18n="Map">Map</span> <span class="export-pane-number"></span> <span class="i18n" data-i18n="Export">Export</span></h2>
+                <h2><span class="i18n" data-i18n="Map Export">Map Export</span></h2>
             </div>
             <div class="popover-content">
                 <div class="row">
@@ -429,16 +429,13 @@
                          <h5 class="i18n" data-i18n="Legend">Legend</h5>
                         <label><input type="checkbox" name="export-include-legend" /><span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
                     </div>
-                    <div class="small-4 columns">
-                        <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="left-col">
                         <div class="export-output-area"></div>
                     </div>
                     <div class="right-col">
-                        <a href="#" id="export-button" class="button radius i18n" data-i18n="Generate Map Export" disabled="disabled">Generate Map Export</a>
+                        <a href="#" id="export-button" class="button radius i18n" data-i18n="Generate Map Export">Generate Map Export</a>
                     </div>
                 </div>
             </div>
@@ -607,6 +604,15 @@
     <!-- Area for plugins to arrange their markup independent
         of their container -->
     <div id="plugin-print-sandbox"></div>
+
+    <!-- Area for the main map to get setup for printing. -->
+    <div id="map-print-sandbox">
+        <div class="print-sandbox-header">
+            <img src="@Model.PrintHeaderLogo" title="Header Logo" class="logo" />
+            <h1></h1>
+        </div>
+        <div id="print-map-container">Map goes here</div>
+    </div>
 
     <!-- LEFT CONTENT AREA -->
     <div id="left-pane" class="flex-container content"></div>

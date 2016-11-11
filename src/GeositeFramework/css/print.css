@@ -12,7 +12,7 @@
     /* An issue in Chrome for Windows would display the borders of this
        element in print media, despite it being selected by the clause above.*/
     .plugin-launcher {
-        display: none; 
+        display: none;
     }
 
     /* Override the map tiles which have inline styles.
@@ -33,7 +33,7 @@
         visibility: visible;
     }
 
-    #plugin-print-preview-map_container img { 
+    #plugin-print-preview-map_container img {
         visibility: visible;
     }
 }

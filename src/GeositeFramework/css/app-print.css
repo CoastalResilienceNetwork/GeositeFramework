@@ -1,0 +1,5 @@
+﻿@media print {
+    #map-print-sandbox {
+        visibility: visible;
+    }
+}
