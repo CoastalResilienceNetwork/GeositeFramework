@@ -2317,6 +2317,27 @@ a.active {
     position: absolute;
     visibility: hidden;
 }
+#map-print-sandbox {
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+}
+#map-print-sandbox .print-sandbox-header {
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+#map-print-sandbox h1 {
+    display: inline;
+}
+#map-print-sandbox img.logo {
+    height: 80px;
+}
+#print-map-container {
+    border: 1px solid #ccc;
+    padding: 5px;
+    height: 850px;
+}
 .print-preview-container {
     padding: 10px;
 }

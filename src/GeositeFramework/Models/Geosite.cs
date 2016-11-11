@@ -64,6 +64,7 @@ namespace GeositeFramework.Models
         public String PrimaryColor { get; private set; }
         public String SecondaryColor { get; private set; }
         public String TertiaryColor { get; private set; }
+        public String PrintHeaderLogo { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -148,6 +149,10 @@ namespace GeositeFramework.Models
                 TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
             }
 
+            var printConfig = jsonObj["print"];
+            if (printConfig != null) {
+                PrintHeaderLogo = (string)printConfig["headerLogoPath"];
+            }
 
             if (jsonObj["googleAnalyticsPropertyId"] != null)
             {
