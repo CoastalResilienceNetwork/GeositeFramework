@@ -410,13 +410,7 @@ require([
                         paneNumber: this.model.get('paneNumber')
                     }),
                     view = new N.views.ExportTool({ model: model });
-
-                TINY.box.show({
-                    html: view.render().el,
-                    fixed: true,
-                    maskopacity: 50,
-                    closejs: function() { view.remove(); }
-                });
+                view.render();
             },
 
             saveState: function() {

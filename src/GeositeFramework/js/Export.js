@@ -1,12 +1,91 @@
-require(['use!Geosite',
-         'dojo/Deferred',
-         'dojo/request',
-         'framework/Logger'],
-    function(N,
-             Deferred,
-             request,
-             Logger) {
+/*global Backbone, _, $ */
+
+require(['use!Geosite'],
+    function(N) {
     "use strict";
+        function render(view) {
+            $('#plugin-print-sandbox').empty();
+            $('.plugin-print-css').remove();
+            $('.base-plugin-print-css').remove();
+            $('<link>', {
+                rel: 'stylesheet',
+                href: 'css/app-print.css',
+                'class': '.app-print-css' 
+            }).appendTo('head');
+            var html = N.app.templates['template-export-window']();
+            view.$el.empty().append(html);
+            if (view.$uiContainer) {
+                view.$uiContainer.show();
+            }
+
+            return view;
+        }
+
+        function createUiContainer(view) {
+            var model = view.model,
+                $uiContainer = $($.trim(N.app.templates['template-export-window']({id: 'export-print-preview'})));
+
+            view.$uiContainer = $uiContainer;
+
+            // Attach to top pane element
+            view.$el.parents().find('.content .nav-apps').after($uiContainer);
+
+            // Tell the model about $uiContainer so it can pass it to the plugin object
+            model.set('$uiContainer', $uiContainer);
+        }
+
+        function setupPrintableMap() {
+            var mapMarkup = N.app.templates['template-export-window']({pluginName: "Test"}),
+                $mapPrint = $($.trim(mapMarkup)),
+                $printPreview = $('#print-preview-sandbox'),
+                mapReadyDeferred = $.Deferred(),
+                mapNodeParent = $("#map-0")[0].parentElement;
+
+            // Setup a print-preview window for the user to select an extent and zoom level
+            // that will be persisted at print due to its fixed size.
+            
+            TINY.box.show({
+                animate: false,
+                html: $mapPrint[0].outerHTML,
+                boxid: 'export-print-preview-container',
+                width: 521,
+                height: 463,
+                fixed: true,
+                maskopacity: 40,
+                openjs: function () {
+                    var mapNode = $("#map-0").detach()[0];
+                    $("#export-print-preview-map").append(mapNode);
+
+                    $('#export-button').on('click', function() {
+                        var $printSandbox = $('#map-print-sandbox'),
+                            previewDeferred = $.Deferred();
+
+                        $('.print-sandbox-header h1').text($("#export-title").val());
+
+                        mapReadyDeferred.then(function () {
+                            $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
+                            window.print();
+                            previewDeferred.resolve();
+                        });
+
+                        previewDeferred.then(function () {
+                            TINY.box.hide();
+                            $printPreview.hide();
+                        });
+                    });
+
+                    mapReadyDeferred.resolve();
+                },
+                closejs: function() {
+                    var mapNode = $("#map-0").detach()[0];
+                    mapNodeParent.append(mapNode);
+                    $("#export-print-preview-map").detach().appendTo($("#export-print-preview-container"));
+                    $('.app-print-css').remove();
+                }
+            });
+            
+            return mapReadyDeferred;
+        }
 
     ////////////////////////////////
     // MODEL CLASS
@@ -37,7 +116,10 @@ require(['use!Geosite',
     ////////////////////////////////
 
     N.views.ExportTool = Backbone.View.extend({
+        tagName: 'div',
         className: 'export-ui',
+        previewDeferred: $.Deferred(),
+
 
         events: {
             "click #export-button": function () { this.handleSubmit(); },
@@ -49,41 +131,23 @@ require(['use!Geosite',
             if (keycode === 13) { this.handleSubmit(); }
         },
 
-        handleSubmit: function () {
-            $('.print-sandbox-header h1').text(this.$("#export-title").val());
-
-            // Any plugin-prints may have left specific print css
-            // or sandbox elements. Clear all so that this new print routine
-            // has no conflicts with other plugins.
-            $('#plugin-print-sandbox').empty();
-            $('.plugin-print-css').remove();
-
-            // Add the print stylesheet for the app
-            // Reuse the print plugin class so that this CSS file
-            // will be removed when a plugin print is triggered
-            $('<link>', {
-                rel: 'stylesheet',
-                href: 'css/app-print.css',
-                'class': 'plugin-print-css'
-            }).appendTo('head');
-
-            // This needs to be delayed to give the browser time to parse the
-            // new print stylesheet.
-            window.setTimeout(function() {
-                window.print();
-            }, 200);
-        },
-
         initialize: function () {
             var view = this;
 
             view.listenTo(view.model, "change:outputText", function () {
                 view.$(".export-output-area").html(view.model.get('outputText'));
             });
+
+            view.paneNumber = 0;
+
+            var mapReadyDeferred = setupPrintableMap(this.model, $("#map-print-sandbox"), this.previewDeferred);
+            createUiContainer(view, 0, view.previewDeferred, mapReadyDeferred);
         },
 
         render: function () {
-            var body = N.app.templates['template-export-window']();
+            var view = this,
+                body = N.app.templates['template-export-window']();
+            
             this.$el
                 .empty()
                 .append(body);
@@ -92,7 +156,7 @@ require(['use!Geosite',
                 $(this.$el).localize();
             }
 
-            return this;
-        }
+            return render(view);
+        },
     });
 });
