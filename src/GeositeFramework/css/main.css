@@ -207,7 +207,7 @@ html {
     -webkit-text-size-adjust: 100%
 }
 body {
-    margin: 0
+    margin: 0;
 }
 article,
 aside,
@@ -447,7 +447,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
+    min-width: 740px;
 }
 .h1,
 .text-h1,
@@ -1632,6 +1632,7 @@ header .nav-main {
 #search {
     position: absolute;
     right: 10px;
+    top: 12px;
 }
 /* -----------------------------------------
    Content Area - Map
@@ -2202,6 +2203,7 @@ header .nav-main {
     right: 0;
     color: inherit;
 }
+
 /*Launchpad Media Queries*/
 
 @media(min-width: 960px) {
@@ -2360,4 +2362,9 @@ body.x-body {
     font-size: 1.5rem;
     color: #73787d;
     font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+}
+@media only screen and (max-width: 740px) {
+    .sidebar-nav {
+      position: absolute;
+    }
 }
