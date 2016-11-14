@@ -911,7 +911,7 @@ nav {
     display: flex
 }
 .sidebar-nav {
-    width: 350px;
+    width: inherit;
     background-color: #fff;
     border-bottom: 1px solid #cdd5d5;
     padding: 2px 12px;
