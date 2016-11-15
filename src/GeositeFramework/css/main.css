@@ -2069,7 +2069,7 @@ header .nav-main {
 }
 .tbox {
     top: 100px!important;
-    min-width: 500px!important;
+    min-width: 100px!important;
 }
 .tinner {
     overflow: hidden;
@@ -2381,6 +2381,20 @@ body.x-body {
 }
 .plugin-infographic {
   width: inherit;
+}
+.popover-section {
+  width: 100%;
+  margin-bottom: 14px;
+}
+.popover-container .row {
+  margin-left: -26px;
+  width: auto;
+}
+#permalink-dialog input[type="text"], #permalink-dialog textarea {
+  width: 100%;
+}
+#iframe-embed {
+  width: 100%;
 }
 @media only screen and (max-width: 740px) {
     .sidebar-nav {
