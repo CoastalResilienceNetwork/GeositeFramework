@@ -667,14 +667,13 @@ require(['use!Geosite',
 
                 this.$el.append(lbl);
 
-                var buttonnode = $('<span>').get(0);
+                var buttonnode = $('<div>').addClass('sidebar-button-bottom').get(0);
                 this.$el.append(buttonnode);
 
-                $('<a>')
-                    .text('Next')
+                $('<button>')
+                    .text('Get started')
                     .attr('data-i18n', 'Get started')
-                    .attr('style', 'background:#F5EB75;color:#000')
-                    .addClass('button radius i18n')
+                    .addClass('button button-primary radius i18n')
                     .click(function() {
                         pluginModel.set('displayHelp', false);
                     })
