@@ -2341,7 +2341,7 @@ a.active {
 #print-map-container {
     border: 1px solid #ccc;
     padding: 5px;
-    height: 850px;
+    height: 500px;
 }
 .print-preview-container {
     padding: 10px;
