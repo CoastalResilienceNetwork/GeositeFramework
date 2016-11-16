@@ -64,11 +64,28 @@ require(['use!Geosite'],
 
                         mapReadyDeferred.then(function () {
                             $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
+
+                            if ($("[name='export-include-legend']").is(":checked")) {
+                                // show & expand all legend items
+                                $("#legend-container-0").css({ visibility: "visible" });
+                                _.each(
+                                    $(".item.expand>.expand-legend"),
+                                    function (el) {
+                                        el.click();
+                                    });
+                                $(".item.extra.collapse").hide();
+                            } else {
+                                // if the style rule is changed via jquery, that state seems to
+                                // "stick", regardless of what's in the stylesheet
+                                $("#legend-container-0").css({ visibility: "hidden" });
+                            }
+
                             window.print();
                             previewDeferred.resolve();
                         });
 
                         previewDeferred.then(function () {
+                            $(".item.extra.collapse").show();
                             TINY.box.hide();
                             $printPreview.hide();
                         });
@@ -81,6 +98,7 @@ require(['use!Geosite'],
                     mapNodeParent.append(mapNode);
                     $("#export-print-preview-map").detach().appendTo($("#export-print-preview-container"));
                     $('.app-print-css').remove();
+                    $("#legend-container-0").css({ visibility: "visible" });
                 }
             });
             

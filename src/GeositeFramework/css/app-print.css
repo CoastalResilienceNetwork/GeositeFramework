@@ -4,7 +4,14 @@
     }
 
     #legend-container-0 {
-        display: none;
+        display: block !important;
+        visibility: hidden;
+        position: fixed;
+        margin-left: 610px;
+    }
+
+    .control-container {
+        display: none !important;
     }
 
     #export-print-preview-container {
@@ -31,35 +38,42 @@
         display: none !important;
     }
 
-    #export-print-preview-map.div.control-container {
+    #print-map-container > #export-print-preview-map.div.control-container {
         display: none;
     }
 
-    #export-print-preview-map {
+    #print-map-container > #export-print-preview-map {
         width: 100% !important;
         max-height: 750px;
+        height: 100%;
     }
 
-    #export-print-preview-map > #map-0 {
+    #print-map-container > #export-print-preview-map > #map-0 {
         max-height: 750px;
         height: 100%;
         top: 0 !important;
         position: relative !important;
     }
 
-    #export-print-preview-map > #map-0 > #legend-container-0 {
-        display: none !important;
+    #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 {
+        display: block !important;
+        position: fixed;
+        margin-left: 610px;
     }
 
-    #export-print-preview-map > #map-0 > #map-0_root {
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root {
         visibility: visible !important;
+        max-height: 750px;
+        height: 100%;
+        max-width: 720px;
+        width: 100%;
     }
     
-    #export-print-preview-map > #map-0 > #map-0_root img.layerTile {
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root img.layerTile {
         visibility: visible !important;
     }
 
-    #export-print-preview-map > #map-0 > #map-0_root > #map-0_zoom_slider {
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root > #map-0_zoom_slider {
         display: none;
     }
 
