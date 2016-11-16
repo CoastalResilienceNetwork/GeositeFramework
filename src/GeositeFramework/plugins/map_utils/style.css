@@ -11,19 +11,23 @@
 .content .map .map-utils-menu {
     position: absolute;
     top: 0;
-    left: -200px;
+    left: -120px;
     background: #e3e3e3;
+    padding: 4px;
     }
     .content .map .map-utils-menu ul,
     .content .map .map-utils-menu li {
         margin: 0;
         padding: 0;
+        list-style: none;
     }
     .content .map .map-utils-menu li a {
         display: inline-block;
-        width: 180px; /* 230 - padding.left - padding.right */
-        padding: 3px 25px;
+        padding: 3px 8px;
         color: #333;
+        font-size: 13px;
+        text-decoration: none;
+        width: 100%;
     }
     .content .map .map-utils-menu li a:hover {
         background: #ddd;

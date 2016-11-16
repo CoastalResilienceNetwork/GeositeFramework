@@ -207,7 +207,7 @@ html {
     -webkit-text-size-adjust: 100%
 }
 body {
-    margin: 0
+    margin: 0;
 }
 article,
 aside,
@@ -242,6 +242,7 @@ template {
 }
 a {
     background-color: transparent;
+    text-decoration: none;
     -webkit-text-decoration-skip: objects
 }
 a:active,
@@ -447,7 +448,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
+    min-width: 740px;
 }
 .h1,
 .text-h1,
@@ -728,7 +729,7 @@ pre {
     cursor: not-allowed
 }
 .button-primary {
-    color: #fff;
+    color: #fff !important;
     background-color: #3bb3be;
     border-color: #35a1ab
 }
@@ -755,7 +756,7 @@ pre {
     opacity: .5
 }
 .button-secondary {
-    color: #fff;
+    color: #fff !important;
     background-color: #529cad;
     border-color: #4a8c9c
 }
@@ -782,7 +783,7 @@ pre {
     opacity: .5
 }
 .button-danger {
-    color: #fff;
+    color: #fff !important;
     background-color: #da4460;
     border-color: #d62f4e
 }
@@ -911,7 +912,7 @@ nav {
     display: flex
 }
 .sidebar-nav {
-    width: 350px;
+    width: inherit;
     background-color: #fff;
     border-bottom: 1px solid #cdd5d5;
     padding: 2px 12px;
@@ -925,7 +926,7 @@ nav {
     font-size: 13px
 }
 .sidebar-content {
-    padding: 36px 12px;
+    padding: 40px 0px 0;
     height: 100%;
 }
 .sidebar-content section {
@@ -1632,6 +1633,7 @@ header .nav-main {
 #search {
     position: absolute;
     right: 10px;
+    top: 12px;
 }
 /* -----------------------------------------
    Content Area - Map
@@ -1664,6 +1666,7 @@ header .nav-main {
 }
 .content .map .topbar-plugin .topbar-tools .plugin-clear {
     position: absolute;
+    display: none;
     bottom: -12px;
     right: -14px;
     padding: 3px 4px;
@@ -2066,7 +2069,7 @@ header .nav-main {
 }
 .tbox {
     top: 100px!important;
-    min-width: 500px!important;
+    min-width: 100px!important;
 }
 .tinner {
     overflow: hidden;
@@ -2202,6 +2205,7 @@ header .nav-main {
     right: 0;
     color: inherit;
 }
+
 /*Launchpad Media Queries*/
 
 @media(min-width: 960px) {
@@ -2269,6 +2273,7 @@ header .nav-main {
 .subregion-header .leave {
     float: right;
     width: 200px;
+    text-align: right;
 }
 .subregion-header .leave i {
     padding-right: 5px;
@@ -2360,4 +2365,39 @@ body.x-body {
     font-size: 1.5rem;
     color: #73787d;
     font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+}
+#tlyPageGuide {
+  list-style: none;
+}
+.sidebar-button-bottom {
+  position: fixed;
+  bottom: 0;
+  background-color: #eee;
+  padding: 10px 12px;
+  width: inherit;
+}
+.sidebar-button-bottom > button {
+  width: 100%;
+}
+.plugin-infographic {
+  width: inherit;
+}
+.popover-section {
+  width: 100%;
+  margin-bottom: 14px;
+}
+.popover-container .row {
+  margin-left: -26px;
+  width: auto;
+}
+#permalink-dialog input[type="text"], #permalink-dialog textarea {
+  width: 100%;
+}
+#iframe-embed {
+  width: 100%;
+}
+@media only screen and (max-width: 740px) {
+    .sidebar-nav {
+      position: absolute;
+    }
 }
