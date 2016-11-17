@@ -450,6 +450,9 @@ require(['use!Geosite',
                     $('.' + printCssClass).remove();
                     $printSandbox.empty();
 
+                    // add base plugin css
+                    addCss('css/print.css', 'base-plugin-print-css');
+
                     // Add the plugin css
                     addCss(pluginCssPath, printCssClass);
 

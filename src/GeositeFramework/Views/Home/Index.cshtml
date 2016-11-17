@@ -91,7 +91,6 @@
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/print.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
 
@@ -433,6 +432,10 @@
                         <label><input type="checkbox" name="export-include-legend" /> <span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
                     </div>
                 </div>
+                <div id="export-print-preview-container">
+                    <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
+                    <div id="export-print-preview-map"></div>
+                </div>
                 <div class="row">
                     <div class="left-col">
                         <div class="export-output-area">
@@ -625,7 +628,7 @@
             <img src="@Model.PrintHeaderLogo" title="Header Logo" class="logo" />
             <h1></h1>
         </div>
-        <div id="print-map-container">Map goes here</div>
+        <div id="print-map-container"></div>
     </div>
 
     <!-- LEFT CONTENT AREA -->

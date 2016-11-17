@@ -1,4 +1,10 @@
 ﻿@media print {
+    #map-print-sandbox {
+        visibility: visible !important;
+    }
+    .print-sandbox-header {
+        display: none !important;
+    }
     /* Hide all body an map elements and print preview map controls */
     body,
     #plugin-print-preview-map_zoom_slider {
@@ -35,5 +41,9 @@
 
     #plugin-print-preview-map_container img {
         visibility: visible;
+    }
+
+    .esriSimpleSlider {
+        display: none;
     }
 }
