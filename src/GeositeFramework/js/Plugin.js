@@ -372,12 +372,10 @@ require(['use!Geosite',
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.model.selected === true) {
-                view.$el.find('button').addClass("active");
                 if (view.$uiContainer) {
                     view.$uiContainer.show();
                 }
             } else {
-                view.$el.find('button').removeClass("active");
                 if (view.$uiContainer) {
                     view.$uiContainer.hide();
                 }

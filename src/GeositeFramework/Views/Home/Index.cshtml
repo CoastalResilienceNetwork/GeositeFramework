@@ -324,8 +324,8 @@
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-        <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]<%=fullName%>">
-            <span class="button-icon"><i class="icon-<%- pluginObject.icon %>"></i></span>
+        <button class="nav-apps-button plugin-launcher i18n <%= selected ? 'active' : ''%>" data-i18n="[title]<%=fullName%>">
+            <span class="button-icon"><img src="<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png"></span>
             <span class="button-text i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></span>
         </button
     </script>
