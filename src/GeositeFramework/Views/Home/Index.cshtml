@@ -32,10 +32,6 @@
             {
                 <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
             }
-            else if (link.LaunchpadId != null)
-            {
-                <a class="launchpad-trigger" href="javascript:;" data-launchpad-id="@link.LaunchpadId">@link.Text</a>
-            }
             else if (link.Items != null && link.Items.Any())
             {
                 var id = "link-dd-" + link.GetHashCode();
@@ -496,64 +492,6 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-launchpad">
-        <div class="popover launchpad">
-            <div class="popover-header">
-                <h2><%= title %></h2>
-            </div>
-
-            <div class="popover-content ">
-                <div class="row">
-                    <p><%= description %></p>
-                </div>
-                <% if (typeof(showSubRegions) !== "undefined" && showSubRegions && subregions) { %>
-                <div class="row">
-                    <div class="well">
-                        <div class="description">
-                            <h3 class="i18n" data-i18n="Pick a Geography">Pick a Geography</h3>
-                            <p><% if (typeof(subRegionDescription) !== "undefined") { %> <%= subRegionDescription %> <% } %></p>
-                        </div>
-                        <div class="thumbs">
-                            <ul>
-                                <li class="free-explore"><i class="fa fa-globe"></i><label class="i18n" data-i18n="Explore the map">Explore the map</label></li>
-                                <% _.each(subregions.areas, function(subregion) { %>
-                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
-                                <% }); %>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-
-                <% _.each(categories, function(category) { %>
-                <div class="row">
-                    <div class="well">
-                        <div class="description">
-                            <h3><%= category.name %></h3>
-                            <p><%= category.description %></p>
-                        </div>
-                        <div class="thumbs">
-                            <ul>
-                                <% _.each(category.issues, function(issue) { %>
-                                    <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
-                                        <i class="<%= issue.faIcon %>"
-                                            <% if (issue.faSize) { %>
-                                                style="font-size:<%= issue.faSize %>px"
-                                            <% } %>
-                                        ></i>
-                                         <label><%= issue.name %></label>
-                                    </li>
-                                <% }); %>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-    </script>
-
     <script type="text/template" id="template-subregion">
         <div class="subregion-header">
             <p><span class="i18n" data-i18n="You are currently in">You are currently in</span>
@@ -709,7 +647,6 @@
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
     <script src="js/SubRegion.js"></script>
-    <script src="js/Launchpad.js"></script>
     <script src="js/MapWrapper.js"></script>
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>
