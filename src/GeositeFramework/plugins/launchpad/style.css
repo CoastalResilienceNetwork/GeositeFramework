@@ -1,0 +1,16 @@
+.launchpad-plugin {
+    padding: 10px;
+}
+.launchpad-plugin .plugins h4,
+.launchpad-plugin .scenarios h4 {
+    color: #3bb3be;
+}
+.launchpad-plugin .plugins div,
+.launchpad-plugin .scenarios div {
+    display: inline-block;
+    width: 83%;
+}
+.launchpad-plugin .plugins .button,
+.launchpad-plugin .scenarios .button {
+    float: right;
+}

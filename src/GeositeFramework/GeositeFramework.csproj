@@ -198,6 +198,9 @@
     <Content Include="js\SyncedMapManager.js" />
     <Content Include="js\TemplateLoader.js" />
     <Content Include="js\lib\use.js" />
+    <Content Include="plugins\launchpad\main.js" />
+    <Content Include="plugins\launchpad\style.css" />
+    <Content Include="plugins\launchpad\templates.html" />
     <Content Include="plugins\map_utils\export\main.js" />
     <Content Include="plugins\map_utils\full_extent\main.js" />
     <Content Include="plugins\map_utils\main.js" />
@@ -263,6 +266,11 @@
     <Content Include="plugins\map_utils\measure\locales\en.json" />
     <Content Include="plugins\map_utils\measure\locales\es.json" />
     <Content Include="plugins\map_utils\plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugins\launchpad\overrides.json" />
+    <Content Include="plugins\launchpad\plugin.json" />
+    <Content Include="plugins\launchpad\README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
