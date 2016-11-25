@@ -221,6 +221,18 @@
                 },
             },
             "additionalProperties": false
+        },
+        "partners": {
+            "type": "array",
+            "required": false,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "logoPath": { "type": "string", "required": true },
+                    "link": { "type": "string", "required": true },
+                    "title": { "type": "string", "required": true }
+                }
+            }
         }
     },
     "additionalProperties": false

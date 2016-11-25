@@ -14,3 +14,11 @@
 .launchpad-plugin .scenarios .button {
     float: right;
 }
+
+.launchpad-plugin .partners li {
+    display: inline-block;
+}
+.launchpad-plugin .partners img {
+    height: 60px;
+    margin: 5px 10px;
+}

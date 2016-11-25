@@ -138,5 +138,27 @@
                 "legendType": "scale"
             }
         ]
-    }
+    },
+    "partners": [
+        {
+            "logoPath": "http://www.naturalcapitalproject.org/wp-content/uploads/2015/05/logo-ls-lined-up.jpg",
+            "link": "http://www.naturalcapitalproject.org/",
+            "title": "Natural Capital Project",
+        },
+        {
+            "logoPath": "https://coast.noaa.gov/assets/logos/noaa-badge-full-color-no-outertext.svg",
+            "link": "https://coast.noaa.gov/digitalcoast/",
+            "title": "NOAA Digital Coast",
+        },
+        {
+            "logoPath": "https://www.fws.gov/home/graphics/logo.png",
+            "link": "https://www.fws.gov/",
+            "title": "U.S. Fish and Wildlife Surface",
+        },
+        {
+            "logoPath": "https://www.usm.edu/sites/default/files/groups/office-university-communications/images/univc123pc_0.png",
+            "link": "https://www.usm.edu/",
+            "title": "University of Southern Mississippi",
+        },
+    ]
 }
