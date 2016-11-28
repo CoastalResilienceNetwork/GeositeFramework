@@ -1,0 +1,34 @@
+<script type="text/template" id="plugin">
+    <div class="launchpad-plugin">
+        <h2><%= title %></h2>
+        <p><%= description %></p>
+        <h3>Start exploring</h3>
+        <div class="plugins">
+            <ul>
+            <% _.each(plugins, function(plugin) { %>
+                <li>
+                    <div>
+                        <h4><%= plugin.title %></h4>
+                        <p><%= plugin.description %></p>
+                    </div>
+                    <button class="button launch-plugin" data-plugin-name="<%= plugin.pluginName %>">Go</button>
+                </li>
+            <% }); %>
+            </ul>
+        </div>
+        <h3>One-click maps</h3>
+        <div class="scenarios">
+            <ul>
+            <% _.each(scenarios, function(scenario) { %>
+                <li>
+                    <div>
+                        <h4><%= scenario.title %></h4>
+                        <p><%= scenario.description %></p>
+                    </div>
+                    <button class="button launch-scenario" data-save-code="<%= scenario.saveCode %>">Go</button>
+                </li>
+            <% }); %>
+            </ul>
+        </div>
+    </div>
+</script>

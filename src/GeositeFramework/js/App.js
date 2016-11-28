@@ -32,9 +32,6 @@
 
             N.app.controllers.help = new N.controllers.HelpOverlay();
             N.app.models.screen = new N.models.Screen();
-            if (regionData.launchpads && _.any($('a.launchpad-trigger'))) {
-                N.app.controllers.launchpads = new N.controllers.Launchpads(regionData.launchpads);
-            }
 
             this.hashModels = Backbone.HashModels.init({
                 updateOnChange: false,

@@ -93,7 +93,6 @@ require(['use!Geosite',
                 loadExtent(view);
             }
         });
-        N.app.dispatcher.on('launchpad:free-explore', function (e) { freeExplore(e, view); });
 
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
@@ -188,12 +187,6 @@ require(['use!Geosite',
                 if (esriMap.loaded) esriMap.onLoad(esriMap);
             }
         }, 2500);
-    }
-
-    function freeExplore(e, view) {
-        if (N.app.models.screen.get('mainPaneNumber') === view.model.get('mapNumber')) {
-            view.esriMap.setExtent(e.extent);
-        }
     }
 
     function loadExtent(view) {

@@ -27,23 +27,20 @@
         "headerLinks": {
             "type": "array",
             "items": {
-                "type": "object",
-                "properties": {
-                    "text": {"type": "string", "required": true},
-                    "url": {"type": "string", "required": true},
-                    "popup": {"type": "boolean", "required": false},
-                    "launchpadId": {"type": "string", "required": false},
-                    "elementId": {"type": "string", "required": false},
-                    "items": {"type": "array", "items": {
-                            "type": "object",
-                            "properties": {
-                                "text": {"type": "string", "required": true},
-                                "url": {"type": "string", "required": true},
-                                "popup": {"type": "boolean", "required": false},
-                                "elementId": {"type": "string", "required": false}
-                            },
-                            "additionalProperties": false
-                        }, "required": false}
+                "text": {"type": "string", "required": true},
+                "url": {"type": "string", "required": true},
+                "popup": {"type": "boolean", "required": false},
+                "elementId": {"type": "string", "required": false},
+                "items": {"type": "array", "items": {
+                        "type": "object",
+                        "properties": {
+                            "text": {"type": "string", "required": true},
+                            "url": {"type": "string", "required": true},
+                            "popup": {"type": "boolean", "required": false},
+                            "elementId": {"type": "string", "required": false}
+                        },
+                        "additionalProperties": false
+                    }, "required": false}
                 },
                 "additionalProperties": false
             }
@@ -173,37 +170,32 @@
             "required": false
         },
         "launchpads": {
-            "type": "array",
+            "type": "object",
             "required": false,
-            "items": {
+            "properties": {
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "required": true },
                     "title": { "type": "string", "required": true },
                     "description": { "type": "string", "required": true },
-                    "showSubRegions": { "type": "boolean", "required": false },
-                    "subRegionDescription": { "type": "string", "required": false },
-                    "showByDefault": { "type": "boolean", "required": false },
-                    "categories": {
+                    "plugins": {
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
-                                "name": { "type": "string" },
-                                "description": { "type": "string" },
-                                "issues": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "name": { "type": "string" },
-                                            "description": { "type": "string" },
-                                            "saveCode": { "type": "string" },
-                                            "faIcon": { "type": "string" },
-                                            "faSize": { "type": "number" }
-                                        }
-                                    }
-                                }
+                                "title": { "type": "string", "required": true },
+                                "description": { "type": "string", "required": true },
+                                "pluginName": { "type": "string", "required": true },
+                            }
+                        }
+                    },
+                    "scenarios": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": { "type": "string", "required": true },
+                                "description": { "type": "string", "required": true },
+                                "saveCode": { "type": "string", "required": true },
                             }
                         }
                     }

@@ -326,7 +326,16 @@ require(['use!Geosite',
                 'click .plugin-clear': 'handleClear'
             },
 
-            initialize: function () { initialize(this); },
+            initialize: function () {
+                var self = this;
+                initialize(this);
+
+                N.app.dispatcher.on('launchpad:activate-plugin', function(pluginName) {
+                    if (pluginName === self.model.getId()) {
+                        self.handleLaunch();
+                    }
+                });
+            },
 
             /*
                 Click handlers exposed so that they can be overridden by

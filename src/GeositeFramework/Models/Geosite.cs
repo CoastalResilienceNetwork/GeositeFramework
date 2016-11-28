@@ -31,13 +31,6 @@ namespace GeositeFramework.Models
             public bool Popup;
 
             /// <summary>
-            /// Id of this launchpad this item should launch.
-            /// If this value is not null, that means this item
-            /// is a launchpad trigger.
-            /// </summary>
-            public string LaunchpadId;
-
-            /// <summary>
             /// Resulting <a> tag will receive this id
             /// </summary>
             public string ElementId;
@@ -222,7 +215,6 @@ namespace GeositeFramework.Models
                 Text = (string)json["text"],
                 Url = (string)json["url"],
                 Popup = json["popup"] != null && bool.Parse(json["popup"].ToString()),
-                LaunchpadId = json["launchpadId"] != null ? (string)json["launchpadId"] : null,
                 ElementId = json["elementId"] != null ? (string)json["elementId"] : null,
                 Items = ExtractLinkListFromJson(json)
             };
