@@ -30,5 +30,17 @@
             <% }); %>
             </ul>
         </div>
+        <h3>Partners</h3>
+        <div class="partners">
+            <ul>
+            <% _.each(partners, function(partner) { %>
+                <li>
+                    <a href="<%= partner.link %>" target="_blank">
+                        <img src="<%= partner.logoPath %>" alt="<%= partner.title %>" title="<%= partner.title %>"/>
+                    </a>
+                </li>
+            <% }); %>
+            </ul>
+        </div>
     </div>
 </script>

@@ -76,7 +76,8 @@ define([
                     title: N.app.data.region.launchpad.title,
                     description: N.app.data.region.launchpad.description,
                     plugins: N.app.data.region.launchpad.plugins,
-                    scenarios: N.app.data.region.launchpad.scenarios
+                    scenarios: N.app.data.region.launchpad.scenarios,
+                    partners: N.app.data.region.partners
                 }));
 
                 $(this.container).empty().append($el);
