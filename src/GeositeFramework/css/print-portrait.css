@@ -1,0 +1,96 @@
+﻿@media print {
+    @page {
+        size: letter portrait;
+    }
+
+    #map-print-sandbox {
+        width: 700px !important;
+        height: 900px !important;
+    }
+
+    .print-sandbox-header {
+        height: 10% !important;
+    }
+
+    #print-map-container {
+        overflow: hidden !important;
+        width: 100% !important;
+        height: 91% !important;
+    }
+
+    #print-map-container > #export-print-preview-map {
+        height: 100% !important;
+        width: 100% !important;
+        /*margin-left: -50%;
+        margin-top: -25%;*/
+    }
+
+    #print-map-container > #export-print-preview-map > #map-0 {
+        height: 100% !important;
+        width: 100% !important;
+        margin-left: 0% !important;
+        top: 0 !important;
+        position: relative !important;
+    }
+    
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root {
+        max-height: 1720px;
+        max-width: 1750px;
+        height: 120% !important;
+        margin-left: -65%;
+        margin-top: -12%;
+    }
+
+    #legend-container-0 {
+        margin-left: 0px !important;
+        top: 80% !important;
+        height: 20% !important;
+        width: 100% !important;
+        position: absolute !important;
+        z-index: 10;
+        background-color: white;
+    }
+
+    .legend-header {
+        height: 15%;
+        font-size: 11px;
+    }
+
+    .legend-body {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100% !important;
+        height: 85% !important;
+    }
+
+    .layer-legends {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .legend-layer {
+        width: auto !important;
+        font-size: 8px;
+        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
+    }
+
+    .legend-title {
+        max-width: 75%;
+    }
+
+    .print-legend-coll {
+        display: flex !important;
+        flex-direction: column;
+    }
+    
+    .legend-layer img {
+        width: 10px;
+        height: 10px;
+    }
+}

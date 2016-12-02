@@ -53,9 +53,6 @@ require(['use!Geosite'],
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
-                    //var mapNode = $("#map-0").detach()[0];
-                    //$("#export-print-preview-map").append(mapNode);
-
                     $('#export-button').on('click', function() {
                         var $printSandbox = $('#map-print-sandbox'),
                             previewDeferred = $.Deferred();
@@ -66,7 +63,6 @@ require(['use!Geosite'],
 
                         mapReadyDeferred.then(function () {
                             $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
-                            //$("#export-print-preview-map").append(mapNode);
 
                             if ($("[name='export-include-legend']").is(":checked")) {
                                 // show & expand all legend items
@@ -77,14 +73,37 @@ require(['use!Geosite'],
                                         el.click();
                                     });
                                 $(".item.extra.collapse").hide();
+
+                                // wrap all items in a div to style separately from header
                             } else {
                                 // if the style rule is changed via jquery, that state seems to
                                 // "stick", regardless of what's in the stylesheet
                                 $("#legend-container-0").css({ visibility: "hidden" });
                             }
+                            var pageOrientation = $("[name='export-orientation']").filter(function () { return this.checked; }).map(function () { return this.value; }).first()[0];
+                            var orientDeferred = $.Deferred();
 
-                            window.print();
-                            previewDeferred.resolve();
+                            if (pageOrientation === "Landscape") {
+                                $('<link>', {
+                                    rel: 'stylesheet',
+                                    href: 'css/print-landscape.css',
+                                    'class': '.print-orientation-css',
+                                }).appendTo('head');
+                                _.delay(orientDeferred.resolve, 500);
+                                $(".legend-layer").each(function(el) { $(this).children(".item").wrapAll("<div class='print-legend-coll'></div>"); });
+                            } else {
+                                $('<link>', {
+                                    rel: 'stylesheet',
+                                    href: 'css/print-portrait.css',
+                                    'class': '.print-orientation-css',
+                                }).appendTo('head');
+                                _.delay(orientDeferred.resolve, 500);
+                            }
+
+                            $.when(orientDeferred).then(function() {
+                                window.print();
+                                previewDeferred.resolve();
+                            });
                         });
 
                         previewDeferred.then(function () {
