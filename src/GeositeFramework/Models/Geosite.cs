@@ -113,7 +113,7 @@ namespace GeositeFramework.Models
             // Get plugin folder names, in the specified order
             if (jsonObj["pluginOrder"] != null)
             {
-                List<string> pluginOrder = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
+                var pluginOrder = GetPluginOrder(jsonObj);
                 Func<string, int> byPluginOrder = x => pluginOrder.IndexOf(PluginLoader.StripPluginModule(x));
                 PluginLoader.SortPluginNames(existingPluginFolderNames, byPluginOrder);
                 PluginLoader.SortPluginNames(pluginModuleNames, byPluginOrder);
@@ -179,6 +179,21 @@ namespace GeositeFramework.Models
             {
                 MergePluginConfigurationData(this, pluginConfigJsonData);
             }
+        }
+
+        /// <summary>
+        /// Get the configured plugin order, ensuring that the launchpad plugin is always first
+        /// </summary>
+        /// <param name="jsonObj"></param>
+        /// <returns>Ordered list of plugins</returns>
+        private List<string> GetPluginOrder(JObject jsonObj)
+        {
+            const string launchpadName = "launchpad";
+            var pluginOrder = jsonObj["pluginOrder"].Select(pluginName => (string)pluginName).ToList();
+            pluginOrder.Remove(launchpadName);
+            pluginOrder.Insert(0, launchpadName); 
+
+            return pluginOrder;
         }
 
         /// <summary>
