@@ -169,7 +169,7 @@
             "type": "boolean",
             "required": false
         },
-        "launchpads": {
+        "launchpad": {
             "type": "object",
             "required": false,
             "properties": {
