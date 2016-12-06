@@ -88,7 +88,6 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "launchpad",
         "subregion_toggle",
         "map_utils"
     ],
