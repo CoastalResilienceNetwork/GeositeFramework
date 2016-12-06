@@ -53,17 +53,20 @@ require(['use!Geosite'],
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
-                    var mapNode = $("#map-0").detach()[0];
-                    $("#export-print-preview-map").append(mapNode);
+                    //var mapNode = $("#map-0").detach()[0];
+                    //$("#export-print-preview-map").append(mapNode);
 
                     $('#export-button').on('click', function() {
                         var $printSandbox = $('#map-print-sandbox'),
                             previewDeferred = $.Deferred();
 
                         $('.print-sandbox-header h1').text($("#export-title").val());
+                        var mapNode = $("#map-0").detach()[0];
+                        $("#export-print-preview-map").append(mapNode);
 
                         mapReadyDeferred.then(function () {
                             $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
+                            //$("#export-print-preview-map").append(mapNode);
 
                             if ($("[name='export-include-legend']").is(":checked")) {
                                 // show & expand all legend items
