@@ -101,31 +101,45 @@ require([
             // Iterate over plugin classes in top-level namespace,
             // instantiate them, and wrap them in backbone objects
 
-            var plugins = new N.collections.Plugins();
+            var plugins = new N.collections.Plugins(),
+                regionData = model.get('regionData');
 
             _.each(N.plugins, function(PluginClass, i) {
                 try {
                     var pluginObject = new PluginClass(),
                         plugin = new N.models.Plugin({
                             pluginObject: pluginObject,
-                            pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                            pluginSrcFolder: regionData.pluginFolderNames[i]
                         });
 
                     // Load plugin only if it passes a compliance check ...
-                    if (plugin.isCompliant()) {
-                        // ... and if we're on map 2, and the plugin isn't on the blacklist
-                        if (model.get('paneNumber') === 1) {
-                            if (getPluginMap2Availability(plugin.getId())) {
-                                plugins.add(plugin);
-                            }
-                        } else {
-                            plugins.add(plugin);
-                        }
-                    } else {
+                    if (!plugin.isCompliant()) {
                         console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
                             pluginObject.toolbarName +
                             ' is not loaded due to improper interface');
+                        return;
                     }
+
+                    // If we're on map 2, and the plugin isn't on the blacklist
+                    if (model.get('paneNumber') === 1) {
+                        var pluginAvailableForMap = getPluginMap2Availability(plugin.getId());
+                        if (!pluginAvailableForMap) {
+                            return;
+                        }
+                    }
+
+                    // If this plugin is the launchpad, but that feature is not configured in the 
+                    // region config, don't create it.
+                    var srcFolder = plugin.get('pluginSrcFolder'),
+                        pluginRoot = srcFolder.substring(srcFolder.lastIndexOf('/') + 1);
+
+                    if (pluginRoot === 'launchpad' && !regionData.launchpad) {
+                        return;
+                    }
+
+                    // All checks are valid against this plugin
+                    plugins.add(plugin);
+
                 } catch(e) {
                     console.error("/ --------------------");
                     console.error("There was a problem creating a plugin.");
