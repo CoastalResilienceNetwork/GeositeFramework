@@ -153,17 +153,34 @@ require([
         function initPlugins(model, esriMap) {
             var mapModel = model.get('mapModel'),
                 regionData = model.get('regionData'),
-                savedState = model.get('stateOfPlugins');
+                savedState = model.get('stateOfPlugins'),
+                launchpadPlugin = null;
 
             model.get('plugins').each(function(pluginModel) {
+                if (checkName(pluginModel, 'launchpad')) {
+                    launchpadPlugin = pluginModel;
+                }
                 pluginModel.initPluginObject(regionData, mapModel, esriMap);
             });
 
-            // Wait a second before activating a permaline (scenario) to ensure the map
+            // Wait a second before activating a permalink (scenario) to ensure the map
             // layer is loaded.
             _.delay(function() {
                 activateScenario(model, savedState, model.get('activeSubregion'));
+
+                // If no savedState and there is a launchpad plugin, active it first.
+                // A saveCode key would indicate that another plugin should be active
+                if (Object.keys(savedState).length === 0 && launchpadPlugin) {
+                    launchpadPlugin.toggleSelected();
+                }
             }, 1000);
+        }
+
+        function checkName(pluginModel, nameToCheck) {
+            if (pluginModel.name().indexOf('/' + nameToCheck) > -1) {
+                return true;
+            }
+            return false;
         }
 
         function activateScenario(pane, stateOfPlugins, activeSubregion) {
