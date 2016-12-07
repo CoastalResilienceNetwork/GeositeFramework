@@ -371,9 +371,11 @@ require(['use!Geosite',
             var model = view.model,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
                 // The plugin icon looks active if the plugin is selected or
-                // active (aka, running but not focused)
+                // active (aka, running but not focused).  It is displayed if
+                // it is currently displaying its UI.
                 html = pluginTemplate(_.extend(model.toJSON(), {
                     selected: model.selected || model.get('active'),
+                    displayed: model.selected,
                     fullName: model.get('pluginObject').fullName
                 }));
 
