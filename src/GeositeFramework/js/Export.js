@@ -89,7 +89,7 @@ require(['use!Geosite'],
                                     href: 'css/print-landscape.css',
                                     'class': '.print-orientation-css',
                                 }).appendTo('head');
-                                _.delay(orientDeferred.resolve, 500);
+                                _.delay(orientDeferred.resolve, 750);
                                 $(".legend-layer").each(function(el) { $(this).children(".item").wrapAll("<div class='print-legend-coll'></div>"); });
                             } else {
                                 $('<link>', {
@@ -97,7 +97,7 @@ require(['use!Geosite'],
                                     href: 'css/print-portrait.css',
                                     'class': '.print-orientation-css',
                                 }).appendTo('head');
-                                _.delay(orientDeferred.resolve, 500);
+                                _.delay(orientDeferred.resolve, 750);
                             }
 
                             $.when(orientDeferred).then(function() {
