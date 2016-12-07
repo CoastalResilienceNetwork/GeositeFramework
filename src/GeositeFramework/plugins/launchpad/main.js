@@ -71,6 +71,11 @@ define([
                 this.render();
             },
 
+            deactivate: function() {
+                var self = this;
+                self.plugin.turnOff();
+            },
+
             render: function() {
                 var $el = $(this.pluginTmpl({
                     title: N.app.data.region.launchpad.title,
