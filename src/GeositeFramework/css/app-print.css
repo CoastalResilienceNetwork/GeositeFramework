@@ -84,3 +84,7 @@
     top: 0 !important;
     position: relative !important;
 }
+
+.instructions {
+    display: none;
+}
