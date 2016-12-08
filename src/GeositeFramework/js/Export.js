@@ -35,7 +35,7 @@ require(['use!Geosite'],
         }
 
         function setupPrintableMap() {
-            var mapMarkup = N.app.templates['template-export-window']({pluginName: "Test"}),
+            var mapMarkup = N.app.templates['template-export-window']({ pluginName: "Test" }),
                 $mapPrint = $($.trim(mapMarkup)),
                 $printPreview = $('#print-preview-sandbox'),
                 mapReadyDeferred = $.Deferred(),
@@ -55,14 +55,22 @@ require(['use!Geosite'],
                 openjs: function () {
                     $('#export-button').on('click', function() {
                         var $printSandbox = $('#map-print-sandbox'),
-                            previewDeferred = $.Deferred();
-
+                            previewDeferred = $.Deferred(),
+                            postPrintAction = function() {};
                         $('.print-sandbox-header h1').text($("#export-title").val());
                         var mapNode = $("#map-0").detach()[0];
                         $("#export-print-preview-map").append(mapNode);
 
                         mapReadyDeferred.then(function () {
                             $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
+
+                            // expand legend container if minimized
+                            if ($("#legend-container-0").hasClass("minimized")) {
+                                _.head($(".legend-close")).click();
+                                postPrintAction = function() {
+                                    _.head($(".legend-close")).click();
+                                };
+                            }
 
                             if ($("[name='export-include-legend']").is(":checked")) {
                                 // show & expand all legend items
@@ -110,6 +118,7 @@ require(['use!Geosite'],
                             $(".item.extra.collapse").show();
                             TINY.box.hide();
                             $printPreview.hide();
+                            postPrintAction();
                         });
                     });
 
