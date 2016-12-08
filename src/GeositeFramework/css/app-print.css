@@ -47,6 +47,14 @@
     .plugin-launcher {
         display: none;
     }
+
+    .esriAttributionLastItem {
+        display: none !important;
+    }
+
+    .logo-med {
+        display: none !important;
+    }
 }
 
 #export-print-preview-container {

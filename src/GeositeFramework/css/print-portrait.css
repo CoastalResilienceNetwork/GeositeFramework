@@ -4,47 +4,36 @@
     }
 
     #map-print-sandbox {
-        width: 700px !important;
-        height: 900px !important;
+        width: 8in !important;
+        height: 9in !important;
     }
 
     .print-sandbox-header {
-        height: 10% !important;
+        height: 0.95in !important;
     }
 
     #print-map-container {
         overflow: hidden !important;
-        width: 100% !important;
-        height: 91% !important;
+        width: 8in !important;
+        height: 8.65in !important;
     }
 
     #print-map-container > #export-print-preview-map {
-        height: 100% !important;
-        width: 100% !important;
-        /*margin-left: -50%;
-        margin-top: -25%;*/
+        height: 8.5in !important;
+        width: 7.9in !important;
     }
 
     #print-map-container > #export-print-preview-map > #map-0 {
         height: 100% !important;
         width: 100% !important;
-        margin-left: 0% !important;
-        top: 0 !important;
-        position: relative !important;
-    }
-    
-    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root {
-        max-height: 1720px;
-        max-width: 1750px;
-        height: 120% !important;
-        margin-left: -65%;
-        margin-top: -12%;
+        position: relative;
     }
 
     #legend-container-0 {
         margin-left: 0px !important;
-        top: 80% !important;
-        height: 20% !important;
+        top: 75% !important;
+        left: 0px !important;
+        height: 25% !important;
         width: 100% !important;
         position: absolute !important;
         z-index: 10;
@@ -93,4 +82,24 @@
         width: 10px;
         height: 10px;
     }
+}
+
+#map-print-sandbox {
+    width: 8in !important;
+    height: 9in !important;
+}
+
+.print-sandbox-header {
+    height: 0.95in !important;
+}
+
+#print-map-container {
+    overflow: hidden !important;
+    width: 8in !important;
+    height: 8.65in !important;
+}
+
+#print-map-container > #export-print-preview-map {
+    height: 8.5in !important;
+    width: 7.9in !important;
 }
