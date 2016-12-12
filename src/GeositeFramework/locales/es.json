@@ -43,6 +43,7 @@
     "Map": "Mapa",
     "Map Utilities": "Utilidad Mapa",
     "Export": "Exportar",
+    "Map Export": "Exportación de mapas",
     "Embed Width (px)": "Insertar Ancho (px)",
     "Embed Height (px)": "Insertar Altura (px)",
     "You are currently in": "Ahora mismo estás en",
@@ -56,6 +57,7 @@
     "Don't show this on start": "No mostrar esto al iniciar",
     "Continue": "Continuar",
     "Next": "Siguiente",
+    "Get Started": "Empezar",
     "Measure": "Mediciones",
     "Turn off this plugin": "Desactivar este plugin"
 }

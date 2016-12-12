@@ -42,6 +42,7 @@
     "Currently viewing Map 2, switch to view Map 1": "Currently viewing Map 2, switch to view Map 1",
     "Map": "Map",
     "Map Utilities": "Map Utilities",
+    "Export": "Export",
     "Map Export": "Map Export",
     "Embed Width (px)": "Embed Width (px)",
     "Embed Height (px)": "Embed Height (px)",
@@ -55,6 +56,7 @@
     "Permalink:": "Permalink:",
     "Don't show this on start": "Don't show this on start",
     "Continue": "Continue",
+    "Next": "Next",
     "Get Started": "Get Started",
     "Measure": "Measure",
     "Turn off this plugin": "Turn off this plugin"
