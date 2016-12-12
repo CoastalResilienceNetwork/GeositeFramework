@@ -1,14 +1,4 @@
-﻿require({
-    packages: [
-        {
-            name: 'jquery',
-            location: '//ajax.googleapis.com/ajax/libs/jquery/1.9.0',
-            main: 'jquery.min'
-        }
-    ]
-});
-
-define([
+﻿define([
     'dojo/_base/declare',
     'esri/geometry/Extent',
     'esri/SpatialReference'
@@ -18,28 +8,21 @@ define([
               SpatialReference) {
     'use strict';
 
+    var LatLng = new SpatialReference({ wkid: 4326 });
+
     return declare(null, {
-        constructor: function(args) {
-            declare.safeMixin(this, args);
+        constructor: function(map, extent) {
+            this.map = map;
+            this.initialExtent = new Extent(
+                extent[0],
+                extent[1],
+                extent[2],
+                extent[3],
+                LatLng);
         },
 
         execute: function() {
-            var extent = this.getInitialExtent();
-            this.map.setExtent(extent);
-        },
-
-        cancel: function() {
-            // NOOP
-        },
-
-        getInitialExtent: function() {
-            var x = this.app.regionConfig.initialExtent,
-                srs = new SpatialReference({ wkid: 4326 /*lat-long*/ });
-            return new Extent(x[0], x[1], x[2], x[3], srs);
-        },
-
-        renderLauncher: function() {
-            return $('<div class="full-extent"></div>');
+            this.map.setExtent(this.initialExtent);
         }
     });
 });

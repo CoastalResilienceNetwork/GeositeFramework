@@ -1,8 +1,6 @@
 define([
         "use!Geosite",
         "jquery",
-        "use!underscore",
-        "dojo/Deferred",
         "esri/geometry/Polyline",
         "esri/geometry/Polygon",
         "esri/geometry/geodesicUtils",
@@ -20,8 +18,6 @@ define([
     ],
     function(N,
              $,
-             _,
-             Deferred,
              Polyline,
              Polygon,
              geodesicUtils,
@@ -41,6 +37,7 @@ define([
 
             var options = _.extend({
                 map: null,
+                introTemplate: '',
                 tooltipTemplate: '',
                 infoBubbleTemplate: '',
                 // It is preferable to provide a custom geometry server, but
@@ -96,9 +93,36 @@ define([
             _hoverLine = null,
             _eventHandles = {},
             _$tooltip = $('<div>'),
+            _introTemplate,
             _popupTemplate,
             _tooltipTemplate,
             _geometrySvc,
+            _introPopup = null,
+
+            showIntroPopup = function() {
+                var map = options.map,
+                    $parent = $(map.infoWindow.domNode).parent();
+                    $infoWindow = $('<div>').appendTo($parent),
+                    infoWindow = new InfoWindow({ map: map }, $infoWindow.get(0));
+
+                map.infoWindow.destroy();
+
+                infoWindow.startup();
+                map.setInfoWindow(infoWindow);
+
+                infoWindow.setTitle('');
+                infoWindow.setContent(_introTemplate());
+                infoWindow.resize(300, 100);
+
+                $(infoWindow.domNode).addClass('measure-info-window');
+                infoWindow.show(map.extent.getCenter());
+
+                if ($.i18n) {
+                    $parent.localize();
+                }
+
+                _introPopup = infoWindow;
+            },
 
             showResultPopup = function(results) {
                 // Delete the current info window (after grabbing its parent DOM node)
@@ -115,6 +139,10 @@ define([
                 map.infoWindow.setContent(_popupTemplate(results));
                 map.infoWindow.setTitle(""); // hides title div
                 map.infoWindow.show(_points[0]);
+
+                $(infoWindow.domNode).on('click', '[data-action]', function() {
+                    reset();
+                });
 
                 if ($.i18n) {
                     $parent.localize();
@@ -139,6 +167,8 @@ define([
                 _.each(_eventHandles, dojo.disconnect);
                 options.map.enableDoubleClickZoom();
                 _$tooltip.hide();
+
+                N.app.restoreIdentify();
             },
 
             reset = function () {
@@ -251,6 +281,10 @@ define([
             },
 
             handleMapClick = function (evt) {
+                // Hide intro popup after first click.
+                if (_introPopup) {
+                    options.map.infoWindow.hide();
+                }
                 if (pointsMakeValidPolygon()) {
                     var originP = new ScreenPoint(_originPointEvent.x, _originPointEvent.y),
                         bufferP = new ScreenPoint(evt.clientX, evt.clientY),
@@ -431,6 +465,7 @@ define([
                     var $map = $(options.map.container);
                     _$tooltip.appendTo($map);
 
+                    _introTemplate = _.template(options.introTemplate);
                     _popupTemplate = _.template(options.infoBubbleTemplate);
                     _tooltipTemplate = _.template(options.tooltipTemplate);
 
@@ -444,18 +479,12 @@ define([
                 activate: function () {
                     // Clear any previous measurements
                     reset();
+                    showIntroPopup();
 
                     _eventHandles.click =
                         dojo.connect(options.map, "onClick", handleMapClick);
 
-                    // Return promise that will never be resolved or rejected.
-                    // The purpose of this is to keep the map_utils plugin
-                    // active after the measure interaction is completed.
-                    // If the deferred is resolved after completing the
-                    // drawing, map_utils would immediately deactivate,
-                    // and erase the measurement that was just drawn.
-                    var defer = new Deferred();
-                    return defer.promise;
+                    N.app.suspendIdentify();
                 }
             };
         };

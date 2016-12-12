@@ -1,48 +1,32 @@
-﻿require({
-    packages: [
-        {
-            name: 'jquery',
-            location: '//ajax.googleapis.com/ajax/libs/jquery/1.9.0',
-            main: 'jquery.min'
-        }
-    ]
-});
-
-define([
+﻿define([
     'dojo/_base/declare',
-    './AgsMeasure',
-    'dojo/text!./templates.html'
+    './AgsMeasure'
     ],
     function(declare,
-             AgsMeasure,
-             templates) {
+             AgsMeasure) {
     'use strict';
 
-    var $templates = $('<div>').append($($.trim(templates)));
+    var introTemplate = $('#template-measure-intro').html();
+    var tooltipTemplate = $('#template-measure-tooltip').html();
+    var infoBubbleTemplate = $('#template-measure-infobubble').html();
 
     return declare(null, {
-        constructor: function(args) {
-            declare.safeMixin(this, args);
+        constructor: function(map) {
             this.agsMeasure = new AgsMeasure({
-                map: this.map,
-                tooltipTemplate: $templates.find('#template-measure-tooltip').html(),
-                infoBubbleTemplate: $templates.find('#template-measure-infobubble').html()
+                map: map,
+                introTemplate: introTemplate,
+                tooltipTemplate: tooltipTemplate,
+                infoBubbleTemplate: infoBubbleTemplate
             });
             this.agsMeasure.initialize();
         },
 
         execute: function() {
-            return this.agsMeasure.activate();
+            this.agsMeasure.activate();
         },
 
         cancel: function() {
             this.agsMeasure.deactivate();
-        },
-
-        hibernate: function() {
-            this.deactivate();
-            if (this._pointLayer) this._pointLayer.clear();
-            if (this._lineLayer) this._lineLayer.clear();
         }
     });
 });

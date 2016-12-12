@@ -59,5 +59,14 @@
     "Next": "Next",
     "Get Started": "Get Started",
     "Measure": "Measure",
-    "Turn off this plugin": "Turn off this plugin"
+    "Turn off this plugin": "Turn off this plugin",
+    "Full Extent": "Full Extent",
+    "Zoom out to the default map extent": "Zoom out to the default map extent",
+    "Measure distances and area on the map": "Measure distances and area on the map",
+    "Segment Length": "Segment Length",
+    "Total Length": "Total Length",
+    "Area:": "Area:",
+    "Length:": "Length:",
+    "Double-click to end a line segment. Single-click the first node to end a polygon.": "Double-click to end a line segment. Single-click the first node to end a polygon.",
+    "Click the map to start measuring": "Click the map to start measuring"
 }

@@ -1,20 +1,16 @@
 ﻿define([
-    'dojo/_base/declare',
+    'dojo/_base/declare'
     ],
     function(declare) {
     'use strict';
 
     return declare(null, {
-        constructor: function(args) {
-            declare.safeMixin(this, args);
+        constructor: function(dispatcher) {
+            this.dispatcher = dispatcher;
         },
 
         execute: function() {
-            this.app.dispatcher.trigger('save-share');
-        },
-
-        cancel: function() {
-            // NOOP
+            this.dispatcher.trigger('save-share');
         }
     });
 });

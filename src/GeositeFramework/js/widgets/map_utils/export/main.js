@@ -5,16 +5,12 @@ define([
     'use strict';
 
     return declare(null, {
-        constructor: function(args) {
-            declare.safeMixin(this, args);
+        constructor: function(dispatcher) {
+            this.dispatcher = dispatcher;
         },
 
         execute: function() {
-            this.app.dispatcher.trigger('export-map:pane-0');
-        },
-
-        cancel: function() {
-            // NOOP
+            this.dispatcher.trigger('export-map:pane-0');
         }
     });
 });
