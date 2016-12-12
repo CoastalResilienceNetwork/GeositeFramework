@@ -1729,7 +1729,7 @@ header .nav-main {
     width: 32px;
 }
 .esriSimpleSlider.subregion-active {
-    top: 103px !important;
+    top: 110px;
 }
 .content .map .basemap-selector {
     color: #444;
@@ -1798,44 +1798,6 @@ header .nav-main {
 .content .map .basemap-selector .basemap-selector-list ul li:hover {
     background: #EEE;
     color: #212323;
-}
-.content .map .topbar-plugin a.plugin-launcher > div {
-    width: 34px;
-    height: 34px;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-position: 8px 8px;
-    overflow: hidden;
-    border-radius: 4px;
-    opacity: .75;
-    cursor: pointer;
-    box-shadow: 0 0 12px black;
-    box-shadow: 0 0 12px rgba(0, 0, 0, .25);
-    border: 1px solid #999;
-}
-.content .map .topbar-plugin.active a.plugin-launcher > div {
-    opacity: 1;
-    border: 1px solid #212323;
-    box-shadow: 0 0 15px black inset;
-    background-color: #999;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .5) inset;
-}
-.content .map .topbar-plugin a.plugin-launcher > div:hover {
-    opacity: 1;
-}
-.esriSimpleSlider {
-    box-shadow: 0 0 12px black;
-    box-shadow: 0 0 12px rgba(0, 0, 0, .25);
-    border: 1px solid #999;
-}
-.esriSimpleSliderVertical .esriSimpleSliderIncrementButton {
-    border-bottom: 1px solid #999;
-}
-.esriSimpleSlider div {
-    width: 32px;
-}
-.esriSimpleSlider.subregion-active {
-    top: 103px !important;
 }
 .control-container {
     position: absolute;
