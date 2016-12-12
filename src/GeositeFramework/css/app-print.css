@@ -1,4 +1,24 @@
 ﻿@media print {
+    .print-sandbox-header h1 {
+        width: 100%;
+        padding-top: 0.3in;
+        text-align: center;
+    }
+
+    .esriScalebar {
+        visibility: hidden;
+    }
+
+    .print-sandbox-header {
+        display: flex;
+        flex-direction: row;
+        height: 0.95in;
+    }
+
+    #print-map-container {
+        overflow: hidden !important;
+    }
+
     #map-print-sandbox {
         visibility: visible !important;
     }
@@ -10,6 +30,32 @@
     #export-print-preview-container {
         padding-bottom: 5px !important;
         visibility: visible;
+    }
+
+    #legend-container-0 {
+        background-color: #fff !important;
+    }
+
+    .legend-close {
+        visibility: hidden;
+    }
+    
+    #print-map-container > #export-print-preview-map > #map-0 {
+        height: 100% !important;
+        width: 100% !important;
+        position: relative;
+    }
+    
+    #legend-container-0 {
+        margin-left: 0px !important;
+        left: 0px !important;
+        width: 100% !important;
+        position: absolute !important;
+        z-index: 10;
+    }
+    
+    .dojoResizeHandle {
+        visibility: hidden !important;
     }
 
     #left-pane {
@@ -55,6 +101,49 @@
     .logo-med {
         display: none !important;
     }
+    
+    .legend-header {
+        height: 15%;
+        font-size: 11px;
+    }
+
+    .legend-body {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100% !important;
+        height: 85% !important;
+    }
+
+    .layer-legends {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .legend-layer {
+        width: auto !important;
+        font-size: 8px;
+        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
+    }
+
+    .legend-title {
+        max-width: 75%;
+    }
+
+    .print-legend-coll {
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    .legend-layer img {
+        width: 10px;
+        height: 10px;
+    }
 }
 
 #export-print-preview-container {
@@ -95,4 +184,44 @@
 
 .instructions {
     display: none;
+}
+
+.legend-close {
+    visibility: hidden;
+}
+
+.dojoResizeHandle {
+    visibility: hidden !important;
+}
+
+#export-title {
+    width: 100%;
+}
+.print-sandbox-header .hdr-container {
+    position: fixed;
+    height: 0.85in;
+    text-align: center;
+    padding-left: 160px;
+    display: flex;
+    flex-direction: row;
+}
+
+.print-sandbox-header h1 {
+    width: 100%;
+    padding-top: 0.3in;
+    text-align: center;
+}
+
+.print-sandbox-header {
+    display: flex;
+    flex-direction: row;
+    height: 0.95in;
+}
+
+.esriScalebar {
+    visibility: hidden;
+}
+    
+#print-map-container {
+    overflow: hidden !important;
 }
