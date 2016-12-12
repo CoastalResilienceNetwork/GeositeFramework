@@ -19,6 +19,10 @@
             N.app.data.region = regionData;
             N.plugins = pluginClasses;
 
+            N.defaults = {
+                identifyEnabled: regionData.identifyEnabled
+            };
+
             N.app.loadedWithState = false;
             if (location.hash !== '' && location.hash !== '#') {
                 N.app.loadedWithState = true;
@@ -92,6 +96,16 @@
             // # character before entering hashmodels
             handleHashChangedFn(location.hash === '#' ? '' : location.hash);
             location.hash = "";
+        },
+
+        // Revert identify setting back to region default value.
+        restoreIdentify: function() {
+            N.app.data.region.identifyEnabled = N.defaults.identifyEnabled;
+        },
+
+        // Temporarily suspend identify handler.
+        suspendIdentify: function() {
+            N.app.data.region.identifyEnabled = false;
         }
     };
 
