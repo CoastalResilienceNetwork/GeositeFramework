@@ -49,7 +49,7 @@ require(['use!Geosite',
                         dispatcher: N.app.dispatcher
                     },
                     plugin: {
-                        turnOff: model.turnOff.bind(model)
+                        turnOff: _.bind(model.turnOff, model)
                     },
                     map: N.createMapWrapper(esriMap, mapModel, pluginObject),
                     container: ($uiContainer ? $uiContainer.find('.sidebar-content')[0] : undefined),
