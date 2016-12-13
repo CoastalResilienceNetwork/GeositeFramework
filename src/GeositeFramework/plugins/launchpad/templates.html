@@ -9,7 +9,17 @@
                 <li>
                     <div>
                         <h4><%= plugin.title %></h4>
-                        <p><%= plugin.description %></p>
+                        <% if (uiState['plugin-' + plugin.pluginName].showToggle) { %>
+                            <% if (uiState['plugin-' + plugin.pluginName].textTruncated) { %>
+                                <p><%= plugin.description.substring(0, 140) + ' [...]' %></p>
+                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="See More">See More</button>
+                            <% } else { %>
+                                <p><%= plugin.description %></p>
+                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="See Less">See Less</button>
+                            <% } %>
+                        <% } else { %>
+                            <p><%= plugin.description %></p>
+                        <% } %>
                     </div>
                     <button class="button launch-plugin" data-plugin-name="<%= plugin.pluginName %>">Go</button>
                 </li>
@@ -23,7 +33,17 @@
                 <li>
                     <div>
                         <h4><%= scenario.title %></h4>
-                        <p><%= scenario.description %></p>
+                        <% if (uiState['scenario-' + scenario.saveCode].showToggle) { %>
+                            <% if (uiState['scenario-' + scenario.saveCode].textTruncated) { %>
+                                <p><%= scenario.description.substring(0, 140) + ' [...]' %></p>
+                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="See More">See More</button>
+                            <% } else { %>
+                                <p><%= scenario.description %></p>
+                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="See Less">See Less</button>
+                            <% } %>
+                        <% } else { %>
+                            <p><%= scenario.description %></p>
+                        <% } %>
                     </div>
                     <button class="button launch-scenario" data-save-code="<%= scenario.saveCode %>">Go</button>
                 </li>
