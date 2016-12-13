@@ -34,71 +34,162 @@ require(['use!Geosite'],
             model.set('$uiContainer', $uiContainer);
         }
 
-        function setupPrintableMap() {
-            var mapMarkup = N.app.templates['template-export-window']({pluginName: "Test"}),
-                $mapPrint = $($.trim(mapMarkup)),
-                $printPreview = $('#print-preview-sandbox'),
-                mapReadyDeferred = $.Deferred(),
-                mapNodeParent = $("#map-0")[0].parentElement;
+        function pageCssLink(pageOrientation) {
+            if (pageOrientation === 'Landscape') {
+                return 'css/print-landscape.css';
+            } else {
+                return 'css/print-portrait.css';
+            }
+        }
 
-            // Setup a print-preview window for the user to select an extent and zoom level
-            // that will be persisted at print due to its fixed size.
-            
+        function setupExport(context) {
+            var previewDeferred = $.Deferred(),
+                orientDeferred = $.Deferred(),
+                resizeDeferred = $.Deferred(),
+                postPrintAction = _.noop;
+
+            $('#export-button').on('click', function() {
+                var mapNode = $("#map-0").detach();
+                var exportMap = $("#export-print-preview-map");
+
+                $('.print-sandbox-header h1').text($("#export-title").val());
+                exportMap.append(mapNode);
+
+                context.mapReadyDeferred.then(function() {
+                    exportMap.detach().appendTo($("#print-map-container"));
+                });
+
+                var pageOrientation = $("[name='export-orientation']:checked").val();
+                $('<link>', {
+                    rel: 'stylesheet',
+                    href: pageCssLink(pageOrientation),
+                    'class': '.print-orientation-css',
+                }).appendTo('head');
+                _.delay(orientDeferred.resolve, 500);
+
+                orientDeferred.then(function() {
+                    context.map.width = parseFloat(exportMap.css("width"));
+                    context.map.height = parseFloat(exportMap.css("height"));
+                    context.map.resize(true);
+                    context.map.centerAt(context.mapDimensions.extent.getCenter());
+                    _.delay(resizeDeferred.resolve, 500);
+                });
+
+                // the legend items are affected by the map resize, so
+                // they are manipulated just before printing
+                resizeDeferred.then(function() {
+                    // expand legend container if minimized
+                    if (context.legend.hasClass("minimized")) {
+                        $(".legend-close").click();
+                        postPrintAction = function() {
+                            $(".legend-close").click();
+                        };
+                    }
+
+                    if ($("[name='export-include-legend']").is(":checked")) {
+                        // show & expand all legend items
+                        context.legend.css({ visibility: "visible" });
+                        $(".item.expand>.expand-legend").click();
+                        $(".item.extra.collapse").hide();
+
+                    } else {
+                        // if the style rule is changed via jquery, that state seems to
+                        // "stick", regardless of what's in the stylesheet
+                        context.legend.css({ visibility: "hidden" });
+                    }
+                    // wrap all legend items in a div to style separately from header
+                    $(".legend-layer").each(
+                        function(el) {
+                            $(this)
+                                .children(".item")
+                                .wrapAll("<div class='print-legend-coll'></div>");
+                        });
+
+                    window.print();
+                    previewDeferred.resolve();
+                });
+
+                previewDeferred.then(function() {
+                    $(".item.extra.collapse").show();
+                    TINY.box.hide();
+                    printPreview.hide();
+                    postPrintAction();
+                });
+            });
+
+            context.mapReadyDeferred.resolve();
+        }
+
+        function destroyExport(context) {
+            var restoreMapDeferred = $.Deferred(),
+                restoreCssDeferred = $.Deferred(),
+                restoreNodeDeferred = $.Deferred(),
+                exportMap = $("#export-print-preview-map"),
+                exportContainer = $("#export-print-preview-container");
+
+            $('.app-print-css').remove();
+            $('.print-orientation-css').remove();
+
+            context.legend.css({ visibility: "visible" });
+            _.delay(restoreCssDeferred.resolve, 500);
+
+            restoreCssDeferred.then(function() {
+                var mapNode = $("#map-0").detach();
+                context.mapNodeParent.append(mapNode);
+                exportMap.detach().appendTo(exportContainer);
+                _.delay(restoreNodeDeferred.resolve, 500);
+            });
+            restoreNodeDeferred.then(function() {
+                context.map.width = context.mapDimensions.width;
+                context.map.height = context.mapDimensions.height;
+                context.map.resize(true);
+                _.delay(restoreMapDeferred.resolve, 250);
+            });
+
+            restoreMapDeferred.then(function() {
+                context.map.setZoom(context.mapDimensions.zoom);
+                context.map.setExtent(context.mapDimensions.extent);
+                context.map.centerAt(context.mapDimensions.extent.getCenter());
+            });
+        }
+
+        function showMapExportModal(model) {
+            var mapMarkup = N.app.templates['template-export-window']({ pluginName: "Test" }),
+                $mapPrint = $($.trim(mapMarkup)),
+                mapReadyDeferred = $.Deferred(),
+                map = model.get('esriMap'),
+                mapElement = $("#map-0"),
+                mapNodeParent = $("#map-0").parent(),
+                legend = $("#legend-container-0"),
+                mapDimensions = {
+                    width: map.width,
+                    height: map.height,
+                    extent: map.extent,
+                    zoom: map.getZoom(),
+                };
+
+            var context = {
+                mapReadyDeferred: mapReadyDeferred,
+                map: map,
+                mapDimensions: mapDimensions,
+                mapElement: mapElement,
+                mapNodeParent: mapNodeParent,
+                legend: legend,
+            };
+
             TINY.box.show({
                 animate: false,
                 html: $mapPrint[0].outerHTML,
                 boxid: 'export-print-preview-container',
-                width: 521,
-                height: 463,
+                width: 400,
+                height: 400,
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
-                    var mapNode = $("#map-0").detach()[0];
-                    $("#export-print-preview-map").append(mapNode);
-
-                    $('#export-button').on('click', function() {
-                        var $printSandbox = $('#map-print-sandbox'),
-                            previewDeferred = $.Deferred();
-
-                        $('.print-sandbox-header h1').text($("#export-title").val());
-
-                        mapReadyDeferred.then(function () {
-                            $("#export-print-preview-map").detach().appendTo($("#print-map-container"));
-
-                            if ($("[name='export-include-legend']").is(":checked")) {
-                                // show & expand all legend items
-                                $("#legend-container-0").css({ visibility: "visible" });
-                                _.each(
-                                    $(".item.expand>.expand-legend"),
-                                    function (el) {
-                                        el.click();
-                                    });
-                                $(".item.extra.collapse").hide();
-                            } else {
-                                // if the style rule is changed via jquery, that state seems to
-                                // "stick", regardless of what's in the stylesheet
-                                $("#legend-container-0").css({ visibility: "hidden" });
-                            }
-
-                            window.print();
-                            previewDeferred.resolve();
-                        });
-
-                        previewDeferred.then(function () {
-                            $(".item.extra.collapse").show();
-                            TINY.box.hide();
-                            $printPreview.hide();
-                        });
-                    });
-
-                    mapReadyDeferred.resolve();
+                    setupExport(context);
                 },
-                closejs: function() {
-                    var mapNode = $("#map-0").detach()[0];
-                    mapNodeParent.append(mapNode);
-                    $("#export-print-preview-map").detach().appendTo($("#export-print-preview-container"));
-                    $('.app-print-css').remove();
-                    $("#legend-container-0").css({ visibility: "visible" });
+                closejs: function () {
+                    destroyExport(context);
                 }
             });
             
@@ -157,8 +248,10 @@ require(['use!Geosite'],
             });
 
             view.paneNumber = 0;
+            var model = this.model;
+            var map = model.get('esriMap');
 
-            var mapReadyDeferred = setupPrintableMap(this.model, $("#map-print-sandbox"), this.previewDeferred);
+            var mapReadyDeferred = showMapExportModal(this.model, $("#map-print-sandbox"), this.previewDeferred);
             createUiContainer(view, 0, view.previewDeferred, mapReadyDeferred);
         },
 

@@ -3,19 +3,13 @@
         visibility: visible !important;
     }
 
-    #legend-container-0 {
-        display: block !important;
-        visibility: hidden;
-        position: fixed;
-        margin-left: 610px;
-    }
-
     .control-container {
         display: none !important;
     }
 
     #export-print-preview-container {
         padding-bottom: 5px !important;
+        visibility: visible;
     }
 
     #left-pane {
@@ -41,33 +35,6 @@
     #print-map-container > #export-print-preview-map.div.control-container {
         display: none;
     }
-
-    #print-map-container > #export-print-preview-map {
-        width: 100% !important;
-        max-height: 750px;
-        height: 100%;
-    }
-
-    #print-map-container > #export-print-preview-map > #map-0 {
-        max-height: 750px;
-        height: 100%;
-        top: 0 !important;
-        position: relative !important;
-    }
-
-    #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 {
-        display: block !important;
-        position: fixed;
-        margin-left: 610px;
-    }
-
-    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root {
-        visibility: visible !important;
-        max-height: 750px;
-        height: 100%;
-        max-width: 720px;
-        width: 100%;
-    }
     
     #print-map-container > #export-print-preview-map > #map-0 > #map-0_root img.layerTile {
         visibility: visible !important;
@@ -79,6 +46,14 @@
 
     .plugin-launcher {
         display: none;
+    }
+
+    .esriAttributionLastItem {
+        display: none !important;
+    }
+
+    .logo-med {
+        display: none !important;
     }
 }
 
@@ -108,16 +83,16 @@
 
 #export-print-preview-map {
     width: 100% !important;
-    max-height: 200px;
+    max-height: 1800px;
 }
 
 #export-print-preview-map > #map-0 {
-    max-height: 200px;
+    max-height: 1800px;
     height: 100%;
     top: 0 !important;
     position: relative !important;
 }
 
-#export-print-preview-map > #map-0 > #legend-container-0 {
-    display: none !important;
+.instructions {
+    display: none;
 }

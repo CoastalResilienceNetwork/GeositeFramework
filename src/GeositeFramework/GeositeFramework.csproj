@@ -140,10 +140,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="css\app-print.css" />
+    <Content Include="css\print-landscape.css" />
     <Content Include="css\print-hide-map1.css" />
     <Content Include="css\print-hide-map0.css" />
     <Content Include="css\jquery.dropdown.css" />
     <Content Include="css\pageguide.min.css" />
+    <Content Include="css\print-portrait.css" />
     <Content Include="css\print.css" />
     <Content Include="css\TinyBox2.css" />
     <Content Include="Error.html" />
