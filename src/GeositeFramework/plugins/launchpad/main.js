@@ -38,7 +38,6 @@ define([
 
                 this.pluginTmpl = _.template(this.getTemplateById('plugin'));
                 this.bindEvents();
-                this.removeTitleBar();
             },
 
             bindEvents: function() {
@@ -55,14 +54,6 @@ define([
                         self.plugin.turnOff();
                         self.triggerEvent('launchpad:activate-scenario', saveCode);
                     });
-            },
-
-            removeTitleBar: function() {
-                // The launchpad is a special plugin that doesn't get to be
-                // closed like other plugins.
-                $(this.container)
-                    .css({ 'padding-top': 0 })
-                    .siblings('.sidebar-nav').remove();
             },
 
             activate: function() {
