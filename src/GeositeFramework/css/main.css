@@ -2234,6 +2234,12 @@ body.x-body {
 #tlyPageGuide {
   list-style: none;
 }
+
+#sidebar-help-area {
+    position: absolute;
+    bottom: 0;
+}
+
 .sidebar-button-bottom {
   position: fixed;
   bottom: 0;
