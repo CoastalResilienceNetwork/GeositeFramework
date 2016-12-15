@@ -944,7 +944,8 @@ nav {
 .nav-apps {
     text-align: left;
     width: 240px;
-    background-color: #27343e
+    background-color: #27343e;
+    position: relative;
 }
 @media (max-width: 991px) {
     .nav-apps {
@@ -2240,6 +2241,16 @@ body.x-body {
 #sidebar-help-area {
     position: absolute;
     bottom: 0;
+    width: 100%;
+    border-top: 1px solid rgba(232, 232, 232, 0.4);
+    padding: 4px 10px;
+}
+
+#help-overlay-start {
+  color: #d9dbde;
+  font-size: 1.3rem;
+  width: 100%;
+  display: block;
 }
 
 .sidebar-button-bottom {
