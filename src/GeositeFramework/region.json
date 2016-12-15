@@ -11,7 +11,7 @@
     },
     "headerLinks": [
         { "text": "Azavea", "url": "http://www.azavea.com/" },
-        { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" },
+        { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" }
     ],
     "regionLinks": [
         { "text": "California", "url": "http://maps.coastalresilience.org/california/" },
