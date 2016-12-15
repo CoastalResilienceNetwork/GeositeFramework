@@ -5,6 +5,7 @@ require(['use!Geosite',
          'framework/Legend',
          'framework/util/ajax',
          'esri/map',
+         'esri/dijit/Scalebar',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
          'esri/SpatialReference',
@@ -14,6 +15,7 @@ require(['use!Geosite',
              Legend,
              ajaxUtil,
              Map,
+             ScaleBar,
              ArcGISTiledMapServiceLayer,
              Extent,
              SpatialReference,
@@ -123,6 +125,11 @@ require(['use!Geosite',
         loadExtent(view);
         selectBasemap(view);
         initSearch(view);
+
+        var scalebar = new ScaleBar({
+            map: view.esriMap,
+            scalebarUnit: 'dual'
+        });
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {
