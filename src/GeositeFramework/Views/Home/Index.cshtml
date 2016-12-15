@@ -87,6 +87,7 @@
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/measure.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
 
@@ -199,7 +200,24 @@
                 <div id="map-0" class="map">
                     <div class="control-container">
                         <div class="top-tools"></div>
-                        <div class="tools"></div>
+                        <div class="map-tools">
+                            <!-- Map utils control -->
+                            <div class="topbar-plugin" id="map-utils-control">
+                                <div class="plugin-launcher">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
+                                        <i class="icon-ellipsis-vert"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+                                        <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
+                                        <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
+                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Top bar plugins -->
+                            <div class="tools"></div>
+                        </div>
                         <div class="basemap-selector">
                             <div class="basemap-selector-title"></div>
                             <div class="basemap-selector-list">
@@ -517,6 +535,43 @@
                 <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
                 <div id="plugin-print-preview-map"></div>
             </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-measure-intro">
+        <span data-i18n="Click the map to start measuring"></span>
+    </script>
+
+    <script type="text/template" id="template-measure-tooltip">
+        <div class="measure-tooltip">
+            <p><%= instructions %></p>
+            <div>
+                <div class="measure-label"><%= segmentLabel %>:</div><%= segmentLength %> <%= units%>
+            </div>
+            <div>
+                <div class="measure-label"><%= lengthLabel %>:</div><%= totalLength %> <%= units%>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-measure-infobubble">
+        <div class="measure-bubble">
+            <% if (area) { %>
+                <p>
+                    <span class="measure-label i18n" data-i18n="Area:">Area:</span>
+                    <span><%= area %> <%= areaUnits%><sup>2</sup></span>
+                </p>
+            <% } %>
+            <p>
+                <span class="measure-label i18n" data-i18n="Length:">Length:</span>
+                <span><%= length %> <%= lengthUnits%></span>
+            </p>
+            <p>
+                <button type="button"
+                        class="btn btn-danger"
+                        data-action="delete"
+                        data-i18n="Delete">Delete</button>
+            </p>
         </div>
     </script>
 

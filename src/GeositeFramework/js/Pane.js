@@ -378,6 +378,9 @@ require([
                 // the framework level 'identify' feature can be disabled by
                 // an active plugin if the plugin uses the map click for another
                 // purpose.
+                if (!view.model.get('regionData').identifyEnabled) {
+                    return;
+                }
                 var pluginModels = view.model.get('plugins');
                 if (!pluginModels.selected ||
                     pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {

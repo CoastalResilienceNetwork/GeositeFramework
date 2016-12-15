@@ -88,8 +88,7 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "subregion_toggle",
-        "map_utils"
+        "subregion_toggle"
     ],
     "map2PluginBlacklist": [
         "identify_point"

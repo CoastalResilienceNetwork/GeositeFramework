@@ -3,6 +3,7 @@
 
 require(['use!Geosite',
          'framework/Legend',
+         'framework/widgets/map_utils/main',
          'framework/util/ajax',
          'esri/map',
          'esri/dijit/Scalebar',
@@ -13,6 +14,7 @@ require(['use!Geosite',
         ],
     function(N,
              Legend,
+             MapUtils,
              ajaxUtil,
              Map,
              ScaleBar,
@@ -150,6 +152,7 @@ require(['use!Geosite',
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
+            initMapUtils(view, esriMap);
 
             // Cache the parent of the infowindow rather than re-select it every time.
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
@@ -319,6 +322,16 @@ require(['use!Geosite',
         dojo.connect(esriMap, 'onLayerSuspend', redraw);
         // Allow plugins to trigger a legend redraw by calling map.resize()
         dojo.connect(esriMap, 'resize', redraw);
+    }
+
+    function initMapUtils(view, esriMap) {
+        var el = $('#map-utils-control').get(0);
+        return new MapUtils({
+            el: el,
+            map: esriMap,
+            app: N.app,
+            regionData: N.app.data.region
+        });
     }
 
     N.views = N.views || {};
