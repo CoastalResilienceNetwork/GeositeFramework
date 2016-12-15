@@ -464,12 +464,12 @@ h2 {
 .h3,
 .text-h3,
 h3 {
-    font-size: 15px
+    font-size: 18px;
 }
 .h4,
 .text-h4,
 h4 {
-    font-size: 13px
+    font-size: 15px;
 }
 .h5,
 .h6,
@@ -477,7 +477,7 @@ h4 {
 .text-h6,
 h5,
 h6 {
-    font-size: 11px
+    font-size: 12px
 }
 .h1,
 .h2,
@@ -2294,4 +2294,21 @@ body.x-body {
     .sidebar-nav {
       position: absolute;
     }
+}
+.launchpad-plugin h4 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+.launchpad-plugin h3 {
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+.launchpad-plugin li:last-child p {
+  margin-bottom: 0;
+}
+.launchpad-plugin p {
+  padding-right: 4px;
+}
+.launchpad-plugin li p {
+  font-size: 13px;
 }
