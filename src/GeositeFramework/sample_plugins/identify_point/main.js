@@ -24,12 +24,12 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 // Example of how a plugin could show help on startup, but
                 // only the first time a user opens the plugin:
 
-                // Show the help on activation, if it has not been supressed
+                // Show the help on activation, if it has not been suppressed
                 if (showHelpOnStart) {
                     this.showHelp();
 
                     // Don't show this help on startup anymore, after the first time 
-                    this.app.supressHelpOnStartup(true);
+                    this.app.suppressHelpOnStartup(true);
                 }
             },
 

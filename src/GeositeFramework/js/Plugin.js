@@ -47,7 +47,7 @@ require(['use!Geosite',
                         downloadAsCsv: requestCsvDownload,
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher,
-                        supressHelpOnStartup: _.partial(supressHelpOnStartup, model)
+                        suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model)
                     },
                     plugin: {
                         turnOff: model.turnOff.bind(model)
@@ -108,8 +108,8 @@ require(['use!Geosite',
 
         // Allow the plugin to ask the framework to store and provide a
         // flag for showing help when activating, across sessions
-        function supressHelpOnStartup(model, doSupress) {
-            model.setSupressHelpOnStartup(doSupress);
+        function suppressHelpOnStartup(model, doSuppress) {
+            model.setSuppressHelpOnStartup(doSuppress);
         }
 
         /*
@@ -134,7 +134,7 @@ require(['use!Geosite',
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
-                startHelpKey: "-supress-help-start",
+                startHelpKey: "-suppress-help-start",
                 pluginObject: null,
                 active: false,
                 pluginLayers: {},
@@ -253,14 +253,14 @@ require(['use!Geosite',
                 }
             },
 
-            getSupressHelpOnStartup: function() {
+            getSuppressHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
                     showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
 
                 return !!localStorage[showValueKey];
             },
 
-            setSupressHelpOnStartup: function(val) {
+            setSuppressHelpOnStartup: function(val) {
                 var pluginObject = this.get('pluginObject'),
                     showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
 
