@@ -4,15 +4,12 @@ define(["dojo/_base/declare", "framework/PluginBase"],
         return declare(PluginBase, {
             toolbarName: "Identify Point",
             fullName: "Identify point sample plugin",
-            infoGraphic: "sample_plugins/identify_point/splash.png",
+            hasHelp: true,
             allowIdentifyWhenActive: true,
-            resizable: false,
-            width: 320,
-            height: 'auto',
+            size: 'small',
             hasCustomPrint: true,
             usePrintPreviewMap: true,
             previewMapSize: [500, 350],
-            icon: 'info-2',
 
             initialize: function(args) {
                 declare.safeMixin(this, args);
@@ -21,6 +18,19 @@ define(["dojo/_base/declare", "framework/PluginBase"],
 
                 // Hide the print button until the identify feature has been used.
                 $(this.printButton).hide();
+            },
+
+            activate: function(showHelpOnStart) {
+                // Example of how a plugin could show help on startup, but
+                // only the first time a user opens the plugin:
+
+                // Show the help on activation, if it has not been supressed
+                if (showHelpOnStart) {
+                    this.showHelp();
+
+                    // Don't show this help on startup anymore, after the first time 
+                    this.app.supressHelpOnStartup(true);
+                }
             },
 
             identify: function(mapPoint, clickPoint, processResults) {
@@ -43,6 +53,27 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 $printArea.append('<img id="sample-graphic-print" src="' + this.infoGraphic + '" >');
 
                 printDeferred.resolve();
+            },
+
+            showHelp: function() {
+                // Show a generic help and dismissal button
+                var self = this;
+                if (self.$helpMsg) {
+                    self.$helpMsg.remove();
+                }
+
+                self.$helpMsg = $("<div>Help: Click the map to see the point </div>");
+
+                $("<a>", {
+                    className: "button",
+                    href: '#',
+                    text: "Got it",
+                    click: function() {
+                        self.$helpMsg.remove();
+                    }
+                }).appendTo(self.$helpMsg);
+
+                $(this.container).append(self.$helpMsg);
             }
         });
     }

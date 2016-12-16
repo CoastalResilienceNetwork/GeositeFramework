@@ -161,11 +161,8 @@ require(['use!Geosite',
 
             onSelectedChanged: function () {
                 if (this.selected) {
-                    var active = this.get('active'),
-                        supressHelpOnStart = !active && this.getSupressHelpOnStartup();
-
                     this.set('active', true);
-                    this.get('pluginObject').activate(!supressHelpOnStart);
+                    this.get('pluginObject').activate(!this.getSuppressHelpOnStartup());
                 } else {
                     this.get('pluginObject').deactivate();
                     this.trigger('plugin:deselected');
