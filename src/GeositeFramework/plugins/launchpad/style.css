@@ -26,3 +26,10 @@
     list-style-type: none;
     padding: 0;
 }
+
+.launchpad-plugin .plugins .button.truncate-toggle, .scenarios .button.truncate-toggle {
+    padding: 2px;
+    font-size: 0.7em;
+    width: 35%;
+    float: none;
+}
