@@ -34,6 +34,13 @@ require(['use!Geosite'],
             model.set('$uiContainer', $uiContainer);
         }
 
+        function isChrome() {
+            if (window.onafterprint === undefined) {
+                return true;
+            }
+            return false;
+        }
+
         function pageCssLink(pageOrientation) {
             if (pageOrientation === 'Landscape') {
                 return 'css/print-landscape.css';
@@ -105,14 +112,28 @@ require(['use!Geosite'],
                                 .wrapAll("<div class='print-legend-coll'></div>");
                         });
 
+                    function afterPrintHandler() {
+                        _.delay(previewDeferred.resolve, 250);
+                    }
+
+                    /* 
+                        Chrome's exposed 'window.print' method includes a preview and
+                        blocks, whereas non-Chrome browsers do neither; similarly,
+                        Chrome does not expose an 'onafterprint' event while the
+                        others do.
+                    */
+                    if (!isChrome()) {
+                        window.onafterprint = afterPrintHandler;
+                    }
                     window.print();
-                    previewDeferred.resolve();
+                    if (isChrome()) {
+                        previewDeferred.resolve();
+                    }
                 });
 
                 previewDeferred.then(function() {
                     $(".item.extra.collapse").show();
                     TINY.box.hide();
-                    printPreview.hide();
                     postPrintAction();
                 });
             });
@@ -131,6 +152,7 @@ require(['use!Geosite'],
             $('.print-orientation-css').remove();
 
             context.legend.css({ visibility: "visible" });
+            $('.legend-close').css({ visibility: "visible" });
             _.delay(restoreCssDeferred.resolve, 500);
 
             restoreCssDeferred.then(function() {
@@ -139,6 +161,7 @@ require(['use!Geosite'],
                 exportMap.detach().appendTo(exportContainer);
                 _.delay(restoreNodeDeferred.resolve, 500);
             });
+
             restoreNodeDeferred.then(function() {
                 context.map.width = context.mapDimensions.width;
                 context.map.height = context.mapDimensions.height;
