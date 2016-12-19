@@ -5,10 +5,6 @@
         text-align: center;
     }
 
-    .esriScalebar {
-        visibility: hidden;
-    }
-
     .print-sandbox-header {
         display: flex;
         flex-direction: row;
@@ -94,14 +90,6 @@
         display: none;
     }
 
-    .esriAttributionLastItem {
-        display: none !important;
-    }
-
-    .logo-med {
-        display: none !important;
-    }
-    
     .legend-header {
         height: 15%;
         font-size: 11px;
@@ -138,6 +126,10 @@
     .print-legend-coll {
         display: flex !important;
         flex-direction: column;
+        flex-wrap: wrap;
+        height: 60px;
+        align-content: stretch;
+        justify-content: center;
     }
 
     .legend-layer img {
@@ -218,10 +210,6 @@
     height: 0.95in;
 }
 
-.esriScalebar {
-    visibility: hidden;
-}
-    
 #print-map-container {
     overflow: hidden !important;
 }
