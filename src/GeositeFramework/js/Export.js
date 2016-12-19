@@ -53,6 +53,7 @@ require(['use!Geosite'],
             var previewDeferred = $.Deferred(),
                 orientDeferred = $.Deferred(),
                 resizeDeferred = $.Deferred(),
+                legendDeferred = $.Deferred(),
                 postPrintAction = _.noop;
 
             $('#export-button').on('click', function() {
@@ -72,14 +73,14 @@ require(['use!Geosite'],
                     href: pageCssLink(pageOrientation),
                     'class': '.print-orientation-css',
                 }).appendTo('head');
-                _.delay(orientDeferred.resolve, 500);
+                _.delay(orientDeferred.resolve, 1000);
 
                 orientDeferred.then(function() {
                     context.map.width = parseFloat(exportMap.css("width"));
                     context.map.height = parseFloat(exportMap.css("height"));
                     context.map.resize(true);
                     context.map.centerAt(context.mapDimensions.extent.getCenter());
-                    _.delay(resizeDeferred.resolve, 500);
+                    _.delay(resizeDeferred.resolve, 1000);
                 });
 
                 // the legend items are affected by the map resize, so
@@ -93,16 +94,21 @@ require(['use!Geosite'],
                         };
                     }
 
-                    if ($("[name='export-include-legend']").is(":checked")) {
+                    if ($("[name='export-include-legend']").is(":checked") &&
+                            context.legend.css("display") !== "none") {
                         // show & expand all legend items
                         context.legend.css({ visibility: "visible" });
                         $(".item.expand>.expand-legend").click();
                         $(".item.extra.collapse").hide();
+                        $(".esriScalebar").toggleClass("above-legend");
+                        $(".esriControlsBR").toggleClass("above-legend");
 
                     } else {
                         // if the style rule is changed via jquery, that state seems to
                         // "stick", regardless of what's in the stylesheet
                         context.legend.css({ visibility: "hidden" });
+                        $(".esriScalebar").toggleClass("page-bottom");
+                        $(".esriControlsBR").toggleClass("page-bottom");
                     }
                     // wrap all legend items in a div to style separately from header
                     $(".legend-layer").each(
@@ -111,11 +117,14 @@ require(['use!Geosite'],
                                 .children(".item")
                                 .wrapAll("<div class='print-legend-coll'></div>");
                         });
+                    _.delay(legendDeferred.resolve, 1000);
+                });
 
-                    function afterPrintHandler() {
-                        _.delay(previewDeferred.resolve, 250);
-                    }
-
+                function afterPrintHandler() {
+                    _.delay(previewDeferred.resolve, 250);
+                }
+                $.when(orientDeferred, legendDeferred, resizeDeferred)
+                 .then(function () {
                     /* 
                         Chrome's exposed 'window.print' method includes a preview and
                         blocks, whereas non-Chrome browsers do neither; similarly,
@@ -153,13 +162,17 @@ require(['use!Geosite'],
 
             context.legend.css({ visibility: "visible" });
             $('.legend-close').css({ visibility: "visible" });
-            _.delay(restoreCssDeferred.resolve, 500);
+            _.delay(restoreCssDeferred.resolve, 1000);
 
             restoreCssDeferred.then(function() {
                 var mapNode = $("#map-0").detach();
                 context.mapNodeParent.append(mapNode);
                 exportMap.detach().appendTo(exportContainer);
-                _.delay(restoreNodeDeferred.resolve, 500);
+                $(".esriScalebar").removeClass("above-legend");
+                $(".esriScalebar").removeClass("page-bottom");
+                $(".esriControlsBR").removeClass("above-legend");
+                $(".esriControlsBR").removeClass("page-bottom");
+                _.delay(restoreNodeDeferred.resolve, 1000);
             });
 
             restoreNodeDeferred.then(function() {

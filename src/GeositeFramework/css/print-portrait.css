@@ -22,6 +22,14 @@
         top: 75% !important;
         height: 25% !important;
     }
+
+    .above-legend {
+        bottom: 26% !important;
+    }
+
+    .page-bottom {
+        bottom: 1% !important;
+    }
 }
 
 #map-print-sandbox {
