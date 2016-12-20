@@ -67,16 +67,16 @@ define([
                     function(p) {
                         self.uiState['plugin-' + p.pluginName] = {
                             showToggle: p.description.length > 140,
-                            textTruncated: p.description.length > 140,
-                        }
+                            textTruncated: p.description.length > 140
+                        };
                     },
                     this);
                 _.each(N.app.data.region.launchpad.scenarios,
                     function(p) {
                         self.uiState['scenario-' + p.saveCode] = {
                             showToggle: p.description.length > 140,
-                            textTruncated: p.description.length > 140,
-                        }
+                            textTruncated: p.description.length > 140
+                        };
                     },
                     this);
                 this.render();
