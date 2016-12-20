@@ -615,6 +615,12 @@
 
     @Html.Partial("TourInfo")
 
+    <!-- If a view is provided (overwritten via the region repo), a user can
+        change the region setting `launchpad.html = true` to use this content -->
+    <div id="custom-launchpad-content" style="display:none;">
+        @Html.Partial("CustomLaunchpadContent")
+    </div>
+
     <!-- Area for plugins to arrange their markup independent
         of their container -->
     <div id="plugin-print-sandbox"></div>
