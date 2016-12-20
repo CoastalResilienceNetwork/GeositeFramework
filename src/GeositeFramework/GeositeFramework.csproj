@@ -202,16 +202,6 @@
     <Content Include="plugins\launchpad\main.js" />
     <Content Include="plugins\launchpad\style.css" />
     <Content Include="plugins\launchpad\templates.html" />
-    <Content Include="plugins\map_utils\export\main.js" />
-    <Content Include="plugins\map_utils\full_extent\main.js" />
-    <Content Include="plugins\map_utils\main.js" />
-    <Content Include="plugins\map_utils\measure\AgsMeasure.js" />
-    <Content Include="plugins\map_utils\measure\main.js" />
-    <Content Include="plugins\map_utils\measure\style.css" />
-    <Content Include="plugins\map_utils\measure\templates.html" />
-    <Content Include="plugins\map_utils\share\main.js" />
-    <Content Include="plugins\map_utils\style.css" />
-    <Content Include="plugins\map_utils\templates.html" />
     <Content Include="plugins\subregion_toggle\icon.png" />
     <Content Include="plugins\subregion_toggle\main.js" />
     <Content Include="plugins\subregion_toggle\subregion-toggle.css" />
@@ -260,13 +250,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="locales\en.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="plugins\map_utils\full_extent\locales\en.json" />
-    <Content Include="plugins\map_utils\full_extent\locales\es.json" />
-    <Content Include="plugins\map_utils\measure\locales\en.json" />
-    <Content Include="plugins\map_utils\measure\locales\es.json" />
-    <Content Include="plugins\map_utils\plugin.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="plugins\launchpad\overrides.json" />
