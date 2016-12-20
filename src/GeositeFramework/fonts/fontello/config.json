@@ -1019,6 +1019,12 @@
       "css": "help-circled",
       "code": 59444,
       "src": "fontawesome"
+    },
+    {
+      "uid": "04f022b8bd044d4ccfffd3887ff72088",
+      "css": "window-minimize",
+      "code": 62161,
+      "src": "fontawesome"
     }
   ]
 }

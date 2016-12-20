@@ -168,3 +168,4 @@
 .icon-user-times { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf235;&nbsp;'); }
 .icon-train { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf238;&nbsp;'); }
 .icon-subway { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf239;&nbsp;'); }
+.icon-window-minimize { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf2d1;&nbsp;'); }

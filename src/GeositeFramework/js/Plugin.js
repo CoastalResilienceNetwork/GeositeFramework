@@ -428,9 +428,9 @@ require(['use!Geosite',
             view.$uiContainer = $uiContainer;
 
             $uiContainer
-                // Toggle plugin layers on and off when eye-icon button's clicked
-                .find('.plugin-eye').on('click', function () {
-                    model.toggleLayers();
+                // Minimize the plugin
+                .find('.plugin-minimize').on('click', function() {
+                    model.deselect();
                 }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {

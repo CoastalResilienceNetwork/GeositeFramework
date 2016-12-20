@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'mantle';
-  src: url('../font/mantle.eot?9240210');
-  src: url('../font/mantle.eot?9240210#iefix') format('embedded-opentype'),
-       url('../font/mantle.woff2?9240210') format('woff2'),
-       url('../font/mantle.woff?9240210') format('woff'),
-       url('../font/mantle.ttf?9240210') format('truetype'),
-       url('../font/mantle.svg?9240210#mantle') format('svg');
+  src: url('../font/mantle.eot?36569101');
+  src: url('../font/mantle.eot?36569101#iefix') format('embedded-opentype'),
+       url('../font/mantle.woff2?36569101') format('woff2'),
+       url('../font/mantle.woff?36569101') format('woff'),
+       url('../font/mantle.ttf?36569101') format('truetype'),
+       url('../font/mantle.svg?36569101#mantle') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'mantle';
-    src: url('../font/mantle.svg?9240210#mantle') format('svg');
+    src: url('../font/mantle.svg?36569101#mantle') format('svg');
   }
 }
 */
@@ -224,3 +224,4 @@
 .icon-user-times:before { content: '\f235'; } /* '' */
 .icon-train:before { content: '\f238'; } /* '' */
 .icon-subway:before { content: '\f239'; } /* '' */
+.icon-window-minimize:before { content: '\f2d1'; } /* '' */
