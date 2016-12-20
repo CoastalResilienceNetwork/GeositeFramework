@@ -1,7 +1,15 @@
 <script type="text/template" id="plugin">
     <div class="launchpad-plugin">
-        <h2><%= title %></h2>
-        <p><%= description %></p>
+        <% if (htmlSnippet) { %>
+            <div>
+            <%= htmlSnippet %>
+            </div>
+        <% } else { %>
+            <h2><%= title %></h2>
+            <p><%= description %></p>
+        <% } %>
+
+        <% if (plugins) { %>
         <h3>Start exploring</h3>
         <div class="plugins">
             <ul>
@@ -26,6 +34,9 @@
             <% }); %>
             </ul>
         </div>
+        <% } %>
+
+        <% if (scenarios) { %>
         <h3>One-click maps</h3>
         <div class="scenarios">
             <ul>
@@ -50,6 +61,9 @@
             <% }); %>
             </ul>
         </div>
+        <% } %>
+
+        <% if (partners) { %>
         <h3>Partners</h3>
         <div class="partners">
             <ul>
@@ -62,5 +76,6 @@
             <% }); %>
             </ul>
         </div>
+        <% } %>
     </div>
 </script>

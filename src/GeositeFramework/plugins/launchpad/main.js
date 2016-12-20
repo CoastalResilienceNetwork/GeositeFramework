@@ -67,16 +67,16 @@ define([
                     function(p) {
                         self.uiState['plugin-' + p.pluginName] = {
                             showToggle: p.description.length > 140,
-                            textTruncated: p.description.length > 140,
-                        }
+                            textTruncated: p.description.length > 140
+                        };
                     },
                     this);
                 _.each(N.app.data.region.launchpad.scenarios,
                     function(p) {
                         self.uiState['scenario-' + p.saveCode] = {
                             showToggle: p.description.length > 140,
-                            textTruncated: p.description.length > 140,
-                        }
+                            textTruncated: p.description.length > 140
+                        };
                     },
                     this);
                 this.render();
@@ -87,13 +87,17 @@ define([
                 self.plugin.turnOff();
             },
 
-            render: function () {
+            render: function() {
+                var config = N.app.data.region.launchpad,
+                    snippetSelector = '#custom-launchpad-content';
+
                 var $el = $(this.pluginTmpl({
-                    title: N.app.data.region.launchpad.title,
-                    description: N.app.data.region.launchpad.description,
-                    plugins: N.app.data.region.launchpad.plugins,
-                    scenarios: N.app.data.region.launchpad.scenarios,
-                    partners: N.app.data.region.partners,
+                    htmlSnippet: config.html ? $(snippetSelector).html() : null,
+                    title: config.title,
+                    description: config.description,
+                    plugins: config.plugins,
+                    scenarios: config.scenarios,
+                    partners: config.partners,
                     uiState: this.uiState,
                 }));
 

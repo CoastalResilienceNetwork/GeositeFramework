@@ -175,9 +175,11 @@
             "properties": {
                 "type": "object",
                 "properties": {
-                    "title": { "type": "string", "required": true },
-                    "description": { "type": "string", "required": true },
+                    "html": { "type": "bool", "required": false },
+                    "title": { "type": "string", "required": false },
+                    "description": { "type": "string", "required": false },
                     "plugins": {
+                        "required": false,
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -189,6 +191,7 @@
                         }
                     },
                     "scenarios": {
+                        "required": false,
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -196,6 +199,18 @@
                                 "title": { "type": "string", "required": true },
                                 "description": { "type": "string", "required": true },
                                 "saveCode": { "type": "string", "required": true },
+                            }
+                        }
+                    },
+                    "partners": {
+                        "type": "array",
+                        "required": false,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "logoPath": { "type": "string", "required": true },
+                                "link": { "type": "string", "required": true },
+                                "title": { "type": "string", "required": true }
                             }
                         }
                     }
@@ -221,18 +236,6 @@
                 },
             },
             "additionalProperties": false
-        },
-        "partners": {
-            "type": "array",
-            "required": false,
-            "items": {
-                "type": "object",
-                "properties": {
-                    "logoPath": { "type": "string", "required": true },
-                    "link": { "type": "string", "required": true },
-                    "title": { "type": "string", "required": true }
-                }
-            }
         }
     },
     "additionalProperties": false
