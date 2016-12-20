@@ -432,6 +432,10 @@ require(['use!Geosite',
                 .find('.plugin-eye').on('click', function () {
                     model.toggleLayers();
                 }).end()
+                // Minimize the plugin
+                .find('.plugin-minimize').on('click', function() {
+                    model.deselect();
+                }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
