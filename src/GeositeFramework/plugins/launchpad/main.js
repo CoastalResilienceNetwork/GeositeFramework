@@ -29,7 +29,6 @@ define([
             size: overrides.size || 'small',
             width: overrides.width || 300,
             hasCustomPrint: false,
-            infoGraphic: undefined,
             toolbarType: "sidebar",
             allowIdentifyWhenActive: true,
             uiState: {},

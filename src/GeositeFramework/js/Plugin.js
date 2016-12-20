@@ -46,7 +46,8 @@ require(['use!Geosite',
                         _unsafeMap: esriMap,
                         downloadAsCsv: requestCsvDownload,
                         downloadAsPlainText: requestTextDownload,
-                        dispatcher: N.app.dispatcher
+                        dispatcher: N.app.dispatcher,
+                        suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model)
                     },
                     plugin: {
                         turnOff: model.turnOff.bind(model)
@@ -105,6 +106,12 @@ require(['use!Geosite',
             return model.get('pluginSrcFolder');
         }
 
+        // Allow the plugin to ask the framework to store and provide a
+        // flag for showing help when activating, across sessions
+        function suppressHelpOnStartup(model, doSuppress) {
+            model.setSuppressHelpOnStartup(doSuppress);
+        }
+
         /*
         Check that the plugin implements the minimal viable interface.
         Plugin code can just assume the plugin is valid if it has been loaded
@@ -127,9 +134,9 @@ require(['use!Geosite',
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
+                startHelpKey: "-suppress-help-start",
                 pluginObject: null,
                 active: false,
-                displayHelp: false,
                 pluginLayers: {},
                 pluginLayersVisible: true
             },
@@ -149,15 +156,13 @@ require(['use!Geosite',
                 return _.last(name(this).split('/'));
             },
 
+            // Instruct the plugin to display its in-app help
+            showHelp: function () { },
+
             onSelectedChanged: function () {
                 if (this.selected) {
-                    var active = this.get('active')
-                    if (!active && this.getShowHelpOnStartup()) {
-                        this.set('displayHelp', true);
-                    }
-
                     this.set('active', true);
-                    this.get('pluginObject').activate();
+                    this.get('pluginObject').activate(!this.getSuppressHelpOnStartup());
                 } else {
                     this.get('pluginObject').deactivate();
                     this.trigger('plugin:deselected');
@@ -248,19 +253,17 @@ require(['use!Geosite',
                 }
             },
 
-            getShowHelpOnStartup: function() {
+            getSuppressHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + " showinfographic";
-                if (typeof localStorage[showValueKey] !== 'undefined') {
-                    return localStorage[showValueKey] === 'true';
-                } else {
-					return pluginObject.showInfographicOnStart;
-				}
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+
+                return !!localStorage[showValueKey];
             },
 
-            setShowHelpOnStartup: function(val) {
+            setSuppressHelpOnStartup: function(val) {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + " showinfographic";
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+
                 localStorage.setItem(showValueKey, val);
             }
         });
@@ -362,8 +365,6 @@ require(['use!Geosite',
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
-            createHelpScreen(view);
-            view.listenTo(model, 'change:displayHelp', onDisplayHelpChanged);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -418,7 +419,7 @@ require(['use!Geosite',
                 bindings = {
                     title: pluginObject.toolbarName,
                     id: containerId,
-                    isHelpButtonVisible: isHelpButtonVisible(view),
+                    hasHelp: pluginObject.hasHelp,
                     hasCustomPrint: pluginObject.hasCustomPrint,
                     sizeClassName: getPluginSizeClassName(pluginObject.size),
                     customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
@@ -441,7 +442,7 @@ require(['use!Geosite',
                     model.deselect();
                 }).end()
                 .find('.plugin-help').on('click', function () {
-                    model.set('displayHelp', true);
+                    pluginObject.showHelp();
                 }).end()
                 .find('.plugin-print').on('click', function() {
                     var pluginDeferred = $.Deferred(),
@@ -562,20 +563,6 @@ require(['use!Geosite',
             }).appendTo('head');
         }
 
-        function createHelpScreen(view) {
-            var model = view.model,
-                pluginObject = model.get('pluginObject'),
-                pluginContainer = view.$uiContainer;
-
-            if (pluginObject.infoGraphic) {
-                view.helpScreen = new N.views.InfoGraphicView({
-                    model: model
-                });
-                pluginContainer.append(view.helpScreen.el);
-                view.helpScreen.$el.hide();
-            }
-        }
-
         function getPluginSizeClassName(size) {
             return 'sidebar-width-' + size;
         }
@@ -588,34 +575,9 @@ require(['use!Geosite',
             }
         }
 
-        function isHelpButtonVisible(view) {
-            var model = view.model,
-                pluginObject = model.get('pluginObject');
-            return typeof pluginObject.infoGraphic !== 'undefined';
-        }
-
-        function onDisplayHelpChanged() {
-            var view = this,
-                model = view.model,
-                pluginObject = model.get('pluginObject'),
-                $uiContainer = view.$uiContainer,
-                $mainPanel = $uiContainer.find('.sidebar-content'),
-                showInfoGraphic = !!model.get('displayHelp');
-
-            if (!view.helpScreen) {
-                return;
-            }
-
-            if (showInfoGraphic) {
-                view.helpScreen.$el.show();
-                $mainPanel.hide();
-            } else {
-                view.helpScreen.$el.hide();
-                $mainPanel.show();
-            }
-
-            var primaryContainerVisible = !showInfoGraphic;
-            pluginObject.onContainerVisibilityChanged(primaryContainerVisible);
+        function hasHelp(view) {
+            var pluginObj = view.model.get('pluginObject');
+            return pluginObj.hasHelp;
         }
 
         N.views = N.views || {};
@@ -632,68 +594,6 @@ require(['use!Geosite',
 
             render: function() {
                 return render(this);
-            }
-        });
-    }());
-
-    (function infoGraphicView() {
-        N.views = N.views || {};
-        N.views.InfoGraphicView = Backbone.View.extend({
-            tagName: 'div',
-            className: 'claro plugin-infographic',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                var pluginModel = this.model,
-                    pluginObject = pluginModel.get('pluginObject'),
-                    snippit;
-
-                if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
-                    snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
-                } else {
-                    snippit = $(pluginObject.infoGraphic);
-                }
-
-                this.$el.append(snippit);
-
-                var checkboxnode = $('<span>').get(0);
-                this.$el.append(checkboxnode);
-
-                var nscheckBox = new CheckBox({
-                    name: "checkBox",
-                    checked: !pluginModel.getShowHelpOnStartup(),
-                    onChange: function(show) {
-                        pluginModel.setShowHelpOnStartup(!show);
-                    }
-                }, checkboxnode);
-
-                var lbl = $("<label>Don't show this on start</label>")
-                    .addClass('i18n')
-                    .attr({
-                        'for': nscheckBox.id,
-                        'data-i18n': "Don't show this on start"
-                    });
-
-                this.$el.append(lbl);
-
-                var buttonnode = $('<div>').addClass('sidebar-button-bottom').get(0);
-                this.$el.append(buttonnode);
-
-                $('<button>')
-                    .text('Get started')
-                    .attr('data-i18n', 'Get started')
-                    .addClass('button button-primary radius i18n')
-                    .click(function() {
-                        pluginModel.set('displayHelp', false);
-                    })
-                    .appendTo(buttonnode);
-
-                if ($.i18n) {
-                    $(this.$el).localize();
-                }
             }
         });
     }());
