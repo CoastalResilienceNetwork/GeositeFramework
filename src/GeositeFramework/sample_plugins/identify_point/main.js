@@ -16,6 +16,13 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 $(this.container).append(
                     '<h4 style="padding: 5px;">' + i18next.t('Click any point on the map to display Latitude and Longitude') + '</h4>');
 
+                // add buttons to bind resize events to
+                $(this.container).append('<p>The buttons below demonstrate how to use a plugins "resize" method</p>')
+                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-set450">Set to 450</button>')
+                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-small">Small</button>')
+                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-large">Large</button>')
+                    .append('<p class="width-textbox"></p>');
+
                 // Hide the print button until the identify feature has been used.
                 $(this.printButton).hide();
             },
@@ -31,6 +38,28 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                     // Don't show this help on startup anymore, after the first time 
                     this.app.suppressHelpOnStartup(true);
                 }
+
+                // attach resize events to sample controls, attach actions to jQuery deferred
+                var self = this;
+                _.each($(self.container).find("button.resize-btn"), function (el) {
+                    switch ($(el).data("ui-key")) {
+                        case "resize-ctl-identify-set450":
+                            $(el).on("click", function() {
+                                self.app.resize.setWidth(450).then($(".width-textbox").text("Width is now 450"));
+                            });
+                            break;
+                        case "resize-ctl-identify-large":
+                            $(el).on("click", function() {
+                                self.app.resize.setWidth("large").then($(".width-textbox").text("Width is now large"));
+                            });
+                            break;
+                        case "resize-ctl-identify-small":
+                            $(el).on("click", function() {
+                                self.app.resize.setWidth("small").then($(".width-textbox").text("Width is now small"));
+                            });
+                            break;
+                    }
+                });
             },
 
             identify: function(mapPoint, clickPoint, processResults) {
