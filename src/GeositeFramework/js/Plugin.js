@@ -401,6 +401,7 @@ require(['use!Geosite',
         function render(view) {
             var model = view.model,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
+                pluginObject = model.get('pluginObject'),
                 // The plugin icon looks active if the plugin is selected or
                 // active (aka, running but not focused).  It is displayed if
                 // it is currently displaying its UI.
@@ -413,13 +414,17 @@ require(['use!Geosite',
             view.$el.empty().append(html);
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
-            if (view.model.selected === true) {
-                if (view.$uiContainer) {
+            if (view.$uiContainer) {
+                if (view.model.selected === true) {
                     view.$uiContainer.show();
-                }
-            } else {
-                if (view.$uiContainer) {
+                } else {
                     view.$uiContainer.hide();
+                }
+                // Call the `resize` method on the Esri map, passing it
+                // true for its `immediate` arg so that it will resize
+                // immediately.
+                if (pluginObject.map) {
+                    pluginObject.map.resize(true);
                 }
             }
             if (view.$legendContainer) {
