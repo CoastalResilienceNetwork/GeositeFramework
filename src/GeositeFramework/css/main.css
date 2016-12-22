@@ -2263,6 +2263,10 @@ body.x-body {
   display: block;
 }
 
+#tlyPageGuideMessages {
+  z-index: 2000 !important;
+}
+
 .sidebar-button-bottom {
   position: fixed;
   bottom: 0;
