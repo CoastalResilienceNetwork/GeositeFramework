@@ -914,7 +914,8 @@ nav {
 .sidebar-nav,
 .sidebar-with-nav-vertical {
     display: -ms-flexbox;
-    display: flex
+    display: flex;
+    z-index: 2005;
 }
 .sidebar-nav {
     width: inherit;
