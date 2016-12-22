@@ -1667,7 +1667,7 @@ header .nav-main {
     position: absolute;
     top: 145px;
     right: 20px;
-    z-index: 1;
+    z-index: 1000;
 }
 .content .map .topbar-plugin {
     margin-bottom: 10px;
