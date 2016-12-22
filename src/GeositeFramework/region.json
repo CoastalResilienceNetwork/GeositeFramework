@@ -93,7 +93,8 @@
     "colors": {
         "primary": "#29658C",
         "secondary": "#3BBDC2",
-        "tertiary": "#333"
+        "tertiary": "#333",
+        "active": "#3b91be"
     },
     "identifyBlacklist": ["OBJECTID", "OBJECTID_1"],
     "identifyEnabled": true,

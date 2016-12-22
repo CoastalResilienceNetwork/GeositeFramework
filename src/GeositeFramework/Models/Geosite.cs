@@ -19,6 +19,7 @@ namespace GeositeFramework.Models
         private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
         private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
         private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
+        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#27343e");
 
         public class Link
         {
@@ -57,6 +58,7 @@ namespace GeositeFramework.Models
         public String PrimaryColor { get; private set; }
         public String SecondaryColor { get; private set; }
         public String TertiaryColor { get; private set; }
+        public String ActiveAppColor { get; private set; }
         public String PrintHeaderLogo { get; private set; }
 
         /// <summary>
@@ -133,13 +135,16 @@ namespace GeositeFramework.Models
             {
                 PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
                 SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
+                ActiveAppColor = ExtractColorFromJson(colorConfig, "active");
                 TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
             }
             else
             {
                 PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
                 SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
+                ActiveAppColor = ColorTranslator.ToHtml(_defaultActiveApp);
                 TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
+
             }
 
             var printConfig = jsonObj["print"];

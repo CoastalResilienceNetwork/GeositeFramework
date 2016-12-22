@@ -156,7 +156,8 @@
             "properties": {
                 "primary": {"type": "string", "required": true},
                 "secondary": {"type": "string", "required": true},
-                "tertiary": {"type": "string", "required": true}
+                "tertiary": {"type": "string", "required": true},
+                "active": {"type": "string", "required": true}
             },
             "required": false,
             "additionalProperties": false
