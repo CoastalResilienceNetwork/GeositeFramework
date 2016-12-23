@@ -70,8 +70,9 @@ define([
                         new dojo.Color([255, 0, 0]), 1),
                         new dojo.Color([255, 0, 0, 0.35])),
 
-                esriLengthUnits: units.MILES,
-                esriAreaUnits: units.SQUARE_MILES
+                esriLengthUnits: [units.MILES, units.KILOMETERS],
+                esriAreaUnits: [units.SQUARE_MILES, units.SQUARE_KILOMETERS,
+                                units.ACRES, units.HECTARES]
 
             }, opts),
 
@@ -80,14 +81,16 @@ define([
                 esriSquareMiles: "mi",
                 esriMeters: "m",
                 esriKilometers: "km",
-                esriSquareKilometers: "km"
+                esriSquareKilometers: "km",
+                esriAcres: "ac",
+                esriHectares: "ha"
             },
 
             _points = [],
             _originPointEvent = null,
             _defaultOriginPointGraphic = null,
             _firstNodeClickBuffer = 20, // measured in pixels
-            _renderedLength = 0,
+            _renderedLength = [],
             _pointLayer = null,
             _outlineLayer = null,
             _hoverLine = null,
@@ -152,8 +155,6 @@ define([
             finish = function (results) {
                 // Finish the measurement, so add a final popup with
                 // all available info
-                results.lengthUnits = _unitsLookup[options.esriLengthUnits];
-                results.areaUnits = _unitsLookup[options.esriAreaUnits];
 
                 showResultPopup(results);
 
@@ -182,7 +183,7 @@ define([
                 _points = [];
                 _originPointEvent = null;
                 _defaultOriginPointGraphic = null;
-                _renderedLength = 0;
+                _renderedLength = [];
                 _hoverLine = null;
                 _eventHandles = {};
 
@@ -210,6 +211,24 @@ define([
                     dojo.connect(_pointLayer, 'onDblClick', handleMarkerDblClick);
             },
 
+            getLength = function(line) {
+                return _.map(options.esriLengthUnits, function (uom) {
+                    return {
+                        uom: _unitsLookup[uom],
+                        length: _.head(geodesicUtils.geodesicLengths([line], uom))
+                    };
+                });
+            },
+
+            getArea = function(polygon) {
+                return _.map(options.esriAreaUnits, function (uom) {
+                    return {
+                        uom: _unitsLookup[uom],
+                        area: _.head(geodesicUtils.geodesicAreas([polygon], uom))
+                    };
+                });
+            },
+
             calculateDistance = function (points) {
                 // Calculate the total distance from a series of ordered points
                 var polyline = new Polyline();
@@ -217,7 +236,7 @@ define([
                 polyline.addPath(points);
 
                 var geoLine = webMercatorUtils.webMercatorToGeographic(polyline);
-                return geodesicUtils.geodesicLengths([geoLine], options.esriLengthUnits)[0];
+                return getLength(geoLine);
             },
 
             handleMapDoubleClick = function (evt) {
@@ -229,19 +248,23 @@ define([
 
                 // Stop measuring
                 finish({
-                    area: null,
-                    length: Azavea.numberToString(_renderedLength, 2)
+                    areas: null,
+                    lengths: _.map(calculateDistance(_points), function (l) {
+                        return { uom: l.uom, length: Azavea.numberToString(l.length, 2) };
+                    })
                 });
             },
 
-            formatTooltip = function (segment, line) {
+            formatTooltip = function (segments, lines) {
+                var lengthText = function (l) {
+                    return { uom: l.uom, length: Azavea.numberToString(l.length, 0) };
+                };
                 return _tooltipTemplate({
                     instructions: i18next.t('Double-click to end a line segment. Single-click the first node to end a polygon.'),
                     lengthLabel: i18next.t('Total Length'),
                     segmentLabel: i18next.t('Segment Length'),
-                    segmentLength: Azavea.numberToString(segment, 0),
-                    totalLength: Azavea.numberToString(line, 0),
-                    units: _unitsLookup[options.esriLengthUnits]
+                    segmentLengths: _.map(segments, lengthText),
+                    totalLengths: _.map(lines, lengthText)
                 });
             },
 
@@ -261,10 +284,28 @@ define([
 
                 // Calculate the length of the line, using a geographic coordindate system
                 geographicLine = webMercatorUtils.webMercatorToGeographic(line);
-                var geoLineLength = geodesicUtils.geodesicLengths([geographicLine], options.esriLengthUnits)[0];
+                var geoLineLength = getLength(geographicLine);
+
+                // calculate the total length for each UoM
+                var lengths = _.union(_renderedLength, geoLineLength),
+                    addOrUpdate = function (total, segment) {
+                        total[segment.uom] = (total[segment.uom] || 0) + segment.length;
+                        return total;
+                    },
+                    totalsByUom = _.reduce(lengths, addOrUpdate, {}),
+                    splitIntoSingleObjs = function (obj) {
+                        return _.chain(obj)
+                            .pairs() // split the accumulator object into key-value (uom/length) pairs
+                            .map(function(pair) { // map each pair array into single object
+                                return { uom: _.head(pair), length: _.last(pair) };
+                            })
+                            .value();
+                    },
+                    totalLengths = splitIntoSingleObjs(totalsByUom);
 
                 // Format the segment and line lengths
-                tipText = formatTooltip(geoLineLength, _renderedLength + geoLineLength);
+                tipText = formatTooltip(geoLineLength, totalLengths);
+
 
                 // Update the popup to also track the mouse cursor, with the
                 // formatted text
@@ -346,7 +387,7 @@ define([
 
                 // Only update the _renderedLength if calculated is a valid number
                 // This is an IE10 workaround.
-                _renderedLength = isNaN(calculated) ? _renderedLength : calculated;
+                _renderedLength = calculated;
             },
 
             setDefaultOriginPointSymbol = function (graphic) {
@@ -436,7 +477,7 @@ define([
             setMeasureOutput = function (polygon)
             {
                 var geoPolygon = webMercatorUtils.webMercatorToGeographic(polygon),
-                    area = geodesicUtils.geodesicAreas([geoPolygon], options.esriAreaUnits)[0];
+                    areas = getArea(geoPolygon);
 
                 // Remove our lines for the outline layer and replace them
                 // with the new polygon area
@@ -447,8 +488,12 @@ define([
                 setDefaultOriginPointSymbol(_defaultOriginPointGraphic);
 
                 finish({
-                    area: Azavea.numberToString(area, 2),
-                    length: Azavea.numberToString(calculateDistance(_points), 2)
+                    areas: _.map(areas, function (a) {
+                        return { uom: a.uom, area: Azavea.numberToString(a.area, 2) };
+                    }),
+                    lengths: _.map(calculateDistance(_points), function (l) {
+                        return { uom: l.uom, length: Azavea.numberToString(l.length, 2) };
+                    })
                 });
             };
 
