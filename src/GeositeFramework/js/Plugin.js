@@ -32,7 +32,36 @@ require(['use!Geosite',
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
                 $legendContainer = model.get('$legendContainer'),
-                logger = new Logger(pluginName);
+                logger = new Logger(pluginName),
+                resizers = {
+                    setWidth: function(val) {
+                        var d = $.Deferred(),
+                            setter = function(w) {
+                                return function() {
+                                    $uiContainer.css({ width: "" });
+                                    $uiContainer.removeClass(function() {
+                                        var classes = this.className.split(" ");
+                                        return _.filter(classes, function(c) {
+                                            return /sidebar-width-.*/.test(c);
+                                        }).join(" ");
+                                    });
+                                    $uiContainer.addClass("sidebar-width-" + w);
+                                };
+                            };
+                        _.delay(function() {
+                            if (typeof val === "string") {
+                                d.then(setter(val));
+                            } else if (typeof val === "number") {
+                                d.then(function() {
+                                    $uiContainer.css({ width: val });
+                                });
+                            }
+                            d.resolve();
+                            esriMap.resize(true);
+                        }, 100);
+                        return d.promise();
+                    }
+                };
 
             try {
                 pluginObject.initialize({
@@ -47,7 +76,8 @@ require(['use!Geosite',
                         downloadAsCsv: requestCsvDownload,
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher,
-                        suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model)
+                        suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
+                        resize: resizers
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)
