@@ -558,25 +558,44 @@
         <div class="measure-tooltip">
             <p><%= instructions %></p>
             <div>
-                <div class="measure-label"><%= segmentLabel %>:</div><%= segmentLength %> <%= units%>
+                <div class="measure-label"><%= segmentLabel %>:</div>
+                <% _.each(segmentLengths, function (item, index) { %>
+                    <div><%= item.length %> <%= item.uom %></div>
+                <% }); %>
             </div>
             <div>
-                <div class="measure-label"><%= lengthLabel %>:</div><%= totalLength %> <%= units%>
+                <div class="measure-label"><%= lengthLabel %>:</div>
+                <% _.each(totalLengths, function (item, index) { %>
+                    <div><%= item.length %> <%= item.uom %></div>
+                <% }); %>
             </div>
         </div>
     </script>
 
     <script type="text/template" id="template-measure-infobubble">
         <div class="measure-bubble">
-            <% if (area) { %>
+            <% if (areas) { %>
                 <p>
                     <span class="measure-label i18n" data-i18n="Area:">Area:</span>
-                    <span><%= area %> <%= areaUnits%><sup>2</sup></span>
+                    <div>
+                        <% _.each(areas, function (item, index) { %>
+                            <span>
+                                <%= item.area %> <%= item.uom %>
+                                <% if (item.uom === "mi" || item.uom === "km") { %>
+                                    <sup>2</sup>
+                                <% } %>
+                            </span>
+                        <% }); %>
+                    </div>
                 </p>
             <% } %>
             <p>
                 <span class="measure-label i18n" data-i18n="Length:">Length:</span>
-                <span><%= length %> <%= lengthUnits%></span>
+                <div>
+                    <% _.each(lengths, function (item, index) { %>
+                            <span><%= item.length %> <%= item.uom %></span>
+                    <% }); %>
+                </div>
             </p>
             <p>
                 <button type="button"
