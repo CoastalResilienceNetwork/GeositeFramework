@@ -1667,7 +1667,7 @@ header .nav-main {
     position: absolute;
     top: 145px;
     right: 20px;
-    z-index: 1;
+    z-index: 1000;
 }
 .content .map .topbar-plugin {
     margin-bottom: 10px;
@@ -2261,6 +2261,10 @@ body.x-body {
   font-size: 1.3rem;
   width: 100%;
   display: block;
+}
+
+#tlyPageGuideMessages {
+  z-index: 2200 !important;
 }
 
 .sidebar-button-bottom {
