@@ -956,7 +956,6 @@ nav {
     width: 240px;
     background-color: #27343e;
     position: relative;
-    z-index: 2100;
 }
 @media (max-width: 991px) {
     .nav-apps {
