@@ -959,11 +959,6 @@ nav {
     padding-bottom: 27px;
     overflow: auto;
 }
-@media (max-width: 991px) {
-    .nav-apps {
-        width: 46px
-    }
-}
 .nav-apps-button {
     width: 100%;
     text-align: left;
@@ -995,18 +990,11 @@ nav {
 }
 
 @media (max-width: 991px) {
-    .nav-apps-button .button-text {
-        display: none
+    .nav-apps-narrow {
+        width: 46px;
     }
-    .nav-apps-button:hover .button-text {
-        display: block;
-        position: absolute;
-        left: 46px;
-        background-color: #0f1c27;
-        z-index: 200;
-        padding: 10px;
-        pointer-events: none;
-        color: #fff
+    .nav-apps-narrow .button-text {
+        display:none;
     }
     .nav-apps-button:hover .button-text:after {
         content: "";
