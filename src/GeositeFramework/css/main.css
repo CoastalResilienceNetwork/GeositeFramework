@@ -2122,6 +2122,17 @@ header .nav-main {
 .export-ui .row p {
     margin: 0;
 }
+
+/*-----------------------------------------
+    TINY overlays and popups
+------------------------------------------- */
+body .tmask {
+    z-index: 2000; /* Keep above the sidebar */
+}
+body .tbox {
+    z-index: 2001; /* Keep above the tmask */
+}
+
 /* ----------------------------------------
     Subregions
 ------------------------------------------- */
