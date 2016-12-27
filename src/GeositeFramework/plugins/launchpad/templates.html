@@ -16,14 +16,18 @@
             <% _.each(plugins, function(plugin) { %>
                 <li>
                     <div>
-                        <h4><%= plugin.title %></h4>
+                        <h4 class="color-primary"><%= plugin.title %></h4>
                         <% if (uiState['plugin-' + plugin.pluginName].showToggle) { %>
                             <% if (uiState['plugin-' + plugin.pluginName].textTruncated) { %>
-                                <p><%= plugin.description.substring(0, 140) + ' [...]' %></p>
-                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="See More">See More</button>
+                                <p>
+                                    <%= plugin.description.substring(0, 140) + '...' %>
+                                    <a href="#" class="color-primary truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="More">More</a>
+                                </p>
                             <% } else { %>
-                                <p><%= plugin.description %></p>
-                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="See Less">See Less</button>
+                                <p>
+                                    <%= plugin.description %>
+                                    <a href="#" class="color-primary truncate-toggle i18n" data-ui-key="<%= 'plugin-' + plugin.pluginName %>" data-i18n="Less">Less</a>
+                                </p>
                             <% } %>
                         <% } else { %>
                             <p><%= plugin.description %></p>
@@ -43,14 +47,18 @@
             <% _.each(scenarios, function(scenario) { %>
                 <li>
                     <div>
-                        <h4><%= scenario.title %></h4>
+                        <h4 class=color-primary><%= scenario.title %></h4>
                         <% if (uiState['scenario-' + scenario.saveCode].showToggle) { %>
                             <% if (uiState['scenario-' + scenario.saveCode].textTruncated) { %>
-                                <p><%= scenario.description.substring(0, 140) + ' [...]' %></p>
-                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="See More">See More</button>
+                                <p>
+                                    <%= scenario.description.substring(0, 140) + '...' %>
+                                    <a href="#" class="color-primary truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="More">More</a>
+                                </p>
                             <% } else { %>
-                                <p><%= scenario.description %></p>
-                                <button class="button truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="See Less">See Less</button>
+                                <p>
+                                    <%= scenario.description %>
+                                    <a href="#" class="color-primary truncate-toggle i18n" data-ui-key="<%= 'scenario-' + scenario.saveCode %>" data-i18n="Less">Less</a>
+                                </p>
                             <% } %>
                         <% } else { %>
                             <p><%= scenario.description %></p>

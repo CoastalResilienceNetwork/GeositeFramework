@@ -931,6 +931,9 @@ nav {
     flex: 1;
     font-size: 13px
 }
+.sidebar-nav .plugin-minimize i {
+    font-size: 12px;
+}
 .sidebar-content {
     height: calc(100% - 40px);
     overflow-y: auto;
@@ -953,7 +956,6 @@ nav {
     width: 240px;
     background-color: #27343e;
     position: relative;
-    z-index: 2100;
 }
 @media (max-width: 991px) {
     .nav-apps {
@@ -1757,8 +1759,9 @@ header .nav-main {
     display: block;
     background: white;
     background: rgba(255, 255, 255, .0);
-    /* Display basemap-selector above esri zoom controls */
-    z-index: 40;
+    /* Display basemap-selector above esri zoom controls, topbar-plugins
+       and help overlay callouts */
+    z-index: 5001;
 }
 .content .map .basemap-selector:hover .basemap-selector-list {
     display: block;
@@ -1841,6 +1844,10 @@ header .nav-main {
     display: block;
     width: 100%;
 }
+.identify-info-window .esriPopupWrapper .contentPane {
+    border-bottom: 0;
+    border-radius: 0;
+}
 .identify-section {
     font-weight: bold;
     cursor: pointer;
@@ -1902,7 +1909,7 @@ header .nav-main {
     color: #000;
     position: absolute;
     bottom: 45px;
-    right: 105px;
+    right: 25px;
     height: 200px;
     width: 255px;
     min-width: 255px;
@@ -2115,6 +2122,17 @@ header .nav-main {
 .export-ui .row p {
     margin: 0;
 }
+
+/*-----------------------------------------
+    TINY overlays and popups
+------------------------------------------- */
+body .tmask {
+    z-index: 2000; /* Keep above the sidebar */
+}
+body .tbox {
+    z-index: 2001; /* Keep above the tmask */
+}
+
 /* ----------------------------------------
     Subregions
 ------------------------------------------- */

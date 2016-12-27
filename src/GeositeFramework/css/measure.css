@@ -65,3 +65,7 @@
     font-family: 'Archivo Narrow', 'Arial Narrow', Arial, Helvetica, sans-serif;
     line-height: 18px;
 }
+
+.measure-bubble p {
+    margin-bottom: 0;
+}
