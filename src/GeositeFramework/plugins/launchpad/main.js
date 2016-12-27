@@ -53,7 +53,7 @@ define([
                         self.plugin.turnOff();
                         self.triggerEvent('launchpad:activate-scenario', saveCode);
                     })
-                    .on('click', 'button.truncate-toggle', function (e) {
+                    .on('click', 'a.truncate-toggle', function (e) {
                         var ui_key = $(e.target).data('ui-key');
                         self.uiState[ui_key].textTruncated = !self.uiState[ui_key].textTruncated;
                         self.render();

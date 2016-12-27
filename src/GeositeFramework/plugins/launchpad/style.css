@@ -1,10 +1,6 @@
 .launchpad-plugin {
     padding: 10px;
 }
-.launchpad-plugin .plugins h4,
-.launchpad-plugin .scenarios h4 {
-    color: #3bb3be;
-}
 .launchpad-plugin .plugins div,
 .launchpad-plugin .scenarios div {
     display: inline-block;
