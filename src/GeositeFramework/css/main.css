@@ -1843,6 +1843,10 @@ header .nav-main {
     display: block;
     width: 100%;
 }
+.identify-info-window .esriPopupWrapper .contentPane {
+    border-bottom: 0;
+    border-radius: 0;
+}
 .identify-section {
     font-weight: bold;
     cursor: pointer;
