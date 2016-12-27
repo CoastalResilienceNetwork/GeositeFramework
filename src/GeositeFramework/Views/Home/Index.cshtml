@@ -574,34 +574,42 @@
 
     <script type="text/template" id="template-measure-infobubble">
         <div class="measure-bubble">
+            <div>
+                <span>Units:</span>
+                <a class="measure-unit-filter" data-unit="mi" title="Miles" href="#">mi</a>
+                <a class="measure-unit-filter" data-unit="km" title="Kilometers" href="#">km</a>
+                <% if (areas) { %>
+                <a class="measure-unit-filter" data-unit="ac" data-alt-unit="mi" title="Acres" href="#">ac</a>
+                <a class="measure-unit-filter" data-unit="ha" data-alt-unit="km" title="Hectares" href="#">ha</a>
+                <% } %>
+            </div>
+            <hr />
             <% if (areas) { %>
                 <p>
                     <span class="measure-label i18n" data-i18n="Area:">Area:</span>
-                    <div>
-                        <% _.each(areas, function (item, index) { %>
-                            <span>
-                                <%= item.area %> <%= item.uom %>
-                                <% if (item.uom === "mi" || item.uom === "km") { %>
-                                    <sup>2</sup>
-                                <% } %>
-                            </span>
-                        <% }); %>
-                    </div>
+                    <% _.each(areas, function (item, index) { %>
+                        <span class="measure-unit-value <%= item.uom %>">
+                            <%= item.area %> <%= item.uom %>
+                            <% if (item.uom === "mi" || item.uom === "km") { %>
+                                <sup>2</sup>
+                            <% } %>
+                        </span>
+                    <% }); %>
                 </p>
             <% } %>
             <p>
                 <span class="measure-label i18n" data-i18n="Length:">Length:</span>
-                <div>
-                    <% _.each(lengths, function (item, index) { %>
-                            <span><%= item.length %> <%= item.uom %></span>
-                    <% }); %>
-                </div>
+                <% _.each(lengths, function (item, index) { %>
+                        <span class="measure-unit-value measure-unit-length <%= item.uom %>">
+                            <%= item.length %> <%= item.uom %>
+                        </span>
+                <% }); %>
             </p>
             <p>
                 <button type="button"
-                        class="btn btn-danger"
-                        data-action="delete"
-                        data-i18n="Delete">Delete</button>
+                        class="btn"
+                        data-action="Clear"
+                        data-i18n="Clear">Clear</button>
             </p>
         </div>
     </script>

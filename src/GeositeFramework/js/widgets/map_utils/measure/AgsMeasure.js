@@ -115,7 +115,7 @@ define([
 
                 infoWindow.setTitle('');
                 infoWindow.setContent(_introTemplate());
-                infoWindow.resize(300, 100);
+                infoWindow.resize(300, 75);
 
                 $(infoWindow.domNode).addClass('measure-info-window');
                 infoWindow.show(map.extent.getCenter());
@@ -131,6 +131,7 @@ define([
                 // Delete the current info window (after grabbing its parent DOM node)
                 var map = options.map,
                     $parent = $(map.infoWindow.domNode).parent();
+
                 map.infoWindow.destroy();
 
                 // Create a new info window at the starting measure node
@@ -145,6 +146,24 @@ define([
 
                 $(infoWindow.domNode).on('click', '[data-action]', function() {
                     reset();
+                });
+
+                // Default to showing km
+                $('.measure-unit-value').hide();
+                $('.measure-unit-value.km').show();
+        
+                // Only show specific units of measurement on the final popup
+                $('.measure-unit-filter').click(function() {
+                    var unit = $(this).data('unit'),
+                        altUnit = $(this).data('alt-unit');
+
+                    $('.measure-unit-value').hide();
+                    $('.measure-unit-value.' + unit).show();
+
+                    // Some area only units don't have equivilents for length
+                    if (altUnit) {
+                        $('.measure-unit-value.measure-unit-length.' + altUnit).show();
+                    }
                 });
 
                 if ($.i18n) {
