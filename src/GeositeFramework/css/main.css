@@ -1759,8 +1759,9 @@ header .nav-main {
     display: block;
     background: white;
     background: rgba(255, 255, 255, .0);
-    /* Display basemap-selector above esri zoom controls */
-    z-index: 40;
+    /* Display basemap-selector above esri zoom controls, topbar-plugins
+       and help overlay callouts */
+    z-index: 5001;
 }
 .content .map .basemap-selector:hover .basemap-selector-list {
     display: block;
