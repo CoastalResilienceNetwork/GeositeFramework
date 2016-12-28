@@ -167,6 +167,7 @@ require(['use!Geosite',
                 startHelpKey: "-suppress-help-start",
                 pluginObject: null,
                 active: false,
+                visible: false,
                 pluginLayers: {},
                 pluginLayersVisible: true
             },
@@ -192,10 +193,18 @@ require(['use!Geosite',
             onSelectedChanged: function () {
                 if (this.selected) {
                     this.set('active', true);
+                    this.set('visible', true);
                     this.get('pluginObject').activate(!this.getSuppressHelpOnStartup());
                 } else {
                     this.get('pluginObject').deactivate();
+                    this.set('visible', false);
                     this.trigger('plugin:deselected');
+                    // Remove the `.nav-apps-narow` class if the
+                    // de-selecting the plugin has left no plugins
+                    // visible.
+                    if (this.collection.all({visible:false})) {
+                        $('.nav-apps').removeClass('nav-apps-narrow');
+                    }
                 }
             },
 
@@ -239,6 +248,7 @@ require(['use!Geosite',
                     // new status via the hibernate function
                     doDeactivate = function() {
                         self.set('active', false);
+                        self.set('visible', false);
                         self.get('pluginObject').hibernate();
                     }
 
@@ -409,7 +419,9 @@ require(['use!Geosite',
                     selected: model.selected || model.get('active'),
                     displayed: model.selected,
                     fullName: model.get('pluginObject').fullName
-                }));
+                })),
+                sidebarNavSizedForTablet = !!$('.nav-apps-narrow'),
+                pluginContentHidden = model.collection.all({visible:false});
 
             view.$el.empty().append(html);
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
@@ -417,9 +429,16 @@ require(['use!Geosite',
             if (view.$uiContainer) {
                 if (view.model.selected === true) {
                     view.$uiContainer.show();
+                    if (sidebarNavSizedForTablet) {
+                        setSideBarPluginTextVisibility(false);
+                    }
                 } else {
                     view.$uiContainer.hide();
+                    if (pluginContentHidden) {
+                        setSideBarPluginTextVisibility(true);
+                    }
                 }
+
                 // Call the `resize` method on the Esri map, passing it
                 // true for its `immediate` arg so that it will resize
                 // immediately.
@@ -441,6 +460,17 @@ require(['use!Geosite',
             }
 
             return view;
+        }
+
+        function setSideBarPluginTextVisibility(visible) {
+            if (visible === undefined) {
+                throw new Error(
+                    '`setSideBarPluginTextVisibility` method requires a boolean arg');
+            } else if (visible) {
+                $('.nav-apps').removeClass('nav-apps-narrow');
+            } else if (!visible) {
+                $('.nav-apps').addClass('nav-apps-narrow');
+            }
         }
 
         function getContainerId(view) {
