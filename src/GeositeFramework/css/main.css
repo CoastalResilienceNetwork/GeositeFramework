@@ -2341,3 +2341,7 @@ body.x-body {
 .sidebar-content > h2  {
   margin-top: 1rem;
 }
+#map-utils-dropdown-button > i:before {
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+}
