@@ -1,5 +1,6 @@
 .launchpad-plugin {
     padding: 10px;
+    height: calc(90vh - 60px);
 }
 .launchpad-plugin .plugins div,
 .launchpad-plugin .scenarios div {
