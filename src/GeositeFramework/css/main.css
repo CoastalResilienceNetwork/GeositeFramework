@@ -986,6 +986,7 @@ nav {
     font-size: 18px;
     position: relative;
     top: 1px;
+    float: left;
 }
 .nav-apps-button > .button-icon img {
     height: 20px;
