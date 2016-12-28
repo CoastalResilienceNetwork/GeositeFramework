@@ -442,10 +442,10 @@ html {
     height: 300px
 }
 body {
-    font-size: 1.5rem;
+    font-size: 13px;
     line-height: 1.5;
     color: #73787d;
-    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -464,12 +464,12 @@ h2 {
 .h3,
 .text-h3,
 h3 {
-    font-size: 18px;
+    font-size: 15px;
 }
 .h4,
 .text-h4,
 h4 {
-    font-size: 15px;
+    font-size: 13px;
 }
 .h5,
 .h6,
@@ -477,7 +477,7 @@ h4 {
 .text-h6,
 h5,
 h6 {
-    font-size: 12px
+    font-size: 11px
 }
 .h1,
 .h2,
@@ -493,9 +493,9 @@ h5,
 h6 {
     line-height: 1.2;
     color: #101d28;
-    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    margin-top: 2rem;
+    margin-bottom: 1.4rem;
     font-weight: 900
 }
 p {
@@ -929,21 +929,20 @@ nav {
 .sidebar-nav .nav-title {
     -ms-flex: 1;
     flex: 1;
-    font-size: 13px
-}
-.sidebar-nav .plugin-minimize i {
-    font-size: 12px;
+    font-size: 13px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
 }
 .sidebar-content {
     height: calc(100% - 40px);
     overflow-y: auto;
     margin-top: 40px;
-}
-.sidebar-content section {
-    padding: 10px 0
+    width: 100%;
 }
 .sidebar-content section:not(:last-child) {
-    border-bottom: 1px solid #cdd5d5
+    border-bottom: 1px solid #cdd5d5;
+    padding-bottom: 10px;
 }
 .sidebar.sidebar-width-small {
     width: 350px
@@ -956,6 +955,9 @@ nav {
     width: 240px;
     background-color: #27343e;
     position: relative;
+    z-index: 2100;
+    padding-bottom: 27px;
+    overflow: auto;
 }
 @media (max-width: 991px) {
     .nav-apps {
@@ -974,7 +976,7 @@ nav {
     -ms-flex-align: center;
     align-items: center;
     cursor: pointer;
-    border-bottom: 1px solid rgba(232, 232, 232, 0.4);
+    border-bottom: 1px solid rgba(232, 232, 232, 0.2);
     padding: 10px 10px 8px;
 }
 .nav-apps-button.active {
@@ -1032,7 +1034,7 @@ nav {
 header {
     background-color: #0f1c27;
     flex-shrink: 0;
-    z-index: 2100;
+    z-index: 2800;
 }
 header,
 header .nav-main {
@@ -1452,7 +1454,7 @@ header .nav-main {
     position: absolute;
     z-index: 1070;
     display: block;
-    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     letter-spacing: normal;
     line-break: auto;
     text-align: left;
@@ -1670,7 +1672,7 @@ header .nav-main {
     position: absolute;
     top: 145px;
     right: 20px;
-    z-index: 1000;
+    z-index: 1;
 }
 .content .map .topbar-plugin {
     margin-bottom: 10px;
@@ -1909,7 +1911,7 @@ header .nav-main {
     color: #000;
     position: absolute;
     bottom: 45px;
-    right: 25px;
+    right: 105px;
     height: 200px;
     width: 255px;
     min-width: 255px;
@@ -2261,18 +2263,19 @@ a.active {
 body.x-body {
     font-size: 1.5rem;
     color: #73787d;
-    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
 }
 #tlyPageGuide {
   list-style: none;
 }
 
 #sidebar-help-area {
-    position: absolute;
+    position: fixed;
     bottom: 0;
-    width: 100%;
-    border-top: 1px solid rgba(232, 232, 232, 0.4);
     padding: 4px 10px;
+    background-color: #273440;
+    width: inherit;
+    z-index: 1;
 }
 
 #help-overlay-start {
@@ -2334,4 +2337,7 @@ body.x-body {
 }
 .launchpad-plugin li p {
   font-size: 13px;
+}
+.sidebar-content > h2  {
+  margin-top: 1rem;
 }
