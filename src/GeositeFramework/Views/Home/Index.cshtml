@@ -450,27 +450,30 @@
                     </div>
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Orientation">Orientation</h3>
-                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/><span class="i18n" data-i18n="Landscape">Landscape</label>
-                        <label><input type="radio" name="export-orientation" value="Portrait"/><span class="i18n" data-i18n="Portrait">Portrait</label>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Landscape" checked="checked"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Landscape">Landscape</span>
+                        </label>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Portrait"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Portrait">Portrait</span>
+                        </label>
                         <p class="font-italic small i18n" data-i18n="Browser Print">* You may need to alter your browser print settings</p>
                     </div>
                     <div class="popover-section">
                          <h3 class="i18n" data-i18n="Legend">Legend</h3>
-                        <label><input type="checkbox" name="export-include-legend" checked/> <span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
+                        <label class="form-component">
+                            <input type="checkbox" name="export-include-legend" checked/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Include Layer Legend">Include Layer Legend</span>
+                        </label>
                     </div>
+                    <button id="export-button" class="button button-primary radius i18n" data-i18n="Generate Map Export">Generate Map Export</button>
                 </div>
                 <div id="export-print-preview-container">
-                    <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
                     <div id="export-print-preview-map"></div>
-                </div>
-                <div class="row">
-                    <div class="left-col">
-                        <div class="export-output-area">
-                            <a href="#" id="export-button" class="button button-primary radius i18n" data-i18n="Generate Map Export">Generate Map Export</a>
-                        </div>
-                    </div>
-                    <div class="right-col">
-                    </div>
                 </div>
             </div>
         </div>
