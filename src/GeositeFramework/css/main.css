@@ -1906,7 +1906,7 @@ header .nav-main {
     color: #000;
     position: absolute;
     bottom: 45px;
-    right: 105px;
+    right: 25px;
     height: 200px;
     width: 255px;
     min-width: 255px;
@@ -2268,7 +2268,6 @@ body.x-body {
     position: fixed;
     bottom: 0;
     padding: 4px 10px;
-    background-color: #273440;
     width: inherit;
     z-index: 1;
 }

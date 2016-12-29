@@ -446,7 +446,7 @@
                 <div class="row">
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Title (Optional):">Title (Optional):</h3>
-                        <input type="text" id="export-title"/>
+                        <input type="text" class="form-control" id="export-title"/>
                     </div>
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Orientation">Orientation</h3>
@@ -487,7 +487,7 @@
     <!-- Adding any white space between the textarea and the iframe
         will result in whitespace within the rendered textarea, which looks strange. -->
     <script type="text/template" id="embed-iframe">
-       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
+       <textarea class="form-control code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
        </textarea>
     </script>
 
@@ -498,7 +498,8 @@
             </div>
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
-                  <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div><input class="code-like permalink-tex" type="text" value="<%= shortUrl %>"/></label>
+                  <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div>
+                    <input class="form-control code-like permalink-tex" type="text" value="<%= shortUrl %>"/></label>
                   <label class="popover-section h3" data-i18n="Embed"><div class="h3">Embed</div></label>
                   <p>You can copy and paste the following code to embed this map on your website.</p><br>
                   <span id="iframe-embed"></span>
@@ -507,19 +508,19 @@
                           <div class="column">
                               <label class="popover-section">
                                   <div class="h4 i18n" data-i18n="Embed Width (px)">Embed Width (px)</div>
-                                  <input type="number" class="embed-size width" value="<%= width %>" />
+                                  <input type="number" class="form-control embed-size width" value="<%= width %>" />
                               </label>
                           </div>
                           <div class="column">
                               <label class="popover-section">
                                   <div class="h4 i18n" data-i18n="Embed Height (px)">Embed Height (px)</div>
-                                  <input type="number" class="embed-size height" value="<%= height %>" />
+                                  <input type="number" class="form-control embed-size height" value="<%= height %>" />
                               </label>
                           </div>
                       </div>
                   </div>
                   <label class="popover-section"><div class="h3 i18n" data-i18n="Need the save code for this map?">Need the save code for this map?</div> <a href="javascript:void(0);" class="show-long-permalink i18n" data-i18n="Get it here.">Get it here.</a>
-                    <input class="code-like" id="long-permalink-tex" type="text" value="<%= hash %>"/>
+                    <input class="form-control code-like" id="long-permalink-tex" type="text" value="<%= hash %>"/>
                   </label>
                 </div>
             </div>
