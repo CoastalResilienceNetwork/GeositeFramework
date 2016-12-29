@@ -278,14 +278,7 @@ require(['use!Geosite'],
 
         initialize: function () {
             var view = this;
-
-            view.listenTo(view.model, "change:outputText", function () {
-                view.$(".export-output-area").html(view.model.get('outputText'));
-            });
-
             view.paneNumber = 0;
-            var model = this.model;
-            var map = model.get('esriMap');
 
             var mapReadyDeferred = showMapExportModal(this.model, $("#map-print-sandbox"), this.previewDeferred);
             createUiContainer(view, 0, view.previewDeferred, mapReadyDeferred);
