@@ -87,6 +87,7 @@
     <link rel="stylesheet" href="css/TinyBox2.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/styleguide.css">
     <link rel="stylesheet" href="css/measure.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
@@ -445,31 +446,34 @@
                 <div class="row">
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Title (Optional):">Title (Optional):</h3>
-                        <input type="text" id="export-title"/>
+                        <input type="text" class="form-control" id="export-title"/>
                     </div>
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Orientation">Orientation</h3>
-                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/><span class="i18n" data-i18n="Landscape">Landscape</label>
-                        <label><input type="radio" name="export-orientation" value="Portrait"/><span class="i18n" data-i18n="Portrait">Portrait</label>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Landscape" checked="checked"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Landscape">Landscape</span>
+                        </label>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Portrait"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Portrait">Portrait</span>
+                        </label>
                         <p class="font-italic small i18n" data-i18n="Browser Print">* You may need to alter your browser print settings</p>
                     </div>
                     <div class="popover-section">
                          <h3 class="i18n" data-i18n="Legend">Legend</h3>
-                        <label><input type="checkbox" name="export-include-legend" checked/> <span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
+                        <label class="form-component">
+                            <input type="checkbox" name="export-include-legend" checked/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Include Layer Legend">Include Layer Legend</span>
+                        </label>
                     </div>
+                    <button id="export-button" class="button button-primary radius i18n" data-i18n="Generate Map Export">Generate Map Export</button>
                 </div>
                 <div id="export-print-preview-container">
-                    <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
                     <div id="export-print-preview-map"></div>
-                </div>
-                <div class="row">
-                    <div class="left-col">
-                        <div class="export-output-area">
-                            <a href="#" id="export-button" class="button button-primary radius i18n" data-i18n="Generate Map Export">Generate Map Export</a>
-                        </div>
-                    </div>
-                    <div class="right-col">
-                    </div>
                 </div>
             </div>
         </div>
@@ -483,7 +487,7 @@
     <!-- Adding any white space between the textarea and the iframe
         will result in whitespace within the rendered textarea, which looks strange. -->
     <script type="text/template" id="embed-iframe">
-       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
+       <textarea class="form-control code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
        </textarea>
     </script>
 
@@ -494,7 +498,8 @@
             </div>
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
-                  <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div><input class="code-like permalink-tex" type="text" value="<%= shortUrl %>"/></label>
+                  <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div>
+                    <input class="form-control code-like permalink-tex" type="text" value="<%= shortUrl %>"/></label>
                   <label class="popover-section h3" data-i18n="Embed"><div class="h3">Embed</div></label>
                   <p>You can copy and paste the following code to embed this map on your website.</p><br>
                   <span id="iframe-embed"></span>
@@ -503,19 +508,19 @@
                           <div class="column">
                               <label class="popover-section">
                                   <div class="h4 i18n" data-i18n="Embed Width (px)">Embed Width (px)</div>
-                                  <input type="number" class="embed-size width" value="<%= width %>" />
+                                  <input type="number" class="form-control embed-size width" value="<%= width %>" />
                               </label>
                           </div>
                           <div class="column">
                               <label class="popover-section">
                                   <div class="h4 i18n" data-i18n="Embed Height (px)">Embed Height (px)</div>
-                                  <input type="number" class="embed-size height" value="<%= height %>" />
+                                  <input type="number" class="form-control embed-size height" value="<%= height %>" />
                               </label>
                           </div>
                       </div>
                   </div>
                   <label class="popover-section"><div class="h3 i18n" data-i18n="Need the save code for this map?">Need the save code for this map?</div> <a href="javascript:void(0);" class="show-long-permalink i18n" data-i18n="Get it here.">Get it here.</a>
-                    <input class="code-like" id="long-permalink-tex" type="text" value="<%= hash %>"/>
+                    <input class="form-control code-like" id="long-permalink-tex" type="text" value="<%= hash %>"/>
                   </label>
                 </div>
             </div>
