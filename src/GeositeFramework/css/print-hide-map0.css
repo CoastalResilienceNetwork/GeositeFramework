@@ -1,7 +1,0 @@
-﻿@media print {
-    /* For split screen print, only 1 plugin from one map should be enabled.  This hides
-        any active from map-0 which uses the same print style and lets map-1 plugins show. */
-    #map-0, #left-pane {
-        display: none;
-    }
-}
