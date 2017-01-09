@@ -146,7 +146,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             },
 
             beforePrint: function(printDeferred, $printArea, mapObject) {
-                var layer = new esri.layers.ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
+                var layer = new esri.layers.MapImageLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
                         "opacity": 0.8
                     });
 
