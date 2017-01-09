@@ -5,7 +5,7 @@
 
 require(['use!Geosite',
          'esri/Map',
-         'esri/layers/ArcGISDynamicMapServiceLayer',
+         'esri/layers/MapImageLayer',
          'framework/Logger',
          'dojo/dom-style',
          'dijit/form/CheckBox',
@@ -13,7 +13,7 @@ require(['use!Geosite',
         ],
     function(N,
              Map,
-             ArcGISDynamicMapServiceLayer,
+             MapImageLayer,
              Logger,
              domStyle,
              CheckBox,
@@ -602,7 +602,7 @@ require(['use!Geosite',
                         map = new Map('plugin-print-preview-map', { extent: originalMap.extent }),
                         currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
 
-                    map.addLayer(new ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
+                    map.addLayer(new MapImageLayer(currentBaseMapUrl));
 
                     dojo.connect(map, 'onLoad', function() {
                         mapReadyDeferred.resolve(map);

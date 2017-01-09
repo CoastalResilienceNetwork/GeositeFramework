@@ -89,7 +89,7 @@ define(["dojo/_base/declare",
             return _.filter(_.map(map.layerIds, map.getLayer), function (layer) {
                 return (layer &&
                     (
-                        (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") ||
+                        (layer.declaredClass === "esri.layers.MapImageLayer") ||
                         (layer.declaredClass === "esri.layers.TileLayer") ||
                         (layer.declaredClass === "esri.layers.FeatureLayer")
                     ));
