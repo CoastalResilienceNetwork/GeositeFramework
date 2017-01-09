@@ -6,7 +6,11 @@ require(['use!Geosite',
          'framework/widgets/map_utils/main',
          'framework/util/ajax',
          'esri/Map',
+         /*
+         Not yet implemented in 4.2:
+         https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
          'esri/dijit/Scalebar',
+         */
          'esri/layers/TileLayer',
          'esri/geometry/Extent',
          'esri/geometry/SpatialReference',
@@ -17,7 +21,11 @@ require(['use!Geosite',
              MapUtils,
              ajaxUtil,
              Map,
+             /*
+             Not yet implemented in 4.2:
+             https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
              ScaleBar,
+             */
              TileLayer,
              Extent,
              SpatialReference,
@@ -127,11 +135,14 @@ require(['use!Geosite',
         loadExtent(view);
         selectBasemap(view);
         initSearch(view);
-
+        /*
+        Not yet implemented in 4.2:
+        https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
         var scalebar = new ScaleBar({
             map: view.esriMap,
             scalebarUnit: 'dual'
         });
+        */
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {
