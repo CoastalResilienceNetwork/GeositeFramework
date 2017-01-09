@@ -4,7 +4,7 @@
 // A plugin wraps around a plugin object and manages it in backbone
 
 require(['use!Geosite',
-         'esri/map',
+         'esri/Map',
          'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
