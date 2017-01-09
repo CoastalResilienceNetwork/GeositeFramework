@@ -1,5 +1,5 @@
 ﻿require(['use!Geosite',
-         'esri/dijit/Popup',
+         'esri/widgets/Popup',
          'esri/geometry/Polygon',
          'esri/SpatialReference',
          'esri/layers/GraphicsLayer',
