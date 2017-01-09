@@ -6,7 +6,7 @@
 require([
     'use!Geosite',
     'esri/geometry/Extent',
-    'esri/SpatialReference'], function (N, Extent, SpatialReference) {
+    'esri/geometry/SpatialReference'], function (N, Extent, SpatialReference) {
 
     (function () {
         'use strict';
