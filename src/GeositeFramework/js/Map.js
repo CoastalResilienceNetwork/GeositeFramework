@@ -10,7 +10,7 @@ require(['use!Geosite',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
          'esri/SpatialReference',
-         'esri/dijit/Search'
+         'esri/widgets/Search'
         ],
     function(N,
              Legend,
