@@ -5,7 +5,7 @@
          'esri/layers/GraphicsLayer',
          'esri/symbols/SimpleFillSymbol',
          'esri/symbols/SimpleLineSymbol',
-         'esri/InfoTemplate',
+         'esri/PopupTemplate',
          'esri/Graphic'
         ],
     function(N,
@@ -15,7 +15,7 @@
              GraphicsLayer,
              SimpleFillSymbol,
              SimpleLineSymbol,
-             InfoTemplate,
+             PopupTemplate,
              Graphic) {
 
     'use strict';
@@ -183,11 +183,11 @@
                 symbol.setColor(new dojo.Color([0, 0, 0, 0]));
             }
 
-            var infoTemplate = new InfoTemplate();
+            var popupTemplate = new PopupTemplate();
             // display is the field containing the subregion name
-            infoTemplate.setContent("${display}");
+            popupTemplate.setContent("${display}");
 
-            var graphic = new Graphic(geom, symbol, subregion, infoTemplate);
+            var graphic = new Graphic(geom, symbol, subregion, popupTemplate);
 
             layer.add(graphic);
         });
