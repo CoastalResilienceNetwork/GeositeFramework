@@ -69,7 +69,7 @@ require(['use!Geosite',
                 attributes: ['extent', 'selectedBasemapIndex']
             });
 
-            // Keep track of ArcGISDynamicMapServiceLayers added to the map
+            // Keep track of MapImageLayers added to the map
             this.serviceInfos = {};
         },
 
