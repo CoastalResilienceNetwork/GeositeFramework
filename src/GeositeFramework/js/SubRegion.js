@@ -1,7 +1,7 @@
 ﻿require(['use!Geosite',
          'esri/widgets/Popup',
          'esri/geometry/Polygon',
-         'esri/SpatialReference',
+         'esri/geometry/SpatialReference',
          'esri/layers/GraphicsLayer',
          'esri/symbols/SimpleFillSymbol',
          'esri/symbols/SimpleLineSymbol',

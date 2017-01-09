@@ -9,7 +9,7 @@ require(['use!Geosite',
          'esri/dijit/Scalebar',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
-         'esri/SpatialReference',
+         'esri/geometry/SpatialReference',
          'esri/widgets/Search'
         ],
     function(N,
