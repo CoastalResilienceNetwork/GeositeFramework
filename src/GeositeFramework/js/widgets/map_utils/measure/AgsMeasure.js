@@ -12,7 +12,7 @@ define([
         "esri/symbols/SimpleFillSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/symbols/SimpleMarkerSymbol",
-        "esri/graphic",
+        "esri/Graphic",
         "esri/layers/GraphicsLayer"
     ],
     function(N,

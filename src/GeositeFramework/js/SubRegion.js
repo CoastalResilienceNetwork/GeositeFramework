@@ -6,7 +6,7 @@
          'esri/symbols/SimpleFillSymbol',
          'esri/symbols/SimpleLineSymbol',
          'esri/InfoTemplate',
-         'esri/graphic'
+         'esri/Graphic'
         ],
     function(N,
              Popup,
