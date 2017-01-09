@@ -7,7 +7,7 @@ require(['use!Geosite',
          'framework/util/ajax',
          'esri/Map',
          'esri/dijit/Scalebar',
-         'esri/layers/ArcGISTiledMapServiceLayer',
+         'esri/layers/TileLayer',
          'esri/geometry/Extent',
          'esri/geometry/SpatialReference',
          'esri/widgets/Search'
@@ -18,7 +18,7 @@ require(['use!Geosite',
              ajaxUtil,
              Map,
              ScaleBar,
-             ArcGISTiledMapServiceLayer,
+             TileLayer,
              Extent,
              SpatialReference,
              Search) {
@@ -29,7 +29,7 @@ require(['use!Geosite',
         var basemap = getSelectedBasemap(model);
         if (basemap.layer === undefined) {
             // This basemap has no layer yet, so make one and cache it
-            basemap.layer = new ArcGISTiledMapServiceLayer(basemap.url);
+            basemap.layer = new TileLayer(basemap.url);
             esriMap.addLayer(basemap.layer);
         }
         return basemap.layer;
