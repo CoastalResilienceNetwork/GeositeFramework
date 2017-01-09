@@ -229,7 +229,7 @@ esri/tileUtils
 esri/geometry/Rect
 esri/layers/TileInfo
 esri/layers/LOD
-esri/layers/ArcGISTiledMapServiceLayer
+esri/layers/TileLayer
 esri/layers/TiledMapServiceLayer
 dojox/collections/ArrayList
 dojox/collections/_base
