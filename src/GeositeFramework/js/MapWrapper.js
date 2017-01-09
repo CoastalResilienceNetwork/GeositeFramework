@@ -68,13 +68,13 @@
 
         _wrapper.addLayer = function (layer, index) {
             // Add layer, and remember it
-            esriMap.addLayer(layer, index);
+            esriMap.add(layer, index);
             rememberLayer(layer);
         };
 
         _wrapper.addLayers = function (layers) {
             // Add layers, and remember them
-            esriMap.addLayers(layers);
+            esriMap.addMany(layers);
             _.each(layers, function (layer) {
                 rememberLayer(layer);
             });
@@ -84,14 +84,14 @@
             if (isMyLayer(layer)) {
                 // This is my layer; forget it and remove it
                 forgetLayer(layer);
-                esriMap.removeLayer(layer);
+                esriMap.remove(layer);
             }
         };
 
         _wrapper.removeAllLayers = function () {
             // Remove all remembered layers
             _.each(_myLayers, function (layer) {
-                esriMap.removeLayer(layer);
+                esriMap.remove(layer);
             });
             _myLayers = [];
         };

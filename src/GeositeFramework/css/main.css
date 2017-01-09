@@ -1419,7 +1419,6 @@ header .nav-main {
     color: #212323;
 }
 .control-container {
-    position: absolute;
     width: 100%;
 }
 .control-container.subregion-active {
@@ -1941,4 +1940,8 @@ body.x-body {
 #map-utils-dropdown-button > i:before {
   margin-left: 50%;
   transform: translate(-50%, 0%);
+}
+#esri-mapview-mount {
+    height: 100%;
+    width: 100%;
 }
