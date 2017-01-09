@@ -6,6 +6,7 @@ require(['use!Geosite',
          'framework/widgets/map_utils/main',
          'framework/util/ajax',
          'esri/Map',
+         'esri/views/MapView',
          /*
          // Not yet implemented in Esri JS API v4.2:
          // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
@@ -14,13 +15,15 @@ require(['use!Geosite',
          'esri/layers/TileLayer',
          'esri/geometry/Extent',
          'esri/geometry/SpatialReference',
-         'esri/widgets/Search'
+         'esri/widgets/Search',
+         'dojo/domReady!',
         ],
     function(N,
              Legend,
              MapUtils,
              ajaxUtil,
              Map,
+             MapView,
              /*
              // Not yet implemented in Esri JS API v4.2:
              // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
@@ -33,14 +36,10 @@ require(['use!Geosite',
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
-        // Return an ESRI layer object for the currently-selected basemap spec
+        // Add the selected basemap to the Esri map
         var basemap = getSelectedBasemap(model);
-        if (basemap.layer === undefined) {
-            // This basemap has no layer yet, so make one and cache it
-            basemap.layer = new TileLayer(basemap.url);
-            esriMap.addLayer(basemap.layer);
-        }
-        return basemap.layer;
+        basemap.layer = new TileLayer(basemap.url);
+        esriMap.add(basemap.layer);
     }
 
     function getSelectedBasemap(model) {
@@ -101,20 +100,24 @@ require(['use!Geosite',
         view.model.on('change:extent', function () {
             var currentExtent = view.model.get('extent');
 
-            if (!_.isEqual(currentExtent, view.esriMap.extent)) {
+            if (!_.isEqual(currentExtent, view.esriMapView.extent)) {
                 loadExtent(view);
             }
         });
 
+        /*
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
         // 2) When it needs to make an HTTP GET with a URL longer than 2000 chars
         esri.config.defaults.io.proxyUrl = "proxy.ashx";
-
+        */
         createMap(view);
     }
 
     function createMap(view) {
+        /*
+        // Reworking this because the Esri JS API 4.2
+        // expects a `map` and a `MapView` with separate concerns
         var esriMap = Map(view.$el.attr('id'), {
                 sliderPosition: 'top-right'
             }),
@@ -130,8 +133,15 @@ require(['use!Geosite',
                     }
             }, 300),
             loadEventFired = false;
+        */
+        var esriMap = new Map({ basemap: 'topo' });
+        var esriMapView = new MapView({
+            map: esriMap,
+            container: 'esri-mapview-mount'
+        });
 
         view.esriMap = esriMap;
+        view.esriMapView = esriMapView;
         loadExtent(view);
         selectBasemap(view);
         initSearch(view);
@@ -191,7 +201,7 @@ require(['use!Geosite',
         function initSearch(view) {
             // Add search control
             var search = new Search({
-                map: view.esriMap,
+                view: view.esriMapView,
                 showInfoWindowOnSelect: false,
                 enableHighlight: false,
             }, "search");
@@ -203,11 +213,13 @@ require(['use!Geosite',
         // the app entirely.  The map does, in fact, load and its loaded property is
         // set.  I put in this hack to check up on the event a little while after
         // it was created and manually raise the event if the library didn't do it.
+        /*
         setTimeout(function() {
             if (!loadEventFired) {
                 if (esriMap.loaded) esriMap.onLoad(esriMap);
             }
         }, 2500);
+        */
     }
 
     function loadExtent(view) {
@@ -216,22 +228,15 @@ require(['use!Geosite',
                 x.xmin, x.ymin, x.xmax, x.ymax,
                 new SpatialReference({ wkid: x.spatialReference.wkid })
             );
-        view.esriMap.setExtent(extent);
+        view.esriMapView.extent = extent;
     }
 
     function saveExtent(view) {
-        view.model.set('extent', view.esriMap.extent);
+        view.model.set('extent', view.esriMapView.extent);
     }
 
     function selectBasemap(view) {
-        // Hide the current basemap layer
-        if (view.currentBasemapLayer !== undefined) {
-            view.currentBasemapLayer.hide();
-        }
-        // Show the new basemap layer (at index 0)
-        view.currentBasemapLayer = view.model.getSelectedBasemapLayer(view.esriMap);
-        view.currentBasemapLayer.show();
-        view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
+        view.model.getSelectedBasemapLayer(view.esriMap);
     }
 
     function initLegend(view, esriMap) {
