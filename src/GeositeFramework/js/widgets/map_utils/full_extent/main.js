@@ -1,7 +1,7 @@
 ﻿define([
     'dojo/_base/declare',
     'esri/geometry/Extent',
-    'esri/SpatialReference'
+    'esri/geometry/SpatialReference'
     ],
     function (declare,
               Extent,
