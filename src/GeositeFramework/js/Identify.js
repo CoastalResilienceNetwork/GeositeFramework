@@ -7,7 +7,7 @@
 // about that point.
 
 require(['use!Geosite',
-         'esri/dijit/Popup'],
+         'esri/widgets/Popup'],
     function(N,
              Popup) {
     'use strict';
