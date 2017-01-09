@@ -1,7 +1,14 @@
 ﻿define([
     'use!Geosite',
     'dojo/_base/declare',
+    /*
+    Disable measure tool as it includes some features
+    not yet implented in Esri JS API 4.2, specifically:
+    - units
+    - mathUtils
+    - InfoWindow
     './measure/main',
+    */
     './full_extent/main',
     './export/main',
     './share/main'

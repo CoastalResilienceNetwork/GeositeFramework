@@ -1487,7 +1487,6 @@ header .nav-main {
     color: #212323;
 }
 .control-container {
-    position: absolute;
     width: 100%;
 }
 .control-container.subregion-active {
@@ -2044,4 +2043,9 @@ body.x-body {
 }
 .arcgisSearch .searchGroup .searchInput:-moz-placeholder { /* Firefox 18- */
   color: #fff;
+}
+
+#esri-mapview-mount {
+    height: 100%;
+    width: 100%;
 }
