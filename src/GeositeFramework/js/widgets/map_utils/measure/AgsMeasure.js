@@ -3,7 +3,7 @@ define([
         "esri/geometry/Polyline",
         "esri/geometry/Polygon",
         "esri/geometry/geodesicUtils",
-        "esri/geometry/webMercatorUtils",
+        "esri/geometry/support/webMercatorUtils",
         "esri/tasks/GeometryService",
         "esri/geometry/ScreenPoint",
         "esri/geometry/mathUtils",
