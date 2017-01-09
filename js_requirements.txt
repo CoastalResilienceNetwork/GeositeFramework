@@ -259,7 +259,7 @@ esri/tasks/RasterData
 esri/tasks/Date
 esri/tasks/ParameterValue
 esri/tasks/GPResultImageLayer
-esri/layers/ArcGISDynamicMapServiceLayer
+esri/layers/MapImageLayer
 esri/layers/ImageParameters
 esri/layers/DynamicLayerInfo
 esri/layers/LayerMapSource
