@@ -96,7 +96,7 @@ define(["dojo/_base/declare",
                 return (layer &&
                     (
                         (layer.declaredClass === "esri.layers.ArcGISDynamicMapServiceLayer") ||
-                        (layer.declaredClass === "esri.layers.ArcGISTiledMapServiceLayer") ||
+                        (layer.declaredClass === "esri.layers.TileLayer") ||
                         (layer.declaredClass === "esri.layers.FeatureLayer")
                     ));
             });
