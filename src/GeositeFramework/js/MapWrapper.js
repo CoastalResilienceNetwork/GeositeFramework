@@ -28,7 +28,8 @@
         function rememberLayer(layer) {
             if (!isMyLayer(layer)) {
                 _myLayers.push(layer);
-                if (_.contains(["esri.layers.MapImageLayer", "esri.layers.TileLayer", "esri.layers.WMSLayer"], layer.declaredClass)) {
+                // "esri.layers.WMSLayer" is not available in Esri JS API v4.2
+                if (_.contains(["esri.layers.MapImageLayer", "esri.layers.TileLayer"], layer.declaredClass)) {
                     mapModel.addService(layer, pluginObject);
                 }
             }
@@ -38,7 +39,8 @@
             _myLayers = _.reject(_myLayers, function (l) {
                 return l.id === layer.id;
             });
-            if (_.contains(["esri.layers.MapImageLayer", "esri.layers.TileLayer", "esri.layers.WMSLayer"], layer.declaredClass)) {
+            // "esri.layers.WMSLayer" is not available in Esri JS API v4.2
+            if (_.contains(["esri.layers.MapImageLayer", "esri.layers.TileLayer"], layer.declaredClass)) {
                 mapModel.removeService(layer);
             }
         }
@@ -52,7 +54,7 @@
 
         _wrapper.getLayer = function (layerId) {
             // Get a layer if it's mine
-            return (isMyLayerId(layerId) ? esriMap.getLayer(layerId) : undefined);
+            return (isMyLayerId(layerId) ? esriMap.findLayerById(layerId) : undefined);
         };
 
         _wrapper.getMyLayers = function() {
@@ -74,7 +76,7 @@
 
         _wrapper.addLayers = function (layers) {
             // Add layers, and remember them
-            esriMap.addMany(layers);
+            esriMap.layers.addMany(layers);
             _.each(layers, function (layer) {
                 rememberLayer(layer);
             });

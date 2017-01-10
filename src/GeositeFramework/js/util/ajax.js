@@ -19,10 +19,9 @@ define(['esri/request'],
                 });
 
             if (typeof promises[url] === 'undefined') {
-                promises[url] = request({
-                    url: url,
-                    content: settings.content,
-                    handleAs: settings.format,
+                promises[url] = request(url, {
+                    query: settings.content,
+                    responseType: settings.format,
                     callbackParamName: 'callback',
                     timeout: 20000
                 }).then(function(data) {
