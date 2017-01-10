@@ -993,8 +993,8 @@ nav {
     float: left;
 }
 .nav-apps-button > .button-icon img {
-    height: 20px;
-    width: 20px;
+    height: 25px;
+    width: 25px;
 }
 
 @media (max-width: 991px) {
