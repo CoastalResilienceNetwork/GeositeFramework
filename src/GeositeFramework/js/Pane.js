@@ -356,11 +356,11 @@ require([
                 el: view.$('.map'),
                 paneNumber: view.model.get('paneNumber')
             });
-
             var esriMap = view.mapView.esriMap;
+            var esriMapView = view.mapView.esriMapView;
 
             // Wait for the map to load
-            dojo.connect(esriMap, "onLoad", function() {
+            esriMapView.then(function () {
                 // Initialize plugins now that all map properties are available (e.g. extent)
                 view.model.initPlugins(esriMap);
 

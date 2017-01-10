@@ -57,7 +57,7 @@ require(['use!Geosite',
                                 });
                             }
                             d.resolve();
-                            esriMap.resize(true);
+                            //esriMap.resize(true);
                         }, 100);
                         return d.promise();
                     }
@@ -439,12 +439,14 @@ require(['use!Geosite',
                     }
                 }
 
+                /*
                 // Call the `resize` method on the Esri map, passing it
                 // true for its `immediate` arg so that it will resize
                 // immediately.
                 if (pluginObject.map) {
                     pluginObject.map.resize(true);
                 }
+                */
             }
             if (view.$legendContainer) {
                 if (view.model.get('active')) {
