@@ -7,8 +7,8 @@ require(['use!Geosite',
          'framework/util/ajax',
          'esri/Map',
          /*
-         Not yet implemented in 4.2:
-         https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
+         // Not yet implemented in Esri JS API v4.2:
+         // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
          'esri/dijit/Scalebar',
          */
          'esri/layers/TileLayer',
@@ -22,8 +22,8 @@ require(['use!Geosite',
              ajaxUtil,
              Map,
              /*
-             Not yet implemented in 4.2:
-             https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
+             // Not yet implemented in Esri JS API v4.2:
+             // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
              ScaleBar,
              */
              TileLayer,
@@ -136,8 +136,8 @@ require(['use!Geosite',
         selectBasemap(view);
         initSearch(view);
         /*
-        Not yet implemented in 4.2:
-        https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
+        // Not yet implemented in Esri JS API 4.2:
+        // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
         var scalebar = new ScaleBar({
             map: view.esriMap,
             scalebarUnit: 'dual'
