@@ -1,3 +1,5 @@
+node_modules
+
 # Visual Studio left-overs
 *.suo        # 'user' settings like 'which file is open in Visual Studio'
 *.v11.suo
