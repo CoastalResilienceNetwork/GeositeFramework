@@ -434,9 +434,7 @@ html {
     left: 0;
     overflow: hidden;
 }
-.content-scrollable {
-    overflow-y: auto
-}
+
 .container,
 .container-fluid {
     position: relative
@@ -944,7 +942,6 @@ nav {
 .sidebar-content {
     position: relative;
     height: calc(100% - 40px);
-    overflow-y: auto;
     margin-top: 40px;
     width: 100%;
 }
