@@ -1,4 +1,4 @@
-input[type="radio"], input[type="checkbox"] {
+.form-component input[type="radio"], .form-component input[type="checkbox"] {
   display: none;
   & ~ .check {
     border-radius: 3px;
@@ -38,7 +38,7 @@ input[type="radio"], input[type="checkbox"] {
   }
 }
 
-input[type="radio"] {
+.form-component input[type="radio"] {
   & ~ .check {
     border-radius: 100%;
   }
