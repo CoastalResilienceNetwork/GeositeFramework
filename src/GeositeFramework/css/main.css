@@ -1040,7 +1040,7 @@ header .nav-main {
 .nav-main {
     padding-left: 12px;
     padding-right: 12px;
-    width: 240px;
+    min-width: 240px;
     height: 60px;
     border-right: 1px solid hsla(0, 0%, 100%, .2)
 }
@@ -1059,7 +1059,8 @@ header .nav-main {
     box-shadow: none!important
 }
 .header-dropdown .icon-menu {
-    color: #fff
+    color: #fff;
+    margin-right: 7px;
 }
 .header-dropdown .button.active,
 .header-dropdown .button.hover,
