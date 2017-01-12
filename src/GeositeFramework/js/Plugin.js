@@ -57,7 +57,11 @@ require(['use!Geosite',
                                 });
                             }
                             d.resolve();
-                            //esriMap.resize(true);
+                            // TODO: Update this method call for Esri JS API v4.2
+                            // `resize` doesn't seem to be available for MapView objects currently,
+                            // but there may be a cognate method to call
+                            // See: https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
+                            // esriMap.resize(true);
                         }, 100);
                         return d.promise();
                     }

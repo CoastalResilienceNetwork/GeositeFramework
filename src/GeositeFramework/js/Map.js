@@ -7,11 +7,9 @@ require(['use!Geosite',
          'framework/util/ajax',
          'esri/Map',
          'esri/views/MapView',
-         /*
-         // Not yet implemented in Esri JS API v4.2:
+         // Scalebar is not yet implemented in Esri JS API v4.2:
          // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
-         'esri/dijit/Scalebar',
-         */
+         // 'esri/dijit/Scalebar',
          'esri/layers/TileLayer',
          'esri/geometry/Extent',
          'esri/geometry/SpatialReference',
@@ -24,11 +22,9 @@ require(['use!Geosite',
              ajaxUtil,
              Map,
              MapView,
-             /*
-             // Not yet implemented in Esri JS API v4.2:
+             // Scalebar is not yet implemented in Esri JS API v4.2:
              // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
-             ScaleBar,
-             */
+             // ScaleBar,
              TileLayer,
              Extent,
              SpatialReference,
@@ -105,19 +101,22 @@ require(['use!Geosite',
             }
         });
 
-        /*
+
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
         // 2) When it needs to make an HTTP GET with a URL longer than 2000 chars
-        esri.config.defaults.io.proxyUrl = "proxy.ashx";
-        */
+        // esri.config.defaults.io.proxyUrl = "proxy.ashx";
         createMap(view);
     }
 
     function createMap(view) {
-        /*
+
         // Reworking this because the Esri JS API 4.2
-        // expects a `map` and a `MapView` with separate concerns
+        // expects a `map` and a `MapView` with separate concerns.
+        // Leaving the original code here for reference, but I think
+        // some of this should be set to work on a MapView:
+        // See https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
+        /*
         var esriMap = Map(view.$el.attr('id'), {
                 sliderPosition: 'top-right'
             }),
@@ -145,9 +144,10 @@ require(['use!Geosite',
         loadExtent(view);
         selectBasemap(view);
         initSearch(view);
-        /*
-        // Not yet implemented in Esri JS API 4.2:
+
+        // Scalebar is not yet implemented in Esri JS API 4.2:
         // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
+        /*
         var scalebar = new ScaleBar({
             map: view.esriMap,
             scalebarUnit: 'dual'
@@ -209,6 +209,8 @@ require(['use!Geosite',
             search.startup();
         }
 
+        // TODO: Remove this once it's confirmed that it's not necessary for IE11.
+        //
         // On IE8, the map.onload event will often not fire at all, which breaks
         // the app entirely.  The map does, in fact, load and its loaded property is
         // set.  I put in this hack to check up on the event a little while after
@@ -336,8 +338,11 @@ require(['use!Geosite',
         dojo.connect(esriMap, 'onLayerAdd', redraw);
         dojo.connect(esriMap, 'onLayerRemove', redraw);
         dojo.connect(esriMap, 'onLayerSuspend', redraw);
+        // TODO: Update this for the Esri JS API v4.2,
+        // which splits the Map into a Map and a MapView
+        // See https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
         // Allow plugins to trigger a legend redraw by calling map.resize()
-        dojo.connect(esriMap, 'resize', redraw);
+        // dojo.connect(esriMap, 'resize', redraw);
     }
 
     function initMapUtils(view, esriMap) {

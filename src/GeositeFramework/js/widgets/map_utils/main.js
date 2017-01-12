@@ -1,21 +1,19 @@
 ﻿define([
     'use!Geosite',
     'dojo/_base/declare',
-    /*
-    Disable measure tool as it includes some features
-    not yet implented in Esri JS API 4.2, specifically:
-    - units
-    - mathUtils
-    - InfoWindow
-    './measure/main',
-    */
+    // Disable measure tool as it includes some features
+    // not yet implemented in Esri JS API 4.2, specifically:
+    // - units
+    // - mathUtils
+    // - InfoWindow
+    // './measure/main',
     './full_extent/main',
     './export/main',
     './share/main'
     ],
     function(N,
              declare,
-             MeasureCommand,
+             // MeasureCommand,
              FullExtentCommand,
              ExportCommand,
              ShareCommand) {
@@ -39,7 +37,8 @@
 
             switch (command) {
                 case 'measure':
-                    return new MeasureCommand(map);
+                    // Disabled for upgrade to Esri JS API v4.2
+                    return // new MeasureCommand(map);
                 case 'zoom':
                    return new FullExtentCommand(map, initialExtent);
                 case 'export':
