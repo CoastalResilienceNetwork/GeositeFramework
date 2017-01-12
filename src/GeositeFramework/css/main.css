@@ -435,6 +435,10 @@ html {
     overflow: hidden;
 }
 
+.content-scrollable {
+    overflow-y: auto;
+}
+
 .container,
 .container-fluid {
     position: relative
@@ -942,6 +946,7 @@ nav {
 .sidebar-content {
     position: relative;
     height: calc(100% - 40px);
+    overflow-y: auto;
     margin-top: 40px;
     width: 100%;
 }
@@ -2336,6 +2341,7 @@ body.x-body {
 .sidebar-content > h2  {
   margin-top: 1rem;
 }
+
 #map-utils-dropdown-button > i:before {
   margin-left: 50%;
   transform: translate(-50%, 0%);
