@@ -5,6 +5,7 @@ require(['use!Geosite',
          'framework/Legend',
          'framework/widgets/map_utils/main',
          'framework/util/ajax',
+         'esri/config',
          'esri/Map',
          'esri/views/MapView',
          // Scalebar is not yet implemented in Esri JS API v4.2:
@@ -20,6 +21,7 @@ require(['use!Geosite',
              Legend,
              MapUtils,
              ajaxUtil,
+             esriConfig,
              Map,
              MapView,
              // Scalebar is not yet implemented in Esri JS API v4.2:
@@ -105,7 +107,7 @@ require(['use!Geosite',
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
         // 2) When it needs to make an HTTP GET with a URL longer than 2000 chars
-        // esri.config.defaults.io.proxyUrl = "proxy.ashx";
+        esriConfig.request.proxyUrl = "proxy.ashx";
         createMap(view);
     }
 
