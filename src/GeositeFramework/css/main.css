@@ -390,7 +390,8 @@ textarea {
 }
 html {
     font-size: 62.5%;
-    box-sizing: border-box
+    box-sizing: border-box;
+    height: 100%;
 }
 .flex-container {
     display: -ms-flexbox;
@@ -400,7 +401,8 @@ html {
     flex-grow: 1;
     -ms-flex-negative: 1;
     flex-shrink: 1;
-    position: relative
+    position: relative;
+    overflow-y: auto;
 }
 .flex-expand {
     background-color: #000;
@@ -418,11 +420,6 @@ html {
 }
 .app-fullscreen {
     height: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
     overflow: hidden;
 }
 
