@@ -8,6 +8,7 @@ require(['use!Geosite',
          'esri/config',
          'esri/Map',
          'esri/views/MapView',
+         'esri/Basemap',
          // Scalebar is not yet implemented in Esri JS API v4.2:
          // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
          // 'esri/dijit/Scalebar',
@@ -24,6 +25,7 @@ require(['use!Geosite',
              esriConfig,
              Map,
              MapView,
+             Basemap,
              // Scalebar is not yet implemented in Esri JS API v4.2:
              // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
              // ScaleBar,
@@ -34,23 +36,16 @@ require(['use!Geosite',
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
-        // Return an ESRI Layer object for the currently-selected basemap spec
+        // Return an ESRI Basemap object for the currently-selected basemap spec
         var basemap = getSelectedBasemap(model);
-        // Cache temporarily disabled during upgrade to Esri JS API v4.2
-        // 4.2 splits layers into `Basemap.baseLayers` and operational layers,
-        // so we may need to upgrade our caching logic to handle the change.
-        // See https://developers.arcgis.com/javascript/latest/guide/migrating/index.html#mapandlayer
-        /* if (basemap.layer === undefined) {
-            basemap.layer = new TileLayer(basemap.url);
-            esriMap.addLayer(basemap.layer);
+        if (basemap.layer === undefined) {
+            basemap.layer = new Basemap({
+                baseLayers: [new TileLayer(basemap.url)],
+                id: basemap.name,
+                title: basemap.name
+            });
         }
         return basemap.layer;
-        */
-
-        // TODO: Replace this when we've updated the cache to work with Esri JS API v4.2
-        // Add the selected basemap to the Esri map
-        basemap.layer = new TileLayer(basemap.url);
-        esriMap.add(basemap.layer);
     }
 
     function getSelectedBasemap(model) {
@@ -148,12 +143,9 @@ require(['use!Geosite',
             }, 300),
             loadEventFired = false;
         */
-        // TODO: Consider re-enabling initial basemap configuration from `region.json`
-        // Currently, we set the map to use the topographic basemap initially in the style
-        // specified by the Esri JS API v4.2, which seems to be creating a new Basemap object
-        // with a set of baseLayers.
-        // See https://developers.arcgis.com/javascript/latest/api-reference/esri-Basemap.html
-        var esriMap = new Map({ basemap: 'topo' });
+        // This `Map` object's initialized without a basemap; it will be set
+        // from `region.json` in `selectBasemap(view)` below
+        var esriMap = new Map();
         var esriMapView = new MapView({
             map: esriMap,
             container: 'esri-mapview-mount'
@@ -258,22 +250,10 @@ require(['use!Geosite',
     }
 
     function selectBasemap(view) {
-        // Logic for shuffling and showing/hiding the basemaps temporarily disabled
-        // during the upgrade to Esri JS API v4.2. The `show` and `hide` methods are no
-        // longer available, and I think the API now uses `.visible = true` and `.visible = false`
-        // in their place. We may now also need to work with the `esriMap.basemap.baseLayers` object.
-        // See https://developers.arcgis.com/javascript/latest/api-reference/esri-Basemap.html#baseLayers
-        /*
-        // Hide the current basemap layer
-        if (view.currentBasemapLayer !== undefined) {
-            view.currentBasemapLayer.hide();
-        }
-        // Show the new basemap layer (at index 0)
-        view.currentBasemapLayer = view.model.getSelectedBasemapLayer(view.esriMap);
-        view.currentBasemapLayer.show();
-        view.esriMap.reorderLayer(view.currentBasemapLayer, 0);
-        */
-        view.model.getSelectedBasemapLayer(view.esriMap);
+        // Instead of using `.show` and `.hide` methods, the Esri ArcGIS JS API 4.2
+        // uses direct setters. Here we set the basemap from the TileLayer created
+        // and cached in the `.getSelectedBasemapLayer` method
+        view.esriMap.basemap = view.model.getSelectedBasemapLayer(view.esriMap);
     }
 
     function initLegend(view, esriMap) {
