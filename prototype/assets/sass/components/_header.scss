@@ -1,0 +1,124 @@
+header {
+  background-color: $brand-color-1;
+  display: flex;
+  align-items: center;
+
+  .nav-main {
+    display: flex;
+    align-items: center;
+  }
+  .nav-locations {
+
+  }
+}
+
+.nav-main {
+  padding-left: $padding-unit;
+  padding-right: $padding-unit;
+  width: 240px;
+  height: $header-height;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-dropdown {
+  height: $header-height;
+  z-index: 2200;
+  &.dropdown {
+    // position: static;
+    &.open {
+      .dropdown-icon {
+        color: $brand-primary;
+      }
+    }
+    & > button {
+      padding: 1px;
+      background-color: transparent;
+      color: white;
+      border: 0;
+      box-shadow: none !important;
+    }
+  }
+  .icon-menu {
+    color: #fff;
+  }
+  .button.active,
+  .button.hover,
+  .button:active,
+  .button:hover {
+      background-color: transparent;
+  }
+  &.nav-main-dropdown {
+
+  }
+  .dropdown-menu {
+    left: 0 !important;
+    position: absolute;
+    top: $header-height;
+    border-radius: 0;
+    border: 0;
+    margin-top: 0;
+    width: 240px;
+    background-color: $brand-primary;
+    &:after {
+      content: "";
+      top: -7px;
+      right: 0;
+      position: absolute;
+      left: 0;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 7px solid $brand-primary;
+    }
+    & > li > a {
+      color: #fff;
+      &:hover {
+        background-color: #188690;
+      }
+    }
+  }
+}
+
+.nav-locations {
+  height: $header-height;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: flex;
+  .dropdown-menu {
+    width: 220px;
+    left: -2px !important;
+    & > li > a {
+      white-space: normal;
+    }
+  }
+}
+
+.nav-locations-content {
+  flex: 1;
+}
+
+.nav-main-title {
+  font-size: 18px;
+  font-weight: $heading-font-weight;
+  color: #fff;
+  flex: 1;
+  text-align: left;
+}
+
+.dropdown-icon.icon-angle-down {
+  position: relative;
+  left: 5px;
+  top: 1px;
+  font-size: 18px;
+}
+
+.nav-main-button {
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background-color: transparent;
+}

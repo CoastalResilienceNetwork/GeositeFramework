@@ -35,7 +35,7 @@
         },
 
         toggleMapSync: function (forceSyncTo) {
-            // Toggle the value of the sync property, or if forceSyncTo is set, 
+            // Toggle the value of the sync property, or if forceSyncTo is set,
             // to the value provided
             var sync = (forceSyncTo === undefined ? !this.get('syncMaps') : forceSyncTo);
             this.set('syncMaps', sync);
@@ -56,8 +56,8 @@
 (function (N) {
     'use strict';
 
-    var paneSelectors = ["#left-pane", "#right-pane"],
-        paneViews = [null, null],
+    var paneSelectors = ["#left-pane"],
+        paneViews = [null],
         $body = $('body'),
         bodyClasses = {
             split: 'view-split',
@@ -70,6 +70,9 @@
         view.model.on(
             'change:splitScreen change:syncMaps change:mainPaneNumber',
             function () { render(view); });
+        N.app.dispatcher.on('save-share', function() {
+            view.makePermalink();
+        });
     }
 
     function render(view) {

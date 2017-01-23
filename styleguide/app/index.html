@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Coastal Resilience</title>
+    <link href="./cr_files/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link href="//simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css" rel="stylesheet">
+    <link href="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/dist/jquery-ui-slider-pips.css" rel="stylesheet">
+    <style>
+        #map-0 {
+            background-color: #f2f3f5;
+        }
+    </style>
+</head>
+<body class="app-fullscreen view-left">
+    <header>
+        <div class="dropdown header-dropdown nav-main-dropdown">
+            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="header-menu" type="button">
+            <div class="nav-main">
+                <div class="nav-main-title">
+                    Coastal Resilience
+                </div><i class="dropdown-icon icon-menu"></i>
+            </div></button>
+            <ul aria-labelledby="header-menu" class="dropdown-menu">
+                <li>
+                    <a href="http://nature.org/marine/" target="_blank">The Nature Conservancy <i class="icon-link-ext"></i></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="http://www.nature.org/about-us/governance/terms-of-use.xml" target="_blank">Legal Disclosure <i class="icon-link-ext"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="dropdown header-dropdown nav-locations">
+            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="installation-menu" type="button">
+            <div class="nav-locations-content">
+                New York <i class="dropdown-icon icon-angle-down"></i>
+            </div></button>
+            <ul aria-labelledby="installation-menu" class="dropdown-menu">
+                <li>
+                    <a href="http://maps.coastalresilience.org/california" target="_blank">California</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/connecticut" target="_blank">Connecticut</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/global/" target="_blank">Global</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/gulfmex/" target="_blank">Gulf of Mexico</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/gsvg/" target="_blank">Grenada, St. Vincent &amp; the Grenadines</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/mar/" target="_blank">MesoAmerican Reef</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/newjersey" target="_blank">New Jersey</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/seflorida/" target="_blank">Southeast Florida</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/unitedstates/" target="_blank">United States</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/usvi/" target="_blank">U.S. Virgin Islands</a>
+                </li>
+                <li>
+                    <a href="http://maps.coastalresilience.org/pugetsound" target="_blank">Washington</a>
+                </li>
+            </ul>
+        </div>
+    </header><!-- If a view is provided (overwritten via the region repo), a user can
+        change the region setting `launchpad.html = true` to use this content -->
+    <div class="flex-container content" id="left-pane">
+        <nav class="nav-apps plugins">
+            <div id="sidebar-help-area">
+                <a href="http://lr01.internal.azavea.com:81/HUDSON_TNC_NY_Prototype_206/#" id="help-overlay-start">Help</a>
+            </div>
+            <div class="sidebar-plugin launchpad-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]Get started using the application" title="Get started using the application"><span class="button-icon"><img src="./cr_files/icon_sm.png"></span> <span class="button-text i18n" data-i18n="Get Started">Get Started</span></button>
+            </div>
+            <div class="sidebar-plugin regional-planning-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]Configure and control layers to be overlayed on the base map." title="Configure and control layers to be overlayed on the base map."><span class="button-icon"><img src="./cr_files/icon_sm(1).png"></span> <span class="button-text i18n" data-i18n="Regional Planning">Regional Planning</span></button>
+            </div>
+            <div class="sidebar-plugin community_planning-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]Configure and control layers to be overlayed on the base map." title="Configure and control layers to be overlayed on the base map."><span class="button-icon"><img src="./cr_files/icon_sm(2).png"></span> <span class="button-text i18n" data-i18n="Community Planning">Community Planning</span></button>
+            </div>
+            <div class="sidebar-plugin flood_slr-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]" title=""><span class="button-icon"><img src="./cr_files/icon_sm(3).png"></span> <span class="button-text i18n" data-i18n="Flood &amp; Sea Level Rise">Flood &amp; Sea Level Rise</span></button>
+            </div>
+            <div class="sidebar-plugin risk_explorer-0">
+                <button class="nav-apps-button plugin-launcher i18n active app-displayed" data-i18n="[title]" title=""><span class="button-icon"><img src="./cr_files/icon_sm(4).png"></span> <span class="button-text i18n" data-i18n="Risk Explorer">Risk Explorer</span></button>
+            </div>
+            <div class="sidebar-plugin future_habitat-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]" title=""><span class="button-icon"><img src="./cr_files/icon_sm(5).png"></span> <span class="button-text i18n" data-i18n="Future Habitat">Future Habitat</span></button>
+            </div>
+            <div class="sidebar-plugin habitat_explorer-0">
+                <button class="nav-apps-button plugin-launcher i18n" data-i18n="[title]" title=""><span class="button-icon"><img src="./cr_files/icon_sm(6).png"></span> <span class="button-text i18n" data-i18n="Habitat Explorer">Habitat Explorer</span></button>
+            </div>
+        </nav>
+        <div class="sidebar sidebar-width-small content-scrollable" id="plugins/risk_explorer-0">
+            <div class="sidebar-nav">
+                <h2 class="nav-title" data-i18n="Risk Explorer">Risk Explorer</h2>
+                <div class="nav-buttons">
+                    <button class="button-link plugin-minimize i18n" data-i18n="[title]Minimize this plugin" title="Minimize this plugin"><i class="icon-window-minimize"></i></button> <button class="button-link plugin-off i18n" data-i18n="[title]Turn off this plugin" title="Turn off this plugin"><i class="icon-cancel"></i></button>
+                </div>
+            </div>
+            <div class="sidebar-content claro">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Sample</a></li>
+                  <li role="presentation"><a href="#components" aria-controls="components" role="tab" data-toggle="tab">Components</a></li>
+                  <li role="presentation"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Form</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <h2 class="sidebar-content-heading">Make adjustments</h2>
+                        <section>
+                            <p>We use a sea level model ABC123 to figure out how much the sea will rise. Make adjustments below to see changes reflected on the map.</p>
+                        </section>
+                        <section>
+                            <h3>Select a location</h3>
+                            <p>Here is what this means</p>
+                            <div>
+                                <label class="form-component radio-pill" for="g-option">
+                                    <input type="radio" checked id="g-option" name="hurricane">
+                                    <div class="check"></div>
+                                    <span class="form-text">No Storm</span>
+                                </label>
+                                <label class="form-component radio-pill" for="h-option">
+                                    <input type="radio" id="h-option" name="hurricane">
+                                    <div class="check"></div>
+                                    <span class="form-text">Hurricane Wilma</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Another place</h3>
+                            <p>We use a sea level model ABC123 to figure out how much the sea will rise. Make adjustments below to see changes reflected on the map.</p>
+                            <div class="slider-container">
+                                <div class="slider"></div>
+                            </div>
+                            <button class="button button-secondary">Secondary Button</button>
+                        </section>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="components">
+                        <h2 class="sidebar-content-heading">Components</h2>
+                        <section>
+                            <h3>Dropdown</h3>
+                            <div class="dropdown">
+                              <button class="button dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Philadelphia, PA
+                                <i class="icon-down-open-mini caret"></i>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li class="active"><a href="#">Something else here</a></li>
+                                <li><a href="#">Separated link</a></li>
+                              </ul>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Tooltip</h3>
+                            <button class="button" data-toggle="tooltip" title="This is a tooltip example">Tool tip top</button>
+                            <button class="button" data-toggle="tooltip" data-placement="bottom" title="This is a tooltip example">Tool tip bottom</button>
+                            <i data-toggle="tooltip" data-placement="top" title="This is a tooltip example" class="icon icon-help-circled"></i>
+                        </section>
+                        <section>
+                            <h3>Buttons</h3>
+                            <button class="button button-default">Default Button</button>
+                            <button class="button button-primary">Primary Button</button>
+                            <button class="button button-secondary">Secondary Button</button>
+                            <button class="button button-danger">Danger Button</button>
+                            <button class="button button-warning">Warning Button</button>
+                            <button class="button button-link">Link Button</button>
+                            <h3>Disabled Buttons</h3>
+                            <button disabled class="button button-default">Default Button</button>
+                            <button disabled class="button button-primary">Primary Button</button>
+                            <button disabled class="button button-secondary">Secondary Button</button>
+                            <button disabled class="button button-danger">Danger Button</button>
+                            <button disabled class="button button-warning">Warning Button</button>
+                            <button disabled class="button button-link">Link Button</button>
+                        </section>
+                        <section>
+                            <h3>Slider</h3>
+                            <div class="slider-container">
+                                <div class="slider"></div>
+                            </div>
+                        </section>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="form">
+                        <h2 class="sidebar-content-heading">Form</h2>
+                        <section>
+                            <h3>Radios</h3>
+                            <div>
+                                <label class="form-component" for="a-option">
+                                    <input checked type="radio" id="a-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">Pizza</span>
+                                </label>
+                                <label class="form-component" for="b-option">
+                                    <input type="radio" id="b-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">BBQ</span>
+                                </label>
+                                <label class="form-component" for="x-option">
+                                    <input type="radio" disabled id="x-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">Apple</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Pills</h3>
+                            <div>
+                                <label class="form-component radio-pill" for="e-option">
+                                    <input checked type="radio" id="e-option" name="pill">
+                                    <div class="check"></div>
+                                    <span class="form-text">Pill 1</span>
+                                </label>
+                                <label class="form-component radio-pill" for="f-option">
+                                    <input type="radio" id="f-option" name="pill">
+                                    <div class="check"></div>
+                                    <span class="form-text">Pill 2</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Checkboxes</h3>
+                            <div>
+                                <label class="form-component" for="c-option">
+                                    <input checked type="checkbox" id="c-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">Guacamole</span>
+                                </label>
+                                <label class="form-component disabled" for="z-option">
+                                    <input type="checkbox" id="z-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">Salsa</span>
+                                </label>
+                                <label class="form-component" for="y-option">
+                                    <input disabled type="checkbox" id="y-option" name="food">
+                                    <div class="check"></div>
+                                    <span class="form-text">Cheese</span>
+                                </label>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-expand">
+            <div class="flex-container">
+                <div class="map" id="map-0">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/src/js/jquery-ui-slider-pips.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(function() {
+            $(".slider")
+                .slider({
+                    min: 0,
+                    max: 5,
+                    range: false,
+                    values: [1]
+                })
+                .slider("pips", {
+                    rest: "label"
+                })
+                .slider("float");
+            $('[data-toggle="tooltip"]').tooltip({container:'body'});
+        });
+    </script>
+</body>
+</html>

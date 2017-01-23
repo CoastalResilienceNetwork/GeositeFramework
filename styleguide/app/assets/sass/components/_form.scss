@@ -1,0 +1,104 @@
+.form-component input[type="radio"], .form-component input[type="checkbox"] {
+  display: none;
+  & ~ .check {
+    border-radius: 3px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(180deg,#fff,hsla(0,0%,100%,0)) 0 no-repeat,50% no-repeat #f5f8fa;
+    border: 1px solid;
+    border-color: rgba(16,22,26,.1) rgba(16,22,26,.1) rgba(16,22,26,.17);
+    box-shadow: 0 1px 1px rgba(16,22,26,.1);
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin-right: 2px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+}
+  &:checked {
+    display: none;
+    & ~ .check {
+      background: #4b9caf;
+      background: linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0)) 0 no-repeat,50% no-repeat #4b9caf;
+      border-color: rgba(16,22,26,.1) rgba(16,22,26,.1) rgba(16,22,26,.3);
+      &:after {
+        display: inline-block;
+        width: 6px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 1px;
+      }
+    }
+  }
+}
+
+.form-component input[type="radio"] {
+  & ~ .check {
+    border-radius: 100%;
+  }
+  &:checked {
+
+    & ~ .check {
+
+      &:after {
+        border-width: 0;
+        background-color: #fff;
+        border-radius: 100%;
+        width: 6px;
+        height: 6px;
+        left: 4px;
+        top: 4px;
+        box-shadow: 0 1px 1px rgba(16, 22, 26, 0.2);
+      }
+    }
+  }
+}
+
+.form-component {
+  position: relative;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.radio-pill {
+  margin-right: 7px;
+  input[type="radio"] {
+    &:checked {
+      & ~ .form-text {
+        padding: 4px 12px;
+        border-radius: 1000px;
+        color: #fff;
+        background-color: #4b9caf;
+        border-color: #438c9d;
+        // box-shadow: 0 1px 1px rgba(16,22,26,.2);
+        &:after {
+          border-width: 0;
+          background-color: #fff;
+          border-radius: 100%;
+          width: 6px;
+          height: 6px;
+          left: 4px;
+          top: 4px;
+          box-shadow: 0 1px 1px rgba(16, 22, 26, 0.2);
+        }
+      }
+    }
+  }
+  .check {
+    display: none !important;
+  }
+}
+
+input[disabled] {
+  & ~ .form-text, & ~ .check {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

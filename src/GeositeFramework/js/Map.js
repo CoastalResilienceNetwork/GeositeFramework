@@ -3,19 +3,25 @@
 
 require(['use!Geosite',
          'framework/Legend',
+         'framework/widgets/map_utils/main',
          'framework/util/ajax',
          'esri/map',
+         'esri/dijit/Scalebar',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
-         'esri/SpatialReference'
+         'esri/SpatialReference',
+         'esri/dijit/Search'
         ],
     function(N,
              Legend,
+             MapUtils,
              ajaxUtil,
              Map,
+             ScaleBar,
              ArcGISTiledMapServiceLayer,
              Extent,
-             SpatialReference) {
+             SpatialReference,
+             Search) {
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
@@ -91,7 +97,6 @@ require(['use!Geosite',
                 loadExtent(view);
             }
         });
-        N.app.dispatcher.on('launchpad:free-explore', function (e) { freeExplore(e, view); });
 
         // Configure the esri proxy, for (at least) 2 cases:
         // 1) For WMS "GetCapabilities" requests
@@ -102,7 +107,9 @@ require(['use!Geosite',
     }
 
     function createMap(view) {
-        var esriMap = Map(view.$el.attr('id')),
+        var esriMap = Map(view.$el.attr('id'), {
+                sliderPosition: 'top-right'
+            }),
             resizeMap = _.debounce(function () {
                 // When the element containing the map resizes, the
                 // map needs to be notified.  Do a slight delay so that
@@ -119,6 +126,12 @@ require(['use!Geosite',
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
+        initSearch(view);
+
+        var scalebar = new ScaleBar({
+            map: view.esriMap,
+            scalebarUnit: 'dual'
+        });
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {
@@ -139,6 +152,7 @@ require(['use!Geosite',
             N.app.syncedMapManager.addMapView(view);
 
             initLegend(view, esriMap);
+            initMapUtils(view, esriMap);
 
             // Cache the parent of the infowindow rather than re-select it every time.
             // Occasionally, the infoWindow dom node as accessed from the underlaying esri.map
@@ -163,6 +177,17 @@ require(['use!Geosite',
             });
         }
 
+        function initSearch(view) {
+            // Add search control
+            var search = new Search({
+                map: view.esriMap,
+                showInfoWindowOnSelect: false,
+                enableHighlight: false,
+            }, "search");
+
+            search.startup();
+        }
+
         // On IE8, the map.onload event will often not fire at all, which breaks
         // the app entirely.  The map does, in fact, load and its loaded property is
         // set.  I put in this hack to check up on the event a little while after
@@ -172,12 +197,6 @@ require(['use!Geosite',
                 if (esriMap.loaded) esriMap.onLoad(esriMap);
             }
         }, 2500);
-    }
-
-    function freeExplore(e, view) {
-        if (N.app.models.screen.get('mainPaneNumber') === view.model.get('mapNumber')) {
-            view.esriMap.setExtent(e.extent);
-        }
     }
 
     function loadExtent(view) {
@@ -303,6 +322,16 @@ require(['use!Geosite',
         dojo.connect(esriMap, 'onLayerSuspend', redraw);
         // Allow plugins to trigger a legend redraw by calling map.resize()
         dojo.connect(esriMap, 'resize', redraw);
+    }
+
+    function initMapUtils(view, esriMap) {
+        var el = $('#map-utils-control').get(0);
+        return new MapUtils({
+            el: el,
+            map: esriMap,
+            app: N.app,
+            regionData: N.app.data.region
+        });
     }
 
     N.views = N.views || {};

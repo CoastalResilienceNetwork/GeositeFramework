@@ -13,10 +13,10 @@ define(["dojo/_base/declare",
        ],
     function (declare,
                 xhr,
-                on, 
-                dIdentifyTask, 
-                IdentifyParameters, 
-                dDeferredList, 
+                on,
+                dIdentifyTask,
+                IdentifyParameters,
+                dDeferredList,
                 Deferred
                 ) {
 
@@ -29,7 +29,8 @@ define(["dojo/_base/declare",
             toolbarType: "sidebar",
             showServiceLayersInLegend: true,
             allowIdentifyWhenActive: false,
-            showInfographicOnStart: false,
+            hasHelp: false,
+
             // Allow the framework to put a custom print button for this plugin
             hasCustomPrint: false,
 
@@ -45,9 +46,9 @@ define(["dojo/_base/declare",
             // will be called.
             closeOthersWhenActive: true,
 
-            resizable: true,
-            width: 300,
-            height: 400,
+            size: 'small', // small, large, or custom
+            width: 300, // only used if 'custom' is specified for size
+            icon: "globe",
 
             initialize: function() {},
             activate: function () {},
@@ -83,7 +84,7 @@ define(["dojo/_base/declare",
 
         function getMyAgsServices(map) {
             // The ESRI map's "layers" are actually service objects (layer managers).
-            // Filter out ones that aren't mine. 
+            // Filter out ones that aren't mine.
             // (Because "map" is a WrappedMap, layers that aren't mine will be undefined.)
             return _.filter(_.map(map.layerIds, map.getLayer), function (layer) {
                 return (layer &&
@@ -92,7 +93,7 @@ define(["dojo/_base/declare",
                         (layer.declaredClass === "esri.layers.ArcGISTiledMapServiceLayer") ||
                         (layer.declaredClass === "esri.layers.FeatureLayer")
                     ));
-            }); 
+            });
         }
 
         function getMyWmsServices(map) {
@@ -116,17 +117,17 @@ define(["dojo/_base/declare",
 
             function collectFeatures() {
                 // Ask each active service to identify its features. Collect responses in "deferred" lists.
- 
+
                 _.each(agsServices, function (service) {
                     if (service.visible && service.visibleLayers.length > 0 && service.visibleLayers[0] !== -1) {
-                        // This service has visible layers. Identify twice -- 
+                        // This service has visible layers. Identify twice --
                         // once with loose tolerance to find "thin" features (point/line/polyline), and
                         // once with tight tolerance to find "area" features (polygon/raster).
-                        
+
                         // When zoomed in close (high zoom level) we want a wider tolerance area,
-                        // than when zoomed far out (low zoom level), with at least a 2px min. 
-                        // Using a fixed number would return "too many" features when zoomed out 
-                        // then there were small features clustered near each other.  This is a 
+                        // than when zoomed far out (low zoom level), with at least a 2px min.
+                        // Using a fixed number would return "too many" features when zoomed out
+                        // then there were small features clustered near each other.  This is a
                         // little magic and was developed by trial and error.
                         var zoomTolerance = map.getZoom() * (3 / 8) + 2;
                         ags_identify(zoomTolerance, agsThinFeatureDeferreds);
@@ -160,13 +161,13 @@ define(["dojo/_base/declare",
 
 
                         // TODO - These numbers are nonsensical
-                        // 
+                        //
                         // after continuous fiddling, I found no
                         // configuration that was better for getting
                         // vector (point) features from a treemap
                         // layer I brought in.
                         //
-                        // Raster AND vector (polygon) layers that 
+                        // Raster AND vector (polygon) layers that
                         // the client provided work at all sizes.
                         //
                         // buffer appears not to be very important
@@ -231,9 +232,9 @@ define(["dojo/_base/declare",
                             // information at the time the callback is added to the
                             // deferred.
                             //
-                            deferred._layerName = _.find(service.layerInfos, 
+                            deferred._layerName = _.find(service.layerInfos,
                                                          function (layerInfo) {
-                                                             return layerInfo.name == layer; 
+                                                             return layerInfo.name == layer;
                                                          }).title;
                         });
                     }

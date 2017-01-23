@@ -14,10 +14,12 @@ namespace GeositeFramework.Models
     /// </summary>
     public class Geosite
     {
-        // For backwards compatibility with V1 region.json files, 
+        // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
-        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#26648E");
-        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#26648E");
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
+        private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
+        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
+        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#27343e");
 
         public class Link
         {
@@ -28,13 +30,6 @@ namespace GeositeFramework.Models
             /// Should this link generate a popup window with the url
             /// </summary>
             public bool Popup;
-
-            /// <summary>
-            /// Id of this launchpad this item should launch.
-            /// If this value is not null, that means this item
-            /// is a launchpad trigger.
-            /// </summary>
-            public string LaunchpadId;
 
             /// <summary>
             /// Resulting <a> tag will receive this id
@@ -53,6 +48,7 @@ namespace GeositeFramework.Models
         public Link TitleMain { get; private set; }
         public Link TitleDetail { get; private set; }
         public List<Link> HeaderLinks { get; private set; }
+        public List<Link> RegionLinks { get; private set; }
         public string RegionDataJson { get; private set; }
         public List<string> PluginFolderNames { get; private set; }
         public string PluginModuleIdentifiers { get; private set; }
@@ -61,6 +57,9 @@ namespace GeositeFramework.Models
         public string ConfigurationForUseJs { get; private set; }
         public String PrimaryColor { get; private set; }
         public String SecondaryColor { get; private set; }
+        public String TertiaryColor { get; private set; }
+        public String ActiveAppColor { get; private set; }
+        public String PrintHeaderLogo { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -102,7 +101,7 @@ namespace GeositeFramework.Models
         }
 
         /// <summary>
-        /// Make a Geosite object given the specified configuration info. 
+        /// Make a Geosite object given the specified configuration info.
         /// Note this is public only for testing purposes.
         /// </summary>
         /// <param name="jsonDataRegion">JSON configuration data (e.g. from a "region.json" configuration file)</param>
@@ -116,7 +115,7 @@ namespace GeositeFramework.Models
             // Get plugin folder names, in the specified order
             if (jsonObj["pluginOrder"] != null)
             {
-                List<string> pluginOrder = jsonObj["pluginOrder"].Select(t => (string)t).ToList();
+                var pluginOrder = GetPluginOrder(jsonObj);
                 Func<string, int> byPluginOrder = x => pluginOrder.IndexOf(PluginLoader.StripPluginModule(x));
                 PluginLoader.SortPluginNames(existingPluginFolderNames, byPluginOrder);
                 PluginLoader.SortPluginNames(pluginModuleNames, byPluginOrder);
@@ -136,13 +135,22 @@ namespace GeositeFramework.Models
             {
                 PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
                 SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
+                ActiveAppColor = ExtractColorFromJson(colorConfig, "active");
+                TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
             }
             else
             {
                 PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
                 SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
+                ActiveAppColor = ColorTranslator.ToHtml(_defaultActiveApp);
+                TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
+
             }
 
+            var printConfig = jsonObj["print"];
+            if (printConfig != null) {
+                PrintHeaderLogo = (string)printConfig["headerLogoPath"];
+            }
 
             if (jsonObj["googleAnalyticsPropertyId"] != null)
             {
@@ -152,6 +160,12 @@ namespace GeositeFramework.Models
             if (jsonObj["headerLinks"] != null)
             {
                 HeaderLinks = jsonObj["headerLinks"]
+                    .Select(ExtractLinkFromJson).ToList();
+            }
+
+            if (jsonObj["regionLinks"] != null)
+            {
+                RegionLinks = jsonObj["regionLinks"]
                     .Select(ExtractLinkFromJson).ToList();
             }
 
@@ -173,6 +187,21 @@ namespace GeositeFramework.Models
         }
 
         /// <summary>
+        /// Get the configured plugin order, ensuring that the launchpad plugin is always first
+        /// </summary>
+        /// <param name="jsonObj"></param>
+        /// <returns>Ordered list of plugins</returns>
+        private List<string> GetPluginOrder(JObject jsonObj)
+        {
+            const string launchpadName = "launchpad";
+            var pluginOrder = jsonObj["pluginOrder"].Select(pluginName => (string)pluginName).ToList();
+            pluginOrder.Remove(launchpadName);
+            pluginOrder.Insert(0, launchpadName); 
+
+            return pluginOrder;
+        }
+
+        /// <summary>
         /// Validate the color syntax and return an HTML acceptable version
         /// of the specified color
         /// </summary>
@@ -183,8 +212,8 @@ namespace GeositeFramework.Models
         {
             try
             {
-                // Run the values through the type system to provide meaningful 
-                // errors to syntax problems, since these values are essentially 
+                // Run the values through the type system to provide meaningful
+                // errors to syntax problems, since these values are essentially
                 // getting tossed into the web page as code
                 var color =  ColorTranslator.FromHtml(json[key].ToString());
                 return ColorTranslator.ToHtml(color);
@@ -206,7 +235,6 @@ namespace GeositeFramework.Models
                 Text = (string)json["text"],
                 Url = (string)json["url"],
                 Popup = json["popup"] != null && bool.Parse(json["popup"].ToString()),
-                LaunchpadId = json["launchpadId"] != null ? (string)json["launchpadId"] : null,
                 ElementId = json["elementId"] != null ? (string)json["elementId"] : null,
                 Items = ExtractLinkListFromJson(json)
             };

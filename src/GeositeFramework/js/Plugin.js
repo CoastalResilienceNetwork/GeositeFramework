@@ -8,8 +8,6 @@ require(['use!Geosite',
          'esri/layers/ArcGISDynamicMapServiceLayer',
          'framework/Logger',
          'dojo/dom-style',
-         'framework/widgets/ConstrainedMoveable',
-         'dojox/layout/ResizeHandle',
          'dijit/form/CheckBox',
          'dijit/form/Button'
         ],
@@ -18,8 +16,6 @@ require(['use!Geosite',
              ArcGISDynamicMapServiceLayer,
              Logger,
              domStyle,
-             ConstrainedMoveable,
-             ResizeHandle,
              CheckBox,
              Button) {
     "use strict";
@@ -36,7 +32,36 @@ require(['use!Geosite',
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
                 $legendContainer = model.get('$legendContainer'),
-                logger = new Logger(pluginName);
+                logger = new Logger(pluginName),
+                resizers = {
+                    setWidth: function(val) {
+                        var d = $.Deferred(),
+                            setter = function(w) {
+                                return function() {
+                                    $uiContainer.css({ width: "" });
+                                    $uiContainer.removeClass(function() {
+                                        var classes = this.className.split(" ");
+                                        return _.filter(classes, function(c) {
+                                            return /sidebar-width-.*/.test(c);
+                                        }).join(" ");
+                                    });
+                                    $uiContainer.addClass("sidebar-width-" + w);
+                                };
+                            };
+                        _.delay(function() {
+                            if (typeof val === "string") {
+                                d.then(setter(val));
+                            } else if (typeof val === "number") {
+                                d.then(function() {
+                                    $uiContainer.css({ width: val });
+                                });
+                            }
+                            d.resolve();
+                            esriMap.resize(true);
+                        }, 100);
+                        return d.promise();
+                    }
+                };
 
             try {
                 pluginObject.initialize({
@@ -50,10 +75,15 @@ require(['use!Geosite',
                         _unsafeMap: esriMap,
                         downloadAsCsv: requestCsvDownload,
                         downloadAsPlainText: requestTextDownload,
-                        dispatcher: N.app.dispatcher
+                        dispatcher: N.app.dispatcher,
+                        suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
+                        resize: resizers
+                    },
+                    plugin: {
+                        turnOff: _.bind(model.turnOff, model)
                     },
                     map: N.createMapWrapper(esriMap, mapModel, pluginObject),
-                    container: ($uiContainer ? $uiContainer.find('.plugin-container-inner')[0] : undefined),
+                    container: ($uiContainer ? $uiContainer.find('.sidebar-content')[0] : undefined),
                     legendContainer: ($legendContainer ? $legendContainer[0] : undefined),
                     printButton: ($uiContainer ? $uiContainer.find('.plugin-print') : undefined)
                 });
@@ -106,6 +136,12 @@ require(['use!Geosite',
             return model.get('pluginSrcFolder');
         }
 
+        // Allow the plugin to ask the framework to store and provide a
+        // flag for showing help when activating, across sessions
+        function suppressHelpOnStartup(model, doSuppress) {
+            model.setSuppressHelpOnStartup(doSuppress);
+        }
+
         /*
         Check that the plugin implements the minimal viable interface.
         Plugin code can just assume the plugin is valid if it has been loaded
@@ -128,9 +164,12 @@ require(['use!Geosite',
         N.models = N.models || {};
         N.models.Plugin = Backbone.Model.extend({
             defaults: {
+                startHelpKey: "-suppress-help-start",
                 pluginObject: null,
                 active: false,
-                displayHelp: false
+                visible: false,
+                pluginLayers: {},
+                pluginLayersVisible: true
             },
             initialize: function () { initialize(this); },
 
@@ -148,18 +187,39 @@ require(['use!Geosite',
                 return _.last(name(this).split('/'));
             },
 
+            // Instruct the plugin to display its in-app help
+            showHelp: function () { },
+
             onSelectedChanged: function () {
                 if (this.selected) {
-                    var active = this.get('active')
-                    if (!active && this.getShowHelpOnStartup()) {
-                        this.set('displayHelp', true);
-                    }
-
                     this.set('active', true);
-                    this.get('pluginObject').activate();
+                    this.set('visible', true);
+                    this.get('pluginObject').activate(!this.getSuppressHelpOnStartup());
                 } else {
                     this.get('pluginObject').deactivate();
+                    this.set('visible', false);
                     this.trigger('plugin:deselected');
+                    // Remove the `.nav-apps-narow` class if the
+                    // de-selecting the plugin has left no plugins
+                    // visible.
+                    if (this.collection.all({visible:false})) {
+                        $('.nav-apps').removeClass('nav-apps-narrow');
+                    }
+                }
+            },
+
+            toggleLayers: function () {
+                var currentPlugin = this.get('pluginObject'),
+                    pluginLayersVisible = this.get('pluginLayersVisible');
+
+                if (pluginLayersVisible) {
+                    this.set('pluginLayers', currentPlugin.map.getMyLayers());
+                    currentPlugin.map.removeAllLayers();
+                    this.set('pluginLayersVisible', false);
+                } else {
+                    currentPlugin.map.addLayers(this.get('pluginLayers'));
+                    this.set('pluginLayers', {});
+                    this.set('pluginLayersVisible', true);
                 }
             },
 
@@ -188,6 +248,7 @@ require(['use!Geosite',
                     // new status via the hibernate function
                     doDeactivate = function() {
                         self.set('active', false);
+                        self.set('visible', false);
                         self.get('pluginObject').hibernate();
                     }
 
@@ -232,19 +293,17 @@ require(['use!Geosite',
                 }
             },
 
-            getShowHelpOnStartup: function() {
+            getSuppressHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + " showinfographic";
-                if (typeof localStorage[showValueKey] !== 'undefined') {
-                    return localStorage[showValueKey] === 'true';
-                } else {
-					return pluginObject.showInfographicOnStart;
-				}
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+
+                return !!localStorage[showValueKey];
             },
 
-            setShowHelpOnStartup: function(val) {
+            setSuppressHelpOnStartup: function(val) {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + " showinfographic";
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+
                 localStorage.setItem(showValueKey, val);
             }
         });
@@ -306,11 +365,20 @@ require(['use!Geosite',
             // into. Make your UI separate from the button that
             // launches it.
             events: {
-                'click a.plugin-launcher': 'handleLaunch',
-                'click a.plugin-clear': 'handleClear'
+                'click .plugin-launcher': 'handleLaunch',
+                'click .plugin-clear': 'handleClear'
             },
 
-            initialize: function () { initialize(this); },
+            initialize: function () {
+                var self = this;
+                initialize(this);
+
+                N.app.dispatcher.on('launchpad:activate-plugin', function(pluginName) {
+                    if (pluginName === self.model.getId()) {
+                        self.handleLaunch();
+                    }
+                });
+            },
 
             /*
                 Click handlers exposed so that they can be overridden by
@@ -337,35 +405,45 @@ require(['use!Geosite',
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
-            createHelpScreen(view);
-            setWidth(view, pluginObject.width);
-            setHeight(view, pluginObject.height);
-            view.listenTo(model, 'change:displayHelp', onDisplayHelpChanged);
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
         function render(view) {
             var model = view.model,
                 pluginTemplate = N.app.templates['template-sidebar-plugin'],
+                pluginObject = model.get('pluginObject'),
                 // The plugin icon looks active if the plugin is selected or
-                // active (aka, running but not focused)
+                // active (aka, running but not focused).  It is displayed if
+                // it is currently displaying its UI.
                 html = pluginTemplate(_.extend(model.toJSON(), {
                     selected: model.selected || model.get('active'),
+                    displayed: model.selected,
                     fullName: model.get('pluginObject').fullName
-                }));
+                })),
+                sidebarNavSizedForTablet = !!$('.nav-apps-narrow'),
+                pluginContentHidden = model.collection.all({visible:false});
 
             view.$el.empty().append(html);
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
-            if (view.model.selected === true) {
-                view.$el.addClass("selected-plugin");
-                if (view.$uiContainer) {
+            if (view.$uiContainer) {
+                if (view.model.selected === true) {
                     view.$uiContainer.show();
-                }
-            } else {
-                view.$el.removeClass("selected-plugin");
-                if (view.$uiContainer) {
+                    if (sidebarNavSizedForTablet) {
+                        setSideBarPluginTextVisibility(false);
+                    }
+                } else {
                     view.$uiContainer.hide();
+                    if (pluginContentHidden) {
+                        setSideBarPluginTextVisibility(true);
+                    }
+                }
+
+                // Call the `resize` method on the Esri map, passing it
+                // true for its `immediate` arg so that it will resize
+                // immediately.
+                if (pluginObject.map) {
+                    pluginObject.map.resize(true);
                 }
             }
             if (view.$legendContainer) {
@@ -384,6 +462,17 @@ require(['use!Geosite',
             return view;
         }
 
+        function setSideBarPluginTextVisibility(visible) {
+            if (visible === undefined) {
+                throw new Error(
+                    '`setSideBarPluginTextVisibility` method requires a boolean arg');
+            } else if (visible) {
+                $('.nav-apps').removeClass('nav-apps-narrow');
+            } else if (!visible) {
+                $('.nav-apps').addClass('nav-apps-narrow');
+            }
+        }
+
         function getContainerId(view) {
             return view.model.name() + '-' + view.paneNumber;
         }
@@ -395,22 +484,20 @@ require(['use!Geosite',
                 bindings = {
                     title: pluginObject.toolbarName,
                     id: containerId,
-                    isHelpButtonVisible: isHelpButtonVisible(view),
-                    hasCustomPrint: pluginObject.hasCustomPrint
+                    hasHelp: pluginObject.hasHelp,
+                    hasCustomPrint: pluginObject.hasCustomPrint,
+                    sizeClassName: getPluginSizeClassName(pluginObject.size),
+                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
                 },
-                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings))),
-                calculatePosition = function ($el) {
-                    return {
-                        top: 64,
-                        left: 70
-                    };
-                };
+                $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
             view.$uiContainer = $uiContainer;
 
             $uiContainer
-                // Position the dialog
-                .css(calculatePosition(view.$el))
+                // Minimize the plugin
+                .find('.plugin-minimize').on('click', function() {
+                    model.deselect();
+                }).end()
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
@@ -420,7 +507,7 @@ require(['use!Geosite',
                     model.deselect();
                 }).end()
                 .find('.plugin-help').on('click', function () {
-                    model.set('displayHelp', true);
+                    pluginObject.showHelp();
                 }).end()
                 .find('.plugin-print').on('click', function() {
                     var pluginDeferred = $.Deferred(),
@@ -437,6 +524,9 @@ require(['use!Geosite',
                     // has no conflicts with other plugins.
                     $('.' + printCssClass).remove();
                     $printSandbox.empty();
+
+                    // add base plugin css
+                    addCss('css/print.css', 'base-plugin-print-css');
 
                     // Add the plugin css
                     addCss(pluginCssPath, printCssClass);
@@ -468,14 +558,7 @@ require(['use!Geosite',
                 .hide();
 
             // Attach to top pane element
-            view.$el.parents('.content').find('.map-outer > .map').append($uiContainer);
-
-            setResizable(view, pluginObject.resizable);
-
-            new ConstrainedMoveable($uiContainer[0], {
-                handle: $uiContainer.find('.plugin-container-header')[0],
-                within: true
-            });
+            view.$el.parents().find('.content .nav-apps').after($uiContainer);
 
             // Tell the model about $uiContainer so it can pass it to the plugin object
             model.set('$uiContainer', $uiContainer);
@@ -545,103 +628,26 @@ require(['use!Geosite',
             }).appendTo('head');
         }
 
-        function onContainerResize(view, resizeHandle, event) {
-            var dx = event.x - resizeHandle.startPoint.x,
-                dy = event.y - resizeHandle.startPoint.y;
-            view.model.get("pluginObject").resize(dx, dy);
+        function getPluginSizeClassName(size) {
+            return 'sidebar-width-' + size;
         }
 
-        function createHelpScreen(view) {
-            var model = view.model,
-                pluginObject = model.get('pluginObject'),
-                pluginContainer = view.$uiContainer.find('.plugin-container');
-
-            if (pluginObject.infoGraphic) {
-                view.helpScreen = new N.views.InfoGraphicView({
-                    model: model
-                });
-                pluginContainer.append(view.helpScreen.el);
-                view.helpScreen.$el.hide();
-            }
-        }
-
-        function isHelpButtonVisible(view) {
-            var model = view.model,
-                pluginObject = model.get('pluginObject');
-            return typeof pluginObject.infoGraphic !== 'undefined';
-        }
-
-        function onDisplayHelpChanged() {
-            var view = this,
-                model = view.model,
-                pluginObject = model.get('pluginObject'),
-                $uiContainer = view.$uiContainer,
-                $mainPanel = $uiContainer.find('.plugin-container-inner'),
-                showInfoGraphic = !!model.get('displayHelp');
-
-            if (!view.helpScreen) {
-                return;
-            }
-
-            if (showInfoGraphic) {
-                view.helpScreen.$el.show();
-                $mainPanel.hide();
+        function getCustomPluginWidth(size, width) {
+            if (size === 'custom') {
+                return 'width: ' + width + 'px;';
             } else {
-                view.helpScreen.$el.hide();
-                $mainPanel.show();
+                return '';
             }
-
-            // Disable resizing when infographic is active
-            setResizable(this, pluginObject.resizable && !showInfoGraphic);
-
-            // Expand plugin panel to fit content when infographic is active
-            if (showInfoGraphic) {
-                setWidth(this, null);
-                setHeight(this, null);
-            } else {
-                setWidth(this, pluginObject.width);
-                setHeight(this, pluginObject.height);
-            }
-
-            var primaryContainerVisible = !showInfoGraphic;
-            pluginObject.onContainerVisibilityChanged(primaryContainerVisible);
         }
 
-        // Draw resize handle if resizable, destroy it if not resizable.
-        function setResizable(view, resizable) {
-            var handle = view.resizeHandle,
-                handleExists = typeof handle !== 'undefined' && handle != null,
-                containerId = getContainerId(view);
-            if (resizable && !handleExists) {
-                // Make the container resizable and moveable
-                handle = new ResizeHandle({
-                    targetId: containerId,
-                    activeResize: true,
-                    animateSizing: false
-                });
-                handle.placeAt(containerId)
-                handle.on('resize', function (e) { onContainerResize(view, this, e); });
-                view.resizeHandle = handle;
-            } else if (!resizable && handleExists) {
-                handle.destroy();
-                view.resizeHandle = null;
-            }
-            view.$uiContainer.toggleClass('resizable', resizable);
-        }
-
-        function setWidth(view, width) {
-            var $uiContainer = view.$uiContainer[0];
-            domStyle.set($uiContainer, 'width', width == null ? 'auto' : width + 'px');
-        }
-
-        function setHeight(view, height) {
-            var $uiContainer = view.$uiContainer[0];
-            domStyle.set($uiContainer, 'height', height == null ? 'auto' : height + 'px');
+        function hasHelp(view) {
+            var pluginObj = view.model.get('pluginObject');
+            return pluginObj.hasHelp;
         }
 
         N.views = N.views || {};
         N.views.SidebarPlugin = N.views.BasePlugin.extend({
-            tagName: 'li',
+            tagName: 'div',
             className: 'sidebar-plugin',
             $uiContainer: null,
             $legendContainer: null,
@@ -653,69 +659,6 @@ require(['use!Geosite',
 
             render: function() {
                 return render(this);
-            }
-        });
-    }());
-
-    (function infoGraphicView() {
-        N.views = N.views || {};
-        N.views.InfoGraphicView = Backbone.View.extend({
-            tagName: 'div',
-            className: 'claro plugin-infographic',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                var pluginModel = this.model,
-                    pluginObject = pluginModel.get('pluginObject');
-
-	       if (pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".jpg" || pluginObject.infoGraphic.slice(pluginObject.infoGraphic.length - 4, pluginObject.infoGraphic.length) == ".png") {
-		var snippit = $('<img class="graphic" />').attr('src', pluginObject.infoGraphic);
-	       } else {
-		var snippit = $(pluginObject.infoGraphic);
-	       }
-
-                this.$el.append(snippit);
-
-                var checkboxnode = $('<span>').get(0);
-                this.$el.append(checkboxnode);
-
-                var nscheckBox = new CheckBox({
-                    name: "checkBox",
-                    checked: !pluginModel.getShowHelpOnStartup(),
-                    onChange: function(show) {
-                        pluginModel.setShowHelpOnStartup(!show);
-                    }
-                }, checkboxnode);
-
-                var lbl = $("<label>Don't show this on start</label>")
-                    .addClass('i18n')
-                    .attr({
-                        'for': nscheckBox.id,
-                        'data-i18n': "Don't show this on start"
-                    });
-
-                this.$el.append(lbl);
-
-                var buttonnode = $('<span>').get(0);
-                this.$el.append(buttonnode);
-
-                $('<a>')
-                    .text('Next')
-                    .attr('data-i18n', 'Next')
-                    .attr('style', 'background:#F5EB75;color:#000')
-                    .addClass('button radius i18n')
-                    .click(function() {
-                        pluginModel.set('displayHelp', false);
-                        pluginObject.resize();
-                    })
-                    .appendTo(buttonnode);
-
-                if ($.i18n) {
-                    $(this.$el).localize();
-                }
             }
         });
     }());

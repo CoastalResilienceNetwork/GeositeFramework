@@ -1,3 +1,5 @@
+node_modules
+
 # Visual Studio left-overs
 *.suo        # 'user' settings like 'which file is open in Visual Studio'
 *.v11.suo
@@ -26,8 +28,9 @@ packages
 *.mdf
 *.ldf
 
-# Windows left-overs
+# OS left-overs
 Thumbs.db    # Having images in the source tree generates those files in Explorer
+.DS_Store
 
 # App folders
 src/GeositeFramework/logs
