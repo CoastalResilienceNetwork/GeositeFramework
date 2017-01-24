@@ -25,7 +25,7 @@ define(['esri/request'],
                     callbackParamName: 'callback',
                     timeout: 20000
                 }).then(function(data) {
-                    cache[url] = data;
+                    cache[url] = data.data;
                 }, function(error) {
                     cache[url] = error;
                 }).then(function() {
