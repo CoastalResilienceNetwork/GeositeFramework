@@ -958,6 +958,10 @@ header .nav-main {
     color: #fff;
     text-align: left
 }
+.nav-region-subtitle {
+    color: #fff;
+    padding-top: 3px;
+}
 .dropdown-icon.icon-angle-down {
     position: relative;
     left: 5px;
