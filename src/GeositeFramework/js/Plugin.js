@@ -502,10 +502,6 @@ require(['use!Geosite',
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
                 }).end()
-                // Unselect the plugin, but keep active
-                .find('.plugin-close').on('click', function () {
-                    model.deselect();
-                }).end()
                 .find('.plugin-help').on('click', function () {
                     pluginObject.showHelp();
                 }).end()
