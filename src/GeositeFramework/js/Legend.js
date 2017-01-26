@@ -56,7 +56,7 @@ define(['use!Geosite',
                     within: true
                 });
 
-            this.$el.find('.legend-close').click(function() {
+            this.$el.find('.legend-close').bind('click touchstart', function() {
                 self.toggleMinimize();
             });
         },
