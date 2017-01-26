@@ -933,21 +933,6 @@ header .nav-main {
 .header-dropdown .dropdown-menu>li>a:hover {
     background-color: #188690
 }
-.nav-locations {
-    height: 60px;
-    padding-left: 8px;
-    padding-right: 8px;
-    display: -ms-flexbox;
-    display: flex
-}
-.nav-locations .dropdown-menu {
-    width: 220px;
-    left: -2px!important
-}
-.nav-locations .dropdown-menu>li>a {
-    white-space: normal
-}
-.nav-locations-content,
 .nav-main-title {
     -ms-flex: 1;
     flex: 1
