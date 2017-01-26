@@ -34,15 +34,15 @@
             }
             else if (link.Items != null && link.Items.Any())
             {
-                var id = "link-dd-" + link.GetHashCode();
-                <a href="@link.Url" data-dropdown="#@id" class="dropdown-init">@link.Text
-                    <span class="dropdown-arrow">▼</span>
-                </a>
-                <div id="@id" class="dropdown dropdown-tip">
+                <li class="dropdown-submenu">
+                    <a id="region-header-menu" href="#">
+                        Other Regions
+                        <i class="dropdown-icon icon-angle-right"></i>
+                    </a>
                     <ul class="dropdown-menu">
-                        @RenderLinks(link.Items, false)
+                        @RenderRegionLinks(link.Items)
                     </ul>
-                </div>
+                </li>
             }
             else
             {
@@ -58,7 +58,7 @@
     if (links != null) {
         foreach (var link in links) {
             <li id="@link.ElementId">
-                <a target="_blank" href="@link.Url">@link.Text</a>
+                <a target="_blank" href="@link.Url">@link.Text <i class="icon-link-ext"></i></a>
             </li>
         }
     }
@@ -165,6 +165,9 @@
         body .tlypageguide_shadow:after {
             background-color: @Model.SecondaryColor;
             opacity: 0.2;
+        }
+        .dropdown-submenu > a:not(:hover) {
+            background-color: @Model.SecondaryColor;
         }
     </style>
 

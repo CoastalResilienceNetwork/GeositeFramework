@@ -161,12 +161,11 @@ namespace GeositeFramework.Models
             {
                 HeaderLinks = jsonObj["headerLinks"]
                     .Select(ExtractLinkFromJson).ToList();
-            }
 
-            if (jsonObj["regionLinks"] != null)
-            {
-                RegionLinks = jsonObj["regionLinks"]
-                    .Select(ExtractLinkFromJson).ToList();
+                if (jsonObj["regionLinks"] != null)
+                {
+                    HeaderLinks.Add(AddRegionLinksToHeaderLinks(jsonObj["regionLinks"]));
+                }
             }
 
             // JSON to be inserted in generated JavaScript code
@@ -245,6 +244,15 @@ namespace GeositeFramework.Models
             return json["items"] != null
                 ? json["items"].Select(ExtractLinkFromJson).ToList()
                 : new List<Link>();
+        }
+
+        private static Link AddRegionLinksToHeaderLinks(JToken regionLinksJson)
+        {
+            return new Link
+            {
+                Text = "Other Regions",
+                Items = regionLinksJson.Select(ExtractLinkFromJson).ToList()
+            };
         }
 
         // Example plugin.json file:
