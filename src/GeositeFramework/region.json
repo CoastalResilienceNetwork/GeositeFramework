@@ -11,22 +11,20 @@
     },
     "headerLinks": [
         { "text": "Azavea", "url": "http://www.azavea.com/" },
-        { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" },
-        { "text": "Other Regions", "items":
-            [
-                { "text": "California", "url": "http://maps.coastalresilience.org/california/" },
-                { "text": "Connecticut", "url": "http://maps.coastalresilience.org/connecticut" },
-                { "text": "Global", "url": "http://maps.coastalresilience.org/global/" },
-                { "text": "Grenada, St. Vincent & the Grenadines", "url": "http://maps.coastalresilience.org/gsvg/" },
-                { "text": "MesoAmerican Reef", "url": "http://maps.coastalresilience.org/mar/" },
-                { "text": "New York", "url": "http://maps.coastalresilience.org/newyork" },
-                { "text": "New Jersey", "url": "http://maps.coastalresilience.org/newjersey" },
-                { "text": "Southeast Florida", "url": "http://maps.coastalresilience.org/seflorida/" },
-                { "text": "United States", "url": "http://maps.coastalresilience.org/unitedstates/" },
-                { "text": "U.S. Virgin Islands", "url": "http://maps.coastalresilience.org/usvi/" },
-                { "text": "Washington", "url": "http://maps.coastalresilience.org/pugetsound" }
-            ]
-        }
+        { "text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system" }
+    ],
+    "regionLinks": [
+        { "text": "California", "url": "http://maps.coastalresilience.org/california/" },
+        { "text": "Connecticut", "url": "http://maps.coastalresilience.org/connecticut" },
+        { "text": "Global", "url": "http://maps.coastalresilience.org/global/" },
+        { "text": "Grenada, St. Vincent & the Grenadines", "url": "http://maps.coastalresilience.org/gsvg/" },
+        { "text": "MesoAmerican Reef", "url": "http://maps.coastalresilience.org/mar/" },
+        { "text": "New York", "url": "http://maps.coastalresilience.org/newyork" },
+        { "text": "New Jersey", "url": "http://maps.coastalresilience.org/newjersey" },
+        { "text": "Southeast Florida", "url": "http://maps.coastalresilience.org/seflorida/" },
+        { "text": "United States", "url": "http://maps.coastalresilience.org/unitedstates/" },
+        { "text": "U.S. Virgin Islands", "url": "http://maps.coastalresilience.org/usvi/" },
+        { "text": "Washington", "url": "http://maps.coastalresilience.org/pugetsound" }
     ],
     "initialExtent": [
         -98.61328125,
