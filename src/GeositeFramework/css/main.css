@@ -1984,7 +1984,11 @@ body.x-body {
   margin-left: 50%;
   transform: translate(-50%, 0%);
 }
-#esri-mapview-mount {
+#esri-mapview-mount, #esri-sceneview-mount {
     height: 100%;
     width: 100%;
+}
+
+#esri-sceneview-mount {
+    display: none;
 }

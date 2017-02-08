@@ -8,6 +8,7 @@ require(['use!Geosite',
          'esri/config',
          'esri/Map',
          'esri/views/MapView',
+         'esri/views/SceneView',
          'esri/Basemap',
          // Scalebar is not yet implemented in Esri JS API v4.2:
          // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
@@ -25,6 +26,7 @@ require(['use!Geosite',
              esriConfig,
              Map,
              MapView,
+             SceneView,
              Basemap,
              // Scalebar is not yet implemented in Esri JS API v4.2:
              // https://developers.arcgis.com/javascript/latest/guide/functionality-matrix/index.html#widgets
@@ -69,7 +71,8 @@ require(['use!Geosite',
             mapNumber: null,
             basemaps: null,
             selectedBasemapIndex: 0,   // Both the map view and the basemap selector listen for changes to this attribute
-            sync: false
+            sync: false,
+            is2dMode: true
         },
 
         initialize: function () {
@@ -101,6 +104,18 @@ require(['use!Geosite',
         }
     });
 
+    function setActiveEsriMapView(esriMap, activateView, deactivateView) {
+        // I tried removeing and re-adding the map propery on each view so
+        // that renders are not computed when they are not active, which works,
+        // but the views throw errors after it's re-attached, despite no apparent
+        // loss in functionality.  It doesn't appear to render when the mount
+        // container is display:none;
+        activateView.extent = deactivateView.extent;
+        activateView.zoom = deactivateView.zoom;
+        $(activateView.container).show();
+        $(deactivateView.container).hide();
+    }
+
     function initialize(view) {
         view.model.on('change:selectedBasemapIndex', function () { selectBasemap(view); });
         view.model.on('change:extent', function () {
@@ -108,6 +123,13 @@ require(['use!Geosite',
 
             if (!_.isEqual(currentExtent, view.esriMapView.extent)) {
                 loadExtent(view);
+            }
+        });
+        view.model.on('change:is2dMode', function() {
+            if (view.model.get('is2dMode')) {
+                setActiveEsriMapView(view.esriMap, view.esriMapView, view.esriSceneView);
+            } else {
+                setActiveEsriMapView(view.esriMap, view.esriSceneView, view.esriMapView);
             }
         });
 
@@ -150,9 +172,14 @@ require(['use!Geosite',
             map: esriMap,
             container: 'esri-mapview-mount'
         });
+        var esriSceneView = new SceneView({
+            map: esriMap,
+            container: 'esri-sceneview-mount'
+        });
 
         view.esriMap = esriMap;
         view.esriMapView = esriMapView;
+        view.esriSceneView = esriSceneView;
         loadExtent(view);
         selectBasemap(view);
         initSearch(view);
