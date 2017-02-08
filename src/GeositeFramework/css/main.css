@@ -2045,7 +2045,11 @@ body.x-body {
   color: #fff;
 }
 
-#esri-mapview-mount {
+#esri-mapview-mount, #esri-sceneview-mount {
     height: 100%;
     width: 100%;
+}
+
+#esri-sceneview-mount {
+    display: none;
 }
