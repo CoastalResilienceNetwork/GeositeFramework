@@ -128,7 +128,7 @@ require([
                         }
                     }
 
-                    // If this plugin is the launchpad, but that feature is not configured in the 
+                    // If this plugin is the launchpad, but that feature is not configured in the
                     // region config, don't create it.
                     var srcFolder = plugin.get('pluginSrcFolder'),
                         pluginRoot = srcFolder.substring(srcFolder.lastIndexOf('/') + 1);
@@ -164,7 +164,7 @@ require([
         //     - We need to create plugin objects before rendering (so we can render their toolbar names).
         //     - We need to pass a map object to the plugin constructors, but that isn't available until after rendering.
 
-        function initPlugins(model, esriMap) {
+        function initPlugins(model, esriMap, esriMapView, esriSceneView) {
             var mapModel = model.get('mapModel'),
                 regionData = model.get('regionData'),
                 savedState = model.get('stateOfPlugins'),
@@ -174,7 +174,8 @@ require([
                 if (checkName(pluginModel, 'launchpad')) {
                     launchpadPlugin = pluginModel;
                 }
-                pluginModel.initPluginObject(regionData, mapModel, esriMap);
+                pluginModel.initPluginObject(regionData, mapModel, esriMap,
+                                             esriMapView, esriSceneView);
             });
 
             // Wait a second before activating a permalink (scenario) to ensure the map
@@ -252,7 +253,9 @@ require([
                 return initialize(this);
             },
 
-            initPlugins: function(esriMap) { return initPlugins(this, esriMap); },
+            initPlugins: function(esriMap, esriMapView, esriSceneView) {
+                return initPlugins(this, esriMap, esriMapView, esriSceneView);
+            },
 
             setPluginState: function(pluginModel, savedState) {
                 var stateWasSet = false;
@@ -356,13 +359,14 @@ require([
                 el: view.$('.map'),
                 paneNumber: view.model.get('paneNumber')
             });
-            var esriMap = view.mapView.esriMap;
-            var esriMapView = view.mapView.esriMapView;
+            var esriMap = view.mapView.esriMap,
+                esriMapView = view.mapView.esriMapView,
+                esriSceneView = view.mapView.esriSceneView;
 
             // Wait for the map to load
             esriMapView.then(function () {
                 // Initialize plugins now that all map properties are available (e.g. extent)
-                view.model.initPlugins(esriMap);
+                view.model.initPlugins(esriMap, esriMapView, esriSceneView);
 
                 // Framework level support for identify is off by default and must
                 // be enabled in the region config

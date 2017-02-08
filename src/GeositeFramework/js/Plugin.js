@@ -27,7 +27,8 @@ require(['use!Geosite',
             _.extend(model, selectable);
         }
 
-        function initPluginObject(model, regionData, mapModel, esriMap) {
+        function initPluginObject(model, regionData, mapModel, esriMap,
+                                  esriMapView, esriSceneView) {
             var pluginObject = model.get('pluginObject'),
                 pluginName = model.get('pluginSrcFolder'),
                 $uiContainer = model.get('$uiContainer'),
@@ -81,7 +82,9 @@ require(['use!Geosite',
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher,
                         suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
-                        resize: resizers
+                        resize: resizers,
+                        activate3d: _.partial(activate3d, mapModel, esriSceneView),
+                        activate2d: _.partial(activate2d, mapModel, esriMapView)
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)
@@ -114,6 +117,16 @@ require(['use!Geosite',
                 .find('input[name=content]').val(JSON.stringify(content)).end()
                 .find('input[name=filename]').val(filename).end()
                 .submit();
+        }
+
+        function activate3d(mapModel, sceneView) {
+            mapModel.set('is2dMode', false);
+            return sceneView;
+        }
+
+        function activate2d(mapModel, mapView) {
+            mapModel.set('is2dMode', true);
+            return mapView;
         }
 
         function setState(model, pluginState) {
@@ -179,7 +192,9 @@ require(['use!Geosite',
 
             isCompliant: function () { return checkPluginCompliance(this); },
 
-            initPluginObject: function (regionData, mapModel, esriMap) { initPluginObject(this, regionData, mapModel, esriMap); },
+            initPluginObject: function (regionData, mapModel, esriMap, esriMapView, esriSceneView) {
+                initPluginObject(this, regionData, mapModel, esriMap, esriMapView, esriSceneView);
+            },
 
             setState: function (pluginState) { setState(this, pluginState); },
 
