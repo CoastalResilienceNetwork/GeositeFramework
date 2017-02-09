@@ -391,7 +391,9 @@ require(['use!Geosite',
 
             // The base class is a no-op for now, but the function must be declared.
             // Implementing classes will override this event
-            handleClear: function handleClear() {}
+            handleClear: function handleClear() {
+                this.model.turnOff();
+            }
 
         });
     }());

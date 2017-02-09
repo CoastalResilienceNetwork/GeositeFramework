@@ -352,7 +352,10 @@
         <button class="nav-apps-button plugin-launcher i18n <%= selected ? 'active' : ''%> <%= displayed ? 'app-displayed' : ''%>" data-i18n="[title]<%=fullName%>">
             <span class="button-icon"><img src="<%- pluginSrcFolder %>/icon_sm.png"></span>
             <span class="button-text i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></span>
-        </button
+        </button>
+        <button class="button-link button-sidebar-plugin-close plugin-clear">
+            <i class="icon-cancel"></i>
+        </button>
     </script>
 
     <script type="text/template" id="template-topbar-plugin">
