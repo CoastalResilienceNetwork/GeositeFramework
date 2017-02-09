@@ -847,6 +847,49 @@ nav {
         border-top: 5px solid transparent
     }
 }
+.button-link.button-sidebar-plugin-close {
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  color: #fff !important;
+  opacity: 1;
+  background-color: #565656;
+  border-radius: 100%;
+  bottom: 0;
+  height: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+}
+.plugin-launcher.active:hover + .button-link.button-sidebar-plugin-close {
+  display: inline-block;
+}
+.plugin-launcher.app-displayed.active:hover + .button-link.button-sidebar-plugin-close {
+  display: none;
+}
+@media (max-width: 991px) {
+  .plugin-launcher.active:hover + .button-link.button-sidebar-plugin-close {
+    display: none;
+  }
+}
+.button-link.button-sidebar-plugin-close:hover {
+  display: inline-block;
+  background-color: #222;
+}
+.button-sidebar-plugin-close .icon-cancel {
+  font-size: 10px;
+  position: relative;
+  left: -2px;
+  top: -1px;
+  color: #fff;
+}
+.sidebar-plugin {
+  position: relative;
+}
+.nav-apps-button {
+  padding: 10px 10px 8px;
+}
 #map-0.map {
     position: absolute;
     top: 0;
