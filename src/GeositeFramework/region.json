@@ -73,7 +73,10 @@
         { "name": "Physical"           , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer" },
         { "name": "Shaded Relief"      , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer" },
         { "name": "Streets"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" },
-        { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" }
+        { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" },
+        { "name": "Night"              , "url": "streets-night-vector" },
+        { "name": "Streets Relief"     , "url": "streets-relief-vector" },
+        { "name": "Streets Navigation" , "url": "streets-navigation-vector" }
     ],
     "pluginFolders": [
         "plugins",
