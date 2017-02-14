@@ -41,11 +41,16 @@ require(['use!Geosite',
         // Return an ESRI Basemap object for the currently-selected basemap spec
         var basemap = getSelectedBasemap(model);
         if (basemap.layer === undefined) {
-            basemap.layer = new Basemap({
-                baseLayers: [new TileLayer(basemap.url)],
-                id: basemap.name,
-                title: basemap.name
-            });
+            if (basemap.url.substring(0,4) === 'http') {
+                basemap.layer = new Basemap({
+                    baseLayers: [new TileLayer(basemap.url)],
+                    id: basemap.name,
+                    title: basemap.name
+                });
+            } else {
+                // It's valid to also specify a short code for a well known basemap
+                basemap.layer = basemap.url;
+            }
         }
         return basemap.layer;
     }
