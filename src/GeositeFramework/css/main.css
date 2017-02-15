@@ -862,10 +862,10 @@ nav {
   transform: translateY(-50%);
   width: 22px;
 }
-.plugin-launcher.active:hover + .button-link.button-sidebar-plugin-close {
+.plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
-.plugin-launcher.app-displayed.active:hover + .button-link.button-sidebar-plugin-close {
+.plugin-launcher.app-displayed.active + .button-link.button-sidebar-plugin-close {
   display: none;
 }
 @media (max-width: 991px) {
