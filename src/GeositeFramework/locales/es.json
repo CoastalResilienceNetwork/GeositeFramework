@@ -72,6 +72,10 @@
     "Length:": "Longitud:",
     "Double-click to end a line segment. Single-click the first node to end a polygon.": "De doble-clic para terminar la línea. De un clic en el primer nodo para terminar el polígono",
     "Click the map to start measuring": "Haga clic en el mapa para comenzar a medir",
-    "More": "Mas",
-    "Less": "Menos"
+    "More": "Más",
+    "Less": "Menos",
+    "View": "Ver",
+    "more": "más",
+    "View less": "Ver menos",
+    "Find address or place": "Encontrar dirección o lugar"
 }

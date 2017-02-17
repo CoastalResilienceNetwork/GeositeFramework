@@ -73,5 +73,9 @@
     "Double-click to end a line segment. Single-click the first node to end a polygon.": "Double-click to end a line segment. Single-click the first node to end a polygon.",
     "Click the map to start measuring": "Click the map to start measuring",
     "More": "More",
-    "Less": "Less"
+    "Less": "Less",
+    "View": "View",
+    "more": "more",
+    "View less": "View less",
+    "Find address or place": "Find address or place"
 }
