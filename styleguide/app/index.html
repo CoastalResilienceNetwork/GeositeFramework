@@ -19,62 +19,71 @@
 <body class="app-fullscreen view-left">
     <header>
         <div class="dropdown header-dropdown nav-main-dropdown">
-            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="header-menu" type="button">
-            <div class="nav-main">
-                <div class="nav-main-title">
-                    Coastal Resilience
-                </div><i class="dropdown-icon icon-menu"></i>
-            </div></button>
-            <ul aria-labelledby="header-menu" class="dropdown-menu">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="dropdown-icon-container">
+                        <i class="dropdown-icon icon-menu"></i>
+                    </div>
+                    <div class="nav-main-title">
+                        Geosite Framework Sample
+                    </div>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
                 <li>
-                    <a href="http://nature.org/marine/" target="_blank">The Nature Conservancy <i class="icon-link-ext"></i></a>
+                    <a target="_blank" href="http://www.azavea.com/">Azavea <i class="icon-link-ext"></i></a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="http://www.nature.org/about-us/governance/terms-of-use.xml" target="_blank">Legal Disclosure <i class="icon-link-ext"></i></a>
+                    <a target="_blank" href="http://en.wikipedia.org/wiki/Geographic_information_system">GIS <i class="icon-link-ext"></i></a>
+                </li>
+                <li class="divider"></li>
+                <li></li>
+                <li class="dropdown-submenu">
+                    <a id="region-header-menu" href="#">
+                        Other Regions
+                        <i class="dropdown-icon icon-angle-right"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/california/">California <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/connecticut">Connecticut <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/global/">Global <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/gsvg/">Grenada, St. Vincent &amp; the Grenadines <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/mar/">MesoAmerican Reef <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/newyork">New York <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/newjersey">New Jersey <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/seflorida/">Southeast Florida <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/unitedstates/">United States <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/usvi/">U.S. Virgin Islands <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/pugetsound">Washington <i class="icon-link-ext"></i></a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
-        <div class="dropdown header-dropdown nav-locations">
-            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="installation-menu" type="button">
-            <div class="nav-locations-content">
-                New York <i class="dropdown-icon icon-angle-down"></i>
-            </div></button>
-            <ul aria-labelledby="installation-menu" class="dropdown-menu">
-                <li>
-                    <a href="http://maps.coastalresilience.org/california" target="_blank">California</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/connecticut" target="_blank">Connecticut</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/global/" target="_blank">Global</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/gulfmex/" target="_blank">Gulf of Mexico</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/gsvg/" target="_blank">Grenada, St. Vincent &amp; the Grenadines</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/mar/" target="_blank">MesoAmerican Reef</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/newjersey" target="_blank">New Jersey</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/seflorida/" target="_blank">Southeast Florida</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/unitedstates/" target="_blank">United States</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/usvi/" target="_blank">U.S. Virgin Islands</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/pugetsound" target="_blank">Washington</a>
-                </li>
-            </ul>
+        <div class="nav-region-subtitle">
+            Sample Region
         </div>
     </header><!-- If a view is provided (overwritten via the region repo), a user can
         change the region setting `launchpad.html = true` to use this content -->
