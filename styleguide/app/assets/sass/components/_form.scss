@@ -19,8 +19,8 @@
   &:checked {
     display: none;
     & ~ .check {
-      background: #4b9caf;
-      background: linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0)) 0 no-repeat,50% no-repeat #4b9caf;
+      background: #0096D6;
+      background: linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0)) 0 no-repeat,50% no-repeat #0096D6;
       border-color: rgba(16,22,26,.1) rgba(16,22,26,.1) rgba(16,22,26,.3);
       &:after {
         display: inline-block;
@@ -75,7 +75,7 @@
         padding: 4px 12px;
         border-radius: 1000px;
         color: #fff;
-        background-color: #4b9caf;
+        background-color: #0096D6;
         border-color: #438c9d;
         // box-shadow: 0 1px 1px rgba(16,22,26,.2);
         &:after {
