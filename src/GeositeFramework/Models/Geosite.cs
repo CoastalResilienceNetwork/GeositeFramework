@@ -195,7 +195,7 @@ namespace GeositeFramework.Models
             const string launchpadName = "launchpad";
             var pluginOrder = jsonObj["pluginOrder"].Select(pluginName => (string)pluginName).ToList();
             pluginOrder.Remove(launchpadName);
-            pluginOrder.Insert(0, launchpadName); 
+            pluginOrder.Insert(0, launchpadName);
 
             return pluginOrder;
         }
