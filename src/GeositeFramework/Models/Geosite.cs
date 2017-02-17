@@ -16,10 +16,10 @@ namespace GeositeFramework.Models
     {
         // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
-        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#5394B6");
         private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
-        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
-        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#27343e");
+        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#333");
+        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#0096D6");
 
         public class Link
         {
