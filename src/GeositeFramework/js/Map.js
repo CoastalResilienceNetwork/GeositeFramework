@@ -185,7 +185,15 @@ require(['use!Geosite',
                 enableHighlight: false,
             }, "search");
 
-            search.startup();
+            // The translation lookup isn't ready when this is initialized.
+            // A slight delay is needed.
+            window.setTimeout(function() {
+                // Required to set the placeholder text.
+                var sources = search.get("sources");
+                sources[0].placeholder = i18next.t("Find address or place");
+                search.set("sources", sources);
+                search.startup();
+            }, 200);
         }
 
         // On IE8, the map.onload event will often not fire at all, which breaks

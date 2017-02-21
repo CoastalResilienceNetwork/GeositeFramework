@@ -284,10 +284,16 @@
             <% }) %>
             <% if (legend.length > 5) { %>
                 <div class="item expand">
-                    <a href="#" class="expand-legend">View <% print(legend.length - 5) %> more</a>
+                    <a href="#" class="expand-legend">
+                        <span class="i18n" data-i18n="View">View</span>
+                        <span> <% print(legend.length - 5) %> </span>
+                        <span class="i18n" data-i18n="more">more</span>
+                    </a>
                 </div>
                 <div class="item extra collapse">
-                    <a href="#" class="expand-legend">View less</a>
+                    <a href="#" class="expand-legend">
+                        <span class="i18n" data-i18n="View less">View less</span>
+                    </a>
                 </div>
             <% } %>
         </div>

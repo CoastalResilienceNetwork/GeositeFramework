@@ -122,6 +122,10 @@ define(['use!Geosite',
                     } else {
                         $container.append(tmpl(legend));
                     }
+
+                    if ($.i18n) {
+                        $container.localize();
+                    }
                 }
             });
 
