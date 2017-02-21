@@ -133,18 +133,14 @@ namespace GeositeFramework.Models
             var colorConfig = jsonObj["colors"];
             if (colorConfig != null)
             {
-                PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
-                SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
-                ActiveAppColor = ExtractColorFromJson(colorConfig, "active");
-                TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
-            }
-            else
-            {
-                PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
-                SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
-                ActiveAppColor = ColorTranslator.ToHtml(_defaultActiveApp);
-                TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
-
+                PrimaryColor = colorConfig.SelectToken("primary") != null ?
+                    ExtractColorFromJson(colorConfig, "primary") : ColorTranslator.ToHtml(_defaultPrimary);
+                SecondaryColor = colorConfig.SelectToken("secondary") != null ?
+                    ExtractColorFromJson(colorConfig, "secondary") : ColorTranslator.ToHtml(_defaultSecondary);
+                ActiveAppColor = colorConfig.SelectToken("active") != null ?
+                    ExtractColorFromJson(colorConfig, "active") : ColorTranslator.ToHtml(_defaultActiveApp);
+                TertiaryColor = colorConfig.SelectToken("tertiary") != null ?
+                    ExtractColorFromJson(colorConfig, "tertiary") : ColorTranslator.ToHtml(_defaultTertiary);
             }
 
             var printConfig = jsonObj["print"];
