@@ -25,6 +25,12 @@ define(["dojo/_base/declare", "framework/PluginBase"],
 
                 // Hide the print button until the identify feature has been used.
                 $(this.printButton).hide();
+
+                // Display a clickable image thumbnail
+                $(this.container)
+                    .append('<p>Click the thumbnail to see a sample modal image popup</p>')
+                    .append('<img src="sample_plugins/identify_point/FutureHabitat_c.jpg"' +
+                            'id="sample-plugin-thumbnail" style="cursor: pointer" width="300" height="195" />');
             },
 
             activate: function(showHelpOnStart) {
@@ -59,6 +65,12 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                             });
                             break;
                     }
+                });
+
+                // Call `renderSampleImageModal` method on clicking thumbnail
+                $(this.container).find('#sample-plugin-thumbnail').on('click', function() {
+                    var modalImageSource = 'sample_plugins/identify_point/FutureHabitat_c.jpg';
+                    self.renderSampleImageModal(modalImageSource);
                 });
             },
 
@@ -103,6 +115,15 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 }).appendTo(self.$helpMsg);
 
                 $(this.container).append(self.$helpMsg);
+            },
+
+            // Use TINY to display a modal image from a path to an image
+            renderSampleImageModal: function(imageSourcePath) {
+                TINY.box.show({
+                    animate: false,
+                    html: '<img src="' + imageSourcePath + '"/>',
+                    fixed: true,
+                });
             }
         });
     }
