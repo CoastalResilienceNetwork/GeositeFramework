@@ -865,13 +865,13 @@ nav {
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
+@media (max-width: 991px) {
+  .nav-apps-narrow .button-sidebar-plugin-close {
+    display: none !important;
+  }
+}
 .plugin-launcher.app-displayed.active + .button-link.button-sidebar-plugin-close {
   display: none;
-}
-@media (max-width: 991px) {
-  .plugin-launcher.active:hover + .button-link.button-sidebar-plugin-close {
-    display: none;
-  }
 }
 .button-link.button-sidebar-plugin-close:hover {
   display: inline-block;
