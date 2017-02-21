@@ -16,10 +16,10 @@ namespace GeositeFramework.Models
     {
         // For backwards compatibility with V1 region.json files,
         // provide defaults for the customized colors
-        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#0f1c27");
+        private readonly Color _defaultPrimary = ColorTranslator.FromHtml("#5394B6");
         private readonly Color _defaultSecondary = ColorTranslator.FromHtml("#3bb3be");
-        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#27343e");
-        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#27343e");
+        private readonly Color _defaultTertiary = ColorTranslator.FromHtml("#333");
+        private readonly Color _defaultActiveApp = ColorTranslator.FromHtml("#0096D6");
 
         public class Link
         {
@@ -133,18 +133,14 @@ namespace GeositeFramework.Models
             var colorConfig = jsonObj["colors"];
             if (colorConfig != null)
             {
-                PrimaryColor = ExtractColorFromJson(colorConfig, "primary");
-                SecondaryColor = ExtractColorFromJson(colorConfig, "secondary");
-                ActiveAppColor = ExtractColorFromJson(colorConfig, "active");
-                TertiaryColor = ExtractColorFromJson(colorConfig, "tertiary");
-            }
-            else
-            {
-                PrimaryColor = ColorTranslator.ToHtml(_defaultPrimary);
-                SecondaryColor = ColorTranslator.ToHtml(_defaultSecondary);
-                ActiveAppColor = ColorTranslator.ToHtml(_defaultActiveApp);
-                TertiaryColor = ColorTranslator.ToHtml(_defaultTertiary);
-
+                PrimaryColor = colorConfig.SelectToken("primary") != null ?
+                    ExtractColorFromJson(colorConfig, "primary") : ColorTranslator.ToHtml(_defaultPrimary);
+                SecondaryColor = colorConfig.SelectToken("secondary") != null ?
+                    ExtractColorFromJson(colorConfig, "secondary") : ColorTranslator.ToHtml(_defaultSecondary);
+                ActiveAppColor = colorConfig.SelectToken("active") != null ?
+                    ExtractColorFromJson(colorConfig, "active") : ColorTranslator.ToHtml(_defaultActiveApp);
+                TertiaryColor = colorConfig.SelectToken("tertiary") != null ?
+                    ExtractColorFromJson(colorConfig, "tertiary") : ColorTranslator.ToHtml(_defaultTertiary);
             }
 
             var printConfig = jsonObj["print"];
@@ -195,7 +191,7 @@ namespace GeositeFramework.Models
             const string launchpadName = "launchpad";
             var pluginOrder = jsonObj["pluginOrder"].Select(pluginName => (string)pluginName).ToList();
             pluginOrder.Remove(launchpadName);
-            pluginOrder.Insert(0, launchpadName); 
+            pluginOrder.Insert(0, launchpadName);
 
             return pluginOrder;
         }

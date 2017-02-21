@@ -441,7 +441,7 @@ html {
 body {
     font-size: 13px;
     line-height: 1.5;
-    color: #73787d;
+    color: #5d6165;
     font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
@@ -787,7 +787,7 @@ nav {
 .nav-apps {
     text-align: left;
     width: 240px;
-    background-color: #27343e;
+    background-color: #333;
     position: relative;
     z-index: 2100;
     padding-bottom: 27px;
@@ -841,7 +841,7 @@ nav {
         margin-right: auto;
         width: 0;
         height: 0;
-        border-right: 7px solid #0f1c27;
+        border-right: 7px solid #5394B6;
         border-left: 5px solid transparent;
         border-bottom: 5px solid transparent;
         border-top: 5px solid transparent
@@ -898,7 +898,7 @@ nav {
     right: 0
 }
 header {
-    background-color: #0f1c27;
+    background-color: #5394B6;
     flex-shrink: 0;
     z-index: 2800;
 }

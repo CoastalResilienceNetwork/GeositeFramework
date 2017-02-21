@@ -154,10 +154,10 @@
         "colors": {
             "type": "object",
             "properties": {
-                "primary": {"type": "string", "required": true},
-                "secondary": {"type": "string", "required": true},
-                "tertiary": {"type": "string", "required": true},
-                "active": {"type": "string", "required": true}
+                "primary": {"type": "string", "required": false},
+                "secondary": {"type": "string", "required": false},
+                "tertiary": {"type": "string", "required": false},
+                "active": {"type": "string", "required": false}
             },
             "required": false,
             "additionalProperties": false
