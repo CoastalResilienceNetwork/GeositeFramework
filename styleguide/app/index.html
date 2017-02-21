@@ -7,9 +7,12 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Coastal Resilience</title>
     <link href="./cr_files/main.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="./assets/css/main.css" />
     <link href="//simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css" rel="stylesheet">
     <link href="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/dist/jquery-ui-slider-pips.css" rel="stylesheet">
+    <link href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/snippet/newComponents.css" />
     <style>
         #map-0 {
             background-color: #f2f3f5;
@@ -208,6 +211,80 @@
                                 <div class="slider"></div>
                             </div>
                         </section>
+                        <section>
+                            <h3>Range slider</h3>
+                            <div>
+                                <div class="slider-container">
+                                    <div id="rsldr"></div>
+                                    <div style="text-align: center; margin-top: 5px;" id="slider-values">Selected values: <span class="blueFont">25</span> - <span class="blueFont">75</span></div>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Accordian</h3>
+                            <div class="accord">
+                                <div id='accord'>
+                                <h3>First Panel</h3>
+                                <div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <p>Ut enim ad minim veniam, quis nostrud...</p>
+                                    <p>Duis aute irure dolor in reprehenderit...</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <p>Ut enim ad minim veniam, quis nostrud...</p>
+                                </div>
+                                <h3>Second Panel</h3>
+                                <div>
+                                    <p>Sed ut perspiciatis unde omnis iste natus...</p>
+                                </div>
+                                <h3>Third Panel</h3>
+                                <div>
+                                    <p>At vero eos et accusamus et iusto odio...</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Chosen select</h3>
+                            <div class="choWrap">
+                                <select data-placeholder="Pick One Number" id="chosenSingle" class="chosen">
+                                    <option></option>
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                    <option value="four">Four</option>
+                                    <option value="five">Five</option>
+                                </select>
+                            </div>
+                            <p>Selected value: <span class="blueFont">none</span></p>
+                        </section>
+                        <section>
+                            <h3>Chosen multiselect</h3>
+                            <div class="choWrap">
+                                <select data-placeholder="Pick Multiple Numbers" id="chosenMultiple" multiple="true" class="chosen">
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                    <option value="four">Four</option>
+                                    <option value="five">Five</option>
+                                </select>
+                            </div>
+                            <p>Array of selected values: <span class="blueFont">[]</span></p>
+                        </section>
+                        <section>
+                            <h3>Toggle Buttons</h3>
+                            <div class="toggle-btn">
+                                <input type="radio" id="ch1" name="ch" value="first"/>
+                                <label for="ch1">First Choice</label>
+                                <input type="radio" id="ch2" name="ch" value="second"/>
+                                <label for="ch2">Second Choice</label>
+                                <input type="radio" id="ch3" name="ch" value="third" checked/>
+                                <label for="ch3">Third Choice</label>
+                                <input type="radio" id="ch4" name="ch" value="fourth"/>
+                                <label for="ch4">Fourth Choice</label>
+                                <input type="radio" id="ch5" name="ch" value="fifth"/>
+                                <label for="ch5">Fifth Choice</label>
+                            </div>
+                            <p>Selected value: <span class="blueFont"></span></p>
+                        </section>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="form">
                         <h2 class="sidebar-content-heading">Form</h2>
@@ -281,6 +358,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/src/js/jquery-ui-slider-pips.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.jquery.js"></script>
     <script>
         $(function() {
             $(".slider")
@@ -294,7 +372,40 @@
                     rest: "label"
                 })
                 .slider("float");
+
+            $('#rsldr').slider({ range:true, min:0, max:100, values:[25,75],
+                // called at end of slide
+                change: function(event, ui) {
+                    //ask server for data
+                },
+                // called at each increment of slide
+                slide: function(event, ui) {
+                    $('#slider-values').find('span').each(function(i,v) {
+                        $(v).html(ui.values[i])
+                    });
+                }
+            });
             $('[data-toggle="tooltip"]').tooltip({container:'body'});
+            $('#accord').accordion({ heightStyle: 'content' });
+            $("#chosenSingle").chosen({
+                allow_single_deselect:true,
+                width: '100%'
+            }).change(function(c) {
+                var v = c.target.value;
+                // check for a deselect
+                if (v.length == 0){
+                    v = "none";
+                }
+                $('#' + c.target.id ).parent().next().find("span").html(v);
+            });
+            $("#chosenMultiple").chosen({ width: '100%' }).change(function(c) {
+                var v = $("#chosenMultiple").val();
+                v = "[" + v.toString() + "]";
+                $('#' + c.target.id ).parent().next().find("span").html(v);
+            });
+            $('.toggle-btn input').click(function(c) {
+                $('#' + c.target.id ).parent().next().find("span").html(c.target.value);
+            });
         });
     </script>
 </body>
