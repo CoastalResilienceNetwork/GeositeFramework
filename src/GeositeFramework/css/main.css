@@ -806,7 +806,7 @@ nav {
     align-items: center;
     cursor: pointer;
     border-bottom: 1px solid rgba(232, 232, 232, 0.2);
-    padding: 10px 10px 8px;
+    padding: 7px 10px 7px;
 }
 .nav-apps-button.active {
     background-color: #3bb3be;
@@ -820,8 +820,8 @@ nav {
     float: left;
 }
 .nav-apps-button > .button-icon img {
-    height: 25px;
-    width: 25px;
+    height: 28px;
+    width: 28px;
 }
 
 @media (max-width: 991px) {
@@ -888,7 +888,7 @@ nav {
   position: relative;
 }
 .nav-apps-button {
-  padding: 10px 10px 8px;
+  padding: 7px 10px 7px;
 }
 #map-0.map {
     position: absolute;
@@ -930,7 +930,7 @@ header .nav-main {
     color: #fff;
 }
 .dropdown-icon-container {
-    padding: 0 15px 0 0;
+    padding: 3px 13px 0 2px;
     border-right: 1px solid hsla(0, 0%, 100%, .2);
     margin-right: 10px;
     line-height: 54px;
