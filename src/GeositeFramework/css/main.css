@@ -1769,10 +1769,10 @@ header .nav-main {
     TINY overlays and popups
 ------------------------------------------- */
 body .tmask {
-    z-index: 2000; /* Keep above the sidebar */
+    z-index: 5001; /* Keep above the sidebar */
 }
 body .tbox {
-    z-index: 2001; /* Keep above the tmask */
+    z-index: 5002; /* Keep above the tmask */
 }
 
 /* ----------------------------------------
