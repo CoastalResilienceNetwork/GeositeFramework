@@ -83,6 +83,8 @@
 .icon-circle-empty:before { content: '\e851'; } /* '' */
 .icon-zoom-in:before { content: '\e852'; } /* '' */
 .icon-circle:before { content: '\e853'; } /* '' */
+.icon-resize-full:before { content: '\e854'; } /* '' */
+.icon-resize-small:before { content: '\e855'; } /* '' */
 .icon-link-ext:before { content: '\f08e'; } /* '' */
 .icon-bookmark-empty:before { content: '\f097'; } /* '' */
 .icon-hdd:before { content: '\f0a0'; } /* '' */
