@@ -7,74 +7,89 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Coastal Resilience</title>
     <link href="./cr_files/main.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="./assets/css/main.css" />
     <link href="//simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css" rel="stylesheet">
     <link href="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/dist/jquery-ui-slider-pips.css" rel="stylesheet">
+    <link href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/snippet/newComponents.css" />
     <style>
         #map-0 {
             background-color: #f2f3f5;
+        }
+        .styleguide-link {
+            color: #fff
         }
     </style>
 </head>
 <body class="app-fullscreen view-left">
     <header>
         <div class="dropdown header-dropdown nav-main-dropdown">
-            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="header-menu" type="button">
-            <div class="nav-main">
-                <div class="nav-main-title">
-                    Coastal Resilience
-                </div><i class="dropdown-icon icon-menu"></i>
-            </div></button>
-            <ul aria-labelledby="header-menu" class="dropdown-menu">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="dropdown-icon-container">
+                        <i class="dropdown-icon icon-menu"></i>
+                    </div>
+                    <div class="nav-main-title">
+                        Geosite Framework Sample
+                    </div>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
                 <li>
-                    <a href="http://nature.org/marine/" target="_blank">The Nature Conservancy <i class="icon-link-ext"></i></a>
+                    <a target="_blank" href="http://www.azavea.com/">Azavea <i class="icon-link-ext"></i></a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="http://www.nature.org/about-us/governance/terms-of-use.xml" target="_blank">Legal Disclosure <i class="icon-link-ext"></i></a>
+                    <a target="_blank" href="http://en.wikipedia.org/wiki/Geographic_information_system">GIS <i class="icon-link-ext"></i></a>
+                </li>
+                <li class="divider"></li>
+                <li></li>
+                <li class="dropdown-submenu">
+                    <a id="region-header-menu" href="#">
+                        Other Regions
+                        <i class="dropdown-icon icon-angle-right"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/california/">California <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/connecticut">Connecticut <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/global/">Global <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/gsvg/">Grenada, St. Vincent &amp; the Grenadines <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/mar/">MesoAmerican Reef <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/newyork">New York <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/newjersey">New Jersey <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/seflorida/">Southeast Florida <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/unitedstates/">United States <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/usvi/">U.S. Virgin Islands <i class="icon-link-ext"></i></a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="http://maps.coastalresilience.org/pugetsound">Washington <i class="icon-link-ext"></i></a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
-        <div class="dropdown header-dropdown nav-locations">
-            <button aria-expanded="true" aria-haspopup="true" class="button dropdown-toggle nav-main-button" data-toggle="dropdown" id="installation-menu" type="button">
-            <div class="nav-locations-content">
-                New York <i class="dropdown-icon icon-angle-down"></i>
-            </div></button>
-            <ul aria-labelledby="installation-menu" class="dropdown-menu">
-                <li>
-                    <a href="http://maps.coastalresilience.org/california" target="_blank">California</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/connecticut" target="_blank">Connecticut</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/global/" target="_blank">Global</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/gulfmex/" target="_blank">Gulf of Mexico</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/gsvg/" target="_blank">Grenada, St. Vincent &amp; the Grenadines</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/mar/" target="_blank">MesoAmerican Reef</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/newjersey" target="_blank">New Jersey</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/seflorida/" target="_blank">Southeast Florida</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/unitedstates/" target="_blank">United States</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/usvi/" target="_blank">U.S. Virgin Islands</a>
-                </li>
-                <li>
-                    <a href="http://maps.coastalresilience.org/pugetsound" target="_blank">Washington</a>
-                </li>
-            </ul>
+        <div class="nav-region-subtitle">
+            <a class="styleguide-link" href="./snippet_index.html">View "code snippet" style guide</a>
         </div>
     </header><!-- If a view is provided (overwritten via the region repo), a user can
         change the region setting `launchpad.html = true` to use this content -->
@@ -196,6 +211,80 @@
                                 <div class="slider"></div>
                             </div>
                         </section>
+                        <section>
+                            <h3>Range slider</h3>
+                            <div>
+                                <div class="slider-container">
+                                    <div id="rsldr"></div>
+                                    <div style="text-align: center; margin-top: 5px;" id="slider-values">Selected values: <span class="blueFont">25</span> - <span class="blueFont">75</span></div>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Accordian</h3>
+                            <div class="accord">
+                                <div id='accord'>
+                                <h3>First Panel</h3>
+                                <div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <p>Ut enim ad minim veniam, quis nostrud...</p>
+                                    <p>Duis aute irure dolor in reprehenderit...</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <p>Ut enim ad minim veniam, quis nostrud...</p>
+                                </div>
+                                <h3>Second Panel</h3>
+                                <div>
+                                    <p>Sed ut perspiciatis unde omnis iste natus...</p>
+                                </div>
+                                <h3>Third Panel</h3>
+                                <div>
+                                    <p>At vero eos et accusamus et iusto odio...</p>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <h3>Chosen select</h3>
+                            <div class="choWrap">
+                                <select data-placeholder="Pick One Number" id="chosenSingle" class="chosen">
+                                    <option></option>
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                    <option value="four">Four</option>
+                                    <option value="five">Five</option>
+                                </select>
+                            </div>
+                            <p>Selected value: <span class="blueFont">none</span></p>
+                        </section>
+                        <section>
+                            <h3>Chosen multiselect</h3>
+                            <div class="choWrap">
+                                <select data-placeholder="Pick Multiple Numbers" id="chosenMultiple" multiple="true" class="chosen">
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                    <option value="four">Four</option>
+                                    <option value="five">Five</option>
+                                </select>
+                            </div>
+                            <p>Array of selected values: <span class="blueFont">[]</span></p>
+                        </section>
+                        <section>
+                            <h3>Toggle Buttons</h3>
+                            <div class="toggle-btn">
+                                <input type="radio" id="ch1" name="ch" value="first"/>
+                                <label for="ch1">First Choice</label>
+                                <input type="radio" id="ch2" name="ch" value="second"/>
+                                <label for="ch2">Second Choice</label>
+                                <input type="radio" id="ch3" name="ch" value="third" checked/>
+                                <label for="ch3">Third Choice</label>
+                                <input type="radio" id="ch4" name="ch" value="fourth"/>
+                                <label for="ch4">Fourth Choice</label>
+                                <input type="radio" id="ch5" name="ch" value="fifth"/>
+                                <label for="ch5">Fifth Choice</label>
+                            </div>
+                            <p>Selected value: <span class="blueFont"></span></p>
+                        </section>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="form">
                         <h2 class="sidebar-content-heading">Form</h2>
@@ -269,6 +358,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="//rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/src/js/jquery-ui-slider-pips.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.jquery.js"></script>
     <script>
         $(function() {
             $(".slider")
@@ -282,7 +372,40 @@
                     rest: "label"
                 })
                 .slider("float");
+
+            $('#rsldr').slider({ range:true, min:0, max:100, values:[25,75],
+                // called at end of slide
+                change: function(event, ui) {
+                    //ask server for data
+                },
+                // called at each increment of slide
+                slide: function(event, ui) {
+                    $('#slider-values').find('span').each(function(i,v) {
+                        $(v).html(ui.values[i])
+                    });
+                }
+            });
             $('[data-toggle="tooltip"]').tooltip({container:'body'});
+            $('#accord').accordion({ heightStyle: 'content' });
+            $("#chosenSingle").chosen({
+                allow_single_deselect:true,
+                width: '100%'
+            }).change(function(c) {
+                var v = c.target.value;
+                // check for a deselect
+                if (v.length == 0){
+                    v = "none";
+                }
+                $('#' + c.target.id ).parent().next().find("span").html(v);
+            });
+            $("#chosenMultiple").chosen({ width: '100%' }).change(function(c) {
+                var v = $("#chosenMultiple").val();
+                v = "[" + v.toString() + "]";
+                $('#' + c.target.id ).parent().next().find("span").html(v);
+            });
+            $('.toggle-btn input').click(function(c) {
+                $('#' + c.target.id ).parent().next().find("span").html(c.target.value);
+            });
         });
     </script>
 </body>

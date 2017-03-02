@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>CR Style Guide</title>
+	<meta name="author" content="Casey Schneebeck">
+	<!--Bring in CR style from the stylesheet-->
+	<link href="http://coastalresiliencenetwork.github.io/GeositeFramework/cr_files/main.css" rel="stylesheet">
+	<link href="http://coastalresiliencenetwork.github.io/GeositeFramework/assets/css/main.css" rel="stylesheet">
+	<link href="http://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css" rel="stylesheet">
+	<link href="http://rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/dist/jquery-ui-slider-pips.css" rel="stylesheet">
+	<link href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
+	<link href="assets/snippet/style.css" rel="stylesheet">
+	<link href="assets/snippet/newComponents.css" rel="stylesheet">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="http://rawgit.com/simeydotme/jQuery-ui-Slider-Pips/master/src/js/jquery-ui-slider-pips.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.jquery.js"></script>
+	<script type="text/javascript" src="assets/snippet/initialize.js"></script>
+</head>
+<body class="accord">
+	<div class="sidebar-content override">
+		<h1>Coastal Resilience Style Guide</h1>
+        <h4><a href="http://coastalresiliencenetwork.github.io/GeositeFramework/">View "in-context" style guide</a></h4>
+        <!--Layout-->
+		<section>
+			<h2>Layout Example</h2>
+			<section style='width:300px;'>
+				<p>Text in a paragraph tag explaining the awesomeness of your app. Maybe this is a short introduction to what the app can and can't do.</p>
+			</section>
+			<section style='width:300px;'>
+				<h3>Next Section</h3>
+				<p>Start making choices</p>
+				<div>
+					<label class="form-component radio-pill" for="g-option">
+						<input type="radio" id="g-option" name="choices">
+						<div class="check"></div>
+						<span class="form-text">This</span>
+					</label>
+					<label class="form-component radio-pill" for="h-option">
+						<input type="radio" id="h-option" name="choices">
+						<div class="check"></div>
+						<span class="form-text">That</span>
+					</label>
+					<label class="form-component radio-pill" for="i-option">
+						<input type="radio" id="i-option" name="choices" checked>
+						<div class="check"></div>
+						<span class="form-text">The Other One</span>
+					</label>
+				</div>
+			</section>
+			<section style='width:300px;'>
+				<h3>Play With Data Section</h3>
+				<p>Should I keep going?</p>
+				<div class="toggle-btn" style="width:100px;">
+					<input type="radio" id="yn1" name="yesno" value="yes" checked/>
+					<label for="yn1">Yes</label>
+
+					<input type="radio" id="yn2" name="yesno" value="no"/>
+					<label for="yn2">No</label>
+				</div>
+				<p>Cool. Then play with this slider</p>
+				<div class="slider-container range-slider" style="width:250px;">
+					<div id="rslider" class="slider"></div>
+					<div style="text-align:center; margin-top:10px;">Selected values: <span class="blueFont">25</span> - <span class="blueFont">75</span></div>
+				</div>
+			</section>
+		<!--Layout Get HTML-->
+			<section>
+				<h3>Get the HTML</h3>
+				<p style='width:300px;'>See the markup for this sample by hitting the button below</p>
+				<button class="button button-default sh">Show HTML</button>
+				<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;h2>Layout Example&lt;/h2>
+&lt;section>
+	&lt;p>Text in a paragraph tag explaining the awesomeness of your app. Maybe this is a short introduction to what the app can and can't do.&lt;/p>
+&lt;/section>
+
+&lt;section>
+	&lt;h3>Next Section&lt;/h3>
+	&lt;p>Start making choices&lt;/p>
+	&lt;div>
+		&lt;label class="form-component radio-pill" for="g-option">
+			&lt;input type="radio" id="g-option" name="choices">
+			&lt;div class="check">&lt;/div>
+			&lt;span class="form-text">This&lt;/span>
+		&lt;/label>
+		&lt;label class="form-component radio-pill" for="h-option">
+			&lt;input type="radio" id="h-option" name="choices">
+			&lt;div class="check">&lt;/div>
+			&lt;span class="form-text">That&lt;/span>
+		&lt;/label>
+		&lt;label class="form-component radio-pill" for="i-option">
+			&lt;input type="radio" id="i-option" name="choices" checked>
+			&lt;div class="check">&lt;/div>
+			&lt;span class="form-text">The Other One&lt;/span>
+		&lt;/label>
+	&lt;/div>
+&lt;/section>
+
+&lt;section>
+	&lt;h3>Play With Data Section&lt;/h3>
+	&lt;p>Should I keep going?&lt;/p>
+	&lt;div class="toggle-btn" style="width:100px;">
+		&lt;input type="radio" id="yn1" name="yesno" value="yes" checked/>
+		&lt;label for="yn1">Yes&lt;/label>
+		&lt;input type="radio" id="yn2" name="yesno" value="no"/>
+		&lt;label for="yn2">No&lt;/label>
+	&lt;/div>
+	&lt;p>Cool. Then play with this slider&lt;/p>
+	&lt;div class="slider-container range-slider" style="width:250px;">
+		&lt;div id="rslider" class="slider">&lt;/div>
+		&lt;div style="text-align:center; margin-top:10px;">
+			Selected values: &lt;span class="blueFont">25&lt;/span> - &lt;span class="blueFont">75&lt;/span>
+		&lt;/div>
+	&lt;/div>
+&lt;/section>
+
+&lt;section>
+	&lt;h3>Get the HTML&lt;/h3>
+	&lt;p>See the markup for this sample by hitting the button below&lt;/p>
+	&lt;button class="button button-default sh">Show HTML&lt;/button>
+&lt;/section>
+</pre>
+				</div>
+			</section>
+		</section>
+	<!--Start of Components-->
+		<section>
+			<h2>Components</h2>
+		<!--Accordion-->
+			<h3>Accordion</h3>
+			<div class="accord" style="height:440px; width:350px; margin-bottom:10px;">
+				<div id='accord'>
+					<h3>First Panel</h3>
+					<div>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+					</div>
+					<h3>Second Panel</h3>
+					<div>
+						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+					</div>
+					<h3>Third Panel</h3>
+					<div>
+						<p>Furantur ius off faciem tuam in caput tuum. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+					</div>
+				</div>
+			</div>
+		<!--Accordion Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+			<button class="button button-default copy-button">Copy</button>
+<pre>&lt;!--Add class accord to the accordion's parent div-->
+&lt;div class="accord" style="height:440px; width:350px; margin-bottom:10px;">
+	&lt;div id='accord'>
+	&lt;h3>First Panel&lt;/h3>
+	&lt;div>
+		&lt;p>Lorem ipsum dolor sit amet, consectetur...&lt;/p>
+		&lt;p>Ut enim ad minim veniam, quis nostrud...&lt;/p>
+		&lt;p>Duis aute irure dolor in reprehenderit...&lt;/p>
+		&lt;p>Lorem ipsum dolor sit amet, consectetur...&lt;/p>
+		&lt;p>Ut enim ad minim veniam, quis nostrud...&lt;/p>
+	&lt;/div>
+	&lt;h3>Second Panel&lt;/h3>
+	&lt;div>
+		&lt;p>Sed ut perspiciatis unde omnis iste natus...&lt;/p>
+	&lt;/div>
+	&lt;h3>Third Panel&lt;/h3>
+	&lt;div>
+		&lt;p>At vero eos et accusamus et iusto odio...&lt;/p>
+	&lt;/div>
+&lt;/div></pre>
+			</div>
+		<!--Accordion Get JavaScript-->
+			<h4>Initialize the jQuery UI Accordion</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>$(function() {
+  $( "#accord" ).accordion( { heightStyle: "fill" } );
+  /* Add classes so style changes to the accordion don't affect
+     jQuery-UI elements within the accordion (e.g., slider) */
+  $( "#accord > h3" ).addClass("accord-header");
+  $( "#accord > div" ).addClass("accord-body");
+});</pre>
+			</div>
+		</section>
+	<!--Buttons-->
+		<section>
+			<h3>Buttons</h3>
+			<button class="button button-default">Default Button</button>
+			<button class="button button-primary">Primary Button</button>
+			<button class="button button-secondary">Secondary Button</button>
+			<button class="button button-danger">Danger Button</button>
+			<button class="button button-warning">Warning Button</button>
+			<button class="button button-link">Link Button</button><br>
+		<!--Buttons Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;button class="button button-default">Default Button&lt;/button>
+
+&lt;button class="button button-primary">Primary Button&lt;/button>
+
+&lt;button class="button button-secondary">Secondary Button&lt;/button>
+
+&lt;button class="button button-danger">Danger Button&lt;/button>
+
+&lt;button class="button button-warning">Warning Button&lt;/button>
+
+&lt;button class="button button-link">Link Button&lt;/button></pre>
+			</div>
+		<!--Disabled Buttons-->
+			<h3>Disabled Buttons</h3>
+			<button disabled class="button button-default">Default Button</button>
+			<button disabled class="button button-primary">Primary Button</button>
+			<button disabled class="button button-secondary">Secondary Button</button>
+			<button disabled class="button button-danger">Danger Button</button>
+			<button disabled class="button button-warning">Warning Button</button>
+			<button disabled class="button button-link">Link Button</button><br>
+		<!--Disabled Buttons Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;button disabled class="button button-default">Default Button&lt;/button>
+
+&lt;button disabled class="button button-primary">Primary Button&lt;/button>
+
+&lt;button disabled class="button button-secondary">Secondary Button&lt;/button>
+
+&lt;button disabled class="button button-danger">Danger Button&lt;/button>
+
+&lt;button disabled class="button button-warning">Warning Button&lt;/button>
+
+&lt;button disabled class="button button-link">Link Button&lt;/button>
+
+&lt;button class="button button-default sh">Show HTML&lt;/button></pre>
+			</div>
+		</section>
+	<!--Checkboxes-->
+		<section>
+			<h3>Checkboxes</h3>
+			<div>
+				<label class="form-component" for="c-option">
+					<input checked type="checkbox" id="c-option" name="food">
+					<div class="check"></div>
+					<span class="form-text">Guacamole</span>
+				</label>
+				<label class="form-component disabled" for="z-option">
+					<input type="checkbox" id="z-option" name="food">
+					<div class="check"></div>
+					<span class="form-text">Salsa</span>
+				</label>
+				<label class="form-component" for="y-option">
+					<input disabled type="checkbox" id="y-option" name="food">
+					<div class="check"></div>
+					<span class="form-text">Cheese</span>
+				</label>
+			</div>
+		<!--Checkboxes Show HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;label class="form-component" for="c-option">
+	&lt;input checked type="checkbox" id="c-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Guacamole&lt;/span>
+&lt;/label>
+&lt;label class="form-component disabled" for="z-option">
+	&lt;input type="checkbox" id="z-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Salsa&lt;/span>
+&lt;/label>
+&lt;label class="form-component" for="y-option">
+	&lt;input disabled type="checkbox" id="y-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Cheese&lt;/span>
+&lt;/label></pre>
+			</div>
+		</section>
+	<!--Chosen Select-->
+		<section>
+			<h3>Chosen Select</h3>
+		<!-- single dropdown -->
+			<div class="chosen-wrap" style="margin-bottom:10px;">
+				<select data-placeholder="Pick One Number" id="chosenSingle" class="chosen">
+					<option></option>
+					<option value="one">One</option>
+					<option value="two">Two</option>
+					<option value="three">Three</option>
+					<option value="four">Four</option>
+					<option value="five">Five</option>
+				</select>
+			</div>
+			<p>Selected value: <span class="blueFont">none</span></p>
+		<!-- single dropdown Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;!-- For Chosen options visit https://harvesthq.github.io/chosen/ -->
+&lt;!-- Add class chos  to select's parent -->
+&lt;div class="chosen-wrap" style="margin-bottom:10px;">
+	&lt;select data-placeholder="Pick One Number" id="chosenSingle" class="chosen">
+		&lt;option>&lt;/option>
+		&lt;option value="one">One&lt;/option>
+		&lt;option value="two">Two&lt;/option>
+		&lt;option value="three">Three&lt;/option>
+		&lt;option value="four">Four&lt;/option>
+		&lt;option value="five">Five&lt;/option>
+	&lt;/select>
+&lt;/div>
+&lt;p>Selected value: &lt;span class="blueFont">none&lt;/span>&lt;/p></pre>
+			</div>
+		<!-- single dropdown Get JavaScript-->
+			<h4>Initialize the Chosen select menu and change listener</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>//For Chosen options visit https://harvesthq.github.io/chosen/
+//Single deselect only works if the first option in the select tag is blank
+
+$("#chosenSingle").chosen({allow_single_deselect:true, width:"155px"})
+	.change(function(c){
+		var v = c.target.value;
+		// check for a deselect
+		if (v.length == 0){
+			v = "none";
+		}
+		$('#' + c.target.id ).parent().next().find("span").html(v)
+	});</pre>
+			</div>
+		<!--Chosen multiple select-->
+			<h3>Chosen Multiple Select</h3>
+		<!-- multiple dropdown -->
+			<div class="chosen-wrap" style="margin-bottom:10px;">
+				<select data-placeholder="Pick Multiple Numbers" id="chosenMultiple" multiple="true" class="chosen">
+					<option value="one">One</option>
+					<option value="two">Two</option>
+					<option value="three">Three</option>
+					<option value="four">Four</option>
+					<option value="five">Five</option>
+				</select>
+			</div>
+			<p>Array of selected values: <span class="blueFont">[]</span></p>
+		<!-- multiple dropdown Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;!-- For Chosen options visit https://harvesthq.github.io/chosen/ -->
+&lt;!-- Multiple select is turned on in the select tag (multiple="true") -->
+&lt;!-- Add class chosen-wrap to select's parent -->
+&lt;div class="chosen-wrap" style="margin-bottom:10px;">
+	&lt;select data-placeholder="Pick Multiple Numbers" id="chosenMultiple" multiple="true" class="chosen">
+		&lt;option value="one">One&lt;/option>
+		&lt;option value="two">Two&lt;/option>
+		&lt;option value="three">Three&lt;/option>
+		&lt;option value="four">Four&lt;/option>
+		&lt;option value="five">Five&lt;/option>
+	&lt;/select>
+&lt;/div>
+&lt;p>Array of selected values: &lt;span class="blueFont">[]&lt;/span>&lt;/p></pre>
+			</div>
+		<!-- single dropdown Get JavaScript-->
+			<h4>Initialize the Chosen multiple select menu and change listener</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>
+//For Chosen options visit https://harvesthq.github.io/chosen/
+
+$("#chosenMultiple").chosen({width:"200px"})
+	.change(function(c){
+		// use .val() on the select tag's id to get array of selected values
+		var v = $("#chosenMultiple").val();
+		v = "[" + v.toString() + "]";
+		$('#' + c.target.id ).parent().next().find("span").html(v)
+	});</pre>
+			</div>
+		</section>
+	<!--Dropdown-->
+		<section>
+			<h3>Dropdown</h3>
+			<div class="dropdown">
+				<button class="button dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					Philadelphia, PA
+					<i class="icon-down-open-mini caret"></i>
+				</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li class="active"><a href="#">Something else here</a></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
+			</div>
+		<!--Dropdown Show HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;div class="dropdown">
+	&lt;button class="button dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		Philadelphia, PA
+		&lt;i class="icon-down-open-mini caret">&lt;/i>
+	&lt;/button>
+	&lt;ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		&lt;li>&lt;a href="#">Action&lt;/a>&lt;/li>
+		&lt;li>&lt;a href="#">Another action&lt;/a>&lt;/li>
+		&lt;li class="active">&lt;a href="#">Something else here&lt;/a>&lt;/li>
+		&lt;li>&lt;a href="#">Separated link&lt;/a>&lt;/li>
+	&lt;/ul>
+&lt;/div></pre>
+			</div>
+		</section>
+	<!--Pills-->
+		<section>
+			<h3>Pills</h3>
+			<div>
+				<label class="form-component radio-pill" for="e-option">
+					<input checked type="radio" id="e-option" name="pill">
+					<div class="check"></div>
+					<span class="form-text">Pill 1</span>
+				</label>
+				<label class="form-component radio-pill" for="f-option">
+					<input type="radio" id="f-option" name="pill">
+					<div class="check"></div>
+					<span class="form-text">Pill 2</span>
+				</label>
+			</div>
+		<!--Pills Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;label class="form-component radio-pill" for="e-option">
+	&lt;input checked type="radio" id="e-option" name="pill">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Pill 1&lt;/span>
+&lt;/label>
+&lt;label class="form-component radio-pill" for="f-option">
+	&lt;input type="radio" id="f-option" name="pill">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Pill 2&lt;/span>
+&lt;/label></pre>
+			</div>
+		</section>
+	<!--Radios-->
+		<section>
+			<h3>Radios</h3>
+				<div>
+					<label class="form-component" for="a-option">
+						<input checked type="radio" id="a-option" name="food">
+						<div class="check"></div>
+						<span class="form-text">Pizza</span>
+					</label>
+					<label class="form-component" for="b-option">
+						<input type="radio" id="b-option" name="food">
+						<div class="check"></div>
+						<span class="form-text">BBQ</span>
+					</label>
+					<label class="form-component" for="x-option">
+						<input type="radio" disabled id="x-option" name="food">
+						<div class="check"></div>
+						<span class="form-text">Apple</span>
+					</label>
+				</div>
+			<!--Radios Get HTML-->
+				<button class="button button-default sh">Show HTML</button>
+				<div class="copyBlocks">
+					<button class="button button-default copy-button">Copy</button>
+<pre>&lt;label class="form-component" for="a-option">
+	&lt;input checked type="radio" id="a-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Pizza&lt;/span>
+&lt;/label>
+&lt;label class="form-component" for="b-option">
+	&lt;input type="radio" id="b-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">BBQ&lt;/span>
+&lt;/label>
+&lt;label class="form-component" for="x-option">
+	&lt;input type="radio" disabled id="x-option" name="food">
+	&lt;div class="check">&lt;/div>
+	&lt;span class="form-text">Apple&lt;/span>
+&lt;/label></pre>
+				</div>
+		</section>
+	<!--Range Slider-->
+		<section>
+			<h3>Rangle Slider</h3>
+			<div class="slider-container range-slider" style="width:250px;">
+				<div id="rsldr" class="slider"></div>
+				<div style="text-align:center; margin-top:10px;">Selected values: <span class="blueFont">25</span> - <span class="blueFont">75</span></div>
+			</div>
+		<!--Range Slider Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+					<button class="button button-default copy-button">Copy</button>
+<pre>&lt;div class="slider-container range-slider" style="width:250px;">
+	&lt;div id="rsldr" class="slider">&lt;/div>
+	&lt;div style="text-align:center; margin-top:10px;">
+		Selected values: &lt;span class="blueFont">25&lt;/span class="blueFont"> - &lt;span>75&lt;/span>
+	&lt;/div>
+&lt;/div></pre>
+			</div>
+		<!--Range Slider Get JavaScript-->
+			<h4>Initialize the jQuery UI Range Slider and handle changes</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>$('#rsldr').slider({range:true, min:0, max:100, values:[25,75],
+	// called at end of slide
+	change:function(event,ui){
+		//ask server for data
+	},
+	// called at each increment of slide
+	slide:function(event,ui){
+		$('#rsldr').next().find('span').each(function(i,v){
+			$(v).html(ui.values[i])
+		})
+	}
+})</pre>
+		</div>
+		</section>
+	<!--Slider-->
+		<section>
+			<h3>Slider</h3>
+			<div class="slider-container" style="width:250px;">
+				<div id="sldr" class="slider"></div>
+			</div>
+		<!--Slider Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;div class="slider-container" style="width:250px;">
+	&lt;div id="sldr" class="slider">&lt;/div>
+&lt;/div></pre>
+			</div>
+		<!--Slider Get JavaScript-->
+			<h4>Initialize the jQuery UI Slider</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>$(function() {
+  $("#sldr").slider({ min: 0, max: 5, range: false, values: [1] })
+    .slider("pips", { rest: "label"})
+    .slider("float");
+});</pre>
+			</div>
+		</section>
+	<!--Toggle Buttons-->
+		<section>
+			<h3>Toggle Buttons</h3>
+			<h4>Buttons expand to width of .toggle-btn div's parent (resize browser window to test)</h4>
+			<div class="toggle-btn">
+				<input type="radio" id="ch1" name="ch" value="first"/>
+				<label for="ch1">First Choice</label>
+				<input type="radio" id="ch2" name="ch" value="second"/>
+				<label for="ch2">Second Choice</label>
+				<input type="radio" id="ch3" name="ch" value="third" checked/>
+				<label for="ch3">Third Choice</label>
+				<input type="radio" id="ch4" name="ch" value="fourth"/>
+				<label for="ch4">Fourth Choice</label>
+				<input type="radio" id="ch5" name="ch" value="fifth"/>
+				<label for="ch5">Fifth Choice</label>
+			</div>
+			<p>Selected value: <span class="blueFont"></span></p>
+		<!--Toggle Buttons Show HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;div class="toggle-btn">
+	&lt;input type="radio" id="ch1" name="ch" value="first"/>
+	&lt;label for="ch1">First Choice&lt;/label>
+	&lt;input type="radio" id="ch2" name="ch" value="second"/>
+	&lt;label for="ch2">Second Choice&lt;/label>
+	&lt;input type="radio" id="ch3" name="ch" value="third"/>
+	&lt;label for="ch3">Third Choice&lt;/label>
+	&lt;input type="radio" id="ch4" name="ch" value="fourth"/>
+	&lt;label for="ch4">Fourth Choice&lt;/label>
+	&lt;input type="radio" id="ch5" name="ch" value="fifth"/>
+	&lt;label for="ch5">Fifth Choice&lt;/label>
+&lt;/div>
+&lt;p>Selected value: &lt;span class="blueFont">&lt;/span>&lt;/p></pre>
+			</div>
+		<!--Toggle Buttons 250px-->
+			<h4>Width of .toggle-btn div set to 250px</h4>
+			<div class="toggle-btn" style="width:250px;">
+				<input type="radio" id="num1" name="num" value="one"/>
+				<label for="num1">One</label>
+				<input type="radio" id="num2" name="num" value="two" checked/>
+				<label for="num2">Two</label>
+				<input type="radio" id="num3" name="num" value="three"/>
+				<label for="num3">Three</label>
+			</div>
+			<p>Selected value: <span class="blueFont"></span></p>
+		<!--Toggle Buttons 250 Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;div class="toggle-btn" style="width:250px;">
+	&lt;input type="radio" id="num1" name="num" value="one"/>
+	&lt;label for="num1">One&lt;/label>
+	&lt;input type="radio" id="num2" name="num" value="two"/>
+	&lt;label for="num2">Two&lt;/label>
+	&lt;input type="radio" id="num3" name="num" value="three"/>
+	&lt;label for="num3">Three&lt;/label>
+&lt;/div>
+&lt;p>Selected value: &lt;span class="blueFont">&lt;/span>&lt;/p></pre>
+			</div>
+		<!--Toggle Buttons Get JavaScript-->
+			<h4>JavaScript Click Handler</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>$( document ).ready(function() {
+	// Set selected value text for button clicks
+	$( '.toggle-btn input' ).click(function(c){
+		$('#' + c.target.id ).parent().next().find("span").html(c.target.value)
+	});
+});</pre>
+			</div>
+		</section>
+	<!--Tooltip-->
+		<section>
+			<h3>Tooltip</h3>
+			<button class="button" data-toggle="tooltip" title="This is a tooltip example">Tool tip top</button>
+			<button class="button" data-toggle="tooltip" data-placement="bottom" title="This is a tooltip example">Tool tip bottom</button>
+			<i data-toggle="tooltip" data-placement="top" title="This is a tooltip example" class="icon icon-help-circled"></i><br>
+		<!--Tooltip Get HTML-->
+			<button class="button button-default sh">Show HTML</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>&lt;button class="button" data-toggle="tooltip" title="This is a tooltip example">Tool tip top&lt;/button>
+&lt;button class="button" data-toggle="tooltip" data-placement="bottom" title="This is a tooltip example">Tool tip bottom&lt;/button>
+&lt;i data-toggle="tooltip" data-placement="top" title="This is a tooltip example" class="icon icon-help-circled">&lt;/i></pre>
+			</div>
+		<!--Tooltip Get JavaScript-->
+			<h4>Initialize the jQuery UI Tooltip</h4>
+			<button class="button button-default sh" id="sc">Show Code</button>
+			<div class="copyBlocks">
+				<button class="button button-default copy-button">Copy</button>
+<pre>$(function() {
+  $('[data-toggle="tooltip"]').tooltip({container:'body'});
+});</pre>
+			</div>
+		</section>
+		<!--Classes-->
+		<section>
+			<h2>Class Names and Custom Styles</h2>
+			<p>The Coastal Resilience Style Guide uses several class names (listed below) that should not be directly used or altered by developers. Developers who want to make changes to existing style can use the following technique.</p>
+			<p>Let's say we want to set the width of following buttons to 150px.</p>
+				<button class="button button-default">Button 1</button>
+				<button class="button button-primary">Button 2</button>
+				<button class="button button-secondary">Button 3</button>
+			<p>The markup shows all the buttons share the class button and each has a seperate class to distinguish them (button-default, button-primary, button-secondary)</p>
+<pre>&lt;button class="button button-default">Button 1&lt;/button>
+&lt;button class="button button-primary">Button 2&lt;/button>
+&lt;button class="button button-secondary">Button 3&lt;/button>
+</pre>
+			<p>If we wrote .button{ width: 150px; } in our main.css file, all the buttons in our app would have a width of 150 pixels, but so would all the buttons in all the other apps in the region. If we add a new class to the button's parent element, we isolate the styling to just those buttons within the parent.</p>
+<pre>
+&lt;p class="my-button">
+  &lt;button class="button button-default">Button 1&lt;/button>
+  &lt;button class="button button-primary">Button 2&lt;/button>
+  &lt;button class="button button-secondary">Button 3&lt;/button>
+&lt;/p>
+</pre>
+			<p>Now we can change the width of each occurance of class button that are within class my-button. </p>
+<pre>
+.my-button .button{
+  width: 150px
+}
+</pre>
+			<p class="my-button">
+				<button class="button button-default">Button 1</button>
+				<button class="button button-primary">Button 2</button>
+				<button class="button button-secondary">Button 3</button>
+			</p>
+			<h3>Reserved Class Names</h3>
+			<p><span class="und">Accordion</span>: accord</p>
+			<p><span class="und">Buttons</span>: button, button-default, button-primary, button-secondary, button-danger, button-link</p>
+			<p><span class="und">Checkboxes</span>: check</p>
+			<p><span class="und">Chosen Select</span>: chosen-wrap, chosen</p>
+			<p><span class="und">Dropdown</span>: dropdown, dropdown-toggle</p>
+			<p><span class="und">General (used for multiple elements)</span>: form-component, form-text</p>
+			<p><span class="und">Pills</span>: radio-pill</p>
+			<p><span class="und">Radios</span>: check</p>
+			<p><span class="und">Range Slider</span>: slider-container, range-slider, slider</p>
+			<p><span class="und">Slider</span>: slider-container, slider</p>
+			<p><span class="und">Toggle Buttons</span>: toggle-btn</p>
+		</section>
+	</div>
+</body>
+</html>
+
+
+
