@@ -828,6 +828,27 @@ nav {
     width: 75%;
 }
 
+.nav-apps-narrow {
+    width: 46px;
+}
+.nav-apps-narrow .button-text {
+    display:none;
+}
+.nav-apps-button:hover .button-text:after {
+    content: "";
+    top: 16px;
+    left: -12px;
+    position: absolute;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 0;
+    height: 0;
+    border-right: 7px solid #5394B6;
+    border-left: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent
+}
 @media (max-width: 991px) {
     .nav-apps-narrow {
         width: 46px;
@@ -869,10 +890,8 @@ nav {
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
-@media (max-width: 991px) {
-  .nav-apps-narrow .button-sidebar-plugin-close {
-    display: none !important;
-  }
+.nav-apps-narrow .button-sidebar-plugin-close {
+  display: none !important;
 }
 .plugin-launcher.app-displayed.active + .button-link.button-sidebar-plugin-close {
   display: none;
@@ -1367,6 +1386,12 @@ header .nav-main {
     box-shadow: 0 0 12px black;
     box-shadow: 0 0 12px rgba(0, 0, 0, .25);
     border: 1px solid #999;
+}
+.content .map .topbar-plugin .plugin-launcher > div i {
+    padding: 5px;
+    font-size: 16px;
+    color: #333;
+    display: inline-block;
 }
 .content .map .topbar-plugin.active .plugin-launcher > div,
 .content .map .topbar-plugin.active .plugin-launcher > button {
