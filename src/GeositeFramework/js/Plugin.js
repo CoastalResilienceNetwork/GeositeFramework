@@ -199,11 +199,15 @@ require(['use!Geosite',
                     this.get('pluginObject').deactivate();
                     this.set('visible', false);
                     this.trigger('plugin:deselected');
-                    // Remove the `.nav-apps-narow` class if the
-                    // de-selecting the plugin has left no plugins
-                    // visible.
                     if (this.collection.all({visible:false})) {
+                        // Remove the `.nav-apps-narow` class if the
+                        // de-selecting the plugin has left no plugins
+                        // visible.
                         $('.nav-apps').removeClass('nav-apps-narrow');
+                    } else {
+                        // Turn off the plugin if another plugin has been selected
+                        // and it hasn't been minimized.
+                        this.get('pluginObject').plugin.turnOff();
                     }
                 }
             },
@@ -503,10 +507,6 @@ require(['use!Geosite',
                 // Listen for events to turn the plugin completely off
                 .find('.plugin-off').on('click', function () {
                     model.turnOff();
-                }).end()
-                // Unselect the plugin, but keep active
-                .find('.plugin-close').on('click', function () {
-                    model.deselect();
                 }).end()
                 .find('.plugin-help').on('click', function () {
                     pluginObject.showHelp();
