@@ -1990,7 +1990,7 @@ body.x-body {
 
 .arcgisSearch .searchGroup .searchInput,
 .arcgisSearch .searchBtn {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.1);
   border-width: 0;
   outline: 0;
   border-radius: 0;
@@ -1999,7 +1999,7 @@ body.x-body {
 }
 
 .arcgisSearch .searchBtn:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .arcgisSearch .searchClear {
