@@ -30,7 +30,50 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 $(this.container)
                     .append('<p>Click the thumbnail to see a sample modal image popup</p>')
                     .append('<img src="sample_plugins/identify_point/FutureHabitat_c.jpg"' +
-                            'id="sample-plugin-thumbnail" style="cursor: pointer" width="300" height="195" />');
+                            'id="sample-plugin-thumbnail" style="cursor: pointer" width="200" height="120" />');
+
+                // Select box using Chosen
+                $(this.container)
+                    .append('<p>An example select box using Chosen</p>' +
+                            '<div class="chosen-wrap" style="margin-bottom:10px;">' +
+	                        '<select data-placeholder="Pick One Number" id="chosen-single"' +
+                            'class="chosen">' +
+		                    '<option></option>' +
+                            '<option value="one">One</option>' +
+                            '<option value="two">Two</option>' +
+                            '<option value="three">Three</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '<p>Selected value: <span class="blueFont">none</span></p>');
+
+                // Slider using jQueryUI
+                $(this.container)
+                    .append('<p>An example slider using jQueryUI</p>' +
+                            '<div class="slider-container range-slider" style="width:250px;' +
+                            'margin-left: 15px !important;">' +
+	                        '<div id="rsldr" class="slider"></div>' +
+	                        '<div style="text-align:center; margin-top:10px;">' +
+		                    'Selected values: <span class="blueFont">25' +
+                            '</span class="blueFont"> - <span>75</span>' +
+	                        '</div></div>');
+
+                // Accordion menu using jQueryUI
+                $(this.container)
+                    .append('<p>An example accordion menu using jQueryUI</p>' +
+                            '<div class="accord" style="height:200px; width:350px;' +
+                            'margin-bottom:10px;">' +
+                            '<div id="accord">' +
+                            '<h3>First Panel</h3>' +
+                            '<div>' +
+                            '<p>Lorem ipsum dolor sit amet, consectetur...</p>' +
+                            '<p>Ut enim ad minim veniam, quis nostrud...</p>' +
+                            '<p>Duis aute irure dolor in reprehenderit...</p>' +
+                            '</div>' +
+                            '<h3>Second Panel</h3>' +
+                            '<div>' +
+                            '<p>Lorem ipsum dolor sit amet, consectetur...</p>' +
+                            '<p>Ut enim ad minim veniam, quis nostrud...</p>' +
+                            '</div></div>');
             },
 
             activate: function(showHelpOnStart) {
@@ -72,7 +115,35 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                     var modalImageSource = 'sample_plugins/identify_point/FutureHabitat_c.jpg';
                     self.renderSampleImageModal(modalImageSource);
                 });
-            },
+
+                // Render the range slider using jQueryUI
+                $('#rsldr').slider({range:true, min:0, max:100, values:[25,75],
+                    change:function(event,ui){
+                        window.console.log(event);
+                    },
+                    slide:function(event,ui){
+                        $('#rsldr').next().find('span').each(function(i,v){
+                            $(v).html(ui.values[i])
+                        })
+                    }
+                });
+
+                // Render an accordion menu using jQueryUI
+                $("#accord").accordion( { heightStyle: "fill" } );
+                $("#accord > h3").addClass("accord-header");
+                $("#accord > div").addClass("accord-body");
+
+                // Use Chosen to style the multi-select
+                $("#chosen-single")
+                    .chosen({ allow_single_deselect: true, width:"155px" })
+                    .change(function (c) {
+                        $('#' + c.target.id)
+                            .parent()
+                            .next()
+                            .find("span")
+                            .html(c.target.value || "none");
+                    });
+           },
 
             identify: function(mapPoint, clickPoint, processResults) {
                 var text = i18next.t("You clicked on latitude %f longitude %f", mapPoint.getLatitude(), mapPoint.getLongitude()),

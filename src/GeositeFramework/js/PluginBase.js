@@ -9,7 +9,9 @@ define(["dojo/_base/declare",
         "esri/tasks/IdentifyTask",
         "esri/tasks/IdentifyParameters",
         "dojo/DeferredList",
-        "dojo/_base/Deferred"
+        "dojo/_base/Deferred",
+        "use!jqueryui",
+        "use!chosen",
        ],
     function (declare,
                 xhr,
@@ -17,7 +19,9 @@ define(["dojo/_base/declare",
                 dIdentifyTask,
                 IdentifyParameters,
                 dDeferredList,
-                Deferred
+                Deferred,
+                jqueryui,
+                chosen
                 ) {
 
         var URL_PATTERN = /^https?:\/\/.+/,
