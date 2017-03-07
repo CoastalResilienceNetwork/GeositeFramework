@@ -204,6 +204,7 @@ require(['use!Geosite',
                     // visible.
                     if (this.collection.all({visible:false})) {
                         $('.nav-apps').removeClass('nav-apps-narrow');
+                        N.app.dispatcher.trigger('map-size:change');
                     }
                 }
             },
@@ -470,8 +471,10 @@ require(['use!Geosite',
                     '`setSideBarPluginTextVisibility` method requires a boolean arg');
             } else if (visible) {
                 $('.nav-apps').removeClass('nav-apps-narrow');
+                N.app.dispatcher.trigger('map-size:change');
             } else if (!visible) {
                 $('.nav-apps').addClass('nav-apps-narrow');
+                N.app.dispatcher.trigger('map-size:change');
             }
         }
 
