@@ -823,6 +823,10 @@ nav {
     height: 28px;
     width: 28px;
 }
+.nav-apps-button .button-text {
+    display: inline-block;
+    width: 75%;
+}
 
 @media (max-width: 991px) {
     .nav-apps-narrow {
