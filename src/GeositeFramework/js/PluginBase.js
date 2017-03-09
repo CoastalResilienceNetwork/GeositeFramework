@@ -12,6 +12,7 @@ define(["dojo/_base/declare",
         "dojo/_base/Deferred",
         "use!jqueryui",
         "use!chosen",
+        "use!pips"
        ],
     function (declare,
                 xhr,
@@ -79,6 +80,7 @@ define(["dojo/_base/declare",
             constructor: function(args) {
                 isBlacklisted = _.partial(_.contains, Geosite.app.data.region.identifyBlacklist);
                 declare.safeMixin(this,args);
+                pips.addjQueryUISliderPips($);
             }
         });
 

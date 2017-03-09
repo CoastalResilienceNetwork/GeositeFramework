@@ -35,10 +35,10 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 // Select box using Chosen
                 $(this.container)
                     .append('<p>An example select box using Chosen</p>' +
-                            '<div class="chosen-wrap" style="margin-bottom:10px;">' +
-	                        '<select data-placeholder="Pick One Number" id="chosen-single"' +
+                            '<div class="chosen-wrap" style="margin-bottom:10px; margin-left:10px">' +
+                            '<select data-placeholder="Pick One Number" id="chosen-single"' +
                             'class="chosen">' +
-		                    '<option></option>' +
+                            '<option></option>' +
                             '<option value="one">One</option>' +
                             '<option value="two">Two</option>' +
                             '<option value="three">Three</option>' +
@@ -49,13 +49,9 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 // Slider using jQueryUI
                 $(this.container)
                     .append('<p>An example slider using jQueryUI</p>' +
-                            '<div class="slider-container range-slider" style="width:250px;' +
-                            'margin-left: 15px !important;">' +
-	                        '<div id="rsldr" class="slider"></div>' +
-	                        '<div style="text-align:center; margin-top:10px;">' +
-		                    'Selected values: <span class="blueFont">25' +
-                            '</span class="blueFont"> - <span>75</span>' +
-	                        '</div></div>');
+                            '<div class="slider-container" style="width:250px; margin-left: 10px;">' +
+                            '<div id="sldr" class="slider"></div>' +
+                            '</div>');
 
                 // Accordion menu using jQueryUI
                 $(this.container)
@@ -117,16 +113,10 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 });
 
                 // Render the range slider using jQueryUI
-                $('#rsldr').slider({range:true, min:0, max:100, values:[25,75],
-                    change:function(event,ui){
-                        window.console.log(event);
-                    },
-                    slide:function(event,ui){
-                        $('#rsldr').next().find('span').each(function(i,v){
-                            $(v).html(ui.values[i])
-                        })
-                    }
-                });
+                $("#sldr")
+                    .slider({ min: 0, max: 5, range: false, values: [1] })
+                    .slider("pips", { rest: "label"})
+                    .slider("floats");
 
                 // Render an accordion menu using jQueryUI
                 $("#accord").accordion( { heightStyle: "fill" } );
