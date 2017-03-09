@@ -93,11 +93,10 @@
     <link href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styleguide.css">
+    <link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
 
     <!-- jQuery UI needs to load before Dojo, or else there is a conflict that prevents Dojo from loading -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
         header {
@@ -710,7 +709,6 @@
     <script src="js/lib/backbone.hashmodels.js"></script>
     <script src="js/lib/TinyBox2.js"></script>
     <script src="js/lib/pageguide.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
@@ -725,6 +723,9 @@
         var useConfig = { @Html.Raw(Model.ConfigurationForUseJs) };
         useConfig['Azavea'] = { attach: 'Azavea' };
         useConfig['Geosite'] = { attach: 'Geosite' };
+        useConfig['jqueryui'] = { attach: 'jqueryui' };
+        useConfig['chosen'] = { attach: 'chosen' };
+        useConfig['pips'] = { attach: 'pips' };
 
         require({
             async: true,
@@ -748,7 +749,10 @@
                 "use": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/use",
                 "Azavea": location.pathname.replace(/\/[^/]+$/, "") + "js/azavea.util",
                 "Geosite": location.pathname.replace(/\/[^/]+$/, "") + "js/Geosite",
-                "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min"
+                "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min",
+                "jqueryui": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui.min",
+                "chosen": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/chosen.jquery.min",
+                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips"
             },
             use: useConfig
         });

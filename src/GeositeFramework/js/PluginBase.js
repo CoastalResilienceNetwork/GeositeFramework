@@ -9,7 +9,10 @@ define(["dojo/_base/declare",
         "esri/tasks/IdentifyTask",
         "esri/tasks/IdentifyParameters",
         "dojo/DeferredList",
-        "dojo/_base/Deferred"
+        "dojo/_base/Deferred",
+        "use!jqueryui",
+        "use!chosen",
+        "use!pips"
        ],
     function (declare,
                 xhr,
@@ -17,7 +20,9 @@ define(["dojo/_base/declare",
                 dIdentifyTask,
                 IdentifyParameters,
                 dDeferredList,
-                Deferred
+                Deferred,
+                jqueryui,
+                chosen
                 ) {
 
         var URL_PATTERN = /^https?:\/\/.+/,
@@ -75,6 +80,7 @@ define(["dojo/_base/declare",
             constructor: function(args) {
                 isBlacklisted = _.partial(_.contains, Geosite.app.data.region.identifyBlacklist);
                 declare.safeMixin(this,args);
+                pips.addjQueryUISliderPips($);
             }
         });
 
