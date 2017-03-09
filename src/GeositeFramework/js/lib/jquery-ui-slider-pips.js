@@ -1,26 +1,10 @@
 /*! jQuery-ui-Slider-Pips - v1.11.4 - 2016-10-02
 * Copyright (c) 2016 Simon Goellner <simey.me@gmail.com>; Licensed MIT */
 
-(function( factory ) {
+var pips = {};
 
-    "use strict";
-
-    if ( typeof define === "function" && define.amd ) {
-
-        // AMD. Register as an anonymous module.
-        define([
-            "jquery",
-            "jquery.ui.slider"
-        ], factory );
-
-    } else {
-
-        // Browser globals
-        factory( jQuery );
-
-    }
-
-}(function( $ ) {
+(function(p) {
+    p.addjQueryUISliderPips = function( $ ) {
 
     "use strict";
 
@@ -839,4 +823,5 @@
 
     return $.ui.slider.prototype.pips;
 
-}));
+}
+}(pips));
