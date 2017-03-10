@@ -22,7 +22,8 @@ define(["dojo/_base/declare",
                 dDeferredList,
                 Deferred,
                 jqueryui,
-                chosen
+                chosen,
+                pips
                 ) {
 
         var URL_PATTERN = /^https?:\/\/.+/,
