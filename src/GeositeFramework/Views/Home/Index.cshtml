@@ -724,8 +724,8 @@
         useConfig['Azavea'] = { attach: 'Azavea' };
         useConfig['Geosite'] = { attach: 'Geosite' };
         useConfig['jqueryui'] = { attach: 'jqueryui' };
-        useConfig['chosen'] = { attach: 'chosen' };
-        useConfig['pips'] = { attach: 'pips' };
+        useConfig['chosen'] = { attach: 'chosen', deps: ['jquery'] };
+        useConfig['pips'] = { attach: 'pips', deps: ['jqueryui'] };
 
         require({
             async: true,
@@ -752,7 +752,7 @@
                 "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min",
                 "jqueryui": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui.min",
                 "chosen": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/chosen.jquery.min",
-                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips"
+                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min"
             },
             use: useConfig
         });

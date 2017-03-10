@@ -22,7 +22,8 @@ define(["dojo/_base/declare",
                 dDeferredList,
                 Deferred,
                 jqueryui,
-                chosen
+                chosen,
+                pips
                 ) {
 
         var URL_PATTERN = /^https?:\/\/.+/,
@@ -80,7 +81,6 @@ define(["dojo/_base/declare",
             constructor: function(args) {
                 isBlacklisted = _.partial(_.contains, Geosite.app.data.region.identifyBlacklist);
                 declare.safeMixin(this,args);
-                pips.addjQueryUISliderPips($);
             }
         });
 
