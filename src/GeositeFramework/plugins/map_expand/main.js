@@ -1,9 +1,19 @@
+﻿require({
+    packages: [
+        {
+            name: "underscore",
+            location: "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3",
+            main: "underscore-min"
+        }
+    ]
+});
+
 define(
-    ["dojo/_base/declare", "framework/PluginBase"],
-    function (declare, PluginBase) {
+    ["dojo/_base/declare", "framework/PluginBase", "underscore"],
+    function (declare, PluginBase, _) {
         return declare(PluginBase, {
-            toolbarName: "Map Expand",
-            fullName: "Expand the map",
+            toolbarName: "Map Expand/Shrink",
+            fullName: "Expand/shrink the map",
             toolbarType: "map",
             allowIdentifyWhenActive: true,
             closeOthersWhenActive: false,
@@ -11,9 +21,17 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.$sidebar = $('.nav-apps.plugins');
-                this.sidebarNarrowClassName = 'nav-apps-narrow';
+                this.autoSidebarNarrowClassName = 'nav-apps-narrow';
+                this.manualSidebarNarrowClassName = 'nav-apps-narrow-manual';
 
+                this.bindEvents();
+            },
+
+            bindEvents: function() {
                 this.app.dispatcher.on('map-size:change', this.updateIcon, this);
+
+                var debouncedUpdateIcon = _.debounce(_.bind(this.updateIcon, this), 250);
+                $(window).resize(debouncedUpdateIcon);
             },
 
             renderLauncher: function () {
@@ -24,9 +42,11 @@ define(
 
             activate: function () {
                 if (this.isSidebarNarrow()) {
-                    this.$sidebar.removeClass(this.sidebarNarrowClassName);
+                    this.$sidebar.removeClass(this.manualSidebarNarrowClassName);
+                    this.$sidebar.removeClass(this.autoSidebarNarrowClassName);
                 } else {
-                    this.$sidebar.addClass(this.sidebarNarrowClassName);
+                    this.$sidebar.addClass(this.autoSidebarNarrowClassName);
+                    this.$sidebar.addClass(this.manualSidebarNarrowClassName);
                 }
 
                 this.updateIcon();
@@ -41,7 +61,9 @@ define(
             },
 
             isSidebarNarrow: function() {
-                if (this.$sidebar.hasClass(this.sidebarNarrowClassName)) {
+                if (this.$sidebar.hasClass(this.manualSidebarNarrowClassName) ||
+                    ($(document).width() <= 991 &&
+                    this.$sidebar.hasClass(this.autoSidebarNarrowClassName))) {
                     return true;
                 }
 
