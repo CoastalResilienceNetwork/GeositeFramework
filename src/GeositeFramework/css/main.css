@@ -1945,6 +1945,10 @@ body.x-body {
     z-index: 1;
 }
 
+.nav-apps-narrow #sidebar-help-area {
+    padding: 4px 5px;
+}
+
 #help-overlay-start {
   color: #d9dbde;
   font-size: 1.7rem;
