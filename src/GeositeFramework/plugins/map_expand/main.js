@@ -61,8 +61,11 @@ define(
             },
 
             isSidebarNarrow: function() {
+                var docWidth = $(document).width(),
+                    narrowWidthThreshold = 991;
+
                 if (this.$sidebar.hasClass(this.manualSidebarNarrowClassName) ||
-                    ($(document).width() <= 991 &&
+                    (docWidth <= narrowWidthThreshold &&
                     this.$sidebar.hasClass(this.autoSidebarNarrowClassName))) {
                     return true;
                 }
