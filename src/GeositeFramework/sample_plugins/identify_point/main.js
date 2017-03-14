@@ -116,7 +116,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 $("#sldr")
                     .slider({ min: 0, max: 5, range: false, values: [1] })
                     .slider("pips", { rest: "label"})
-                    .slider("floats");
+                    .slider("float");
 
                 // Render an accordion menu using jQueryUI
                 $("#accord").accordion( { heightStyle: "fill" } );
