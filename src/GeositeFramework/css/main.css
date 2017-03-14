@@ -1940,13 +1940,9 @@ body.x-body {
 #sidebar-help-area {
     position: fixed;
     bottom: 0;
-    padding: 4px 10px;
+    padding: 4px 5px;
     width: inherit;
     z-index: 1;
-}
-
-.nav-apps-narrow #sidebar-help-area {
-    padding: 4px 5px;
 }
 
 #help-overlay-start {
