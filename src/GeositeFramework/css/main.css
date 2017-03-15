@@ -1010,10 +1010,6 @@ header .nav-main {
     top: inherit;
 }
 .nav-main-title {
-    -ms-flex: 1;
-    flex: 1
-}
-.nav-main-title {
     font-size: 18px;
     font-weight: 900;
     color: #fff;
