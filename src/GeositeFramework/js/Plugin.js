@@ -84,7 +84,8 @@ require(['use!Geosite',
                         suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
                         resize: resizers,
                         activate3d: _.partial(activate3d, mapModel, esriSceneView),
-                        activate2d: _.partial(activate2d, mapModel, esriMapView)
+                        activate2d: _.partial(activate2d, mapModel, esriMapView),
+                        mapIs2d: function() { return mapModel.get('is2dMode'); }
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)

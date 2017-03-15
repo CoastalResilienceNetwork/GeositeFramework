@@ -1,0 +1,6 @@
+{
+    "css": [
+        "plugins/mapview-sceneview-toggle/style.css"
+    ],
+    "use": {}
+}
