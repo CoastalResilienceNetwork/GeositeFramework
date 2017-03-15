@@ -828,13 +828,13 @@ nav {
     width: 75%;
 }
 
-.nav-apps-narrow {
+.nav-apps-narrow-manual {
     width: 46px;
 }
-.nav-apps-narrow .button-text {
+.nav-apps-narrow-manual .button-text {
     display:none;
 }
-.nav-apps-button:hover .button-text:after {
+.nav-apps-narrow-manual .nav-apps-button:hover .button-text:after {
     content: "";
     top: 16px;
     left: -12px;
@@ -890,6 +890,7 @@ nav {
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
+.nav-apps-narrow-manual .button-sidebar-plugin-close,
 .nav-apps-narrow .button-sidebar-plugin-close {
   display: none !important;
 }
@@ -1940,13 +1941,9 @@ body.x-body {
 #sidebar-help-area {
     position: fixed;
     bottom: 0;
-    padding: 4px 10px;
+    padding: 4px 5px;
     width: inherit;
     z-index: 1;
-}
-
-.nav-apps-narrow #sidebar-help-area {
-    padding: 4px 5px;
 }
 
 #help-overlay-start {
