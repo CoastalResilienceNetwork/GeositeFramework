@@ -1,6 +1,5 @@
 define([
         "use!Geosite",
-        "jquery",
         "esri/geometry/Polyline",
         "esri/geometry/Polygon",
         "esri/geometry/geodesicUtils",
@@ -17,7 +16,6 @@ define([
         "esri/layers/GraphicsLayer"
     ],
     function(N,
-             $,
              Polyline,
              Polygon,
              geodesicUtils,
