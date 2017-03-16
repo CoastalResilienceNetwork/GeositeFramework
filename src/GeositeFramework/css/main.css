@@ -890,9 +890,13 @@ nav {
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
-.nav-apps-narrow-manual .button-sidebar-plugin-close,
-.nav-apps-narrow .button-sidebar-plugin-close {
+.nav-apps-narrow-manual .button-sidebar-plugin-close {
   display: none !important;
+}
+@media (max-width: 991px) {
+    .nav-apps-narrow .button-sidebar-plugin-close {
+        display: none !important;
+    }
 }
 .plugin-launcher.app-displayed.active + .button-link.button-sidebar-plugin-close {
   display: none;
