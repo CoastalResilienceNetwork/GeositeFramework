@@ -74,9 +74,13 @@
         { "name": "Shaded Relief"      , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer" },
         { "name": "Streets"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" },
         { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" },
-        { "name": "Night"              , "url": "streets-night-vector" },
-        { "name": "Streets Relief"     , "url": "streets-relief-vector" },
-        { "name": "Streets Navigation" , "url": "streets-navigation-vector" }
+        { "name": "Dark Gray Vector", "url": "dark-gray-vector" },
+        { "name": "Gray Vector", "url": "gray-vector" },
+        { "name": "Streets Vector", "url": "streets-vector" },
+        { "name": "Streets Night Vector", "url": "streets-night-vector" },
+        { "name": "Streets Relief Vector", "url": "streets-relief-vector" },
+        { "name": "Streets Navigation Vector", "url": "streets-navigation-vector" },
+        { "name": "Topo Vector", "url": "topo-vector" }
     ],
     "pluginFolders": [
         "plugins",
