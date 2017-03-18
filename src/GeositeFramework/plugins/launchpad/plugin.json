@@ -1,0 +1,6 @@
+{
+    "css": [
+        "plugins/launchpad/style.css",
+    ],
+    "use": {}
+}

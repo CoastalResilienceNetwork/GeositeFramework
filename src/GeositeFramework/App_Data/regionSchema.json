@@ -27,23 +27,31 @@
         "headerLinks": {
             "type": "array",
             "items": {
+                "text": {"type": "string", "required": true},
+                "url": {"type": "string", "required": true},
+                "popup": {"type": "boolean", "required": false},
+                "elementId": {"type": "string", "required": false},
+                "items": {"type": "array", "items": {
+                        "type": "object",
+                        "properties": {
+                            "text": {"type": "string", "required": true},
+                            "url": {"type": "string", "required": true},
+                            "popup": {"type": "boolean", "required": false},
+                            "elementId": {"type": "string", "required": false}
+                        },
+                        "additionalProperties": false
+                    }, "required": false}
+                },
+                "additionalProperties": false
+            }
+        },
+        "regionLinks": {
+            "type": "array",
+            "items": {
                 "type": "object",
                 "properties": {
                     "text": {"type": "string", "required": true},
                     "url": {"type": "string", "required": true},
-                    "popup": {"type": "boolean", "required": false},
-                    "launchpadId": {"type": "string", "required": false},
-                    "elementId": {"type": "string", "required": false},
-                    "items": {"type": "array", "items": {
-                            "type": "object",
-                            "properties": {
-                                "text": {"type": "string", "required": true},
-                                "url": {"type": "string", "required": true},
-                                "popup": {"type": "boolean", "required": false},
-                                "elementId": {"type": "string", "required": false}
-                            },
-                            "additionalProperties": false
-                        }, "required": false}
                 },
                 "additionalProperties": false
             }
@@ -96,7 +104,7 @@
             }
         },
         "basemaps": {
-            "type": "array", 
+            "type": "array",
             "required": true,
             "minItems": 1,
             "items": {
@@ -131,6 +139,10 @@
                 "customPrintTemplatePrefix": {
                     "type": "string",
                     "required": false
+                },
+                "headerLogoPath": {
+                    "type": "string",
+                    "required": false
                 }
             },
             "additionalProperties": false
@@ -142,8 +154,10 @@
         "colors": {
             "type": "object",
             "properties": {
-                "primary": {"type": "string", "required": true},
-                "secondary": {"type": "string", "required": true}
+                "primary": {"type": "string", "required": false},
+                "secondary": {"type": "string", "required": false},
+                "tertiary": {"type": "string", "required": false},
+                "active": {"type": "string", "required": false}
             },
             "required": false,
             "additionalProperties": false
@@ -156,38 +170,48 @@
             "type": "boolean",
             "required": false
         },
-        "launchpads": {
-            "type": "array",
+        "launchpad": {
+            "type": "object",
             "required": false,
-            "items": {
+            "properties": {
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "required": true },
-                    "title": { "type": "string", "required": true },
-                    "description": { "type": "string", "required": true },
-                    "showSubRegions": { "type": "boolean", "required": false },
-                    "subRegionDescription": { "type": "string", "required": false },
-                    "showByDefault": { "type": "boolean", "required": false },
-                    "categories": {
+                    "html": { "type": "bool", "required": false },
+                    "title": { "type": "string", "required": false },
+                    "description": { "type": "string", "required": false },
+                    "plugins": {
+                        "required": false,
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
-                                "name": { "type": "string" },
-                                "description": { "type": "string" },
-                                "issues": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "name": { "type": "string" },
-                                            "description": { "type": "string" },
-                                            "saveCode": { "type": "string" },
-                                            "faIcon": { "type": "string" },
-                                            "faSize": { "type": "number" }
-                                        }
-                                    }
-                                }
+                                "title": { "type": "string", "required": true },
+                                "description": { "type": "string", "required": true },
+                                "pluginName": { "type": "string", "required": true },
+                            }
+                        }
+                    },
+                    "scenarios": {
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "title": { "type": "string", "required": true },
+                                "description": { "type": "string", "required": true },
+                                "saveCode": { "type": "string", "required": true },
+                            }
+                        }
+                    },
+                    "partners": {
+                        "type": "array",
+                        "required": false,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "logoPath": { "type": "string", "required": true },
+                                "link": { "type": "string", "required": true },
+                                "title": { "type": "string", "required": true }
                             }
                         }
                     }

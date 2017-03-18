@@ -32,37 +32,46 @@
             {
                 <a class="framework-popup" href="javascript:;" data-url="@link.Url">@link.Text</a>
             }
-            else if (link.LaunchpadId != null)
-            {
-                <a class="launchpad-trigger" href="javascript:;" data-launchpad-id="@link.LaunchpadId">@link.Text</a>
-            }
             else if (link.Items != null && link.Items.Any())
             {
-                var id = "link-dd-" + link.GetHashCode();
-                <a href="@link.Url" data-dropdown="#@id" class="dropdown-init">@link.Text
-                    <span class="dropdown-arrow">&#9660;</span>
-                </a>
-                <div id="@id" class="dropdown dropdown-tip">
+                <li class="dropdown-submenu">
+                    <a id="region-header-menu" href="#">
+                        Other Regions
+                        <i class="dropdown-icon icon-angle-right"></i>
+                    </a>
+
                     <ul class="dropdown-menu">
-                        @RenderLinks(link.Items, false)
+                        @RenderRegionLinks(link.Items)
                     </ul>
-                </div>
+                </li>
             }
             else
             {
-                <a target="_blank" href="@link.Url">@link.Text</a>
+                <a target="_blank" href="@link.Url">@link.Text <i class="icon-link-ext"></i></a>
             }
 
         </li>
     }
 
 }
+
+@helper RenderRegionLinks(IList<Geosite.Link> links) {
+    if (links != null) {
+        foreach (var link in links) {
+            <li id="@link.ElementId">
+                <a target="_blank" href="@link.Url">@link.Text <i class="icon-link-ext"></i></a>
+            </li>
+        }
+    }
+}
+
 <!DOCTYPE html>
 <!--[if IE 8]>          <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-    <meta http-equiv="x-ua-compatible" content="IE=9"/>
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@Model.TitleMain.Text | @Model.TitleDetail.Text</title>
 
     <!-- Load CSS for plugins -->
@@ -76,23 +85,65 @@
     <link rel="stylesheet" href="//js.arcgis.com/3.10/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="//js.arcgis.com/o/232546/geosite-v1.0.9/esri/css/esri.css">
 
-    <link rel="stylesheet" href="css/print.css">
-    <link rel="stylesheet" href="css/foundation.min.css">
     <link rel="stylesheet" href="css/TinyBox2.css">
-    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="css/pageguide.min.css"/>
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/jquery.dropdown.css"/>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/measure.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500,900" rel="stylesheet">
+    <link href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styleguide.css">
+    <link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
 
+    <!-- jQuery UI needs to load before Dojo, or else there is a conflict that prevents Dojo from loading -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
-        .top-bar {
+        header {
             background: @Model.PrimaryColor;
         }
 
-        .top-bar ul > li.name h1 a {
+        .nav-apps {
+            background-color: @Model.TertiaryColor;
+        }
+
+        .nav-apps-button.active.app-displayed {
+            background-color: @Model.ActiveAppColor;
+        }
+
+        .color-primary,
+        .alert-primary {
             color: @Model.SecondaryColor;
+        }
+
+        .background-primary,
+        .button-primary,
+        .nav-apps-button.active,
+        .header-dropdown .dropdown-menu,
+        .dropdown-menu>.active>a:hover,
+        .loading.loading-pulse.loading-primary,
+        .loading.loading-blink.loading-primary>div,
+        .alert-primary {
+            background-color: @Model.SecondaryColor;
+        }
+
+        .button:focus,
+        .button-primary:focus,
+        .button-secondary:focus,
+        .button-danger:focus,
+        .button-warning:focus {
+            box-shadow: 0 1px 2px -1px @Model.SecondaryColor;
+        }
+
+        .header-dropdown .dropdown-menu:after {
+            border-bottom: 7px solid @Model.SecondaryColor;
+        }
+
+        .loading.loading-spinner.loading-primary {
+            border-left: 1.1em solid @Model.SecondaryColor;
+            border-bottom: 1.1em solid @Model.SecondaryColor;
+            border-right: 1.1em solid @Model.SecondaryColor;
         }
 
         /* Use custom colors for overlay */
@@ -120,10 +171,7 @@
             background-color: @Model.SecondaryColor;
             opacity: 0.2;
         }
-
-        /* Site color for header dropdown menu selection */
-        .top-bar .dropdown .dropdown-menu LI > A:hover,
-        .top-bar .dropdown .dropdown-menu LABEL:hover {
+        .dropdown-submenu > a:not(:hover) {
             background-color: @Model.SecondaryColor;
         }
     </style>
@@ -146,7 +194,7 @@
 
 
 <!-- EX.: view-split, view-left, view-right -->
-<body class="view-left" style="zoom: 0 !important;">
+<body class="app-fullscreen" style="zoom: 0 !important;">
 
     <!-- iframe and form are used in tandem to facilitate a non-reloading
         POST to the download URL.  The form targets the iframe, making it reload
@@ -158,34 +206,54 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        <div class="sidebar">
-            <ul class="plugins side-nav twelve top"></ul>
-            <ul class="side-nav twelve bottom"></ul>
-        </div>
-        <div class="map-outer">
-            <div id="map-<%= paneNumber %>" class="map">
-                <div class="control-container">
-                    <div class="top-tools"></div>
-                    <div class="tools"></div>
-                    <div class="basemap-selector">
-                        <div class="basemap-selector-title"></div>
-                        <div class="basemap-selector-list">
-                            <ul>
-                            </ul>
+        <nav class="nav-apps plugins">
+            <div id="sidebar-help-area">
+                <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
+            </div>
+        </nav>
+        <div class="flex-expand">
+            <div class="flex-container">
+                <div id="map-0" class="map">
+                    <div class="control-container">
+                        <div class="top-tools"></div>
+                        <div class="map-tools">
+                            <!-- Map utils control -->
+                            <div class="topbar-plugin" id="map-utils-control">
+                                <div class="plugin-launcher">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
+                                        <i class="icon-wrench"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+                                        <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
+                                        <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
+                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Top bar plugins -->
+                            <div class="tools"></div>
+                        </div>
+                        <div class="basemap-selector">
+                            <div class="basemap-selector-title"></div>
+                            <div class="basemap-selector-list">
+                                <ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="legend-container-<%= paneNumber %>" class="legend">
-                    <div class="legend-header">
-                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    <div id="legend-container-<%= paneNumber %>" class="legend">
+                        <div class="legend-header">
+                            <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                        </div>
+                        <div class="legend-body">
+                            <div class="layer-legends"></div>
+                            <div class="plugin-legends"></div>
+                        </div>
                     </div>
-                    <div class="legend-body">
-                        <div class="layer-legends"></div>
-                        <div class="plugin-legends"></div>
-                    </div>
+                    <div class="subregion-tooltip"></div>
                 </div>
-                <div class="subregion-tooltip"></div>
             </div>
         </div>
     </script>
@@ -221,10 +289,16 @@
             <% }) %>
             <% if (legend.length > 5) { %>
                 <div class="item expand">
-                    <a href="#" class="expand-legend">View <% print(legend.length - 5) %> more</a>
+                    <a href="#" class="expand-legend">
+                        <span class="i18n" data-i18n="View">View</span>
+                        <span> <% print(legend.length - 5) %> </span>
+                        <span class="i18n" data-i18n="more">more</span>
+                    </a>
                 </div>
                 <div class="item extra collapse">
-                    <a href="#" class="expand-legend">View less</a>
+                    <a href="#" class="expand-legend">
+                        <span class="i18n" data-i18n="View less">View less</span>
+                    </a>
                 </div>
             <% } %>
         </div>
@@ -280,20 +354,23 @@
             </li>
         <% } %>
         <% if (showExportButton) { %>
-            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Export Page">Export Page</span></a></li>
+            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Create Map">Create Map</span></a></li>
         <% } %>
 
     </script>
 
     <script type="text/template" id="template-sidebar-plugin">
-            <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;">
-                <img src="<%- pluginSrcFolder %>/icon<%= selected ? '_active' : ''%>.png">
-                <div class="i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></div>
-            </a>
+        <button class="nav-apps-button plugin-launcher i18n <%= selected ? 'active' : ''%> <%= displayed ? 'app-displayed' : ''%>" data-i18n="[title]<%=fullName%>">
+            <span class="button-icon"><img src="<%- pluginSrcFolder %>/icon_sm.png"></span>
+            <span class="button-text i18n" data-i18n="<%- pluginObject.toolbarName %>"><%- pluginObject.toolbarName %></span>
+        </button>
+        <button class="button-link button-sidebar-plugin-close plugin-clear">
+            <i class="icon-cancel"></i>
+        </button>
     </script>
 
     <script type="text/template" id="template-topbar-plugin">
-            <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;"></a>
+        <a class="plugin-launcher i18n" data-i18n="[title]<%=fullName%>" href="javascript:;"></a>
     </script>
 
     <script type="text/template" id="template-topbar-tools">
@@ -312,23 +389,32 @@
     </script>
 
     <script type="text/template" id="template-plugin-container">
-        <div class="plugin-container-outer" id="<%= id %>" style="position: absolute;"> <!-- Extra outer div to minimize mis-alignment of dojo resize "ghost".
-                                                                                             Position:absolute to eliminate jump in dojo drag. -->
-            <div class="plugin-container">
-                <div class="plugin-container-header">
-                    <h6 class="i18n" data-i18n="<%- title %>"><%- title %></h6>
-                    <a class="plugin-off" href="javascript:;">&#10006;</a>
-                    <a class="plugin-close" href="javascript:;">&#95;</a>
-
+        <div class="sidebar <%= sizeClassName %> content-scrollable" id="<%= id %>" style="<%= customWidth %>">
+            <div class="sidebar-nav">
+                <h2 class="nav-title" class="i18n" data-i18n="<%- title %>">
+                    <%- title %>
+                </h2>
+                <div class="nav-buttons">
                     <% if (hasCustomPrint) { %>
-                        <a class="plugin-print i18n" data-i18n="[title]Print Contents" href="javascript:;" title="Print Contents"><i class="fa fa-print"></i></a>
+                        <button class="button-link plugin-print i18n" data-i18n="[title]Print Contents" title="Print Contents">
+                            <i class="icon-print"></i>
+                        </button>
                     <% } %>
 
-                    <% if (isHelpButtonVisible) { %>
-                        <a class="plugin-help i18n" data-i18n="[title]View the info-graphic" href="javascript:;" title="View the info-graphic">?</a>
+                    <% if (hasHelp) { %>
+                        <button class="button-link plugin-help i18n" data-i18n="[title]Help" title="Help">
+                            <i class="icon-info-circled"></i>
+                        </button>
                     <% } %>
+                    <button class="button-link plugin-minimize i18n" data-i18n="[title]Minimize this plugin" title="Minimize this plugin">
+                        <i class="icon-window-minimize"></i>
+                    </button>
+                    <button class="button-link plugin-off i18n" data-i18n="[title]Turn off this plugin" title="Turn off this plugin">
+                        <i class="icon-cancel"></i>
+                    </button>
                 </div>
-                <div class="plugin-container-inner"></div>
+            </div>
+            <div class="sidebar-content">
             </div>
         </div>
     </script>
@@ -371,31 +457,40 @@
     <script type="text/template" id="template-export-window">
         <div class="popover">
             <div class="popover-header">
-                <h2><span class="i18n" data-i18n="Map">Map</span> <span class="export-pane-number"></span> <span class="i18n" data-i18n="Export">Export</span></h2>
+                <h2><span class="i18n" data-i18n="Map Export">Create Map</span></h2>
             </div>
             <div class="popover-content">
                 <div class="row">
-                    <h5 class="i18n" data-i18n="Title (Optional):">Title (Optional):</h5> <input type="text" id="export-title"/>
-                    <div class="small-4 columns">
-                        <h5 class="i18n" data-i18n="Orientation">Orientation</h5>
-                        <label><input type="radio" name="export-orientation" value="Landscape" checked="checked"/><span class="i18n" data-i18n="Landscape">Landscape</label>
-                        <label><input type="radio" name="export-orientation" value="Portrait"/><span class="i18n" data-i18n="Portrait">Portrait</label>
+                    <div class="popover-section">
+                        <h3 class="i18n" data-i18n="Title (Optional):">Title (Optional):</h3>
+                        <input type="text" class="form-control" id="export-title"/>
                     </div>
-                    <div class="small-4 columns">
-                         <h5 class="i18n" data-i18n="Legend">Legend</h5>
-                        <label><input type="checkbox" name="export-include-legend" /><span class="i18n" data-i18n="Include Layer Legend">Include Layer Legend</span></label>
+                    <div class="popover-section">
+                        <h3 class="i18n" data-i18n="Orientation">Orientation</h3>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Landscape" checked="checked"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Landscape">Landscape</span>
+                        </label>
+                        <label class="form-component">
+                            <input type="radio" name="export-orientation" value="Portrait"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Portrait">Portrait</span>
+                        </label>
+                        <p class="font-italic small i18n" data-i18n="Browser Print">* You may need to alter your browser print settings</p>
                     </div>
-                    <div class="small-4 columns">
-                        <div class="export-indicator"><img class="icon" src="img/spinner.gif" /></div>
+                    <div class="popover-section">
+                         <h3 class="i18n" data-i18n="Legend">Legend</h3>
+                        <label class="form-component">
+                            <input type="checkbox" name="export-include-legend" checked/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Include Layer Legend">Include Layer Legend</span>
+                        </label>
                     </div>
+                    <button id="export-button" class="button button-primary radius i18n" data-i18n="Generate Map Export">Generate Map Export</button>
                 </div>
-                <div class="row">
-                    <div class="left-col">
-                        <div class="export-output-area"></div>
-                    </div>
-                    <div class="right-col">
-                        <a href="#" id="export-button" class="button radius i18n" data-i18n="Generate Map Export" disabled="disabled">Generate Map Export</a>
-                    </div>
+                <div id="export-print-preview-container">
+                    <div id="export-print-preview-map"></div>
                 </div>
             </div>
         </div>
@@ -409,7 +504,7 @@
     <!-- Adding any white space between the textarea and the iframe
         will result in whitespace within the rendered textarea, which looks strange. -->
     <script type="text/template" id="embed-iframe">
-       <textarea class="code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
+       <textarea class="form-control code-like"><iframe width="<%= width %>" height="<%= height %>" src="<%= shortUrl %>"></iframe>
        </textarea>
     </script>
 
@@ -420,78 +515,37 @@
             </div>
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
-                  <label><span class="i18n" data-i18n="Permalink:">Permalink:</span><input class="code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
-                  <p class="i18n" data-i18n="Share your map with friends or family, or just bookmark the link for later.">Share your map with friends or family, or just bookmark the link for later.</p>
-                  <label class="i18n" data-i18n="Embed this map in your website:">Embed this map in your website:</label>
-                  <div id="iframe-embed"></div>
-                  <label><span class="i18n" data-i18n="Embed Width (px)">Embed Width (px)</span>
-                    <input type="number" class="embed-size width" value="<%= width %>" /></label>
-                  <label><span class="i18n" data-i18n="Embed Height (px)">Embed Height (px)</span>
-                    <input type="number" class="embed-size height" value="<%= height %>" /></label>
-                  <em>
-                    <label><span class="i18n" data-i18n="Need the save code for this map?">Need the save code for this map?</span> <a href="javascript:void(0);" class="show-long-permalink i18n" data-i18n="Get it here.">Get it here.</a>
-                      <input class="code-like" id="long-permalink-textbox" type="text" value="<%= hash %>"/>
-                    </label>
-                  </em>
+                  <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div>
+                    <input class="form-control code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
+                  <label class="popover-section h3" data-i18n="Embed"><div class="h3">Embed</div></label>
+                  <p>You can copy and paste the following code to embed this map on your website.</p><br>
+                  <span id="iframe-embed"></span>
+                  <div class="popover-container">
+                      <div class="row">
+                          <div class="column">
+                              <label class="popover-section">
+                                  <div class="h4 i18n" data-i18n="Embed Width (px)">Embed Width (px)</div>
+                                  <input type="number" class="form-control embed-size width" value="<%= width %>" />
+                              </label>
+                          </div>
+                          <div class="column">
+                              <label class="popover-section">
+                                  <div class="h4 i18n" data-i18n="Embed Height (px)">Embed Height (px)</div>
+                                  <input type="number" class="form-control embed-size height" value="<%= height %>" />
+                              </label>
+                          </div>
+                      </div>
+                  </div>
+                  <label class="popover-section">
+                      <div class="h3 i18n" data-i18n="Need the save code for this map?">
+                          Need the save code for this map?
+                      </div>
+                      <a href="javascript:void(0);" class="show-long-permalink i18n" data-i18n="Get it here.">
+                          Get it here.
+                      </a>
+                    <input class="form-control code-like" id="long-permalink-textbox" type="text" value="<%= hash %>"/>
+                  </label>
                 </div>
-            </div>
-        </div>
-    </script>
-
-    <script type="text/template" id="template-launchpad">
-        <div class="popover launchpad">
-            <div class="popover-header">
-                <h2><%= title %></h2>
-            </div>
-
-            <div class="popover-content ">
-                <div class="row">
-                    <p><%= description %></p>
-                </div>
-                <% if (typeof(showSubRegions) !== "undefined" && showSubRegions && subregions) { %>
-                <div class="row">
-                    <div class="well">
-                        <div class="description">
-                            <h3 class="i18n" data-i18n="Pick a Geography">Pick a Geography</h3>
-                            <p><% if (typeof(subRegionDescription) !== "undefined") { %> <%= subRegionDescription %> <% } %></p>
-                        </div>
-                        <div class="thumbs">
-                            <ul>
-                                <li class="free-explore"><i class="fa fa-globe"></i><label class="i18n" data-i18n="Explore the map">Explore the map</label></li>
-                                <% _.each(subregions.areas, function(subregion) { %>
-                                <li class="subregion" data-subregion-id="<%= subregion.id %>"><i class="fa fa-map-marker"></i><label><%= subregion.display %></label></li>
-                                <% }); %>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-
-                <% _.each(categories, function(category) { %>
-                <div class="row">
-                    <div class="well">
-                        <div class="description">
-                            <h3><%= category.name %></h3>
-                            <p><%= category.description %></p>
-                        </div>
-                        <div class="thumbs">
-                            <ul>
-                                <% _.each(category.issues, function(issue) { %>
-                                    <li class="lp-issue-btn" data-issue-id="<%= issue.id %>">
-                                        <i class="<%= issue.faIcon %>"
-                                            <% if (issue.faSize) { %>
-                                                style="font-size:<%= issue.faSize %>px"
-                                            <% } %>
-                                        ></i>
-                                         <label><%= issue.name %></label>
-                                    </li>
-                                <% }); %>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <% }); %>
             </div>
         </div>
     </script>
@@ -524,48 +578,126 @@
         </div>
     </script>
 
+    <script type="text/template" id="template-measure-intro">
+        <span data-i18n="Click the map to start measuring"></span>
+    </script>
+
+    <script type="text/template" id="template-measure-tooltip">
+        <div class="measure-tooltip">
+            <p><%= instructions %></p>
+            <div>
+                <div class="measure-label"><%= segmentLabel %>:</div>
+                <% _.each(segmentLengths, function (item, index) { %>
+                    <div><%= item.length %> <%= item.uom %></div>
+                <% }); %>
+            </div>
+            <div>
+                <div class="measure-label"><%= lengthLabel %>:</div>
+                <% _.each(totalLengths, function (item, index) { %>
+                    <div><%= item.length %> <%= item.uom %></div>
+                <% }); %>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="template-measure-infobubble">
+        <div class="measure-bubble">
+            <div>
+                <span>Units:</span>
+                <a class="measure-unit-filter" data-unit="mi" title="Miles" href="#">mi</a>
+                <a class="measure-unit-filter" data-unit="km" title="Kilometers" href="#">km</a>
+                <% if (areas) { %>
+                <a class="measure-unit-filter" data-unit="ac" data-alt-unit="mi" title="Acres" href="#">ac</a>
+                <a class="measure-unit-filter" data-unit="ha" data-alt-unit="km" title="Hectares" href="#">ha</a>
+                <% } %>
+            </div>
+            <hr />
+            <% if (areas) { %>
+                <p>
+                    <span class="measure-label i18n" data-i18n="Area:">Area:</span>
+                    <% _.each(areas, function (item, index) { %>
+                        <span class="measure-unit-value <%= item.uom %>">
+                            <%= item.area %> <%= item.uom %>
+                            <% if (item.uom === "mi" || item.uom === "km") { %>
+                                <sup>2</sup>
+                            <% } %>
+                        </span>
+                    <% }); %>
+                </p>
+            <% } %>
+            <p>
+                <span class="measure-label i18n" data-i18n="Length:">Length:</span>
+                <% _.each(lengths, function (item, index) { %>
+                        <span class="measure-unit-value measure-unit-length <%= item.uom %>">
+                            <%= item.length %> <%= item.uom %>
+                        </span>
+                <% }); %>
+            </p>
+            <p>
+                <button type="button"
+                        class="btn"
+                        data-action="Clear"
+                        data-i18n="Clear">Clear</button>
+            </p>
+        </div>
+    </script>
+
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
-    <div class="fixed">
-        <nav class="top-bar">
-            <ul>
-                <li class="name">
-                    <h1>@OptionalLinkText(@Model.TitleMain)</h1>
-                    <h2>@OptionalLinkText(@Model.TitleDetail)</h2>
-                </li>
-                <!-- USED FOR SMALLER SCREENS TO CONDENSE NAVIGATION -->
-                <li class="toggle-topbar"><a href="javascript:;"></a></li>
+    <header>
+        <div class="dropdown header-dropdown nav-main-dropdown">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="dropdown-icon-container">
+                        <i class="dropdown-icon icon-menu"></i>
+                    </div>
+                    <div class="nav-main-title">
+                        @Model.TitleMain.Text
+                    </div>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
+                @RenderLinks(Model.HeaderLinks)
             </ul>
-            <section>
-                <ul class="right">
-                    @RenderLinks(Model.HeaderLinks)
-                </ul>
-            </section>
-        </nav>
-    </div>
+        </div>
+        <div class="nav-region-subtitle">
+            @Model.TitleDetail.Text
+        </div>
+        <div id="search"></div>
+    </header>
 
     @Html.Partial("TourInfo")
+
+    <!-- If a view is provided (overwritten via the region repo), a user can
+        change the region setting `launchpad.html = true` to use this content -->
+    <div id="custom-launchpad-content" style="display:none;">
+        @Html.Partial("CustomLaunchpadContent")
+    </div>
 
     <!-- Area for plugins to arrange their markup independent
         of their container -->
     <div id="plugin-print-sandbox"></div>
 
-    <!-- LEFT CONTENT AREA -->
-    <div id="left-pane" class="content"></div>
+    <!-- Area for the main map to get setup for printing. -->
+    <div id="map-print-sandbox">
+        <div class="print-sandbox-header">
+            <img src="@Model.PrintHeaderLogo" title="Header Logo" class="logo" />
+            <h1></h1>
+        </div>
+        <div id="print-map-container"></div>
+    </div>
 
-    <!-- RIGHT CONTENT AREA -->
-    <div id="right-pane" class="content"></div>
+    <!-- LEFT CONTENT AREA -->
+    <div id="left-pane" class="flex-container content"></div>
 
     <script src="js/polyfill.js"></script>
 
     <script src="//apis.google.com/js/client.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
     <!-- Scripts that will change their behavior in undesirable ways if they find an AMD
          environment should be loaded before the jsapi -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
     <script src="js/lib/jquery.mousewheel.min.js"></script>
-    <script src="js/lib/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="js/lib/i18next-2.2.0.min.js"></script>
     <script src="js/lib/i18next-XHRBackend-0.3.0.min.js"></script>
     <script src="js/lib/i18next-jquery-0.0.14.min.js"></script>
@@ -573,14 +705,12 @@
 
     <script src="//js.arcgis.com/o/232546/geosite-v1.0.9/dojo/dojo.js"></script>
     <script src="Scripts/json2.min.js"></script> <!-- Can be removed when IE8 support is dropped -->
-    <script src="js/lib/foundation/foundation.min.js"></script>
-    <script src="js/lib/foundation/app.js"></script>
-    <script src="js/lib/jquery.dropdown.min.js"></script>
     <script src="js/lib/backbone.picky.js"></script>
     <script src="js/lib/jquery.history.min.js"></script>
     <script src="js/lib/backbone.hashmodels.js"></script>
     <script src="js/lib/TinyBox2.js"></script>
     <script src="js/lib/pageguide.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
             // Configure the Dojo module loader so that module identifiers starting with "plugins/"
@@ -594,6 +724,9 @@
         var useConfig = { @Html.Raw(Model.ConfigurationForUseJs) };
         useConfig['Azavea'] = { attach: 'Azavea' };
         useConfig['Geosite'] = { attach: 'Geosite' };
+        useConfig['jqueryui'] = { attach: 'jqueryui' };
+        useConfig['chosen'] = { attach: 'chosen', deps: ['jquery'] };
+        useConfig['pips'] = { attach: 'pips', deps: ['jqueryui'] };
 
         require({
             async: true,
@@ -617,7 +750,10 @@
                 "use": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/use",
                 "Azavea": location.pathname.replace(/\/[^/]+$/, "") + "js/azavea.util",
                 "Geosite": location.pathname.replace(/\/[^/]+$/, "") + "js/Geosite",
-                "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min"
+                "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min",
+                "jqueryui": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui.min",
+                "chosen": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/chosen.jquery.min",
+                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min"
             },
             use: useConfig
         });
@@ -632,7 +768,6 @@
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
     <script src="js/SubRegion.js"></script>
-    <script src="js/Launchpad.js"></script>
     <script src="js/MapWrapper.js"></script>
     <script src="js/Pane.js"></script>
     <script src="js/Plugin.js"></script>

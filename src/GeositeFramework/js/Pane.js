@@ -101,31 +101,45 @@ require([
             // Iterate over plugin classes in top-level namespace,
             // instantiate them, and wrap them in backbone objects
 
-            var plugins = new N.collections.Plugins();
+            var plugins = new N.collections.Plugins(),
+                regionData = model.get('regionData');
 
             _.each(N.plugins, function(PluginClass, i) {
                 try {
                     var pluginObject = new PluginClass(),
                         plugin = new N.models.Plugin({
                             pluginObject: pluginObject,
-                            pluginSrcFolder: model.get('regionData').pluginFolderNames[i]
+                            pluginSrcFolder: regionData.pluginFolderNames[i]
                         });
 
                     // Load plugin only if it passes a compliance check ...
-                    if (plugin.isCompliant()) {
-                        // ... and if we're on map 2, and the plugin isn't on the blacklist
-                        if (model.get('paneNumber') === 1) {
-                            if (getPluginMap2Availability(plugin.getId())) {
-                                plugins.add(plugin);
-                            }
-                        } else {
-                            plugins.add(plugin);
-                        }
-                    } else {
+                    if (!plugin.isCompliant()) {
                         console.log('Plugin: Pane[' + model.get('paneNumber') + '] - ' +
                             pluginObject.toolbarName +
                             ' is not loaded due to improper interface');
+                        return;
                     }
+
+                    // If we're on map 2, and the plugin isn't on the blacklist
+                    if (model.get('paneNumber') === 1) {
+                        var pluginAvailableForMap = getPluginMap2Availability(plugin.getId());
+                        if (!pluginAvailableForMap) {
+                            return;
+                        }
+                    }
+
+                    // If this plugin is the launchpad, but that feature is not configured in the 
+                    // region config, don't create it.
+                    var srcFolder = plugin.get('pluginSrcFolder'),
+                        pluginRoot = srcFolder.substring(srcFolder.lastIndexOf('/') + 1);
+
+                    if (pluginRoot === 'launchpad' && !regionData.launchpad) {
+                        return;
+                    }
+
+                    // All checks are valid against this plugin
+                    plugins.add(plugin);
+
                 } catch(e) {
                     console.error("/ --------------------");
                     console.error("There was a problem creating a plugin.");
@@ -153,17 +167,34 @@ require([
         function initPlugins(model, esriMap) {
             var mapModel = model.get('mapModel'),
                 regionData = model.get('regionData'),
-                savedState = model.get('stateOfPlugins');
+                savedState = model.get('stateOfPlugins'),
+                launchpadPlugin = null;
 
             model.get('plugins').each(function(pluginModel) {
+                if (checkName(pluginModel, 'launchpad')) {
+                    launchpadPlugin = pluginModel;
+                }
                 pluginModel.initPluginObject(regionData, mapModel, esriMap);
             });
 
-            // Wait a second before activating a permaline (scenario) to ensure the map
+            // Wait a second before activating a permalink (scenario) to ensure the map
             // layer is loaded.
             _.delay(function() {
                 activateScenario(model, savedState, model.get('activeSubregion'));
+
+                // If no savedState and there is a launchpad plugin, active it first.
+                // A saveCode key would indicate that another plugin should be active
+                if (Object.keys(savedState).length === 0 && launchpadPlugin) {
+                    launchpadPlugin.toggleSelected();
+                }
             }, 1000);
+        }
+
+        function checkName(pluginModel, nameToCheck) {
+            if (pluginModel.name().indexOf('/' + nameToCheck) > -1) {
+                return true;
+            }
+            return false;
         }
 
         function activateScenario(pane, stateOfPlugins, activeSubregion) {
@@ -264,24 +295,7 @@ require([
             initBasemapSelector(view);
             initMapView(view);
             initPluginViews(view);
-            view.$('.side-nav.top').mCustomScrollbar({
-                advanced: { updateOnContentResize: true },
-                mouseWheelPixels: 75,
-                autoHideScrollbar: false,
-                contentTouchScroll: true
-            });
             N.app.models.screen.on('change', function() { renderSidebar(view); });
-
-            // The scrollbar is inconsistent in showing up, and I suspect that it is
-            // due to the content height not being specified when it calculates if it
-            // needs to be displayed or not.  Wait a little while and then update the
-            // scrollbar to let it determine visibility post render.
-            setTimeout(function() { view.$('.side-nav.top').mCustomScrollbar("update"); }, 1000);
-
-            // Detects orientation change and updates the scrollbar
-            window.onorientationchange = function() {
-                view.$('.side-nav.top').mCustomScrollbar('update');
-            };
 
             // For on demand export initialization. See Layer Selector print, for example.
             var paneNumber = view.model.get('paneNumber');
@@ -356,8 +370,6 @@ require([
                     // Clicking the map means "Identify" contents at a point
                     dojo.connect(esriMap, "onClick", tryIdentify);
                 }
-
-                adjustToolPositions(view, esriMap);
             });
 
             function tryIdentify(event) {
@@ -366,6 +378,9 @@ require([
                 // the framework level 'identify' feature can be disabled by
                 // an active plugin if the plugin uses the map click for another
                 // purpose.
+                if (!view.model.get('regionData').identifyEnabled) {
+                    return;
+                }
                 var pluginModels = view.model.get('plugins');
                 if (!pluginModels.selected ||
                     pluginModels.selected.get('pluginObject').allowIdentifyWhenActive) {
@@ -413,25 +428,6 @@ require([
             });
         }
 
-        function adjustToolPositions(view, esriMap) {
-            // If there are tools above the "+/-" zoom buttons, move everything down
-            var nMapTopPlugins = view.$('.top-tools').children().length;
-            if (nMapTopPlugins > 0) {
-                var $zoomButtons = view.$('#' + esriMap.id + '_zoom_slider'),
-                    $mapbar = view.$('.tools');
-                lowerTool($zoomButtons, nMapTopPlugins);
-                lowerTool($mapbar, nMapTopPlugins);
-            }
-        }
-
-        function lowerTool($el, toolCount) {
-            // Move $el lower on the page by "toolCount" slots
-            var pluginButtonHeight = 44,
-                offset = $el.offset();
-            offset.top += toolCount * pluginButtonHeight;
-            $el.offset(offset);
-        }
-
         N.views = N.views || {};
         N.views.Pane = Backbone.View.extend({
             mapView: null,
@@ -448,13 +444,7 @@ require([
                         paneNumber: this.model.get('paneNumber')
                     }),
                     view = new N.views.ExportTool({ model: model });
-
-                TINY.box.show({
-                    html: view.render().el,
-                    fixed: true,
-                    maskopacity: 50,
-                    closejs: function() { view.remove(); }
-                });
+                view.render();
             },
 
             saveState: function() {

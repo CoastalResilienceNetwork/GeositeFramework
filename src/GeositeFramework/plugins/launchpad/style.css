@@ -1,0 +1,32 @@
+.launchpad-plugin {
+    padding: 10px;
+    height: calc(90vh - 60px);
+}
+.launchpad-plugin .plugins div,
+.launchpad-plugin .scenarios div {
+    display: inline-block;
+    width: 83%;
+}
+.launchpad-plugin .plugins .button,
+.launchpad-plugin .scenarios .button {
+    float: right;
+}
+.launchpad-plugin .partners li {
+    display: inline-block;
+}
+.launchpad-plugin .partners img {
+    height: 60px;
+    margin: 5px 10px;
+}
+.launchpad-plugin ul {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.launchpad-plugin .plugins .button.truncate-toggle, .scenarios .button.truncate-toggle {
+    padding: 2px;
+    font-size: 0.7em;
+    width: 35%;
+    float: none;
+}

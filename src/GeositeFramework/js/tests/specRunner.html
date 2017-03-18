@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta charset="UTF-8" /> 
+  <meta charset="UTF-8" />
   <title>Test Runner</title>
   <link rel="stylesheet" type="text/css" href="../../../../tools/JsTestTools/lib/jasmine/jasmine.css">
 
@@ -24,7 +24,6 @@
   </script>
 
   <!-- load application source files -->
-  <script type="text/javascript" src="../../plugins/zoom_to/ui.js"></script>
   <script type="text/javascript" src="../Geosite.js"></script>
   <script type="text/javascript" src="../Plugin.js"></script>
   <script type="text/javascript" src="../Pane.js"></script>
@@ -34,7 +33,6 @@
 
 
     <!-- load test spec files -->
-  <script type="text/javascript" src="./spec/ZoomToSpec.js"></script>
 </head>
 <body>
 
@@ -45,8 +43,7 @@ modules = {};
 // add it to the modules global, and refer to it by modules.module_name
 // in the spec file.
 
-require(["../../plugins/zoom_to/ui.js"], function (ui) {
-  modules.ui = ui;
+require([], function () {
   jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
   // The test output, by default, is created in the same directory as phantomjs-testrunner.js
   // unless a path is passed into the JUnitXmlReport 'constructor'

@@ -1,0 +1,215 @@
+﻿@media print {
+    .print-sandbox-header h1 {
+        width: 100%;
+        padding-top: 0.3in;
+        text-align: center;
+    }
+
+    .print-sandbox-header {
+        display: flex;
+        flex-direction: row;
+        height: 0.95in;
+    }
+
+    #print-map-container {
+        overflow: hidden !important;
+    }
+
+    #map-print-sandbox {
+        visibility: visible !important;
+    }
+
+    .control-container {
+        display: none !important;
+    }
+
+    #export-print-preview-container {
+        padding-bottom: 5px !important;
+        visibility: visible;
+    }
+
+    #legend-container-0 {
+        background-color: #fff !important;
+    }
+
+    .legend-close {
+        visibility: hidden;
+    }
+    
+    #print-map-container > #export-print-preview-map > #map-0 {
+        height: 100% !important;
+        width: 100% !important;
+        position: relative;
+    }
+    
+    #legend-container-0 {
+        margin-left: 0px !important;
+        left: 0px !important;
+        width: 100% !important;
+        position: absolute !important;
+        z-index: 10;
+    }
+    
+    .dojoResizeHandle {
+        visibility: hidden !important;
+    }
+
+    #left-pane {
+        display: none;
+    }
+    
+    #right-pane {
+        display: none;
+    }
+
+    .tbox {
+        display: none !important;
+    }
+
+    .tmask {
+        display: none !important;
+    }
+
+    header {
+        display: none !important;
+    }
+
+    #print-map-container > #export-print-preview-map.div.control-container {
+        display: none;
+    }
+    
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root img.layerTile {
+        visibility: visible !important;
+    }
+
+    #print-map-container > #export-print-preview-map > #map-0 > #map-0_root > #map-0_zoom_slider {
+        display: none;
+    }
+
+    .plugin-launcher {
+        display: none;
+    }
+
+    .legend-header {
+        height: 15%;
+        font-size: 11px;
+    }
+
+    .legend-body {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100% !important;
+        height: 85% !important;
+    }
+
+    .layer-legends {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .legend-layer {
+        width: auto !important;
+        font-size: 8px;
+        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
+    }
+
+    .legend-title {
+        max-width: 75%;
+    }
+
+    .print-legend-coll {
+        display: flex !important;
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: 60px;
+        align-content: stretch;
+        justify-content: center;
+    }
+
+    .legend-layer img {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+#export-print-preview-container {
+    padding-bottom: 5px !important;
+}
+
+#export-print-preview-container.tinner > div.tcontent {
+    max-height: 100% !important;
+}
+
+#export-print-preview-container.tinner > div.tcontent > div.popover {
+    max-height: 100%;
+}
+
+#export-print-preview-container.tinner > div.tcontent > div.popover > div.popover-content {
+    max-height: 95%;
+    height: 95%;
+    padding-bottom: 5px;
+    padding-top: 10px;
+}
+
+
+#export-print-preview-map.div.control-container {
+    display: none;
+}
+
+#export-print-preview-map {
+    width: 100% !important;
+    max-height: 1800px;
+}
+
+#export-print-preview-map > #map-0 {
+    max-height: 1800px;
+    height: 100%;
+    top: 0 !important;
+    position: relative !important;
+}
+
+.instructions {
+    display: none;
+}
+
+.legend-close {
+    visibility: hidden;
+}
+
+.dojoResizeHandle {
+    visibility: hidden !important;
+}
+
+#export-title {
+    width: 100%;
+}
+.print-sandbox-header .hdr-container {
+    position: fixed;
+    height: 0.85in;
+    text-align: center;
+    padding-left: 160px;
+    display: flex;
+    flex-direction: row;
+}
+
+.print-sandbox-header h1 {
+    width: 100%;
+    padding-top: 0.3in;
+    text-align: center;
+}
+
+.print-sandbox-header {
+    display: flex;
+    flex-direction: row;
+    height: 0.95in;
+}
+
+#print-map-container {
+    overflow: hidden !important;
+}

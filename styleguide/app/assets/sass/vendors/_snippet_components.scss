@@ -1,0 +1,185 @@
+/* Styles in this file are intended to be copied into one of the frameworks main.css file */
+
+/* Overrides the imported jQuery-UI classes for the accordion - .accord is
+   added to isolate jquery-ui.css  class overrides to only those elements
+   within divs of class accord */
+.accord .ui-accordion .ui-accordion-content{
+	padding:0.5em;
+	font-size:13px;
+	color:#5d6165;
+}
+.accord .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+	left:0em;
+}
+.accord .ui-accordion .ui-accordion-icons {
+	padding-left:1.2em !important;
+}
+.accord .ui-accordion .ui-accordion-icons:focus {
+	outline:none;
+}
+.accord .ui-accordion .ui-accordion-header {
+	color:#222;
+	margin:0;
+	padding:.8em .5em .8em .7em;
+	text-align:left;
+	font-size:14px;
+}
+.accord .ui-accordion .ui-accordion-header:hover {
+	background:#f3f3f3;
+	text-shadow:1px 1px #cdcdcd;
+}
+.accord .ui-accordion-header-active  {
+	font-weight:bold; box-shadow:0 2px 4px rgba(0, 0, 0, 0.25); border:solid 1px #999;
+}
+.accord .ui-state-default, .accord .ui-widget-content .ui-state-default, .accord .ui-widget-header .ui-state-default {
+    border: 1px solid #aaa; color: #5d6165; background:#fff;
+}
+/*.accord .ui-widget-content {
+   border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	border-bottom-width:0;
+	box-shadow:inset 0 -1px 4px rgba(0, 0, 0, 0.25);
+}*/
+.accord-header {
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+.accord-body{
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom-width: 0;
+    box-shadow: inset 0 -1px 4px rgba(0,0,0,.25);
+}
+
+
+
+/* Overrides to the imported chosen.css classes - .chosen-wrap is added to isolate
+   chosen.css class overrides to only those elements within divs of class chosen-wrap */
+.chosen-wrap .chosen-container-single .chosen-single {
+	padding: 6px 0 0 10px;
+	height: 33px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: #fff;
+	background-clip: padding-box;
+	box-shadow: 0 1px 1px rgba(16,22,26,.2);
+	color: #5d6165;
+	text-decoration: none;
+	white-space: nowrap;
+	line-height: 1.5;
+	text-align: left;
+}
+.chosen-wrap .chosen-container-single .chosen-single div b{
+	margin-top: 4px;
+}
+.chosen-wrap .chosen-container-single .chosen-single abbr {
+	top: 10px;
+	right: 20px;
+}
+.chosen-wrap .chosen-container-single span{
+	color:#222;
+	margin-right: 0;
+}
+.chosen-wrap .chosen-container-multi .chosen-choices {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background-image: none;
+	cursor: pointer;
+	box-shadow: 0 1px 1px rgba(16,22,26,.2);
+}
+.chosen-wrap .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+	height: 33px;
+	color: #222;
+	font-size: 100%;
+	cursor:pointer;
+}
+.chosen-wrap .chosen-container-multi .chosen-choices li.search-choice {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background-color: #fdfdfd;
+	background-image: none;
+	box-shadow: 0 1px 1px rgba(16,22,26,.2);
+	color: #222;
+	line-height: 1.7;
+}
+.chosen-wrap .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+	top:9px;
+}
+/* width of slider bar*/
+.slider{
+	font-size: 1.1em !important;
+}
+/* jQuery-UI overrides for the slider */
+.ui-widget .ui-widget{
+	font-size:1.1em;
+}
+.slider-container .ui-state-default, .slider-container .ui-widget-content .ui-state-default, .slider-container .ui-widget-header .ui-state-default{
+	cursor:pointer;
+}
+.slider-container .ui-slider .ui-slider-handle:focus {
+	outline: none;
+}
+.range-slider .ui-widget-header{
+	background:#e8f5fe;
+}
+.slider-container {
+	margin: 16px 0 40px;
+}
+.range-slider {
+	margin: 10px 0 20px !important;
+}
+
+/* Toggle Button Styling - all based on the parent divs toggle-btn class - no external
+   library styles are used */
+.toggle-btn {
+	padding-left:5px;
+	margin-bottom:10px;
+	display:flex;
+}
+.toggle-btn input {
+  display: none;
+}
+.toggle-btn label {
+	padding:5px;
+	box-shadow: 0 1px 1px rgba(16,22,26,.2);
+	background-clip: padding-box;
+	background-color:#fff;
+	text-align:center;
+	border: 1px solid #DDD;
+	margin:5px 5px 5px -6px;
+	flex:1;
+  	transition:all 0.1s ease-in-out;
+	cursor: pointer;
+	color:#222;
+}
+.toggle-btn label:hover{
+	background-color:#f3f3f3;
+}
+.toggle-btn input:checked + label {
+	color:#FFF;
+	font-weight:bold;
+	background-color:#0096D6;
+	text-shadow:0 1px 1px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.35), 0 1px rgba(255, 255, 255, 0.1);
+}
+.toggle-btn input:checked + label:hover {
+	cursor:default;
+}
+.toggle-btn label:first-of-type {
+  border-radius: 3px 0 0 3px;
+}
+.toggle-btn label:last-of-type {
+  border-radius: 0 3px 3px 0;
+}
+
+/* Blue font */
+.blueFont{
+	color:#2F6384;
+	font-weight:bold;
+}

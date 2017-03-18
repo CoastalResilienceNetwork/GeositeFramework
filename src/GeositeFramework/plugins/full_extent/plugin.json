@@ -1,8 +1,0 @@
-{    
-	"css": [
-        "plugins/full_extent/full_extent.css"
-    ],
-    "use": {
-        "underscore": { "attach": "_" }
-    }
-}
