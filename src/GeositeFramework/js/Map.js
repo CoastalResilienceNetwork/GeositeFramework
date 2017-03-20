@@ -252,6 +252,7 @@ require(['use!Geosite',
 
             // The translation lookup isn't ready when this is initialized.
             // A slight delay is needed.
+            /* Commenting this out for the js-api-4x-pilot branch
             window.setTimeout(function() {
                 // Required to set the placeholder text.
                 var sources = search.get("sources");
@@ -259,6 +260,7 @@ require(['use!Geosite',
                 search.set("sources", sources);
                 search.startup();
             }, 200);
+            */
         }
 
         // TODO: Remove this once it's confirmed that it's not necessary for IE11.
