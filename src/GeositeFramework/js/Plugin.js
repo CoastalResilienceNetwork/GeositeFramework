@@ -296,9 +296,10 @@ require(['use!Geosite',
 
             getSuppressHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey'),
+                    suppressHelpValue = localStorage[showValueKey];
 
-                return !!localStorage[showValueKey];
+                return suppressHelpValue ? JSON.parse(suppressHelpValue) : false;
             },
 
             setSuppressHelpOnStartup: function(val) {
