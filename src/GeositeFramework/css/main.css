@@ -786,7 +786,7 @@ nav {
 }
 .nav-apps {
     text-align: left;
-    width: 240px;
+    width: 220px;
     background-color: #333;
     position: relative;
     z-index: 2100;
@@ -976,7 +976,7 @@ header .nav-main {
     border-radius: 0;
     border: 0;
     margin-top: 0;
-    width: 240px;
+    width: 220px;
     background-color: #3bb3be
 }
 .header-dropdown .dropdown-menu:after {
