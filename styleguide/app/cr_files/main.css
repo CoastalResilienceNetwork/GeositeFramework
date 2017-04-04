@@ -1401,9 +1401,6 @@ header .nav-main {
        and help overlay callouts */
     z-index: 5001;
 }
-.content .map .basemap-selector:hover .basemap-selector-list {
-    display: block;
-}
 .content .map .basemap-selector .basemap-selector-title {
     padding: 10px 15px;
     font-weight: bold;

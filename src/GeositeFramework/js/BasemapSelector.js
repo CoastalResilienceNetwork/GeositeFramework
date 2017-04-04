@@ -33,15 +33,24 @@
         // DOM element's 'data-index' attribute tells us which item was clicked
         var index = $(e.currentTarget).data("index");
         view.model.set('selectedBasemapIndex', index);
+        hideBasemapList(view, e);
+    }
+
+    function showBasemapList(view) {
+        view.$el.find('.basemap-selector-list').show();
+    }
+
+    function hideBasemapList(view, e) {
+        view.$el.find('.basemap-selector-list').hide();
+        e.stopPropagation();
     }
 
     N.views = N.views || {};
     N.views.BasemapSelector = Backbone.View.extend({
         initialize: function () { return initialize(this); },
         events: {
-            'click li': function (e) { onItemClicked(this, e); }
+            'click li': function (e) { onItemClicked(this, e); },
+            'click': function (e) { showBasemapList(this); }
         }
-
     });
-
 }(Geosite));
