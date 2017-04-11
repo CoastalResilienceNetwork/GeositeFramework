@@ -21,7 +21,6 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.$sidebar = $('.nav-apps.plugins');
-                this.autoSidebarNarrowClassName = 'nav-apps-narrow';
                 this.manualSidebarNarrowClassName = 'nav-apps-narrow-manual';
 
                 this.bindEvents();
@@ -43,9 +42,7 @@ define(
             activate: function () {
                 if (this.isSidebarNarrow()) {
                     this.$sidebar.removeClass(this.manualSidebarNarrowClassName);
-                    this.$sidebar.removeClass(this.autoSidebarNarrowClassName);
                 } else {
-                    this.$sidebar.addClass(this.autoSidebarNarrowClassName);
                     this.$sidebar.addClass(this.manualSidebarNarrowClassName);
                 }
 
@@ -61,16 +58,7 @@ define(
             },
 
             isSidebarNarrow: function() {
-                var docWidth = $(document).width(),
-                    narrowWidthThreshold = 991;
-
-                if (this.$sidebar.hasClass(this.manualSidebarNarrowClassName) ||
-                    (docWidth <= narrowWidthThreshold &&
-                    this.$sidebar.hasClass(this.autoSidebarNarrowClassName))) {
-                    return true;
-                }
-
-                return false;
+                return this.$sidebar.hasClass(this.manualSidebarNarrowClassName);
             },
 
             updateIcon: function() {

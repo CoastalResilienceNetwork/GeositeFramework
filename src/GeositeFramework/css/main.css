@@ -850,12 +850,6 @@ nav {
     border-top: 5px solid transparent
 }
 @media (max-width: 991px) {
-    .nav-apps-narrow {
-        width: 46px;
-    }
-    .nav-apps-narrow .button-text {
-        display:none;
-    }
     .nav-apps-button:hover .button-text:after {
         content: "";
         top: 16px;
