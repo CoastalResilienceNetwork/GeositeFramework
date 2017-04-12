@@ -128,7 +128,7 @@ require([
                         }
                     }
 
-                    // If this plugin is the launchpad, but that feature is not configured in the 
+                    // If this plugin is the launchpad, but that feature is not configured in the
                     // region config, don't create it.
                     var srcFolder = plugin.get('pluginSrcFolder'),
                         pluginRoot = srcFolder.substring(srcFolder.lastIndexOf('/') + 1);
