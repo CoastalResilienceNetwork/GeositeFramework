@@ -9,6 +9,17 @@
         render(view);
         // When the map's selected basemap changes, update the title element in the DOM
         view.model.on('change:selectedBasemapIndex', function () { renderSelectedBasemapName(view); });
+        view.model.set('basemapListVisible', false);
+        $(document).on('click', function(e) {
+           if (!_.contains(['basemap-selector-list', 'basemap-selector'], e.target.className)) {
+               hideBasemapList(view);
+           }
+        });
+        // Listen on the "Tour" link element to ensure the
+        // basemap selector closes before the tour overlay's applied
+        $('#help-overlay-start').on('click', function() {
+            hideBasemapList(view);
+        });
     }
 
     function render(view) {
@@ -33,16 +44,24 @@
         // DOM element's 'data-index' attribute tells us which item was clicked
         var index = $(e.currentTarget).data("index");
         view.model.set('selectedBasemapIndex', index);
-        hideBasemapList(view, e);
-    }
-
-    function showBasemapList(view) {
-        view.$el.find('.basemap-selector-list').show();
-    }
-
-    function hideBasemapList(view, e) {
-        view.$el.find('.basemap-selector-list').hide();
         e.stopPropagation();
+        hideBasemapList(view);
+    }
+
+    function toggleBasemapList(view, e) {
+        e.stopPropagation();
+        if (view.model.get('basemapListVisible')) {
+            view.model.set('basemapListVisible', false);
+            view.$el.find('.basemap-selector-list').hide();
+        } else {
+            view.model.set('basemapListVisible', true);
+            view.$el.find('.basemap-selector-list').show();
+        }
+    }
+
+    function hideBasemapList(view) {
+        view.model.set('basemapListVisible', false);
+        view.$el.find('.basemap-selector-list').hide();
     }
 
     N.views = N.views || {};
@@ -50,7 +69,7 @@
         initialize: function () { return initialize(this); },
         events: {
             'click li': function (e) { onItemClicked(this, e); },
-            'click': function (e) { showBasemapList(this); }
+            'click': function (e) { toggleBasemapList(this, e); }
         }
     });
 }(Geosite));
