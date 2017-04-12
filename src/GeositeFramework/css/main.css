@@ -791,7 +791,7 @@ nav {
     position: relative;
     z-index: 2100;
     padding-bottom: 27px;
-    overflow: auto;
+    overflow: visible;
 }
 .nav-apps-button {
     width: 100%;
@@ -1927,6 +1927,20 @@ body.x-body {
 }
 #tlyPageGuide {
   list-style: none;
+}
+
+#sidebar-toggle {
+  position: absolute;
+  color: #fff;
+  bottom: 35px;
+  right: -9px;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  border-radius: 100%;
+  line-height: 26px;
+  z-index: 100;
+  cursor: pointer;
 }
 
 #sidebar-help-area {

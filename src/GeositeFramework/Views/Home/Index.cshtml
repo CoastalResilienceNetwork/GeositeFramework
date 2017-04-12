@@ -100,7 +100,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <!-- Simple implementation style overrides from config -->
     <style type="text/css">
-        header {
+        header,
+        #sidebar-toggle {
             background: @Model.PrimaryColor;
         }
 
@@ -209,6 +210,9 @@
         <nav class="nav-apps plugins nav-apps-narrow">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
+                <div id="sidebar-toggle">
+                    <a><i class="fa fa-chevron-right"></i></a>
+                </div>
             </div>
         </nav>
         <div class="flex-expand">
@@ -764,6 +768,7 @@
     <script src="js/Geosite.js"></script>
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
+    <script src="js/SidebarToggle.js"></script>
     <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
