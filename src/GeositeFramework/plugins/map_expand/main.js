@@ -21,7 +21,7 @@ define(
             initialize: function (args) {
                 declare.safeMixin(this, args);
                 this.$sidebar = $('.nav-apps.plugins');
-                this.manualSidebarNarrowClassName = 'nav-apps-narrow-manual';
+                this.manualSidebarNarrowClassName = 'nav-apps-narrow';
 
                 this.bindEvents();
             },
