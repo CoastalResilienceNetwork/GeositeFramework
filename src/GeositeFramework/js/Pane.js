@@ -128,7 +128,7 @@ require([
                         }
                     }
 
-                    // If this plugin is the launchpad, but that feature is not configured in the 
+                    // If this plugin is the launchpad, but that feature is not configured in the
                     // region config, don't create it.
                     var srcFolder = plugin.get('pluginSrcFolder'),
                         pluginRoot = srcFolder.substring(srcFolder.lastIndexOf('/') + 1);
@@ -293,6 +293,7 @@ require([
         function initialize(view) {
             render(view);
             initBasemapSelector(view);
+            initSidebarToggle(view);
             initMapView(view);
             initPluginViews(view);
             N.app.models.screen.on('change', function() { renderSidebar(view); });
@@ -347,6 +348,12 @@ require([
             new N.views.BasemapSelector({
                 model: view.model.get('mapModel'),
                 el: view.$('.basemap-selector')
+            });
+        }
+
+        function initSidebarToggle(view) {
+            new N.views.SidebarToggle({
+                el: view.$('#sidebar-toggle')
             });
         }
 
