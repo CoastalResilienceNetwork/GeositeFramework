@@ -786,12 +786,12 @@ nav {
 }
 .nav-apps {
     text-align: left;
-    width: 240px;
+    width: 220px;
     background-color: #333;
     position: relative;
     z-index: 2100;
     padding-bottom: 27px;
-    overflow: auto;
+    overflow: visible;
 }
 .nav-apps-button {
     width: 100%;
@@ -828,13 +828,13 @@ nav {
     width: 75%;
 }
 
-.nav-apps-narrow-manual {
+.nav-apps-narrow {
     width: 46px;
 }
-.nav-apps-narrow-manual .button-text {
+.nav-apps-narrow .button-text {
     display:none;
 }
-.nav-apps-narrow-manual .nav-apps-button:hover .button-text:after {
+.nav-apps-narrow .nav-apps-button:hover .button-text:after {
     content: "";
     top: 16px;
     left: -12px;
@@ -850,12 +850,6 @@ nav {
     border-top: 5px solid transparent
 }
 @media (max-width: 991px) {
-    .nav-apps-narrow {
-        width: 46px;
-    }
-    .nav-apps-narrow .button-text {
-        display:none;
-    }
     .nav-apps-button:hover .button-text:after {
         content: "";
         top: 16px;
@@ -890,7 +884,7 @@ nav {
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
-.nav-apps-narrow-manual .button-sidebar-plugin-close {
+.nav-apps-narrow .button-sidebar-plugin-close {
   display: none !important;
 }
 @media (max-width: 991px) {
@@ -976,7 +970,7 @@ header .nav-main {
     border-radius: 0;
     border: 0;
     margin-top: 0;
-    width: 240px;
+    width: 220px;
     background-color: #3bb3be
 }
 .header-dropdown .dropdown-menu:after {
@@ -1433,9 +1427,6 @@ header .nav-main {
     /* Display basemap-selector above esri zoom controls, topbar-plugins
        and help overlay callouts */
     z-index: 5001;
-}
-.content .map .basemap-selector:hover .basemap-selector-list {
-    display: block;
 }
 .content .map .basemap-selector .basemap-selector-title {
     padding: 10px 15px;
@@ -1936,6 +1927,20 @@ body.x-body {
 }
 #tlyPageGuide {
   list-style: none;
+}
+
+#sidebar-toggle {
+  position: absolute;
+  color: #fff;
+  bottom: 35px;
+  right: -9px;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  border-radius: 100%;
+  line-height: 26px;
+  z-index: 100;
+  cursor: pointer;
 }
 
 #sidebar-help-area {

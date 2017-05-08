@@ -10,7 +10,7 @@ require(['use!Geosite'],
             $('<link>', {
                 rel: 'stylesheet',
                 href: 'css/app-print.css',
-                'class': '.app-print-css' 
+                'class': 'app-print-css' 
             }).appendTo('head');
             var html = N.app.templates['template-export-window']();
             view.$el.empty().append(html);

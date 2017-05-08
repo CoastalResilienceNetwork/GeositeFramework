@@ -199,13 +199,6 @@ require(['use!Geosite',
                     this.get('pluginObject').deactivate();
                     this.set('visible', false);
                     this.trigger('plugin:deselected');
-                    // Remove the `.nav-apps-narow` class if the
-                    // de-selecting the plugin has left no plugins
-                    // visible.
-                    if (this.collection.all({visible:false})) {
-                        $('.nav-apps').removeClass('nav-apps-narrow');
-                        N.app.dispatcher.trigger('map-size:change');
-                    }
                 }
             },
 
@@ -296,9 +289,10 @@ require(['use!Geosite',
 
             getSuppressHelpOnStartup: function() {
                 var pluginObject = this.get('pluginObject'),
-                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey');
+                    showValueKey = pluginObject.toolbarName + this.get('startHelpKey'),
+                    suppressHelpValue = localStorage[showValueKey];
 
-                return !!localStorage[showValueKey];
+                return suppressHelpValue ? JSON.parse(suppressHelpValue) : false;
             },
 
             setSuppressHelpOnStartup: function(val) {
@@ -423,7 +417,6 @@ require(['use!Geosite',
                     displayed: model.selected,
                     fullName: model.get('pluginObject').fullName
                 })),
-                sidebarNavSizedForTablet = !!$('.nav-apps-narrow'),
                 pluginContentHidden = model.collection.all({visible:false});
 
             view.$el.empty().append(html);
@@ -432,14 +425,8 @@ require(['use!Geosite',
             if (view.$uiContainer) {
                 if (view.model.selected === true) {
                     view.$uiContainer.show();
-                    if (sidebarNavSizedForTablet) {
-                        setSideBarPluginTextVisibility(false);
-                    }
                 } else {
                     view.$uiContainer.hide();
-                    if (pluginContentHidden) {
-                        setSideBarPluginTextVisibility(true);
-                    }
                 }
 
                 // Call the `resize` method on the Esri map, passing it
@@ -463,19 +450,6 @@ require(['use!Geosite',
             }
 
             return view;
-        }
-
-        function setSideBarPluginTextVisibility(visible) {
-            if (visible === undefined) {
-                throw new Error(
-                    '`setSideBarPluginTextVisibility` method requires a boolean arg');
-            } else if (visible) {
-                $('.nav-apps').removeClass('nav-apps-narrow');
-                N.app.dispatcher.trigger('map-size:change');
-            } else if (!visible) {
-                $('.nav-apps').addClass('nav-apps-narrow');
-                N.app.dispatcher.trigger('map-size:change');
-            }
         }
 
         function getContainerId(view) {

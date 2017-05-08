@@ -786,7 +786,7 @@ nav {
 }
 .nav-apps {
     text-align: left;
-    width: 240px;
+    width: 220px;
     background-color: #333;
     position: relative;
     z-index: 2100;
@@ -912,7 +912,7 @@ header .nav-main {
 .nav-main {
     padding-left: 12px;
     padding-right: 12px;
-    min-width: 240px;
+    min-width: 220px;
     height: 60px;
 }
 .header-dropdown {
@@ -1400,9 +1400,6 @@ header .nav-main {
     /* Display basemap-selector above esri zoom controls, topbar-plugins
        and help overlay callouts */
     z-index: 5001;
-}
-.content .map .basemap-selector:hover .basemap-selector-list {
-    display: block;
 }
 .content .map .basemap-selector .basemap-selector-title {
     padding: 10px 15px;
