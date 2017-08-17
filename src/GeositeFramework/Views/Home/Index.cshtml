@@ -207,7 +207,7 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        <nav class="nav-apps plugins nav-apps-narrow">
+        <nav class="nav-apps plugins nav-apps-narrow @(Model.SinglePluginMode ? "single-plugin-mode" : "")">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
                 <div id="sidebar-toggle">
