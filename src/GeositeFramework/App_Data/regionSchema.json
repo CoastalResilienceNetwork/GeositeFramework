@@ -237,6 +237,21 @@
                 },
             },
             "additionalProperties": false
+        },
+        "singlePluginMode": {
+            "type": "object",
+            "required": false,
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "required": true
+                },
+                "pluginFolderName": {
+                    "type": "string",
+                    "required": true
+                }
+            },
+            "additionalProperties": false
         }
     },
     "additionalProperties": false
