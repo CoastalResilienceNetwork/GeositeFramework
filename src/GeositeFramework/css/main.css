@@ -793,6 +793,9 @@ nav {
     padding-bottom: 27px;
     overflow: visible;
 }
+.nav-apps.single-plugin-mode {
+    display: none;
+}
 .nav-apps-button {
     width: 100%;
     text-align: left;

@@ -168,12 +168,14 @@ require([
             var mapModel = model.get('mapModel'),
                 regionData = model.get('regionData'),
                 savedState = model.get('stateOfPlugins'),
-                launchpadPlugin = null;
+                // Either the launchpad or the specified plugin for single plugin mode
+                initialPlugin = null;
 
             model.get('plugins').each(function(pluginModel) {
-                if (checkName(pluginModel, 'launchpad')) {
-                    launchpadPlugin = pluginModel;
+                if (checkName(pluginModel, 'launchpad') || N.app.singlePluginMode) {
+                    initialPlugin = pluginModel;
                 }
+
                 pluginModel.initPluginObject(regionData, mapModel, esriMap);
             });
 
@@ -184,8 +186,8 @@ require([
 
                 // If no savedState and there is a launchpad plugin, active it first.
                 // A saveCode key would indicate that another plugin should be active
-                if (Object.keys(savedState).length === 0 && launchpadPlugin) {
-                    launchpadPlugin.toggleSelected();
+                if (Object.keys(savedState).length === 0 && initialPlugin) {
+                    initialPlugin.toggleSelected();
                 }
             }, 1000);
         }

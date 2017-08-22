@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.Helpers;
 using GeositeFramework.Helpers;
 using Newtonsoft.Json.Linq;
 
@@ -60,6 +61,7 @@ namespace GeositeFramework.Models
         public String TertiaryColor { get; private set; }
         public String ActiveAppColor { get; private set; }
         public String PrintHeaderLogo { get; private set; }
+        public Boolean SinglePluginMode { get; private set; }
 
         /// <summary>
         /// Create a Geosite object by loading the "region.json" file and enumerating plug-ins, using the specified paths.
@@ -123,12 +125,40 @@ namespace GeositeFramework.Models
 
             PluginFolderNames = existingPluginFolderNames;
 
+            // If single plugin mode is active, remove every plugin besides the specified plugin
+            // from the plugin lists.
+            if (jsonObj["singlePluginMode"] != null && (bool)jsonObj["singlePluginMode"]["active"])
+            {
+                SinglePluginMode = true;
+                var singlePlugin = (string)jsonObj["singlePluginMode"]["pluginFolderName"];
+                PluginFolderNames = PluginFolderNames.Where(p => p.Contains(singlePlugin)).ToList();
+                pluginModuleNames = pluginModuleNames.Where(p => p.Contains(singlePlugin)).ToList();
+            } else
+            {
+                SinglePluginMode = false;
+            }
+
             // Augment the JSON so the client will have the full list of folder names
             jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
-            TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
-            TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
+            if (SinglePluginMode)
+            {
+                TitleMain = new Link
+                {
+                    Text = (string)jsonObj["singlePluginMode"]["title"],
+                    Url = ""
+                };
+                TitleDetail = new Link
+                {
+                    Text = "About",
+                    Url = ""
+                };
+            } else
+            {
+                TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
+                TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
+            }
 
             var colorConfig = jsonObj["colors"];
             if (colorConfig != null)
