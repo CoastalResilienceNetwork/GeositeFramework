@@ -52,6 +52,19 @@ namespace GeositeFramework.Tests
                         { 'text': 'Azavea', 'url': 'http://www.azavea.com/' },
                         { 'text': 'GIS', 'url': 'http://en.wikipedia.org/wiki/Geographic_information_system' }
                     ],
+                    'regionLinks': [
+                        { 'text': 'California', 'url': 'http://maps.coastalresilience.org/california/' },
+                        { 'text': 'Connecticut', 'url': 'http://maps.coastalresilience.org/connecticut' },
+                        { 'text': 'Global', 'url': 'http://maps.coastalresilience.org/global/' },
+                        { 'text': 'Grenada, St. Vincent & the Grenadines', 'url': 'http://maps.coastalresilience.org/gsvg/' },
+                        { 'text': 'MesoAmerican Reef', 'url': 'http://maps.coastalresilience.org/mar/' },
+                        { 'text': 'New York', 'url': 'http://maps.coastalresilience.org/newyork' },
+                        { 'text': 'New Jersey', 'url': 'http://maps.coastalresilience.org/newjersey' },
+                        { 'text': 'Southeast Florida', 'url': 'http://maps.coastalresilience.org/seflorida/' },
+                        { 'text': 'United States', 'url': 'http://maps.coastalresilience.org/unitedstates/' },
+                        { 'text': 'U.S. Virgin Islands', 'url': 'http://maps.coastalresilience.org/usvi/' },
+                        { 'text': 'Washington', 'url': 'http://maps.coastalresilience.org/pugetsound' }
+                    ],
                     'basemaps': [
                         {
                             'name': 'Topological',
@@ -67,12 +80,9 @@ namespace GeositeFramework.Tests
 
             Expect(geosite.TitleMain.Text, EqualTo("Geosite Framework Sample"));
             Expect(geosite.TitleDetail.Text, EqualTo("Sample Region"));
-            Expect(geosite.HeaderLinks.Count, EqualTo(2));
+            Expect(geosite.HeaderLinks.Count, EqualTo(3));
             Expect(geosite.HeaderLinks[0].Url, EqualTo("http://www.azavea.com/"));
             Expect(geosite.HeaderLinks[1].Text, EqualTo("GIS"));
-            Expect(geosite.RegionLinks.Count, EqualTo(11));
-            Expect(geosite.RegionLinks[10].Text, EqualTo("Washington"));
-            Expect(geosite.RegionLinks[3].Url, EqualTo("http://maps.coastalresilience.org/gsvg/"));
             Expect(geosite.PluginModuleIdentifiers, EqualTo("'layer_selector/main', 'measure/main', 'nearshore_waves/main', 'explode/main'"));
             Expect(geosite.PluginVariableNames, EqualTo("p0, p1, p2, p3"));
             Expect(geosite.PluginCssUrls, Contains("main.css"));
