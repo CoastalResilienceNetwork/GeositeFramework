@@ -3,14 +3,29 @@
     "title": "Geosite configuration",
     "type": "object",
     "properties": {
-        "language": {"type": "string", "required": false},
-        "googleAnalyticsPropertyId": {"type": "string", "required": false},
-        "googleUrlShortenerApiKey": {"type": "string", "required": false},
+        "language": {
+            "type": "string",
+            "required": false
+        },
+        "googleAnalyticsPropertyId": {
+            "type": "string",
+            "required": false
+        },
+        "googleUrlShortenerApiKey": {
+            "type": "string",
+            "required": false
+        },
         "titleMain": {
             "type": "object",
             "properties": {
-                "text": {"type": "string", "required": true},
-                "url": {"type": "string", "required": false}
+                "text": {
+                    "type": "string",
+                    "required": true
+                },
+                "url": {
+                    "type": "string",
+                    "required": false
+                }
             },
             "additionalProperties": false,
             "required": true
@@ -18,8 +33,14 @@
         "titleDetail": {
             "type": "object",
             "properties": {
-                "text": {"type": "string", "required": true},
-                "url": {"type": "string", "required": false}
+                "text": {
+                    "type": "string",
+                    "required": true
+                },
+                "url": {
+                    "type": "string",
+                    "required": false
+                }
             },
             "additionalProperties": false,
             "required": true
@@ -27,235 +48,392 @@
         "headerLinks": {
             "type": "array",
             "items": {
-                "text": {"type": "string", "required": true},
-                "url": {"type": "string", "required": true},
-                "popup": {"type": "boolean", "required": false},
-                "elementId": {"type": "string", "required": false},
-                "items": {"type": "array", "items": {
-                        "type": "object",
-                        "properties": {
-                            "text": {"type": "string", "required": true},
-                            "url": {"type": "string", "required": true},
-                            "popup": {"type": "boolean", "required": false},
-                            "elementId": {"type": "string", "required": false}
-                        },
-                        "additionalProperties": false
-                    }, "required": false}
+                "text": {
+                    "type": "string",
+                    "required": true
                 },
-                "additionalProperties": false
-            }
-        },
-        "regionLinks": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "text": {"type": "string", "required": true},
-                    "url": {"type": "string", "required": true}
+                "url": {
+                    "type": "string",
+                    "required": true
                 },
-                "additionalProperties": false
-            }
-        },
-        "sidebarLinks": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "text": {"type": "string", "required": true},
-                    "url": {"type": "string", "required": true}
+                "popup": {
+                    "type": "boolean",
+                    "required": false
                 },
-                "additionalProperties": false
-            }
-        },
-        "initialExtent": {
-            "type": "array",
-            "required": true,
-            "minItems": 4,
-            "maxItems": 4,
-            "items": {"type": "number"}
-        },
-        "subregions": {
-            "type": "object",
-            "required": false,
-            "properties": {
-                "hideAtZoomLevel": {"type": "number", "required": false},
-                "color": {"type": "string", "required": false},
-                "outlineColor": {"type": "string", "required": false},
-                "opacity": {"type": "number", "required": false},
-                "clickToFocus": {"type": "boolean", "required": true},
-                "hideByDefault": {"type": "boolean", "required": false},
-                "areas": {"type": "array", "items": {
-                    "type": "object",
-                    "properties": {
-                        "id": {"type": "string", "required": true},
-                        "display": {"type": "string", "required": true},
-                        "details": {"type": "string", "required": true},
-                        "shape": {"type": "array", "required": true},
-                        "color": {"type": "string", "required": false},
-                        "outlineColor": {"type": "string", "required": false},
-                        "noFill": {"type": "boolean", "required": false},
-                        "availablePlugins": {
-                            "type": "array",
-                            "required": false,
-                            "items": {"type": "string"}
-                        }
-                    }
-                }}
-            }
-        },
-        "basemaps": {
-            "type": "array",
-            "required": true,
-            "minItems": 1,
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string", "required": true},
-                    "url": {"type": "string", "required": true}
-                },
-                "additionalProperties": false
-            }
-        },
-        "pluginFolders": {
-            "type": "array",
-            "items": {"type": "string"}
-        },
-        "pluginOrder": {
-            "type": "array",
-            "items": {"type": "string"}
-        },
-        "map2PluginBlacklist": {
-            "type": "array",
-            "items": {"type": "string"},
-            "required": false
-        },
-        "print": {
-            "type": "object",
-            "properties": {
-                "printServerUrl": {
+                "elementId": {
                     "type": "string",
                     "required": false
                 },
-                "customPrintTemplatePrefix": {
-                    "type": "string",
-                    "required": false
-                },
-                "headerLogoPath": {
-                    "type": "string",
-                    "required": false
-                }
-            },
-            "additionalProperties": false
-        },
-        "helpUrl": {
-            "type": "string",
-            "required": false
-        },
-        "colors": {
-            "type": "object",
-            "properties": {
-                "primary": {"type": "string", "required": false},
-                "secondary": {"type": "string", "required": false},
-                "tertiary": {"type": "string", "required": false},
-                "active": {"type": "string", "required": false}
-            },
-            "required": false,
-            "additionalProperties": false
-        },
-        "identifyBlacklist": {
-            "type": "array",
-            "items": { "type": "string" }
-        },
-        "identifyEnabled": {
-            "type": "boolean",
-            "required": false
-        },
-        "launchpad": {
-            "type": "object",
-            "required": false,
-            "properties": {
-                "type": "object",
-                "properties": {
-                    "html": { "type": "bool", "required": false },
-                    "title": { "type": "string", "required": false },
-                    "description": { "type": "string", "required": false },
-                    "plugins": {
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "title": { "type": "string", "required": true },
-                                "description": { "type": "string", "required": true },
-                                "pluginName": { "type": "string", "required": true }
-                            }
-                        }
-                    },
-                    "scenarios": {
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "title": { "type": "string", "required": true },
-                                "description": { "type": "string", "required": true },
-                                "saveCode": { "type": "string", "required": true }
-                            }
-                        }
-                    },
-                    "partners": {
-                        "type": "array",
-                        "required": false,
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "logoPath": { "type": "string", "required": true },
-                                "link": { "type": "string", "required": true },
-                                "title": { "type": "string", "required": true }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "legend": {
-            "type": "object",
-            "required": false,
-            "properties": {
-                "layers": {
+                "items": {
                     "type": "array",
-                    "required": true,
                     "items": {
                         "type": "object",
                         "properties": {
-                            "serviceUrl": { "type": "string", "required": true },
-                            "layerName": { "type": "string", "required": true },
-                            "legendType": { "type": "string", "required": true }
+                            "text": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "url": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "popup": {
+                                "type": "boolean",
+                                "required": false
+                            },
+                            "elementId": {
+                                "type": "string",
+                                "required": false
+                            }
                         },
                         "additionalProperties": false
-                    }
+                    },
+                    "required": false
                 }
             },
             "additionalProperties": false
-        },
-        "singlePluginMode": {
+        }
+    },
+    "regionLinks": {
+        "type": "array",
+        "items": {
             "type": "object",
-            "required": false,
             "properties": {
-                "active": {
-                    "type": "boolean",
-                    "required": true
-                },
-                "pluginFolderName": {
+                "text": {
                     "type": "string",
                     "required": true
+                },
+                "url": {
+                    "type": "string",
+                    "required": true
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "sidebarLinks": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "required": true
+                },
+                "url": {
+                    "type": "string",
+                    "required": true
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "initialExtent": {
+        "type": "array",
+        "required": true,
+        "minItems": 4,
+        "maxItems": 4,
+        "items": {
+            "type": "number"
+        }
+    },
+    "subregions": {
+        "type": "object",
+        "required": false,
+        "properties": {
+            "hideAtZoomLevel": {
+                "type": "number",
+                "required": false
+            },
+            "color": {
+                "type": "string",
+                "required": false
+            },
+            "outlineColor": {
+                "type": "string",
+                "required": false
+            },
+            "opacity": {
+                "type": "number",
+                "required": false
+            },
+            "clickToFocus": {
+                "type": "boolean",
+                "required": true
+            },
+            "hideByDefault": {
+                "type": "boolean",
+                "required": false
+            },
+            "areas": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "display": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "details": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "shape": {
+                            "type": "array",
+                            "required": true
+                        },
+                        "color": {
+                            "type": "string",
+                            "required": false
+                        },
+                        "outlineColor": {
+                            "type": "string",
+                            "required": false
+                        },
+                        "noFill": {
+                            "type": "boolean",
+                            "required": false
+                        },
+                        "availablePlugins": {
+                            "type": "array",
+                            "required": false,
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "basemaps": {
+        "type": "array",
+        "required": true,
+        "minItems": 1,
+        "items": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "url": {
+                    "type": "string",
+                    "required": true
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "pluginFolders": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        }
+    },
+    "pluginOrder": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        }
+    },
+    "map2PluginBlacklist": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        },
+        "required": false
+    },
+    "print": {
+        "type": "object",
+        "properties": {
+            "printServerUrl": {
+                "type": "string",
+                "required": false
+            },
+            "customPrintTemplatePrefix": {
+                "type": "string",
+                "required": false
+            },
+            "headerLogoPath": {
+                "type": "string",
+                "required": false
+            }
+        },
+        "additionalProperties": false
+    },
+    "helpUrl": {
+        "type": "string",
+        "required": false
+    },
+    "colors": {
+        "type": "object",
+        "properties": {
+            "primary": {
+                "type": "string",
+                "required": false
+            },
+            "secondary": {
+                "type": "string",
+                "required": false
+            },
+            "tertiary": {
+                "type": "string",
+                "required": false
+            },
+            "active": {
+                "type": "string",
+                "required": false
+            }
+        },
+        "required": false,
+        "additionalProperties": false
+    },
+    "identifyBlacklist": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        }
+    },
+    "identifyEnabled": {
+        "type": "boolean",
+        "required": false
+    },
+    "launchpad": {
+        "type": "object",
+        "required": false,
+        "properties": {
+            "type": "object",
+            "properties": {
+                "html": {
+                    "type": "bool",
+                    "required": false
                 },
                 "title": {
                     "type": "string",
-                    "required": true
+                    "required": false
+                },
+                "description": {
+                    "type": "string",
+                    "required": false
+                },
+                "plugins": {
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "description": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "pluginName": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "scenarios": {
+                    "required": false,
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "description": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "saveCode": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "partners": {
+                    "type": "array",
+                    "required": false,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "logoPath": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "link": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "title": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
                 }
+            }
+        }
+    },
+    "legend": {
+        "type": "object",
+        "required": false,
+        "properties": {
+            "layers": {
+                "type": "array",
+                "required": true,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "serviceUrl": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "layerName": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "legendType": {
+                            "type": "string",
+                            "required": true
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            }
+        },
+        "additionalProperties": false
+    },
+    "singlePluginMode": {
+        "type": "object",
+        "required": false,
+        "properties": {
+            "active": {
+                "type": "boolean",
+                "required": true
             },
-            "additionalProperties": false
+            "pluginFolderName": {
+                "type": "string",
+                "required": true
+            },
+            "title": {
+                "type": "string",
+                "required": true
+            }
+        },
+        "additionalProperties": false
     },
     "additionalProperties": false
 }
