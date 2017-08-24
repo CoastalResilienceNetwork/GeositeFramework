@@ -769,7 +769,6 @@ nav {
 }
 .sidebar-content {
     position: relative;
-    height: calc(100% - 40px);
     overflow-y: auto;
     margin-top: 40px;
     width: 100%;
