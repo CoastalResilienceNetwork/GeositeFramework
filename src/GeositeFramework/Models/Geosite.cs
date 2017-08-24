@@ -142,23 +142,8 @@ namespace GeositeFramework.Models
             jsonObj.Add("pluginFolderNames", new JArray(PluginFolderNames.ToArray()));
 
             // Set public properties needed for View rendering
-            if (SinglePluginMode)
-            {
-                TitleMain = new Link
-                {
-                    Text = (string)jsonObj["singlePluginMode"]["title"],
-                    Url = ""
-                };
-                TitleDetail = new Link
-                {
-                    Text = "About",
-                    Url = ""
-                };
-            } else
-            {
-                TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
-                TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
-            }
+            TitleMain = ExtractLinkFromJson(jsonObj["titleMain"]);
+            TitleDetail = ExtractLinkFromJson(jsonObj["titleDetail"]);
 
             var colorConfig = jsonObj["colors"];
             if (colorConfig != null)

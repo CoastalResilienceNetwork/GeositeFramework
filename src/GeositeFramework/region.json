@@ -3,8 +3,7 @@
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "singlePluginMode": {
         "active": true,
-        "pluginFolderName": "regional-planning",
-        "title": "Single Plugin Mode Title"
+        "pluginFolderName": "regional-planning"
     },
     "titleMain": {
         "text": "Geosite Framework Sample",
