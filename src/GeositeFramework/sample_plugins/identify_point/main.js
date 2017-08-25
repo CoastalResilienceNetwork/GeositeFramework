@@ -94,7 +94,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 if (showHelpOnStart) {
                     this.showHelp();
 
-                    // Don't show this help on startup anymore, after the first time 
+                    // Don't show this help on startup anymore, after the first time
                     this.app.suppressHelpOnStartup(true);
                 }
 
