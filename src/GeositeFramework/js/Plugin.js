@@ -77,7 +77,8 @@ require(['use!Geosite',
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher,
                         suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
-                        resize: resizers
+                        resize: resizers,
+                        singlePluginMode: N.app.singlePluginMode
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)
