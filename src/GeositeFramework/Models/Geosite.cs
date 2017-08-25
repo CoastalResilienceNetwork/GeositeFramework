@@ -131,8 +131,25 @@ namespace GeositeFramework.Models
             {
                 SinglePluginMode = true;
                 var singlePlugin = (string)jsonObj["singlePluginMode"]["pluginFolderName"];
-                PluginFolderNames = PluginFolderNames.Where(p => p.Contains(singlePlugin)).ToList();
-                pluginModuleNames = pluginModuleNames.Where(p => p.Contains(singlePlugin)).ToList();
+
+                if (String.IsNullOrEmpty(singlePlugin))
+                {
+                    const string msg = "Single plugin mode is active but no plugin is defined.";
+                    throw new Exception(msg);
+                }
+
+                var singlePluginFolderName = PluginFolderNames.Where(p => p.Contains(singlePlugin)).ToList();
+                var singlePluginModuleName = pluginModuleNames.Where(p => p.Contains(singlePlugin)).ToList();
+
+                if (String.IsNullOrEmpty(singlePluginFolderName.FirstOrDefault()))
+                {
+                    const string msg = "The specified plugin for single plugin mode was not found.";
+                    throw new Exception(msg);
+                } else
+                {
+                    PluginFolderNames = singlePluginFolderName;
+                    pluginModuleNames = singlePluginModuleName;
+                }
             } else
             {
                 SinglePluginMode = false;
