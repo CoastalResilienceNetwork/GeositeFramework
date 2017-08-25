@@ -1,4 +1,13 @@
-﻿
+require({
+    packages: [
+        {
+            name: "jquery",
+            location: "//ajax.googleapis.com/ajax/libs/jquery/1.9.0",
+            main: "jquery.min"
+        }
+    ]
+});
+
 define(["dojo/_base/declare", "framework/PluginBase"],
     function (declare, PluginBase) {
         return declare(PluginBase, {
