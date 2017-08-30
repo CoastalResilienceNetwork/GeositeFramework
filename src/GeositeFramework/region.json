@@ -3,7 +3,7 @@
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "singlePluginMode": {
         "active": true,
-        "pluginFolderName": "regional-planning"
+        "pluginFolderName": "identify_point"
     },
     "titleMain": {
         "text": "Geosite Framework Sample",

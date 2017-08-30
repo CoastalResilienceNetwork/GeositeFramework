@@ -1,4 +1,13 @@
-﻿
+require({
+    packages: [
+        {
+            name: "jquery",
+            location: "//ajax.googleapis.com/ajax/libs/jquery/1.9.0",
+            main: "jquery.min"
+        }
+    ]
+});
+
 define(["dojo/_base/declare", "framework/PluginBase"],
     function (declare, PluginBase) {
         return declare(PluginBase, {
@@ -11,8 +20,13 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             usePrintPreviewMap: true,
             previewMapSize: [500, 350],
 
-            initialize: function(args) {
-                declare.safeMixin(this, args);
+            initialize: function(frameworkParameters) {
+                declare.safeMixin(this, frameworkParameters);
+
+                if (frameworkParameters.app.singlePluginMode) {
+                    $(this.container).append('<h2>Welcome to single plugin mode!</h2>');
+                }
+
                 $(this.container).append(
                     '<h4 style="padding: 5px;">' + i18next.t('Click any point on the map to display Latitude and Longitude') + '</h4>');
 
@@ -80,7 +94,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                 if (showHelpOnStart) {
                     this.showHelp();
 
-                    // Don't show this help on startup anymore, after the first time 
+                    // Don't show this help on startup anymore, after the first time
                     this.app.suppressHelpOnStartup(true);
                 }
 
