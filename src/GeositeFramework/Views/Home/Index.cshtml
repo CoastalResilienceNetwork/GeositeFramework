@@ -230,7 +230,9 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        @if (!Model.SinglePluginMode) {
+                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        }
                                         <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                     </ul>
                                 </div>
