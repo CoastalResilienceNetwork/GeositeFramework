@@ -298,7 +298,6 @@ require([
             initSidebarToggle(view);
             initMapView(view);
             initPluginViews(view);
-            N.app.models.screen.on('change', function() { renderSidebar(view); });
 
             // For on demand export initialization. See Layer Selector print, for example.
             var paneNumber = view.model.get('paneNumber');
@@ -311,39 +310,6 @@ require([
             var paneTemplate = N.app.templates['template-pane'],
                 html = paneTemplate(view.model.toJSON());
             view.$el.append(html);
-            renderSidebar(view);
-
-            renderSidebarLinks(view);
-        }
-
-        function renderSidebar(view) {
-            var sidebarTemplate = N.app.templates['template-sidebar'],
-                paneNumber = view.model.get('paneNumber'),
-                data = _.extend(N.app.models.screen.toJSON(), {
-                    paneNumber: paneNumber,
-                    isMain: paneNumber === N.app.models.screen.get('mainPaneNumber'),
-                    alternatePaneNumber: paneNumber === 0 ? 1 : 0
-                }),
-                html = sidebarTemplate(data);
-
-            view.$('.bottom.side-nav').empty().append(html);
-
-            // If i18n has been initialized,
-            if ($.i18n) {
-                // Internationalize everything with a data-i18n attribute
-                $(view.$el).localize();
-            }
-        }
-
-        // TODO: Sidebar links aren't in the prototype - do we have anything for them?
-        function renderSidebarLinks(view) {
-            var regionData = view.model.get('regionData'),
-                linkTemplate = N.app.templates['template-sidebar-link'],
-                $links = view.$('.sidebar-links');
-            _.each(regionData.sidebarLinks, function(link) {
-                var html = linkTemplate({ link: link });
-                $links.append(html);
-            });
         }
 
         function initBasemapSelector(view) {
