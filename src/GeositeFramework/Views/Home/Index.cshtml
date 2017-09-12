@@ -175,6 +175,27 @@
         .dropdown-submenu > a:not(:hover) {
             background-color: @Model.SecondaryColor;
         }
+
+        @if (Model.SinglePluginMode) {
+        <text>
+        .sidebar-content {
+            height: 100% !important;
+            margin-top: 0 !important;
+        }
+
+        .sidebar-nav {
+            display:none;
+        }
+
+        #toggle-plugin-container button {
+            background-color: @Model.PrimaryColor;
+            border-color: @Model.PrimaryColor;
+        }
+        #toggle-plugin-container button:hover {
+            background-color: @Model.SecondaryColor;
+        }
+        </text>
+        }
     </style>
 
     @if (Model.GoogleAnalyticsPropertyId != null)
@@ -217,6 +238,11 @@
         </nav>
         <div class="flex-expand">
             <div class="flex-container">
+                @if (Model.SinglePluginMode) {
+                <div id="toggle-plugin-container" class="single-plugin-mode">
+                    <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                </div>
+                }
                 <div id="map-0" class="map">
                     <div class="control-container">
                         <div class="top-tools"></div>

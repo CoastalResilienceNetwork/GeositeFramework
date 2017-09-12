@@ -42,4 +42,25 @@
             'click': function (e) { toggle(this, e); }
         }
     });
+
+    // Single plugin mode button to toggle plugin visibility
+    N.views.TogglePlugin = Backbone.View.extend({
+        initialize: function(options) {
+            this.singlePlugin = options.viewModel.get('plugins').at(0);
+        },
+
+        events: {
+            'click': 'togglePluginVisibility'
+        },
+
+        togglePluginVisibility: function() {
+            if (this.singlePlugin.selected) {
+                this.singlePlugin.deselect();
+                this.$el.find('i').attr('class', 'fa fa-chevron-right');
+            } else {
+                this.singlePlugin.select();
+                this.$el.find('i').attr('class', 'fa fa-chevron-left');
+            }
+        }
+    });
 }(Geosite));
