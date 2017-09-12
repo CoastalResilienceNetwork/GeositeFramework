@@ -230,7 +230,9 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        @if (!Model.SinglePluginMode) {
+                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        }
                                         <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                     </ul>
                                 </div>
@@ -332,37 +334,6 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-sidebar">
-        <li class="divider"></li>
-        <% if (isMain) { %>
-            <% if (splitScreen) { %>
-                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 1" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
-                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 2" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
-            <% } else { %>
-                <li><a class="switch-screen i18n" data-i18n="[title]Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
-                    <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/><span class="i18n" data-i18n="Switch to Map <%= alternatePaneNumber + 1 %>">Switch To Map <%= alternatePaneNumber + 1 %>
-                </a></li>
-                <li><a class="split-screen i18n" data-i18n="[title]Split the current workspace into two workspaces" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/><span class="i18n" data-i18n="Split View">Split View</span></a><li>
-            <% } %>
-            <li class="divider"></li>
-            <li><a href="javascript:;" class="permalink-button hide-for-tablet i18n" data-i18n="[title]Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/><span class="i18n" data-i18n="Save & Share">Save &amp; Share</span></a></li>
-            <% if (helpUrl) { %>
-                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet i18n" data-i18n="[title]Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/><span class="i18n" data-i18n="Help">Help</span></a></li>
-            <% } %>
-        <% } else { %>
-            <li>
-                <a href="javascript:;" class="hide-for-tablet map-sync i18n" data-i18n=<%= syncMaps ? '"[title]Allow maps to show different extents"' : '"[title]Force maps to show the same extent"' %>>
-                    <img class="icon" src="img/icons/icon_<%= syncMaps ? '' : 'un' %>link-views_up.png"/>
-                    <span class="i18n" data-i18n="<%= syncMaps ? 'Unlink Maps' : 'Link Maps' %>"><%= syncMaps ? 'Unlink' : 'Link' %> Maps</span>
-                </a>
-            </li>
-        <% } %>
-        <% if (showExportButton) { %>
-            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Create Map">Create Map</span></a></li>
-        <% } %>
-
-    </script>
-
     <script type="text/template" id="template-sidebar-plugin">
         <button class="nav-apps-button plugin-launcher i18n <%= selected ? 'active' : ''%> <%= displayed ? 'app-displayed' : ''%>" data-i18n="[title]<%=fullName%>">
             <span class="button-icon"><img src="<%- pluginSrcFolder %>/icon_sm.png"></span>
@@ -381,11 +352,6 @@
         <span class="topbar-tools">
             <a class="plugin-clear" href="javascript:;">&#10006;</a>
         </span>
-    </script>
-    <script type="text/template" id="template-sidebar-link">
-        <div class="sidebar-link">
-            <a target="_blank" href="<%= link.url %>"><%- link.text %></a>
-        </div>
     </script>
 
     <script type="text/template" id="template-basemap-selector-item">

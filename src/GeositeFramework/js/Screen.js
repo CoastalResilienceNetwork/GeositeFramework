@@ -41,14 +41,7 @@
             this.set('syncMaps', sync);
         },
 
-        initialize: function () {
-            if (N.app.data.region.print && N.app.data.region.print.printServerUrl) {
-                this.set('showExportButton', true);
-            }
-            if (N.app.data.region.helpUrl) {
-                this.set('helpUrl', N.app.data.region.helpUrl);
-            }
-        }
+        initialize: function () { }
     });
 
 }(Geosite));
