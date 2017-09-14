@@ -179,8 +179,8 @@
         @if (Model.SinglePluginMode) {
         <text>
         .sidebar-content {
-            height: 100% !important;
-            margin-top: 0 !important;
+            height: 100%;
+            margin-top: 0;
         }
 
         .sidebar-nav {
@@ -228,6 +228,13 @@
     </form>
 
     <script type="text/template" id="template-pane">
+        @if (Model.SinglePluginMode) {
+        <text>
+        <div id="single-plugin-mode-help-container">
+            Help
+        </div>
+        </text>
+        }
         <nav class="nav-apps plugins nav-apps-narrow @(Model.SinglePluginMode ? "single-plugin-mode" : "")">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
@@ -638,6 +645,24 @@
         </div>
     </script>
 
+    <script type="text/template" id="single-plugin-mode-help-template">
+        <div class="sidebar content-scrollable">
+            <div class="sidebar-nav">
+                <h2 class="nav-title" class="i18n" data-i18n="About">
+                    About
+                </h2>
+                <div class="nav-buttons">
+                    <button class="button-link plugin-off i18n" data-i18n="[title]Turn off this plugin" title="Turn off this plugin">
+                        <i class="icon-cancel"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <%= content %>
+            </div>
+        </div>
+    </script>
+
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
         <div class="dropdown header-dropdown nav-main-dropdown">
@@ -656,7 +681,11 @@
             </ul>
         </div>
         <div class="nav-region-subtitle">
-            @Model.TitleDetail.Text
+            @if (!Model.SinglePluginMode) {
+                @Model.TitleDetail.Text
+            } else {
+                <text><span id="show-single-plugin-mode-help">About</span></text>
+            }
         </div>
         <div id="search"></div>
     </header>
@@ -667,6 +696,10 @@
         change the region setting `launchpad.html = true` to use this content -->
     <div id="custom-launchpad-content" style="display:none;">
         @Html.Partial("CustomLaunchpadContent")
+    </div>
+
+    <div id="single-plugin-mode-help-content" style="display:none;">
+        @Html.Partial("SinglePluginModeHelp")
     </div>
 
     <!-- Area for plugins to arrange their markup independent
@@ -761,6 +794,11 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
+    @if (@Model.SinglePluginMode) {
+    <text>
+        <script src="js/SinglePluginModeHelp.js"></script>
+    </text>
+    }
     <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>

@@ -188,6 +188,7 @@
     <Content Include="js\PluginBase.js" />
     <Content Include="js\polyfill.js" />
     <Content Include="js\Screen.js" />
+    <Content Include="js\SinglePluginModeHelp.js" />
     <Content Include="js\SubRegion.js" />
     <Content Include="js\lib\backbone.picky.js" />
     <Content Include="js\lib\backbone.picky.min.js" />
@@ -258,6 +259,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\CustomLaunchPadContent.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\SinglePluginModeHelp.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
