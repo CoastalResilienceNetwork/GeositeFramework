@@ -5,63 +5,37 @@
         text-align: center;
     }
 
-    .print-sandbox-header {
-        display: flex;
-        flex-direction: row;
-        height: 0.95in;
-    }
-
     #print-map-container {
-        overflow: hidden !important;
-    }
-
-    #map-print-sandbox {
-        visibility: visible !important;
+        overflow: hidden;
     }
 
     .control-container {
-        display: none !important;
+        display: none;
     }
 
     #export-print-preview-container {
-        padding-bottom: 5px !important;
+        padding-bottom: 5px;
         visibility: visible;
     }
 
-    #legend-container-0 {
-        background-color: #fff !important;
+    #print-map-container > #export-print-preview-map > #map-0 {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        max-height: 1800px;
+        top: 0;
     }
 
-    .legend-close {
+    .dojoxResizeHandle {
         visibility: hidden;
-    }
-    
-    #print-map-container > #export-print-preview-map > #map-0 {
-        height: 100% !important;
-        width: 100% !important;
-        position: relative;
-    }
-    
-    #legend-container-0 {
-        margin-left: 0px !important;
-        left: 0px !important;
-        width: 100% !important;
-        position: absolute !important;
-        z-index: 10;
-    }
-    
-    .dojoResizeHandle {
-        visibility: hidden !important;
     }
 
     #left-pane {
         display: none;
     }
-    
-    #right-pane {
-        display: none;
-    }
 
+    /* !important required to override inline styles, otherwise
+    print modal appears on top of printed element */
     .tbox {
         display: none !important;
     }
@@ -71,15 +45,15 @@
     }
 
     header {
-        display: none !important;
+        display: none;
     }
 
     #print-map-container > #export-print-preview-map.div.control-container {
         display: none;
     }
-    
+
     #print-map-container > #export-print-preview-map > #map-0 > #map-0_root img.layerTile {
-        visibility: visible !important;
+        visibility: visible;
     }
 
     #print-map-container > #export-print-preview-map > #map-0 > #map-0_root > #map-0_zoom_slider {
@@ -90,16 +64,37 @@
         display: none;
     }
 
+    /* Legend can be manually resized by user, which utilizies inline style rules.
+    Without these overrides, the legend would be sized on the print-out as it
+    in the DOM. */
+    #legend-container-0 {
+        margin-left: 0px !important;
+        left: 0px !important;
+        width: 100% !important;
+        position: absolute !important;
+        z-index: 10;
+        background-color: #fff !important; /* Needed for IE */
+    }
+
+    .legend-close {
+        visibility: hidden;
+    }
+
     .legend-header {
         height: 15%;
         font-size: 11px;
     }
 
+    /* It's not quite clear why, but removing the !important flags from the next
+    few legend style blocks results in the rules, despite not having any conflicting
+    rules, not having any effect. It could have something to do with how the legend
+    elements are moved around the DOM for printing */
     .legend-body {
         display: flex;
         flex-wrap: wrap;
         width: 100% !important;
         height: 85% !important;
+        background-color: #fff !important; /* Needed for IE */
     }
 
     .layer-legends {
@@ -138,12 +133,8 @@
     }
 }
 
-#export-print-preview-container {
-    padding-bottom: 5px !important;
-}
-
 #export-print-preview-container.tinner > div.tcontent {
-    max-height: 100% !important;
+    max-height: 100%;
 }
 
 #export-print-preview-container.tinner > div.tcontent > div.popover {
@@ -157,21 +148,8 @@
     padding-top: 10px;
 }
 
-
 #export-print-preview-map.div.control-container {
     display: none;
-}
-
-#export-print-preview-map {
-    width: 100% !important;
-    max-height: 1800px;
-}
-
-#export-print-preview-map > #map-0 {
-    max-height: 1800px;
-    height: 100%;
-    top: 0 !important;
-    position: relative !important;
 }
 
 .instructions {
@@ -180,10 +158,6 @@
 
 .legend-close {
     visibility: hidden;
-}
-
-.dojoResizeHandle {
-    visibility: hidden !important;
 }
 
 #export-title {
@@ -208,8 +182,5 @@
     display: flex;
     flex-direction: row;
     height: 0.95in;
-}
-
-#print-map-container {
-    overflow: hidden !important;
+    visibility: visible;
 }
