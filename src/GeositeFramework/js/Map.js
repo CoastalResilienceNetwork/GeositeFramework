@@ -159,7 +159,9 @@ require(['use!Geosite',
             // would be detached from the body and the parent would not be accessible
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
 
-            setupSubregions(N.app.data.region.subregions, esriMap);
+            if (!N.app.singlePluginMode) {
+                setupSubregions(N.app.data.region.subregions, esriMap);
+            }
         });
 
         function setupSubregions(subregions, esriMap) {
