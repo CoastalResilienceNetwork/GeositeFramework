@@ -233,7 +233,7 @@ define(['use!Geosite',
             // legends. It will do so until the hard-coded limits
             // here are reached.
             var MAX_HEIGHT = 400, // Somewhat arbitrary
-                MAX_WIDTH = 485, // Just enough to fit two columns
+                MAX_WIDTH = 255, // Just enough to fit one column
                 MIN_WIDTH = 255, // Just enough to fit one column
                 LEGEND_BODY_PADDING = 22;
 
