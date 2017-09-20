@@ -298,6 +298,9 @@ require([
             initSidebarToggle(view);
             initMapView(view);
             initPluginViews(view);
+            if (N.app.singlePluginMode) {
+                initTogglePlugin(view);
+            }
 
             // For on demand export initialization. See Layer Selector print, for example.
             var paneNumber = view.model.get('paneNumber');
@@ -323,6 +326,15 @@ require([
             new N.views.SidebarToggle({
                 el: view.$('#sidebar-toggle')
             });
+        }
+
+        function initTogglePlugin(view) {
+            var togglePluginView = new N.views.TogglePlugin({
+                el: view.$('#toggle-plugin-container'),
+                viewModel: view.model
+            });
+
+            togglePluginView.$el.show();
         }
 
         function initMapView(view) {
