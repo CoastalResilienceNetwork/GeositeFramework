@@ -933,7 +933,7 @@ nav {
     background: #fff;
     height: 100%;
     position: absolute;
-    z-index: 10;
+    z-index: 100;
     display: none;
     width: 350px;
 }
