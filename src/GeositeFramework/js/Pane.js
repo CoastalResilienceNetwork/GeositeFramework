@@ -300,6 +300,7 @@ require([
             initPluginViews(view);
             if (N.app.singlePluginMode) {
                 initTogglePlugin(view);
+                initSinglePluginModeHelp(view);
             }
 
             // For on demand export initialization. See Layer Selector print, for example.
@@ -335,6 +336,13 @@ require([
             });
 
             togglePluginView.$el.show();
+        }
+
+        function initSinglePluginModeHelp(view) {
+            new N.views.SinglePluginModeHelp({
+                el: view.$('#single-plugin-mode-help-container'),
+                viewModel: view.model
+            });
         }
 
         function initMapView(view) {

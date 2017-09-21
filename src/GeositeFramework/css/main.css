@@ -928,6 +928,37 @@ nav {
 .nav-apps-button {
   padding: 7px 10px 7px;
 }
+#single-plugin-mode-help-container {
+    left: 0;
+    background: #fff;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    display: none;
+    width: 350px;
+}
+#single-plugin-mode-help-container .sidebar {
+    height: 100%;
+}
+#single-plugin-mode-help-container .sidebar-nav {
+    border-bottom: none;
+    position: relative;
+    display: flex;
+}
+#single-plugin-mode-help-container .sidebar-nav .nav-title {
+    font-size: 14px;
+}
+#single-plugin-mode-help-container .sidebar-content {
+    padding: 10px;
+    margin-top: 0;
+    height: calc(100% - 40px);
+}
+#single-plugin-mode-help-container .plugin-off {
+    cursor: pointer;
+}
+#show-single-plugin-mode-help {
+    cursor: pointer;
+}
 #map-0.map {
     position: absolute;
     top: 0;
