@@ -969,7 +969,7 @@ nav {
 header {
     background-color: #5394B6;
     flex-shrink: 0;
-    z-index: 2800;
+    z-index: 5002;
 }
 header,
 header .nav-main {
@@ -983,9 +983,18 @@ header .nav-main {
     padding-right: 12px;
     height: 55px;
 }
+.single-plugin-mode .nav-main {
+    padding-right: 0;
+}
 .header-dropdown {
     height: 55px;
     z-index: 2200
+}
+.header-dropdown.single-plugin-mode {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10000;
 }
 .header-dropdown.dropdown>button {
     padding: 0;
@@ -1003,6 +1012,10 @@ header .nav-main {
     margin-right: 10px;
     line-height: 50px;
     height: 100%;
+}
+.single-plugin-mode .dropdown-icon-container {
+    margin-right: 0;
+    border-right: none;
 }
 .header-dropdown .button.active,
 .header-dropdown .button.hover,
@@ -1054,6 +1067,12 @@ header .nav-main {
 }
 .dropdown-submenu > .dropdown-menu:after {
     top: inherit;
+}
+.single-plugin-mode .dropdown-menu {
+    left: -175px;
+}
+.single-plugin-mode .dropdown-menu #region-links {
+    left: -282px;
 }
 .nav-main-title {
     font-size: 18px;
