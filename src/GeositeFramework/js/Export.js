@@ -71,7 +71,7 @@ require(['use!Geosite'],
                 $('<link>', {
                     rel: 'stylesheet',
                     href: pageCssLink(pageOrientation),
-                    'class': '.print-orientation-css',
+                    'class': 'print-orientation-css',
                 }).appendTo('head');
                 _.delay(orientDeferred.resolve, 1000);
 
