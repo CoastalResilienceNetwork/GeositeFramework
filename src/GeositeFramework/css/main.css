@@ -1670,7 +1670,7 @@ header .nav-main {
 .content .legend .legend-body {
     padding: 10px 15px;
     overflow: auto;
-    height: 100%;
+    height: 99%;
     width: 100%;
 }
 .layer-legends {
