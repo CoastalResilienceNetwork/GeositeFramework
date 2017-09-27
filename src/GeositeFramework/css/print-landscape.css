@@ -1,21 +1,21 @@
-﻿@media print {
+@media print {
     @page {
         size: letter landscape;
     }
 
     #map-print-sandbox {
-        width: 10in !important;
-        height: 6in !important;
+        width: 10in;
+        height: 6in;
     }
 
     #print-map-container {
-        width: 10in !important;
-        height: 6in !important;
+        width: 10in;
+        height: 6in;
     }
 
     #print-map-container > #export-print-preview-map {
-        height: 5.9in !important;
-        width: 9.9in !important;
+        height: 5.9in;
+        width: 9.9in;
     }
 
     #legend-container-0 {
@@ -24,25 +24,25 @@
     }
 
     .above-legend {
-        bottom: 21% !important;
+        bottom: 21%;
     }
 
     .page-bottom {
-        bottom: 1% !important;
+        bottom: 1%;
     }
 }
 
 #map-print-sandbox {
-    width: 10in !important;
-    height: 6in !important;
+    width: 10in;
+    height: 6in;
 }
 
 #print-map-container {
-    width: 10in !important;
-    height: 6in !important;
+    width: 10in;
+    height: 6in;
 }
 
 #print-map-container > #export-print-preview-map {
-    height: 5.9in !important;
-    width: 9.9in !important;
+    height: 5.9in;
+    width: 9.9in;
 }
