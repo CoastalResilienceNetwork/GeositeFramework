@@ -40,7 +40,7 @@
                         <i class="dropdown-icon icon-angle-right"></i>
                     </a>
 
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="region-links">
                         @RenderRegionLinks(link.Items)
                     </ul>
                 </li>
@@ -193,6 +193,13 @@
         }
         #toggle-plugin-container button:hover {
             background-color: @Model.SecondaryColor;
+        }
+
+        /* Ideally these would be stored in class, but when the ESRI search is
+        initialized, existing classes are overwritten */
+        #search {
+            right: 45px;
+            z-index: 10000;
         }
         </text>
         }
@@ -665,6 +672,7 @@
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
+        @if (!@Model.SinglePluginMode) {
         <div class="dropdown header-dropdown nav-main-dropdown">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -680,6 +688,13 @@
                 @RenderLinks(Model.HeaderLinks)
             </ul>
         </div>
+        } else {
+        <div class="nav-main">
+            <div class="nav-main-title">
+                @Model.TitleMain.Text
+            </div>
+        </div>
+        }
         <div class="nav-region-subtitle">
             @if (!Model.SinglePluginMode) {
                 @Model.TitleDetail.Text
@@ -688,6 +703,20 @@
             }
         </div>
         <div id="search"></div>
+        @if (@Model.SinglePluginMode) {
+        <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="dropdown-icon-container">
+                        <i class="dropdown-icon icon-menu"></i>
+                    </div>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
+                @RenderLinks(Model.HeaderLinks)
+            </ul>
+        </div>
+        }
     </header>
 
     @Html.Partial("TourInfo")
