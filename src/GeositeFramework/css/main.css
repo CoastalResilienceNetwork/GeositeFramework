@@ -2122,3 +2122,37 @@ body.x-body {
 .arcgisSearch .searchGroup .searchInput:-moz-placeholder { /* Firefox 18- */
   color: #fff;
 }
+#single-plugin-toggle-footer {
+    bottom: 0px;
+    width: 100vw;
+    height: 8vh;
+    background-color: lightgray;
+    z-index: 100;
+    text-align: center;
+}
+
+#single-plugin-toggle-buttons {
+    display: inline-block;
+    width: 100vw;
+    height: 8vh;
+    margin-top: 1vh;
+}
+
+.single-plugin-toggle-button {
+    width: 48vw;
+    height: 75%;
+    font-size: 20px !important;
+    font-weight: 500;
+    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    padding: 0 !important;
+    border: 0px !important;
+    border-radius: 0 !important;
+}
+
+#single-plugin-toggle-content-button {
+
+}
+
+#single-plugin-toggle-map-button {
+
+}

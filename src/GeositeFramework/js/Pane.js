@@ -336,6 +336,26 @@ require([
             });
 
             togglePluginView.$el.show();
+
+            var mobileContentButton = $('#single-plugin-toggle-content-button'),
+                mobileMapButton = $('#single-plugin-toggle-map-button'),
+                sidebarDiv = $('.sidebar');
+
+            mobileContentButton.on('click', function() {
+                sidebarDiv.show();
+                mobileContentButton.removeClass('button-secondary');
+                mobileContentButton.addClass('button-primary');
+                mobileMapButton.removeClass('button-primary');
+                mobileMapButton.addClass('button-secondary');
+            });
+
+            mobileMapButton.on('click', function() {
+                sidebarDiv.hide();
+                mobileMapButton.removeClass('button-secondary');
+                mobileMapButton.addClass('button-primary');
+                mobileContentButton.removeClass('button-primary');
+                mobileContentButton.addClass('button-secondary');
+            });
         }
 
         function initSinglePluginModeHelp(view) {
