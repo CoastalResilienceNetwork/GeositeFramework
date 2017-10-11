@@ -299,8 +299,7 @@ require([
             initMapView(view);
             initPluginViews(view);
             if (N.app.singlePluginMode) {
-                initTogglePlugin(view);
-                initSinglePluginModeHelp(view);
+                initSinglePluginMode(view);
             }
 
             // For on demand export initialization. See Layer Selector print, for example.
@@ -329,6 +328,12 @@ require([
             });
         }
 
+        function initSinglePluginMode(view) {
+            initTogglePlugin(view);
+            initMobileTogglePlugin(view);
+            initSinglePluginModeHelp(view);
+        }
+
         function initTogglePlugin(view) {
             var togglePluginView = new N.views.TogglePlugin({
                 el: view.$('#toggle-plugin-container'),
@@ -336,26 +341,14 @@ require([
             });
 
             togglePluginView.$el.show();
+        }
 
-            var mobileContentButton = $('#single-plugin-toggle-content-button'),
-                mobileMapButton = $('#single-plugin-toggle-map-button'),
-                sidebarDiv = $('.sidebar');
-
-            mobileContentButton.on('click', function() {
-                sidebarDiv.show();
-                mobileContentButton.removeClass('button-secondary');
-                mobileContentButton.addClass('button-primary');
-                mobileMapButton.removeClass('button-primary');
-                mobileMapButton.addClass('button-secondary');
+        function initMobileTogglePlugin(view) {
+            var mobileTogglePluginView = new N.views.MobileTogglePlugin({
+                viewModel: view.model
             });
 
-            mobileMapButton.on('click', function() {
-                sidebarDiv.hide();
-                mobileMapButton.removeClass('button-secondary');
-                mobileMapButton.addClass('button-primary');
-                mobileContentButton.removeClass('button-primary');
-                mobileContentButton.addClass('button-secondary');
-            });
+            mobileTogglePluginView.$el.show();
         }
 
         function initSinglePluginModeHelp(view) {

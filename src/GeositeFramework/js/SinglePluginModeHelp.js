@@ -3,11 +3,14 @@
 
     var $container;
     var $pluginToggle;
+    var $mobileToggle;
     var singlePlugin;
+    var viewModel;
 
     function initialize(view, $el) {
         $container = $el;
         $pluginToggle = $('#toggle-plugin-container');
+        $mobileToggle = $('#single-plugin-toggle-footer');
 
         // Get the content from the developer-provided HTML partial
         var content = $('#single-plugin-mode-help-content').html();
@@ -23,6 +26,7 @@
         $('#show-single-plugin-mode-help').click(function() {
             $container.show();
             $pluginToggle.hide();
+            $mobileToggle.hide();
             singlePlugin.get('$uiContainer').hide();
         });
     }
@@ -30,15 +34,20 @@
     function close(view) {
         $container.hide();
         $pluginToggle.show();
+        $mobileToggle.show();
         if (singlePlugin.selected) {
-            singlePlugin.get('$uiContainer').show();
+            if (!window.matchMedia("screen and (max-device-width: 736px)").matches ||
+                viewModel.get('pluginContentVisible')) {
+                singlePlugin.get('$uiContainer').show();
+            }
         }
     }
 
     N.views = N.views || {};
     N.views.SinglePluginModeHelp = Backbone.View.extend({
         initialize: function (options) {
-            singlePlugin = options.viewModel.get('plugins').at(0);
+            singlePlugin = options.viewModel.get('plugins').at(0),
+            viewModel = options.viewModel;
             return initialize(this, $('#single-plugin-mode-help-container'), singlePlugin);
         },
         events: {
