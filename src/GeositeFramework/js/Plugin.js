@@ -519,7 +519,7 @@ require(['use!Geosite',
                     // not be present and print features wouldn't show up.
                     _.delay(parseDeferred.resolve, 200);
 
-                    var mapReadyDeferred = setupPrintableMap(pluginObject, $printSandbox, previewDeferred);
+                    var mapReadyDeferred = setupPrintableMap(view.model.get('pluginObject').map, pluginObject, $printSandbox, previewDeferred);
 
                     mapReadyDeferred.then(function(previewMap) {
                         // The plugin is given a deferred object to resolve when the page is ready
@@ -544,7 +544,7 @@ require(['use!Geosite',
             model.set('$uiContainer', $uiContainer);
         }
 
-        function setupPrintableMap(pluginObject, $printSandbox, previewDeferred) {
+        function setupPrintableMap(map, pluginObject, $printSandbox, previewDeferred) {
             var mapMarkup = N.app.templates['template-map-preview']({ pluginName: pluginObject.toolbarName }),
                 $mapPrint = $($.trim(mapMarkup)),
                 $printPreview = $('#print-preview-sandbox'),
@@ -570,30 +570,35 @@ require(['use!Geosite',
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
-                    // Remove any calculated size so that it contains the full map
-                    $('#print-preview-container').css({ height: 'initial', width: 'initial' });
-
-                    // Set the supplied height & width on the map
-                    $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
-
-                    var originalMap = pluginObject.app._unsafeMap,
-                        map = new Map('plugin-print-preview-map', { extent: originalMap.extent }),
-                        currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
-
-                    map.addLayer(new ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
-
-                    dojo.connect(map, 'onLoad', function() {
-                        mapReadyDeferred.resolve(map);
-                    });
+                    // Let the app know that the map is ready for modification
+                    // for plugin print
+                    mapReadyDeferred.resolve(map);
 
                     $('#print-preview-print').on('click', function() {
-                        // Move the map from the plugin print preview dialog to the sandbox where
+                        // Move the map from the main app area to to the sandbox where
                         // the plugin can mess with it's positioning among its other elements
-                        $(map.container).detach().appendTo($printSandbox);
-                        TINY.box.hide();
+                        var mapNode = $("#map-0").detach();
+                        $(mapNode).appendTo($printSandbox);
+                        map.resize();
+                        map.reposition();
+
+                        // TODO: Remove or replace in #1009
                         $printPreview.hide();
                         previewDeferred.resolve();
+
+                        // Close out the modal, which calls the closejs method
+                        TINY.box.hide();
                     });
+                },
+
+                closejs: function () {
+                    // Move the map back to it's original container
+                    var mapNode = $('#map-0').detach();
+                    $('.map-container').append(mapNode);
+                    map.resize(true);
+
+                    // Remove print related CSS
+                    $('.base-plugin-print-css').remove();
                 }
             });
 
