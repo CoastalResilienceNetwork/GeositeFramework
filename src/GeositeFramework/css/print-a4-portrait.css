@@ -4,18 +4,18 @@
     }
 
     #map-print-sandbox {
-        width: 8in;
-        height: 9in;
+        width: 7.76in;
+        height: 9.69in;
     }
 
     #print-map-container {
-        width: 8in;
-        height: 8.65in;
+        width: 7.76in;
+        height: 9.34in;
     }
 
     #print-map-container > #export-print-preview-map {
-        height: 8.5in;
-        width: 7.9in;
+        width: 7.66in;
+        height: 9.19in;
     }
 
     #legend-container-0 {
@@ -33,16 +33,16 @@
 }
 
 #map-print-sandbox {
-    width: 8in;
-    height: 9in;
+    width: 7.76in;
+    height: 9.69in;
 }
 
 #print-map-container {
-    width: 8in;
-    height: 8.65in;
+    width: 7.76in;
+    height: 9.34in;
 }
 
 #print-map-container > #export-print-preview-map {
-    height: 8.5in;
-    width: 7.9in;
+    width: 7.66in;
+    height: 9.19in;
 }

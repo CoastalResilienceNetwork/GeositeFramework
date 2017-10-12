@@ -41,12 +41,8 @@ require(['use!Geosite'],
             return false;
         }
 
-        function pageCssLink(pageOrientation) {
-            if (pageOrientation === 'Landscape') {
-                return 'css/print-landscape.css';
-            } else {
-                return 'css/print-portrait.css';
-            }
+        function pageCssLink(pageOrientation, pageSize) {
+            return 'css/print-' + pageSize + "-" + pageOrientation + '.css';
         }
 
         function setupExport(context) {
@@ -68,11 +64,14 @@ require(['use!Geosite'],
                 });
 
                 var pageOrientation = $("[name='export-orientation']:checked").val();
+                var pageSize = $("[name='export-page-size']:checked").val();
+
                 $('<link>', {
                     rel: 'stylesheet',
-                    href: pageCssLink(pageOrientation),
+                    href: pageCssLink(pageOrientation, pageSize),
                     'class': 'print-orientation-css',
                 }).appendTo('head');
+
                 _.delay(orientDeferred.resolve, 1000);
 
                 orientDeferred.then(function() {
@@ -218,7 +217,7 @@ require(['use!Geosite'],
                 html: $mapPrint[0].outerHTML,
                 boxid: 'export-print-preview-container',
                 width: 400,
-                height: 400,
+                height: 500,
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
