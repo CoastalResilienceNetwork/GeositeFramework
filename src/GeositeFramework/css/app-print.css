@@ -5,6 +5,10 @@
         text-align: center;
     }
 
+    #map-print-sandbox {
+        visibility: visible;
+    }
+
     #print-map-container {
         overflow: hidden;
     }
