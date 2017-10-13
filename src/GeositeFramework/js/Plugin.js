@@ -61,7 +61,11 @@ require(['use!Geosite',
                         }, 100);
                         return d.promise();
                     }
-                };
+                },
+                showMobileMap = (N.app.singlePluginMode && N.app.showMobileMap) ?
+                    N.app.showMobileMap : _.noop(),
+                showMobileContent = (N.app.singlePluginMode && N.app.showMobileContent) ?
+                    N.app.showMobileContent : _.noop();
 
             try {
                 pluginObject.initialize({
@@ -78,7 +82,9 @@ require(['use!Geosite',
                         dispatcher: N.app.dispatcher,
                         suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
                         resize: resizers,
-                        singlePluginMode: N.app.singlePluginMode
+                        singlePluginMode: N.app.singlePluginMode,
+                        showMobileMap: showMobileMap,
+                        showMobileContent: showMobileContent,
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)

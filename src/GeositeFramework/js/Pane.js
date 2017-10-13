@@ -299,8 +299,7 @@ require([
             initMapView(view);
             initPluginViews(view);
             if (N.app.singlePluginMode) {
-                initTogglePlugin(view);
-                initSinglePluginModeHelp(view);
+                initSinglePluginMode(view);
             }
 
             // For on demand export initialization. See Layer Selector print, for example.
@@ -329,6 +328,12 @@ require([
             });
         }
 
+        function initSinglePluginMode(view) {
+            initTogglePlugin(view);
+            initMobileTogglePlugin(view);
+            initSinglePluginModeHelp(view);
+        }
+
         function initTogglePlugin(view) {
             var togglePluginView = new N.views.TogglePlugin({
                 el: view.$('#toggle-plugin-container'),
@@ -336,6 +341,14 @@ require([
             });
 
             togglePluginView.$el.show();
+        }
+
+        function initMobileTogglePlugin(view) {
+            var mobileTogglePluginView = new N.views.MobileTogglePlugin({
+                viewModel: view.model
+            });
+
+            mobileTogglePluginView.$el.show();
         }
 
         function initSinglePluginModeHelp(view) {
