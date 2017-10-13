@@ -1949,6 +1949,8 @@ a.active {
 #plugin-print-sandbox {
     position: absolute;
     visibility: hidden;
+    background-color: #fff;
+    z-index: 1;
 }
 #map-print-sandbox {
     position: absolute;

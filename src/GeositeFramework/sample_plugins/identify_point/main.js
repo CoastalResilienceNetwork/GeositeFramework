@@ -166,8 +166,6 @@ define(["dojo/_base/declare", "framework/PluginBase"],
 
                 mapObject.addLayer(layer);
 
-                $printArea.append('<img id="sample-graphic-print" src="' + this.infoGraphic + '" >');
-
                 printDeferred.resolve();
             },
 
