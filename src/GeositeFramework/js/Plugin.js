@@ -430,6 +430,8 @@ require(['use!Geosite',
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.$uiContainer) {
+                assignEvents(view.$uiContainer, model, view.paneNumber);
+
                 if (view.model.selected === true) {
                     view.$uiContainer.show();
                 } else {
@@ -479,6 +481,14 @@ require(['use!Geosite',
 
             view.$uiContainer = $uiContainer;
 
+            // Attach to top pane element
+            view.$el.parents().find('.content .nav-apps').after($uiContainer);
+
+            // Tell the model about $uiContainer so it can pass it to the plugin object
+            model.set('$uiContainer', $uiContainer);
+        }
+
+        function assignEvents($uiContainer, model, paneNumber) {
             $uiContainer
                 // Minimize the plugin
                 .find('.plugin-minimize').on('click', function() {
@@ -496,58 +506,59 @@ require(['use!Geosite',
                     pluginObject.showHelp();
                 }).end()
                 .find('.plugin-print').on('click', function() {
-                    var pluginDeferred = $.Deferred(),
-                        parseDeferred = $.Deferred(),
-                        previewDeferred = $.Deferred(),
-                        pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
-                        printCssClass = 'plugin-print-css',
-                        oppositePaneHideCssPath = 'css/print-hide-map' +
-                            (paneNumber === 0 ? 1 : 0) + '.css',
-                        $printSandbox = $('#plugin-print-sandbox');
+                    initPrint(model, paneNumber);
+                }).end();
+        }
 
-                    // Any previous plugin-prints may have left specific print css
-                    // or sandbox elements.  Clear all so that this new print routine
-                    // has no conflicts with other plugins.
-                    $('.' + printCssClass).remove();
-                    $printSandbox.empty();
+        function initPrint(model, paneNumber) {
+            var pluginDeferred = $.Deferred(),
+                parseDeferred = $.Deferred(),
+                previewDeferred = $.Deferred(),
+                pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
+                printCssClass = 'plugin-print-css',
+                oppositePaneHideCssPath = 'css/print-hide-map' +
+                    (paneNumber === 0 ? 1 : 0) + '.css',
+                $printSandbox = $('#plugin-print-sandbox'),
+                pluginObject = model.get('pluginObject');
 
-                    // add base plugin css
-                    addCss('css/print.css', 'base-plugin-print-css');
+            // Any previous plugin-prints may have left specific print css
+            // or sandbox elements.  Clear all so that this new print routine
+            // has no conflicts with other plugins.
+            $('.' + printCssClass).remove();
+            $printSandbox.empty();
 
-                    // Add the plugin css
-                    addCss(pluginCssPath, printCssClass);
+            // add base plugin css
+            addCss('css/print.css', 'base-plugin-print-css');
 
-                    // Hide the possible same plugin from the opposite map pane
-                    addCss(oppositePaneHideCssPath, printCssClass);
+            // Add the plugin css
+            addCss(pluginCssPath, printCssClass);
 
-                    // Give some time for the browser to parse the new CSS,
-                    // if this wasn't slightly delayed, occasionally the override would
-                    // not be present and print features wouldn't show up.
-                    _.delay(parseDeferred.resolve, 200);
+            // Hide the possible same plugin from the opposite map pane
+            addCss(oppositePaneHideCssPath, printCssClass);
 
-                    var mapReadyDeferred = setupPrintableMap(view.model.get('pluginObject').map, pluginObject, $printSandbox, previewDeferred);
+            // Give some time for the browser to parse the new CSS,
+            // if this wasn't slightly delayed, occasionally the override would
+            // not be present and print features wouldn't show up.
+            _.delay(parseDeferred.resolve, 200);
 
-                    mapReadyDeferred.then(function(previewMap) {
-                        // The plugin is given a deferred object to resolve when the page is ready
-                        // to be printed, a reference to an element where it can place printable
-                        // elements outside of its container and a reference to an esriMap which
-                        // is used as a print preview box.
-                        pluginObject.beforePrint(pluginDeferred, $printSandbox, previewMap);
+            var mapReadyDeferred = setupPrintableMap(pluginObject.map,
+                pluginObject,
+                $printSandbox,
+                previewDeferred);
 
-                        // Exectue the browser print when the plugin and print preview (if used)
-                        // have responded, as well as a slight delay for css parsing.
-                        $.when(pluginDeferred, parseDeferred, previewDeferred).then(function() {
-                            window.print();
-                        });
-                    });
-                }).end()
-                .hide();
+            mapReadyDeferred.then(function(previewMap) {
+                // The plugin is given a deferred object to resolve when the page is ready
+                // to be printed, a reference to an element where it can place printable
+                // elements outside of its container and a reference to an esriMap which
+                // is used as a print preview box.
+                pluginObject.beforePrint(pluginDeferred, $printSandbox, previewMap);
 
-            // Attach to top pane element
-            view.$el.parents().find('.content .nav-apps').after($uiContainer);
-
-            // Tell the model about $uiContainer so it can pass it to the plugin object
-            model.set('$uiContainer', $uiContainer);
+                // Exectue the browser print when the plugin and print preview (if used)
+                // have responded, as well as a slight delay for css parsing.
+                $.when(pluginDeferred, parseDeferred, previewDeferred).then(function() {
+                    window.print();
+                });
+            });
         }
 
         function setupPrintableMap(map, pluginObject, $printSandbox, previewDeferred) {
