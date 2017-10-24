@@ -8,8 +8,8 @@ require({
     ]
 });
 
-define(["dojo/_base/declare", "framework/PluginBase"],
-    function (declare, PluginBase) {
+define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html"],
+    function (declare, PluginBase, template) {
         return declare(PluginBase, {
             toolbarName: "Identify Point",
             fullName: "Identify point sample plugin",
@@ -23,67 +23,7 @@ define(["dojo/_base/declare", "framework/PluginBase"],
             initialize: function(frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);
 
-                if (frameworkParameters.app.singlePluginMode) {
-                    $(this.container).append('<h2>Welcome to single plugin mode!</h2>');
-                }
-
-                $(this.container).append(
-                    '<h4 style="padding: 5px;">' + i18next.t('Click any point on the map to display Latitude and Longitude') + '</h4>');
-
-                // add buttons to bind resize events to
-                $(this.container).append('<p>The buttons below demonstrate how to use a plugins "resize" method</p>')
-                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-set450">Set to 450</button>')
-                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-small">Small</button>')
-                    .append('<button class="resize-btn" data-ui-key="resize-ctl-identify-large">Large</button>')
-                    .append('<p class="width-textbox"></p>');
-
-                // Hide the print button until the identify feature has been used.
-                $(this.printButton).hide();
-
-                // Display a clickable image thumbnail
-                $(this.container)
-                    .append('<p>Click the thumbnail to see a sample modal image popup</p>')
-                    .append('<img src="sample_plugins/identify_point/FutureHabitat_c.jpg"' +
-                            'id="sample-plugin-thumbnail" style="cursor: pointer" width="200" height="120" />');
-
-                // Select box using Chosen
-                $(this.container)
-                    .append('<p>An example select box using Chosen</p>' +
-                            '<div class="chosen-wrap" style="margin-bottom:10px; margin-left:10px">' +
-                            '<select data-placeholder="Pick One Number" id="chosen-single"' +
-                            'class="chosen">' +
-                            '<option></option>' +
-                            '<option value="one">One</option>' +
-                            '<option value="two">Two</option>' +
-                            '<option value="three">Three</option>' +
-                            '</select>' +
-                            '</div>' +
-                            '<p>Selected value: <span class="blueFont">none</span></p>');
-
-                // Slider using jQueryUI
-                $(this.container)
-                    .append('<p>An example slider using jQueryUI</p>' +
-                            '<div class="slider-container" style="width:250px; margin-left: 10px;">' +
-                            '<div id="sldr" class="slider"></div>' +
-                            '</div>');
-
-                // Accordion menu using jQueryUI
-                $(this.container)
-                    .append('<p>An example accordion menu using jQueryUI</p>' +
-                            '<div class="accord" style="height:200px; width:350px;' +
-                            'margin-bottom:10px;">' +
-                            '<div id="accord">' +
-                            '<h3>First Panel</h3>' +
-                            '<div>' +
-                            '<p>Lorem ipsum dolor sit amet, consectetur...</p>' +
-                            '<p>Ut enim ad minim veniam, quis nostrud...</p>' +
-                            '<p>Duis aute irure dolor in reprehenderit...</p>' +
-                            '</div>' +
-                            '<h3>Second Panel</h3>' +
-                            '<div>' +
-                            '<p>Lorem ipsum dolor sit amet, consectetur...</p>' +
-                            '<p>Ut enim ad minim veniam, quis nostrud...</p>' +
-                            '</div></div>');
+                this.render(frameworkParameters);
             },
 
             activate: function(showHelpOnStart) {
@@ -197,6 +137,18 @@ define(["dojo/_base/declare", "framework/PluginBase"],
                     html: '<img src="' + imageSourcePath + '"/>',
                     fixed: true,
                 });
+            },
+
+            render: function(frameworkParameters) {
+                $(this.container).append(template);
+
+                if (frameworkParameters.app.singlePluginMode) {
+                    $(this.container)
+                        .find('#home')
+                        .prepend('<h2>Welcome to single plugin mode!</h2>')
+                        .append('<button class="plugin-print">Plugin print demo</button>');
+
+                }
             }
         });
     }
