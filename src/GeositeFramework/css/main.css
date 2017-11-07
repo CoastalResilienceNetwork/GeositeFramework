@@ -2133,6 +2133,15 @@ body.x-body {
 }
 
 @media screen and (max-device-width: 736px) {
+    .tbox {
+        max-width: 96vw !important;
+        max-height: 90vh !important;
+    }
+
+    .tcontent {
+        overflow: auto !important;
+    }
+
     #toggle-plugin-container {
         display: none !important;
     }
