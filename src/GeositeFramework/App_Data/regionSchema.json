@@ -318,6 +318,20 @@
                     "type": "string",
                     "required": false
                 },
+                "infographic": {
+                    "type": "object",
+                    "required": false,
+                    "properties": {
+                        "height": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "width": {
+                            "type": "number",
+                            "required": true
+                        }
+                    }
+                },
                 "plugins": {
                     "required": false,
                     "type": "array",
