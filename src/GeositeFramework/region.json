@@ -2,7 +2,7 @@
     "language": "en",
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "singlePluginMode": {
-        "active": true,
+        "active": false,
         "pluginFolderName": "identify_point"
     },
     "titleMain": {
