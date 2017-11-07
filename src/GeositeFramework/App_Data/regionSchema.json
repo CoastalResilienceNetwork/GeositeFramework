@@ -179,6 +179,20 @@
                     "html": { "type": "bool", "required": false },
                     "title": { "type": "string", "required": false },
                     "description": { "type": "string", "required": false },
+                    "infographic": {
+                        "type": "object",
+                        "required": false,
+                        "properties": {
+                            "height": {
+                                "type": "number",
+                                "required": true
+                            },
+                            "width": {
+                                "type": "number",
+                                "required": true
+                            }
+                        }
+                    },
                     "plugins": {
                         "required": false,
                         "type": "array",
