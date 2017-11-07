@@ -2,7 +2,7 @@
     "language": "en",
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "singlePluginMode": {
-        "active": true,
+        "active": false,
         "pluginFolderName": "identify_point"
     },
     "titleMain": {
@@ -106,6 +106,10 @@
         "html": false,
         "title": "Explore coastal resilience issues",
         "description": "Coastal resilience is Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna diam, sodales et nibh at, aliquet bibendum erat. Nunc mattis in erat id luctus. Mauris aliquam scelerisque dui.",
+        "infographic": {
+            "width": 366,
+            "height": 300,
+        },
         "plugins": [
             {
                 "title": "Regional Planning",
