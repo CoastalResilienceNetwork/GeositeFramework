@@ -131,7 +131,7 @@ define([
             showInfographic: function(config) {
                 TINY.box.show({
                     animate: true,
-                    url: '/plugins/launchpad/infographic.html',
+                    url: 'plugins/launchpad/infographic.html',
                     fixed: true,
                     width: config.infographic.width,
                     height: config.infographic.height
