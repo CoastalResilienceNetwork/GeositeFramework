@@ -1983,7 +1983,8 @@ a.active {
     padding: 5px;
 }
 #print-preview-print {
-    float: right;
+    position: absolute;
+    right: 3rem;
 }
 .esriLegendMsg {
     display: none;
@@ -2140,6 +2141,10 @@ body.x-body {
 
     .tcontent {
         overflow: auto !important;
+    }
+
+    #plugin-print-preview .popover.popover-header {
+        height: 12vh;
     }
 
     #toggle-plugin-container {
