@@ -102,6 +102,10 @@
         "html": false,
         "title": "Explore coastal resilience issues",
         "description": "Coastal resilience is Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna diam, sodales et nibh at, aliquet bibendum erat. Nunc mattis in erat id luctus. Mauris aliquam scelerisque dui.",
+        "infographic": {
+            "width": 366,
+            "height": 300,
+        },
         "plugins": [
             {
                 "title": "Regional Planning",

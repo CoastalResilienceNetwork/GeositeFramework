@@ -101,6 +101,10 @@ define([
                 }));
 
                 $(this.container).empty().append($el);
+
+                if (config.infographic) {
+                    this.addInfographicButton(config);
+                }
             },
 
             getTemplateById: function(id) {
@@ -111,6 +115,27 @@ define([
 
             triggerEvent: function(eventName, eventData) {
                 N.app.dispatcher.trigger(eventName, eventData);
+            },
+
+            addInfographicButton: function(config) {
+                var $containerParent = $(this.container).parent(),
+                    self = this;
+
+                $containerParent.append(_.template(this.getTemplateById('infographic-button')));
+                $containerParent.find('.nav-title').addClass('title-with-graphic');
+                $containerParent.find('.infographic-icon').on('click', function() {
+                    self.showInfographic(config);
+                });
+            },
+
+            showInfographic: function(config) {
+                TINY.box.show({
+                    animate: true,
+                    url: 'plugins/launchpad/infographic.html',
+                    fixed: true,
+                    width: config.infographic.width,
+                    height: config.infographic.height
+                });
             }
         });
     }
