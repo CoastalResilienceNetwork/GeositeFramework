@@ -1983,7 +1983,8 @@ a.active {
     padding: 5px;
 }
 #print-preview-print {
-    float: right;
+    position: absolute;
+    right: 3rem;
 }
 .esriLegendMsg {
     display: none;
@@ -2133,6 +2134,28 @@ body.x-body {
 }
 
 @media screen and (max-device-width: 736px) {
+    .tbox {
+        max-width: 96vw !important;
+        max-height: 90vh !important;
+    }
+
+    .tcontent {
+        overflow: auto !important;
+    }
+
+    #permalink-tiny-box-modal {
+        width: 85vw !important;
+        height: 60vh !important;
+    }
+
+    #permalink-tiny-box-modal .tcontent {
+        display: block !important;
+    }
+
+    #plugin-print-preview .popover.popover-header {
+        height: 12vh;
+    }
+
     #toggle-plugin-container {
         display: none !important;
     }

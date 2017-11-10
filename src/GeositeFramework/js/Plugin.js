@@ -567,7 +567,9 @@ require(['use!Geosite',
                 $printPreview = $('#print-preview-sandbox'),
                 mapReadyDeferred = $.Deferred(),
                 mapHeight = pluginObject.previewMapSize[1],
-                mapWidth = pluginObject.previewMapSize[0];
+                mapWidth = pluginObject.previewMapSize[0],
+                isMobileSingleAppMode = N.app.singlePluginMode &&
+                    window.matchMedia("screen and (max-device-width: 736px)").matches;
 
             // If the plugin is not set up for map print preview, don't set up a map
             // and resolve any pending print-preview map operations
@@ -583,8 +585,8 @@ require(['use!Geosite',
                 animate: false,
                 html: $mapPrint[0].outerHTML,
                 boxid: 'print-preview-container',
-                width: _.max([mapWidth, 500]),
-                fixed: true,
+                width: isMobileSingleAppMode ? '96vw' : _.max([mapWidth, 500]),
+                fixed: !isMobileSingleAppMode,
                 maskopacity: 40,
                 openjs: function () {
                     // Let the app know that the map is ready for modification

@@ -59,6 +59,7 @@
             var view = this;
 
             TINY.box.show({
+                boxid: 'permalink-tiny-box-modal',
                 html: this.template(view.model.toJSON()),
                 fixed: true,
                 openjs: function () {

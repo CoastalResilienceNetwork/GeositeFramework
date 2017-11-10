@@ -1881,7 +1881,7 @@ a.active {
 .print-preview-container {
     padding: 10px;
 }
-#print-preview-container p {
+#print-preview-container span {
     padding: 5px;
 }
 #print-preview-print {
