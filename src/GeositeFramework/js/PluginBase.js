@@ -52,6 +52,11 @@ define(["dojo/_base/declare",
             // will be called.
             closeOthersWhenActive: true,
 
+            // The [width, height] of the infographic
+            // If defined, adds a button to the titlebar that opens an infographic
+            // in a modal. Infographic is sourced from infographic.html.
+            infographic: null,
+
             size: 'small', // small, large, or custom
             width: 300, // only used if 'custom' is specified for size
             icon: "globe",

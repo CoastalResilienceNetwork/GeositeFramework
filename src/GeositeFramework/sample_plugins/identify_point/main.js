@@ -19,6 +19,7 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             hasCustomPrint: true,
             usePrintPreviewMap: true,
             previewMapSize: [500, 350],
+            infographic: [500, 300],
 
             initialize: function(frameworkParameters) {
                 declare.safeMixin(this, frameworkParameters);

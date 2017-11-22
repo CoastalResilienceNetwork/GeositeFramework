@@ -444,7 +444,14 @@ require(['use!Geosite',
                 if (pluginObject.map) {
                     pluginObject.map.resize(true);
                 }
+
+                if (model.get('pluginObject').infographic) {
+                    addInfographicButton(view,
+                        model.get('pluginObject').infographic,
+                        model.get('pluginSrcFolder'))
+                }
             }
+
             if (view.$legendContainer) {
                 if (view.model.get('active')) {
                     view.$legendContainer.show();
@@ -459,6 +466,24 @@ require(['use!Geosite',
             }
 
             return view;
+        }
+
+        function addInfographicButton(view, infographicConfig, sourceFolder) {
+            view.$uiContainer.append(N.app.templates['infographic-button-template']());
+            view.$uiContainer.find('.nav-title').addClass('title-with-graphic');
+            view.$uiContainer.find('.infographic-icon').on('click', function() {
+                showInfographic(infographicConfig, sourceFolder);
+            });
+        }
+
+        function showInfographic(infographicConfig, sourceFolder) {
+            TINY.box.show({
+                animate: true,
+                url: sourceFolder + '/html/infographic.html',
+                fixed: true,
+                width: infographicConfig[0] || 350,
+                height: infographicConfig[1] || 350
+            });
         }
 
         function getContainerId(view) {
