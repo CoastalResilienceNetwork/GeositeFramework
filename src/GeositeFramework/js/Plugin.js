@@ -475,7 +475,8 @@ require(['use!Geosite',
                     hasHelp: pluginObject.hasHelp,
                     hasCustomPrint: pluginObject.hasCustomPrint,
                     sizeClassName: getPluginSizeClassName(pluginObject.size),
-                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
+                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width),
+                    hideMinimizeButton: pluginObject.hideMinimizeButton
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
