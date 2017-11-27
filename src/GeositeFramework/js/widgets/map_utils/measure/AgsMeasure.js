@@ -68,7 +68,8 @@ define([
                         new dojo.Color([255, 0, 0]), 1),
                         new dojo.Color([255, 0, 0, 0.35])),
 
-                esriLengthUnits: [units.MILES, units.KILOMETERS],
+                esriLengthUnits: [units.MILES, units.KILOMETERS,
+                                  units.METERS, units.FEET],
                 esriAreaUnits: [units.SQUARE_MILES, units.SQUARE_KILOMETERS,
                                 units.ACRES, units.HECTARES]
 
@@ -81,7 +82,8 @@ define([
                 esriKilometers: "km",
                 esriSquareKilometers: "km",
                 esriAcres: "ac",
-                esriHectares: "ha"
+                esriHectares: "ha",
+                esriFeet: "ft"
             },
 
             _points = [],
