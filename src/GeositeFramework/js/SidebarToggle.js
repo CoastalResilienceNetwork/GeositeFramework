@@ -56,7 +56,7 @@
             'click': 'togglePluginVisibility'
         },
 
-        adjustToggleIcon() {
+        adjustToggleIcon: function() {
             const newIconClass =
                 this.viewModel.get('pluginContentVisible') ?
                 'fa fa-chevron-right' : 'fa fa-chevron-left';
