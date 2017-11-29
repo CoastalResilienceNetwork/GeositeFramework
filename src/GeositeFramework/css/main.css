@@ -792,7 +792,7 @@ nav {
     width: 220px;
     background-color: #333;
     position: relative;
-    z-index: 5001;
+    z-index: 2500;
     padding-bottom: 27px;
     overflow: visible;
 }
