@@ -61,6 +61,9 @@ define(["dojo/_base/declare",
             width: 300, // only used if 'custom' is specified for size
             icon: "globe",
 
+            // If true, the minimize button is hidden in the plugin title bar
+            hideMinimizeButton: false,
+
             initialize: function() {},
             activate: function () {},
             deactivate: function () {},
