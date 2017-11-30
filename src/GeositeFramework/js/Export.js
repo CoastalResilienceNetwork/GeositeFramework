@@ -50,7 +50,10 @@ require(['use!Geosite'],
                 orientDeferred = $.Deferred(),
                 resizeDeferred = $.Deferred(),
                 legendDeferred = $.Deferred(),
-                postPrintAction = _.noop;
+                postPrintAction = function() {
+                    var pluginLegend = $('.plugin-legends').detach();
+                    $(pluginLegend).appendTo('.legend-body');
+                }
 
             $('#export-button').on('click', function() {
                 var mapNode = $("#map-0").detach();
@@ -90,6 +93,8 @@ require(['use!Geosite'],
                         $(".legend-close").click();
                         postPrintAction = function() {
                             $(".legend-close").click();
+                            var pluginLegend = $('.plugin-legends').detach();
+                            $(pluginLegend).appendTo('.legend-body');
                         };
                     }
 
@@ -109,13 +114,13 @@ require(['use!Geosite'],
                         $(".esriScalebar").toggleClass("page-bottom");
                         $(".esriControlsBR").toggleClass("page-bottom");
                     }
-                    // wrap all legend items in a div to style separately from header
-                    $(".legend-layer").each(
-                        function(el) {
-                            $(this)
-                                .children(".item")
-                                .wrapAll("<div class='print-legend-coll'></div>");
-                        });
+
+                    // Temporarily move plugin legends container into
+                    // layer legends container so that they can coexist
+                    // in the same flexbox layout
+                    var pluginLegend = $('.plugin-legends').detach();
+                    $(pluginLegend).appendTo('.layer-legends');
+
                     _.delay(legendDeferred.resolve, 1000);
                 });
 

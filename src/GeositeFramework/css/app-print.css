@@ -93,42 +93,34 @@
     few legend style blocks results in the rules, despite not having any conflicting
     rules, not having any effect. It could have something to do with how the legend
     elements are moved around the DOM for printing */
-    .legend-body {
+    div.legend-body {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-wrap: wrap;
         width: 100% !important;
         height: 85% !important;
         background-color: #fff !important; /* Needed for IE */
     }
 
-    .layer-legends {
-        height: 100% !important;
-        width: 100% !important;
+    div.layer-legends {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+        width: 100%;
+        align-content: flex-start;
     }
 
-    .legend-layer {
+    div.legend-layer {
         width: auto !important;
-        font-size: 8px;
         height: auto !important;
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 1;
-    }
-
-    .legend-title {
-        max-width: 75%;
-    }
-
-    .print-legend-coll {
-        display: flex !important;
-        flex-direction: column;
-        flex-wrap: wrap;
-        height: 60px;
-        align-content: stretch;
-        justify-content: center;
+        font-size: 8px;
+        margin: 0 10px 0 0;
     }
 
     .legend-layer img {
