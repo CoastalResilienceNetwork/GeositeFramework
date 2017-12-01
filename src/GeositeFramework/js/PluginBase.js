@@ -40,11 +40,11 @@ define(["dojo/_base/declare",
             // Allow the framework to put a custom print button for this plugin
             hasCustomPrint: false,
 
-            // Show a print preview map for plugin printing
-            usePrintPreviewMap: false,
+            // Show a modal dialog for plugin printing
+            usePrintModal: false,
 
-            // The [width, height] of the print preview map
-            previewMapSize: [500, 400],
+            // The [width, height] of the print modal
+            printModalSize: [500, 400],
 
             // This option changes the default launch behavior and is only applicable to topbar plugins.
             // If true, this will deselect other active plugins when launched. If false, this will
@@ -75,11 +75,18 @@ define(["dojo/_base/declare",
             subregionDeactivated: function() {},
             validate: function () { return true; },
 
-            // Auto-resolve the print deferred if the plugin does not implement the function
-            // printDeferred: deferred object to resolve when the printing can commence
+            // Auto-resolve the print deferred if the plugin does not implement this method.
+            // preModalDeferred: deferred object to resolve when the printing can commence
             // $printSandbox: DOM element which the framework provides for printable element arrangement
-            // previewMap: an ESRI map object for the print preview, if `usePrintPreviewMap` is true
-            beforePrint: function (printDeferred, $printSandbox, previewMap) { printDeferred.resolve();  },
+            // mapObject: an ESRI map object referencing the main map
+            // modalSandbox: DOM element which gets rendered in the print modal
+            prePrintModal: function (preModalDeferred, $printSandbox, mapObject, modalSandbox) { preModalDeferred.resolve(); },
+
+            // Auto-resolve the modal deferred if the plugin does not implement this method.
+            // postModalDeferred: deferred object to resolve after the print modal has been dimissed
+            // modalSandbox: DOM element which gets rendered in the print modal. Plugins can now check the value of inputs/form elements
+            // mapObject: an ESRI map object referencing the main map
+            postPrintModal: function (postModalDeferred, modalSandbox, mapObject) { postModalDeferred.resolve(); },
 
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},

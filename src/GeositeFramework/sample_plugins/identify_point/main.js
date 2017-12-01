@@ -17,8 +17,8 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             allowIdentifyWhenActive: true,
             size: 'small',
             hasCustomPrint: true,
-            usePrintPreviewMap: true,
-            previewMapSize: [500, 350],
+            usePrintModal: true,
+            printModalSize: [500, 350],
             infographic: [500, 300],
 
             initialize: function(frameworkParameters) {
@@ -100,14 +100,21 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
 
             },
 
-            beforePrint: function(printDeferred, $printArea, mapObject) {
-                var layer = new esri.layers.ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
-                        "opacity": 0.8
-                    });
+            prePrintModal: function(preModalDeferred, $printArea, mapObject, modalSandbox) {
+                modalSandbox.append('<label><input type="checkbox" name="checkbox" value="value">Check this box to add demo element.</label>');
 
-                mapObject.addLayer(layer);
+                preModalDeferred.resolve();
+            },
 
-                printDeferred.resolve();
+            postPrintModal: function(postModalDeferred, modalSandbox, mapObject) {
+                var isInputChecked = $(modalSandbox).find('input').is(':checked');
+
+                if (isInputChecked) {
+                    $('#plugin-print-sandbox').append('<div class="sample">Demo element</div>');
+
+                }
+
+                postModalDeferred.resolve();
             },
 
             showHelp: function() {

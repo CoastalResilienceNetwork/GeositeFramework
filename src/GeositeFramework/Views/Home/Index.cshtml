@@ -593,15 +593,14 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-map-preview">
-        <div id="plugin-print-preview">
+    <script type="text/template" id="template-plugin-print-modal">
+        <div id="plugin-print-modal">
             <div class="popover popover-header">
-                <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Preview">Print Preview</span></h2>
+                <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Options">Print Options</span></h2>
             </div>
-            <div class="print-preview-container">
-                <span class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</span>
-                <button id="print-preview-print" class="button radius i18n" data-class="Print">Print</button>
-                <div id="plugin-print-preview-map"></div>
+            <div class="print-modal-container">
+                <button id="print-modal-confirm" class="button radius i18n" data-class="Print">Ok</button>
+                <div id="plugin-print-modal-content"></div>
             </div>
         </div>
     </script>
