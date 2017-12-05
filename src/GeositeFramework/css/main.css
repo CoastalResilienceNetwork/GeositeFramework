@@ -1553,6 +1553,7 @@ header .nav-main {
 .control-container {
     position: absolute;
     width: 100%;
+    z-index: 102;
 }
 .control-container.subregion-active {
     top: 40px;
@@ -1645,8 +1646,6 @@ header .nav-main {
     width: 255px;
     min-width: 255px;
     z-index: 101;
-    /* show over plugin-container */
-
     font-weight: bold;
     background: #FFF;
     font-size: 12px;
