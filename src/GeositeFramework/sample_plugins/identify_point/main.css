@@ -6,3 +6,9 @@ hr {
     height: 200px;
     margin-bottom: 100px;
 }
+
+.sample {
+    float: right;
+    color: hotpink;
+    font-size: 24px;
+}

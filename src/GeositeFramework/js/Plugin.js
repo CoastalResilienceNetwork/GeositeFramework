@@ -537,9 +537,10 @@ require(['use!Geosite',
         }
 
         function initPrint(model, paneNumber) {
-            var pluginDeferred = $.Deferred(),
+            var modalConfirmDeferred = $.Deferred(),
                 parseDeferred = $.Deferred(),
-                previewDeferred = $.Deferred(),
+                preModalDeferred = $.Deferred(),
+                postModalDeferred = $.Deferred(),
                 pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
                 printCssClass = 'plugin-print-css',
                 oppositePaneHideCssPath = 'css/print-hide-map' +
@@ -570,48 +571,50 @@ require(['use!Geosite',
             var mapReadyDeferred = setupPrintableMap(pluginObject.map,
                 pluginObject,
                 $printSandbox,
-                previewDeferred);
+                modalConfirmDeferred,
+                postModalDeferred);
 
-            mapReadyDeferred.then(function(previewMap) {
+            mapReadyDeferred.then(function(map) {
                 // The plugin is given a deferred object to resolve when the page is ready
                 // to be printed, a reference to an element where it can place printable
-                // elements outside of its container and a reference to an esriMap which
-                // is used as a print preview box.
-                pluginObject.beforePrint(pluginDeferred, $printSandbox, previewMap);
+                // elements outside of its container, a reference to the map, and a reference
+                // to the print modal sandbox, where it can add a form to collect user input.
+                var $modalSandbox = $('#plugin-print-modal-content');
+                pluginObject.prePrintModal(preModalDeferred, $printSandbox, map, $modalSandbox);
 
-                // Exectue the browser print when the plugin and print preview (if used)
-                // have responded, as well as a slight delay for css parsing.
-                $.when(pluginDeferred, parseDeferred, previewDeferred).then(function() {
+                // Execute the browser print when the plugin and print modal (if used) have responded.
+                $.when(preModalDeferred, parseDeferred, modalConfirmDeferred, postModalDeferred).then(function() {
                     window.print();
                 });
             });
         }
 
-        function setupPrintableMap(map, pluginObject, $printSandbox, previewDeferred) {
-            var mapMarkup = N.app.templates['template-map-preview']({ pluginName: pluginObject.toolbarName }),
-                $mapPrint = $($.trim(mapMarkup)),
-                $printPreview = $('#print-preview-sandbox'),
+        function setupPrintableMap(map, pluginObject, $printSandbox, modalConfirmDeferred, postModalDeferred) {
+            var printModal = N.app.templates['template-plugin-print-modal']({ pluginName: pluginObject.toolbarName }),
+                $printModal = $($.trim(printModal)),
                 mapReadyDeferred = $.Deferred(),
-                mapHeight = pluginObject.previewMapSize[1],
-                mapWidth = pluginObject.previewMapSize[0],
+                modalHeight = pluginObject.printModalSize[1],
+                modalWidth = pluginObject.printModalSize[0],
                 isMobileSingleAppMode = N.app.singlePluginMode &&
                     window.matchMedia("screen and (max-device-width: 736px)").matches;
 
-            // If the plugin is not set up for map print preview, don't set up a map
-            // and resolve any pending print-preview map operations
-            if (!pluginObject.usePrintPreviewMap) {
-                previewDeferred.resolve();
+            // If the plugin is not set up for a print modal,
+            // resolve any pending pre-print map operations
+            if (!pluginObject.usePrintModal) {
+                modalConfirmDeferred.resolve();
+                postModalDeferred.resolve();
                 mapReadyDeferred.resolve();
                 return mapReadyDeferred;
             }
 
-            // Setup a print-preview window for the user to select an extent and zoom level
-            // that will be persisted at print due to its fixed size.
+            // Setup a print modal window for the user.
+            // The plugin will provide the content
             TINY.box.show({
                 animate: false,
-                html: $mapPrint[0].outerHTML,
+                html: $printModal[0].outerHTML,
                 boxid: 'print-preview-container',
-                width: isMobileSingleAppMode ? '96vw' : _.max([mapWidth, 500]),
+                height: modalHeight,
+                width: isMobileSingleAppMode ? '96vw' : _.max([modalWidth, 500]),
                 fixed: !isMobileSingleAppMode,
                 maskopacity: 40,
                 openjs: function () {
@@ -619,7 +622,7 @@ require(['use!Geosite',
                     // for plugin print
                     mapReadyDeferred.resolve(map);
 
-                    $('#print-preview-print').on('click', function() {
+                    $('#print-modal-confirm').on('click', function() {
                         // Move the map from the main app area to to the sandbox where
                         // the plugin can mess with it's positioning among its other elements
                         var mapNode = $("#map-0").detach();
@@ -627,9 +630,12 @@ require(['use!Geosite',
                         map.resize();
                         map.reposition();
 
-                        // TODO: Remove or replace in #1009
-                        $printPreview.hide();
-                        previewDeferred.resolve();
+                        modalConfirmDeferred.resolve();
+
+                        // Pass the modal contents to the plugin,
+                        // so it can extract form values, etc.
+                        var modalContent = $(this).siblings('#plugin-print-modal-content');
+                        pluginObject.postPrintModal(postModalDeferred, modalContent, map);
 
                         // Close out the modal, which calls the closejs method
                         TINY.box.hide();
