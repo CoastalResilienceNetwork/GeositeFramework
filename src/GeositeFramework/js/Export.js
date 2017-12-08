@@ -45,6 +45,11 @@ require(['use!Geosite'],
             return 'css/print-' + pageSize + "-" + pageOrientation + '.css';
         }
 
+        function invalidateSize(map) {
+            map.resize();
+            map.reposition();
+        }
+
         function setupExport(context) {
             var previewDeferred = $.Deferred(),
                 orientDeferred = $.Deferred(),
@@ -61,9 +66,11 @@ require(['use!Geosite'],
 
                 $('.print-sandbox-header h1').text($("#export-title").val());
                 exportMap.append(mapNode);
+                invalidateSize(context.map);
 
                 context.mapReadyDeferred.then(function() {
                     exportMap.detach().appendTo($("#print-map-container"));
+                    invalidateSize(context.map);
                 });
 
                 var pageOrientation = $("[name='export-orientation']:checked").val();
@@ -80,7 +87,7 @@ require(['use!Geosite'],
                 orientDeferred.then(function() {
                     context.map.width = parseFloat(exportMap.css("width"));
                     context.map.height = parseFloat(exportMap.css("height"));
-                    context.map.resize(true);
+                    invalidateSize(context.map);
                     context.map.centerAt(context.mapDimensions.extent.getCenter());
                     _.delay(resizeDeferred.resolve, 1000);
                 });
@@ -172,6 +179,7 @@ require(['use!Geosite'],
                 var mapNode = $("#map-0").detach();
                 context.mapNodeParent.append(mapNode);
                 exportMap.detach().appendTo(exportContainer);
+                invalidateSize(context.map);
                 $(".esriScalebar").removeClass("above-legend");
                 $(".esriScalebar").removeClass("page-bottom");
                 $(".esriControlsBR").removeClass("above-legend");
@@ -182,7 +190,7 @@ require(['use!Geosite'],
             restoreNodeDeferred.then(function() {
                 context.map.width = context.mapDimensions.width;
                 context.map.height = context.mapDimensions.height;
-                context.map.resize(true);
+                invalidateSize(context.map);
                 _.delay(restoreMapDeferred.resolve, 250);
             });
 
