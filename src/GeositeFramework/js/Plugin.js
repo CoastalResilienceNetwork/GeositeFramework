@@ -637,6 +637,11 @@ require(['use!Geosite',
                         var modalContent = $(this).siblings('#plugin-print-modal-content');
                         pluginObject.postPrintModal(postModalDeferred, modalContent, map);
 
+                        // Move the scalebar inside the map container so
+                        // that it stays with the map.
+                        var scalebar = $('.esriScalebar').detach();
+                        $(scalebar).appendTo('#map-0_root');
+
                         // Close out the modal, which calls the closejs method
                         TINY.box.hide();
                     });
@@ -647,6 +652,10 @@ require(['use!Geosite',
                     var mapNode = $('#map-0').detach();
                     $('.map-container').append(mapNode);
                     map.resize(true);
+
+                    // Move the scalebar back to it's original location
+                    var scalebar = $('.esriScalebar').detach();
+                    $(scalebar).appendTo('#map-0');
 
                     // Remove print related CSS
                     $('.base-plugin-print-css').remove();
