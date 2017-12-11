@@ -779,7 +779,7 @@
 
     <!-- Scripts that will change their behavior in undesirable ways if they find an AMD
          environment should be loaded before the jsapi -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="js/lib/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
     <script src="js/lib/jquery.mousewheel.min.js"></script>
     <script src="js/lib/i18next-2.2.0.min.js"></script>
@@ -811,6 +811,7 @@
         useConfig['jqueryui'] = { attach: 'jqueryui' };
         useConfig['chosen'] = { attach: 'chosen', deps: ['jquery'] };
         useConfig['pips'] = { attach: 'pips', deps: ['jqueryui'] };
+        useConfig['underscore'] = { attach: 'underscore' };
 
         require({
             async: true,
@@ -837,7 +838,8 @@
                 "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min",
                 "jqueryui": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui.min",
                 "chosen": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/chosen.jquery.min",
-                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min"
+                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min",
+                "underscore": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/underscore-min"
             },
             use: useConfig
         });
