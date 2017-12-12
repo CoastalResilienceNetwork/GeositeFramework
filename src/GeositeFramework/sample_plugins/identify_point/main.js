@@ -18,7 +18,7 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             size: 'small',
             hasCustomPrint: true,
             usePrintModal: true,
-            printModalSize: [500, 350],
+            printModalSize: [500, 200],
             infographic: [500, 300],
 
             initialize: function(frameworkParameters) {
@@ -97,24 +97,33 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
 
                 // Make the print button available now.
                 $(this.printButton).show();
-
             },
 
             prePrintModal: function(preModalDeferred, $printArea, mapObject, modalSandbox) {
-                modalSandbox.append('<label><input type="checkbox" name="checkbox" value="value">Check this box to add demo element.</label>');
+                $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
+                    modalSandbox.append(html);
+                }).then(preModalDeferred.resolve());
 
-                preModalDeferred.resolve();
+                // Append optional images to print sandbox, which are hidden by default
+                $('#plugin-print-sandbox').append('<div class="sample"><img id="north-arrow-img" src="sample_plugins/identify_point/north-arrow.png"/></div>');
+                $('#plugin-print-sandbox').append('<div class="sample"><img id="logo-img" src="sample_plugins/identify_point/tnc-logo.png"/></div>');
             },
 
             postPrintModal: function(postModalDeferred, modalSandbox, mapObject) {
-                var isInputChecked = $(modalSandbox).find('input').is(':checked');
+                var includeNorthArrow = $(modalSandbox).find('#north-arrow').is(':checked');
+                var includeTncLogo = $(modalSandbox).find('#tnc-logo').is(':checked');
 
-                if (isInputChecked) {
-                    $('#plugin-print-sandbox').append('<div class="sample">Demo element</div>');
-
+                if (includeNorthArrow) {
+                    $('#plugin-print-sandbox').find('#north-arrow-img').show();
                 }
 
-                postModalDeferred.resolve();
+                if (includeTncLogo) {
+                    $('#plugin-print-sandbox').find('#logo-img').show();
+                }
+
+                window.setTimeout(function() {
+                    postModalDeferred.resolve();
+                }, 1);
             },
 
             showHelp: function() {
