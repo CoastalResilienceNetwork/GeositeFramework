@@ -594,13 +594,17 @@
     </script>
 
     <script type="text/template" id="template-plugin-print-modal">
-        <div id="plugin-print-modal">
+        <div id="plugin-print-modal" class="popover">
             <div class="popover popover-header">
                 <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Options">Print Options</span></h2>
             </div>
-            <div class="print-modal-container">
-                <button id="print-modal-confirm" class="button radius i18n" data-class="Print">Ok</button>
-                <div id="plugin-print-modal-content"></div>
+            <div class="popover-content">
+                <div class="print-modal-container row">
+                    <div id="plugin-print-modal-content" class="popover-section"></div>
+                    <div class="print-modal-confirm-container">
+                        <button id="print-modal-confirm" class="button button-primary radius i18n" data-class="Print">Print</button>
+                    </div>
+                </div>
             </div>
         </div>
     </script>

@@ -1977,7 +1977,8 @@ a.active {
 }
 .print-modal-confirm-container {
     position: absolute;
-    right: 3rem;
+    bottom: 25px;
+    left: 16px;
 }
 .esriLegendMsg {
     display: none;

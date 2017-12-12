@@ -633,7 +633,7 @@ require(['use!Geosite',
 
                         // Pass the modal contents to the plugin,
                         // so it can extract form values, etc.
-                        var modalContent = $(this).siblings('#plugin-print-modal-content');
+                        var modalContent = $(this).parent().siblings('#plugin-print-modal-content');
                         pluginObject.postPrintModal(postModalDeferred, modalContent, map);
 
                         // Move the scalebar inside the map container so
