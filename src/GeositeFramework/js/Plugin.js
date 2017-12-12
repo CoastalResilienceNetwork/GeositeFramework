@@ -585,6 +585,9 @@ require(['use!Geosite',
                 // Execute the browser print when the plugin and print modal (if used) have responded.
                 $.when(preModalDeferred, parseDeferred, modalConfirmDeferred, postModalDeferred).then(function() {
                     window.print();
+
+                    // Close out the modal, which calls the closejs method
+                    TINY.box.hide();
                 });
             });
         }
@@ -640,9 +643,6 @@ require(['use!Geosite',
                         // that it stays with the map.
                         var scalebar = $('.esriScalebar').detach();
                         $(scalebar).appendTo('#map-0_root');
-
-                        // Close out the modal, which calls the closejs method
-                        TINY.box.hide();
                     });
                 },
 
