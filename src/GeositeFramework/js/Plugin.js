@@ -612,7 +612,6 @@ require(['use!Geosite',
             TINY.box.show({
                 animate: false,
                 html: $printModal[0].outerHTML,
-                boxid: 'print-preview-container',
                 height: modalHeight,
                 width: isMobileSingleAppMode ? '96vw' : _.max([modalWidth, 500]),
                 fixed: !isMobileSingleAppMode,

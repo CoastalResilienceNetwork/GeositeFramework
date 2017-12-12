@@ -1975,13 +1975,7 @@ a.active {
     padding: 5px;
     height: 500px;
 }
-.print-preview-container {
-    padding: 10px;
-}
-#print-preview-container p {
-    padding: 5px;
-}
-#print-preview-print {
+.print-modal-confirm-container {
     position: absolute;
     right: 3rem;
 }
@@ -2149,10 +2143,6 @@ body.x-body {
 
     #permalink-tiny-box-modal .tcontent {
         display: block !important;
-    }
-
-    #plugin-print-preview .popover.popover-header {
-        height: 12vh;
     }
 
     #toggle-plugin-container {
