@@ -9,8 +9,4 @@
         top: 1710px;
         -webkit-transform: rotate(45deg);
     }    
-
-    #plugin-print-preview-map {
-        visibility: visible;
-    }
 }

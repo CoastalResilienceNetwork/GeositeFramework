@@ -585,6 +585,9 @@ require(['use!Geosite',
                 // Execute the browser print when the plugin and print modal (if used) have responded.
                 $.when(preModalDeferred, parseDeferred, modalConfirmDeferred, postModalDeferred).then(function() {
                     window.print();
+
+                    // Close out the modal, which calls the closejs method
+                    TINY.box.hide();
                 });
             });
         }
@@ -612,7 +615,6 @@ require(['use!Geosite',
             TINY.box.show({
                 animate: false,
                 html: $printModal[0].outerHTML,
-                boxid: 'print-preview-container',
                 height: modalHeight,
                 width: isMobileSingleAppMode ? '96vw' : _.max([modalWidth, 500]),
                 fixed: !isMobileSingleAppMode,
@@ -634,16 +636,13 @@ require(['use!Geosite',
 
                         // Pass the modal contents to the plugin,
                         // so it can extract form values, etc.
-                        var modalContent = $(this).siblings('#plugin-print-modal-content');
+                        var modalContent = $(this).parent().siblings('#plugin-print-modal-content');
                         pluginObject.postPrintModal(postModalDeferred, modalContent, map);
 
                         // Move the scalebar inside the map container so
                         // that it stays with the map.
                         var scalebar = $('.esriScalebar').detach();
                         $(scalebar).appendTo('#map-0_root');
-
-                        // Close out the modal, which calls the closejs method
-                        TINY.box.hide();
                     });
                 },
 
