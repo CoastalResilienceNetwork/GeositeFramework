@@ -107,6 +107,12 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 // Append optional images to print sandbox, which are hidden by default
                 $('#plugin-print-sandbox').append('<div class="sample"><img id="north-arrow-img" src="sample_plugins/identify_point/north-arrow.png"/></div>');
                 $('#plugin-print-sandbox').append('<div class="sample"><img id="logo-img" src="sample_plugins/identify_point/tnc-logo.png"/></div>');
+
+                // Zoom and center to Philadelphia, as a demonstration
+                this.initialZoom = mapObject.getZoom();
+                this.initialCenter = mapObject.extent.getCenter();
+
+                mapObject.centerAndZoom([-75.1641, 39.9562], 8)
             },
 
             postPrintModal: function(postModalDeferred, modalSandbox, mapObject) {
@@ -124,6 +130,11 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 window.setTimeout(function() {
                     postModalDeferred.resolve();
                 }, 1);
+            },
+
+            postPrintCleanup: function(mapObject) {
+                // Reset map to initial position
+                mapObject.centerAndZoom(this.initialCenter, this.initialZoom);
             },
 
             showHelp: function() {

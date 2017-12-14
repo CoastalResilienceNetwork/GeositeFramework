@@ -88,6 +88,10 @@ define(["dojo/_base/declare",
             // mapObject: an ESRI map object referencing the main map
             postPrintModal: function (postModalDeferred, modalSandbox, mapObject) { postModalDeferred.resolve(); },
 
+            // Reset any modifications made during the print process.
+            // mapObject: an ESRI map object referencing the main map
+            postPrintCleanup: function(mapObject) {},
+
             // Called when switching from infographic to the primary view or vice versa.
             onContainerVisibilityChanged: function (visible) {},
 
