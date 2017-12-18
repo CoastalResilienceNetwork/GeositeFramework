@@ -59,7 +59,7 @@
         adjustToggleIcon: function() {
             const newIconClass =
                 this.viewModel.get('pluginContentVisible') ?
-                'fa fa-chevron-right' : 'fa fa-chevron-left';
+                'fa fa-chevron-left' : 'fa fa-chevron-right';
 
             this.$el.find('i').attr('class', newIconClass);
         },
