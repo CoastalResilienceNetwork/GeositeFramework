@@ -409,6 +409,11 @@ require(['use!Geosite',
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
+            if (model.get('pluginObject').infographic && !N.app.singlePluginMode) {
+                addInfographicButton(view,
+                    model.get('pluginObject').infographic,
+                    model.get('pluginSrcFolder'))
+            }
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -443,12 +448,6 @@ require(['use!Geosite',
                 // immediately.
                 if (pluginObject.map) {
                     pluginObject.map.resize(true);
-                }
-
-                if (model.get('pluginObject').infographic) {
-                    addInfographicButton(view,
-                        model.get('pluginObject').infographic,
-                        model.get('pluginSrcFolder'))
                 }
             }
 
