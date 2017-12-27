@@ -123,6 +123,15 @@
         margin: 0 10px 0 0;
     }
 
+    div.plugin-legends {
+        display: flex;
+    }
+
+    div.custom-legend {
+        min-width: 100px;
+        max-width: 300px;
+    }
+
     .legend-layer img {
         width: 10px;
         height: 10px;
