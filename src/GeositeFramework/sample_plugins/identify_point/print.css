@@ -9,4 +9,10 @@
         top: 1710px;
         -webkit-transform: rotate(45deg);
     }    
+
+    #legend-container-0 {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
 }
