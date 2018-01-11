@@ -631,6 +631,10 @@ require(['use!Geosite',
                         map.resize();
                         map.reposition();
 
+                        // Move the legend out of the map container for easier styling
+                        var legendNode = $("#legend-container-0").detach();
+                        $(legendNode).appendTo($printSandbox);
+
                         modalConfirmDeferred.resolve();
 
                         // Pass the modal contents to the plugin,
@@ -646,9 +650,11 @@ require(['use!Geosite',
                 },
 
                 closejs: function () {
-                    // Move the map back to it's original container
+                    // Move the map and legend back to the original container
                     var mapNode = $('#map-0').detach();
+                    var legendNode = $("#legend-container-0").detach();
                     $('.map-container').append(mapNode);
+                    $('#map-0').append(legendNode);
                     map.resize(true);
 
                     // Move the scalebar back to it's original location
