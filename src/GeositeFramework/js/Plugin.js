@@ -579,7 +579,7 @@ require(['use!Geosite',
                 // elements outside of its container, a reference to the map, and a reference
                 // to the print modal sandbox, where it can add a form to collect user input.
                 var $modalSandbox = $('#plugin-print-modal-content');
-                pluginObject.prePrintModal(preModalDeferred, $printSandbox, map, $modalSandbox);
+                pluginObject.prePrintModal(preModalDeferred, $printSandbox, $modalSandbox, map);
 
                 // Execute the browser print when the plugin and print modal (if used) have responded.
                 $.when(preModalDeferred, parseDeferred, modalConfirmDeferred, postModalDeferred).then(function() {
@@ -635,8 +635,8 @@ require(['use!Geosite',
 
                         // Pass the modal contents to the plugin,
                         // so it can extract form values, etc.
-                        var modalContent = $(this).parent().siblings('#plugin-print-modal-content');
-                        pluginObject.postPrintModal(postModalDeferred, modalContent, map);
+                        var $modalContent = $(this).parent().siblings('#plugin-print-modal-content');
+                        pluginObject.postPrintModal(postModalDeferred, $printSandbox, $modalContent, map);
 
                         // Move the scalebar inside the map container so
                         // that it stays with the map.

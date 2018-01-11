@@ -99,14 +99,14 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 $(this.printButton).show();
             },
 
-            prePrintModal: function(preModalDeferred, $printArea, mapObject, modalSandbox) {
+            prePrintModal: function(preModalDeferred, $printSandbox, $modalSandbox, mapObject) {
                 $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
-                    modalSandbox.append(html);
+                    $modalSandbox.append(html);
                 }).then(preModalDeferred.resolve());
 
                 // Append optional images to print sandbox, which are hidden by default
-                $('#plugin-print-sandbox').append('<div class="sample"><img id="north-arrow-img" src="sample_plugins/identify_point/north-arrow.png"/></div>');
-                $('#plugin-print-sandbox').append('<div class="sample"><img id="logo-img" src="sample_plugins/identify_point/tnc-logo.png"/></div>');
+                $printSandbox.append('<div class="sample"><img id="north-arrow-img" src="sample_plugins/identify_point/north-arrow.png"/></div>');
+                $printSandbox.append('<div class="sample"><img id="logo-img" src="sample_plugins/identify_point/tnc-logo.png"/></div>');
 
                 // Zoom and center to Philadelphia, as a demonstration
                 this.initialZoom = mapObject.getZoom();
@@ -115,16 +115,16 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 mapObject.centerAndZoom([-75.1641, 39.9562], 8)
             },
 
-            postPrintModal: function(postModalDeferred, modalSandbox, mapObject) {
-                var includeNorthArrow = $(modalSandbox).find('#north-arrow').is(':checked');
-                var includeTncLogo = $(modalSandbox).find('#tnc-logo').is(':checked');
+            postPrintModal: function(postModalDeferred, $printSandbox, $modalSandbox, mapObject) {
+                var includeNorthArrow = $modalSandbox.find('#north-arrow').is(':checked');
+                var includeTncLogo = $modalSandbox.find('#tnc-logo').is(':checked');
 
                 if (includeNorthArrow) {
-                    $('#plugin-print-sandbox').find('#north-arrow-img').show();
+                    $printSandbox.find('#north-arrow-img').show();
                 }
 
                 if (includeTncLogo) {
-                    $('#plugin-print-sandbox').find('#logo-img').show();
+                    $printSandbox.find('#logo-img').show();
                 }
 
                 window.setTimeout(function() {
