@@ -15,4 +15,9 @@
         bottom: 25px;
         right: 10px;
     }
+
+    #map-0 {
+       height: 10in;
+       width: 10in;
+    }
 }
