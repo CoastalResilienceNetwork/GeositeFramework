@@ -1954,6 +1954,8 @@ a.active {
     visibility: hidden;
     background-color: #fff;
     z-index: 1;
+    height: 100%;
+    width: 100%;
 }
 #map-print-sandbox {
     position: absolute;
