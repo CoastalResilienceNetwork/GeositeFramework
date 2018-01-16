@@ -89,6 +89,10 @@
         font-size: 11px;
     }
 
+    #legend-container-0 .dojoxResizeHandle {
+        display: none;
+    }
+
     /* It's not quite clear why, but removing the !important flags from the next
     few legend style blocks results in the rules, despite not having any conflicting
     rules, not having any effect. It could have something to do with how the legend

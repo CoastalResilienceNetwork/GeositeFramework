@@ -53,4 +53,13 @@
     #print-map-container {
         border: none;
     }
+
+    .legend-close {
+        visibility: hidden;
+    }
+
+    #legend-container-0 .dojoxResizeHandle {
+        visibility: hidden;
+    }
+
 }

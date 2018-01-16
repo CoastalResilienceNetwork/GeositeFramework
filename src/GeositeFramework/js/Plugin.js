@@ -663,6 +663,7 @@ require(['use!Geosite',
 
                     // Remove print related CSS
                     $('.base-plugin-print-css').remove();
+                    $('.plugin-print-css').remove();
 
                     pluginObject.postPrintCleanup(map);
                 }

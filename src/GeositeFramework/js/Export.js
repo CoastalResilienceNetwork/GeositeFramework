@@ -161,7 +161,6 @@ require(['use!Geosite'],
             $('.print-orientation-css').remove();
 
             context.legend.css({ visibility: "visible" });
-            $('.legend-close').css({ visibility: "visible" });
             _.delay(restoreCssDeferred.resolve, 1000);
 
             restoreCssDeferred.then(function() {
