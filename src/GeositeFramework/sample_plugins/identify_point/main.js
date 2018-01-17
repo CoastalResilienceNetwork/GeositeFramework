@@ -118,6 +118,7 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             postPrintModal: function(postModalDeferred, $printSandbox, $modalSandbox, mapObject) {
                 var includeNorthArrow = $modalSandbox.find('#north-arrow').is(':checked');
                 var includeTncLogo = $modalSandbox.find('#tnc-logo').is(':checked');
+                var addLayer = $modalSandbox.find('#add-layer').is(':checked');
 
                 if (includeNorthArrow) {
                     $printSandbox.find('#north-arrow-img').show();
@@ -127,14 +128,36 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                     $printSandbox.find('#logo-img').show();
                 }
 
+                if (addLayer) {
+                    if (this.layer) {
+                        this.layer.setVisibility(true);
+                    } else {
+                        this.layer = new esri.layers.ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
+                            "opacity": 0.8
+                        });
+
+                        mapObject.addLayer(this.layer);
+                    }
+                }
+
                 window.setTimeout(function() {
-                    postModalDeferred.resolve();
-                }, 1);
+                    if (mapObject.updating) {
+                        var delayedPrint = mapObject.on('update-end', function() {
+                                delayedPrint.remove();
+                                postModalDeferred.resolve();
+                        });
+                    } else {
+                        postModalDeferred.resolve();
+                    }
+                }, 500);
             },
 
             postPrintCleanup: function(mapObject) {
                 // Reset map to initial position
                 mapObject.centerAndZoom(this.initialCenter, this.initialZoom);
+                if (this.layer) {
+                    this.layer.setVisibility(false);
+                }
             },
 
             showHelp: function() {
