@@ -1,0 +1,48 @@
+@media print {
+    @page {
+        size: letter portrait;
+    }
+
+    #map-print-sandbox {
+        width: 8in;
+        height: 9in;
+    }
+
+    #print-map-container {
+        width: 8in;
+        height: 8.65in;
+    }
+
+    #print-map-container > #export-print-preview-map {
+        width: 7.9in;
+        height: 8.5in;
+    }
+
+    #legend-container-0 {
+        top: 75% !important;
+        height: 25% !important;
+    }
+
+    .above-legend {
+        bottom: 26%;
+    }
+
+    .page-bottom {
+        bottom: 2%;
+    }
+}
+
+#map-print-sandbox {
+    width: 8in;
+    height: 9in;
+}
+
+#print-map-container {
+    width: 8in;
+    height: 8.65in;
+}
+
+#print-map-container > #export-print-preview-map {
+    height: 8.5in;
+    width: 7.9in;
+}

@@ -1,0 +1,48 @@
+@media print {
+    @page {
+        size: A4 landscape;
+    }
+
+    #map-print-sandbox {
+        width: 10.69in;
+        height: 5.76in;
+    }
+
+    #print-map-container {
+        width: 10.69in;
+        height: 5.76in;
+    }
+
+    #print-map-container > #export-print-preview-map {
+        width: 10.59in;
+        height: 5.66in;
+    }
+
+    #legend-container-0 {
+        top: 80% !important;
+        height: 20% !important;
+    }
+
+    .above-legend {
+        bottom: 21%;
+    }
+
+    .page-bottom {
+        bottom: 2%;
+    }
+}
+
+#map-print-sandbox {
+    width: 10.69in;
+    height: 5.76in;
+}
+
+#print-map-container {
+    width: 10.69in;
+    height: 5.76in;
+}
+
+#print-map-container > #export-print-preview-map {
+    width: 10.59in;
+    height: 5.66in;
+}

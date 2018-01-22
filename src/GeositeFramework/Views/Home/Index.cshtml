@@ -40,7 +40,7 @@
                         <i class="dropdown-icon icon-angle-right"></i>
                     </a>
 
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="region-links">
                         @RenderRegionLinks(link.Items)
                     </ul>
                 </li>
@@ -175,6 +175,34 @@
         .dropdown-submenu > a:not(:hover) {
             background-color: @Model.SecondaryColor;
         }
+
+        @if (Model.SinglePluginMode) {
+        <text>
+        .sidebar-content {
+            height: 100%;
+            margin-top: 0;
+        }
+
+        .sidebar-nav {
+            display:none;
+        }
+
+        #toggle-plugin-container button {
+            background-color: @Model.PrimaryColor;
+            border-color: @Model.PrimaryColor;
+        }
+        #toggle-plugin-container button:hover {
+            background-color: @Model.SecondaryColor;
+        }
+
+        /* Ideally these would be stored in class, but when the ESRI search is
+        initialized, existing classes are overwritten */
+        #search {
+            right: 45px;
+            z-index: 10000;
+        }
+        </text>
+        }
     </style>
 
     @if (Model.GoogleAnalyticsPropertyId != null)
@@ -207,7 +235,14 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        <nav class="nav-apps plugins nav-apps-narrow">
+        @if (Model.SinglePluginMode) {
+        <text>
+        <div id="single-plugin-mode-help-container">
+            Help
+        </div>
+        </text>
+        }
+        <nav class="nav-apps plugins nav-apps-narrow @(Model.SinglePluginMode ? "single-plugin-mode" : "")">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
                 <div id="sidebar-toggle">
@@ -216,7 +251,12 @@
             </div>
         </nav>
         <div class="flex-expand">
-            <div class="flex-container">
+            <div class="flex-container map-container">
+                @if (Model.SinglePluginMode) {
+                <div id="toggle-plugin-container" class="single-plugin-mode">
+                    <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                </div>
+                }
                 <div id="map-0" class="map">
                     <div class="control-container">
                         <div class="top-tools"></div>
@@ -230,7 +270,9 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        @if (!Model.SinglePluginMode) {
+                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                        }
                                         <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                     </ul>
                                 </div>
@@ -252,8 +294,8 @@
                             <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
                         </div>
                         <div class="legend-body">
-                            <div class="layer-legends"></div>
                             <div class="plugin-legends"></div>
+                            <div class="layer-legends"></div>
                         </div>
                     </div>
                     <div class="subregion-tooltip"></div>
@@ -332,37 +374,6 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-sidebar">
-        <li class="divider"></li>
-        <% if (isMain) { %>
-            <% if (splitScreen) { %>
-                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 1" data-screen="0" href="javascript:;"><img class="icon" src="img/icons/icon_switch-0_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
-                <li><a class="switch-screen i18n" data-i18n="[title]View Only Map 2" data-screen="1" href="javascript:;"><img class="icon" src="img/icons/icon_switch-1_up.png"/><span class="i18n" data-i18n="Full Map">Full Map</span></a></li>
-            <% } else { %>
-                <li><a class="switch-screen i18n" data-i18n="[title]Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>" data-screen="<%= alternatePaneNumber %>" href="javascript:;" title="Currently viewing Map <%= paneNumber + 1 %>, switch to view Map <%= alternatePaneNumber + 1 %>">
-                    <img class="icon" src="img/icons/icon_switch-<%= paneNumber %>_up.png"/><span class="i18n" data-i18n="Switch to Map <%= alternatePaneNumber + 1 %>">Switch To Map <%= alternatePaneNumber + 1 %>
-                </a></li>
-                <li><a class="split-screen i18n" data-i18n="[title]Split the current workspace into two workspaces" href="javascript:;"><img class="icon" src="img/icons/icon_split_up.png"/><span class="i18n" data-i18n="Split View">Split View</span></a><li>
-            <% } %>
-            <li class="divider"></li>
-            <li><a href="javascript:;" class="permalink-button hide-for-tablet i18n" data-i18n="[title]Receive a hyperlink to share your current workspace"><img class="icon" src="img/icons/icon_share_up.png"/><span class="i18n" data-i18n="Save & Share">Save &amp; Share</span></a></li>
-            <% if (helpUrl) { %>
-                <li><a target="_blank" href="<%= helpUrl %>" class="help-button hide-for-tablet i18n" data-i18n="[title]Receive help on how to use this application"><img class="icon" src="img/icons/icon_help-support_up.png"/><span class="i18n" data-i18n="Help">Help</span></a></li>
-            <% } %>
-        <% } else { %>
-            <li>
-                <a href="javascript:;" class="hide-for-tablet map-sync i18n" data-i18n=<%= syncMaps ? '"[title]Allow maps to show different extents"' : '"[title]Force maps to show the same extent"' %>>
-                    <img class="icon" src="img/icons/icon_<%= syncMaps ? '' : 'un' %>link-views_up.png"/>
-                    <span class="i18n" data-i18n="<%= syncMaps ? 'Unlink Maps' : 'Link Maps' %>"><%= syncMaps ? 'Unlink' : 'Link' %> Maps</span>
-                </a>
-            </li>
-        <% } %>
-        <% if (showExportButton) { %>
-            <li><a href="javascript:;" class="export-button hide-for-tablet i18n" data-i18n="[title]Receive a printable copy of the current map"><img class="icon" src="img/icons/icon_print_up.png"/><span class="i18n" data-i18n="Create Map">Create Map</span></a></li>
-        <% } %>
-
-    </script>
-
     <script type="text/template" id="template-sidebar-plugin">
         <button class="nav-apps-button plugin-launcher i18n <%= selected ? 'active' : ''%> <%= displayed ? 'app-displayed' : ''%>" data-i18n="[title]<%=fullName%>">
             <span class="button-icon"><img src="<%- pluginSrcFolder %>/icon_sm.png"></span>
@@ -381,11 +392,6 @@
         <span class="topbar-tools">
             <a class="plugin-clear" href="javascript:;">&#10006;</a>
         </span>
-    </script>
-    <script type="text/template" id="template-sidebar-link">
-        <div class="sidebar-link">
-            <a target="_blank" href="<%= link.url %>"><%- link.text %></a>
-        </div>
     </script>
 
     <script type="text/template" id="template-basemap-selector-item">
@@ -410,9 +416,13 @@
                             <i class="icon-info-circled"></i>
                         </button>
                     <% } %>
-                    <button class="button-link plugin-minimize i18n" data-i18n="[title]Minimize this plugin" title="Minimize this plugin">
-                        <i class="icon-window-minimize"></i>
-                    </button>
+
+                    <% if (!hideMinimizeButton) { %>
+                        <button class="button-link plugin-minimize i18n" data-i18n="[title]Minimize this plugin" title="Minimize this plugin">
+                            <i class="icon-window-minimize"></i>
+                        </button>
+                    <% } %>
+
                     <button class="button-link plugin-off i18n" data-i18n="[title]Turn off this plugin" title="Turn off this plugin">
                         <i class="icon-cancel"></i>
                     </button>
@@ -472,14 +482,28 @@
                     <div class="popover-section">
                         <h3 class="i18n" data-i18n="Orientation">Orientation</h3>
                         <label class="form-component">
-                            <input type="radio" name="export-orientation" value="Landscape" checked="checked"/>
+                            <input type="radio" name="export-orientation" value="landscape" checked="checked"/>
                             <div class="check"></div>
-                            <span class="form-text i18n" data-i18n="Landscape">Landscape</span>
+                            <span class="form-text i18n" data-i18n="landscape">Landscape</span>
                         </label>
                         <label class="form-component">
-                            <input type="radio" name="export-orientation" value="Portrait"/>
+                            <input type="radio" name="export-orientation" value="portrait"/>
                             <div class="check"></div>
                             <span class="form-text i18n" data-i18n="Portrait">Portrait</span>
+                        </label>
+                        <p class="font-italic small i18n" data-i18n="Browser Print">* You may need to alter your browser print settings</p>
+                    </div>
+                    <div class="popover-section">
+                        <h3 class="i18n" data-i18n="Page Size">Page Size</h3>
+                        <label class="form-component">
+                            <input type="radio" name="export-page-size" value="letter" checked="checked"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="Letter">Letter</span>
+                        </label>
+                        <label class="form-component">
+                            <input type="radio" name="export-page-size" value="a4"/>
+                            <div class="check"></div>
+                            <span class="form-text i18n" data-i18n="A4">A4</span>
                         </label>
                         <p class="font-italic small i18n" data-i18n="Browser Print">* You may need to alter your browser print settings</p>
                     </div>
@@ -569,15 +593,18 @@
         </div>
     </script>
 
-    <script type="text/template" id="template-map-preview">
-        <div id="plugin-print-preview">
+    <script type="text/template" id="template-plugin-print-modal">
+        <div id="plugin-print-modal" class="popover">
             <div class="popover popover-header">
-                <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Preview">Print Preview</span></h2>
+                <h2><%= pluginName %> - <span class="i18n" data-i18n="Print Options">Print Options</span></h2>
             </div>
-            <div class="print-preview-container">
-                <button id="print-preview-print" class="button radius i18n" data-class="Print">Print</button>
-                <p class="instructions i18n" data-i18n="Zoom to the view that you want printed in your map.">Zoom to the view that you want printed in your map.</p>
-                <div id="plugin-print-preview-map"></div>
+            <div class="popover-content">
+                <div class="print-modal-container row">
+                    <div id="plugin-print-modal-content" class="popover-section"></div>
+                    <div class="print-modal-confirm-container">
+                        <button id="print-modal-confirm" class="button button-primary radius i18n" data-class="Print">Print</button>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
@@ -613,6 +640,9 @@
                 <% if (areas) { %>
                 <a class="measure-unit-filter" data-unit="ac" data-alt-unit="mi" title="Acres" href="#">ac</a>
                 <a class="measure-unit-filter" data-unit="ha" data-alt-unit="km" title="Hectares" href="#">ha</a>
+                <% } else { %>
+                <a class="measure-unit-filter" data-unit="m" title="Meters" href="#">m</a>
+                <a class="measure-unit-filter" data-unit="ft" title="Feet" href="#">ft</a>
                 <% } %>
             </div>
             <hr />
@@ -646,8 +676,33 @@
         </div>
     </script>
 
+    <script type="text/template" id="single-plugin-mode-help-template">
+        <div class="sidebar content-scrollable">
+            <div class="sidebar-nav">
+                <h2 class="nav-title" class="i18n" data-i18n="About">
+                    About
+                </h2>
+                <div class="nav-buttons">
+                    <button class="button-link plugin-off i18n" data-i18n="[title]Turn off this plugin" title="Turn off this plugin">
+                        <i class="icon-cancel"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <%= content %>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="infographic-button-template">
+        <button class="button button-default infographic-icon">
+            <img src="img/infographic-icon.png" alt="Show infographic">
+        </button>
+    </script>
+
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
+        @if (!@Model.SinglePluginMode) {
         <div class="dropdown header-dropdown nav-main-dropdown">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -663,10 +718,35 @@
                 @RenderLinks(Model.HeaderLinks)
             </ul>
         </div>
+        } else {
+        <div class="nav-main">
+            <div class="nav-main-title">
+                @Model.TitleMain.Text
+            </div>
+        </div>
+        }
         <div class="nav-region-subtitle">
-            @Model.TitleDetail.Text
+            @if (!Model.SinglePluginMode) {
+                @Model.TitleDetail.Text
+            } else {
+                <text><span id="show-single-plugin-mode-help">About</span></text>
+            }
         </div>
         <div id="search"></div>
+        @if (@Model.SinglePluginMode) {
+        <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
+            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <div class="nav-main">
+                    <div class="dropdown-icon-container">
+                        <i class="dropdown-icon icon-menu"></i>
+                    </div>
+                </div>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="header-menu">
+                @RenderLinks(Model.HeaderLinks)
+            </ul>
+        </div>
+        }
     </header>
 
     @Html.Partial("TourInfo")
@@ -675,6 +755,10 @@
         change the region setting `launchpad.html = true` to use this content -->
     <div id="custom-launchpad-content" style="display:none;">
         @Html.Partial("CustomLaunchpadContent")
+    </div>
+
+    <div id="single-plugin-mode-help-content" style="display:none;">
+        @Html.Partial("SinglePluginModeHelp")
     </div>
 
     <!-- Area for plugins to arrange their markup independent
@@ -699,7 +783,7 @@
 
     <!-- Scripts that will change their behavior in undesirable ways if they find an AMD
          environment should be loaded before the jsapi -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="js/lib/underscore.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
     <script src="js/lib/jquery.mousewheel.min.js"></script>
     <script src="js/lib/i18next-2.2.0.min.js"></script>
@@ -731,6 +815,8 @@
         useConfig['jqueryui'] = { attach: 'jqueryui' };
         useConfig['chosen'] = { attach: 'chosen', deps: ['jquery'] };
         useConfig['pips'] = { attach: 'pips', deps: ['jqueryui'] };
+        useConfig['underscore'] = { attach: '_', deps: ['underscore'] };
+        useConfig['underscore-min'] = { attach: '_', deps: ['underscore'] };
 
         require({
             async: true,
@@ -757,7 +843,10 @@
                 "tv4": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/tv4.min",
                 "jqueryui": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui.min",
                 "chosen": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/chosen.jquery.min",
-                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min"
+                "pips": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/jquery-ui-slider-pips.min",
+                "underscore": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/underscore",
+                "underscore/underscore-min": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/underscore",
+                "underscore/underscore": location.pathname.replace(/\/[^/]+$/, "") + "js/lib/underscore",
             },
             use: useConfig
         });
@@ -769,6 +858,11 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
+    @if (@Model.SinglePluginMode) {
+    <text>
+        <script src="js/SinglePluginModeHelp.js"></script>
+    </text>
+    }
     <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
@@ -832,5 +926,15 @@
         });
 
     </script>
+    <footer id="single-plugin-toggle-footer">
+        <span id="single-plugin-toggle-buttons">
+            <button class="single-plugin-toggle-button button button-primary" id="single-plugin-toggle-content-button">
+                Content
+            </button>
+            <button class="single-plugin-toggle-button button button-secondary" id="single-plugin-toggle-map-button">
+                Map
+            </button>
+        </span>
+    </footer>
 </body>
 </html>

@@ -5,28 +5,20 @@
     .print-sandbox-header {
         display: none !important;
     }
-    /* Hide all body an map elements and print preview map controls */
-    body,
-    #plugin-print-preview-map_zoom_slider {
+    /* Hide all body map elements */
+    body {
         visibility: hidden;
     }
 
     html, body {
         overflow: visible !important;
+        height: auto !important;
     }
 
     /* An issue in Chrome for Windows would display the borders of this
        element in print media, despite it being selected by the clause above.*/
     .plugin-launcher {
         display: none;
-    }
-
-    /* Override the map tiles which have inline styles.
-       This avoids having to have an !important on the broader
-       selectors for the rest of the page elements */
-    #map-0_root, #map-0_root img.layerTile,
-    #map-1_root, #map-1_root img.layerTile {
-        visibility: hidden !important;
     }
 
     /* Plugin print will only be one side of a split view map ever, so
@@ -37,13 +29,37 @@
 
     #plugin-print-sandbox {
         visibility: visible;
+        height: 100%;
+        width: 100%;
     }
 
-    #plugin-print-preview-map_container img {
-        visibility: visible;
+    #plugin-print-sandbox .control-container {
+        display: none;
     }
 
     .esriSimpleSlider {
         display: none;
     }
+
+    /* Default styling for map print out */
+    #plugin-print-sandbox #legend-container-0 {
+        float: right;
+    }
+
+    #plugin-print-sandbox #map-0_root {
+        float: left;
+    }
+
+    #print-map-container {
+        border: none;
+    }
+
+    .legend-close {
+        visibility: hidden;
+    }
+
+    #legend-container-0 .dojoxResizeHandle {
+        visibility: hidden;
+    }
+
 }

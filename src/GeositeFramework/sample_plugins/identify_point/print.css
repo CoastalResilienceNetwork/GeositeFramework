@@ -10,7 +10,14 @@
         -webkit-transform: rotate(45deg);
     }    
 
-    #plugin-print-preview-map {
-        visibility: visible;
+    #legend-container-0 {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
+
+    #map-0 {
+       height: 10in;
+       width: 10in;
     }
 }

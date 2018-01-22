@@ -742,7 +742,7 @@ nav {
 }
 .sidebar {
   box-shadow: 0px 0px 26px 0px rgba(51, 51, 51, 0.42);
-  z-index: 1;
+  z-index: 2;
 }
 .sidebar-nav,
 .sidebar-with-nav-vertical {
@@ -776,6 +776,7 @@ nav {
     overflow-y: auto;
     margin-top: 40px;
     width: 100%;
+    background-color: #fff;
 }
 .sidebar-content section:not(:last-child) {
     border-bottom: 1px solid #cdd5d5;
@@ -792,9 +793,12 @@ nav {
     width: 220px;
     background-color: #333;
     position: relative;
-    z-index: 2500;
+    z-index: 5001;
     padding-bottom: 27px;
     overflow: visible;
+}
+.nav-apps.single-plugin-mode {
+    display: none;
 }
 .nav-apps-button {
     width: 100%;
@@ -810,6 +814,7 @@ nav {
     cursor: pointer;
     border-bottom: 1px solid rgba(232, 232, 232, 0.2);
     padding: 7px 10px 7px;
+    border-radius: 0;
 }
 .nav-apps-button.active {
     background-color: #3bb3be;
@@ -884,6 +889,18 @@ nav {
   transform: translateY(-50%);
   width: 22px;
 }
+#toggle-plugin-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  padding: 7px 12px;
+  background-color: #DDD;
+  cursor: pointer;
+}
+#toggle-plugin-container span {
+  color: #000;
+}
 .plugin-launcher.active + .button-link.button-sidebar-plugin-close {
   display: inline-block;
 }
@@ -915,6 +932,37 @@ nav {
 .nav-apps-button {
   padding: 7px 10px 7px;
 }
+#single-plugin-mode-help-container {
+    left: 0;
+    background: #fff;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: none;
+    width: 350px;
+}
+#single-plugin-mode-help-container .sidebar {
+    height: 100%;
+}
+#single-plugin-mode-help-container .sidebar-nav {
+    border-bottom: none;
+    position: relative;
+    display: flex;
+}
+#single-plugin-mode-help-container .sidebar-nav .nav-title {
+    font-size: 14px;
+}
+#single-plugin-mode-help-container .sidebar-content {
+    padding: 10px;
+    margin-top: 0;
+    height: calc(100% - 40px);
+}
+#single-plugin-mode-help-container .plugin-off {
+    cursor: pointer;
+}
+#show-single-plugin-mode-help {
+    cursor: pointer;
+}
 #map-0.map {
     position: absolute;
     top: 0;
@@ -925,7 +973,7 @@ nav {
 header {
     background-color: #5394B6;
     flex-shrink: 0;
-    z-index: 2800;
+    z-index: 5002;
 }
 header,
 header .nav-main {
@@ -939,9 +987,18 @@ header .nav-main {
     padding-right: 12px;
     height: 55px;
 }
+.single-plugin-mode .nav-main {
+    padding-right: 0;
+}
 .header-dropdown {
     height: 55px;
     z-index: 2200
+}
+.header-dropdown.single-plugin-mode {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10000;
 }
 .header-dropdown.dropdown>button {
     padding: 0;
@@ -959,6 +1016,10 @@ header .nav-main {
     margin-right: 10px;
     line-height: 50px;
     height: 100%;
+}
+.single-plugin-mode .dropdown-icon-container {
+    margin-right: 0;
+    border-right: none;
 }
 .header-dropdown .button.active,
 .header-dropdown .button.hover,
@@ -1010,6 +1071,12 @@ header .nav-main {
 }
 .dropdown-submenu > .dropdown-menu:after {
     top: inherit;
+}
+.single-plugin-mode .dropdown-menu {
+    left: -175px;
+}
+.single-plugin-mode .dropdown-menu #region-links {
+    left: -282px;
 }
 .nav-main-title {
     font-size: 18px;
@@ -1487,6 +1554,7 @@ header .nav-main {
 .control-container {
     position: absolute;
     width: 100%;
+    z-index: 102;
 }
 .control-container.subregion-active {
     top: 40px;
@@ -1579,8 +1647,6 @@ header .nav-main {
     width: 255px;
     min-width: 255px;
     z-index: 101;
-    /* show over plugin-container */
-
     font-weight: bold;
     background: #FFF;
     font-size: 12px;
@@ -1626,7 +1692,7 @@ header .nav-main {
 .content .legend .legend-body {
     padding: 10px 15px;
     overflow: auto;
-    height: 100%;
+    height: 99%;
     width: 100%;
 }
 .layer-legends {
@@ -1886,6 +1952,10 @@ a.active {
 #plugin-print-sandbox {
     position: absolute;
     visibility: hidden;
+    background-color: #fff;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
 }
 #map-print-sandbox {
     position: absolute;
@@ -1908,14 +1978,10 @@ a.active {
     padding: 5px;
     height: 500px;
 }
-.print-preview-container {
-    padding: 10px;
-}
-#print-preview-container p {
-    padding: 5px;
-}
-#print-preview-print {
-    float: right;
+.print-modal-confirm-container {
+    position: absolute;
+    bottom: 25px;
+    left: 16px;
 }
 .esriLegendMsg {
     display: none;
@@ -2056,4 +2122,149 @@ body.x-body {
 }
 .arcgisSearch .searchGroup .searchInput:-moz-placeholder { /* Firefox 18- */
   color: #fff;
+}
+
+@media not screen and (max-device-width: 737px) {
+    #single-plugin-toggle-footer {
+        display: none !important;
+    }
+}
+
+@media screen and (max-device-width: 736px) {
+    .tbox {
+        max-width: 96vw !important;
+        max-height: 90vh !important;
+    }
+
+    .tcontent {
+        overflow: auto !important;
+    }
+
+    #permalink-tiny-box-modal {
+        width: 85vw !important;
+        height: 60vh !important;
+    }
+
+    #permalink-tiny-box-modal .tcontent {
+        display: block !important;
+    }
+
+    #toggle-plugin-container {
+        display: none !important;
+    }
+
+    #single-plugin-toggle-footer {
+        bottom: 0px;
+        width: 100vw;
+        background-color: lightgray;
+        z-index: 100;
+        text-align: center;
+        display: block;
+    }
+
+    #single-plugin-toggle-buttons {
+        display: inline-block;
+        width: 100vw;
+        height: inherit;
+        margin-top: 1vh;
+    }
+
+    .single-plugin-toggle-button {
+        width: 48vw;
+        height: 75%;
+        font-size: 20px !important;
+        font-weight: 500;
+        font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+        padding: 0 !important;
+        border: 0px !important;
+        border-radius: 0 !important;
+    }
+
+    #single-plugin-toggle-buttons .button-primary {
+        background-color: #0096d6 !important;
+        border-color: #0084bd !important;
+    }
+
+    #single-plugin-toggle-buttons .button-primary:focus {
+        box-shadow: unset !important;
+    }
+
+    .esriMapContainer {
+        width: 100vw !important;
+    }
+
+    @media (orientation: portrait) {
+        #single-plugin-toggle-footer {
+            height: 8vh;
+        }
+    }
+
+    @media (orientation: landscape) {
+        #single-plugin-toggle-footer {
+            height: 10vh;
+        }
+    }
+
+    .sidebar {
+        width: 100vw !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .control-container {
+        width: 100vw;
+    }
+
+    header {
+        width: 100vw;
+    }
+
+    .app-fullscreen {
+        width: 100vw;
+        position: fixed;
+    }
+
+    #single-plugin-mode-help-container {
+        z-index: 5010;
+    }
+
+    #search {
+        position: fixed !important;
+        right: 10vw !important;
+    }
+
+    .searchBtn {
+        background-color: inherit !important;
+    }
+
+    #search .searchExpanded .searchExpandContainer {
+        background-color: #5C95B5;
+        width: 75vw;
+        margin-left: 2vw !important;
+    }
+
+    .arcgisSearch .searchExpanded #search_input {
+        width: 60vw;
+        margin-left: 2vw !important;
+    }
+
+    .nav-main-dropdown {
+        position: fixed !important;
+        right: 2vw !important;
+    }
+
+    .nav-region-subtitle {
+        right: 22vw;
+    }
+
+    .nav-main {
+        padding-right: 5px;
+    }
+
+    .nav-main-title {
+        display: inline-block;
+        white-space: nowrap;
+        width: 60vw;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 }

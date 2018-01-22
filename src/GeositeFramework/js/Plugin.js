@@ -61,7 +61,11 @@ require(['use!Geosite',
                         }, 100);
                         return d.promise();
                     }
-                };
+                },
+                showMobileMap = (N.app.singlePluginMode && N.app.showMobileMap) ?
+                    N.app.showMobileMap : _.noop(),
+                showMobileContent = (N.app.singlePluginMode && N.app.showMobileContent) ?
+                    N.app.showMobileContent : _.noop();
 
             try {
                 pluginObject.initialize({
@@ -77,7 +81,10 @@ require(['use!Geosite',
                         downloadAsPlainText: requestTextDownload,
                         dispatcher: N.app.dispatcher,
                         suppressHelpOnStartup: _.partial(suppressHelpOnStartup, model),
-                        resize: resizers
+                        resize: resizers,
+                        singlePluginMode: N.app.singlePluginMode,
+                        showMobileMap: showMobileMap,
+                        showMobileContent: showMobileContent,
                     },
                     plugin: {
                         turnOff: _.bind(model.turnOff, model)
@@ -402,6 +409,11 @@ require(['use!Geosite',
             render(view);
             view.$el.appendTo($parent);
             createUiContainer(view, paneNumber);
+            if (model.get('pluginObject').infographic && !N.app.singlePluginMode) {
+                addInfographicButton(view,
+                    model.get('pluginObject').infographic,
+                    model.get('pluginSrcFolder'))
+            }
             N.views.BasePlugin.prototype.initialize.call(view);
         }
 
@@ -423,6 +435,8 @@ require(['use!Geosite',
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.$uiContainer) {
+                assignEvents(view.$uiContainer, model, view.paneNumber);
+
                 if (view.model.selected === true) {
                     view.$uiContainer.show();
                 } else {
@@ -436,6 +450,7 @@ require(['use!Geosite',
                     pluginObject.map.resize(true);
                 }
             }
+
             if (view.$legendContainer) {
                 if (view.model.get('active')) {
                     view.$legendContainer.show();
@@ -452,6 +467,24 @@ require(['use!Geosite',
             return view;
         }
 
+        function addInfographicButton(view, infographicConfig, sourceFolder) {
+            view.$uiContainer.append(N.app.templates['infographic-button-template']());
+            view.$uiContainer.find('.nav-title').addClass('title-with-graphic');
+            view.$uiContainer.find('.infographic-icon').on('click', function() {
+                showInfographic(infographicConfig, sourceFolder);
+            });
+        }
+
+        function showInfographic(infographicConfig, sourceFolder) {
+            TINY.box.show({
+                animate: true,
+                url: sourceFolder + '/html/infographic.html',
+                fixed: true,
+                width: infographicConfig[0] || 350,
+                height: infographicConfig[1] || 350
+            });
+        }
+
         function getContainerId(view) {
             return view.model.name() + '-' + view.paneNumber;
         }
@@ -466,12 +499,21 @@ require(['use!Geosite',
                     hasHelp: pluginObject.hasHelp,
                     hasCustomPrint: pluginObject.hasCustomPrint,
                     sizeClassName: getPluginSizeClassName(pluginObject.size),
-                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width)
+                    customWidth: getCustomPluginWidth(pluginObject.size, pluginObject.width),
+                    hideMinimizeButton: pluginObject.hideMinimizeButton
                 },
                 $uiContainer = $($.trim(N.app.templates['template-plugin-container'](bindings)));
 
             view.$uiContainer = $uiContainer;
 
+            // Attach to top pane element
+            view.$el.parents().find('.content .nav-apps').after($uiContainer);
+
+            // Tell the model about $uiContainer so it can pass it to the plugin object
+            model.set('$uiContainer', $uiContainer);
+        }
+
+        function assignEvents($uiContainer, model, paneNumber) {
             $uiContainer
                 // Minimize the plugin
                 .find('.plugin-minimize').on('click', function() {
@@ -489,110 +531,141 @@ require(['use!Geosite',
                     pluginObject.showHelp();
                 }).end()
                 .find('.plugin-print').on('click', function() {
-                    var pluginDeferred = $.Deferred(),
-                        parseDeferred = $.Deferred(),
-                        previewDeferred = $.Deferred(),
-                        pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
-                        printCssClass = 'plugin-print-css',
-                        oppositePaneHideCssPath = 'css/print-hide-map' +
-                            (paneNumber === 0 ? 1 : 0) + '.css',
-                        $printSandbox = $('#plugin-print-sandbox');
-
-                    // Any previous plugin-prints may have left specific print css
-                    // or sandbox elements.  Clear all so that this new print routine
-                    // has no conflicts with other plugins.
-                    $('.' + printCssClass).remove();
-                    $printSandbox.empty();
-
-                    // add base plugin css
-                    addCss('css/print.css', 'base-plugin-print-css');
-
-                    // Add the plugin css
-                    addCss(pluginCssPath, printCssClass);
-
-                    // Hide the possible same plugin from the opposite map pane
-                    addCss(oppositePaneHideCssPath, printCssClass);
-
-                    // Give some time for the browser to parse the new CSS,
-                    // if this wasn't slightly delayed, occasionally the override would
-                    // not be present and print features wouldn't show up.
-                    _.delay(parseDeferred.resolve, 200);
-
-                    var mapReadyDeferred = setupPrintableMap(pluginObject, $printSandbox, previewDeferred);
-
-                    mapReadyDeferred.then(function(previewMap) {
-                        // The plugin is given a deferred object to resolve when the page is ready
-                        // to be printed, a reference to an element where it can place printable
-                        // elements outside of its container and a reference to an esriMap which
-                        // is used as a print preview box.
-                        pluginObject.beforePrint(pluginDeferred, $printSandbox, previewMap);
-
-                        // Exectue the browser print when the plugin and print preview (if used)
-                        // have responded, as well as a slight delay for css parsing.
-                        $.when(pluginDeferred, parseDeferred, previewDeferred).then(function() {
-                            window.print();
-                        });
-                    });
-                }).end()
-                .hide();
-
-            // Attach to top pane element
-            view.$el.parents().find('.content .nav-apps').after($uiContainer);
-
-            // Tell the model about $uiContainer so it can pass it to the plugin object
-            model.set('$uiContainer', $uiContainer);
+                    initPrint(model, paneNumber);
+                }).end();
         }
 
-        function setupPrintableMap(pluginObject, $printSandbox, previewDeferred) {
-            var mapMarkup = N.app.templates['template-map-preview']({ pluginName: pluginObject.toolbarName }),
-                $mapPrint = $($.trim(mapMarkup)),
-                $printPreview = $('#print-preview-sandbox'),
-                mapReadyDeferred = $.Deferred(),
-                mapHeight = pluginObject.previewMapSize[1],
-                mapWidth = pluginObject.previewMapSize[0];
+        function initPrint(model, paneNumber) {
+            var modalConfirmDeferred = $.Deferred(),
+                parseDeferred = $.Deferred(),
+                preModalDeferred = $.Deferred(),
+                postModalDeferred = $.Deferred(),
+                pluginCssPath = model.get('pluginSrcFolder') + '/print.css',
+                printCssClass = 'plugin-print-css',
+                oppositePaneHideCssPath = 'css/print-hide-map' +
+                    (paneNumber === 0 ? 1 : 0) + '.css',
+                $printSandbox = $('#plugin-print-sandbox'),
+                pluginObject = model.get('pluginObject');
 
-            // If the plugin is not set up for map print preview, don't set up a map
-            // and resolve any pending print-preview map operations
-            if (!pluginObject.usePrintPreviewMap) {
-                previewDeferred.resolve();
+            // Any previous plugin-prints may have left specific print css
+            // or sandbox elements.  Clear all so that this new print routine
+            // has no conflicts with other plugins.
+            $('.' + printCssClass).remove();
+            $printSandbox.empty();
+
+            // add base plugin css
+            addCss('css/print.css', 'base-plugin-print-css');
+
+            // Add the plugin css
+            addCss(pluginCssPath, printCssClass);
+
+            // Hide the possible same plugin from the opposite map pane
+            addCss(oppositePaneHideCssPath, printCssClass);
+
+            // Give some time for the browser to parse the new CSS,
+            // if this wasn't slightly delayed, occasionally the override would
+            // not be present and print features wouldn't show up.
+            _.delay(parseDeferred.resolve, 200);
+
+            var mapReadyDeferred = setupPrintableMap(pluginObject.map,
+                pluginObject,
+                $printSandbox,
+                modalConfirmDeferred,
+                postModalDeferred);
+
+            mapReadyDeferred.then(function(map) {
+                // The plugin is given a deferred object to resolve when the page is ready
+                // to be printed, a reference to an element where it can place printable
+                // elements outside of its container, a reference to the map, and a reference
+                // to the print modal sandbox, where it can add a form to collect user input.
+                var $modalSandbox = $('#plugin-print-modal-content');
+                pluginObject.prePrintModal(preModalDeferred, $printSandbox, $modalSandbox, map);
+
+                // Execute the browser print when the plugin and print modal (if used) have responded.
+                $.when(preModalDeferred, parseDeferred, modalConfirmDeferred, postModalDeferred).then(function() {
+                    window.print();
+
+                    // Close out the modal, which calls the closejs method
+                    TINY.box.hide();
+                });
+            });
+        }
+
+        function setupPrintableMap(map, pluginObject, $printSandbox, modalConfirmDeferred, postModalDeferred) {
+            var printModal = N.app.templates['template-plugin-print-modal']({ pluginName: pluginObject.toolbarName }),
+                $printModal = $($.trim(printModal)),
+                mapReadyDeferred = $.Deferred(),
+                modalHeight = pluginObject.printModalSize[1],
+                modalWidth = pluginObject.printModalSize[0],
+                isMobileSingleAppMode = N.app.singlePluginMode &&
+                    window.matchMedia("screen and (max-device-width: 736px)").matches;
+
+            // If the plugin is not set up for a print modal,
+            // resolve any pending pre-print map operations
+            if (!pluginObject.usePrintModal) {
+                modalConfirmDeferred.resolve();
+                postModalDeferred.resolve();
                 mapReadyDeferred.resolve();
                 return mapReadyDeferred;
             }
 
-            // Setup a print-preview window for the user to select an extent and zoom level
-            // that will be persisted at print due to its fixed size.
+            // Setup a print modal window for the user.
+            // The plugin will provide the content
             TINY.box.show({
                 animate: false,
-                html: $mapPrint[0].outerHTML,
-                boxid: 'print-preview-container',
-                width: _.max([mapWidth, 500]),
-                fixed: true,
+                html: $printModal[0].outerHTML,
+                height: modalHeight,
+                width: isMobileSingleAppMode ? '96vw' : _.max([modalWidth, 500]),
+                fixed: !isMobileSingleAppMode,
                 maskopacity: 40,
                 openjs: function () {
-                    // Remove any calculated size so that it contains the full map
-                    $('#print-preview-container').css({ height: 'initial', width: 'initial' });
+                    // Let the app know that the map is ready for modification
+                    // for plugin print
+                    mapReadyDeferred.resolve(map);
 
-                    // Set the supplied height & width on the map
-                    $('#plugin-print-preview-map').css({ height: mapHeight, width: mapWidth });
-
-                    var originalMap = pluginObject.app._unsafeMap,
-                        map = new Map('plugin-print-preview-map', { extent: originalMap.extent }),
-                        currentBaseMapUrl = originalMap.getLayer(originalMap.layerIds[0]).url;
-
-                    map.addLayer(new ArcGISDynamicMapServiceLayer(currentBaseMapUrl));
-
-                    dojo.connect(map, 'onLoad', function() {
-                        mapReadyDeferred.resolve(map);
-                    });
-
-                    $('#print-preview-print').on('click', function() {
-                        // Move the map from the plugin print preview dialog to the sandbox where
+                    $('#print-modal-confirm').on('click', function() {
+                        // Move the map from the main app area to to the sandbox where
                         // the plugin can mess with it's positioning among its other elements
-                        $(map.container).detach().appendTo($printSandbox);
-                        TINY.box.hide();
-                        $printPreview.hide();
-                        previewDeferred.resolve();
+                        var mapNode = $("#map-0").detach();
+                        $(mapNode).appendTo($printSandbox);
+                        map.resize();
+                        map.reposition();
+
+                        // Move the legend out of the map container for easier styling
+                        var legendNode = $("#legend-container-0").detach();
+                        $(legendNode).appendTo($printSandbox);
+
+                        modalConfirmDeferred.resolve();
+
+                        // Pass the modal contents to the plugin,
+                        // so it can extract form values, etc.
+                        var $modalContent = $(this).parent().siblings('#plugin-print-modal-content');
+                        pluginObject.postPrintModal(postModalDeferred, $printSandbox, $modalContent, map);
+
+                        // Move the scalebar inside the map container so
+                        // that it stays with the map.
+                        var scalebar = $('.esriScalebar').detach();
+                        $(scalebar).appendTo('#map-0_root');
                     });
+                },
+
+                closejs: function () {
+                    // Move the map and legend back to the original container
+                    var mapNode = $('#map-0').detach();
+                    var legendNode = $("#legend-container-0").detach();
+                    $('.map-container').append(mapNode);
+                    $('#map-0').append(legendNode);
+                    map.resize(true);
+
+                    // Move the scalebar back to it's original location
+                    var scalebar = $('.esriScalebar').detach();
+                    $(scalebar).appendTo('#map-0');
+
+                    // Remove print related CSS
+                    $('.base-plugin-print-css').remove();
+                    $('.plugin-print-css').remove();
+
+                    pluginObject.postPrintCleanup(map);
                 }
             });
 

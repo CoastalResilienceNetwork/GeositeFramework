@@ -41,12 +41,13 @@ require(['use!Geosite'],
             return false;
         }
 
-        function pageCssLink(pageOrientation) {
-            if (pageOrientation === 'Landscape') {
-                return 'css/print-landscape.css';
-            } else {
-                return 'css/print-portrait.css';
-            }
+        function pageCssLink(pageOrientation, pageSize) {
+            return 'css/print-' + pageSize + "-" + pageOrientation + '.css';
+        }
+
+        function invalidateSize(map) {
+            map.resize();
+            map.reposition();
         }
 
         function setupExport(context) {
@@ -62,23 +63,28 @@ require(['use!Geosite'],
 
                 $('.print-sandbox-header h1').text($("#export-title").val());
                 exportMap.append(mapNode);
+                invalidateSize(context.map);
 
                 context.mapReadyDeferred.then(function() {
                     exportMap.detach().appendTo($("#print-map-container"));
+                    invalidateSize(context.map);
                 });
 
                 var pageOrientation = $("[name='export-orientation']:checked").val();
+                var pageSize = $("[name='export-page-size']:checked").val();
+
                 $('<link>', {
                     rel: 'stylesheet',
-                    href: pageCssLink(pageOrientation),
-                    'class': '.print-orientation-css',
+                    href: pageCssLink(pageOrientation, pageSize),
+                    'class': 'print-orientation-css',
                 }).appendTo('head');
+
                 _.delay(orientDeferred.resolve, 1000);
 
                 orientDeferred.then(function() {
                     context.map.width = parseFloat(exportMap.css("width"));
                     context.map.height = parseFloat(exportMap.css("height"));
-                    context.map.resize(true);
+                    invalidateSize(context.map);
                     context.map.centerAt(context.mapDimensions.extent.getCenter());
                     _.delay(resizeDeferred.resolve, 1000);
                 });
@@ -110,13 +116,7 @@ require(['use!Geosite'],
                         $(".esriScalebar").toggleClass("page-bottom");
                         $(".esriControlsBR").toggleClass("page-bottom");
                     }
-                    // wrap all legend items in a div to style separately from header
-                    $(".legend-layer").each(
-                        function(el) {
-                            $(this)
-                                .children(".item")
-                                .wrapAll("<div class='print-legend-coll'></div>");
-                        });
+
                     _.delay(legendDeferred.resolve, 1000);
                 });
 
@@ -161,13 +161,13 @@ require(['use!Geosite'],
             $('.print-orientation-css').remove();
 
             context.legend.css({ visibility: "visible" });
-            $('.legend-close').css({ visibility: "visible" });
             _.delay(restoreCssDeferred.resolve, 1000);
 
             restoreCssDeferred.then(function() {
                 var mapNode = $("#map-0").detach();
                 context.mapNodeParent.append(mapNode);
                 exportMap.detach().appendTo(exportContainer);
+                invalidateSize(context.map);
                 $(".esriScalebar").removeClass("above-legend");
                 $(".esriScalebar").removeClass("page-bottom");
                 $(".esriControlsBR").removeClass("above-legend");
@@ -178,7 +178,7 @@ require(['use!Geosite'],
             restoreNodeDeferred.then(function() {
                 context.map.width = context.mapDimensions.width;
                 context.map.height = context.mapDimensions.height;
-                context.map.resize(true);
+                invalidateSize(context.map);
                 _.delay(restoreMapDeferred.resolve, 250);
             });
 
@@ -218,7 +218,7 @@ require(['use!Geosite'],
                 html: $mapPrint[0].outerHTML,
                 boxid: 'export-print-preview-container',
                 width: 400,
-                height: 400,
+                height: 500,
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {

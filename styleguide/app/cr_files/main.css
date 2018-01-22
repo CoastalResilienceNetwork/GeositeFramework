@@ -1878,15 +1878,6 @@ a.active {
     padding: 5px;
     height: 500px;
 }
-.print-preview-container {
-    padding: 10px;
-}
-#print-preview-container p {
-    padding: 5px;
-}
-#print-preview-print {
-    float: right;
-}
 .esriLegendMsg {
     display: none;
 }

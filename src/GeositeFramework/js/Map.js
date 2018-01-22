@@ -159,7 +159,9 @@ require(['use!Geosite',
             // would be detached from the body and the parent would not be accessible
             view.$infoWindowParent = $(esriMap.infoWindow.domNode).parent();
 
-            setupSubregions(N.app.data.region.subregions, esriMap);
+            if (!N.app.singlePluginMode) {
+                setupSubregions(N.app.data.region.subregions, esriMap);
+            }
         });
 
         function setupSubregions(subregions, esriMap) {
@@ -178,11 +180,15 @@ require(['use!Geosite',
         }
 
         function initSearch(view) {
-            // Add search control
+            var isMobileSingleAppMode = N.app.singlePluginMode &&
+                window.matchMedia("screen and (max-device-width: 736px)").matches;
+            // Add search control; have it be expandable & collapsible in mobile single plugin mode
             var search = new Search({
                 map: view.esriMap,
                 showInfoWindowOnSelect: false,
                 enableHighlight: false,
+                enableButtonMode: isMobileSingleAppMode,
+                expanded: false, // this property only takes effect if `enableButtonMode` is `true`
             }, "search");
 
             // The translation lookup isn't ready when this is initialized.
@@ -194,6 +200,23 @@ require(['use!Geosite',
                 search.set("sources", sources);
                 search.startup();
             }, 200);
+
+            if (isMobileSingleAppMode) {
+                // If the app's in mobile single app mode: hide title & subtitle on opening geocoder
+                // search input, showing them again on close. 200ms delay to smooth animation
+                search.on('focus', function() {
+                    window.setTimeout(function() {
+                        $('.nav-main-title').hide();
+                        $('.nav-region-subtitle').hide();
+                    }, 200)
+                });
+                search.on('blur', function() {
+                    window.setTimeout(function() {
+                        $('.nav-main-title').show();
+                        $('.nav-region-subtitle').show();
+                    }, 200)
+                });
+            }
         }
 
         // On IE8, the map.onload event will often not fire at all, which breaks

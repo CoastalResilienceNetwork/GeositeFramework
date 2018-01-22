@@ -28,6 +28,11 @@
                 N.app.loadedWithState = true;
             }
 
+            N.app.singlePluginMode = false;
+            if (regionData.singlePluginMode) {
+                N.app.singlePluginMode = regionData.singlePluginMode.active;
+            }
+
             // Set up the google url shortener service
             gapi.client.load('urlshortener', 'v1');
             if (regionData.googleUrlShortenerApiKey) {

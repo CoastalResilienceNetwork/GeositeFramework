@@ -1,0 +1,28 @@
+hr {
+    margin: 20px 0;
+}
+
+.accord {
+    height: 200px;
+    margin-bottom: 100px;
+}
+
+.sample {
+    float: right;
+    color: hotpink;
+    font-size: 24px;
+}
+
+.sample img {
+    display: none;
+}
+
+#north-arrow-img {
+    height: 60px;
+    width: 100px;
+}
+
+#logo-img {
+    height: 60px;
+    width: 200px;
+}

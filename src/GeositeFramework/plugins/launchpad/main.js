@@ -31,6 +31,7 @@ define([
             hasCustomPrint: false,
             toolbarType: "sidebar",
             allowIdentifyWhenActive: true,
+            hideMinimizeButton: _.isUndefined(overrides.hideMinimizeButton) ? false : overrides.hideMinimizeButton,
             uiState: {},
 
             initialize: function (frameworkParameters, currentRegion) {
