@@ -1796,7 +1796,6 @@ header .nav-main {
 .tinner {
     overflow: hidden;
     padding: 0!important;
-    min-height: 380px!important;
     width: 100%;
 }
 .tinner .tclose:hover {
