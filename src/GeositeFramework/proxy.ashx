@@ -50,7 +50,7 @@ public class proxy : IHttpHandler {
             byte[] bytes = new byte[context.Request.InputStream.Length];
             context.Request.InputStream.Read(bytes, 0, (int)context.Request.InputStream.Length);
             req.ContentLength = bytes.Length;
-            req.ContentType = "application/x-www-form-urlencoded";
+            req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
             using (Stream outputStream = req.GetRequestStream())
             {
                 outputStream.Write(bytes, 0, bytes.Length);
