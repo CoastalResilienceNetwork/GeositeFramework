@@ -83,6 +83,98 @@ require(['use!Geosite'],
             map.reposition();
         }
 
+        function createPrintableMap(
+            context, previewDeferred, orientDeferred, resizeDeferred, legendDeferred, postPrintAction
+        ) {
+            var mapNode = $("#map-0").detach();
+            var exportMap = $("#export-print-preview-map");
+
+            $('.print-sandbox-header h1').text($("#export-title").val());
+            exportMap.append(mapNode);
+            invalidateSize(context.map);
+
+            context.mapReadyDeferred.then(function() {
+                exportMap.detach().appendTo($("#print-map-container"));
+                invalidateSize(context.map);
+            });
+
+            var pageOrientation = $("[name='export-orientation']:checked").val();
+            var pageSize = $("[name='export-page-size']:checked").val();
+
+            addPagePrintCSSFile();
+
+            _.delay(orientDeferred.resolve, 1000);
+
+            orientDeferred.then(function() {
+                context.map.width = parseFloat(exportMap.css("width"));
+                context.map.height = parseFloat(exportMap.css("height"));
+                invalidateSize(context.map);
+                context.map.centerAt(context.mapDimensions.extent.getCenter());
+                _.delay(resizeDeferred.resolve, 1000);
+            });
+
+            // the legend items are affected by the map resize, so
+            // they are manipulated just before printing
+            resizeDeferred.then(function() {
+                // expand legend container if minimized
+                if (context.legend.hasClass("minimized")) {
+                    $(".legend-close").click();
+                    postPrintAction = function() {
+                        $(".legend-close").click();
+                    };
+                }
+
+                if ($("[name='export-include-legend']").is(":checked") &&
+                        context.legend.css("display") !== "none") {
+                    // show & expand all legend items
+                    context.legend.css({ visibility: "visible" });
+                    $(".item.expand>.expand-legend").click();
+                    $(".item.extra.collapse").hide();
+                    $(".esriScalebar").toggleClass("above-legend");
+                    $(".esriControlsBR").toggleClass("above-legend");
+
+                } else {
+                    // if the style rule is changed via jquery, that state seems to
+                    // "stick", regardless of what's in the stylesheet
+                    context.legend.css({ visibility: "hidden" });
+                    $(".esriScalebar").toggleClass("page-bottom");
+                    $(".esriControlsBR").toggleClass("page-bottom");
+                }
+
+                _.delay(legendDeferred.resolve, 1000);
+            });
+
+            function afterPrintHandler() {
+                _.delay(previewDeferred.resolve, 250);
+            }
+
+            $.when(orientDeferred, legendDeferred, resizeDeferred)
+                .then(function () {
+                /*
+                    Chrome's exposed 'window.print' method includes a preview and
+                    blocks, whereas non-Chrome browsers do neither; similarly,
+                    Chrome does not expose an 'onafterprint' event while the
+                    others do.
+                */
+
+                if (!isChrome()) {
+                    window.onafterprint = afterPrintHandler;
+                }
+
+                window.print();
+
+                if (isChrome()) {
+                    previewDeferred.resolve();
+                }
+            });
+
+            previewDeferred.then(function() {
+                $(".item.extra.collapse").show();
+                TINY.box.hide();
+                postPrintAction();
+            });
+        }
+
         function setupExport(context) {
             var previewDeferred = $.Deferred(),
                 orientDeferred = $.Deferred(),
@@ -91,93 +183,14 @@ require(['use!Geosite'],
                 postPrintAction = _.noop;
 
             $('#export-button').on('click', function() {
-                var mapNode = $("#map-0").detach();
-                var exportMap = $("#export-print-preview-map");
-
-                $('.print-sandbox-header h1').text($("#export-title").val());
-                exportMap.append(mapNode);
-                invalidateSize(context.map);
-
-                context.mapReadyDeferred.then(function() {
-                    exportMap.detach().appendTo($("#print-map-container"));
-                    invalidateSize(context.map);
-                });
-
-                var pageOrientation = $("[name='export-orientation']:checked").val();
-                var pageSize = $("[name='export-page-size']:checked").val();
-
-                addPagePrintCSSFile();
-
-                _.delay(orientDeferred.resolve, 1000);
-
-                orientDeferred.then(function() {
-                    context.map.width = parseFloat(exportMap.css("width"));
-                    context.map.height = parseFloat(exportMap.css("height"));
-                    invalidateSize(context.map);
-                    context.map.centerAt(context.mapDimensions.extent.getCenter());
-                    _.delay(resizeDeferred.resolve, 1000);
-                });
-
-                // the legend items are affected by the map resize, so
-                // they are manipulated just before printing
-                resizeDeferred.then(function() {
-                    // expand legend container if minimized
-                    if (context.legend.hasClass("minimized")) {
-                        $(".legend-close").click();
-                        postPrintAction = function() {
-                            $(".legend-close").click();
-                        };
-                    }
-
-                    if ($("[name='export-include-legend']").is(":checked") &&
-                            context.legend.css("display") !== "none") {
-                        // show & expand all legend items
-                        context.legend.css({ visibility: "visible" });
-                        $(".item.expand>.expand-legend").click();
-                        $(".item.extra.collapse").hide();
-                        $(".esriScalebar").toggleClass("above-legend");
-                        $(".esriControlsBR").toggleClass("above-legend");
-
-                    } else {
-                        // if the style rule is changed via jquery, that state seems to
-                        // "stick", regardless of what's in the stylesheet
-                        context.legend.css({ visibility: "hidden" });
-                        $(".esriScalebar").toggleClass("page-bottom");
-                        $(".esriControlsBR").toggleClass("page-bottom");
-                    }
-
-                    _.delay(legendDeferred.resolve, 1000);
-                });
-
-                function afterPrintHandler() {
-                    _.delay(previewDeferred.resolve, 250);
-                }
-
-                $.when(orientDeferred, legendDeferred, resizeDeferred)
-                 .then(function () {
-                    /*
-                        Chrome's exposed 'window.print' method includes a preview and
-                        blocks, whereas non-Chrome browsers do neither; similarly,
-                        Chrome does not expose an 'onafterprint' event while the
-                        others do.
-                    */
-
-                    if (!isChrome()) {
-                        window.onafterprint = afterPrintHandler;
-                    }
-
-                    window.print();
-
-                    if (isChrome()) {
-                        previewDeferred.resolve();
-                    }
-                });
-
-                previewDeferred.then(function() {
-                    $(".item.extra.collapse").show();
-                    TINY.box.hide();
-                    postPrintAction();
-                });
+                return createPrintableMap(
+                    context,
+                    previewDeferred,
+                    orientDeferred,
+                    resizeDeferred,
+                    legendDeferred,
+                    postPrintAction
+                );
             });
 
             context.mapReadyDeferred.resolve();
