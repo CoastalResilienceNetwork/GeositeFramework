@@ -261,7 +261,7 @@ require(['use!Geosite'],
                     destroyExport(context);
                 }
             });
-            
+
             return mapReadyDeferred;
         }
 
@@ -320,7 +320,7 @@ require(['use!Geosite'],
         render: function () {
             var view = this,
                 body = N.app.templates['template-export-window']();
-            
+
             this.$el
                 .empty()
                 .append(body);
