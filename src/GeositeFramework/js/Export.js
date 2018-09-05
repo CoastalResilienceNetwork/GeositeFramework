@@ -2,16 +2,49 @@
 
 require(['use!Geosite'],
     function(N) {
-    "use strict";
+        "use strict";
+
+        function addAppPrintCSSFile() {
+            $('<link>', {
+                rel: 'stylesheet',
+                href: 'css/app-print.css',
+                'class': 'app-print-css'
+            }).appendTo('head');
+        }
+
+        function addPagePrintCSSFile(debug) {
+            var pageOrientation,
+                pageSize;
+
+            if (!debug) {
+                pageOrientation = $("[name='export-orientation']:checked").val();
+                pageSize = $("[name='export-page-size']:checked").val();
+            } else {
+                pageOrientation = 'portrait';
+                pageSize = 'letter';
+            }
+
+            $('<link>', {
+                rel: 'stylesheet',
+                href: pageCssLink(pageOrientation, pageSize),
+                'class': 'print-orientation-css',
+            }).appendTo('head');
+        }
+
+        function removeAppPrintCSSFile() {
+            $('.app-print-css').remove();
+        }
+
+        function removePagePrintCSSFile() {
+            $('.print-orientation-css').remove();
+        }
+
         function render(view) {
             $('#plugin-print-sandbox').empty();
             $('.plugin-print-css').remove();
             $('.base-plugin-print-css').remove();
-            $('<link>', {
-                rel: 'stylesheet',
-                href: 'css/app-print.css',
-                'class': 'app-print-css' 
-            }).appendTo('head');
+            addAppPrintCSSFile();
+
             var html = N.app.templates['template-export-window']();
             view.$el.empty().append(html);
             if (view.$uiContainer) {
@@ -73,11 +106,7 @@ require(['use!Geosite'],
                 var pageOrientation = $("[name='export-orientation']:checked").val();
                 var pageSize = $("[name='export-page-size']:checked").val();
 
-                $('<link>', {
-                    rel: 'stylesheet',
-                    href: pageCssLink(pageOrientation, pageSize),
-                    'class': 'print-orientation-css',
-                }).appendTo('head');
+                addPagePrintCSSFile();
 
                 _.delay(orientDeferred.resolve, 1000);
 
@@ -123,18 +152,22 @@ require(['use!Geosite'],
                 function afterPrintHandler() {
                     _.delay(previewDeferred.resolve, 250);
                 }
+
                 $.when(orientDeferred, legendDeferred, resizeDeferred)
                  .then(function () {
-                    /* 
+                    /*
                         Chrome's exposed 'window.print' method includes a preview and
                         blocks, whereas non-Chrome browsers do neither; similarly,
                         Chrome does not expose an 'onafterprint' event while the
                         others do.
                     */
+
                     if (!isChrome()) {
                         window.onafterprint = afterPrintHandler;
                     }
+
                     window.print();
+
                     if (isChrome()) {
                         previewDeferred.resolve();
                     }
@@ -157,8 +190,8 @@ require(['use!Geosite'],
                 exportMap = $("#export-print-preview-map"),
                 exportContainer = $("#export-print-preview-container");
 
-            $('.app-print-css').remove();
-            $('.print-orientation-css').remove();
+            removeAppPrintCSSFile();
+            removePagePrintCSSFile();
 
             context.legend.css({ visibility: "visible" });
             _.delay(restoreCssDeferred.resolve, 1000);
