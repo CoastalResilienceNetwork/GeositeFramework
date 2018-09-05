@@ -83,6 +83,23 @@ require(['use!Geosite'],
             map.reposition();
         }
 
+        function moveScaleBarAboveLegendForPrint() {
+            $(".esriScalebar").addClass("above-legend");
+            $(".esriControlsBR").addClass("above-legend");
+        }
+
+        function moveScaleBarToPageBottomForPrint() {
+            $(".esriScalebar").toggleClass("page-bottom");
+            $(".esriControlsBR").toggleClass("page-bottom");
+        }
+
+        function restoreScaleBarAfterPrint() {
+            $(".esriScalebar").removeClass("above-legend");
+            $(".esriScalebar").removeClass("page-bottom");
+            $(".esriControlsBR").removeClass("above-legend");
+            $(".esriControlsBR").removeClass("page-bottom");
+        }
+
         function createPrintableMap(
             context, previewDeferred, orientDeferred, resizeDeferred, legendDeferred, postPrintAction
         ) {
@@ -130,15 +147,12 @@ require(['use!Geosite'],
                     context.legend.css({ visibility: "visible" });
                     $(".item.expand>.expand-legend").click();
                     $(".item.extra.collapse").hide();
-                    $(".esriScalebar").toggleClass("above-legend");
-                    $(".esriControlsBR").toggleClass("above-legend");
-
+                    moveScaleBarAboveLegendForPrint();
                 } else {
                     // if the style rule is changed via jquery, that state seems to
                     // "stick", regardless of what's in the stylesheet
                     context.legend.css({ visibility: "hidden" });
-                    $(".esriScalebar").toggleClass("page-bottom");
-                    $(".esriControlsBR").toggleClass("page-bottom");
+                    moveScaleBarToPageBottomForPrint();
                 }
 
                 _.delay(legendDeferred.resolve, 1000);
