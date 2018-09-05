@@ -12,16 +12,16 @@ require(['use!Geosite'],
             }).appendTo('head');
         }
 
-        function addPagePrintCSSFile(debug) {
+        function addPagePrintCSSFile(debugOptions) {
             var pageOrientation,
                 pageSize;
 
-            if (!debug) {
+            if (!debugOptions) {
                 pageOrientation = $("[name='export-orientation']:checked").val();
                 pageSize = $("[name='export-page-size']:checked").val();
             } else {
-                pageOrientation = 'portrait';
-                pageSize = 'letter';
+                pageOrientation = debugOptions.pageOrientation;
+                pageSize = debugOptions.pageSize;
             }
 
             $('<link>', {
@@ -101,7 +101,7 @@ require(['use!Geosite'],
         }
 
         function createPrintableMap(
-            context, previewDeferred, orientDeferred, resizeDeferred, legendDeferred, postPrintAction
+            context, previewDeferred, orientDeferred, resizeDeferred, legendDeferred, postPrintAction, debug
         ) {
             var mapNode = $("#map-0").detach();
             var exportMap = $("#export-print-preview-map");
@@ -115,10 +115,7 @@ require(['use!Geosite'],
                 invalidateSize(context.map);
             });
 
-            var pageOrientation = $("[name='export-orientation']:checked").val();
-            var pageSize = $("[name='export-page-size']:checked").val();
-
-            addPagePrintCSSFile();
+            addPagePrintCSSFile(debug);
 
             _.delay(orientDeferred.resolve, 1000);
 
@@ -141,8 +138,8 @@ require(['use!Geosite'],
                     };
                 }
 
-                if ($("[name='export-include-legend']").is(":checked") &&
-                        context.legend.css("display") !== "none") {
+                if (($("[name='export-include-legend']").is(":checked") &&
+                     context.legend.css("display") !== "none") || !!debug) {
                     // show & expand all legend items
                     context.legend.css({ visibility: "visible" });
                     $(".item.expand>.expand-legend").click();
@@ -171,6 +168,10 @@ require(['use!Geosite'],
                     others do.
                 */
 
+                if (!!debug) {
+                    return _.noop();
+                }
+
                 if (!isChrome()) {
                     window.onafterprint = afterPrintHandler;
                 }
@@ -189,7 +190,7 @@ require(['use!Geosite'],
             });
         }
 
-        function setupExport(context) {
+        function setupExport(context, debugOptions) {
             var previewDeferred = $.Deferred(),
                 orientDeferred = $.Deferred(),
                 resizeDeferred = $.Deferred(),
@@ -203,14 +204,19 @@ require(['use!Geosite'],
                     orientDeferred,
                     resizeDeferred,
                     legendDeferred,
-                    postPrintAction
+                    postPrintAction,
+                    debugOptions
                 );
             });
 
             context.mapReadyDeferred.resolve();
         }
 
-        function destroyExport(context) {
+        function destroyExport(context, debugOptions) {
+            if (!!debugOptions) {
+                return _.noop();
+            }
+
             var restoreMapDeferred = $.Deferred(),
                 restoreCssDeferred = $.Deferred(),
                 restoreNodeDeferred = $.Deferred(),
@@ -247,6 +253,8 @@ require(['use!Geosite'],
                 context.map.setExtent(context.mapDimensions.extent);
                 context.map.centerAt(context.mapDimensions.extent.getCenter());
             });
+
+            return _.noop();
         }
 
         function showMapExportModal(model) {
@@ -264,6 +272,12 @@ require(['use!Geosite'],
                     zoom: map.getZoom(),
                 };
 
+            var debugQueryString = new URLSearchParams(window.location.search),
+                isPrintDebugMode = debugQueryString.get('debug') === 'true',
+                debugPageSize = debugQueryString.get('size'),
+                debugPageOrientation = debugQueryString.get('orientation'),
+                debugOptions = null;
+
             var context = {
                 mapReadyDeferred: mapReadyDeferred,
                 map: map,
@@ -272,6 +286,23 @@ require(['use!Geosite'],
                 mapNodeParent: mapNodeParent,
                 legend: legend,
             };
+
+            if (isPrintDebugMode) {
+                if (!['a4', 'letter'].includes(debugPageSize)) {
+                    window.console.warn('Invalid pageSize: expected "letter" or "a4"');
+                    return null;
+                }
+
+                if (!['portrait', 'landscape'].includes(debugPageOrientation)) {
+                    window.console.warn('Invalid pageOrientation: expected "portrait" or "landscape"');
+                    return null;
+                }
+
+                debugOptions = {
+                    pageSize: debugPageSize,
+                    pageOrientation: debugPageOrientation,
+                };
+            }
 
             TINY.box.show({
                 animate: false,
@@ -282,10 +313,10 @@ require(['use!Geosite'],
                 fixed: true,
                 maskopacity: 40,
                 openjs: function () {
-                    setupExport(context);
+                    setupExport(context, debugOptions);
                 },
                 closejs: function () {
-                    destroyExport(context);
+                    destroyExport(context, debugOptions);
                 }
             });
 
