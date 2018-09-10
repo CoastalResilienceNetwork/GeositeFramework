@@ -514,24 +514,38 @@ require(['use!Geosite',
         }
 
         function assignEvents($uiContainer, model, paneNumber) {
+            // Note: assignEvents is called everytime the plugin is rendered.
+            // In order to prevent events firing multiple times we need to unbind
+            // before rebinding any events.  I've scoped these bindings so we
+            // don't remove events added by plugin developers.
             $uiContainer
                 // Minimize the plugin
-                .find('.plugin-minimize').on('click', function() {
-                    model.deselect();
+                .find('.plugin-minimize')
+                    .off('.deselect')
+                    .on('click.deselect', function() {
+                        model.deselect();
                 }).end()
                 // Listen for events to turn the plugin completely off
-                .find('.plugin-off').on('click', function () {
-                    model.turnOff();
+                .find('.plugin-off')
+                    .off('.turnoff')
+                    .on('click.turnoff', function () {
+                        model.turnOff();
                 }).end()
                 // Unselect the plugin, but keep active
-                .find('.plugin-close').on('click', function () {
-                    model.deselect();
+                .find('.plugin-close')
+                    .off('.deselect')
+                    .on('click.deselect', function () {
+                        model.deselect();
                 }).end()
-                .find('.plugin-help').on('click', function () {
-                    pluginObject.showHelp();
+                .find('.plugin-help')
+                    .off('.showhelp')
+                    .on('click.showhelp', function () {
+                        pluginObject.showHelp();
                 }).end()
-                .find('.plugin-print').on('click', function() {
-                    initPrint(model, paneNumber);
+                .find('.plugin-print')
+                    .off('.initprint')
+                    .on('click.initprint', function() {
+                        initPrint(model, paneNumber);
                 }).end();
         }
 
