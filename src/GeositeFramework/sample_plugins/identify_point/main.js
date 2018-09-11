@@ -143,8 +143,8 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 window.setTimeout(function() {
                     if (mapObject.updating) {
                         var delayedPrint = mapObject.on('update-end', function() {
-                                delayedPrint.remove();
-                                postModalDeferred.resolve();
+                            delayedPrint.remove();
+                            postModalDeferred.resolve();
                         });
                     } else {
                         postModalDeferred.resolve();
