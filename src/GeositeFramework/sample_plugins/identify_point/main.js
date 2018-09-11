@@ -18,7 +18,7 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             size: 'small',
             hasCustomPrint: true,
             usePrintModal: true,
-            printModalSize: [500, 200],
+            printModalSize: [500, 475],
             infographic: [500, 300],
 
             initialize: function(frameworkParameters) {
@@ -102,6 +102,11 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             prePrintModal: function(preModalDeferred, $printSandbox, $modalSandbox, mapObject) {
                 $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
                     $modalSandbox.append(html);
+
+                    var mapNode = $("#map-0").detach();
+                    $(mapNode).appendTo('.print-preview-map-container');
+                    mapObject.resize(true);
+                    mapObject.reposition();
                 }).then(preModalDeferred.resolve());
 
                 // Append optional images to print sandbox, which are hidden by default
