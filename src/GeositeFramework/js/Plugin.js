@@ -6,7 +6,7 @@
 require(['use!Geosite',
          'esri/map',
          'esri/layers/ArcGISDynamicMapServiceLayer',
-         'framework/Logger',
+         './js/Logger.js',
          'dojo/dom-style',
          'dijit/form/CheckBox',
          'dijit/form/Button'
