@@ -13,7 +13,7 @@ define([
         "dojo/_base/declare",
         "dojo/text!./templates.html",
         "dojo/text!./overrides.json",
-        "framework/PluginBase"
+        "./js/PluginBase.js"
     ],
     function(N,
              declare,
