@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${GEOSITE_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -n "Usage: $(basename "$0")
+Starts python server.
+"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]
+then
+    if [ "${1:-}" = "--help" ]
+    then
+        usage
+    else
+        (cd src/GeositeFramework/; python -m SimpleHTTPServer 54633)
+    fi
+fi
