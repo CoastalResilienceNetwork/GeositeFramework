@@ -1,23 +1,28 @@
-#!/bin/bash
+#! /usr/bin/env python
 
-set -e
+import os
+from BaseHTTPServer import HTTPServer
+from SimpleHTTPServer import SimpleHTTPRequestHandler
 
-if [[ -n "${GEOSITE_DEBUG}" ]]; then
-    set -x
-fi
+PORT = 54633
+PATH_TO_PROJECT = 'src/GeositeFramework/'
 
-function usage() {
-    echo -n "Usage: $(basename "$0")
-Starts python server.
-"
-}
+class CustomRootHTTPServer(HTTPServer):
+    def __init__(self, base_path, *args, **kwargs):
+        HTTPServer.__init__(self, *args, **kwargs)
+        self.RequestHandlerClass.base_path = base_path
 
-if [ "${BASH_SOURCE[0]}" = "${0}" ]
-then
-    if [ "${1:-}" = "--help" ]
-    then
-        usage
-    else
-        (cd src/GeositeFramework/; python -m SimpleHTTPServer 54633)
-    fi
-fi
+class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
+    def translate_path(self, path):
+        words = filter(None, path.split('/'))
+        modified_path = self.base_path
+        for word in words:
+            modified_path = os.path.join(modified_path, word)
+        return modified_path
+
+def serve():
+    server = CustomRootHTTPServer(PATH_TO_PROJECT, ('', PORT), CustomRootHTTPRequestHandler)
+    server.serve_forever()
+
+if __name__ == '__main__':
+    serve()
