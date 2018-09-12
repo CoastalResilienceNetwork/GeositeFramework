@@ -23,4 +23,4 @@ To run the project locally, on any OS, clone the repo and run `./scripts/server`
 
 | Name           | Description                                                   |
 | -------------- | ------------------------------------------------------------- |
-| `server`       | Run a Python SimpleHTTPServer              |
+| `server`      | Run a Python SimpleHTTPServer              |
