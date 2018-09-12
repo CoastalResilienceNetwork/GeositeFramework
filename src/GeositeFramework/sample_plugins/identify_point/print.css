@@ -17,7 +17,69 @@
     }
 
     #map-0 {
-       height: 10in;
-       width: 10in;
+       height: 8in;
+       width: 8in;
     }
+}
+
+#north-arrow-img {
+    height: 60px;
+    width: 70px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#logo-img {
+    height: 60px;
+    width: 200px;
+}
+
+/**
+    Rules related to the print preview map:
+    1. Overrides to the print modal to fit the map
+    2. Overrides to the map to better fit in the modal
+**/
+
+.print-preview {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.print-preview-map-container {
+    width: 100%;
+    height: 100%;
+}
+
+.print-preview-map-container #map-0.map {
+    position: relative;
+    height: 325px;
+}
+
+.popover-section {
+    height: 400px;
+}
+
+.print-modal-confirm-container {
+    position: initial;
+}
+
+.map-tools {
+    display: none;
+}
+
+.basemap-selector {
+    display: none;
+}
+
+#map-0_zoom_slider {
+    top: 10px;
+    right: 10px;
+}
+
+.print-modal-confirm-container {
+    position: relative !important;
+    margin-top: 30px;
+    bottom: 0px !important;
+    left: 0px !important;
 }
