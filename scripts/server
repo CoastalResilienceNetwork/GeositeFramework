@@ -1,11 +1,14 @@
 #! /usr/bin/env python
 
 import os
+import logging
 from BaseHTTPServer import HTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 
 PORT = 54633
 PATH_TO_PROJECT = 'src/GeositeFramework/'
+
+logging.basicConfig(level=logging.INFO)
 
 class CustomRootHTTPServer(HTTPServer):
     def __init__(self, base_path, *args, **kwargs):
@@ -22,6 +25,7 @@ class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
 
 def serve():
     server = CustomRootHTTPServer(PATH_TO_PROJECT, ('', PORT), CustomRootHTTPRequestHandler)
+    logging.info('Now serving on http://localhost:54633')
     server.serve_forever()
 
 if __name__ == '__main__':
