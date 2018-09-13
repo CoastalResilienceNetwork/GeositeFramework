@@ -1,10 +1,10 @@
 ﻿define([
     'use!Geosite',
     'dojo/_base/declare',
-    './measure/main',
-    './full_extent/main',
-    './export/main',
-    './share/main'
+    '../js/widgets/map_utils/measure/main.js',
+    '../js/widgets/map_utils/full_extent/main.js',
+    '../js/widgets/map_utils/export/main.js',
+    '../js/widgets/map_utils/share/main.js'
     ],
     function(N,
              declare,

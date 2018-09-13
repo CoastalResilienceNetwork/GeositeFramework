@@ -2,9 +2,9 @@
 /*global Backbone, _, $, Geosite, esri, Azavea, setTimeout, dojo, dojox */
 
 require(['use!Geosite',
-         'framework/Legend',
-         'framework/widgets/map_utils/main',
-         'framework/util/ajax',
+         './js/Legend.js',
+         './js/widgets/map_utils/main.js',
+         './js/util/ajax.js',
          'esri/map',
          'esri/dijit/Scalebar',
          'esri/layers/OpenStreetMapLayer',
