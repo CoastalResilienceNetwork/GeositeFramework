@@ -1,13 +1,12 @@
 version: '3'
 services:
   app:
-    image: python:2.7-slim
-    working_dir: /usr/src
+    build:
+      context: ./src/GeositeFramework
+    working_dir: /usr/src/
     ports:
       - "54633:54633"
     volumes:
         - ./src/GeositeFramework:/usr/src/GeositeFramework
         - ./scripts:/usr/src/scripts
         - ./dist:/usr/dist
-    tty: true
-    command: ./scripts/server.py
