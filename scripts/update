@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${GEOSITE_DEBUG}" ]]; then
+    set -x
+fi
+
+function usage() {
+    echo -n "Usage: $(basename "$0")
+    Attempts to install dependencies.
+    "
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]
+then
+    if [ "${1:-}" = "--help" ]
+    then
+        usage
+    else
+        if docker-compose --version; then
+            docker-compose exec app sh -c \
+            "pip install -r ./GeositeFramework/requirements.txt"
+        else
+            echo "ERROR: Install docker & docker-compose locally."
+            exit 1
+        fi
+    fi
+fi
