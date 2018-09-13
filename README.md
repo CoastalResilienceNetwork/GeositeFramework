@@ -11,7 +11,10 @@ Copyright (C) 2013 The Nature Conservancy
 This project is actively being converted into a static site and away from using .NET on the `feature/task-1` branch. During this time, the project will continue to work off `develop` via the typical set up in Visual Studio on Windows. It may break with Visual Studio on `feature/task-1` and its child branches.
 
 ### Run a python development environment
-To run the project locally, on any OS, clone the repo and run `./scripts/server` from root. 
+To run the project locally, on any OS, clone the repo and run `./scripts/update` from root to set up. To run the project server thereafter, `./scripts/server`.
+
+The project uses docker-compose and the app container can be accessed in the usual way:
+`docker-compose exec app /bin/bash`
 
 #### Ports
 
@@ -23,4 +26,5 @@ To run the project locally, on any OS, clone the repo and run `./scripts/server`
 
 | Name           | Description                                                   |
 | -------------- | ------------------------------------------------------------- |
-| `server`      | Run a Python SimpleHTTPServer              |
+| `server`       | Run a Python SimpleHTTPServer serving the templated app       |
+| `update`       | Create app container and install dependencies                 |
