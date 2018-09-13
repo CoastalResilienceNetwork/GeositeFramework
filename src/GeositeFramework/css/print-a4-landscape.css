@@ -6,7 +6,7 @@
     #map-print-sandbox {
         visibility: visible;
         width: 10.69in;
-        height: 7.5in;
+        height: 7.25in;
     }
 
     #map-print-sandbox > .print-sandbox-header {
@@ -21,16 +21,16 @@
 
     #map-print-sandbox > #print-map-container {
         width: 10.69in;
-        height: 6.4in;
+        height: 6.15in;
     }
 
     #map-print-sandbox > #print-map-container > #export-print-preview-map {
         width: 10.59in;
-        height: 6.4in;
+        height: 6.15in;
     }
 
     #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 {
-        height: 6.3in;
+        height: 6.05in;
         width: 10.59in;
         position: relative;
     }
@@ -114,15 +114,15 @@
 
 #map-print-sandbox {
     width: 10.69in;
-    height: 7.5in;
+    height: 7.25in;
 }
 
 #print-map-container {
     width: 10.69in;
-    height: 6.4in;
+    height: 6.15in;
 }
 
 #print-map-container > #export-print-preview-map {
     width: 10.59in;
-    height: 6.4in;
+    height: 6.15in;
 }
