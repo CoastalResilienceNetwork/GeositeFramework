@@ -259,7 +259,7 @@ require(['use!Geosite'],
 
         function showMapExportModal(model) {
             var mapMarkup = N.app.templates['template-export-window']({ pluginName: "Test" }),
-                $mapPrint = $($.trim(mapMarkup)),
+                $mapPrint = $($.trim(mapMarkup)).localize(),
                 mapReadyDeferred = $.Deferred(),
                 map = model.get('esriMap'),
                 mapElement = $("#map-0"),
