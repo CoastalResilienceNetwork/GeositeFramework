@@ -1,35 +1,4 @@
 ﻿@media print {
-    .print-sandbox-header h1 {
-        width: 100%;
-        padding-top: 0.3in;
-        text-align: center;
-    }
-
-    #map-print-sandbox {
-        visibility: visible;
-    }
-
-    #print-map-container {
-        overflow: hidden;
-    }
-
-    .control-container {
-        display: none;
-    }
-
-    #export-print-preview-container {
-        padding-bottom: 5px;
-        visibility: visible;
-    }
-
-    #print-map-container > #export-print-preview-map > #map-0 {
-        height: 100%;
-        width: 100%;
-        position: relative;
-        max-height: 1800px;
-        top: 0;
-    }
-
     .dojoxResizeHandle {
         visibility: hidden;
     }
@@ -68,77 +37,12 @@
         display: none;
     }
 
-    /* Legend can be manually resized by user, which utilizies inline style rules.
-    Without these overrides, the legend would be sized on the print-out as it
-    in the DOM. */
-    #legend-container-0 {
-        margin-left: 0px !important;
-        left: 0px !important;
-        width: 100% !important;
-        position: absolute !important;
-        z-index: 10;
-        background-color: #fff !important; /* Needed for IE */
-    }
-
     .legend-close {
         visibility: hidden;
     }
 
-    .legend-header {
-        height: 15%;
-        font-size: 11px;
-    }
-
     #legend-container-0 .dojoxResizeHandle {
         display: none;
-    }
-
-    /* It's not quite clear why, but removing the !important flags from the next
-    few legend style blocks results in the rules, despite not having any conflicting
-    rules, not having any effect. It could have something to do with how the legend
-    elements are moved around the DOM for printing */
-    div.legend-body {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        width: 100% !important;
-        height: 85% !important;
-        background-color: #fff !important; /* Needed for IE */
-    }
-
-    div.layer-legends {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-            -ms-flex-direction: column;
-                flex-direction: column;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-        width: 100%;
-        align-content: flex-start;
-    }
-
-    div.legend-layer {
-        width: auto !important;
-        height: auto !important;
-        font-size: 8px;
-        margin: 0 10px 0 0;
-    }
-
-    div.plugin-legends {
-        display: flex;
-    }
-
-    div.custom-legend {
-        min-width: 100px;
-        max-width: 300px;
-    }
-
-    .legend-layer img {
-        width: 10px;
-        height: 10px;
     }
 }
 

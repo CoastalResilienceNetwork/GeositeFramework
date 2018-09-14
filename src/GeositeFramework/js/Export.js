@@ -43,7 +43,6 @@ require(['use!Geosite'],
             $('#plugin-print-sandbox').empty();
             $('.plugin-print-css').remove();
             $('.base-plugin-print-css').remove();
-            addAppPrintCSSFile();
 
             var html = N.app.templates['template-export-window']();
             view.$el.empty().append(html);
@@ -115,6 +114,7 @@ require(['use!Geosite'],
                 invalidateSize(context.map);
             });
 
+            addAppPrintCSSFile();
             addPagePrintCSSFile(debug);
 
             _.delay(orientDeferred.resolve, 1000);

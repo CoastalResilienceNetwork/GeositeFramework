@@ -1,48 +1,128 @@
 @media print {
     @page {
-        size: letter portrait;
+        size: A4 portrait;
     }
 
     #map-print-sandbox {
+        visibility: visible;
         width: 8in;
-        height: 9in;
+        height: 11in;
     }
 
-    #print-map-container {
-        width: 8in;
-        height: 8.65in;
+    #map-print-sandbox > .print-sandbox-header {
+        height: 1in;
     }
 
-    #print-map-container > #export-print-preview-map {
+    #map-print-sandbox > .print-sandbox-header > h1 {
+        width: 8in;
+        padding-top: 0.3in;
+        text-align: center;
+    }
+
+    #map-print-sandbox > #print-map-container {
+        width: 8in;
+        height: 9.9in;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map {
         width: 7.9in;
-        height: 8.5in;
+        height: 9.9in;
     }
 
-    #legend-container-0 {
-        top: 75% !important;
-        height: 25% !important;
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 {
+        height: 9.8in;
+        width: 7.89in;
+        position: relative;
     }
 
-    .above-legend {
-        bottom: 26%;
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > .control-container {
+        display: none;
     }
 
-    .page-bottom {
-        bottom: 2%;
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 {
+        bottom: 0 !important;
+        height: 1.5in !important;
+        margin-left: 0 !important;
+        left: 0 !important;
+        width: 7.89in !important;
+        position: absolute !important;
+        z-index: 10;
+        background-color: #fff !important; /* Needed for IE */
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-header {
+        height: 0.3in;
+        font-size: 11px;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 7.89in !important;
+        height: 1.2in !important;
+        background-color: #fff !important; /* Needed for IE */
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body > .plugin-legends {
+        display: flex;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body > .plugin-legends > .custom-legend {
+        min-width: 100px;
+        max-width: 300px;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body > .layer-legends {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        width: 7.89in;
+        align-content: flex-start;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body > .layer-legends > .legend-layer {
+        width: auto !important;
+        height: auto !important;
+        font-size: 8px;
+        margin: 0 0.2in 0 0;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #legend-container-0 > .legend-body > .layer-legends > .legend-layer > img {
+        width: 0.25in;
+        height: 0.25in;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #map-0_root > .esriControlsBR.above-legend {
+        bottom: 2.7in !important;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > #map-0_root > .esriControlsBR.page-bottom {
+        bottom: 1.2in !important;
+    }
+
+    #map-print-sandbox > #print-map-container > #export-print-preview-map > #map-0 > .above-legend {
+        bottom: 1.6in;
     }
 }
 
 #map-print-sandbox {
     width: 8in;
-    height: 9in;
+    height: 11in;
 }
 
 #print-map-container {
     width: 8in;
-    height: 8.65in;
+    height: 9.9in;
 }
 
 #print-map-container > #export-print-preview-map {
-    height: 8.5in;
     width: 7.9in;
+    height: 9.9in;
 }
