@@ -10,7 +10,7 @@
     "Save & Share": "Guardar y Compartir",
     "Receive help on how to use this application": "Recibir ayuda sobre cómo utilizar esta aplicación",
     "Help": "Ayuda",
-    "Tour": "Tutorial",
+    "Tour": "Gira",
     "Allow maps to show different extents": "Permitir que los mapas muestren diferentes zonas",
     "Unlink Maps": "Desvincular mapas 1 y 2",
     "Force maps to show the same extent": "Ver la misma zona en ambos mapas",
@@ -77,5 +77,9 @@
     "View": "Ver",
     "more": "más",
     "View less": "Ver menos",
-    "Find address or place": "Encontrar dirección o lugar"
+    "Find address or place": "Encontrar dirección o lugar",
+    "Letter": "Carta",
+    "Page Size": "Tamaño de página",
+    "Embed": "Empotrar",
+    "You can copy and paste the following code to embed this map on your website.": "Puede copiar y pegar el siguiente código para insertar este mapa en su sitio web."
 }

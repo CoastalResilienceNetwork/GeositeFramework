@@ -10,7 +10,7 @@
         <% } %>
 
         <% if (plugins) { %>
-        <h3>Start exploring</h3>
+        <h3 class="i18n" data-i18n="Start exploring">Start exploring</h3>
         <div class="plugins">
             <ul>
             <% _.each(plugins, function(plugin) { %>
@@ -33,7 +33,7 @@
                             <p><%= plugin.description %></p>
                         <% } %>
                     </div>
-                    <button class="button launch-plugin" data-plugin-name="<%= plugin.pluginName %>">Go</button>
+                    <button class="button launch-plugin i18n" data-i18n="Go" data-plugin-name="<%= plugin.pluginName %>">Go</button>
                 </li>
             <% }); %>
             </ul>
@@ -41,7 +41,7 @@
         <% } %>
 
         <% if (scenarios) { %>
-        <h3>One-click maps</h3>
+        <h3 class="i18n" data-i18n="One-click maps">One-click maps</h3>
         <div class="scenarios">
             <ul>
             <% _.each(scenarios, function(scenario) { %>
@@ -64,7 +64,7 @@
                             <p><%= scenario.description %></p>
                         <% } %>
                     </div>
-                    <button class="button launch-scenario" data-save-code="<%= scenario.saveCode %>">Go</button>
+                    <button class="button launch-scenario i18n" data-i18n="Go" data-save-code="<%= scenario.saveCode %>">Go</button>
                 </li>
             <% }); %>
             </ul>
@@ -72,7 +72,7 @@
         <% } %>
 
         <% if (partners) { %>
-        <h3>Partners</h3>
+        <h3 class="i18n" data-i18n="Partners">Partners</h3>
         <div class="partners">
             <ul>
             <% _.each(partners, function(partner) { %>
