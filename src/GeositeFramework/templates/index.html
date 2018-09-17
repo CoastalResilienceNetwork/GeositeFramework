@@ -23,7 +23,7 @@
 {
     foreach (var link in links)
     {
-        if (link != Model.HeaderLinks.First() && showDividers)
+        if (link != headerLinks.First() && showDividers)
         {
             <li class="divider"></li>
         }
@@ -75,10 +75,6 @@
     <title>{{ titleMain.text }} | {{ titleDetail.text }}</title>
 
     <!-- Load CSS for plugins -->
-    @foreach (var url in Model.PluginCssUrls)
-    {
-        <link rel="stylesheet" href="@url">
-    }
     <link rel='shortcut icon' href='img/favicon.ico' type='image/x-icon'/ >
 
     <link rel="stylesheet" href="//js.arcgis.com/3.25/dijit/themes/claro/claro.css">
@@ -103,20 +99,20 @@
     <style type="text/css">
         header,
         #sidebar-toggle {
-            background: @Model.PrimaryColor;
+            background: {{ colors.primary }};
         }
 
         .nav-apps {
-            background-color: @Model.TertiaryColor;
+            background-color: {{ colors.tertiary }};
         }
 
         .nav-apps-button.active.app-displayed {
-            background-color: @Model.ActiveAppColor;
+            background-color: {{ colors.active }};
         }
 
         .color-primary,
         .alert-primary {
-            color: @Model.SecondaryColor;
+            color: {{ colors.secondary }};
         }
 
         .background-primary,
@@ -127,7 +123,7 @@
         .loading.loading-pulse.loading-primary,
         .loading.loading-blink.loading-primary>div,
         .alert-primary {
-            background-color: @Model.SecondaryColor;
+            background-color: {{ colors.secondary }};
         }
 
         .button:focus,
@@ -135,17 +131,17 @@
         .button-secondary:focus,
         .button-danger:focus,
         .button-warning:focus {
-            box-shadow: 0 1px 2px -1px @Model.SecondaryColor;
+            box-shadow: 0 1px 2px -1px {{ colors.secondary }};
         }
 
         .header-dropdown .dropdown-menu:after {
-            border-bottom: 7px solid @Model.SecondaryColor;
+            border-bottom: 7px solid {{ colors.secondary }};
         }
 
         .loading.loading-spinner.loading-primary {
-            border-left: 1.1em solid @Model.SecondaryColor;
-            border-bottom: 1.1em solid @Model.SecondaryColor;
-            border-right: 1.1em solid @Model.SecondaryColor;
+            border-left: 1.1em solid {{ colors.secondary }};
+            border-bottom: 1.1em solid {{ colors.secondary }};
+            border-right: 1.1em solid {{ colors.secondary }};
         }
 
         /* Use custom colors for overlay */
@@ -154,7 +150,7 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active
         {
-            background: @Model.SecondaryColor;
+            background: {{ colors.secondary }};
         }
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_left:after,
@@ -162,22 +158,22 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_left:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_top:after {
-            border-top: 15px solid @Model.SecondaryColor;
+            border-top: 15px solid {{ colors.secondary }};
         }
 
         body .popover-header {
-            background-color: @Model.PrimaryColor;
+            background-color: {{ colors.primary }};
         }
 
         body .tlypageguide_shadow:after {
-            background-color: @Model.SecondaryColor;
+            background-color: {{ colors.secondary }};
             opacity: 0.2;
         }
         .dropdown-submenu > a:not(:hover) {
-            background-color: @Model.SecondaryColor;
+            background-color: {{ colors.secondary }};
         }
 
-        @if (Model.SinglePluginMode) {
+        @if ({{ singlePluginMode }}) {
         <text>
         .sidebar-content {
             height: 100%;
@@ -189,11 +185,11 @@
         }
 
         #toggle-plugin-container button {
-            background-color: @Model.PrimaryColor;
-            border-color: @Model.PrimaryColor;
+            background-color: {{ colors.primary }};
+            border-color: {{ colors.primary }};
         }
         #toggle-plugin-container button:hover {
-            background-color: @Model.SecondaryColor;
+            background-color: {{ colors.secondary }};
         }
 
         /* Ideally these would be stored in class, but when the ESRI search is
@@ -206,7 +202,7 @@
         }
     </style>
 
-    @if (Model.GoogleAnalyticsPropertyId != null)
+    @if ({{ googleUrlShortenerApiKey }}!= null)
     {
         <!-- Google Analytics -->
         <script>
@@ -215,7 +211,7 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            ga('create', 'UA-@Model.GoogleAnalyticsPropertyId', 'auto');
+            ga('create', 'UA-{{ googleUrlShortenerApiKey }}', 'auto');
             ga('send', 'pageview');
         </script>
         <!-- End Google Analytics -->
@@ -236,14 +232,14 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        @if (Model.SinglePluginMode) {
+        @if ({{ singlePluginMode }}) {
         <text>
         <div id="single-plugin-mode-help-container">
             Help
         </div>
         </text>
         }
-        <nav class="nav-apps plugins nav-apps-narrow @(Model.SinglePluginMode ? "single-plugin-mode" : "")">
+        <nav class="nav-apps plugins nav-apps-narrow @({{ singlePluginMode }} ? "single-plugin-mode" : "")">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
                 <div id="sidebar-toggle">
@@ -253,7 +249,7 @@
         </nav>
         <div class="flex-expand">
             <div class="flex-container map-container">
-                @if (Model.SinglePluginMode) {
+                @if ({{ singlePluginMode }}) {
                 <div id="toggle-plugin-container" class="single-plugin-mode">
                     <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
                 </div>
@@ -271,7 +267,7 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        @if (!Model.SinglePluginMode) {
+                                        @if (!{{ singlePluginMode }}) {
                                             <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
                                         }
                                         <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
@@ -703,7 +699,7 @@
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
-        @if (!@Model.SinglePluginMode) {
+        @if (!{{ singlePluginMode }}) {
         <div class="dropdown header-dropdown nav-main-dropdown">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -711,12 +707,12 @@
                         <i class="dropdown-icon icon-menu"></i>
                     </div>
                     <div class="nav-main-title">
-                        @Model.TitleMain.Text
+                        {{ titleMain.text }}
                     </div>
                 </div>
             </button>
             <ul class="dropdown-menu" aria-labelledby="header-menu">
-                @RenderLinks(Model.HeaderLinks)
+                @RenderLinks(headerLinks)
             </ul>
         </div>
         } else {
@@ -727,14 +723,14 @@
         </div>
         }
         <div class="nav-region-subtitle">
-            @if (!Model.SinglePluginMode) {
-                @Model.TitleDetail.Text
+            @if (!{{ singlePluginMode }}) {
+                {{ titleDetail.text }}
             } else {
                 <text><span id="show-single-plugin-mode-help">About</span></text>
             }
         </div>
         <div id="search"></div>
-        @if (@Model.SinglePluginMode) {
+        @if ({{ singlePluginMode }}) {
         <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -744,7 +740,7 @@
                 </div>
             </button>
             <ul class="dropdown-menu" aria-labelledby="header-menu">
-                @RenderLinks(Model.HeaderLinks)
+                @RenderLinks(headerLinks)
             </ul>
         </div>
         }
@@ -769,7 +765,7 @@
     <!-- Area for the main map to get setup for printing. -->
     <div id="map-print-sandbox">
         <div class="print-sandbox-header">
-            <img src="@Model.PrintHeaderLogo" title="Header Logo" class="logo" />
+            <img src="{{ print.headerLogoPath }}" title="Header Logo" class="logo" />
             <h1></h1>
         </div>
         <div id="print-map-container"></div>
@@ -859,7 +855,7 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
-    @if (@Model.SinglePluginMode) {
+    @if ({{ singlePluginMode }}) {
     <text>
         <script src="js/SinglePluginModeHelp.js"></script>
     </text>
