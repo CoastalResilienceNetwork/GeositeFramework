@@ -13,7 +13,13 @@ def template_index():
     j2_env = Environment(loader=FileSystemLoader(''),
                          trim_blocks=True)
     region_json = convert_region_json()
-    templated = j2_env.get_template('./GeositeFramework/templates/index.html').render(region_json)
+    templated = j2_env.get_template('./GeositeFramework/template_index.html').render(region_json)
+
+    # write jinja template to disk, to be used in geosite static assets build
+    # as well as served the this project's development server
+    with open("./GeositeFramework/index.html", "wb") as fh:
+        fh.write(templated)
+
     return templated
 
 if __name__ == '__main__':
