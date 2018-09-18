@@ -8,7 +8,7 @@ fi
 
 function usage() {
     echo -n "Usage: $(basename "$0")
-    Attempts to install dependencies.
+    Creates app container if nonexistant and attempts to install dependencies
     "
 }
 
@@ -19,8 +19,7 @@ then
         usage
     else
         if docker-compose --version; then
-            docker-compose exec app sh -c \
-            "pip install -r ./GeositeFramework/requirements.txt"
+            docker-compose build
         else
             echo "ERROR: Install docker & docker-compose locally."
             exit 1

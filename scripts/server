@@ -8,7 +8,7 @@ fi
 
 function usage() {
     echo -n "Usage: $(basename "$0")
-    Starts the python development server.
+        Starts the python development server.
     "
 }
 
