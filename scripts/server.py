@@ -4,6 +4,7 @@ import os
 import logging
 from BaseHTTPServer import HTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
+import main
 
 PORT = 54633
 PATH_TO_PROJECT = 'GeositeFramework/'
@@ -24,6 +25,7 @@ class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
         return modified_path
 
 def serve():
+    main.template_index() ## create template files
     server = CustomRootHTTPServer(PATH_TO_PROJECT, ('', PORT), CustomRootHTTPRequestHandler)
     logging.info('Now serving on http://localhost:54633')
     server.serve_forever()

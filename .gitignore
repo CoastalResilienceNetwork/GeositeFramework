@@ -16,6 +16,7 @@ node_modules
 # Compiled files
 src/GeositeFramework/bin/
 src/GeositeFramework/obj/
+src/GeositeFramework/index.html
 */Obj/       # git is case sensitive
 */Generated_Code/
 PrecompiledWeb
