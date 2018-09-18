@@ -24,8 +24,12 @@ class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
             modified_path = os.path.join(modified_path, word)
         return modified_path
 
+    def do_GET(self):     
+        main.template_index() ## create template files    
+
+        return SimpleHTTPRequestHandler.do_GET(self)
+
 def serve():
-    main.template_index() ## create template files
     server = CustomRootHTTPServer(PATH_TO_PROJECT, ('', PORT), CustomRootHTTPRequestHandler)
     logging.info('Now serving on http://localhost:54633')
     server.serve_forever()
