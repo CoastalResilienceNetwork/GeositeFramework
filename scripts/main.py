@@ -17,10 +17,8 @@ def template_index():
 
     # write jinja template to disk, to be used in geosite static assets build
     # as well as served the this project's development server
-    with open("./GeositeFramework/index.html", "wb") as fh:
-        fh.write(templated)
-
-    return templated
+    with open("./GeositeFramework/index.html", "wb") as f:
+        f.write(templated)
 
 if __name__ == '__main__':
     template_index()
