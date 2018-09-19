@@ -106,6 +106,10 @@ define([
                 if (config.infographic) {
                     this.addInfographicButton(config);
                 }
+
+                if ($.i18n) {
+                    $($el).localize();
+                }
             },
 
             getTemplateById: function(id) {

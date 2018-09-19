@@ -7,6 +7,7 @@ require(['use!Geosite',
          'framework/util/ajax',
          'esri/map',
          'esri/dijit/Scalebar',
+         'esri/layers/OpenStreetMapLayer',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
          'esri/SpatialReference',
@@ -18,6 +19,7 @@ require(['use!Geosite',
              ajaxUtil,
              Map,
              ScaleBar,
+             OpenStreetMapLayer,
              ArcGISTiledMapServiceLayer,
              Extent,
              SpatialReference,
@@ -29,7 +31,11 @@ require(['use!Geosite',
         var basemap = getSelectedBasemap(model);
         if (basemap.layer === undefined) {
             // This basemap has no layer yet, so make one and cache it
-            basemap.layer = new ArcGISTiledMapServiceLayer(basemap.url);
+            if (basemap.name.toLowerCase() === 'openstreetmap') {
+                basemap.layer = new OpenStreetMapLayer();
+            } else {
+                basemap.layer = new ArcGISTiledMapServiceLayer(basemap.url);
+            }
             esriMap.addLayer(basemap.layer);
         }
         return basemap.layer;
@@ -278,7 +284,9 @@ require(['use!Geosite',
                 result = [];
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
-                if (serviceInfo && service.visible && serviceInfo.pluginObject.showServiceLayersInLegend) {
+                if (serviceInfo && service.visible &&
+                    serviceInfo.pluginObject.showServiceLayersInLegend &&
+                    service.visibleLayers) {
                     service.visibleLayers.sort(function(a, b) { return a - b; });
                     _.each(service.visibleLayers, function(layerId) {
                         var layer,

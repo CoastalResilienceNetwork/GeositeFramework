@@ -1383,7 +1383,7 @@ header .nav-main {
     position: absolute;
     right: 10px;
     top: 12px;
-    z-index: 2800;
+    z-index: 5800;
 }
 /* -----------------------------------------
    Content Area - Map
@@ -2224,7 +2224,7 @@ body.x-body {
     }
 
     #single-plugin-mode-help-container {
-        z-index: 5010;
+        z-index: 5001;
     }
 
     #search {
