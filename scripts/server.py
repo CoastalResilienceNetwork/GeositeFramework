@@ -7,7 +7,7 @@ from SimpleHTTPServer import SimpleHTTPRequestHandler
 import main
 
 PORT = 54633
-PATH_TO_PROJECT = 'GeositeFramework/'
+PATH_TO_PROJECT = 'src/GeositeFramework/'
 
 logging.basicConfig(level=logging.INFO)
 

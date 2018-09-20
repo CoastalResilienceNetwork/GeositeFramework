@@ -7,9 +7,11 @@ if [[ -n "${GEOSITE_DEBUG}" ]]; then
 fi
 
 function usage() {
-    echo -n "Usage: $(basename "$0")
+    echo -n "Usage: $(basename "$0") OPTION(S)
         Starts the python development server.
-    "
+
+        Options:
+        -d     Start server within a python docker container"
 }
 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]
@@ -18,6 +20,11 @@ then
     then
         usage
     else
-        docker-compose -f docker-compose.yml up
+        if [ "${1:-}" = "-d" ]
+        then
+            docker-compose -f docker-compose.yml up
+        else
+            python ./scripts/server.py
+        fi
     fi
 fi
