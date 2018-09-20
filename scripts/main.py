@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import os
 import json
@@ -16,8 +16,8 @@ def template_index():
     templated = j2_env.get_template('./src/GeositeFramework/template_index.html').render(region_json)
 
     # write jinja template to disk, to be used in geosite static assets build
-    # as well as served the this project's development server
-    with open("./src/GeositeFramework/index.html", "wb") as f:
+    # as well as served from this project's development server
+    with open('./src/GeositeFramework/index.html', 'wb') as f:
         f.write(templated)
 
 if __name__ == '__main__':
