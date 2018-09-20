@@ -638,12 +638,20 @@ require(['use!Geosite',
                     mapReadyDeferred.resolve(map);
 
                     $('#print-modal-confirm').on('click', function() {
+                        // Before moving the map, get the current center and extent
+                        var center = map.extent.getCenter();
+                        var extent = map.extent;
+
                         // Move the map from the main app area to to the sandbox where
                         // the plugin can mess with it's positioning among its other elements
                         var mapNode = $("#map-0").detach();
                         $(mapNode).appendTo($printSandbox);
-                        map.resize();
+                        map.resize(true);
                         map.reposition();
+
+                        // Ensure the map view matches the view before it was moved.
+                        map.centerAt(center);
+                        map.setExtent(extent);
 
                         // Move the legend out of the map container for easier styling
                         var legendNode = $("#legend-container-0").detach();

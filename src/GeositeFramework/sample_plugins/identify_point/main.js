@@ -100,6 +100,8 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             },
 
             prePrintModal: function(preModalDeferred, $printSandbox, $modalSandbox, mapObject) {
+                var self = this;
+
                 $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
                     $modalSandbox.append(html);
 
@@ -107,6 +109,20 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                     $(mapNode).appendTo('.print-preview-map-container');
                     mapObject.resize(true);
                     mapObject.reposition();
+
+                    $modalSandbox.find('#add-layer').click(function() {
+                        if (self.layer) {
+                            self.layer.setVisibility(true);
+                        } else {
+                            var layerUrl = "http://services.coastalresilience.org/arcgis/rest/services/US/Population/MapServer"
+                            self.layer = new esri.layers.ArcGISDynamicMapServiceLayer(layerUrl, {
+                                "opacity": 0.8,
+                                "visibleLayers": [1]
+                            });
+
+                            mapObject.addLayer(self.layer);
+                        }
+                    });
                 }).then(preModalDeferred.resolve());
 
                 // Append optional images to print sandbox, which are hidden by default
@@ -123,7 +139,6 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             postPrintModal: function(postModalDeferred, $printSandbox, $modalSandbox, mapObject) {
                 var includeNorthArrow = $modalSandbox.find('#north-arrow').is(':checked');
                 var includeTncLogo = $modalSandbox.find('#tnc-logo').is(':checked');
-                var addLayer = $modalSandbox.find('#add-layer').is(':checked');
 
                 if (includeNorthArrow) {
                     $printSandbox.find('#north-arrow-img').show();
@@ -131,18 +146,6 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
 
                 if (includeTncLogo) {
                     $printSandbox.find('#logo-img').show();
-                }
-
-                if (addLayer) {
-                    if (this.layer) {
-                        this.layer.setVisibility(true);
-                    } else {
-                        this.layer = new esri.layers.ArcGISDynamicMapServiceLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Population_World/MapServer", {
-                            "opacity": 0.8
-                        });
-
-                        mapObject.addLayer(this.layer);
-                    }
                 }
 
                 window.setTimeout(function() {
