@@ -7,6 +7,6 @@ services:
     ports:
       - "54633:54633"
     volumes:
-        - ./src/GeositeFramework:/usr/src/GeositeFramework
+        - ./src/GeositeFramework:/usr/src/src/GeositeFramework
         - ./scripts:/usr/src/scripts
         - ./dist:/usr/dist
