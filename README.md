@@ -10,21 +10,47 @@ Copyright (C) 2013 The Nature Conservancy
 ## Static Site Conversion (**work in progress**)
 This project is actively being converted into a static site and away from using .NET on the `feature/task-1` branch. During this time, the project will continue to work off `develop` via the typical set up in Visual Studio on Windows. It may break with Visual Studio on `feature/task-1` and its child branches.
 
-### Run a python development environment
-To run the project locally, on any OS, clone the repo and run `./scripts/update` from root to set up. To run the project server thereafter, `./scripts/server`.
+*Note the static site port is 54634 instead of 54633*
 
-The project uses docker-compose and the app container can be accessed in the usual way:
-`docker-compose exec app /bin/bash`
+### Run a python development environment
+To run the project locally, on any OS, clone the repo and ensure you have `Python 2.x`. You can choose to work on your host machine or within a docker container. It is advised to work within docker if you'd rather not adjust your local python setup.
+
+#### Host
+Ensure `pip` is installed.
+
+Install the python requirements:
+`python ./scripts/update.py`
+
+Run the development server and serve the static assets:
+`python ./scripts/server.py`
+
+
+#### Docker container
+Ensure [`docker`](https://www.docker.com/) and `docker-compose` are installed.
+The same commands as above will run within docker if passed a docker flag, `-d`:
+
+Build the docker container with dependencies installed and serve the static assets:
+`python ./scripts/server.py -d`
+
+If requirements should change, dependencies can be updated via script:
+`python ./scripts/update.py -d`
+
+Containers can be accessed by bash in the usual way:
+`docker-compose exec <container_name> /bin/bash`
+
+To stop the docker server:
+`docker kill server`
 
 #### Ports
 
 | Service            | Port                              |
 | ------------------ | --------------------------------- |
-| Python Dev Server  | [`54633`](http://localhost:54633) |
+| Python Dev Server  | [`54634`](http://localhost:54634) |
 
 #### Scripts
 
-| Name           | Description                                                   |
-| -------------- | ------------------------------------------------------------- |
-| `server`       | Run a Python SimpleHTTPServer serving the templated app       |
-| `update`       | Create app container and install dependencies                 |
+| Name               | Description                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| `server.py`        | Run a Python SimpleHTTPServer serving the templated app       |
+| `update.py`        | Install python dependencies                                   |
+| `create_static.py` | Write and compile static assets directly                      |
