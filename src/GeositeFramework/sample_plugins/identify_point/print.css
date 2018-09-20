@@ -53,7 +53,9 @@
 
 .print-preview-map-container #map-0.map {
     position: relative;
-    height: 325px;
+    height: 300px;
+    width: 300px;
+    margin: 10px auto;
 }
 
 .popover-section {
