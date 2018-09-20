@@ -18,6 +18,7 @@ class CustomRootHTTPServer(HTTPServer):
 
 class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
     def translate_path(self, path):
+        """Serve files from a specific directory."""
         words = filter(None, path.split('/'))
         modified_path = self.base_path
         for word in words:

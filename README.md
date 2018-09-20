@@ -19,27 +19,28 @@ To run the project locally, on any OS, clone the repo and ensure you have `Pytho
 Ensure `pip` is installed.
 
 Install the python requirements:
-`python ./scripts/update.py`
+```python ./scripts/update.py```
 
 Run the development server and serve the static assets:
-`python ./scripts/server.py`
+```python ./scripts/server.py```
 
 
 #### Docker container
-Ensure [`docker`](https://www.docker.com/) and `docker-compose` are installed.
+Ensure [`docker`](https://www.docker.com/) and `docker-compose` are installed and that the docker client is running.
+
 The same commands as above will run within docker if passed a docker flag, `-d`:
 
 Build the docker container with dependencies installed and serve the static assets:
-`python ./scripts/server.py -d`
+```python ./scripts/server.py -d```
 
 If requirements should change, dependencies can be updated via script:
-`python ./scripts/update.py -d`
+```python ./scripts/update.py -d```
 
 Containers can be accessed by bash in the usual way:
-`docker-compose exec <container_name> /bin/bash`
+```docker-compose exec <container_name> /bin/bash```
 
 To stop the docker server:
-`docker kill server`
+```docker-compose stop server```
 
 #### Ports
 
@@ -48,6 +49,8 @@ To stop the docker server:
 | Python Dev Server  | [`54634`](http://localhost:54634) |
 
 #### Scripts
+
+Prefix script calls with `python`, if python is not in your `$PATH`.
 
 | Name               | Description                                                   |
 | ------------------ | ------------------------------------------------------------- |

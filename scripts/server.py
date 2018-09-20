@@ -8,11 +8,11 @@ Usage: python ./scripts/server.py [OPTIONS]
 """
 import argparse
 import subprocess
-import  py_server
+import py_server
 import signal
 
 def handler(signum, frame):
-    subprocess.call('docker kill server', shell=True)
+    subprocess.call('docker-compose stop server', shell=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
