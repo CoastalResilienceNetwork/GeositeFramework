@@ -1,38 +1,29 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
-import os
-import logging
-from BaseHTTPServer import HTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
-import main
+"""
+Static site server script
 
-PORT = 54633
-PATH_TO_PROJECT = 'src/GeositeFramework/'
+Usage: python ./scripts/server.py [OPTIONS]
 
-logging.basicConfig(level=logging.INFO)
+"""
+import argparse
+import subprocess
+import  py_server
+import signal
 
-class CustomRootHTTPServer(HTTPServer):
-    def __init__(self, base_path, *args, **kwargs):
-        HTTPServer.__init__(self, *args, **kwargs)
-        self.RequestHandlerClass.base_path = base_path
-
-class CustomRootHTTPRequestHandler(SimpleHTTPRequestHandler):
-    def translate_path(self, path):
-        words = filter(None, path.split('/'))
-        modified_path = self.base_path
-        for word in words:
-            modified_path = os.path.join(modified_path, word)
-        return modified_path
-
-    def do_GET(self):     
-        main.template_index() ## create template files    
-
-        return SimpleHTTPRequestHandler.do_GET(self)
-
-def serve():
-    server = CustomRootHTTPServer(PATH_TO_PROJECT, ('', PORT), CustomRootHTTPRequestHandler)
-    logging.info('Now serving on http://localhost:54633')
-    server.serve_forever()
+def handler(signum, frame):
+    subprocess.call('docker kill server', shell=True)
 
 if __name__ == '__main__':
-    serve()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d',
+                        help='Start server within a python docker container.',
+                        action='store_true')
+    args = parser.parse_args()
+
+    if args.d:
+        subprocess.call('docker-compose -f docker-compose.yml up',
+                        shell=True)
+        signal.signal(signal.SIGINT, handler) # kill docker container when script is stopped
+    else:
+        py_server.serve()
