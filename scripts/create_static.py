@@ -10,6 +10,9 @@ Usage: python ./scripts/create_static.py [OPTIONS]
 import argparse
 import subprocess
 import main
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-d',
@@ -17,13 +20,13 @@ parser.add_argument('-d',
                     action='store_true')
 args = parser.parse_args()
 
+logging.info('Compiling static assets...')
+
 if args.d:
-    commands = ['docker-compose start server',
-                'echo "Compiling static assets..."',
-                'docker-compose exec server sh -c ./scripts/main.py',
-                'echo "Finished compiling static assets...shutting down container"',
-                'docker-compose kill server']
-    for command in commands:
-        subprocess.call(command, shell=True)
+    command = ('docker-compose run --rm server -c'
+                '''"import subprocess;subprocess.call('./scripts/main.py')"''')
+    subprocess.call(command, shell=True)
 else:
     main.template_index()
+
+logging.info('Finished compiling static assets.')

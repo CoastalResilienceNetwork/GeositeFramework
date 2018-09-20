@@ -36,3 +36,7 @@ Thumbs.db    # Having images in the source tree generates those files in Explore
 # App folders
 src/GeositeFramework/logs
 src/GeositeFramework/languages
+
+# Python
+*.pyc
+*__pycache__/

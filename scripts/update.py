@@ -7,6 +7,9 @@ Usage: python ./scripts/update.py [OPTIONS]
 """
 import argparse
 import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-d',
@@ -14,6 +17,7 @@ parser.add_argument('-d',
                     action='store_true')
 args = parser.parse_args()
 
+logging.info('Updating python dependencies...')
 if args.d:
     subprocess.call('docker-compose build', shell=True)
 else:
