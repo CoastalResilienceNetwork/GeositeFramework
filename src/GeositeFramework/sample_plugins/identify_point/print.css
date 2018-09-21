@@ -58,6 +58,10 @@
     margin: 10px auto;
 }
 
+.print-preview-map-container #legend-container-0 {
+    display: none !important;
+}
+
 .popover-section {
     height: 400px;
 }
