@@ -20,12 +20,12 @@ parser.add_argument('-d',
                     action='store_true')
 args = parser.parse_args()
 
-logging.info('Compiling static assets...')
+logging.info('Attempting to compile static assets...')
 
 if args.d:
     command = ('docker-compose run --rm server -c'
                 '''"import subprocess;subprocess.call('./scripts/main.py')"''')
-    subprocess.call(command, shell=True)
+    subprocess.call(command, stderr=subprocess.STDOUT, shell=True)
 else:
     main.template_index()
 
