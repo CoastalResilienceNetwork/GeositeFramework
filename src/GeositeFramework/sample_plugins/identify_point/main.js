@@ -157,7 +157,7 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                     } else {
                         postModalDeferred.resolve();
                     }
-                }, 500);
+                }, 750);
             },
 
             postPrintCleanup: function(mapObject) {
