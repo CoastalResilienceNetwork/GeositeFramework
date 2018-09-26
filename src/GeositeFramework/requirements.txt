@@ -1,1 +1,2 @@
 Jinja2==2.10
+jsonschema==2.6.0
