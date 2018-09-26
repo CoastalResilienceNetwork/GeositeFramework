@@ -102,29 +102,6 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
             prePrintModal: function(preModalDeferred, $printSandbox, $modalSandbox, mapObject) {
                 var self = this;
 
-                $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
-                    $modalSandbox.append(html);
-
-                    var mapNode = $("#map-0").detach();
-                    $(mapNode).appendTo('.print-preview-map-container');
-                    mapObject.resize(true);
-                    mapObject.reposition();
-
-                    $modalSandbox.find('#add-layer').click(function() {
-                        if (self.layer) {
-                            self.layer.setVisibility(true);
-                        } else {
-                            var layerUrl = "http://services.coastalresilience.org/arcgis/rest/services/US/Population/MapServer"
-                            self.layer = new esri.layers.ArcGISDynamicMapServiceLayer(layerUrl, {
-                                "opacity": 0.8,
-                                "visibleLayers": [1]
-                            });
-
-                            mapObject.addLayer(self.layer);
-                        }
-                    });
-                }).then(preModalDeferred.resolve());
-
                 // Append optional images to print sandbox, which are hidden by default
                 $printSandbox.append('<div class="sample"><img id="north-arrow-img" src="sample_plugins/identify_point/north-arrow.png"/></div>');
                 $printSandbox.append('<div class="sample"><img id="logo-img" src="sample_plugins/identify_point/tnc-logo.png"/></div>');
@@ -132,8 +109,34 @@ define(["dojo/_base/declare", "framework/PluginBase", "dojo/text!./template.html
                 // Zoom and center to Philadelphia, as a demonstration
                 this.initialZoom = mapObject.getZoom();
                 this.initialCenter = mapObject.extent.getCenter();
-
                 mapObject.centerAndZoom([-75.1641, 39.9562], 8)
+
+                if (self.usePrintModal) {
+                    $.get('sample_plugins/identify_point/html/print-form.html', function(html) {
+                        $modalSandbox.append(html);
+
+                        var mapNode = $("#map-0").detach();
+                        $(mapNode).appendTo('.print-preview-map-container');
+                        mapObject.resize(true);
+                        mapObject.reposition();
+
+                        $modalSandbox.find('#add-layer').click(function() {
+                            if (self.layer) {
+                                self.layer.setVisibility(true);
+                            } else {
+                                var layerUrl = "http://services.coastalresilience.org/arcgis/rest/services/US/Population/MapServer"
+                                self.layer = new esri.layers.ArcGISDynamicMapServiceLayer(layerUrl, {
+                                    "opacity": 0.8,
+                                    "visibleLayers": [1]
+                                });
+
+                                mapObject.addLayer(self.layer);
+                            }
+                        });
+                    }).then(preModalDeferred.resolve());
+                } else {
+                    preModalDeferred.resolve();
+                }
             },
 
             postPrintModal: function(postModalDeferred, $printSandbox, $modalSandbox, mapObject) {
