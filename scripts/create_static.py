@@ -10,7 +10,6 @@ Usage: python ./scripts/create_static.py [OPTIONS]
 import argparse
 import sys
 import subprocess
-import main
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -25,16 +24,20 @@ logging.info('Attempting to compile static assets...')
 
 if args.d:
     command = ('docker-compose run --rm server ./scripts/main.py')
-    return_code = subprocess.call(command, stderr=subprocess.STDOUT, shell=True)
+    return_code = subprocess.call(command, stderr=subprocess.STDOUT,
+                                  shell=True)
 else:
     command = ('./scripts/main.py')
-    return_code = subprocess.call(command, stderr=subprocess.STDOUT, shell=True)
+    return_code = subprocess.call(command, stderr=subprocess.STDOUT,
+                                  shell=True)
 
 if return_code == 1:
-    logging.warn('Failed! Check that your JSON config files are properly formatted.')
+    msg = 'Failed! Check that your JSON config files are properly formatted.'
+    logging.warn(msg)
     sys.exit()
 if return_code == 2:
-    logging.warn('Failed! Check that your JSON config files match their schemas.')
+    msg = 'Failed! Check that your JSON config files match their schemas.'
+    logging.warn(msg)
     sys.exit()
 
 logging.info('Finished compiling static assets.')

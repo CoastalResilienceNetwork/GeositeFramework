@@ -12,9 +12,11 @@ REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 
+
 def convert_json(file):
     with open(file) as f:
         return json.load(f)
+
 
 def template_index():
     # create a jinja environment
@@ -28,7 +30,7 @@ def template_index():
     except ValueError:
         raise
         sys.exit(1)
-    
+
     # validate the json against their JSON schema spec
     try:
         validate(region_json, region_schema_json)
@@ -43,6 +45,7 @@ def template_index():
     # as well as served from this project's development server
     with open(IDX_FILE, 'wb') as f:
         f.write(templated_idx)
+
 
 if __name__ == '__main__':
     template_index()
