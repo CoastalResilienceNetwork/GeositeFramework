@@ -1,6 +1,6 @@
 {
     "css": [
-        "sample_plugins/identify_point/main.css",
+        "sample_plugins/identify_point/main.css"
     ],
     "use": { }
 }
