@@ -702,16 +702,16 @@
         {% endif %}
     </header>
 
-    @Html.Partial("TourInfo")
+   {% include "src/GeositeFramework/Views/Shared/TourInfo.cshtml" %}
 
     <!-- If a view is provided (overwritten via the region repo), a user can
         change the region setting `launchpad.html = true` to use this content -->
     <div id="custom-launchpad-content" style="display:none;">
-        @Html.Partial("CustomLaunchpadContent")
+        {% include "src/GeositeFramework/Views/Shared/CustomLaunchPadContent.cshtml" %}
     </div>
 
     <div id="single-plugin-mode-help-content" style="display:none;">
-        @Html.Partial("SinglePluginModeHelp")
+        {% include "src/GeositeFramework/Views/Shared/SinglePluginModeHelp.cshtml" %}
     </div>
 
     <!-- Area for plugins to arrange their markup independent
