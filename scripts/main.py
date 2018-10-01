@@ -27,16 +27,18 @@ def template_index():
     try:
         region_json = convert_json(REGION_FILE)
         region_schema_json = convert_json(REGION_SCHEMA_FILE)
-    except ValueError:
-        raise
-        sys.exit(1)
+    except ValueError as e:
+        msg = 'Failed! Check that your region.json ' \
+              'config file is properly formatted. {}'.format(e)
+        sys.exit(msg)
 
     # validate the json against their JSON schema spec
     try:
         validate(region_json, region_schema_json)
-    except exceptions.ValidationError:
-        raise
-        sys.exit(2)
+    except exceptions.ValidationError as e:
+        msg = 'Failed! Check that your region.json ' \
+              'config file matches the schema. {}'.format(e.message)
+        sys.exit(msg)
 
     # template HTML with validated custom JSON configs
     templated_idx = j2_env.get_template(TMPL_FILE).render(region_json)
