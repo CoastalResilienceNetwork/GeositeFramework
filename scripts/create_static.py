@@ -24,20 +24,15 @@ logging.info('Attempting to compile static assets...')
 
 if args.d:
     command = ('docker-compose run --rm server ./scripts/main.py')
-    return_code = subprocess.call(command, stderr=subprocess.STDOUT,
-                                  shell=True)
+    return_value = subprocess.call(command, stderr=subprocess.STDOUT,
+                                   shell=True)
 else:
     command = ('./scripts/main.py')
-    return_code = subprocess.call(command, stderr=subprocess.STDOUT,
-                                  shell=True)
+    return_value = subprocess.call(command, stderr=subprocess.STDOUT,
+                                   shell=True)
 
-if return_code == 1:
-    msg = 'Failed! Check that your JSON config files are properly formatted.'
-    logging.warn(msg)
-    sys.exit()
-if return_code == 2:
-    msg = 'Failed! Check that your JSON config files match their schemas.'
-    logging.warn(msg)
+if return_value != 0:
+    logging.error('Exiting before compiling static assets.')
     sys.exit()
 
 logging.info('Finished compiling static assets.')
