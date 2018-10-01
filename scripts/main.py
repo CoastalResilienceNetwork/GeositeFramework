@@ -2,20 +2,14 @@
 
 import os
 import sys
-import json
 from jinja2 import Environment, FileSystemLoader
 from jsonschema import validate, exceptions
+from script_helpers import to_json, BASE_DIR
 
-BASE_DIR = os.path.join('src', 'GeositeFramework')
 REGION_FILE = os.path.join(BASE_DIR, 'region.json')
 REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
-
-
-def convert_json(file):
-    with open(file) as f:
-        return json.load(f)
 
 
 def template_index():
@@ -25,8 +19,8 @@ def template_index():
 
     # extract json from their files
     try:
-        region_json = convert_json(REGION_FILE)
-        region_schema_json = convert_json(REGION_SCHEMA_FILE)
+        region_json = to_json(REGION_FILE)
+        region_schema_json = to_json(REGION_SCHEMA_FILE)
     except ValueError as e:
         msg = 'Failed! Check that your region.json ' \
               'config file is properly formatted. {}'.format(e)
