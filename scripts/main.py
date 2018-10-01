@@ -2,6 +2,7 @@
 
 import os
 import sys
+import plugin_loader
 from jinja2 import Environment, FileSystemLoader
 from jsonschema import validate, exceptions
 from script_helpers import to_json, BASE_DIR
@@ -33,6 +34,30 @@ def template_index():
         msg = 'Failed! Check that your region.json ' \
               'config file matches the schema. {}'.format(e.message)
         sys.exit(msg)
+
+    # assemble and validate plugins
+    try:
+        base_path = os.path.join(os.path.dirname(
+                        os.path.dirname(os.path.realpath(__file__))), BASE_DIR)
+        plugin_directories = plugin_loader.get_plugin_directories(region_json,
+                                                                  base_path)
+        plugin_loader.verify_directories_exist(plugin_directories)
+        plugin_folder_paths = [d + '/' + r for d in plugin_directories
+                               for r in os.listdir(d)]
+
+        # Generate plugin config data, folder names, and module names for use
+        # in JS code
+        plugin_config_data = plugin_loader.get_plugin_configuration_data(
+                                plugin_folder_paths)
+        plugin_folder_names = [plugin_loader.get_plugin_folder_path(
+                                base_path, p) for p in plugin_folder_paths]
+        plugin_module_names = [plugin_loader.get_plugin_module_name(
+                                base_path, p) for p in plugin_folder_paths]
+
+        # TODO: Temporary
+        print(plugin_config_data, plugin_folder_names, plugin_module_names)
+    except ValueError as e:
+        sys.exit(e)
 
     # template HTML with validated custom JSON configs
     templated_idx = j2_env.get_template(TMPL_FILE).render(region_json)
