@@ -1,18 +1,59 @@
 #!/usr/bin/env python
 
 import os
+import re
 import codecs
 import sys
 import plugin_loader
 from jinja2 import Environment, FileSystemLoader
 from jsonschema import validate, exceptions
-from script_helpers import to_json, BASE_DIR
+from script_helpers import (to_json,
+                            BASE_DIR,
+                            REGION_FILE,
+                            extract_filepaths_from_dirs)
 
-REGION_FILE = os.path.join(BASE_DIR, 'region.json')
 REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
+
+
+def prepare_languages():
+    # get app-wide translation files
+    try:
+        language_dir = os.path.join(BASE_DIR, 'locales')
+        plugin_loader.verify_directories_exist([language_dir])
+        app_json_files = [os.path.join(language_dir, file) for file in
+                          os.listdir(language_dir) if file.endswith('.json')]
+    except ValueError as e:
+        msg = 'Failed! Check the app has JSON translation files. {}'.format(e)
+        sys.exit(msg)
+
+    # get plug-ins' translation files
+    plugin_folder_paths = plugin_loader.get_plugin_folder_paths()
+    plugin_locales = [str(path+'/locales') for path in plugin_folder_paths
+                      if os.path.exists(path+'/locales')]
+    plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
+
+    # merge app and plugin translation dicts keyed to language code
+    # prefer app dict translations, if conflict
+    # final format:
+    # {
+    #   "es": {
+    #       "Start": "Comience",
+    #   }
+    # }
+    all_json_files = plugin_json_files + app_json_files
+    translations = {}
+
+    for file in all_json_files:
+        language = re.search(r'locales\/(.*?)\.json', file).group(1)
+        if language in translations:
+            translations[language].update(to_json(file))
+        else:
+            translations.update({language: to_json(file)})
+
+    return translations
 
 
 def template_index():
@@ -41,11 +82,7 @@ def template_index():
     try:
         base_path = os.path.join(os.path.dirname(
                         os.path.dirname(os.path.realpath(__file__))), BASE_DIR)
-        plugin_directories = plugin_loader.get_plugin_directories(region_json,
-                                                                  base_path)
-        plugin_loader.verify_directories_exist(plugin_directories)
-        plugin_folder_paths = [d + '/' + r for d in plugin_directories
-                               for r in os.listdir(d)]
+        plugin_folder_paths = plugin_loader.get_plugin_folder_paths(custom_base_path=base_path)
 
         # Generate plugin config data, folder names, and module names for use
         # in JS code
@@ -100,6 +137,11 @@ def template_index():
                 plugin_loader.merge_plugin_config_data(plugin_config_data))
     except ValueError as e:
         sys.exit(e)
+
+    translations = prepare_languages()
+
+    # TODO: Remove print statement. For testing only.
+    print(translations)
 
     # rewrite partials in charset utf-8 for Jinja2 compatibility
     for file in os.listdir(PARTIALS_DIR):
