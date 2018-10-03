@@ -13,7 +13,8 @@ logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-d',
-                    help='Update dependencies within the python docker container.',
+                    help='Update dependencies within ' +
+                         'the python docker container.',
                     action='store_true')
 args = parser.parse_args()
 

@@ -11,8 +11,10 @@ import subprocess
 import py_server
 import signal
 
+
 def handler(signum, frame):
     subprocess.call('docker-compose stop server', shell=True)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -24,6 +26,7 @@ if __name__ == '__main__':
     if args.d:
         subprocess.call('docker-compose -f docker-compose.yml up',
                         shell=True)
-        signal.signal(signal.SIGINT, handler) # kill docker container when script is stopped
+        # kill docker container when script is stopped
+        signal.signal(signal.SIGINT, handler)
     else:
         py_server.serve()
