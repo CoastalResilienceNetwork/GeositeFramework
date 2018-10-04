@@ -600,7 +600,11 @@ require(['use!Geosite',
                     window.print();
 
                     // Close out the modal, which calls the closejs method
-                    TINY.box.hide();
+                    if ($('.tbox').is(':visible')) {
+                        TINY.box.hide();
+                    } else {
+                        printReset(map, pluginObject);
+                    }
                 });
             });
         }
@@ -617,10 +621,13 @@ require(['use!Geosite',
             // If the plugin is not set up for a print modal,
             // resolve any pending pre-print map operations
             if (!pluginObject.usePrintModal) {
-                modalConfirmDeferred.resolve();
-                postModalDeferred.resolve();
-                mapReadyDeferred.resolve();
-                return mapReadyDeferred;
+                // Wrap in a setTimeout to give the map time to update
+                // before initiating print.
+                window.setTimeout(function() {
+                    printSetup(map, pluginObject, $printSandbox, modalConfirmDeferred, postModalDeferred);
+                }, 750);
+
+                return mapReadyDeferred.resolve(map);
             }
 
             // Setup a print modal window for the user.
@@ -638,48 +645,12 @@ require(['use!Geosite',
                     mapReadyDeferred.resolve(map);
 
                     $('#print-modal-confirm').on('click', function() {
-                        // Move the map from the main app area to to the sandbox where
-                        // the plugin can mess with it's positioning among its other elements
-                        var mapNode = $("#map-0").detach();
-                        $(mapNode).appendTo($printSandbox);
-                        map.resize();
-                        map.reposition();
-
-                        // Move the legend out of the map container for easier styling
-                        var legendNode = $("#legend-container-0").detach();
-                        $(legendNode).appendTo($printSandbox);
-
-                        modalConfirmDeferred.resolve();
-
-                        // Pass the modal contents to the plugin,
-                        // so it can extract form values, etc.
-                        var $modalContent = $(this).parent().siblings('#plugin-print-modal-content');
-                        pluginObject.postPrintModal(postModalDeferred, $printSandbox, $modalContent, map);
-
-                        // Move the scalebar inside the map container so
-                        // that it stays with the map.
-                        var scalebar = $('.esriScalebar').detach();
-                        $(scalebar).appendTo('#map-0_root');
+                        printSetup(map, pluginObject, $printSandbox, modalConfirmDeferred, postModalDeferred);
                     });
                 },
 
                 closejs: function () {
-                    // Move the map and legend back to the original container
-                    var mapNode = $('#map-0').detach();
-                    var legendNode = $("#legend-container-0").detach();
-                    $('.map-container').append(mapNode);
-                    $('#map-0').append(legendNode);
-                    map.resize(true);
-
-                    // Move the scalebar back to it's original location
-                    var scalebar = $('.esriScalebar').detach();
-                    $(scalebar).appendTo('#map-0');
-
-                    // Remove print related CSS
-                    $('.base-plugin-print-css').remove();
-                    $('.plugin-print-css').remove();
-
-                    pluginObject.postPrintCleanup(map);
+                    printReset(map, pluginObject)
                 }
             });
 
@@ -709,6 +680,62 @@ require(['use!Geosite',
         function hasHelp(view) {
             var pluginObj = view.model.get('pluginObject');
             return pluginObj.hasHelp;
+        }
+
+        function printSetup(map, pluginObject, $printSandbox, modalConfirmDeferred, postModalDeferred) {
+            // Before moving the map, get the current center and extent
+            var center = map.extent.getCenter();
+            var extent = map.extent;
+
+            // Move the map from the main app area to to the sandbox where
+            // the plugin can mess with it's positioning among its other elements
+            var mapNode = $("#map-0").detach();
+            $(mapNode).appendTo($printSandbox);
+            map.resize(true);
+            map.reposition();
+
+            // Ensure the map view matches the view before it was moved.
+            map.centerAt(center);
+            map.setExtent(extent);
+
+            // Move the legend out of the map container for easier styling
+            var legendNode = $("#legend-container-0").detach();
+            $(legendNode).appendTo($printSandbox);
+
+            modalConfirmDeferred.resolve();
+
+            // Pass the modal contents to the plugin,
+            // so it can extract form values, etc.
+            var $modalContent = $(this).parent().siblings('#plugin-print-modal-content');
+            if ($modalContent.length === 0) {
+                pluginObject.postPrintModal(postModalDeferred, $printSandbox, $modalContent, map);
+            } else {
+                postModalDeferred.resolve();
+            }
+
+            // Move the scalebar inside the map container so
+            // that it stays with the map.
+            var scalebar = $('.esriScalebar').detach();
+            $(scalebar).appendTo('#map-0_root');
+        }
+
+        function printReset(map, pluginObject) {
+            // Move the map and legend back to the original container
+            var mapNode = $('#map-0').detach();
+            var legendNode = $("#legend-container-0").detach();
+            $('.map-container').append(mapNode);
+            $('#map-0').append(legendNode);
+            map.resize(true);
+
+            // Move the scalebar back to it's original location
+            var scalebar = $('.esriScalebar').detach();
+            $(scalebar).appendTo('#map-0');
+
+            // Remove print related CSS
+            $('.base-plugin-print-css').remove();
+            $('.plugin-print-css').remove();
+
+            pluginObject.postPrintCleanup(map);
         }
 
         N.views = N.views || {};

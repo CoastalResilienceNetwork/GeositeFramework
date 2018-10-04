@@ -1,14 +1,7 @@
 ﻿@media print {
     @page { 
-        size: landscape;
+        size: portrait;
     }
-
-    #sample-graphic-print {
-        visibility: visible;
-        position: absolute;
-        top: 1710px;
-        -webkit-transform: rotate(45deg);
-    }    
 
     #legend-container-0 {
         position: absolute;
@@ -17,6 +10,7 @@
     }
 
     #map-0 {
+       margin-top: 1in;
        height: 8in;
        width: 8in;
     }
@@ -28,6 +22,7 @@
     position: absolute;
     bottom: 20px;
     right: 20px;
+    z-index: 1000;
 }
 
 #logo-img {
@@ -53,7 +48,13 @@
 
 .print-preview-map-container #map-0.map {
     position: relative;
-    height: 325px;
+    height: 300px;
+    width: 300px;
+    margin: 10px auto;
+}
+
+.print-preview-map-container #legend-container-0 {
+    display: none !important;
 }
 
 .popover-section {
