@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import codecs
 import sys
 import plugin_loader
 from jinja2 import Environment, FileSystemLoader
@@ -12,6 +13,7 @@ REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 
+PARTIALS_DIR= os.path.join(BASE_DIR, 'Views/Shared')
 
 def template_index():
     # create a jinja environment
@@ -58,6 +60,12 @@ def template_index():
         print(plugin_config_data, plugin_folder_names, plugin_module_names)
     except ValueError as e:
         sys.exit(e)
+
+    # rewrite partials in charset utf-8 for Jinja2 compatibility
+    for file in os.listdir(PARTIALS_DIR):
+        filename = os.path.join(PARTIALS_DIR, file)
+        s = codecs.open(filename, mode='r', encoding='utf-8-sig').read()
+        codecs.open(filename, mode='w', encoding='utf-8').write(s)
 
     # template HTML with validated custom JSON configs
     templated_idx = j2_env.get_template(TMPL_FILE).render(region_json)
