@@ -12,8 +12,6 @@ REGION_FILE = os.path.join(BASE_DIR, 'region.json')
 REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
-
-
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
 
 
@@ -58,8 +56,18 @@ def template_index():
         plugin_module_names = [plugin_loader.get_plugin_module_name(
                                 base_path, p) for p in plugin_folder_paths]
 
-        # TODO: Temporary
-        print(plugin_config_data, plugin_folder_names, plugin_module_names)
+        # Create plugin module identifiers, to be inserted in generated
+        # JavaScript code. Example: "'plugins/layer_selector/main',
+        # 'plugins/measure/main'"
+        plugin_module_identifiers = "'" + "', '".join(plugin_module_names) + \
+                                    "'"
+        # Create plugin variable names, to be inserted in generated JavaScript
+        # code. Example: "p0, p1"
+        plugin_variable_names = ",".join(map(lambda i: 'p{}'.format(i),
+                                         range(len(plugin_folder_names))))
+
+        plugin_css_urls, config_for_use_js = (
+                plugin_loader.merge_plugin_config_data(plugin_config_data))
     except ValueError as e:
         sys.exit(e)
 
@@ -70,7 +78,14 @@ def template_index():
         codecs.open(filename, mode='w', encoding='utf-8').write(s)
 
     # template HTML with validated custom JSON configs
-    templated_idx = j2_env.get_template(TMPL_FILE).render(region_json)
+    templated_idx = j2_env.get_template(TMPL_FILE).render({
+        'region': region_json,
+        'plugin_module_identifiers': plugin_module_identifiers,
+        'plugin_variable_names': plugin_variable_names,
+        'plugin_config_data': plugin_config_data,
+        'plugin_css_urls': plugin_css_urls,
+        'config_for_use_js': config_for_use_js,
+    })
 
     # write jinja template to disk, to be used in geosite static assets build
     # as well as served from this project's development server

@@ -23,7 +23,7 @@ def get_plugin_module_name(basePath, pluginPath):
     then return "tnc/plugins/xyz/main". Assuming "tnc" prefix is a package
     configured to point to your basePath.
     """
-    return "tnc/{}/main".format(get_plugin_folder_path(basePath, pluginPath))
+    return "tnc{}/main".format(get_plugin_folder_path(basePath, pluginPath))
 
 
 def strip_plugin_module(pluginModule):
@@ -100,3 +100,28 @@ def get_plugin_configuration_data(plugin_folder_paths):
 
         # Generate plugin module names for use in JS code
     return plugin_config_data
+
+
+def merge_plugin_config_data(plugin_config_data):
+    css_urls = []
+    use_clause_dict = {}
+
+    for data in plugin_config_data:
+        if "css" in data:
+            # This config has CSS urls - add them to the list
+            css_urls.append(data["css"])
+
+        if "use" in data:
+            # This config has "use" clauses - add unique ones to the list
+            for lib, config in data["use"].items():
+                lib = lib.replace(" ", "")  # remove whitespace
+
+                if lib in use_clause_dict and use_clause_dict[lib] != config:
+                    msg = "Plugins define 'use' clause '{0}' " \
+                          "differently: '{1}' vs. '{2}'".format(
+                            lib, config, use_clause_dict[lib])
+                    sys.exit(msg)
+                else:
+                    use_clause_dict[lib] = config
+
+    return css_urls, use_clause_dict

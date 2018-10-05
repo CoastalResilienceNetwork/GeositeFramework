@@ -5,9 +5,13 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>{{ titleMain.text }} | {{ titleDetail.text }}</title>
+    <title>{{ region.titleMain.text }} | {{ region.titleDetail.text }}</title>
 
     <!-- Load CSS for plugins -->
+    {% for url in plugin_css_urls %}
+    <link rel="stylesheet" href="{{ url }}">
+    {% endfor %}
+
     <link rel='shortcut icon' href='img/favicon.ico' type='image/x-icon'/ >
 
     <link rel="stylesheet" href="//js.arcgis.com/3.25/dijit/themes/claro/claro.css">
@@ -32,20 +36,20 @@
     <style type="text/css">
         header,
         #sidebar-toggle {
-            background: {{ colors.primary }};
+            background: {{ region.colors.primary }};
         }
 
         .nav-apps {
-            background-color: {{ colors.tertiary }};
+            background-color: {{ region.colors.tertiary }};
         }
 
         .nav-apps-button.active.app-displayed {
-            background-color: {{ colors.active }};
+            background-color: {{ region.colors.active }};
         }
 
         .color-primary,
         .alert-primary {
-            color: {{ colors.secondary }};
+            color: {{ region.colors.secondary }};
         }
 
         .background-primary,
@@ -56,7 +60,7 @@
         .loading.loading-pulse.loading-primary,
         .loading.loading-blink.loading-primary>div,
         .alert-primary {
-            background-color: {{ colors.secondary }};
+            background-color: {{ region.colors.secondary }};
         }
 
         .button:focus,
@@ -64,17 +68,17 @@
         .button-secondary:focus,
         .button-danger:focus,
         .button-warning:focus {
-            box-shadow: 0 1px 2px -1px {{ colors.secondary }};
+            box-shadow: 0 1px 2px -1px {{ region.colors.secondary }};
         }
 
         .header-dropdown .dropdown-menu:after {
-            border-bottom: 7px solid {{ colors.secondary }};
+            border-bottom: 7px solid {{ region.colors.secondary }};
         }
 
         .loading.loading-spinner.loading-primary {
-            border-left: 1.1em solid {{ colors.secondary }};
-            border-bottom: 1.1em solid {{ colors.secondary }};
-            border-right: 1.1em solid {{ colors.secondary }};
+            border-left: 1.1em solid {{ region.colors.secondary }};
+            border-bottom: 1.1em solid {{ region.colors.secondary }};
+            border-right: 1.1em solid {{ region.colors.secondary }};
         }
 
         /* Use custom colors for overlay */
@@ -83,7 +87,7 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active
         {
-            background: {{ colors.secondary }};
+            background: {{ region.colors.secondary }};
         }
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_left:after,
@@ -91,22 +95,22 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_left:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_top:after {
-            border-top: 15px solid {{ colors.secondary }};
+            border-top: 15px solid {{ region.colors.secondary }};
         }
 
         body .popover-header {
-            background-color: {{ colors.primary }};
+            background-color: {{ region.colors.primary }};
         }
 
         body .tlypageguide_shadow:after {
-            background-color: {{ colors.secondary }};
+            background-color: {{ region.colors.secondary }};
             opacity: 0.2;
         }
         .dropdown-submenu > a:not(:hover) {
-            background-color: {{ colors.secondary }};
+            background-color: {{ region.colors.secondary }};
         }
 
-        {% if singlePluginMode %}
+        {% if region.singlePluginMode %}
         <text>
         .sidebar-content {
             height: 100%;
@@ -118,11 +122,11 @@
         }
 
         #toggle-plugin-container button {
-            background-color: {{ colors.primary }};
-            border-color: {{ colors.primary }};
+            background-color: {{ region.colors.primary }};
+            border-color: {{ region.colors.primary }};
         }
         #toggle-plugin-container button:hover {
-            background-color: {{ colors.secondary }};
+            background-color: {{ region.colors.secondary }};
         }
 
         /* Ideally these would be stored in class, but when the ESRI search is
@@ -135,7 +139,7 @@
         {% endif %}
     </style>
 
-    {% if googleUrlShortenerApiKey != null %}
+    {% if region.googleUrlShortenerApiKey != null %}
     <!-- Google Analytics -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -143,7 +147,7 @@
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-{{ googleUrlShortenerApiKey }}', 'auto');
+        ga('create', 'UA-{{ region.googleUrlShortenerApiKey }}', 'auto');
         ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
@@ -164,7 +168,7 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        {% if singlePluginMode %}
+        {% if region.singlePluginMode %}
         <text>
         <div id="single-plugin-mode-help-container">
             Help
@@ -631,7 +635,7 @@
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
-        {% if singlePluginMode %}
+        {% if region.singlePluginMode %}
         <div class="dropdown header-dropdown nav-main-dropdown">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -639,12 +643,12 @@
                         <i class="dropdown-icon icon-menu"></i>
                     </div>
                     <div class="nav-main-title">
-                        {{ titleMain.text }}
+                        {{ region.titleMain.text }}
                     </div>
                 </div>
             </button>
             <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in headerLinks %}
+                {% for headerLink in region.headerLinks %}
                     <li>
                         <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
                     </li>
@@ -657,7 +661,7 @@
                     </a>
 
                     <ul class="dropdown-menu" id="region-links">
-                        {% for region in regionLinks %}
+                        {% for region in region.regionLinks %}
                         <li id="@link.ElementId">
                             <a target="_blank" href="{{ region.url }}">{{ region.text }} <i class="icon-link-ext"></i></a>
                         </li>
@@ -669,19 +673,19 @@
         {% else %}
         <div class="nav-main">
             <div class="nav-main-title">
-                {{ titleMain.text }}
+                {{ region.titleMain.text }}
             </div>
         </div>
         {% endif %}
         <div class="nav-region-subtitle">
-            {% if singlePluginMode %}
-                {{ titleDetail.text }}
+            {% if region.singlePluginMode %}
+                {{ region.titleDetail.text }}
             {% else %}
                 <text><span id="show-single-plugin-mode-help">About</span></text>
             {% endif %}
         </div>
         <div id="search"></div>
-        {% if singlePluginMode %}
+        {% if region.singlePluginMode %}
         <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -691,7 +695,7 @@
                 </div>
             </button>
             <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in headerLinks %}
+                {% for headerLink in region.headerLinks %}
                     <li>
                         <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
                     </li>
@@ -721,7 +725,7 @@
     <!-- Area for the main map to get setup for printing. -->
     <div id="map-print-sandbox">
         <div class="print-sandbox-header">
-            <img src="{{ print.headerLogoPath }}" title="Header Logo" class="logo" />
+            <img src="{{ region.print.headerLogoPath }}" title="Header Logo" class="logo" />
             <h1></h1>
         </div>
         <div id="print-map-container"></div>
@@ -762,7 +766,7 @@
             // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
             // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
 
-        var useConfig = { @Html.Raw(Model.ConfigurationForUseJs) };
+        var useConfig = {{ config_for_use_js | tojson }};
         useConfig['Azavea'] = { attach: 'Azavea' };
         useConfig['Geosite'] = { attach: 'Geosite' };
         useConfig['jqueryui'] = { attach: 'jqueryui' };
@@ -811,7 +815,7 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
-    {% if singlePluginMode %}
+    {% if region.singlePluginMode %}
     <text>
         <script src="js/SinglePluginModeHelp.js"></script>
     </text>
@@ -869,12 +873,12 @@
         //         });
         //     });
 
-        require([@Html.Raw(Model.PluginModuleIdentifiers)],
-            function(@Html.Raw(Model.PluginVariableNames)) {
+        require([{{ plugin_module_identifiers }}],
+            function({{ plugin_variable_names }}) {
                 $(document).ready(function() {
-                    var regionData = @Html.Raw(Model.RegionDataJson),     // contents of region.json (augmented)
-                        plugins = [@Html.Raw(Model.PluginVariableNames)]; // loaded plugin objects
-                        Geosite.app.init('@Html.Raw(Model.GeositeFrameworkVersion)', regionData, plugins);
+                    var regionData = {{ region | tojson }},     // contents of region.json (augmented)
+                        plugins = [{{ plugin_variable_names }}]; // loaded plugin objects
+                        Geosite.app.init("0.1.0", regionData, plugins);
                 });
         });
 
