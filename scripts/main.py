@@ -13,7 +13,9 @@ REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 
-PARTIALS_DIR= os.path.join(BASE_DIR, 'Views/Shared')
+
+PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
+
 
 def template_index():
     # create a jinja environment
