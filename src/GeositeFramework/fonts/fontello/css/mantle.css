@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'mantle';
-  src: url('../font/mantle.eot?18944855');
-  src: url('../font/mantle.eot?18944855#iefix') format('embedded-opentype'),
-       url('../font/mantle.woff2?18944855') format('woff2'),
-       url('../font/mantle.woff?18944855') format('woff'),
-       url('../font/mantle.ttf?18944855') format('truetype'),
-       url('../font/mantle.svg?18944855#mantle') format('svg');
+  src: url('../font/mantle.eot');
+  src: url('../font/mantle.eot#iefix') format('embedded-opentype'),
+       url('../font/mantle.woff2') format('woff2'),
+       url('../font/mantle.woff') format('woff'),
+       url('../font/mantle.ttf') format('truetype'),
+       url('../font/mantle.svg#mantle') format('svg');
   font-weight: normal;
   font-style: normal;
 }
