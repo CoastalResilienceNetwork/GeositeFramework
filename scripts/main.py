@@ -93,6 +93,9 @@ def template_index():
         plugin_variable_names = ",".join(map(lambda i: 'p{}'.format(i),
                                          range(len(plugin_folder_names))))
 
+        # Modify region file with plugin data
+        region_json["pluginFolderNames"] = plugin_folder_names
+
         plugin_css_urls, config_for_use_js = (
                 plugin_loader.merge_plugin_config_data(plugin_config_data))
     except ValueError as e:
