@@ -110,8 +110,7 @@
             background-color: {{ region.colors.secondary }};
         }
 
-        {% if region.singlePluginMode %}
-        <text>
+        {% if region.singlePluginMode.active %}
         .sidebar-content {
             height: 100%;
             margin-top: 0;
@@ -135,7 +134,6 @@
             right: 45px;
             z-index: 10000;
         }
-        </text>
         {% endif %}
     </style>
 
@@ -168,14 +166,12 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        {% if region.singlePluginMode %}
-        <text>
+        {% if region.singlePluginMode.active %}
         <div id="single-plugin-mode-help-container">
             Help
         </div>
-        </text>
         {% endif %}
-        <nav class="nav-apps plugins nav-apps-narrow {% if singlePluginMode %}single-plugin-mode{% endif %}">
+        <nav class="nav-apps plugins nav-apps-narrow {% if region.singlePluginMode.active %}single-plugin-mode{% endif %}">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
                 <div id="sidebar-toggle">
@@ -185,7 +181,7 @@
         </nav>
         <div class="flex-expand">
             <div class="flex-container map-container">
-                {% if singlePluginMode %}
+                {% if region.singlePluginMode.active %}
                 <div id="toggle-plugin-container" class="single-plugin-mode">
                     <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
                 </div>
@@ -203,7 +199,7 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        {% if singlePluginMode %}
+                                        {% if region.singlePluginMode.active %}
                                             <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
                                         {% endif %}
                                         <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
@@ -635,7 +631,7 @@
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
-        {% if region.singlePluginMode %}
+        {% if region.singlePluginMode.active %}
         <div class="dropdown header-dropdown nav-main-dropdown">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -678,14 +674,14 @@
         </div>
         {% endif %}
         <div class="nav-region-subtitle">
-            {% if region.singlePluginMode %}
+            {% if region.singlePluginMode.active %}
                 {{ region.titleDetail.text }}
             {% else %}
-                <text><span id="show-single-plugin-mode-help">About</span></text>
+                <span id="show-single-plugin-mode-help">About</span>
             {% endif %}
         </div>
         <div id="search"></div>
-        {% if region.singlePluginMode %}
+        {% if region.singlePluginMode.active %}
         <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
             <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
@@ -815,10 +811,8 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
-    {% if region.singlePluginMode %}
-    <text>
+    {% if region.singlePluginMode.active %}
         <script src="js/SinglePluginModeHelp.js"></script>
-    </text>
     {% endif %}
     <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>

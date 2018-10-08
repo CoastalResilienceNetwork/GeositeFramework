@@ -56,6 +56,33 @@ def template_index():
         plugin_module_names = [plugin_loader.get_plugin_module_name(
                                 base_path, p) for p in plugin_folder_paths]
 
+
+        # If single plugin mode is active, remove every plugin besides the
+        # specified plugin from the plugin lists.
+        if (region_json["singlePluginMode"] is not None and
+           region_json["singlePluginMode"]["active"]):
+
+            single_plugin_name = (
+                    region_json["singlePluginMode"]["pluginFolderName"]
+            )
+
+            if single_plugin_name is None:
+                msg = "Single plugin mode is active but no plugin is defined."
+                sys.exit(msg)
+
+            single_plugin_folder_name = [p for p in plugin_folder_names
+                                         if single_plugin_name in p]
+            single_plugin_module_name = [p for p in plugin_module_names
+                                         if single_plugin_name in p]
+
+            if len(single_plugin_folder_name) == 0:
+                msg = "The specified plugin for single plugin " \
+                      "mode was not found."
+                sys.exit(msg)
+            else:
+                plugin_folder_names = single_plugin_folder_name
+                plugin_module_names = single_plugin_module_name
+
         # Create plugin module identifiers, to be inserted in generated
         # JavaScript code. Example: "'plugins/layer_selector/main',
         # 'plugins/measure/main'"
