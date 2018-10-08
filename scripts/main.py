@@ -5,6 +5,7 @@ import re
 import codecs
 import sys
 import plugin_loader
+import json
 from jinja2 import Environment, FileSystemLoader
 from jsonschema import validate, exceptions
 from script_helpers import (to_json,
@@ -37,12 +38,6 @@ def prepare_languages():
 
     # merge app and plugin translation dicts keyed to language code
     # prefer app dict translations, if conflict
-    # final format:
-    # {
-    #   "es": {
-    #       "Start": "Comience",
-    #   }
-    # }
     all_json_files = plugin_json_files + app_json_files
     translations = {}
 
@@ -52,9 +47,18 @@ def prepare_languages():
             translations[language].update(to_json(file))
         else:
             translations.update({language: to_json(file)})
+    
+    # split languages to their own files
+    lang_dir = os.path.join(BASE_DIR, 'languages')
+    languages = translations.keys()
 
-    return translations
-
+    # write files to languages directory for i18next to consume
+    if not os.path.exists(lang_dir):
+        os.makedirs(lang_dir)
+    for lang in languages:
+        filename = os.path.join(lang_dir, lang)
+        data = json.dumps(translations[lang], ensure_ascii=False)
+        codecs.open(filename, mode='w', encoding='utf-8').write(data)
 
 def template_index():
     # create a jinja environment
@@ -138,10 +142,7 @@ def template_index():
     except ValueError as e:
         sys.exit(e)
 
-    translations = prepare_languages()
-
-    # TODO: Remove print statement. For testing only.
-    print(translations)
+    prepare_languages()
 
     # rewrite partials in charset utf-8 for Jinja2 compatibility
     for file in os.listdir(PARTIALS_DIR):
