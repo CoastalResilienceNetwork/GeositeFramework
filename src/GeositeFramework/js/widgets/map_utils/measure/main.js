@@ -1,6 +1,6 @@
 ﻿define([
     'dojo/_base/declare',
-    './AgsMeasure'
+    '../js/widgets/map_utils/measure/AgsMeasure.js'
     ],
     function(declare,
              AgsMeasure) {
