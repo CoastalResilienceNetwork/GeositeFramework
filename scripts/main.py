@@ -24,16 +24,22 @@ def prepare_languages():
     try:
         language_dir = os.path.join(BASE_DIR, 'locales')
         plugin_loader.verify_directories_exist([language_dir])
-        app_json_files = [os.path.join(language_dir, file) for file in
-                          os.listdir(language_dir) if file.endswith('.json')]
+        app_json_files = [os.path.join(language_dir, f) for f in
+                          os.listdir(language_dir) if f.endswith('.json')]
     except ValueError as e:
         msg = 'Failed! Check the app has JSON translation files. {}'.format(e)
         sys.exit(msg)
 
     # get plug-ins' translation files
     plugin_folder_paths = plugin_loader.get_plugin_folder_paths()
-    plugin_locales = [str(path+'/locales') for path in plugin_folder_paths
-                      if os.path.exists(path+'/locales')]
+    plugin_locales = []
+    for path in plugin_folder_paths:
+        try:
+            locale_dir = os.path.join(str(path),'locales')
+            plugin_locales.append(locale_dir)
+        except:
+            continue
+
     plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
 
     # merge app and plugin translation dicts keyed to language code
@@ -41,12 +47,12 @@ def prepare_languages():
     all_json_files = plugin_json_files + app_json_files
     translations = {}
 
-    for file in all_json_files:
-        language = re.search(r'locales\/(.*?)\.json', file).group(1)
+    for f in all_json_files:
+        language = re.search(r'locales\/(.*?)\.json', f).group(1)
         if language in translations:
-            translations[language].update(to_json(file))
+            translations[language].update(to_json(f))
         else:
-            translations.update({language: to_json(file)})
+            translations.update({language: to_json(f)})
     
     # split languages to their own files
     lang_dir = os.path.join(BASE_DIR, 'languages')
@@ -86,7 +92,7 @@ def template_index():
     try:
         base_path = os.path.join(os.path.dirname(
                         os.path.dirname(os.path.realpath(__file__))), BASE_DIR)
-        plugin_folder_paths = plugin_loader.get_plugin_folder_paths(custom_base_path=base_path)
+        plugin_folder_paths = plugin_loader.get_plugin_folder_paths(base_path)
 
         # Generate plugin config data, folder names, and module names for use
         # in JS code
@@ -145,8 +151,8 @@ def template_index():
     prepare_languages()
 
     # rewrite partials in charset utf-8 for Jinja2 compatibility
-    for file in os.listdir(PARTIALS_DIR):
-        filename = os.path.join(PARTIALS_DIR, file)
+    for f in os.listdir(PARTIALS_DIR):
+        filename = os.path.join(PARTIALS_DIR, f)
         s = codecs.open(filename, mode='r', encoding='utf-8-sig').read()
         codecs.open(filename, mode='w', encoding='utf-8').write(s)
 

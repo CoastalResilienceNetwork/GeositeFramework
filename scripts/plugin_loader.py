@@ -63,12 +63,11 @@ def verify_directories_exist(dirs):
             raise ValueError("{} does not exist".format(path))
 
 
-def get_plugin_folder_paths(**kwargs):
+def get_plugin_folder_paths(base_path=BASE_DIR):
     """Returns paths to all plugin directories.
 
-    Options: `custom_base_path`
+    Accepts a custom base path.
     """
-    base_path = kwargs.get('custom_base_path', BASE_DIR)
     region_json = to_json(REGION_FILE)
     plugin_directories = get_plugin_directories(region_json,
                                                 base_path)
