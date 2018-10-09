@@ -44,6 +44,23 @@ def sort_plugin_names(pluginNames, keyFunc):
     return sorted(pluginNames, key=keyFunc)
 
 
+def get_plugin_order(region_json):
+    """Get the configured plugin order, ensuring that the
+    launchpad plugin is always first
+
+    Return ordered list of plugins
+    """
+    launchpad_name = "launchpad"
+    plugin_order = region_json["pluginOrder"]
+
+    if launchpad_name in plugin_order:
+        plugin_order.remove(launchpad_name)
+
+    plugin_order.insert(0, launchpad_name)
+
+    return plugin_order
+
+
 def get_plugin_directories(regionData, basePath):
     """Return pluginFolders array from region.json.
     Default value is ["plugins"]

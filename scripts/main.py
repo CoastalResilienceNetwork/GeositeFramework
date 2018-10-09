@@ -103,6 +103,21 @@ def template_index():
         plugin_module_names = [plugin_loader.get_plugin_module_name(
                                 base_path, p) for p in plugin_folder_paths]
 
+        # Get plugin folder names, in the specified order
+        if (region_json["pluginOrder"] is not None):
+            plugin_order = plugin_loader.get_plugin_order(region_json)
+
+            def sort_func(p):
+                try:
+                    val = plugin_order.index(
+                        plugin_loader.strip_plugin_module(p)
+                    )
+                    return val
+                except ValueError:
+                    return 999
+
+            plugin_folder_names.sort(key=sort_func)
+            plugin_module_names.sort(key=sort_func)
 
         # If single plugin mode is active, remove every plugin besides the
         # specified plugin from the plugin lists.
