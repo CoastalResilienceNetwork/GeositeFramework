@@ -137,7 +137,7 @@ def merge_plugin_config_data(plugin_config_data):
     for data in plugin_config_data:
         if "css" in data:
             # This config has CSS urls - add them to the list
-            css_urls.append(data["css"])
+            css_urls = css_urls + data["css"]
 
         if "use" in data:
             # This config has "use" clauses - add unique ones to the list
