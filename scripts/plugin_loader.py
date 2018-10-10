@@ -3,8 +3,7 @@
 import os
 import sys
 from jsonschema import validate, exceptions
-from script_helpers import to_json, BASE_DIR
-
+from script_helpers import to_json, BASE_DIR, REGION_FILE
 
 PLUGIN_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/pluginSchema.json')
 
@@ -62,6 +61,18 @@ def verify_directories_exist(dirs):
     for path in dirs:
         if not os.path.exists(path):
             raise ValueError("{} does not exist".format(path))
+
+
+def get_plugin_folder_paths(base_path=BASE_DIR):
+    """Returns paths to all plugin directories.
+
+    Accepts a custom base path.
+    """
+    region_json = to_json(REGION_FILE)
+    plugin_directories = get_plugin_directories(region_json,
+                                                base_path)
+    verify_directories_exist(plugin_directories)
+    return [d + '/' + r for d in plugin_directories for r in os.listdir(d)]
 
 
 def get_plugin_configuration_data(plugin_folder_paths):
