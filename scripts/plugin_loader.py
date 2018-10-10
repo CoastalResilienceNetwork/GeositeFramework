@@ -44,6 +44,23 @@ def sort_plugin_names(pluginNames, keyFunc):
     return sorted(pluginNames, key=keyFunc)
 
 
+def get_plugin_order(region_json):
+    """Get the configured plugin order, ensuring that the
+    launchpad plugin is always first
+
+    Return ordered list of plugins
+    """
+    launchpad_name = "launchpad"
+    plugin_order = region_json["pluginOrder"]
+
+    if launchpad_name in plugin_order:
+        plugin_order.remove(launchpad_name)
+
+    plugin_order.insert(0, launchpad_name)
+
+    return plugin_order
+
+
 def get_plugin_directories(regionData, basePath):
     """Return pluginFolders array from region.json.
     Default value is ["plugins"]
@@ -120,7 +137,7 @@ def merge_plugin_config_data(plugin_config_data):
     for data in plugin_config_data:
         if "css" in data:
             # This config has CSS urls - add them to the list
-            css_urls.append(data["css"])
+            css_urls = css_urls + data["css"]
 
         if "use" in data:
             # This config has "use" clauses - add unique ones to the list

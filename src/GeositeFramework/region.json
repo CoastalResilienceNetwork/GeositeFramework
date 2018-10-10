@@ -85,7 +85,8 @@
         "sample_plugins"
     ],
     "pluginOrder": [
-        "subregion_toggle"
+        "identify_point",
+        "regional-planning"
     ],
     "map2PluginBlacklist": [
         "identify_point"
