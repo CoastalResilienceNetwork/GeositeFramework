@@ -105,7 +105,8 @@ def template_index():
                                 base_path, p) for p in plugin_folder_paths]
 
         # Get plugin folder names, in the specified order
-        if (region_json["pluginOrder"] is not None):
+        if ("pluginOrder" in region_json and
+           region_json["pluginOrder"] is not None):
             plugin_order = plugin_loader.get_plugin_order(region_json)
 
             def sort_func(p):
@@ -122,7 +123,8 @@ def template_index():
 
         # If single plugin mode is active, remove every plugin besides the
         # specified plugin from the plugin lists.
-        if (region_json["singlePluginMode"] is not None and
+        if ("singlePluginMode" in region_json and
+           region_json["singlePluginMode"] is not None and
            region_json["singlePluginMode"]["active"]):
 
             single_plugin_name = (
