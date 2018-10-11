@@ -48,11 +48,16 @@ def prepare_languages():
     translations = {}
 
     for f in all_json_files:
-        language = re.search(r'locales\/(.*?)\.json', f).group(1)
-        if language in translations:
-            translations[language].update(to_json(f))
-        else:
-            translations.update({language: to_json(f)})
+        language = None
+        matches = re.search(r'locales\/(.*?)\.json', f)
+
+        if matches is not None:
+            language = matches.group(1)
+
+            if language in translations:
+                translations[language].update(to_json(f))
+            else:
+                translations.update({language: to_json(f)})
 
     # split languages to their own files
     lang_dir = os.path.join(BASE_DIR, 'languages')
