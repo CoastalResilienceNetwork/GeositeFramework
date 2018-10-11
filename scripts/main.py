@@ -35,7 +35,7 @@ def prepare_languages():
     plugin_locales = []
     for path in plugin_folder_paths:
         try:
-            locale_dir = os.path.join(str(path),'locales')
+            locale_dir = os.path.join(str(path), 'locales')
             plugin_locales.append(locale_dir)
         except:
             continue
@@ -53,7 +53,7 @@ def prepare_languages():
             translations[language].update(to_json(f))
         else:
             translations.update({language: to_json(f)})
-    
+
     # split languages to their own files
     lang_dir = os.path.join(BASE_DIR, 'languages')
     languages = translations.keys()
@@ -65,6 +65,7 @@ def prepare_languages():
         filename = os.path.join(lang_dir, lang)
         data = json.dumps(translations[lang], ensure_ascii=False)
         codecs.open(filename, mode='w', encoding='utf-8').write(data)
+
 
 def template_index():
     # create a jinja environment
