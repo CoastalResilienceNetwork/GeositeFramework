@@ -14,7 +14,7 @@ from script_helpers import (to_json,
                             extract_filepaths_from_dirs)
 
 REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
-TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
+TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html').replace("\\", "/")
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
 
@@ -75,7 +75,7 @@ def prepare_languages():
 def template_index():
     # create a jinja environment
     j2_env = Environment(loader=FileSystemLoader(''),
-                         trim_blocks=True)
+                         trim_blocks=True,)
 
     # extract json from their files
     try:
