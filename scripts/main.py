@@ -14,7 +14,7 @@ from script_helpers import (to_json,
                             extract_filepaths_from_dirs)
 
 REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
-TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html')
+TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html').replace("\\", "/")
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
 
@@ -35,7 +35,7 @@ def prepare_languages():
     plugin_locales = []
     for path in plugin_folder_paths:
         try:
-            locale_dir = os.path.join(str(path),'locales')
+            locale_dir = os.path.join(str(path), 'locales')
             plugin_locales.append(locale_dir)
         except:
             continue
@@ -48,12 +48,17 @@ def prepare_languages():
     translations = {}
 
     for f in all_json_files:
-        language = re.search(r'locales\/(.*?)\.json', f).group(1)
-        if language in translations:
-            translations[language].update(to_json(f))
-        else:
-            translations.update({language: to_json(f)})
-    
+        language = None
+        matches = re.search(r'locales\/(.*?)\.json', f)
+
+        if matches is not None:
+            language = matches.group(1)
+
+            if language in translations:
+                translations[language].update(to_json(f))
+            else:
+                translations.update({language: to_json(f)})
+
     # split languages to their own files
     lang_dir = os.path.join(BASE_DIR, 'languages')
     languages = translations.keys()
@@ -66,10 +71,11 @@ def prepare_languages():
         data = json.dumps(translations[lang], ensure_ascii=False)
         codecs.open(filename, mode='w', encoding='utf-8').write(data)
 
+
 def template_index():
     # create a jinja environment
     j2_env = Environment(loader=FileSystemLoader(''),
-                         trim_blocks=True)
+                         trim_blocks=True,)
 
     # extract json from their files
     try:
@@ -104,7 +110,8 @@ def template_index():
                                 base_path, p) for p in plugin_folder_paths]
 
         # Get plugin folder names, in the specified order
-        if (region_json["pluginOrder"] is not None):
+        if ("pluginOrder" in region_json and
+           region_json["pluginOrder"] is not None):
             plugin_order = plugin_loader.get_plugin_order(region_json)
 
             def sort_func(p):
@@ -121,7 +128,8 @@ def template_index():
 
         # If single plugin mode is active, remove every plugin besides the
         # specified plugin from the plugin lists.
-        if (region_json["singlePluginMode"] is not None and
+        if ("singlePluginMode" in region_json and
+           region_json["singlePluginMode"] is not None and
            region_json["singlePluginMode"]["active"]):
 
             single_plugin_name = (
