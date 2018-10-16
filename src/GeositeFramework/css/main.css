@@ -1485,6 +1485,16 @@ header .nav-main {
 .esriSimpleSlider.subregion-active {
     top: 110px;
 }
+@media (max-width: 600px) {
+    .content .map .esriScalebar {
+        bottom: 60px;
+    }
+}
+@media (max-width: 360px) {
+    .content .map .esriScalebar {
+        bottom: 80px;
+    }
+}
 .content .map .basemap-selector {
     color: #444;
     position: absolute;
