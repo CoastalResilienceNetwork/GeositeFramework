@@ -1,6 +1,6 @@
 FROM python:2.7-slim
 
-WORKDIR /usr/src/src/GeositeFramework
+WORKDIR /usr/src/src/
 
 COPY requirements.txt .
 

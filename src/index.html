@@ -5,13 +5,13 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>{{ region.titleMain.text }} | {{ region.titleDetail.text }}</title>
+    <title>Geosite Framework Sample | Sample Region</title>
 
     <!-- Load CSS for plugins -->
-    {% for url in plugin_css_urls %}
-    <link rel="stylesheet" href="{{ url }}">
-    {% endfor %}
-
+        <link rel="stylesheet" href="plugins/subregion_toggle/subregion-toggle.css">
+        <link rel="stylesheet" href="plugins/launchpad/style.css">
+        <link rel="stylesheet" href="sample_plugins/identify_point/main.css">
+    
     <link rel='shortcut icon' href='img/favicon.ico' type='image/x-icon'/ >
 
     <link rel="stylesheet" href="//js.arcgis.com/3.25/dijit/themes/claro/claro.css">
@@ -36,20 +36,20 @@
     <style type="text/css">
         header,
         #sidebar-toggle {
-            background: {{ region.colors.primary }};
+            background: #5394B6;
         }
 
         .nav-apps {
-            background-color: {{ region.colors.tertiary }};
+            background-color: #333;
         }
 
         .nav-apps-button.active.app-displayed {
-            background-color: {{ region.colors.active }};
+            background-color: #0096D6;
         }
 
         .color-primary,
         .alert-primary {
-            color: {{ region.colors.secondary }};
+            color: #3BBDC2;
         }
 
         .background-primary,
@@ -60,7 +60,7 @@
         .loading.loading-pulse.loading-primary,
         .loading.loading-blink.loading-primary>div,
         .alert-primary {
-            background-color: {{ region.colors.secondary }};
+            background-color: #3BBDC2;
         }
 
         .button:focus,
@@ -68,17 +68,17 @@
         .button-secondary:focus,
         .button-danger:focus,
         .button-warning:focus {
-            box-shadow: 0 1px 2px -1px {{ region.colors.secondary }};
+            box-shadow: 0 1px 2px -1px #3BBDC2;
         }
 
         .header-dropdown .dropdown-menu:after {
-            border-bottom: 7px solid {{ region.colors.secondary }};
+            border-bottom: 7px solid #3BBDC2;
         }
 
         .loading.loading-spinner.loading-primary {
-            border-left: 1.1em solid {{ region.colors.secondary }};
-            border-bottom: 1.1em solid {{ region.colors.secondary }};
-            border-right: 1.1em solid {{ region.colors.secondary }};
+            border-left: 1.1em solid #3BBDC2;
+            border-bottom: 1.1em solid #3BBDC2;
+            border-right: 1.1em solid #3BBDC2;
         }
 
         /* Use custom colors for overlay */
@@ -87,7 +87,7 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active
         {
-            background: {{ region.colors.secondary }};
+            background: #3BBDC2;
         }
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li.tlypageguide-active.tlypageguide_left:after,
@@ -95,62 +95,35 @@
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_right:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_left:after,
         body #tlyPageGuideWrapper #tlyPageGuide li:hover.tlypageguide_top:after {
-            border-top: 15px solid {{ region.colors.secondary }};
+            border-top: 15px solid #3BBDC2;
         }
 
         body .popover-header {
-            background-color: {{ region.colors.primary }};
+            background-color: #5394B6;
         }
 
         body .tlypageguide_shadow:after {
-            background-color: {{ region.colors.secondary }};
+            background-color: #3BBDC2;
             opacity: 0.2;
         }
         .dropdown-submenu > a:not(:hover) {
-            background-color: {{ region.colors.secondary }};
+            background-color: #3BBDC2;
         }
 
-        {% if region.singlePluginMode and region.singlePluginMode.active %}
-        .sidebar-content {
-            height: 100%;
-            margin-top: 0;
-        }
+            </style>
 
-        .sidebar-nav {
-            display:none;
-        }
-
-        #toggle-plugin-container button {
-            background-color: {{ region.colors.primary }};
-            border-color: {{ region.colors.primary }};
-        }
-        #toggle-plugin-container button:hover {
-            background-color: {{ region.colors.secondary }};
-        }
-
-        /* Ideally these would be stored in class, but when the ESRI search is
-        initialized, existing classes are overwritten */
-        #search {
-            right: 45px;
-            z-index: 10000;
-        }
-        {% endif %}
-    </style>
-
-    {% if region.googleUrlShortenerApiKey != null %}
-    <!-- Google Analytics -->
+        <!-- Google Analytics -->
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-{{ region.googleUrlShortenerApiKey }}', 'auto');
+        ga('create', 'UA-AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA', 'auto');
         ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
-    {% endif %}
-</head>
+    </head>
 
 
 <!-- EX.: view-split, view-left, view-right -->
@@ -166,12 +139,7 @@
     </form>
 
     <script type="text/template" id="template-pane">
-        {% if region.singlePluginMode and region.singlePluginMode.active %}
-        <div id="single-plugin-mode-help-container">
-            Help
-        </div>
-        {% endif %}
-        <nav class="nav-apps plugins nav-apps-narrow {% if region.singlePluginMode and region.singlePluginMode.active %}single-plugin-mode{% endif %}">
+                <nav class="nav-apps plugins nav-apps-narrow ">
             <div id="sidebar-help-area">
                 <a id="help-overlay-start" href="#" data-i18n="Tour">Tour</a>
                 <div id="sidebar-toggle">
@@ -181,12 +149,7 @@
         </nav>
         <div class="flex-expand">
             <div class="flex-container map-container">
-                {% if region.singlePluginMode and region.singlePluginMode.active %}
-                <div id="toggle-plugin-container" class="single-plugin-mode">
-                    <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                </div>
-                {% endif %}
-                <div id="map-0" class="map">
+                                <div id="map-0" class="map">
                     <div class="control-container">
                         <div class="top-tools"></div>
                         <div class="map-tools">
@@ -199,10 +162,7 @@
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        {% if region.singlePluginMode and region.singlePluginMode.active %}
-                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
-                                        {% endif %}
-                                        <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
+                                                                                <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -631,88 +591,70 @@
 
     <!-- TOP BAR, FIXED TO THE TOP OF THE SCREEN -->
     <header>
-        {% if region.singlePluginMode and region.singlePluginMode.active %}
-        <div class="dropdown header-dropdown nav-main-dropdown">
-            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
-                    <div class="dropdown-icon-container">
-                        <i class="dropdown-icon icon-menu"></i>
-                    </div>
-                    <div class="nav-main-title">
-                        {{ region.titleMain.text }}
-                    </div>
-                </div>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in region.headerLinks %}
-                    <li>
-                        <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
-                    </li>
-                    <li class="divider"></li>
-                {% endfor %}
-                <li class="dropdown-submenu">
-                    <a id="region-header-menu" href="#">
-                        Other Regions
-                        <i class="dropdown-icon icon-angle-right"></i>
-                    </a>
-
-                    <ul class="dropdown-menu" id="region-links">
-                        {% for region in region.regionLinks %}
-                        <li id="@link.ElementId">
-                            <a target="_blank" href="{{ region.url }}">{{ region.text }} <i class="icon-link-ext"></i></a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        {% else %}
-        <div class="nav-main">
             <div class="nav-main-title">
-                {{ region.titleMain.text }}
+                Geosite Framework Sample
             </div>
         </div>
-        {% endif %}
-        <div class="nav-region-subtitle">
-            {% if region.singlePluginMode and region.singlePluginMode.active %}
-                {{ region.titleDetail.text }}
-            {% else %}
-                <span id="show-single-plugin-mode-help">About</span>
-            {% endif %}
-        </div>
-        <div id="search"></div>
-        {% if region.singlePluginMode and region.singlePluginMode.active %}
-        <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
-            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <div class="nav-main">
-                    <div class="dropdown-icon-container">
-                        <i class="dropdown-icon icon-menu"></i>
+                <div class="nav-region-subtitle">
+                            <span id="show-single-plugin-mode-help">About</span>
                     </div>
-                </div>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in region.headerLinks %}
-                    <li>
-                        <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
-                    </li>
-                    <li class="divider"></li>
-                {% endfor %}
-            </ul>
+        <div id="search"></div>
+            </header>
+
+   <ul id="tlyPageGuide">
+    <li class="tlypageguide_right" data-tourtarget=".name">
+        <div>
+			These are links that will take you to the Coastal Resilience website for more project background.
         </div>
-        {% endif %}
-    </header>
+    </li>
+	<li class="tlypageguide_right" data-tourtarget="#pluginZoomTo-clearSearch">
+        <div>
+	         Type in your point of interest and you will get a list of available selections from a global search address database.
+	    </div>
+    </li>
+	<li class="tlypageguide_right" data-tourtarget=".plugin-launcher">
+        <div>
+            Each item listed in the sidebar is a mini Coastal Resilience "app."  These apps are intended to address a specific coastal issue for resilience, restoration and adaptation planning.  You can have multiple apps running at the same time; simply minimize an active app (the icon will stay blue) and open others to view additional data and information.  Hover over any app in the list to see a short description.
+        </div>
+    </li>
+    <li class="tlypageguide_left" data-tourtarget=".tools">
+        <div>These tools let you explore the map: measure an area or distance, zoom to the full extent of the map, and the legend button.</div>
+    </li>
+    <li class="tlypageguide_right" data-tourtarget=".switch-screen">
+        <div>This website has two maps loaded, which can be toggled on or off.  Use this tool to switch between the different maps, or return to a single map after using split screen.</div>
+    </li>
+    <li class="tlypageguide_right" data-tourtarget=".split-screen">
+        <div>To view both maps at once, split the view.  Once both maps are visible, you can also link them so they are both viewing the same area as you move the map.  The link button can be found in the sidebar on the right map.</div>
+    </li>
+    <li class="tlypageguide_right" data-tourtarget=".permalink-button">
+        <div>You can generate a custom URL which will let you share this map and data with others.  You can also generate code to embed this map in another website.</div>
+    </li>
+    <li class="tlypageguide_right" data-tourtarget=".export-button">
+        <div>Save your current map as a PDF to email or print out.</div>
+    </li>
+	<li class="tlypageguide_left" data-tourtarget=".basemap-selector">
+        <div>You can change the background map layer by selecting from the list here.</div>
+    </li>
+	<li class="tlypageguide_left" data-tourtarget=".legend-header">
+        <div>This displays all legend information from any active data layers; it will track data that are active across multiple apps.  This can be resized to show one or more columns.</div>
+    </li>
 
-   {% include "src/Views/Shared/TourInfo.cshtml" %}
-
+</ul>
     <!-- If a view is provided (overwritten via the region repo), a user can
         change the region setting `launchpad.html = true` to use this content -->
     <div id="custom-launchpad-content" style="display:none;">
-        {% include "src/Views/Shared/CustomLaunchPadContent.cshtml" %}
-    </div>
+        <h2>Custom Launchpad</h2>
+<div>
+    This shows how it is possible to include custom launchpad markup.
+</div>
+<img src="http://placehold.it/300x150">    </div>
 
     <div id="single-plugin-mode-help-content" style="display:none;">
-        {% include "src/Views/Shared/SinglePluginModeHelp.cshtml" %}
-    </div>
+        <img src="http://placehold.it/300x150">
+<div>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+</div>    </div>
 
     <!-- Area for plugins to arrange their markup independent
         of their container -->
@@ -721,7 +663,7 @@
     <!-- Area for the main map to get setup for printing. -->
     <div id="map-print-sandbox">
         <div class="print-sandbox-header">
-            <img src="{{ region.print.headerLogoPath }}" title="Header Logo" class="logo" />
+            <img src="http://maps.coastalresilience.org/network/assets/images/partners/TNCLogoPrimary_RGB2.jpg" title="Header Logo" class="logo" />
             <h1></h1>
         </div>
         <div id="print-map-container"></div>
@@ -762,7 +704,7 @@
             // Otherwise, since Dojo is loaded from a CDN it will prepend the CDN server path, and fail.
             // (See https://dojotoolkit.org/documentation/tutorials/1.7/cdn)
 
-        var useConfig = {{ config_for_use_js | tojson }};
+        var useConfig = {};
         useConfig['Azavea'] = { attach: 'Azavea' };
         useConfig['Geosite'] = { attach: 'Geosite' };
         useConfig['jqueryui'] = { attach: 'jqueryui' };
@@ -811,10 +753,7 @@
     <script src="js/HelpOverlay.js"></script>
     <script src="js/BasemapSelector.js"></script>
     <script src="js/SidebarToggle.js"></script>
-    {% if region.singlePluginMode and region.singlePluginMode.active %}
-        <script src="js/SinglePluginModeHelp.js"></script>
-    {% endif %}
-    <script src="js/TimeoutWrapper.js"></script>
+        <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>
     <script src="js/Map.js"></script>
     <script src="js/SubRegion.js"></script>
@@ -867,11 +806,11 @@
         //         });
         //     });
 
-        require([{{ plugin_module_identifiers }}],
-            function({{ plugin_variable_names }}) {
+        require(['tnc/plugins/launchpad/main', 'tnc/sample_plugins/identify_point/main', 'tnc/plugins/subregion_toggle/main'],
+            function(p0,p1,p2) {
                 $(document).ready(function() {
-                    var regionData = {{ region | tojson }},     // contents of region.json (augmented)
-                        plugins = [{{ plugin_variable_names }}]; // loaded plugin objects
+                    var regionData = {"basemaps": [{"name": "Topographic", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"}, {"name": "National Geographic", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer"}, {"name": "Ocean", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer"}, {"name": "Imagery", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"}, {"name": "Physical", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer"}, {"name": "Shaded Relief", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer"}, {"name": "Streets", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"}, {"name": "Terrain", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer"}, {"name": "OpenStreetMap", "url": ""}], "colors": {"active": "#0096D6", "primary": "#5394B6", "secondary": "#3BBDC2", "tertiary": "#333"}, "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA", "headerLinks": [{"text": "Azavea", "url": "http://www.azavea.com/"}, {"text": "GIS", "url": "http://en.wikipedia.org/wiki/Geographic_information_system"}], "identifyBlacklist": ["OBJECTID", "OBJECTID_1"], "identifyEnabled": true, "initialExtent": [-98.61328125, 17.392579271057766, -79.716796875, 31.653381399664], "language": "en", "launchpad": {"description": "Coastal resilience is Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna diam, sodales et nibh at, aliquet bibendum erat. Nunc mattis in erat id luctus. Mauris aliquam scelerisque dui.", "html": false, "infographic": {"height": 300, "width": 366}, "partners": [{"link": "http://www.naturalcapitalproject.org/", "logoPath": "http://www.naturalcapitalproject.org/wp-content/uploads/2015/05/logo-ls-lined-up.jpg", "title": "Natural Capital Project"}, {"link": "https://coast.noaa.gov/digitalcoast/", "logoPath": "https://coast.noaa.gov/assets/logos/noaa-badge-full-color-no-outertext.svg", "title": "NOAA Digital Coast"}, {"link": "https://www.fws.gov/", "logoPath": "https://www.fws.gov/home/graphics/logo.png", "title": "U.S. Fish and Wildlife Surface"}, {"link": "https://www.usm.edu/", "logoPath": "https://www.usm.edu/sites/default/files/groups/office-university-communications/images/univc123pc_0.png", "title": "University of Southern Mississippi"}], "plugins": [{"description": "Investing in watersheds produces a range of benefits and contributes to addressing other social, economic and ecological challenges in addition to water security. The Benefits Explorer app allows users to see where investments may achieve the most co-benefits for people and nature.", "pluginName": "regional-planning", "title": "Regional Planning"}], "scenarios": [{"description": "Water funds are a source water protection mechanism for sharing the benefits of healthy watersheds across communities.", "saveCode": "eyJtYXAwIjrEgGV4dGVudMSGxIB0eXBlxIYixInEi8SNIiwieG1pbsSGLTEwNzU0MjMxLjI1xKXEpsSpNcSbecSexKA6MzI5NzY4OcSrOMSjMcS5NDbEm8SdYXjEocSjMzbEpDMzLjQzNTnEpzTFgcSyxILFiMS2NTg2xLDFkDk5ODI0xZEyxJtzcGF0aWFsUmVmZXLEjGPElMSHIndraWTEhsSjMsSjMH3Em1/FqnJ0c8SGW8SIxIrEjMSOxbjEkcSTxJXEl8aOxJrEnMS0xYnEpMSmxKjEqsSsxK7FkTHEsSLEs8SfxIbEt8S5xLvEvTLEvzDFgTfFg8WFxZnGmcWLxY3Fj8WRxZPFlcWXxqPGssWbxZ3FnzTFocWjxaXEt8WoxarFrMWuxbDFssW0bsW2xI/FucW7xb06xb/GgX3GgyJmcmFtZUlkxok6WzBdfcejxahlbGVjxItkQmFzZcSCcEluZMSJxIbGgsSbxapuZcSFxbjHumVOdW1ixbPHt8WodMWrZU9mUGx1Z8Sfx5/EgMevx6jHqmVkyI3Ij8alOiJwyI7IkG5zL2xhecWzX8iUx6l0b3LGlmHHqml2ZVN1YsW0yJBvxLXEgMW8xJVnxa7IsnPIq8SgxJtkacWpyKR5xJVHyL9lyYHIuSDHrcmJyYRlyIhpbMefIsaWc2jEg8W3W1stOTXEqzczxZHEpSzEuC7FosmmxZ03MTg0xq82xZRdLMmgyaIuMDTFozE3yb/JpjPJqMmqM8m9xKXGmjE0NcS4ybbJuMmjxYMwMjA1xKTEv8Ssyak4yas3OcSpypLFizcyxaQ2yo3JocmjMcWexK3Ep8mwyoPKmTjFk8SjxKXJpcqAyqTFlMSryqvEscmqypQ2xKbFlMSnNzjFncmwyrQ0LsS8xaHKkcqByagzMC7Kp8WWMsWexqA2xKPEucq0yaMyyaXJp8q4xL3JrMm8NsmvybHJs8m1ybYibm9GyZZsxIZ0cnVlx5bInsiayKHHjsuxyKDIosmIyKfIqceqyKzHjnJvb3QvQcikYseaYcyCzITMhjHHjm/FqmNpxJHHty43xJtjaMepa8iXxIZmxa7Hr8eWyLJyc2nIucSVxKrMi8Sby77MgMyIYcyFxILMq8ytYcmmNcufOMyMzI7MkMmJOsuMzJQizJbMmMyaOsycyZfLr8yoy7/MgcyDzKzMhsyvzIrHvcSAzI3Ir8y4zJLMvMy+Y8yZx5HNgsyezYXMqs2IzLDNi8SCMcaAM8y2zZDMkcy6zJPMlcyXzZXNgM2YzYQizKnNh8yJzK7NnMyKNcqnzaPMj82lzLvNqMy/zZfMnc2tza/NnsyHzbPNn8S/OcqSxoDKocSoxaTNt82RzabNk82pzZbMm82+x5bOgEZsyKzFvMyHzpbOmGRhzIvFuM2PzbjMuc26zL3OkM2rzpPNmsyBzptyzpkvzqvOmcyyy5/OjM25zafOpc28zpLNg86UzYbOrs6XzqzOnc68zpxhOc6zzqPOtc2UzpHNgc6oza7Ou86vzr/Pjc6ezp/Njsy3zrTOj863z4nOuc6pz4DOvs6azr3OmTHEqTTPhM2SzbvNqs29z5jPi8yqz4/Pms+ey5PLoM+izo7PpM+IzazOus+pz53Pjs+2Yc6HzaDKocS3xKfKizbPr86kz4fOp8+nzpXPuM+rzp3Gq8WOM8WUMtCBz4bOps+mzZnPqM6q0IfPj8myybzKi9CPz5XPpc640JPOgExvdcmGxa1uzIfQodCjzKJh0KbNoDfQm8+x0ITQn8670KjQpNCr0KfQotC10KzNocqJxqHNts6gz5PPhdCcz7LPitCg0LjQqtCmL9C00YfOns6F0K/OttCdz5fQssyq0YrQpdC30KnRlc6I0I7Qv82k0YHQsNCSzb/Qs9GG0ZXRidGi0LbFpMSsy5DLmNGO0IPRn8+0zIHRlNC20aTRl9GmypwwxKnEt9CLxrfFi8qCyoXQjDTJu8+RIs6hzo3QgtCR0J7RoNGT0aXRiNGw0KbFkcWlyorFg9CYybHPg9GbzqLPo9GP0YPQhc67TcmGzKJzzKJwcGkv0pzSn9KdadKhadKB0oPPlNGe0ofRrtKk0qfSptKp0rHSptKz0qLJptKUz5LRnNKX0azSr8+Z0qXSntKg0qLStdOC0qjSotC90IDSldKE0JDPls+z04DSstOD0qPTgdKn0qnJsMWB0avShtGR0ojMgdOU0rfTk9OR04dp0ZnTmdOO0YTSm9Oh0rTTntOS0afPv9Gq04vSrdKY0LHTnNOF05XThNOr06LEuMuL0bfEqMWOz6HTsNGd07LRrdOQ0rbTktO105/Fi9Ol0ZDTj9CUL1TEiceu1I7UkHPSq9GA0r3TmtSMzoDUj3jUkdSbx67Oscq/0rrSgtSWz7DUgtK/1I3Unsii1KnKktSK0pnRksyB1KnUktScc86JzaLUgNSXz5bLrMuuxJt20KRix6hMyKXFs8edx59bxKjHpdSo1JPUsseu0ag2y5jGq9St07PSsNSx1KnTu8+f073KgTXVkdSD1I1HdWxmIG/VoU3EiWljby/VntWg1aLVpNWm1ajNoMyy1ZvUp86A1avVodWjINWleNWn1anVttWt1bnVr2/Kv9Wz05vSsNW+1bjVutW81arVn9W31a7Vu9Wwxq0xzaDPn9aE1JnOu9aH1o7WitaY1oDWj2/TidaV06fMqtab1onVqNaL1azWiNaB05fOhsqRz7vOitO/0rvSltSl0r7WhceVx5bIr8WsyLLItMi2Zci4yLoiyLzInMi+bMmAyYLGlsmFyYfIpcmKyYzJjm7JkNeJyZPJlcmXxJXJmsmcxpLHoMqOyaTLicubyas4ya3Ln8mw0JjJtDTLlsm6ybzGgMm/y5nKgtebyoXXp8qUxKXKicqLOdekypDKkteuypbKuMqZxLnKnM2g0bbLn8qhxYPXpMqnxZLGr8aAOMqsy4XKr8aayrLJpcuDyrbYhtebyrrKvMWly5jLgMuTONiNy4Y5y4jLmizLi8uNNsuPy5HEqcuTMMuVybfKpdeZ2JzJqsudya7XoMui16PLpMumy6hsy6o61LrLr8eV", "title": "Galveston"}, {"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "saveCode": "eyJtYXAwIjrEgGV4dGVudMSGxIB0eXBlxIYixInEi8SNIiwieG1pbsSGLTEwMjA0OTU0Ljc3MjI5NzEyxJt5xJ7EoDozMTEzNTM5LsSyMTQ0NjUxOcSbxJ1heMShOTIzxKU2xKoyNzYyODPFgzXEtMSCxYzEuDYzNsSwxL84OcS6NDMzN8SwxJtzcGF0aWFsUmVmZXLEjGPElMSHIndraWTEhsSjMsSjMMSbbMWwZXN0V8aAxoLEuDg1N33Em1/Fr3J0c8SGW8SIxIrEjMSOxb3EkcSTxJXEl8agxJrEnMS2xKHGhMSmxKjEqsSsxK7EsMSyxZzEn8SGxLnEu8S9xL/FgcWDxYXFh8WJxZ3FjcWPxZHFk8WVxZfFmTTFmyLEtcWLxrbFoMWixasuxaXFp8Wpxas3xa3Fr8WxxbPFtcW3xbluxbvEj8W+xo/Gg8SkxobGiMaKxozGjsaBxrbGksaUxpUiZnJhbWVJZMabOlswXX3Hu8WtZWxlY8SLZEJhc2XEgnBJbmTEicSGNMeuxa9uZcSFxb3IkmVOdW1ixbjEhsaHIsaMxopPZlBsdWfEn8e3xIDIh8iAyIJlZMilyKfGtToicMimyKhucy/GiXnFuF/IrMiBdG9yxqhhyIJpdmVTdWLFuciob8S3xIDHqsi0dGhlLW/Fu2HEoMSbZGnFrsi8xJVTb8ezd8mWxbkgxJ8gyZVlIMmZZcmbxqjIjXRhaWzHtyJNb8aMbHkgd8aKyYTFrWjEg8W8W1stODguxZc2xLvFl8SyxZvFlC7Fg8WjMMWQxLA4NMaFNF0syog4Ni7EvDLGuTDFlsqSyoswxLE5OMqXMDHErMqtNsqeyqA1yozKpsqoLMqTxK0yxag1xabFpTfFmTPKtcqJyrfGuTU1yqs4ypHKu8qiyq7GvMqrNsWFxYQxyrTKn8qJN8qUxKjEusSxODfKksqiMDnKqMSnyqfLpcaSy4XLmcqKxKs0y6E1xpI5xarLosqMy7M0McuLxKYyxYXErMuGy63KjcqPy43Kpcq7y5vKlcWrypfErzfKmsqcXcqeIm5vRsm2bMSGdHJ1ZcSbb3V0bMSfZUNvbMmDxJUjMMyoMEZGIsiRyLfIqcegyLbIssi5yLthyL1yyL/Hv8mBzKXFvXJvb3QvR8WzyYnGjMmQIEzJmcWzL0HGiWLHsmExx6Bvxa9jacSRyJ7Eq8SbY8mWY2vIr8SGZsWzyIfHrsmJcnNpyZDElTHFgMaozL7NgC9UyZYgT8mabs2IzYpsICYgTcm1bs2MzY7NkM2Sxb3NlMmGzZd5zZnHliLNnMiBzZ/GkM2iybdlx67Nr82BzY1hzY/Egs6BzpjOg82TzZXOiM6KzZvNnc6PzaHNo86TxJvOlc6bzplhzqrNkMWZNTbMi86ezofNmDowzZrOjM6jzaA6zpHNpM6ozL/Ols6CzprOl86rxKPOs82WzrXOt86Lzo3Nns67zJfMmcSbdsmfaWLIgEzMtsW4x7XHt1vEo8e9Is6pz4TNkM6txILFgTPPh86gzrbOuM+MzqQ6z4/MmiLPks2oz5Vlz5fMt8+axpzEu8+ez6DPgs6sz6HPpMWGNs+nz4nPqs66zpDOps6Uz4DPo8+9z7wxy43FjsekxK7HgjTQgs6Jz6nPi9CFzqXOkn3Qm8euyYbFscmJyYvJjWXJj8mRIsmTIsmsyZjNtsmyyZ/Itsy2yaLJpGXJpsW4ya3Jqsmsya7Qq8mdZcm0ybbJuMm6ybzJvsqAxIvKgsigyoTGpMe4yqDKi8yBxZDMg8qSzIbEp8yIypjMi8qbxYLLv8qiyqTKucyExZcuyqvFh8quM8qwyrLKocu/yrfKpcS+yqfRmsubyr3Kv8uBxLDLhNGkLsuJy4vMi8uOy7zHkcSmxYTLk8uVyo7LmMqgzIbLncqx0I3LocuP0ZzLpcqly6fFojbLqsu/yos3y6/Lisuyy7TShMSvxZnLucyoypvLvTfSjMqMyqHMgtG10Y/KltGSzIzRlcyPzJHMk2zMlc+tzJjPr8yczJ7MoMyizKTJhMi0zKfMqcyrzK3Qmw==", "title": "Flower Garden Hazard"}], "title": "Explore coastal resilience issues"}, "legend": {"layers": [{"layerName": "Bathymetry (m)", "legendType": "scale", "serviceUrl": "http://dev.services2.coastalresilience.org:6080/arcgis/rest/services/Gulf_of_Mexico/Florida/MapServer"}]}, "map2PluginBlacklist": ["identify_point"], "pluginFolderNames": ["/plugins/launchpad", "/sample_plugins/identify_point", "/plugins/subregion_toggle"], "pluginFolders": ["plugins", "sample_plugins"], "pluginOrder": ["launchpad", "identify_point", "regional-planning"], "print": {"customPrintTemplatePrefix": "Letter ANSI A GeositeFramework", "headerLogoPath": "http://maps.coastalresilience.org/network/assets/images/partners/TNCLogoPrimary_RGB2.jpg", "printServerUrl": "http://lr13:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"}, "regionLinks": [{"text": "California", "url": "http://maps.coastalresilience.org/california/"}, {"text": "Connecticut", "url": "http://maps.coastalresilience.org/connecticut"}, {"text": "Global", "url": "http://maps.coastalresilience.org/global/"}, {"text": "Grenada, St. Vincent \u0026 the Grenadines", "url": "http://maps.coastalresilience.org/gsvg/"}, {"text": "MesoAmerican Reef", "url": "http://maps.coastalresilience.org/mar/"}, {"text": "New York", "url": "http://maps.coastalresilience.org/newyork"}, {"text": "New Jersey", "url": "http://maps.coastalresilience.org/newjersey"}, {"text": "Southeast Florida", "url": "http://maps.coastalresilience.org/seflorida/"}, {"text": "United States", "url": "http://maps.coastalresilience.org/unitedstates/"}, {"text": "U.S. Virgin Islands", "url": "http://maps.coastalresilience.org/usvi/"}, {"text": "Washington", "url": "http://maps.coastalresilience.org/pugetsound"}], "singlePluginMode": {"active": false, "pluginFolderName": "identify_point"}, "subregions": {"areas": [{"details": "The sanctuary protects a productive...", "display": "Flower Garden Banks Marine Sanctuary", "id": "flower-garden", "noFill": true, "outlineColor": "#000", "shape": [[-94.7900390625, 27.780771643348196], [-94.7900390625, 28.497660832963472], [-93.724365234375, 28.497660832963472], [-93.724365234375, 27.780771643348196], [-94.7900390625, 27.780771643348196]]}, {"details": "Mostly water", "display": "Somewhere in the ocean", "id": "the-ocean", "noFill": true, "outlineColor": "#0000FF", "shape": [[-88.2861328125, 27.449790329784214], [-86.3525390625, 28.07198030177986], [-85.25390625, 27.72243591897343], [-85.53955078125, 26.80446076654616], [-87.4951171875, 26.09625490696853], [-88.74755859375, 26.29341500426577], [-88.2861328125, 27.449790329784214]]}, {"details": "", "display": "Galveston Bay", "id": "galveston", "noFill": true, "shape": [[-95.2734375, 29.983486718474694], [-95.0482177734375, 29.38217507514529], [-95.460205078125, 28.97931203672246], [-95.16357421875, 28.859107573773], [-94.21875, 29.506549442788618], [-94.89990234375, 30.164126343161097], [-95.2734375, 29.983486718474694]]}], "clickToFocus": true, "color": "#00C5CD", "hideAtZoomLevel": 8, "hideByDefault": false, "opacity": 0.2, "outlineColor": "#008000"}, "titleDetail": {"text": "Sample Region", "url": "http://www.azavea.com/"}, "titleMain": {"text": "Geosite Framework Sample", "url": "http://www.azavea.com/"}},     // contents of region.json (augmented)
+                        plugins = [p0,p1,p2]; // loaded plugin objects
                         Geosite.app.init("0.1.0", regionData, plugins);
                 });
         });

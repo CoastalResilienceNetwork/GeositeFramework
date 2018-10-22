@@ -1,7 +1,7 @@
 import os
 import json
 
-BASE_DIR = os.path.join('src', 'GeositeFramework')
+BASE_DIR = 'src'
 REGION_FILE = os.path.join(BASE_DIR, 'region.json')
 
 
