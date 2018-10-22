@@ -997,7 +997,6 @@ header .nav-main {
 .header-dropdown.single-plugin-mode {
     position: absolute;
     right: 0;
-    top: 0;
     z-index: 10000;
 }
 .header-dropdown.dropdown>button {
@@ -1484,6 +1483,16 @@ header .nav-main {
 }
 .esriSimpleSlider.subregion-active {
     top: 110px;
+}
+@media (max-width: 600px) {
+    .content .map .esriScalebar {
+        bottom: 60px;
+    }
+}
+@media (max-width: 360px) {
+    .content .map .esriScalebar {
+        bottom: 80px;
+    }
 }
 .content .map .basemap-selector {
     color: #444;
@@ -2193,6 +2202,16 @@ body.x-body {
         width: 100vw !important;
     }
 
+    .arcgisSearch.searchExpanded .searchBtn {
+        margin-right: 2px;
+    }
+
+    .arcgisSearch .searchBtn {
+        padding: 8px 4px 6px 4px;
+        height: 25px;
+        width: 38px;
+    }
+
     @media (orientation: portrait) {
         #single-plugin-toggle-footer {
             height: 8vh;
@@ -2229,7 +2248,7 @@ body.x-body {
 
     #search {
         position: fixed !important;
-        right: 10vw !important;
+        right: 11.5vw !important;
     }
 
     .searchBtn {
@@ -2249,11 +2268,13 @@ body.x-body {
 
     .nav-main-dropdown {
         position: fixed !important;
-        right: 2vw !important;
+        right: 0vw !important;
     }
 
     .nav-region-subtitle {
-        right: 22vw;
+        position: fixed;
+        right: 24vw;
+        padding: 15px 7px 14px 7px;
     }
 
     .nav-main {
@@ -2266,5 +2287,9 @@ body.x-body {
         width: 60vw;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+    .single-plugin-mode .dropdown-icon-container {
+        padding: 5px 11px 0 0;
     }
 }
