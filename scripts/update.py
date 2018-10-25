@@ -22,5 +22,5 @@ logging.info('Updating python dependencies...')
 if args.d:
     subprocess.call('docker-compose build', shell=True)
 else:
-    subprocess.call('pip install -r src/GeositeFramework/requirements.txt',
+    subprocess.call('pip install -r src/requirements.txt',
                     shell=True)
