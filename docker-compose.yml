@@ -2,11 +2,11 @@ version: '3'
 services:
   server:
     build:
-      context: ./src/GeositeFramework/
+      context: ./src/
     working_dir: /usr/src/
     ports:
       - "54634:54634"
     volumes:
-        - ./src/GeositeFramework:/usr/src/src/GeositeFramework
+        - ./src:/usr/src/src/
         - ./scripts:/usr/src/scripts
         - ./dist:/usr/dist
