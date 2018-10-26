@@ -36,7 +36,7 @@
         $pluginToggle.show();
         $mobileToggle.show();
         if (singlePlugin.selected) {
-            if (!window.matchMedia("screen and (max-device-width: 736px)").matches ||
+            if (!window.matchMedia("screen and (max-width: 736px)").matches ||
                 viewModel.get('pluginContentVisible')) {
                 singlePlugin.get('$uiContainer').show();
             }

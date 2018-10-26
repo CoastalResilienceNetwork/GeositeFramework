@@ -187,8 +187,8 @@ require(['use!Geosite',
 
         function initSearch(view) {
             var isMobileSingleAppMode = N.app.singlePluginMode &&
-                window.matchMedia("screen and (max-device-width: 736px)").matches;
-            // Add search control; have it be expandable & collapsible in mobile single plugin mode
+                window.matchMedia("screen and (max-width: 736px)").matches;
+
             var search = new Search({
                 map: view.esriMap,
                 showInfoWindowOnSelect: false,
