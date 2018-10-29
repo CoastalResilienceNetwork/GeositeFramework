@@ -14,13 +14,7 @@ node_modules
 \#*\#        # (x)emacs
 
 # Compiled files
-src/GeositeFramework/bin/
-src/GeositeFramework/obj/
-src/GeositeFramework/index.html
-*/Obj/       # git is case sensitive
-*/Generated_Code/
-PrecompiledWeb
-*/ClientBin
+src/index.html
 
 # NuGet
 packages
