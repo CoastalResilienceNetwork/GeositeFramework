@@ -186,15 +186,12 @@ require(['use!Geosite',
         }
 
         function initSearch(view) {
-            var isMobileSingleAppMode = N.app.singlePluginMode &&
-                window.matchMedia("screen and (max-device-width: 736px)").matches;
-            // Add search control; have it be expandable & collapsible in mobile single plugin mode
             var search = new Search({
                 map: view.esriMap,
                 showInfoWindowOnSelect: false,
                 enableHighlight: false,
-                enableButtonMode: isMobileSingleAppMode,
-                expanded: false, // this property only takes effect if `enableButtonMode` is `true`
+                enableButtonMode: true,
+                expanded: true,
             }, "search");
 
             // The translation lookup isn't ready when this is initialized.
@@ -207,21 +204,54 @@ require(['use!Geosite',
                 search.startup();
             }, 200);
 
-            if (isMobileSingleAppMode) {
-                // If the app's in mobile single app mode: hide title & subtitle on opening geocoder
-                // search input, showing them again on close. 200ms delay to smooth animation
-                search.on('focus', function() {
+            // If the app's in mobile single app mode: hide title & subtitle on opening geocoder
+            // search input, showing them again on close. 200ms delay to smooth animation
+            search.on('focus', function() {
+                if (isMobileSingleAppMode()) {
                     window.setTimeout(function() {
                         $('.nav-main-title').hide();
                         $('.nav-region-subtitle').hide();
                     }, 200)
-                });
-                search.on('blur', function() {
+                }
+            });
+
+            search.on('blur', function() {
+                if (isMobileSingleAppMode()) {
                     window.setTimeout(function() {
                         $('.nav-main-title').show();
                         $('.nav-region-subtitle').show();
                     }, 200)
-                });
+                }
+            });
+
+            // Listen for resize events, and make adjustments to the
+            // app header accordingly
+            window.addEventListener("resize", resizeThrottler, false);
+            var resizeTimeout;
+            function resizeThrottler() {
+                if (!resizeTimeout) {
+                    resizeTimeout = setTimeout(function() {
+                        resizeTimeout = null;
+                        adjustSearchControl(search);
+                    }, 66);
+                }
+            }
+
+            // To make sure the header is adjusted properly at app start,
+            // call the adjust function on init.
+            adjustSearchControl(search);
+        }
+
+        function isMobileSingleAppMode() {
+            return N.app.singlePluginMode &&
+                window.matchMedia("screen and (max-width: 736px)").matches;
+        }
+
+        function adjustSearchControl(search) {
+            if (isMobileSingleAppMode()) {
+                search.collapse();
+            } else {
+                search.expand();
             }
         }
 
