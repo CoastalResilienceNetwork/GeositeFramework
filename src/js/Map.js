@@ -104,10 +104,14 @@ require(['use!Geosite',
             }
         });
 
-        // Configure the esri proxy, for (at least) 2 cases:
-        // 1) For WMS "GetCapabilities" requests
-        // 2) When it needs to make an HTTP GET with a URL longer than 2000 chars
-        esri.config.defaults.io.proxyUrl = "proxy.ashx";
+        // Add the TNC AGS servers to the CORS server list
+        esri.config.defaults.io.corsEnabledServers.push(
+            'dev.services2.coastalresilience.org:6080',
+            'services.coastalresilience.org:6080',
+            'dev.services2.coastalresilience.org',
+            'services.coastalresilience.org',
+            'dev.services.coastalresilience.org',
+        )
 
         createMap(view);
     }
