@@ -192,7 +192,7 @@ def template_index():
     # write jinja template to disk, to be used in geosite static assets build
     # as well as served from this project's development server
     with open(IDX_FILE, 'wb') as f:
-        f.write(templated_idx)
+        f.write(templated_idx.encode('utf8'))
 
 
 if __name__ == '__main__':
