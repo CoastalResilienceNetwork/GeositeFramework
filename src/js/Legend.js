@@ -3,7 +3,7 @@ define(['use!Geosite',
          'dojo/window',
          'dojo/dom-geometry',
          'dojox/layout/ResizeHandle',
-         '../js/widgets/ConstrainedMoveable.js'
+         'js/widgets/ConstrainedMoveable.js'
         ],
     function(N,
              declare,

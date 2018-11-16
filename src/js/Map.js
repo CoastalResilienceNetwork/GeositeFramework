@@ -3,7 +3,7 @@
 
 require(['use!Geosite',
          './js/Legend.js',
-         './js/widgets/map_utils/main.js',
+         'js/widgets/map_utils/main.js',
          './js/util/ajax.js',
          'esri/map',
          'esri/dijit/Scalebar',

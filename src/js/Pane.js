@@ -109,7 +109,8 @@ require([
                     var pluginObject = new PluginClass(),
                         plugin = new N.models.Plugin({
                             pluginObject: pluginObject,
-                            pluginSrcFolder: regionData.pluginFolderNames[i]
+                            // Drop forward slash from path
+                            pluginSrcFolder: regionData.pluginFolderNames[i].slice(1)
                         });
 
                     // Load plugin only if it passes a compliance check ...
