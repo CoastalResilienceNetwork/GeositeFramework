@@ -117,7 +117,8 @@ require(['use!Geosite',
 
     function createMap(view) {
         var esriMap = Map(view.$el.attr('id'), {
-                sliderPosition: 'top-right'
+                sliderPosition: 'top-right',
+                minZoom: 2
             }),
             resizeMap = _.debounce(function () {
                 // When the element containing the map resizes, the
