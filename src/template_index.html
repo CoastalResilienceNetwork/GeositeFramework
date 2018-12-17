@@ -829,12 +829,6 @@
     <script src="js/App.js"></script>
 
     <script type="text/javascript">
-
-        require(['use!Azavea'], function(Azavea) {
-            // Initialize logging URL before we load any modules
-            Azavea.logUrl = "Log";
-        });
-
         // Our require() call below for loading plugins shouldn't fail, since:
         //     * Server-side code verifies that each plugin folder exists and contains a main.js file.
         //     * require() succeeds even if main.js has errors. (It passes an empty object for that module.)
@@ -849,7 +843,6 @@
             } else if (error.message !== undefined) {
                 message = error.message;
             }
-            Azavea.logError(message, "load Dojo module");
         });
 
         // Load the plugins and launch the app.
