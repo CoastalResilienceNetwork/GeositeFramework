@@ -29,7 +29,6 @@
 
             request.execute(function (result) {
                 if (result.error) {
-                    Azavea.logError("Error in URL Shortener", result.error);
                     model.set('shortUrl', model.get('url'));
                 } else {
                     model.set('shortUrl', result.id);

@@ -20,9 +20,6 @@ var Azavea = {};
  */
 
 (function(az) {
-    // Defaults (feel free to set to something different):
-    az.logUrl = 'handlers/logger.ashx';
-
     // Utility functions:
 
     az.isArray = function(o) {
@@ -503,9 +500,6 @@ var Azavea = {};
             try {
                 return callMe.apply(this, arguments);
             } catch (e) {
-                az.logError('Unexpected error while calling:\n' + callMe +
-                    '\nWith arguments:\n' + arguments, tryingTo, e);
-                
                 alert('Unable to ' + tryingTo + '.  An error occurred: ' + az.errorToString(e));
                 throw e;
             } finally {
@@ -514,66 +508,6 @@ var Azavea = {};
                 }
             }
         };
-    };
-
-    az.logError = function (message, triedTo, error) {
-        /// <summary>Makes a call to a logging handler to log the error with the server-side log.
-        ///          In order for this to work, Azavea.logHandlerUrl must be set.
-        ///          Also logs to the console if possible.</summary>
-        if (!az.logUrl) {
-            return;
-        }
-        try {
-            var errorStr = az.errorToString(error);
-            $.ajax({
-                url: az.logUrl,
-                type: 'POST',
-                data: {
-                    message: message,
-                    triedTo: triedTo,
-                    url: window.location.href,
-                    level: 'ERROR'
-                },
-                dataType: 'text',
-                success: function (resp) {
-                    az.log("Successfully logged error to server, message '" +
-                        message + "', attempted action '" + triedTo + "', error '" + errorStr +
-                        "'.  Handler response: '" + resp + "'.");
-                },
-                error: function (resp) {
-                    az.log("Unable to log error to server (" + az.logUrl + "), original message '" +
-                        message + "', original attempted action '" + triedTo + "', original error '" + errorStr +
-                        "'.  Handler response: '" + resp.responseText + "'.");
-                }
-            });
-        } catch (e) {
-            az.log("Error while attempting to handle an error, original message '" +
-                message + "', original attempted action '" + triedTo + "', original error '" + error +
-                "'.  New error: '" + e + "'.");
-        }
-    };
-
-    az.logMessage = function (message, logger, level) {
-        /// <summary>Logs a message to a server-side log, using specified level and logger name.
-        ///          In order for this to work, Azavea.logHandlerUrl must be set.</summary>
-        if (!az.logUrl) {
-            return;
-        }
-        $.ajax({
-            url: az.logUrl,
-            type: 'POST',
-            data: {
-                message: message,
-                url: window.location.href,
-                logger: logger,
-                level: level
-            },
-            dataType: 'text',
-            error: function (resp) {
-                az.log("Unable to log message to server (" + az.logUrl + "), original message '" +
-                    message + "'.  Handler response: '" + resp.responseText + "'.");
-            }
-        });
     };
 
     az.inputOnFocus = function(defaultText, defaultTextStyle) {
