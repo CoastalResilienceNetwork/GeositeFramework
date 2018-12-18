@@ -67,7 +67,7 @@ def prepare_languages():
     if not os.path.exists(lang_dir):
         os.makedirs(lang_dir)
     for lang in languages:
-        filename = os.path.join(lang_dir, lang)
+        filename = os.path.join(lang_dir, lang + '.json')
         data = json.dumps(translations[lang], ensure_ascii=False)
         codecs.open(filename, mode='w', encoding='utf-8').write(data)
 
