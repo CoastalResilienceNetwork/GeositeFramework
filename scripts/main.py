@@ -49,10 +49,10 @@ def prepare_languages():
 
     for f in all_json_files:
         language = None
-        matches = re.search(r'locales\/(.*?)\.json', f)
+        matches = re.search(r'locales(\/|\\)(.+)\.json', f)
 
         if matches is not None:
-            language = matches.group(1)
+            language = matches.group(2)
 
             if language in translations:
                 translations[language].update(to_json(f))
