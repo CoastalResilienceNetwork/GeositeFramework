@@ -167,7 +167,7 @@
                 overloadTranslationOptionHandler: i18nextSprintfPostProcessor.overloadTranslationOptionHandler,
                 // Path to load translations from
                 backend: {
-                    loadPath: 'languages/{{lng}}'
+                    loadPath: 'languages/{{lng}}.json'
                 }
             },
             callback = function() {
