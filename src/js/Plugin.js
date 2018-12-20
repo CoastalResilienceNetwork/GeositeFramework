@@ -610,7 +610,7 @@ require(['use!Geosite',
                 modalHeight = pluginObject.printModalSize[1],
                 modalWidth = pluginObject.printModalSize[0],
                 isMobileSingleAppMode = N.app.singlePluginMode &&
-                    window.matchMedia("screen and (max-device-width: 736px)").matches;
+                    window.matchMedia("screen and (max-width: 736px)").matches;
 
             // If the plugin is not set up for a print modal,
             // resolve any pending pre-print map operations

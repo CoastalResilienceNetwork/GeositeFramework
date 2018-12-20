@@ -2133,13 +2133,13 @@ body.x-body {
   color: #fff;
 }
 
-@media not screen and (max-device-width: 737px) {
+@media not screen and (max-width: 737px) {
     #single-plugin-toggle-footer {
         display: none !important;
     }
 }
 
-@media screen and (max-device-width: 736px) {
+@media screen and (max-width: 736px) {
     .tbox {
         max-width: 96vw !important;
         max-height: 90vh !important;
