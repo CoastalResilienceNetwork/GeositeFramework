@@ -14,12 +14,7 @@ node_modules
 \#*\#        # (x)emacs
 
 # Compiled files
-src/GeositeFramework/bin/
-src/GeositeFramework/obj/
-*/Obj/       # git is case sensitive
-*/Generated_Code/
-PrecompiledWeb
-*/ClientBin
+src/index.html
 
 # NuGet
 packages
@@ -33,5 +28,9 @@ Thumbs.db    # Having images in the source tree generates those files in Explore
 .DS_Store
 
 # App folders
-src/GeositeFramework/logs
-src/GeositeFramework/languages
+src/logs
+src/languages
+
+# Python
+*.pyc
+*__pycache__/
