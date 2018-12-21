@@ -109,7 +109,7 @@ require(['use!Geosite',
             'services.coastalresilience.org:6080',
             'dev.services2.coastalresilience.org',
             'services.coastalresilience.org',
-            'dev.services.coastalresilience.org',
+            'dev.services.coastalresilience.org'
         )
 
         createMap(view);
