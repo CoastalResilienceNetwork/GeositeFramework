@@ -1,0 +1,12 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./src/
+    working_dir: /usr/src/
+    ports:
+      - "54634:54634"
+    volumes:
+        - ./src:/usr/src/src/
+        - ./scripts:/usr/src/scripts
+        - ./dist:/usr/dist
