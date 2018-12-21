@@ -2257,18 +2257,11 @@ body.x-body {
 
     #search .searchExpanded .searchExpandContainer {
         background-color: #5C95B5;
-        width: 75vw;
-        margin-left: 2vw !important;
     }
 
     .arcgisSearch .searchExpanded #search_input {
         width: 60vw;
         margin-left: 2vw !important;
-    }
-
-    .nav-main-dropdown {
-        position: fixed !important;
-        right: 0vw !important;
     }
 
     .nav-region-subtitle {

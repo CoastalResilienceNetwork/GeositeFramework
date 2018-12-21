@@ -230,20 +230,22 @@ require(['use!Geosite',
 
             // Listen for resize events, and make adjustments to the
             // app header accordingly
-            window.addEventListener("resize", resizeThrottler, false);
-            var resizeTimeout;
-            function resizeThrottler() {
-                if (!resizeTimeout) {
-                    resizeTimeout = setTimeout(function() {
-                        resizeTimeout = null;
-                        adjustSearchControl(search);
-                    }, 66);
+            if (isMobileSingleAppMode()) {
+                window.addEventListener("resize", resizeThrottler, false);
+                var resizeTimeout;
+                function resizeThrottler() {
+                    if (!resizeTimeout) {
+                        resizeTimeout = setTimeout(function() {
+                            resizeTimeout = null;
+                            adjustSearchControl(search);
+                        }, 66);
+                    }
                 }
-            }
 
-            // To make sure the header is adjusted properly at app start,
-            // call the adjust function on init.
-            adjustSearchControl(search);
+                // To make sure the header is adjusted properly at app start,
+                // call the adjust function on init.
+                adjustSearchControl(search);
+            }
         }
 
         function isMobileSingleAppMode() {

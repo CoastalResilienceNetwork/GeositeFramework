@@ -134,6 +134,21 @@
             right: 45px;
             z-index: 10000;
         }
+
+        /* Mobile-friendly rules that should only apply
+           to single plugin mode */
+        @media screen and (max-width: 736px) {
+          .nav-main-dropdown {
+              position: fixed !important;
+              right: 0vw !important;
+          }
+
+          #search .searchExpanded .searchExpandContainer {
+              width: 75vw;
+              margin-left: 2vw !important;
+          }
+        }
+
         {% endif %}
     </style>
 
@@ -870,6 +885,7 @@
         });
 
     </script>
+    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
     <footer id="single-plugin-toggle-footer">
         <span id="single-plugin-toggle-buttons">
             <button class="single-plugin-toggle-button button button-primary" id="single-plugin-toggle-content-button">
@@ -880,5 +896,6 @@
             </button>
         </span>
     </footer>
+    {% endif %}
 </body>
 </html>
