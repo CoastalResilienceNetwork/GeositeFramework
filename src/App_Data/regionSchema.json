@@ -440,6 +440,11 @@
                 }
             },
             "additionalProperties": false
+        },
+        "appIntro": {
+            "type": "boolean",
+            "required": false,
+            "additionalProperties": false
         }
     },
     "additionalProperties": false

@@ -5,6 +5,7 @@
         "active": false,
         "pluginFolderName": "identify_point"
     },
+    "appIntro": true,
     "titleMain": {
         "text": "Geosite Framework Sample",
         "url": "http://www.azavea.com/"
