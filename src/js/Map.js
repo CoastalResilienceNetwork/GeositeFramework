@@ -136,7 +136,11 @@ require(['use!Geosite',
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
-        initSearch(view);
+
+        // don't include address search for single plugin mode
+        if(!N.app.singlePluginMode) {
+            initSearch(view);
+        }
 
         var scalebar = new ScaleBar({
             map: view.esriMap,
