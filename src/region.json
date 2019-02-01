@@ -2,8 +2,8 @@
     "language": "en",
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "singlePluginMode": {
-        "active": false,
-        "pluginFolderName": "identify_point"
+        "active": true,
+        "pluginFolderName": "natural_coastal_protection"
     },
     "titleMain": {
         "text": "Geosite Framework Sample",
@@ -97,7 +97,7 @@
         "headerLogoPath": "http://maps.coastalresilience.org/network/assets/images/partners/TNCLogoPrimary_RGB2.jpg"
     },
     "colors": {
-        "primary": "#5394B6",
+        "primary": "#144863",
         "secondary": "#3BBDC2",
         "tertiary": "#333",
         "active": "#0096D6"
