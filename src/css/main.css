@@ -446,7 +446,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-width: 740px;
+    /* min-width: 740px; */
 }
 .h1,
 .text-h1,
@@ -2040,6 +2040,16 @@ body.x-body {
   z-index: 2200 !important;
 }
 
+
+.mobile-full-map-toggle {
+    display: none;
+}
+
+/* Button to expand/contract content and map on mobile */
+#mobile-content-toggle {
+    display: none;
+}
+
 .sidebar-button-bottom {
   position: fixed;
   bottom: 0;
@@ -2136,6 +2146,18 @@ body.x-body {
 @media not screen and (max-width: 737px) {
     #single-plugin-toggle-footer {
         display: none !important;
+    }
+
+    .map-container {
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: space-around;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        position: relative;
+        overflow-y: auto;
     }
 }
 

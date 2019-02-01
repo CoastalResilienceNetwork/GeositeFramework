@@ -1,0 +1,93 @@
+.sidebar-content {
+  height: calc(100% - 23px);
+  margin-top: 0;
+}
+
+.sidebar-nav {
+  display:none;
+}
+
+/* Mobile-friendly rules that should only apply
+to single plugin mode */
+@media screen and (max-width: 736px) {
+  .sidebar {
+    position: absolute;
+    max-height: 100%;
+    bottom: 0;
+    transition: max-height 500ms ease-in-out;
+    overflow: hidden;
+  }
+
+  .map {
+    max-height: 100%;
+    transition: max-height 500ms ease-in-out;
+  }
+
+  .sidebar-peeking {
+    height: 45%;
+  }
+
+  .sidebar-max {
+    height: 100%;
+  }
+
+  .sidebar-min {
+    height: 23px;
+  }
+
+  /* Button to expand/contract content and map on mobile */
+  #mobile-content-toggle {
+    display: block;
+    text-align: center;
+    background: #4B4B4B;
+    box-shadow: 0 -1px 4px 0 rgba(0,0,0,0.17);
+    padding: 2px;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .content .map .basemap-selector {
+    display: none;
+  }
+
+  .content .map .map-tools {
+    top: 20px;
+    opacity: 1;
+  }
+
+  .esriSimpleSlider {
+    display: none;
+  }
+
+  .mobile-full-map-toggle {
+    display: block;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    z-index: 5001;
+  }
+
+  .mobile-full-map-toggle > img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .map-peeking {
+    height: 55%;
+  }
+
+  .map-max {
+    height: calc(100% - 23px);
+  }
+
+  .map-min {
+    height: 0;
+  }
+
+  .nav-main-dropdown {
+    position: fixed !important;
+    right: 0vw !important;
+  }
+}

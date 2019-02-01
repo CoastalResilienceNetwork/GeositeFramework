@@ -137,15 +137,15 @@ require(['use!Geosite',
         loadExtent(view);
         selectBasemap(view);
 
-        // don't include address search for single plugin mode
+        // don't include address search or scale bar in single plugin mode
         if(!N.app.singlePluginMode) {
             initSearch(view);
-        }
 
-        var scalebar = new ScaleBar({
-            map: view.esriMap,
-            scalebarUnit: 'dual'
-        });
+            var scalebar = new ScaleBar({
+                map: view.esriMap,
+                scalebarUnit: 'dual'
+            });
+        }
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {

@@ -29,6 +29,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styleguide.css">
     <link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
+    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+    <link rel="stylesheet" href="css/single-plugin-mode.css">
+    {% endif %}
 
     <!-- jQuery UI needs to load before Dojo, or else there is a conflict that prevents Dojo from loading -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -109,47 +112,6 @@
         .dropdown-submenu > a:not(:hover) {
             background-color: {{ region.colors.secondary }};
         }
-
-        {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-        .sidebar-content {
-            height: 100%;
-            margin-top: 0;
-        }
-
-        .sidebar-nav {
-            display:none;
-        }
-
-        #toggle-plugin-container button {
-            background-color: {{ region.colors.primary }};
-            border-color: {{ region.colors.primary }};
-        }
-        #toggle-plugin-container button:hover {
-            background-color: {{ region.colors.secondary }};
-        }
-
-        /* Ideally these would be stored in class, but when the ESRI search is
-        initialized, existing classes are overwritten */
-        #search {
-            right: 45px;
-            z-index: 10000;
-        }
-
-        /* Mobile-friendly rules that should only apply
-           to single plugin mode */
-        @media screen and (max-width: 736px) {
-          .nav-main-dropdown {
-              position: fixed !important;
-              right: 0vw !important;
-          }
-
-          #search .searchExpanded .searchExpandContainer {
-              width: 75vw;
-              margin-left: 2vw !important;
-          }
-        }
-
-        {% endif %}
     </style>
 
     {% if region.googleUrlShortenerApiKey != null %}
@@ -194,56 +156,55 @@
                 </div>
             </div>
         </nav>
-        <div class="flex-expand">
-            <div class="flex-container map-container">
-                {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-                <div id="toggle-plugin-container" class="single-plugin-mode">
-                    <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                </div>
-                {% endif %}
-                <div id="map-0" class="map">
-                    <div class="control-container">
-                        <div class="top-tools"></div>
-                        <div class="map-tools">
-                            <!-- Map utils control -->
-                            <div class="topbar-plugin" id="map-utils-control">
-                                <div class="plugin-launcher">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
-                                        <i class="icon-wrench"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+        <div class="map-container">
+            {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+            <div id="toggle-plugin-container" class="single-plugin-mode">
+                <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+            </div>
+            {% endif %}
+            <div id="map-0" class="map map-peeking">
+                <div class="control-container">
+                    <div class="top-tools"></div>
+                    <div class="map-tools">
+                        <!-- Map utils control -->
+                        <div class="topbar-plugin" id="map-utils-control">
+                            <div class="plugin-launcher">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
+                                    <i class="icon-wrench"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+                                    {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
-                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
-                                        {% endif %}
-                                        <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Top bar plugins -->
-                            <div class="tools"></div>
-                        </div>
-                        <div class="basemap-selector">
-                            <div class="basemap-selector-title"></div>
-                            <div class="basemap-selector-list">
-                                <ul>
+                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                    {% endif %}
+                                    <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                 </ul>
                             </div>
                         </div>
+                        <!-- Top bar plugins -->
+                        <div class="tools"></div>
                     </div>
-                    <div id="legend-container-<%= paneNumber %>" class="legend">
-                        <div class="legend-header">
-                            <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
-                        </div>
-                        <div class="legend-body">
-                            <div class="plugin-legends"></div>
-                            <div class="layer-legends"></div>
+                    <div class="basemap-selector">
+                        <div class="basemap-selector-title"></div>
+                        <div class="basemap-selector-list">
+                            <ul>
+                            </ul>
                         </div>
                     </div>
-                    <div class="subregion-tooltip"></div>
                 </div>
+                <div id="legend-container-<%= paneNumber %>" class="legend">
+                    <div class="legend-header">
+                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    </div>
+                    <div class="legend-body">
+                        <div class="plugin-legends"></div>
+                        <div class="layer-legends"></div>
+                    </div>
+                </div>
+                <div class="subregion-tooltip"></div>
+                <div class="mobile-full-map-toggle"><img src="img/fullMapIcon.svg" alt="Expand Map" /></div>
             </div>
         </div>
     </script>
@@ -343,7 +304,7 @@
     </script>
 
     <script type="text/template" id="template-plugin-container">
-        <div class="sidebar <%= sizeClassName %> content-scrollable" id="<%= id %>" style="<%= customWidth %>">
+        <div class="sidebar sidebar-peeking <%= sizeClassName %> content-scrollable" id="<%= id %>" style="<%= customWidth %>">
             <div class="sidebar-nav">
                 <h2 class="nav-title" class="i18n" data-i18n="<%- title %>">
                     <%- title %>
@@ -371,6 +332,10 @@
                         <i class="icon-cancel"></i>
                     </button>
                 </div>
+            </div>
+            <div id="mobile-content-toggle">
+                <span class="mobile-toggle-arrow"><i class="fa fa-chevron-up"></i></span>
+                <span class="mobile-toggle-text">View More Data</span>
             </div>
             <div class="sidebar-content">
             </div>
@@ -885,17 +850,5 @@
         });
 
     </script>
-    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-    <footer id="single-plugin-toggle-footer">
-        <span id="single-plugin-toggle-buttons">
-            <button class="single-plugin-toggle-button button button-primary" id="single-plugin-toggle-content-button">
-                Content
-            </button>
-            <button class="single-plugin-toggle-button button button-secondary" id="single-plugin-toggle-map-button">
-                Map
-            </button>
-        </span>
-    </footer>
-    {% endif %}
 </body>
 </html>

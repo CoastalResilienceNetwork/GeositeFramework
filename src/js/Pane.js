@@ -345,7 +345,11 @@ require([
         }
 
         function initMobileTogglePlugin(view) {
-            var mobileTogglePluginView = new N.views.MobileTogglePlugin({
+            var mobileTogglePluginView = new N.views.MobileTogglePluginContent({
+                viewModel: view.model
+            });
+
+            var mobileToggleFullMap = new N.views.MobileToggleFullMap({
                 viewModel: view.model
             });
 

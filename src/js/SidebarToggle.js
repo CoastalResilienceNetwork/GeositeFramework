@@ -75,51 +75,81 @@
         }
     });
 
-    // Mobile toggle view for single plugin mode
-    N.views.MobileTogglePlugin = Backbone.View.extend({
-        el: 'footer',
+    // Mobile toggle full screen content view for single plugin mode
+    N.views.MobileToggleFullMap = Backbone.View.extend({
+        el: '.mobile-full-map-toggle',
 
         events: {
-            'click #single-plugin-toggle-content-button': 'showMobileContent',
-            'click #single-plugin-toggle-map-button': 'showMobileMap'
+            'click': 'setFullMap',
+        },
+
+        initialize: function(options) {
+            this.mobileToggleButton = $('#mobile-content-toggle');
+            this.fullMapButton = this.$el;
+            this.pluginSidebar = $('.sidebar');
+            this.mapRef = $('.map');
+
+        },
+
+        setFullMap: function() {
+            // set correct classes on map and sidebar, hide full map toggle button
+            this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-max').addClass('sidebar-min');
+            this.mapRef.removeClass('map-peeking').removeClass('map-min').addClass('map-max');
+            // set content of mobile toggle tab
+            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('view data');
+            // show full map button
+            this.fullMapButton.hide();
+        },
+
+    });
+
+    // Mobile toggle content view for single plugin mode
+    N.views.MobileTogglePluginContent = Backbone.View.extend({
+        el: '#mobile-content-toggle',
+
+        events: {
+            'click': 'handleContentToggleClick',
         },
 
         initialize: function(options) {
             this.viewModel = options.viewModel;
-            this.listenTo(this.viewModel, 'change', this.adjustButtonCSS);
+            this.listenTo(this.viewModel, 'change', this.handleContentToggleClick);
 
-            this.mobileMapButton = this.$el.find('#single-plugin-toggle-content-button');
-            this.mobileContentButton = this.$el.find('#single-plugin-toggle-map-button');
+            this.mobileToggleButton = this.$el;
+            this.fullMapButton = $('.mobile-full-map-toggle');
             this.pluginSidebar = $('.sidebar');
-
-            N.app.showMobileMap = this.showMobileMap.bind(this);
-            N.app.showMobileContent = this.showMobileContent.bind(this);
+            this.mapRef = $('.map');
         },
 
-        adjustButtonCSS: function() {
-            if (!this.viewModel.get('pluginContentVisible')) {
-                this.mobileMapButton.addClass('button-secondary');
-                this.mobileContentButton.addClass('button-primary');
-
-                this.mobileMapButton.removeClass('button-primary');
-                this.mobileContentButton.removeClass('button-secondary');
+        handleContentToggleClick() {
+            if(this.pluginSidebar.hasClass('sidebar-peeking')) {
+                this.setFullContent();
             } else {
-                this.mobileMapButton.addClass('button-primary');
-                this.mobileContentButton.addClass('button-secondary');
-
-                this.mobileMapButton.removeClass('button-secondary');
-                this.mobileContentButton.removeClass('button-primary');
+                this.setPeekingView();
             }
         },
 
-        showMobileContent: function() {
-            this.pluginSidebar.show();
-            this.viewModel.set('pluginContentVisible', true);
+        setFullContent: function() {
+            // set correct classes on map and sidebar, full map toggle button state?
+            this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-min').addClass('sidebar-max');
+            this.mapRef.removeClass('map-peeking').removeClass('map-max').addClass('map-min');
+            // set content of mobile toggle tab
+            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-down');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('view less data');
+            // hide full map button
+            this.fullMapButton.show();
         },
 
-        showMobileMap: function() {
-            this.pluginSidebar.hide();
-            this.viewModel.set('pluginContentVisible', false);
+        setPeekingView: function() {
+            // set correct classes on map and sidebar, how full map toggle button
+            this.pluginSidebar.removeClass('sidebar-max').removeClass('sidebar-min').addClass('sidebar-peeking');
+            this.mapRef.removeClass('map-min').removeClass('map-max').addClass('map-peeking');
+            // set content of mobile toggle tab
+            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('view more data');
+            // show full map button
+            this.fullMapButton.show();
         }
     });
 }(Geosite));

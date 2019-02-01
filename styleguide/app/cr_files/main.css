@@ -446,7 +446,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-width: 740px;
+    /* min-width: 740px; */
 }
 .h1,
 .text-h1,
