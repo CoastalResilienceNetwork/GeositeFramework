@@ -42,7 +42,7 @@ to single plugin mode */
     display: block;
     text-align: center;
     background: #4B4B4B;
-    box-shadow: 0 -1px 4px 0 rgba(0,0,0,0.17);
+    box-shadow: 0 -3px 4px 0 rgba(0,0,0,0.5);
     padding: 2px;
     color: white;
     text-transform: uppercase;
@@ -61,7 +61,7 @@ to single plugin mode */
     display: none;
   }
 
-  .mobile-full-map-toggle {
+  .map-peeking .mobile-full-map-toggle {
     display: block;
     width: 36px;
     height: 36px;

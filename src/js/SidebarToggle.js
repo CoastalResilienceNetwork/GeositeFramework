@@ -98,8 +98,6 @@
             // set content of mobile toggle tab
             this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
             this.mobileToggleButton.find('.mobile-toggle-text').html('view data');
-            // show full map button
-            this.fullMapButton.hide();
         },
 
     });
@@ -137,8 +135,6 @@
             // set content of mobile toggle tab
             this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-down');
             this.mobileToggleButton.find('.mobile-toggle-text').html('view less data');
-            // hide full map button
-            this.fullMapButton.show();
         },
 
         setPeekingView: function() {
@@ -148,8 +144,6 @@
             // set content of mobile toggle tab
             this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
             this.mobileToggleButton.find('.mobile-toggle-text').html('view more data');
-            // show full map button
-            this.fullMapButton.show();
         }
     });
 }(Geosite));

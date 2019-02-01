@@ -352,8 +352,6 @@ require([
             var mobileToggleFullMap = new N.views.MobileToggleFullMap({
                 viewModel: view.model
             });
-
-            mobileTogglePluginView.$el.show();
         }
 
         function initSinglePluginModeHelp(view) {
