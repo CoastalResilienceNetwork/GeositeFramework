@@ -7,20 +7,21 @@
   display:none;
 }
 
+.sidebar, .map {
+  -webkit-transition: height 500ms ease-in-out;
+  -moz-transition: height 500ms ease-in-out;
+  -ms-transition: height 500ms ease-in-out; 
+  -o-transition: height 500ms ease-in-out; 
+  transition: height 500ms ease-in-out;
+}
+
 /* Mobile-friendly rules that should only apply
 to single plugin mode */
 @media screen and (max-width: 736px) {
   .sidebar {
     position: absolute;
-    max-height: 100%;
     bottom: 0;
-    transition: max-height 500ms ease-in-out;
     overflow: hidden;
-  }
-
-  .map {
-    max-height: 100%;
-    transition: max-height 500ms ease-in-out;
   }
 
   .sidebar-peeking {
@@ -31,6 +32,7 @@ to single plugin mode */
     height: 100%;
   }
 
+  /* height of the toggle control */
   .sidebar-min {
     height: 23px;
   }
