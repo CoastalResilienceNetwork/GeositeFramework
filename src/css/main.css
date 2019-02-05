@@ -1,3 +1,14 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(../fonts/opensans/OpenSans-Regular.ttf);
+}
+
+@font-face {
+    font-family: OpenSansBold;
+    src: url(../fonts/opensans/OpenSans-Bold.ttf);
+    font-weight: bold;
+}
+
 .padding-2 {
     padding: 2rem
 }
@@ -193,7 +204,7 @@
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 
 html {
-    font-family: sans-serif;
+    font-family: OpenSans, sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
 }
@@ -442,7 +453,7 @@ body {
     font-size: 13px;
     line-height: 1.5;
     color: #5d6165;
-    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: OpenSans, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -490,7 +501,7 @@ h5,
 h6 {
     line-height: 1.2;
     color: #101d28;
-    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: OpenSansBold, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     margin-top: 2rem;
     margin-bottom: 1.4rem;
     font-weight: 900
@@ -2001,7 +2012,7 @@ a.active {
 body.x-body {
     font-size: 1.5rem;
     color: #73787d;
-    font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+    font-family: OpenSans, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
 }
 #tlyPageGuide {
   list-style: none;
@@ -2205,7 +2216,7 @@ body.x-body {
         height: 75%;
         font-size: 20px !important;
         font-weight: 500;
-        font-family: colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+        font-family: OpenSans, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
         padding: 0 !important;
         border: 0px !important;
         border-radius: 0 !important;
