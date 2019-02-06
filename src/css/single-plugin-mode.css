@@ -15,6 +15,57 @@
   transition: height 500ms ease-in-out;
 }
 
+/* HEADER AND OFF CANVAS MENU */
+.single-plugin-mode .nav-main {
+  padding-right: 0;
+}
+.header-offcanvas {
+    height: 55px;
+    z-index: 2200;
+}
+.header-offcanvas.single-plugin-mode {
+    position: absolute;
+    right: 0;
+    z-index: 10000;
+}
+.header-offcanvas.offcanvas>button {
+    padding: 0;
+    background-color: transparent;
+    color: #fff;
+    border: 0;
+    box-shadow: none!important
+}
+.header-offcanvas .icon-menu {
+    color: #fff;
+}
+.offcanvas-icon-container {
+    padding: 3px 13px 0 2px;
+    border-right: 1px solid hsla(0, 0%, 100%, .2);
+    margin-right: 10px;
+    line-height: 50px;
+    height: 100%;
+}
+.single-plugin-mode .offcanvas-icon-container {
+    margin-right: 0;
+    border-right: none;
+}
+.header-offcanvas .button.active,
+.header-offcanvas .button.hover,
+.header-offcanvas .button:active,
+.header-offcanvas .button:hover {
+    background-color: transparent
+}
+.nav-main-button {
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    background-color: transparent
+}
+
+.offcanvas-menu {
+  display: none;
+}
+
 /* Mobile-friendly rules that should only apply
 to single plugin mode */
 @media screen and (max-width: 736px) {
@@ -68,7 +119,7 @@ to single plugin mode */
     position: absolute;
     left: 20px;
     bottom: 20px;
-    z-index: 5001;
+    z-index: 501;
   }
 
   .mobile-full-map-toggle > img {
@@ -88,8 +139,13 @@ to single plugin mode */
     height: 0;
   }
 
-  .nav-main-dropdown {
+  .nav-main-offcanvas {
     position: fixed !important;
     right: 0vw !important;
   }
+
+  .single-plugin-mode .offcanvas-icon-container {
+    padding: 5px 11px 0 0;
+  }
+
 }

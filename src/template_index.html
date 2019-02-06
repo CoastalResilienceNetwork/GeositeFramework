@@ -656,29 +656,27 @@
         <div class="nav-region-subtitle">
             {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                 {{ region.titleDetail.text }}
-            {% else %}
-                <span id="show-single-plugin-mode-help">About</span>
             {% endif %}
         </div>
         <div id="search"></div>
         {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-        <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
-            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <div class="offcanvas header-offcanvas nav-main-offcanvas single-plugin-mode">
+            <button class="button offcanvas-toggle nav-main-button" type="button" id="header-menu" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
-                    <div class="dropdown-icon-container">
-                        <i class="dropdown-icon icon-menu"></i>
+                    <div class="offcanvas-icon-container">
+                        <i class="offcanvas-icon icon-menu"></i>
                     </div>
                 </div>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in region.headerLinks %}
-                    <li>
-                        <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
-                    </li>
-                    <li class="divider"></li>
-                {% endfor %}
-            </ul>
         </div>
+        <ul class="offcanvas-menu" aria-labelledby="header-menu">
+            <li id="show-single-plugin-mode-help"><a href="#">About</a></li>
+            {% for headerLink in region.headerLinks %}
+                <li>
+                    <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
+                </li>
+            {% endfor %}
+        </ul>
         {% endif %}
     </header>
 

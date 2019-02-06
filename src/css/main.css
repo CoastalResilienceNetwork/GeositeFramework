@@ -902,12 +902,14 @@ nav {
 }
 #toggle-plugin-container {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 15px;
+  left: -3px;
   z-index: 2;
   padding: 7px 12px;
-  background-color: #DDD;
+  background-color: #FFF;
   cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 0px 0px 26px 0px rgba(51, 51, 51, 0.42);
 }
 #toggle-plugin-container span {
   color: #000;
