@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
     {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
     <link rel="stylesheet" href="css/single-plugin-mode.css">
+    <link rel="stylesheet" href="css/pushy.css">
     {% endif %}
 
     <!-- jQuery UI needs to load before Dojo, or else there is a conflict that prevents Dojo from loading -->
@@ -661,7 +662,8 @@
         <div id="search"></div>
         {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
         <div class="offcanvas header-offcanvas nav-main-offcanvas single-plugin-mode">
-            <button class="button offcanvas-toggle nav-main-button" type="button" id="header-menu" aria-haspopup="true" aria-expanded="true">
+            <!-- Menu Button -->
+            <button class="button menu-btn offcanvas-toggle nav-main-button" type="button" id="header-menu" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
                     <div class="offcanvas-icon-container">
                         <i class="offcanvas-icon icon-menu"></i>
@@ -669,16 +671,24 @@
                 </div>
             </button>
         </div>
-        <ul class="offcanvas-menu" aria-labelledby="header-menu">
-            <li id="show-single-plugin-mode-help"><a href="#">About</a></li>
-            {% for headerLink in region.headerLinks %}
-                <li>
-                    <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
-                </li>
-            {% endfor %}
-        </ul>
+        <!-- Pushy Menu -->
+        <nav class="pushy pushy-right offcanvas-menu" aria-labelledby="header-menu">
+            <div class="pushy-content">
+                <ul class="offcanvas-links">
+                    <li class="pushy-link" id="show-single-plugin-mode-help"><a href="#">About</a></li>
+                    {% for headerLink in region.headerLinks %}
+                        <li class="pushy-link">
+                            <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
+        <!-- Pushy Site Overlay -->
+        <div class="site-overlay"></div>
         {% endif %}
     </header>
+
 
    {% include "src/Views/Shared/TourInfo.cshtml" %}
 
@@ -791,6 +801,7 @@
     <script src="js/SidebarToggle.js"></script>
     {% if region.singlePluginMode and region.singlePluginMode.active %}
         <script src="js/SinglePluginModeHelp.js"></script>
+        <script src="js/lib/pushy.min.js"></script>
     {% endif %}
     <script src="js/TimeoutWrapper.js"></script>
     <script src="js/Identify.js"></script>

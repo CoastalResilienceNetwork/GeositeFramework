@@ -62,9 +62,28 @@
     background-color: transparent
 }
 
-.offcanvas-menu {
-  display: none;
+.offcanvas-links {
+  list-style-type: none;
+  padding-left: 0px;
+  font-family: OpenSansBold, OpenSans, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
 }
+
+.pushy.offcanvas-menu {
+  background: #fff;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link {
+  line-height: 24px;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link a {
+  color: #555555;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link a:hover {
+  color: #000000;
+}
+
 
 /* Mobile-friendly rules that should only apply
 to single plugin mode */
@@ -143,9 +162,4 @@ to single plugin mode */
     position: fixed !important;
     right: 0vw !important;
   }
-
-  .single-plugin-mode .offcanvas-icon-container {
-    padding: 5px 11px 0 0;
-  }
-
 }
