@@ -5,6 +5,7 @@
         "active": true,
         "pluginFolderName": "natural_coastal_protection"
     },
+    "appIntro": true,
     "titleMain": {
         "text": "Geosite Framework Sample",
         "url": "http://www.azavea.com/"
