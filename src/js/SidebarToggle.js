@@ -43,10 +43,11 @@
         }
     });
 
-    // Single plugin mode button to toggle plugin visibility
+    // Single plugin mode button to toggle plugin content visibility
     N.views.TogglePlugin = Backbone.View.extend({
         initialize: function(options) {
             this.singlePlugin = options.viewModel.get('plugins').at(0);
+            this.pluginSidebar = $('.sidebar');
             this.viewModel = options.viewModel;
             this.viewModel.set('pluginContentVisible', true);
             this.listenTo(this.viewModel, 'change', this.adjustToggleIcon);
@@ -67,10 +68,12 @@
         togglePluginVisibility: function() {
             if (this.viewModel.get('pluginContentVisible')) {
                 this.viewModel.set('pluginContentVisible', false);
-                this.singlePlugin.deselect();
+                this.pluginSidebar.addClass('desktop-sidebar-hidden');
+                //this.singlePlugin.deselect();
             } else {
                 this.viewModel.set('pluginContentVisible', true);
-                this.singlePlugin.select();
+                this.pluginSidebar.removeClass('desktop-sidebar-hidden');
+                //this.singlePlugin.select();
             }
         }
     });

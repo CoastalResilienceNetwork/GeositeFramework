@@ -84,10 +84,18 @@
   color: #000000;
 }
 
+@media screen and (min-width: 736px) {
+  .desktop-sidebar-hidden {
+    visibility: hidden;
+    width: 0px !important;
+  }
+}
+
 
 /* Mobile-friendly rules that should only apply
 to single plugin mode */
 @media screen and (max-width: 736px) {
+
   .sidebar {
     position: absolute;
     bottom: 0;
