@@ -93,8 +93,8 @@
 }
 
 .content .legend {
-  bottom: 40px;
-  left: 15px;
+  bottom: 25px;
+  left: 25px;
   min-width: 100px;
   max-height: 250px;
 }
@@ -211,5 +211,10 @@ to single plugin mode */
 
   .content .legend {
     bottom: 55px;
+    left: 15px;
+  }
+
+  .map-max .legend {
+    bottom: 10px;
   }
 }
