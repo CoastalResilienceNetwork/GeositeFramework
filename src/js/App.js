@@ -130,6 +130,8 @@
         $(window).resize(_.debounce(resizeMap, 300));
     }
 
+    /* TODO: Is this used anywhere?? Does not trigger on a.framework-popup links located within plugin content. 
+    Leaving for now. No need to migrate to featherweight as it already provides this functionality  */
     function registerPopupHandlers() {
         $('a.framework-popup').click(function() {
             var url = $(this).data('url');
@@ -151,6 +153,7 @@
             });
 
         });
+
     };
 
     function internationalize(lng) {

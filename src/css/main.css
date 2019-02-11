@@ -1791,7 +1791,7 @@ header .nav-main {
 }
 .tclose {
     position: absolute;
-    top: 20px;
+    top: 26px;
     right: 24px;
     cursor: pointer;
     padding: 6px;
@@ -1800,9 +1800,9 @@ header .nav-main {
     color: #CCC;
     font-weight: 700;
     z-index: 99;
-    height: 24px;
+    height: 22px;
     line-height: 10px;
-    width: 24px;
+    width: 22px;
 }
 .tclose:hover {
     background: #F1F2F2;
@@ -2154,6 +2154,56 @@ body.x-body {
 }
 .arcgisSearch .searchGroup .searchInput:-moz-placeholder { /* Firefox 18- */
   color: #fff;
+}
+
+/* Social Share */
+.fb-share-button {
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    background: #365899;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: top;
+}
+
+.fb-share-button a {
+    color: white;
+}
+
+.fb-share-button svg {
+    width: 11px;
+    margin-right: 3px;
+    margin-bottom: -1px;
+}
+
+.fb-share-button:hover{
+    background: #1D3F80;
+}
+
+.tinner .twitter-share-button, .twitter-share-button {
+    display: inline-block;
+    margin-top: 0px;
+    margin-right: 8px;
+}
+
+.mail-share-button {
+    display: inline-block;
+    vertical-align: top;
+    padding: 2px 6px;
+    font-size: 11px;
+    margin-right: 8px;
+    border-radius: 3px;
+    background: #999;
+}
+
+.mail-share-button a {
+    color: white;
+}
+
+.mail-share-button:hover {
+    background: #777;
 }
 
 @media not screen and (max-width: 737px) {

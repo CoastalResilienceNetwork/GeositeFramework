@@ -7,7 +7,8 @@
             width: 500,
             hash: null,
             url: null,
-            shortUrl: null
+            shortUrl: null,
+            mailLink: null
         },
 
         initialize: function () {
@@ -32,8 +33,13 @@
                     model.set('shortUrl', model.get('url'));
                 } else {
                     model.set('shortUrl', result.id);
+                    model.genMailLink();
                 }
             });
+        },
+
+        genMailLink: function() {
+            this.set('mailLink', encodeURI("mailto:?subject=See the map I made on " + N.app.data.region.titleMain.text + "&body=I made a custom map with The Nature Conservancy's '" + N.app.data.region.titleMain.text + "'. " + this.get('shortUrl')));
         }
     });
 
@@ -56,7 +62,6 @@
 
         render: function () {
             var view = this;
-
             TINY.box.show({
                 boxid: 'permalink-tiny-box-modal',
                 html: this.template(view.model.toJSON()),
@@ -64,13 +69,21 @@
                 openjs: function () {
                     view.setElement($('#permalink-dialog'));
 
-                    // Embed code will be re-rendered with UI changes
-                    // so it is removed to its own view
-                    view.embedView = new N.views.EmbedCode({
-                        el: view.$('#iframe-embed'),
-                        model: view.model
-                    });
-                    view.embedView.render();
+                    if(!N.app.singlePluginMode) {
+                        // Embed code will be re-rendered with UI changes
+                        // so it is removed to its own view
+                        view.embedView = new N.views.EmbedCode({
+                            el: view.$('#iframe-embed'),
+                            model: view.model
+                        });
+                        view.embedView.render();
+                    } else {
+                        view.socialView = new N.views.SocialShare({
+                            el: view.$('#social-share'),
+                            model: view.model
+                        });
+                        view.socialView.render();
+                    }
 
                     var $domElement = view.$('.permalink-textbox');
                     view.selectText($domElement);
@@ -89,7 +102,9 @@
                 },
                 closejs: function() {
                     view.remove();
-                    view.embedView.remove();
+                    if(!N.app.singlePluginMode) {
+                        view.embedView.remove();
+                    }
                 }
             });
         },
@@ -133,6 +148,20 @@
 
         initialize: function () {
             this.template = N.app.templates['embed-iframe'];
+        },
+
+        render: function () {
+            this.$el.empty().html(
+                $.trim(this.template(this.model.toJSON()))
+            );
+        }
+    });
+
+    N.views.SocialShare = Backbone.View.extend({
+        template: null,
+
+        initialize: function () {
+            this.template = N.app.templates['social-share'];
         },
 
         render: function () {
