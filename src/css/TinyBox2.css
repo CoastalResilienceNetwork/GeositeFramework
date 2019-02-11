@@ -34,3 +34,17 @@
     border-right: 1px solid #333;
     border-bottom: 1px solid #333;
 }
+
+/* CSS helper classes for plugins to use TINY box */
+
+.plugin-tiny-box {
+    width: 50vw;
+    height: 80vh;
+}
+
+@media screen and (max-width: 740px) {
+    .plugin-tiny-box {
+        width: 100vw;
+        height: 100vh;
+    }
+}

@@ -90,6 +90,7 @@
 
 .minimized .legend-toggle {
   padding: 0px;
+  cursor: pointer;
 }
 
 .content .legend {
@@ -104,6 +105,7 @@
   color: #4B4B4B;
   padding: 5px 10px;
   background: #fff;
+  border-radius: 4px;
 }
 
 .content .legend .legend-body {

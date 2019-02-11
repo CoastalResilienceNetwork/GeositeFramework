@@ -43,7 +43,7 @@ define(['use!Geosite',
 
 
             if(N.app.singlePluginMode) {
-                this.$el.find('.legend-toggle').bind('click touchstart', function() {
+                this.$el.find('.legend-toggle').bind('click', function() {
                     self.toggleMinimize();
                 });
             } else {
