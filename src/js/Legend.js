@@ -41,24 +41,31 @@ define(['use!Geosite',
             this.tmplLegendItemScale = _.template($('#template-legend-item-scale').html());
             this.tmplLegendItemImage = _.template($('#template-legend-item-image').html());
 
-            // Make the legend resizeable and moveable
-            var handle = new ResizeHandle({
-                targetId: id,
-                activeResize: true,
-                animateSizing: false
-            });
 
-            handle.placeAt(id);
-
-            new ConstrainedMoveable(
-                document.getElementById(id), {
-                    handle: this.$el.find('.legend-header')[0],
-                    within: true
+            if(N.app.singlePluginMode) {
+                this.$el.find('.legend-toggle').bind('click touchstart', function() {
+                    self.toggleMinimize();
+                });
+            } else {
+                // Make the legend resizeable and moveable
+                var handle = new ResizeHandle({
+                    targetId: id,
+                    activeResize: true,
+                    animateSizing: false
                 });
 
-            this.$el.find('.legend-close').bind('click touchstart', function() {
-                self.toggleMinimize();
-            });
+                handle.placeAt(id);
+
+                new ConstrainedMoveable(
+                    document.getElementById(id), {
+                        handle: this.$el.find('.legend-header')[0],
+                        within: true
+                    });
+
+                this.$el.find('.legend-close').bind('click touchstart', function() {
+                    self.toggleMinimize();
+                });
+            }
         },
 
         getLayerTemplate: function(legend, service, layer) {
@@ -174,23 +181,31 @@ define(['use!Geosite',
                 // was so that the header doesn't look like it's floating.
                 top = dims.top + height - dims.headerHeight;
 
-            this.$el.css({
-                height: 0,
-                top: top
-            });
+            if(N.app.singlePluginMode) {
+                this.$el.css({
+                    height: 0,
+                });
+
+                this.$el.find('.legend-header').hide();
+            } else {
+                this.$el.css({
+                    height: 0,
+                    top: top
+                });
+
+                // Toggle the text of the minimize button
+                this.$el.find('.legend-close')
+                .attr({title: 'Restore Legend'})
+                .text('+');
+
+                // Hide the resize handle or else the user can resize the
+                // minimized legend.
+                this.$el.find('.dojoxResizeHandle').hide();
+            }
 
             // Hide the legend body or else it maintains it's
             // height despite the above css changes.
             this.$el.find('.legend-body').hide();
-
-            // Toggle the text of the minimize button
-            this.$el.find('.legend-close')
-                .attr({title: 'Restore Legend'})
-                .text('+');
-
-            // Hide the resize handle or else the user can resize the
-            // minimized legend.
-            this.$el.find('.dojoxResizeHandle').hide();
 
             this.$el.addClass('minimized');
         },
@@ -206,18 +221,27 @@ define(['use!Geosite',
                 calculatedTop = dims.top - this.height + dims.headerHeight,
                 top = calculatedTop < 0 ? 0 : calculatedTop;
 
-            this.$el.css({
-                height: this.height,
-                top: top
-            });
+            if(N.app.singlePluginMode) {
+                this.$el.css({
+                    height: this.height,
+                });
+
+                this.$el.find('.legend-header').show();
+            } else {
+                this.$el.css({
+                    height: this.height,
+                    top: top
+                });
+
+                this.$el.find('.dojoxResizeHandle').show();
+
+                // Toggle the text of the minimize button
+                this.$el.find('.legend-close')
+                    .attr({title: 'Hide Legend'})
+                    .text('_');
+            }
 
             this.$el.find('.legend-body').show();
-            this.$el.find('.dojoxResizeHandle').show();
-
-            // Toggle the text of the minimize button
-            this.$el.find('.legend-close')
-                .attr({title: 'Hide Legend'})
-                .text('_');
 
             this.$el.removeClass('minimized');
         },
@@ -278,10 +302,13 @@ define(['use!Geosite',
                 }
             }
 
-            // If the legend was minimized or moved by the user,
-            // it's possible that resizing it will push part of
-            // the element off the screen.
-            this.checkAndSetPosition();
+
+            if(!N.app.singlePluginMode) {
+                // If the legend was minimized or moved by the user,
+                // it's possible that resizing it will push part of
+                // the element off the screen.
+                this.checkAndSetPosition();
+            }
         },
 
         checkAndSetPosition: function() {

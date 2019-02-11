@@ -84,6 +84,40 @@
   color: #000000;
 }
 
+.legend-toggle {
+  padding: 3px 10px;
+}
+
+.minimized .legend-toggle {
+  padding: 0px;
+}
+
+.content .legend {
+  bottom: 40px;
+  left: 15px;
+  min-width: 100px;
+  max-height: 250px;
+}
+
+.content .legend .legend-header {
+  font-size: 15px;
+  color: #4B4B4B;
+  padding: 5px 10px;
+  background: #fff;
+}
+
+.content .legend .legend-body {
+  color: #4B4B4B;
+  height: 170px;
+  padding: 0px 15px;
+}
+
+.legend.minimized {
+  width: auto;
+  background: none;
+  box-shadow: none;
+}
+
 @media screen and (min-width: 736px) {
   .desktop-sidebar-hidden {
     visibility: hidden;
@@ -144,8 +178,8 @@ to single plugin mode */
     width: 36px;
     height: 36px;
     position: absolute;
-    left: 20px;
-    bottom: 20px;
+    left: 15px;
+    bottom: 10px;
     z-index: 501;
   }
 
@@ -169,5 +203,13 @@ to single plugin mode */
   .nav-main-offcanvas {
     position: fixed !important;
     right: 0vw !important;
+  }
+
+  .map-legend-expand {
+    display: block;
+  }
+
+  .content .legend {
+    bottom: 55px;
   }
 }

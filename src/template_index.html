@@ -201,14 +201,18 @@
                 <div id="legend-container-<%= paneNumber %>" class="legend">
                     <div class="legend-header">
                         <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                        <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                        {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
+                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                        {% endif %}
                     </div>
                     <div class="legend-body">
                         <div class="plugin-legends"></div>
                         <div class="layer-legends"></div>
                     </div>
+                    <div class="legend-toggle"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
                 </div>
                 <div class="subregion-tooltip"></div>
+                <!-- <div class="map-legend-expand legend-toggle"><img src="img/mapLegendIcon.svg" alt="Show Legend" /></div> -->
                 <div class="mobile-full-map-toggle"><img src="img/fullMapIcon.svg" alt="Expand Map" /></div>
             </div>
         </div>
