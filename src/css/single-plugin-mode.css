@@ -85,12 +85,13 @@
 }
 
 .legend-toggle {
-  padding: 3px 10px;
+  display: none;
 }
 
 .minimized .legend-toggle {
   padding: 0px;
   cursor: pointer;
+  display: block;
 }
 
 .content .legend {
@@ -108,9 +109,15 @@
   border-radius: 4px;
 }
 
+.content .legend .legend-header .legend-toggle {
+  color: #000;
+  display: block;
+  top: -12px;
+  right: -5px;
+}
+
 .content .legend .legend-body {
   color: #4B4B4B;
-  height: 170px;
   padding: 0px 15px;
 }
 

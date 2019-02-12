@@ -201,15 +201,15 @@
                 <div id="legend-container-<%= paneNumber %>" class="legend">
                     <div class="legend-header">
                         <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                        {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
-                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
-                        {% endif %}
+                        <a class="legend-close legend-toggle i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
                     </div>
                     <div class="legend-body">
                         <div class="plugin-legends"></div>
                         <div class="layer-legends"></div>
                     </div>
-                    <div class="legend-toggle"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
+                    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+                        <div class="legend-toggle legend-expand"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
+                    {% endif %}
                 </div>
                 <div class="subregion-tooltip"></div>
                 <!-- <div class="map-legend-expand legend-toggle"><img src="img/mapLegendIcon.svg" alt="Show Legend" /></div> -->
@@ -462,7 +462,7 @@
             </a>
         </div>
         <div class="fb-share-button" data-href="<=% url %>" data-layout="button" data-size="large" data-mobile-iframe="true">
-            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<%= url %>" class="fb-xfbml-parse-ignore">
+            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<%= shortUrl %>" class="fb-xfbml-parse-ignore">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 58"><defs><style>.cls-1{fill:#fff;}</style></defs><title>flogo-HexRBG-Wht-58</title><path class="cls-1" d="M53.85,0H3.15A3.15,3.15,0,0,0,0,3.15v50.7A3.15,3.15,0,0,0,3.15,57h27.3V35H23V26.33h7.41V20c0-7.37,4.49-11.38,11.06-11.38A62.15,62.15,0,0,1,48.15,9v7.69H43.61c-3.57,0-4.26,1.69-4.26,4.18v5.5H47.9L46.79,35H39.35V57h14.5A3.15,3.15,0,0,0,57,53.85V3.15A3.15,3.15,0,0,0,53.85,0Z"/></svg>
                 Share
             </a>
