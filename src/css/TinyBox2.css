@@ -33,6 +33,7 @@
     background: #fff;
     border-right: 1px solid #333;
     border-bottom: 1px solid #333;
+    position: relative;
 }
 
 /* CSS helper classes for responsive plugins to use TINY box */
@@ -41,11 +42,11 @@
     border-radius: 0px !important;
 }
 
-#plugin-tiny-box .plugin-tiny-box-header  {
-    padding: 10px;
+.tinner .plugin-tiny-box-header  {
+    padding: 10px 16px;
 }
 
-#plugin-tiny-box .plugin-tiny-box-header .plugin-tiny-box-icon {
+.tinner .plugin-tiny-box-header .plugin-tiny-box-icon {
     margin-right: 5px;
     display: inline-block;
     vertical-align: middle;
@@ -53,20 +54,22 @@
     height: 50px;
 }
 
-#plugin-tiny-box .plugin-tiny-box-header .plugin-tiny-box-title {
-    font-weight: bold;
+.tinner .plugin-tiny-box-header .plugin-tiny-box-title {
+    font-family: OpenSansBold, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
     font-size: 16px;
     display: inline-block;
+    color: #000;
+    margin-top: 10px;
 }
 
-#plugin-tiny-box .tclose {
+.tinner .tclose {
     color: #000 !important;
     right: 40px;
     font-size: 20px;
-    top: 30px;
+    top: 20px;
 }
 
-#plugin-tiny-box .tclose:hover {
+.tinner .tclose:hover {
     color: #000 !important;
     background: none;
 }
@@ -76,9 +79,11 @@
 }
 
 @media screen and (max-width: 740px) {
-    #plugin-tiny-box {
+    .tinner {
         width: calc(100vw + 1px) !important;
         height: 100vh !important;
+        position: relative;
+        border-radius: 0px !important;
     }
 
     body .tbox {
@@ -89,7 +94,7 @@
         padding: 0px !important;
     }
 
-    #plugin-tiny-box .tclose {
+    .tinner .tclose {
         color: #000 !important;
         right: 30px;
         font-size: 20px;

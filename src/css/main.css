@@ -2235,11 +2235,6 @@ body.x-body {
         overflow: auto !important;
     }
 
-    #permalink-tiny-box-modal {
-        width: 85vw !important;
-        height: 60vh !important;
-    }
-
     #permalink-tiny-box-modal .tcontent {
         display: block !important;
     }

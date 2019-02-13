@@ -62,6 +62,7 @@
 
         render: function () {
             var view = this;
+            $.featherlight
             TINY.box.show({
                 boxid: 'permalink-tiny-box-modal',
                 html: this.template(view.model.toJSON()),
