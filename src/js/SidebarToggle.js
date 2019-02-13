@@ -123,7 +123,7 @@
             this.mapRef = $('.map');
         },
 
-        handleContentToggleClick() {
+        handleContentToggleClick: function() {
             if(this.pluginSidebar.hasClass('sidebar-peeking')) {
                 this.setFullContent();
             } else {

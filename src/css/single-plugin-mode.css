@@ -27,6 +27,7 @@
     position: absolute;
     right: 0;
     z-index: 10000;
+    top: 0;
 }
 .header-offcanvas.offcanvas>button {
     padding: 0;
@@ -125,6 +126,11 @@
   width: auto;
   background: none;
   box-shadow: none;
+}
+
+.content .legend .legend-header a:hover {
+  background: none;
+  color: black;
 }
 
 @media screen and (min-width: 736px) {
