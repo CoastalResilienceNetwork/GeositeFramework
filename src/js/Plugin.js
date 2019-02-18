@@ -429,8 +429,6 @@ require(['use!Geosite',
             view.$el.addClass(model.getId() + '-' + view.paneNumber);
 
             if (view.$uiContainer) {
-                assignEvents(view.$uiContainer, model, view.paneNumber);
-
                 if (view.model.selected === true) {
                     view.$uiContainer.show();
                 } else {
@@ -443,6 +441,10 @@ require(['use!Geosite',
                 if (pluginObject.map) {
                     pluginObject.map.resize(true);
                 }
+
+                window.setTimeout(function() {
+                    assignEvents(view.$uiContainer, model, view.paneNumber);
+                }, 100);
             }
 
             if (view.$legendContainer) {
