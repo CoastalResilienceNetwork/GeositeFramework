@@ -144,6 +144,10 @@ define(['use!Geosite',
             this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
 
+            if(N.app.singlePluginMode) {
+                this.minimize();
+            }
+
             if (!this.$el.hasClass('minimized')) {
                 this.autoResize();
             }

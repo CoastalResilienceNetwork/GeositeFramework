@@ -1457,7 +1457,6 @@ header .nav-main {
     background-position: 8px 8px;
     overflow: hidden;
     border-radius: 4px;
-    opacity: .75;
     cursor: pointer;
     box-shadow: 0 0 12px black;
     box-shadow: 0 0 12px rgba(0, 0, 0, .25);
@@ -2361,6 +2360,7 @@ body.x-body {
         width: 60vw;
         text-overflow: ellipsis;
         overflow: hidden;
+        font-size: 16px;
     }
 
     .single-plugin-mode .dropdown-icon-container {

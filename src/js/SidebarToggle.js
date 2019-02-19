@@ -110,7 +110,7 @@
         el: '#mobile-content-toggle',
 
         events: {
-            'click': 'handleContentToggleClick',
+            'click': 'handleContentToggleClick'
         },
 
         initialize: function(options) {
