@@ -188,7 +188,7 @@ to single plugin mode */
     display: none;
   }
 
-  .map-peeking .mobile-full-map-toggle {
+  .map-peeking .mobile-full-map-toggle, .map-max .mobile-full-map-toggle {
     display: block;
     width: 36px;
     height: 36px;
@@ -196,6 +196,14 @@ to single plugin mode */
     left: 15px;
     bottom: 10px;
     z-index: 501;
+  }
+
+  .map-peeking .min-map-icon {
+    display: none;
+  }
+
+  .map-max .full-map-icon {
+    display: none;
   }
 
   .mobile-full-map-toggle > img {
@@ -227,9 +235,5 @@ to single plugin mode */
   .content .legend {
     bottom: 55px;
     left: 15px;
-  }
-
-  .map-max .legend {
-    bottom: 10px;
   }
 }

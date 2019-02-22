@@ -83,7 +83,7 @@
         el: '.mobile-full-map-toggle',
 
         events: {
-            'click': 'setFullMap',
+            'click': 'toggleFullMap',
         },
 
         initialize: function(options) {
@@ -94,13 +94,22 @@
 
         },
 
-        setFullMap: function() {
-            // set correct classes on map and sidebar, hide full map toggle button
-            this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-max').addClass('sidebar-min');
-            this.mapRef.removeClass('map-peeking').removeClass('map-min').addClass('map-max');
-            // set content of mobile toggle tab
-            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
-            this.mobileToggleButton.find('.mobile-toggle-text').html('view data');
+        toggleFullMap: function() {
+            if(this.pluginSidebar.hasClass('sidebar-peeking')) {
+                // set correct classes on map and sidebar
+                this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-max').addClass('sidebar-min');
+                this.mapRef.removeClass('map-peeking').removeClass('map-min').addClass('map-max');
+                // set content of mobile toggle tab
+                this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('view data');
+            } else {
+                // set correct classes on map and sidebar
+                this.pluginSidebar.removeClass('sidebar-max').removeClass('sidebar-min').addClass('sidebar-peeking');
+                this.mapRef.removeClass('map-max').removeClass('map-min').addClass('map-peeking');
+                // set content of mobile toggle tab
+                this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('view more data');
+            }
         },
 
     });
