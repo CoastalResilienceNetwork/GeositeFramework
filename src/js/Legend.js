@@ -36,6 +36,7 @@ define(['use!Geosite',
 
             this.$el = $('#' + id);
             this.config = new LegendConfig(regionData);
+            this.firstOpen = true;
             this.tmplLegendItemSingle = _.template($('#template-legend-item-single').html());
             this.tmplLegendItemMultiple = _.template($('#template-legend-item-multiple').html());
             this.tmplLegendItemScale = _.template($('#template-legend-item-scale').html());
@@ -144,8 +145,9 @@ define(['use!Geosite',
             this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
 
-            if(N.app.singlePluginMode) {
+            if(N.app.singlePluginMode && this.firstOpen) {
                 this.minimize();
+                this.firstOpen = false;
             }
 
             if (!this.$el.hasClass('minimized')) {
