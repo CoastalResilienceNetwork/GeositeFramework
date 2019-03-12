@@ -310,8 +310,8 @@ require(['use!Geosite',
             legend.render(getVisibleLayers());
         };
 
-        function getServiceLegend(service) {
-            var legendUrl = service.url + '/legend',
+        function getServiceLegend(url) {
+            var legendUrl = url + '/legend',
                 data = ajaxUtil.get(legendUrl);
             if (ajaxUtil.shouldFetch(legendUrl)) {
                 ajaxUtil.fetch(legendUrl).then(redraw);
@@ -324,7 +324,8 @@ require(['use!Geosite',
                 result = [];
             _.each(services, function (service) {
                 var serviceInfo = view.model.serviceInfos[service.id];
-                if (serviceInfo && service.visible &&
+                // AGS or WMS Service is referenced from root service and contains all layers
+                if(serviceInfo && service.visible &&
                     serviceInfo.pluginObject.showServiceLayersInLegend &&
                     service.visibleLayers) {
                     service.visibleLayers.sort(function(a, b) { return a - b; });
@@ -351,6 +352,22 @@ require(['use!Geosite',
                             });
                         }
                     });
+                } else {
+                    // Feature Layer specifies a layerID and is refernced from the layer URL
+                    if(serviceInfo && service.layerId >= 0 && service.visible) {
+                        var layer,
+                            legend,
+                            layerId = parseInt(service.layerId);
+
+                        layer = _getFeatureLayer(service, layerId);
+                        legend = _getFeatureLegend(service, layerId);
+                        if(!legend) { return; }
+                        result.push({
+                            service: service,
+                            layer: layer,
+                            legend: legend
+                        });
+                    }
                 }
 
             });
@@ -377,8 +394,7 @@ require(['use!Geosite',
         }
 
         function _getAGSLegend(service, layerId) {
-            var serviceLegend = getServiceLegend(service);
-
+            var serviceLegend = getServiceLegend(service.url);
             if (!serviceLegend) {
                 return;
             }
@@ -386,9 +402,23 @@ require(['use!Geosite',
             return _.findWhere(serviceLegend, {layerId: layerId});
         }
 
+        function _getFeatureLayer(service, layerId) {
+            return _.findWhere(service.layerInfos, {id: layerId});
+        }
+
+        function _getFeatureLegend(service, layerId) {
+            // feature layer is referenced from layer url - strip away layer index before passing url to legend funciton
+            var serviceLegend = getServiceLegend(service.url.substring(0, service.url.lastIndexOf("/")));
+            if (!serviceLegend) {
+                return;
+            }
+            return _.findWhere(serviceLegend, {layerId: layerId});
+        }
+
         // Filter out layers that are not visible at the current map scale.
         // Adapted from the ESRI dijit legend source code. (Ref: _isLayerInScale)
         function isLayerInScale(service, layer) {
+            console.log(service, layer);
             var scale = esriMap.getScale();
             var minScale = Math.min(service.minScale, layer.minScale) || service.minScale || layer.minScale || 0;
             var maxScale = Math.max(service.maxScale, layer.maxScale) || 0;

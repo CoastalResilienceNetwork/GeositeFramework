@@ -2357,7 +2357,7 @@ body.x-body {
     .nav-main-title {
         display: inline-block;
         white-space: nowrap;
-        width: 60vw;
+        width: 80vw;
         text-overflow: ellipsis;
         overflow: hidden;
         font-size: 16px;

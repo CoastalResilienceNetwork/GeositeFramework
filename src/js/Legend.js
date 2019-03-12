@@ -20,10 +20,18 @@ define(['use!Geosite',
 
         getLayerSettings: function(service, layer) {
             if (this.config && this.config.layers) {
-                return _.findWhere(this.config.layers, {
-                    serviceUrl: service.url,
-                    layerName: layer.name
-                });
+                if(layer) {
+                    return _.findWhere(this.config.layers, {
+                        serviceUrl: service.url,
+                        layerName: layer.name
+                    });
+                } else {
+                    // feature layer
+                    return _.findWhere(this.config.layers, {
+                        serviceUrl: service.url,
+                        layerName: service.name
+                    });
+                }
             }
 
             return null;
@@ -71,7 +79,7 @@ define(['use!Geosite',
 
         getLayerTemplate: function(legend, service, layer) {
             // Exclude layers from legend if they begin with an _
-            if (layer.name[0] === '_'){ 
+            if (layer && layer.name[0] === '_'){ 
                 return null; 
             }
 
@@ -145,7 +153,10 @@ define(['use!Geosite',
             this.$el.find('.legend-body .layer-legends').html($container.html());
             this.assignLegendEvents();
 
-            if(N.app.singlePluginMode && this.firstOpen) {
+            var browserWidth = window.innerWidth
+                    || document.documentElement.clientWidth
+                    || document.body.clientWidth;
+            if(N.app.singlePluginMode && this.firstOpen && browserWidth <= 737) {
                 this.minimize();
                 this.firstOpen = false;
             }

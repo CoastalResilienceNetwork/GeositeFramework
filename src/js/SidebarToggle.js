@@ -101,14 +101,14 @@
                 this.mapRef.removeClass('map-peeking').removeClass('map-min').addClass('map-max');
                 // set content of mobile toggle tab
                 this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
-                this.mobileToggleButton.find('.mobile-toggle-text').html('view data');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
             } else {
                 // set correct classes on map and sidebar
                 this.pluginSidebar.removeClass('sidebar-max').removeClass('sidebar-min').addClass('sidebar-peeking');
                 this.mapRef.removeClass('map-max').removeClass('map-min').addClass('map-peeking');
                 // set content of mobile toggle tab
                 this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
-                this.mobileToggleButton.find('.mobile-toggle-text').html('view more data');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
             }
         },
 
@@ -146,7 +146,7 @@
             this.mapRef.removeClass('map-peeking').removeClass('map-max').addClass('map-min');
             // set content of mobile toggle tab
             this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-down');
-            this.mobileToggleButton.find('.mobile-toggle-text').html('view less data');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('show map');
         },
 
         setPeekingView: function() {
@@ -155,7 +155,7 @@
             this.mapRef.removeClass('map-min').removeClass('map-max').addClass('map-peeking');
             // set content of mobile toggle tab
             this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
-            this.mobileToggleButton.find('.mobile-toggle-text').html('view more data');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
         }
     });
 }(Geosite));
