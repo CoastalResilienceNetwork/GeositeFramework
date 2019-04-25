@@ -418,7 +418,6 @@ require(['use!Geosite',
         // Filter out layers that are not visible at the current map scale.
         // Adapted from the ESRI dijit legend source code. (Ref: _isLayerInScale)
         function isLayerInScale(service, layer) {
-            console.log(service, layer);
             var scale = esriMap.getScale();
             var minScale = Math.min(service.minScale, layer.minScale) || service.minScale || layer.minScale || 0;
             var maxScale = Math.max(service.maxScale, layer.maxScale) || 0;

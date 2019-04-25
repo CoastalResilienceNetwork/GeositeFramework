@@ -50,31 +50,9 @@ define(['use!Geosite',
             this.tmplLegendItemScale = _.template($('#template-legend-item-scale').html());
             this.tmplLegendItemImage = _.template($('#template-legend-item-image').html());
 
-
-            if(N.app.singlePluginMode) {
-                this.$el.find('.legend-toggle').bind('click', function() {
-                    self.toggleMinimize();
-                });
-            } else {
-                // Make the legend resizeable and moveable
-                var handle = new ResizeHandle({
-                    targetId: id,
-                    activeResize: true,
-                    animateSizing: false
-                });
-
-                handle.placeAt(id);
-
-                new ConstrainedMoveable(
-                    document.getElementById(id), {
-                        handle: this.$el.find('.legend-header')[0],
-                        within: true
-                    });
-
-                this.$el.find('.legend-close').bind('click touchstart', function() {
-                    self.toggleMinimize();
-                });
-            }
+            this.$el.find('.legend-toggle').bind('click', function() {
+                self.toggleMinimize();
+            });
         },
 
         getLayerTemplate: function(legend, service, layer) {
@@ -156,7 +134,7 @@ define(['use!Geosite',
             var browserWidth = window.innerWidth
                     || document.documentElement.clientWidth
                     || document.body.clientWidth;
-            if(N.app.singlePluginMode && this.firstOpen && browserWidth <= 737) {
+            if(this.firstOpen && browserWidth <= 737) {
                 this.minimize();
                 this.firstOpen = false;
             }
@@ -198,27 +176,11 @@ define(['use!Geosite',
                 // was so that the header doesn't look like it's floating.
                 top = dims.top + height - dims.headerHeight;
 
-            if(N.app.singlePluginMode) {
-                this.$el.css({
-                    height: 0,
-                });
+            this.$el.css({
+                height: 0,
+            });
 
-                this.$el.find('.legend-header').hide();
-            } else {
-                this.$el.css({
-                    height: 0,
-                    top: top
-                });
-
-                // Toggle the text of the minimize button
-                this.$el.find('.legend-close')
-                .attr({title: 'Restore Legend'})
-                .text('+');
-
-                // Hide the resize handle or else the user can resize the
-                // minimized legend.
-                this.$el.find('.dojoxResizeHandle').hide();
-            }
+            this.$el.find('.legend-header').hide();
 
             // Hide the legend body or else it maintains it's
             // height despite the above css changes.
@@ -238,25 +200,11 @@ define(['use!Geosite',
                 calculatedTop = dims.top - this.height + dims.headerHeight,
                 top = calculatedTop < 0 ? 0 : calculatedTop;
 
-            if(N.app.singlePluginMode) {
-                this.$el.css({
-                    height: this.height,
-                });
+            this.$el.css({
+                height: this.height,
+            });
 
-                this.$el.find('.legend-header').show();
-            } else {
-                this.$el.css({
-                    height: this.height,
-                    top: top
-                });
-
-                this.$el.find('.dojoxResizeHandle').show();
-
-                // Toggle the text of the minimize button
-                this.$el.find('.legend-close')
-                    .attr({title: 'Hide Legend'})
-                    .text('_');
-            }
+            this.$el.find('.legend-header').show();
 
             this.$el.find('.legend-body').show();
 
@@ -320,12 +268,12 @@ define(['use!Geosite',
             }
 
 
-            if(!N.app.singlePluginMode) {
+            /*if(!N.app.singlePluginMode) {
                 // If the legend was minimized or moved by the user,
                 // it's possible that resizing it will push part of
                 // the element off the screen.
                 this.checkAndSetPosition();
-            }
+            }*/
         },
 
         checkAndSetPosition: function() {
