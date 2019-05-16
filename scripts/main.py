@@ -183,7 +183,7 @@ def template_index():
     # template HTML with validated custom JSON configs
     templated_idx = j2_env.get_template(TMPL_FILE).render({
         'region': region_json,
-        'prod': PROD,
+        'is_prod': PROD,
         'plugin_module_identifiers': plugin_module_identifiers,
         'plugin_variable_names': plugin_variable_names,
         'plugin_config_data': plugin_config_data,
