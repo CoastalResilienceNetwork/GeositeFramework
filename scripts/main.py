@@ -18,7 +18,6 @@ TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html').replace("\\", "/")
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
 print sys.argv[1]
-print sys.argv[2]
 
 def prepare_languages():
     # get app-wide translation files
