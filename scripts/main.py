@@ -17,7 +17,8 @@ REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html').replace("\\", "/")
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
-
+PROD = sys.argv[1]
+print PROD
 
 def prepare_languages():
     # get app-wide translation files
@@ -182,6 +183,7 @@ def template_index():
     # template HTML with validated custom JSON configs
     templated_idx = j2_env.get_template(TMPL_FILE).render({
         'region': region_json,
+        'is_prod': PROD,
         'plugin_module_identifiers': plugin_module_identifiers,
         'plugin_variable_names': plugin_variable_names,
         'plugin_config_data': plugin_config_data,
