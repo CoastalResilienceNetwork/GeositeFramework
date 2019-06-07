@@ -15,10 +15,6 @@
             "type": "string",
             "required": false
         },
-        "urlShortenerApiKey": {
-            "type": "string",
-            "required": false
-        },
         "titleMain": {
             "type": "object",
             "properties": {

@@ -22,9 +22,9 @@
         shorten: function() {
             
             var model = this;
-			if (_.has(N.app.data.region, 'urlShortenerApiKey')) {
+			if (isProd) {
 				
-				var apiKey = N.app.data.region.urlShortenerApiKey;
+				var apiKey = "48598fa6dd3e4237b18dd6344b77a049";
 				var requestHeaders = {
 					"Content-Type": "application/json",
 					"apikey": apiKey
