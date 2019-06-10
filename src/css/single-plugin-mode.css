@@ -175,12 +175,9 @@ to single plugin mode */
     text-transform: uppercase;
   }
 
-  .content .map .basemap-selector {
-    display: none;
-  }
-
   .content .map .map-tools {
-    top: 20px;
+    top: 60px;
+    right: 15px;
     opacity: 1;
   }
 
