@@ -53,6 +53,10 @@ define(['use!Geosite',
             this.$el.find('.legend-toggle').bind('click', function() {
                 self.toggleMinimize();
             });
+
+            this.$el.find('.legend-header').bind('click', function() {
+                self.toggleMinimize();
+            });
         },
 
         getLayerTemplate: function(legend, service, layer) {
