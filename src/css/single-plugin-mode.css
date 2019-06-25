@@ -85,6 +85,19 @@
   color: #000000;
 }
 
+.basemap-selector-title, .basemap-selector-title:hover {
+  color: #555555 !important;
+  cursor: pointer;
+}
+
+.basemap-selector {
+  cursor: pointer;
+}
+
+.basemap-selector span {
+  padding-left: 10px;
+}
+
 .legend-toggle {
   display: none;
 }
@@ -99,7 +112,7 @@
   bottom: 25px;
   left: 25px;
   min-width: 100px;
-  max-height: 250px;
+  max-height: 220px;
 }
 
 .content .legend .legend-header {
@@ -176,8 +189,8 @@ to single plugin mode */
   }
 
   .content .map .map-tools {
-    top: 60px;
-    right: 15px;
+    top: 20px;
+    right: 10px;
     opacity: 1;
   }
 

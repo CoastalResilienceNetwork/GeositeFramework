@@ -23,7 +23,7 @@
     }
 
     function render(view) {
-        var $container = view.$('.basemap-selector-list ul'),
+        var $container = view.$('ul'),
             template = N.app.templates['template-basemap-selector-item'];
         _.each(view.model.get('basemaps'), function (basemap, index) {
             // Augment basemap data with 'index' to feed the DOM item's data-index attribute
@@ -46,6 +46,10 @@
         view.model.set('selectedBasemapIndex', index);
         e.stopPropagation();
         hideBasemapList(view);
+        if(N.app.singlePluginMode) {
+            view.$el.removeClass('pushy-submenu-open').addClass('pushy-submenu-closed');
+            $('body').removeClass('pushy-open-left').removeClass('pushy-open-right');
+        }
     }
 
     function toggleBasemapList(view, e) {

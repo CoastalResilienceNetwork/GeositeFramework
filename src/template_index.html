@@ -194,6 +194,7 @@
                         <!-- Top bar plugins -->
                         <div class="tools"></div>
                     </div>
+                    {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                     <div class="basemap-selector">
                         <div class="basemap-selector-title"></div>
                         <div class="basemap-selector-list">
@@ -201,6 +202,7 @@
                             </ul>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div id="legend-container-<%= paneNumber %>" class="legend">
                     <div class="legend-header">
@@ -310,7 +312,7 @@
     </script>
 
     <script type="text/template" id="template-basemap-selector-item">
-        <li data-index="<%- index %>"><%- name %></li>
+        <li data-index="<%- index %>" class="pushy-link"><a><%- name %></a></li>
     </script>
 
     <script type="text/template" id="template-plugin-container">
@@ -711,6 +713,13 @@
                             <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
                         </li>
                     {% endfor %}
+                    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+                    <li class="basemap-selector pushy-submenu">
+                        <button class="basemap-selector-title"></button>
+                        <ul class="basemap-selector-list">
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
