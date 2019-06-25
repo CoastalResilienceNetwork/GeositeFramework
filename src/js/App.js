@@ -33,12 +33,6 @@
                 N.app.singlePluginMode = regionData.singlePluginMode.active;
             }
 
-            // Set up the google url shortener service
-            gapi.client.load('urlshortener', 'v1');
-            if (regionData.googleUrlShortenerApiKey) {
-                gapi.client.setApiKey(regionData.googleUrlShortenerApiKey);
-            }
-
             N.app.controllers.help = new N.controllers.HelpOverlay();
             N.app.models.screen = new N.models.Screen();
 

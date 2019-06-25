@@ -1,6 +1,7 @@
 {
     "language": "en",
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
+    "googleAnalyticsPropertyId": "XXXXXXXXX-0",
     "singlePluginMode": {
         "active": true,
         "pluginFolderName": "natural_coastal_protection"

@@ -21,26 +21,42 @@
         },
 
         shorten: function() {
-            var model = this,
-                request = gapi.client.urlshortener.url.insert({
-                    'resource': {
-                        'longUrl': model.get('url')
-                    }
-                });
-
-            request.execute(function (result) {
-                if (result.error) {
-                    model.set('shortUrl', model.get('url'));
-                } else {
-                    model.set('shortUrl', result.id);
-                    model.genMailLink();
-                }
-            });
+            var model = this;
+			if (isProd) {
+				
+				var apiKey = "48598fa6dd3e4237b18dd6344b77a049";
+				var requestHeaders = {
+					"Content-Type": "application/json",
+					"apikey": apiKey
+				};
+				
+				var linkRequest = {
+					destination: model.get('url')
+				};
+				
+				$.ajax({
+					url: 'https://api.rebrandly.com/v1/links',
+					type: "post",
+					data: JSON.stringify(linkRequest),
+					headers: requestHeaders,
+					dataType: "json",
+					success: function(result){
+						var shortUrl = (result.shortUrl.indexOf('http') == -1) ? 'https://' + result.shortUrl : result.shortUrl;
+						model.set('shortUrl', shortUrl);
+					},
+					error: function(error) {
+						model.set('shortUrl', model.get('url')); 
+					}
+				});
+			} else {
+				model.set('shortUrl', model.get('url')); 
+			}
         },
 
         genMailLink: function() {
             this.set('mailLink', encodeURI("mailto:?subject=See the map I made on " + N.app.data.region.titleMain.text + "&body=I made a custom map with The Nature Conservancy's '" + N.app.data.region.titleMain.text + "'. " + this.get('shortUrl')));
-        }
+        },
+            
     });
 
     N.views.Permalink = Backbone.View.extend({
