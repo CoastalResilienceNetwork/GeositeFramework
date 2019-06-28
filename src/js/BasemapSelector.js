@@ -9,12 +9,14 @@
         render(view);
         // When the map's selected basemap changes, update the title element in the DOM
         view.model.on('change:selectedBasemapIndex', function () { renderSelectedBasemapName(view); });
-        view.model.set('basemapListVisible', false);
-        $(document).on('click', function(e) {
-           if (!_.contains(['basemap-selector-list', 'basemap-selector'], e.target.className)) {
-               hideBasemapList(view);
-           }
-        });
+        if(!N.app.singlePluginMode) {
+            view.model.set('basemapListVisible', false);
+            $(document).on('click', function(e) {
+            if (!_.contains(['basemap-selector-list', 'basemap-selector'], e.target.className)) {
+                hideBasemapList(view);
+            }
+            });
+        }
         // Listen on the "Tour" link element to ensure the
         // basemap selector closes before the tour overlay's applied
         $('#help-overlay-start').on('click', function() {
@@ -45,21 +47,28 @@
         var index = $(e.currentTarget).data("index");
         view.model.set('selectedBasemapIndex', index);
         e.stopPropagation();
-        hideBasemapList(view);
         if(N.app.singlePluginMode) {
-            view.$el.removeClass('pushy-submenu-open').addClass('pushy-submenu-closed');
+            if(view.$el.hasClass('push-submenu-open')) {
+                view.$el.removeClass('pushy-submenu-open').addClass('pushy-submenu-closed');
+            } else {
+                view.$el.removeClass('pushy-submenu-closed').addClass('pushy-submenu-open');
+            }
             $('body').removeClass('pushy-open-left').removeClass('pushy-open-right');
+        } else {
+            hideBasemapList(view);
         }
     }
 
     function toggleBasemapList(view, e) {
-        e.stopPropagation();
-        if (view.model.get('basemapListVisible')) {
-            view.model.set('basemapListVisible', false);
-            view.$el.find('.basemap-selector-list').hide();
-        } else {
-            view.model.set('basemapListVisible', true);
-            view.$el.find('.basemap-selector-list').show();
+        if(!N.app.singlePluginMode) {
+            e.stopPropagation();
+            if (view.model.get('basemapListVisible')) {
+                view.model.set('basemapListVisible', false);
+                view.$el.find('.basemap-selector-list').hide();
+            } else {
+                view.model.set('basemapListVisible', true);
+                view.$el.find('.basemap-selector-list').show();
+            }
         }
     }
 
