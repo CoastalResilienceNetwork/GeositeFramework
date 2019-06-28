@@ -90,6 +90,10 @@
   cursor: pointer;
 }
 
+.pushy-content .basemap-selector ul li {
+  list-style-type: none;
+}
+
 .basemap-selector {
   cursor: pointer;
 }
