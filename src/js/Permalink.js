@@ -8,7 +8,8 @@
             hash: null,
             url: null,
             shortUrl: null,
-            mailLink: null
+            mailLink: null,
+            twitterLink: null
         },
 
         initialize: function () {
@@ -42,19 +43,33 @@
 					dataType: "json",
 					success: function(result){
 						var shortUrl = (result.shortUrl.indexOf('http') == -1) ? 'https://' + result.shortUrl : result.shortUrl;
-						model.set('shortUrl', shortUrl);
+                        model.set('shortUrl', shortUrl);
+                        model.genSocialLinks();
 					},
 					error: function(error) {
-						model.set('shortUrl', model.get('url')); 
+                        model.set('shortUrl', model.get('url')); 
+                        model.genSocialLinks();
 					}
 				});
 			} else {
-				model.set('shortUrl', model.get('url')); 
+                model.set('shortUrl', model.get('url'));
+                model.genSocialLinks(); 
 			}
         },
 
-        genMailLink: function() {
-            this.set('mailLink', encodeURI("mailto:?subject=See the map I made on " + N.app.data.region.titleMain.text + "&body=I made a custom map with The Nature Conservancy's '" + N.app.data.region.titleMain.text + "'. " + this.get('shortUrl')));
+        toTitleCase: function(str) {
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        },
+
+        genSocialLinks: function() {
+            let shareText = "Check out my custom map from the " + N.app.data.region.titleMain.text;
+            if(N.app.singlePluginMode) {
+                shareText = shareText + " - " + this.toTitleCase(N.app.data.region.singlePluginMode.pluginFolderName.replace(/_/g, " ").replace(/-/g, " ")) + " App";
+            }
+            this.set('twitterLink', encodeURI(shareText));
+            this.set('mailLink', encodeURI("mailto:?subject=See the map I made on " + N.app.data.region.titleMain.text + "&body=" + shareText + ": " + this.get('shortUrl')));
         },
             
     });
