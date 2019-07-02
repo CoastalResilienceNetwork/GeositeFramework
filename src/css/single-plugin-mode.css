@@ -122,7 +122,7 @@
 .content .legend .legend-header {
   font-size: 15px;
   color: #4B4B4B;
-  padding: 5px 10px;
+  padding: 10px;
   background: #fff;
   border-radius: 4px;
 }
@@ -130,13 +130,15 @@
 .content .legend .legend-header .legend-toggle-single {
   color: #000;
   display: block;
-  top: -12px;
+  top: -20px;
+  font-size: 20px;
   right: -5px;
 }
 
 .content .legend .legend-body {
   color: #4B4B4B;
   padding: 0px 15px;
+  height: 92%;
 }
 
 .legend.minimized {
