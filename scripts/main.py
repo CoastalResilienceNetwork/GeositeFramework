@@ -54,10 +54,11 @@ def prepare_languages():
     # prefer app dict translations, if conflict
     all_plugin_files = []
     for plugin in plugin_json_files:
-        try:
-            all_plugin_files.append(plugin)
-        except:
-            continue
+        for trans_file in plugin: 
+            try:
+                all_plugin_files.append(trans_file)
+            except:
+                continue
 
     all_json_files = plugin_json_files + app_json_files
 
