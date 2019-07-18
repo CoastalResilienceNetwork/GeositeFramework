@@ -21,7 +21,7 @@ PROD = sys.argv[1]
 print PROD
 
 def prepare_languages():
-    print "template_index"
+    print "prep_languages"
     # get app-wide translation files
     try:
         language_dir = os.path.join(BASE_DIR, 'locales')
@@ -47,6 +47,8 @@ def prepare_languages():
     # merge app and plugin translation dicts keyed to language code
     # prefer app dict translations, if conflict
     all_json_files = plugin_json_files + app_json_files
+
+    print all_json_files
     translations = {}
 
     for f in all_json_files:
