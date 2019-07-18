@@ -34,6 +34,7 @@ def prepare_languages():
 
     # get plug-ins' translation files
     plugin_folder_paths = plugin_loader.get_plugin_folder_paths()
+    print plugin_folder_paths
     plugin_locales = []
     for path in plugin_folder_paths:
         try:
