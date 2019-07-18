@@ -17,6 +17,7 @@ REGION_SCHEMA_FILE = os.path.join(BASE_DIR, 'App_Data/regionSchema.json')
 TMPL_FILE = os.path.join(BASE_DIR, 'template_index.html').replace("\\", "/")
 IDX_FILE = os.path.join(BASE_DIR, 'index.html')
 PARTIALS_DIR = os.path.join(BASE_DIR, 'Views/Shared')
+PROD = sys.argv[1]
 print PROD
 
 def prepare_languages():
