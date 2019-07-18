@@ -21,7 +21,6 @@ PROD = sys.argv[1]
 print PROD
 
 def prepare_languages():
-    print "prep_languages"
     # get app-wide translation files
     try:
         language_dir = os.path.join(BASE_DIR, 'locales')
@@ -34,19 +33,16 @@ def prepare_languages():
 
     # get plug-ins' translation files
     plugin_folder_paths = plugin_loader.get_plugin_folder_paths()
-    print plugin_folder_paths
+
     plugin_locales = []
     for path in plugin_folder_paths:
         try:
             locale_dir = os.path.join(str(path), 'locales')
-            print locale_dir
             plugin_locales.append(locale_dir)
         except:
             continue
 
     plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
-
-    print plugin_json_files
 
     # merge app and plugin translation dicts keyed to language code
     # prefer app dict translations, if conflict
@@ -60,7 +56,6 @@ def prepare_languages():
 
     all_json_files = all_plugin_files + app_json_files
 
-    print all_json_files
     translations = {}
 
     for f in all_json_files:
@@ -89,7 +84,6 @@ def prepare_languages():
 
 
 def template_index():
-    print "template_index"
     # create a jinja environment
     j2_env = Environment(loader=FileSystemLoader(''),
                          trim_blocks=True,)
