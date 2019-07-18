@@ -39,9 +39,12 @@ def prepare_languages():
     for path in plugin_folder_paths:
         try:
             locale_dir = os.path.join(str(path), 'locales')
+            print locale_dir
             plugin_locales.append(locale_dir)
         except:
             continue
+
+    print plugin_locales
 
     plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
 
