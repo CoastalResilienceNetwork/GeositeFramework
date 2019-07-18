@@ -19,4 +19,4 @@ def extract_filepaths_from_dirs(directory_list):
                   for (path, dirs, files) in os.walk(dir)
                   for file in files])
     print f
-    return f[0]
+    return f
