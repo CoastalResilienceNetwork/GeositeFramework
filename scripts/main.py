@@ -44,8 +44,6 @@ def prepare_languages():
         except:
             continue
 
-    print plugin_locales
-
     plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
 
     print plugin_json_files
@@ -60,7 +58,7 @@ def prepare_languages():
             except:
                 continue
 
-    all_json_files = plugin_json_files + app_json_files
+    all_json_files = all_plugin_files + app_json_files
 
     print all_json_files
     translations = {}

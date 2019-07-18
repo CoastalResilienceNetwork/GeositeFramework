@@ -18,5 +18,4 @@ def extract_filepaths_from_dirs(directory_list):
         f.append([os.path.join(dir, file)
                   for (path, dirs, files) in os.walk(dir)
                   for file in files])
-    print f
     return f
