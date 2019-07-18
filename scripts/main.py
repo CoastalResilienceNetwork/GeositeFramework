@@ -48,6 +48,8 @@ def prepare_languages():
 
     plugin_json_files = extract_filepaths_from_dirs(plugin_locales)
 
+    print plugin_json_files
+
     # merge app and plugin translation dicts keyed to language code
     # prefer app dict translations, if conflict
     all_json_files = plugin_json_files + app_json_files
