@@ -21,6 +21,7 @@ PROD = sys.argv[1]
 print PROD
 
 def prepare_languages():
+    print "template_index"
     # get app-wide translation files
     try:
         language_dir = os.path.join(BASE_DIR, 'locales')
@@ -74,6 +75,7 @@ def prepare_languages():
 
 
 def template_index():
+    print "template_index"
     # create a jinja environment
     j2_env = Environment(loader=FileSystemLoader(''),
                          trim_blocks=True,)
