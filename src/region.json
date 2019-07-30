@@ -3,8 +3,8 @@
     "googleUrlShortenerApiKey": "AIzaSyDd5hwYX4vAMLOH425cnMSq3gte98w4VFA",
     "googleAnalyticsPropertyId": "XXXXXXXXX-0",
     "singlePluginMode": {
-        "active": false,
-        "pluginFolderName": "identify_point"
+        "active": true,
+        "pluginFolderName": "natural_coastal_protection"
     },
     "appIntro": true,
     "titleMain": {
@@ -72,12 +72,12 @@
         ]
     },
     "basemaps": [
+        { "name": "Shaded Relief"      , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer" },
         { "name": "Topographic"        , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" },
         { "name": "National Geographic", "url": "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer" },
         { "name": "Ocean"              , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer" },
         { "name": "Imagery"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" },
         { "name": "Physical"           , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer" },
-        { "name": "Shaded Relief"      , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer" },
         { "name": "Streets"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" },
         { "name": "Terrain"            , "url": "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer" },
         { "name": "OpenStreetMap"      , "url": "" }
@@ -99,7 +99,7 @@
         "headerLogoPath": "http://maps.coastalresilience.org/network/assets/images/partners/TNCLogoPrimary_RGB2.jpg"
     },
     "colors": {
-        "primary": "#5394B6",
+        "primary": "#144863",
         "secondary": "#3BBDC2",
         "tertiary": "#333",
         "active": "#0096D6"

@@ -7,7 +7,9 @@
             width: 500,
             hash: null,
             url: null,
-            shortUrl: null
+            shortUrl: null,
+            mailLink: null,
+            twitterLink: null
         },
 
         initialize: function () {
@@ -20,21 +22,56 @@
         },
 
         shorten: function() {
-            var model = this,
-                request = gapi.client.urlshortener.url.insert({
-                    'resource': {
-                        'longUrl': model.get('url')
-                    }
-                });
+            var model = this;
+			if (isProd) {
+				
+				var apiKey = "48598fa6dd3e4237b18dd6344b77a049";
+				var requestHeaders = {
+					"Content-Type": "application/json",
+					"apikey": apiKey
+				};
+				
+				var linkRequest = {
+					destination: model.get('url')
+				};
+				
+				$.ajax({
+					url: 'https://api.rebrandly.com/v1/links',
+					type: "post",
+					data: JSON.stringify(linkRequest),
+					headers: requestHeaders,
+					dataType: "json",
+					success: function(result){
+						var shortUrl = (result.shortUrl.indexOf('http') == -1) ? 'https://' + result.shortUrl : result.shortUrl;
+                        model.set('shortUrl', shortUrl);
+                        model.genSocialLinks();
+					},
+					error: function(error) {
+                        model.set('shortUrl', model.get('url')); 
+                        model.genSocialLinks();
+					}
+				});
+			} else {
+                model.set('shortUrl', model.get('url'));
+                model.genSocialLinks(); 
+			}
+        },
 
-            request.execute(function (result) {
-                if (result.error) {
-                    model.set('shortUrl', model.get('url'));
-                } else {
-                    model.set('shortUrl', result.id);
-                }
+        toTitleCase: function(str) {
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             });
-        }
+        },
+
+        genSocialLinks: function() {
+            let shareText = "Check out my custom map from the " + N.app.data.region.titleMain.text;
+            if(N.app.singlePluginMode) {
+                shareText = shareText + " - " + this.toTitleCase(N.app.data.region.singlePluginMode.pluginFolderName.replace(/_/g, " ").replace(/-/g, " ")) + " App";
+            }
+            this.set('twitterLink', encodeURI(shareText));
+            this.set('mailLink', encodeURI("mailto:?subject=See the map I made on " + N.app.data.region.titleMain.text + "&body=" + shareText + ": " + this.get('shortUrl')));
+        },
+            
     });
 
     N.views.Permalink = Backbone.View.extend({
@@ -56,7 +93,7 @@
 
         render: function () {
             var view = this;
-
+            $.featherlight
             TINY.box.show({
                 boxid: 'permalink-tiny-box-modal',
                 html: this.template(view.model.toJSON()),
@@ -64,13 +101,21 @@
                 openjs: function () {
                     view.setElement($('#permalink-dialog'));
 
-                    // Embed code will be re-rendered with UI changes
-                    // so it is removed to its own view
-                    view.embedView = new N.views.EmbedCode({
-                        el: view.$('#iframe-embed'),
-                        model: view.model
-                    });
-                    view.embedView.render();
+                    if(!N.app.singlePluginMode) {
+                        // Embed code will be re-rendered with UI changes
+                        // so it is removed to its own view
+                        view.embedView = new N.views.EmbedCode({
+                            el: view.$('#iframe-embed'),
+                            model: view.model
+                        });
+                        view.embedView.render();
+                    } else {
+                        view.socialView = new N.views.SocialShare({
+                            el: view.$('#social-share'),
+                            model: view.model
+                        });
+                        view.socialView.render();
+                    }
 
                     var $domElement = view.$('.permalink-textbox');
                     view.selectText($domElement);
@@ -89,7 +134,9 @@
                 },
                 closejs: function() {
                     view.remove();
-                    view.embedView.remove();
+                    if(!N.app.singlePluginMode) {
+                        view.embedView.remove();
+                    }
                 }
             });
         },
@@ -133,6 +180,20 @@
 
         initialize: function () {
             this.template = N.app.templates['embed-iframe'];
+        },
+
+        render: function () {
+            this.$el.empty().html(
+                $.trim(this.template(this.model.toJSON()))
+            );
+        }
+    });
+
+    N.views.SocialShare = Backbone.View.extend({
+        template: null,
+
+        initialize: function () {
+            this.template = N.app.templates['social-share'];
         },
 
         render: function () {

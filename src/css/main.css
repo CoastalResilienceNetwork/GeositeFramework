@@ -355,6 +355,7 @@ legend {
     padding: 0;
     white-space: normal
 }
+
 textarea {
     overflow: auto
 }
@@ -446,7 +447,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-width: 740px;
+    /* min-width: 740px; */
 }
 .h1,
 .text-h1,
@@ -891,12 +892,14 @@ nav {
 }
 #toggle-plugin-container {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 15px;
+  left: -3px;
   z-index: 2;
   padding: 7px 12px;
-  background-color: #DDD;
+  background-color: #FFF;
   cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 0px 0px 26px 0px rgba(51, 51, 51, 0.42);
 }
 #toggle-plugin-container span {
   color: #000;
@@ -937,7 +940,7 @@ nav {
     background: #fff;
     height: 100%;
     position: absolute;
-    z-index: 100;
+    z-index: 600;
     display: none;
     width: 350px;
 }
@@ -1444,7 +1447,6 @@ header .nav-main {
     background-position: 8px 8px;
     overflow: hidden;
     border-radius: 4px;
-    opacity: .75;
     cursor: pointer;
     box-shadow: 0 0 12px black;
     box-shadow: 0 0 12px rgba(0, 0, 0, .25);
@@ -1672,12 +1674,6 @@ header .nav-main {
     height: 0;
     min-height: 0;
 }
-.content .legend .legend-header {
-    padding: 10px;
-    background: #444;
-    color: #fff;
-    cursor: move;
-}
 .content .legend .legend-header a {
     float: right;
     color: #CCC;
@@ -1703,6 +1699,56 @@ header .nav-main {
     overflow: auto;
     height: 99%;
     width: 100%;
+}
+.map-legend-expand {
+    display: block;
+}
+.legend-toggle {
+    display: none;
+}
+
+.minimized .legend-toggle {
+    padding: 0px;
+    cursor: pointer;
+    display: block;
+}
+
+.content .legend {
+    bottom: 55px;
+    left: 15px;
+    min-width: 100px;
+    max-height: 250px;
+}
+
+.content .legend .legend-header {
+    font-size: 15px;
+    color: #4B4B4B;
+    padding: 5px 10px;
+    background: #fff;
+    border-radius: 4px;
+}
+
+.content .legend .legend-header .legend-toggle {
+    color: #000;
+    display: block;
+    top: -12px;
+    right: -5px;
+}
+
+.content .legend .legend-body {
+    color: #4B4B4B;
+    padding: 0px 15px;
+}
+
+.legend.minimized {
+    width: auto;
+    background: none;
+    box-shadow: none;
+}
+
+.content .legend .legend-header a:hover {
+    background: none;
+    color: black;
 }
 .layer-legends {
     overflow: hidden;
@@ -1778,7 +1824,7 @@ header .nav-main {
 }
 .tclose {
     position: absolute;
-    top: 20px;
+    top: 26px;
     right: 24px;
     cursor: pointer;
     padding: 6px;
@@ -1787,9 +1833,9 @@ header .nav-main {
     color: #CCC;
     font-weight: 700;
     z-index: 99;
-    height: 24px;
+    height: 22px;
     line-height: 10px;
-    width: 24px;
+    width: 22px;
 }
 .tclose:hover {
     background: #F1F2F2;
@@ -2040,6 +2086,16 @@ body.x-body {
   z-index: 2200 !important;
 }
 
+
+.mobile-full-map-toggle {
+    display: none;
+}
+
+/* Button to expand/contract content and map on mobile */
+#mobile-content-toggle {
+    display: none;
+}
+
 .sidebar-button-bottom {
   position: fixed;
   bottom: 0;
@@ -2133,9 +2189,72 @@ body.x-body {
   color: #fff;
 }
 
+/* Social Share */
+.fb-share-button {
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    background: #365899;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: top;
+}
+
+.fb-share-button a {
+    color: white;
+}
+
+.fb-share-button svg {
+    width: 11px;
+    height: 11px;
+    margin-right: 3px;
+    margin-bottom: -1px;
+}
+
+.fb-share-button:hover{
+    background: #1D3F80;
+}
+
+.tinner .twitter-share-button, .twitter-share-button {
+    display: inline-block;
+    margin-top: 0px;
+    margin-right: 8px;
+}
+
+.mail-share-button {
+    display: inline-block;
+    vertical-align: top;
+    padding: 2px 6px;
+    font-size: 11px;
+    margin-right: 8px;
+    border-radius: 3px;
+    background: #999;
+}
+
+.mail-share-button a {
+    color: white;
+}
+
+.mail-share-button:hover {
+    background: #777;
+}
+
 @media not screen and (max-width: 737px) {
     #single-plugin-toggle-footer {
         display: none !important;
+    }
+
+    .map-container {
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: space-around;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        position: relative;
+        overflow-y: auto;
     }
 }
 
@@ -2147,11 +2266,6 @@ body.x-body {
 
     .tcontent {
         overflow: auto !important;
-    }
-
-    #permalink-tiny-box-modal {
-        width: 85vw !important;
-        height: 60vh !important;
     }
 
     #permalink-tiny-box-modal .tcontent {
@@ -2277,9 +2391,10 @@ body.x-body {
     .nav-main-title {
         display: inline-block;
         white-space: nowrap;
-        width: 60vw;
+        width: 80vw;
         text-overflow: ellipsis;
         overflow: hidden;
+        font-size: 16px;
     }
 
     .single-plugin-mode .dropdown-icon-container {

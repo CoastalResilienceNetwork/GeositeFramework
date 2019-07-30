@@ -33,6 +33,7 @@ def prepare_languages():
 
     # get plug-ins' translation files
     plugin_folder_paths = plugin_loader.get_plugin_folder_paths()
+
     plugin_locales = []
     for path in plugin_folder_paths:
         try:
@@ -45,7 +46,16 @@ def prepare_languages():
 
     # merge app and plugin translation dicts keyed to language code
     # prefer app dict translations, if conflict
-    all_json_files = plugin_json_files + app_json_files
+    all_plugin_files = []
+    for plugin in plugin_json_files:
+        for trans_file in plugin: 
+            try:
+                all_plugin_files.append(trans_file)
+            except:
+                continue
+
+    all_json_files = all_plugin_files + app_json_files
+
     translations = {}
 
     for f in all_json_files:

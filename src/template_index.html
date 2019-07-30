@@ -29,6 +29,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styleguide.css">
     <link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
+    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+    <link rel="stylesheet" href="css/single-plugin-mode.css">
+    <link rel="stylesheet" href="css/pushy.css">
+    {% endif %}
 
     <!-- jQuery UI needs to load before Dojo, or else there is a conflict that prevents Dojo from loading -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -109,47 +113,6 @@
         .dropdown-submenu > a:not(:hover) {
             background-color: {{ region.colors.secondary }};
         }
-
-        {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-        .sidebar-content {
-            height: 100%;
-            margin-top: 0;
-        }
-
-        .sidebar-nav {
-            display:none;
-        }
-
-        #toggle-plugin-container button {
-            background-color: {{ region.colors.primary }};
-            border-color: {{ region.colors.primary }};
-        }
-        #toggle-plugin-container button:hover {
-            background-color: {{ region.colors.secondary }};
-        }
-
-        /* Ideally these would be stored in class, but when the ESRI search is
-        initialized, existing classes are overwritten */
-        #search {
-            right: 45px;
-            z-index: 10000;
-        }
-
-        /* Mobile-friendly rules that should only apply
-           to single plugin mode */
-        @media screen and (max-width: 736px) {
-          .nav-main-dropdown {
-              position: fixed !important;
-              right: 0vw !important;
-          }
-
-          #search .searchExpanded .searchExpandContainer {
-              width: 75vw;
-              margin-left: 2vw !important;
-          }
-        }
-
-        {% endif %}
     </style>
 
     {% if region.googleUrlShortenerApiKey != null %}
@@ -200,56 +163,62 @@
                 </div>
             </div>
         </nav>
-        <div class="flex-expand">
-            <div class="flex-container map-container">
-                {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-                <div id="toggle-plugin-container" class="single-plugin-mode">
-                    <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                </div>
-                {% endif %}
-                <div id="map-0" class="map">
-                    <div class="control-container">
-                        <div class="top-tools"></div>
-                        <div class="map-tools">
-                            <!-- Map utils control -->
-                            <div class="topbar-plugin" id="map-utils-control">
-                                <div class="plugin-launcher">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
+        <div class="map-container">
+            {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+            <div id="toggle-plugin-container" class="single-plugin-mode">
+                <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+            </div>
+            {% endif %}
+            <div id="map-0" class="map map-peeking">
+                <div class="control-container">
+                    <div class="top-tools"></div>
+                    <div class="map-tools">
+                        <!-- Map utils control -->
+                        <div class="topbar-plugin" id="map-utils-control">
+                            <div class="plugin-launcher">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="map-utils-dropdown-button" data-toggle="dropdown" aria-haspopup="true">
+                                    {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                                         <i class="icon-wrench"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+                                    {% else %}
+                                        <i class="icon-share"></i>
+                                    {% endif %}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="map-utils-dropdown-button">
+                                    {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                                         <li><a href="#" class="i18n" data-command="measure" data-i18n="Measure">Measure</a></li>
                                         <li><a href="#" class="i18n" data-command="zoom" data-i18n="Zoom to Extent">Zoom to Extent</a></li>
-                                        {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
-                                            <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
-                                        {% endif %}
-                                        <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Top bar plugins -->
-                            <div class="tools"></div>
-                        </div>
-                        <div class="basemap-selector">
-                            <div class="basemap-selector-title"></div>
-                            <div class="basemap-selector-list">
-                                <ul>
+                                        <li><a href="#" class="i18n" data-command="export" data-i18n="Create Map">Create Map</a></li>
+                                    {% endif %}
+                                    <li><a href="#" class="i18n" data-command="share" data-i18n="Save &amp; Share">Save &amp; Share</a></li>
                                 </ul>
                             </div>
                         </div>
+                        <!-- Top bar plugins -->
+                        <div class="tools"></div>
                     </div>
-                    <div id="legend-container-<%= paneNumber %>" class="legend">
-                        <div class="legend-header">
-                            <span class="i18n" data-i18n="Map Legend">Map Legend</span>
-                            <a class="legend-close i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
-                        </div>
-                        <div class="legend-body">
-                            <div class="plugin-legends"></div>
-                            <div class="layer-legends"></div>
+                    {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
+                    <div class="basemap-selector">
+                        <div class="basemap-selector-title"></div>
+                        <div class="basemap-selector-list">
+                            <ul>
+                            </ul>
                         </div>
                     </div>
-                    <div class="subregion-tooltip"></div>
+                    {% endif %}
                 </div>
+                <div id="legend-container-<%= paneNumber %>" class="legend">
+                    <div class="legend-header">
+                        <span class="i18n" data-i18n="Map Legend">Map Legend</span>
+                        <a class="legend-close legend-toggle-single i18n" data-i18n="[title]Hide Legend" href="javascript:;">_</a>
+                    </div>
+                    <div class="legend-body">
+                        <div class="plugin-legends"></div>
+                        <div class="layer-legends"></div>
+                    </div>
+                    <div class="legend-toggle legend-expand"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
+                </div>
+                <div class="subregion-tooltip"></div>
+                <div class="mobile-full-map-toggle"><img class="full-map-icon" src="img/fullMapIcon.svg" alt="Expand Map" /><img class="min-map-icon" src="img/minMapIcon.svg" alt="Shrink Map" /></div>
             </div>
         </div>
     </script>
@@ -345,11 +314,11 @@
     </script>
 
     <script type="text/template" id="template-basemap-selector-item">
-        <li data-index="<%- index %>"><%- name %></li>
+        <li data-index="<%- index %>" class="pushy-link"><a><%- name %></a></li>
     </script>
 
     <script type="text/template" id="template-plugin-container">
-        <div class="sidebar <%= sizeClassName %> content-scrollable" id="<%= id %>" style="<%= customWidth %>">
+        <div class="sidebar sidebar-peeking <%= sizeClassName %> content-scrollable" id="<%= id %>" style="<%= customWidth %>">
             <div class="sidebar-nav">
                 <h2 class="nav-title" class="i18n" data-i18n="<%- title %>">
                     <%- title %>
@@ -377,6 +346,10 @@
                         <i class="icon-cancel"></i>
                     </button>
                 </div>
+            </div>
+            <div id="mobile-content-toggle">
+                <span class="mobile-toggle-arrow"><i class="fa fa-chevron-up"></i></span>
+                <span class="mobile-toggle-text">Hide Map</span>
             </div>
             <div class="sidebar-content">
             </div>
@@ -486,15 +459,32 @@
        </textarea>
     </script>
 
+    <script type="text/template" id="social-share">
+        <div class="mail-share-button">
+            <a href="<%= mailLink %>">
+                <i class="icon-mail"></i>
+                E-mail
+            </a>
+        </div>
+        <div class="fb-share-button" data-href="<=% url %>" data-layout="button" data-size="large" data-mobile-iframe="true">
+            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<%= shortUrl %>" class="fb-xfbml-parse-ignore">
+                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 58"><defs><style>.cls-1{fill:#fff;}</style></defs><title>flogo-HexRBG-Wht-58</title><path class="cls-1" d="M53.85,0H3.15A3.15,3.15,0,0,0,0,3.15v50.7A3.15,3.15,0,0,0,3.15,57h27.3V35H23V26.33h7.41V20c0-7.37,4.49-11.38,11.06-11.38A62.15,62.15,0,0,1,48.15,9v7.69H43.61c-3.57,0-4.26,1.69-4.26,4.18v5.5H47.9L46.79,35H39.35V57h14.5A3.15,3.15,0,0,0,57,53.85V3.15A3.15,3.15,0,0,0,53.85,0Z"/></svg>
+                Share
+            </a>
+        </div>
+        <a href="https://twitter.com/intent/tweet?text=<%= twitterLink %>&url=<%= shortUrl %>" data-url="<%= shortUrl %>" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </script>
+
     <script type="text/template" id="permalink-share-window">
         <div class="popover">
-            <div class="popover-header">
-                <h2 class="i18n" data-i18n="Save & Share">Save & Share</h2>
+            <div class="plugin-tiny-box-header">
+                <span class="i18n plugin-tiny-box-title" data-i18n="Save & Share">Save & Share</span>
             </div>
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
                   <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div>
                     <input class="form-control code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
+                {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                   <label class="popover-section h3" data-i18n="Embed"><div class="h3">Embed</div></label>
                   <p>You can copy and paste the following code to embed this map on your website.</p><br>
                   <span id="iframe-embed"></span>
@@ -514,6 +504,10 @@
                           </div>
                       </div>
                   </div>
+                {% else %}
+                  <label class="popover-section h3" data-i18n="Social"><div class="h3">Social</div></label>
+                  <div id="social-share"></div>
+                {% endif %}
                   <label class="popover-section">
                       <div class="h3 i18n" data-i18n="Need the save code for this map?">
                           Need the save code for this map?
@@ -697,31 +691,45 @@
         <div class="nav-region-subtitle">
             {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                 {{ region.titleDetail.text }}
-            {% else %}
-                <span id="show-single-plugin-mode-help">About</span>
             {% endif %}
         </div>
         <div id="search"></div>
         {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-        <div class="dropdown header-dropdown nav-main-dropdown single-plugin-mode">
-            <button class="button dropdown-toggle nav-main-button" type="button" id="header-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <div class="offcanvas header-offcanvas nav-main-offcanvas single-plugin-mode">
+            <!-- Menu Button -->
+            <button class="button menu-btn offcanvas-toggle nav-main-button" type="button" id="header-menu" aria-haspopup="true" aria-expanded="true">
                 <div class="nav-main">
-                    <div class="dropdown-icon-container">
-                        <i class="dropdown-icon icon-menu"></i>
+                    <div class="offcanvas-icon-container">
+                        <i class="offcanvas-icon icon-menu"></i>
                     </div>
                 </div>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="header-menu">
-                {% for headerLink in region.headerLinks %}
-                    <li>
-                        <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
-                    </li>
-                    <li class="divider"></li>
-                {% endfor %}
-            </ul>
         </div>
+        <!-- Pushy Menu -->
+        <nav class="pushy pushy-right offcanvas-menu" aria-labelledby="header-menu">
+            <div class="pushy-content">
+                <ul class="offcanvas-links">
+                    <li class="pushy-link" id="show-single-plugin-mode-help"><a href="#" data-i18n="About">About</a></li>
+                    {% for headerLink in region.headerLinks %}
+                        <li class="pushy-link">
+                            <a target="_blank" href="{{ headerLink.url }}">{{ headerLink.text }}<i class="icon-link-ext"></i></a>
+                        </li>
+                    {% endfor %}
+                    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+                    <li class="basemap-selector pushy-submenu">
+                        <button class="basemap-selector-title"></button>
+                        <ul class="basemap-selector-list">
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <!-- Pushy Site Overlay -->
+        <div class="site-overlay"></div>
         {% endif %}
     </header>
+
 
    {% include "src/Views/Shared/TourInfo.cshtml" %}
 
@@ -772,6 +780,9 @@
     <script src="js/lib/backbone.hashmodels.js"></script>
     <script src="js/lib/TinyBox2.js"></script>
     <script src="js/lib/pageguide.min.js"></script>
+    {% if region.singlePluginMode and region.singlePluginMode.active %}
+        <script src="js/lib/pushy.min.js"></script>
+    {% endif %}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
@@ -891,17 +902,5 @@
         });
 
     </script>
-    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
-    <footer id="single-plugin-toggle-footer">
-        <span id="single-plugin-toggle-buttons">
-            <button class="single-plugin-toggle-button button button-primary" id="single-plugin-toggle-content-button">
-                Content
-            </button>
-            <button class="single-plugin-toggle-button button button-secondary" id="single-plugin-toggle-map-button">
-                Map
-            </button>
-        </span>
-    </footer>
-    {% endif %}
 </body>
 </html>
