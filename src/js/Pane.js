@@ -295,12 +295,13 @@ require([
 
         function initialize(view) {
             render(view);
-            initBasemapSelector(view);
             initSidebarToggle(view);
             initMapView(view);
             initPluginViews(view);
             if (N.app.singlePluginMode) {
                 initSinglePluginMode(view);
+            } else {
+                initBasemapSelector(view);
             }
 
             // For on demand export initialization. See Layer Selector print, for example.
@@ -323,6 +324,13 @@ require([
             });
         }
 
+        function initSinglePluginBasemapSelector(view) {
+            new N.views.BasemapSelector({
+                model: view.model.get('mapModel'),
+                el: $('.basemap-selector')
+            });
+        }
+
         function initSidebarToggle(view) {
             new N.views.SidebarToggle({
                 el: view.$('#sidebar-toggle')
@@ -333,6 +341,7 @@ require([
             initTogglePlugin(view);
             initMobileTogglePlugin(view);
             initSinglePluginModeHelp(view);
+            initSinglePluginBasemapSelector(view);
         }
 
         function initTogglePlugin(view) {
@@ -345,11 +354,13 @@ require([
         }
 
         function initMobileTogglePlugin(view) {
-            var mobileTogglePluginView = new N.views.MobileTogglePlugin({
+            var mobileTogglePluginView = new N.views.MobileTogglePluginContent({
                 viewModel: view.model
             });
 
-            mobileTogglePluginView.$el.show();
+            var mobileToggleFullMap = new N.views.MobileToggleFullMap({
+                viewModel: view.model
+            });
         }
 
         function initSinglePluginModeHelp(view) {

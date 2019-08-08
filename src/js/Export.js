@@ -185,7 +185,7 @@ require(['use!Geosite'],
 
             previewDeferred.then(function() {
                 $(".item.extra.collapse").show();
-                TINY.box.hide();
+                /*TINY.box.hide();*/
                 postPrintAction();
             });
         }

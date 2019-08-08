@@ -43,10 +43,11 @@
         }
     });
 
-    // Single plugin mode button to toggle plugin visibility
+    // Single plugin mode button to toggle plugin content visibility
     N.views.TogglePlugin = Backbone.View.extend({
         initialize: function(options) {
             this.singlePlugin = options.viewModel.get('plugins').at(0);
+            this.pluginSidebar = $('.sidebar');
             this.viewModel = options.viewModel;
             this.viewModel.set('pluginContentVisible', true);
             this.listenTo(this.viewModel, 'change', this.adjustToggleIcon);
@@ -67,59 +68,94 @@
         togglePluginVisibility: function() {
             if (this.viewModel.get('pluginContentVisible')) {
                 this.viewModel.set('pluginContentVisible', false);
-                this.singlePlugin.deselect();
+                this.pluginSidebar.addClass('desktop-sidebar-hidden');
+                //this.singlePlugin.deselect();
             } else {
                 this.viewModel.set('pluginContentVisible', true);
-                this.singlePlugin.select();
+                this.pluginSidebar.removeClass('desktop-sidebar-hidden');
+                //this.singlePlugin.select();
             }
         }
     });
 
-    // Mobile toggle view for single plugin mode
-    N.views.MobileTogglePlugin = Backbone.View.extend({
-        el: 'footer',
+    // Mobile toggle full screen content view for single plugin mode
+    N.views.MobileToggleFullMap = Backbone.View.extend({
+        el: '.mobile-full-map-toggle',
 
         events: {
-            'click #single-plugin-toggle-content-button': 'showMobileContent',
-            'click #single-plugin-toggle-map-button': 'showMobileMap'
+            'click': 'toggleFullMap',
+        },
+
+        initialize: function(options) {
+            this.mobileToggleButton = $('#mobile-content-toggle');
+            this.fullMapButton = this.$el;
+            this.pluginSidebar = $('.sidebar');
+            this.mapRef = $('.map');
+
+        },
+
+        toggleFullMap: function() {
+            if(this.pluginSidebar.hasClass('sidebar-peeking')) {
+                // set correct classes on map and sidebar
+                this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-max').addClass('sidebar-min');
+                this.mapRef.removeClass('map-peeking').removeClass('map-min').addClass('map-max');
+                // set content of mobile toggle tab
+                this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
+            } else {
+                // set correct classes on map and sidebar
+                this.pluginSidebar.removeClass('sidebar-max').removeClass('sidebar-min').addClass('sidebar-peeking');
+                this.mapRef.removeClass('map-max').removeClass('map-min').addClass('map-peeking');
+                // set content of mobile toggle tab
+                this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+                this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
+            }
+        },
+
+    });
+
+    // Mobile toggle content view for single plugin mode
+    N.views.MobileTogglePluginContent = Backbone.View.extend({
+        el: '#mobile-content-toggle',
+
+        events: {
+            'click': 'handleContentToggleClick'
         },
 
         initialize: function(options) {
             this.viewModel = options.viewModel;
-            this.listenTo(this.viewModel, 'change', this.adjustButtonCSS);
+            this.listenTo(this.viewModel, 'change', this.handleContentToggleClick);
 
-            this.mobileMapButton = this.$el.find('#single-plugin-toggle-content-button');
-            this.mobileContentButton = this.$el.find('#single-plugin-toggle-map-button');
+            this.mobileToggleButton = this.$el;
+            this.fullMapButton = $('.mobile-full-map-toggle');
             this.pluginSidebar = $('.sidebar');
-
-            N.app.showMobileMap = this.showMobileMap.bind(this);
-            N.app.showMobileContent = this.showMobileContent.bind(this);
+            this.mapRef = $('.map');
         },
 
-        adjustButtonCSS: function() {
-            if (!this.viewModel.get('pluginContentVisible')) {
-                this.mobileMapButton.addClass('button-secondary');
-                this.mobileContentButton.addClass('button-primary');
-
-                this.mobileMapButton.removeClass('button-primary');
-                this.mobileContentButton.removeClass('button-secondary');
+        handleContentToggleClick: function() {
+            if(this.pluginSidebar.hasClass('sidebar-peeking')) {
+                this.setFullContent();
             } else {
-                this.mobileMapButton.addClass('button-primary');
-                this.mobileContentButton.addClass('button-secondary');
-
-                this.mobileMapButton.removeClass('button-secondary');
-                this.mobileContentButton.removeClass('button-primary');
+                this.setPeekingView();
             }
         },
 
-        showMobileContent: function() {
-            this.pluginSidebar.show();
-            this.viewModel.set('pluginContentVisible', true);
+        setFullContent: function() {
+            // set correct classes on map and sidebar, full map toggle button state?
+            this.pluginSidebar.removeClass('sidebar-peeking').removeClass('sidebar-min').addClass('sidebar-max');
+            this.mapRef.removeClass('map-peeking').removeClass('map-max').addClass('map-min');
+            // set content of mobile toggle tab
+            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-down');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('show map');
         },
 
-        showMobileMap: function() {
-            this.pluginSidebar.hide();
-            this.viewModel.set('pluginContentVisible', false);
+        setPeekingView: function() {
+            // set correct classes on map and sidebar, how full map toggle button
+            this.pluginSidebar.removeClass('sidebar-max').removeClass('sidebar-min').addClass('sidebar-peeking');
+            this.mapRef.removeClass('map-min').removeClass('map-max').addClass('map-peeking');
+            // set content of mobile toggle tab
+            this.mobileToggleButton.find('i').attr('class', 'fa fa-chevron-up');
+            this.mobileToggleButton.find('.mobile-toggle-text').html('hide map');
         }
     });
 }(Geosite));

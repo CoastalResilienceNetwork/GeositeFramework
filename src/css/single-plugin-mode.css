@@ -1,0 +1,352 @@
+
+.content .legend {
+  color: #000;
+  position: absolute;
+  bottom: 45px;
+  right: 25px;
+  height: 200px;
+  width: 255px;
+  min-width: 255px;
+  z-index: 101;
+  font-weight: bold;
+  background: #FFF;
+  font-size: 12px;
+  border-radius: 4px;
+  box-shadow: 0 0 12px #666;
+  box-shadow: 0 0 12px rgba(0, 0, 0, .25);
+  padding-bottom: 36px;
+  /* header offset */
+
+  overflow: visible;
+  display: none;
+}
+.content .legend.minimized {
+  height: 0;
+  min-height: 0;
+}
+.content .legend .legend-header a {
+  float: right;
+  color: #CCC;
+  font-weight: bold;
+  padding: 6px;
+  position: relative;
+  top: -6px;
+  right: -8px;
+  width: 26px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.content .legend .legend-body {
+  padding: 10px 15px;
+  overflow: auto;
+  height: 99%;
+  width: 100%;
+}
+.map-legend-expand {
+  display: block;
+}
+.legend-toggle {
+  display: none;
+}
+
+.minimized .legend-toggle {
+  padding: 0px;
+  cursor: pointer;
+  display: block;
+}
+
+.content .legend {
+  bottom: 55px;
+  left: 15px;
+  min-width: 100px;
+  max-height: 250px;
+}
+
+.content .legend .legend-header {
+  font-size: 15px;
+  color: #4B4B4B;
+  padding: 5px 10px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.content .legend .legend-header .legend-toggle {
+  color: #000;
+  display: block;
+  top: -12px;
+  right: -5px;
+}
+
+.content .legend .legend-body {
+  color: #4B4B4B;
+  padding: 0px 15px;
+}
+
+.legend.minimized {
+  width: auto;
+  background: none;
+  box-shadow: none;
+}
+
+.content .legend .legend-header a:hover {
+  background: none;
+  color: black;
+}
+
+.sidebar-content {
+  height: calc(100% - 23px);
+  margin-top: 0;
+}
+
+.sidebar-nav {
+  display:none;
+}
+
+.sidebar, .map {
+  -webkit-transition: all 500ms ease-in-out;
+  -moz-transition: all 500ms ease-in-out;
+  -ms-transition: all 500ms ease-in-out; 
+  -o-transition: all 500ms ease-in-out; 
+  transition: all 500ms ease-in-out;
+}
+
+/* HEADER AND OFF CANVAS MENU */
+.single-plugin-mode .nav-main {
+  padding-right: 0;
+}
+.header-offcanvas {
+    height: 55px;
+    z-index: 2200;
+}
+.header-offcanvas.single-plugin-mode {
+    position: absolute;
+    right: 0;
+    z-index: 10000;
+    top: 0;
+}
+.header-offcanvas.offcanvas>button {
+    padding: 0;
+    background-color: transparent;
+    color: #fff;
+    border: 0;
+    box-shadow: none!important
+}
+.header-offcanvas .icon-menu {
+    color: #fff;
+}
+.offcanvas-icon-container {
+    padding: 3px 13px 0 2px;
+    border-right: 1px solid hsla(0, 0%, 100%, .2);
+    margin-right: 10px;
+    line-height: 50px;
+    height: 100%;
+}
+.single-plugin-mode .offcanvas-icon-container {
+    margin-right: 0;
+    border-right: none;
+}
+.header-offcanvas .button.active,
+.header-offcanvas .button.hover,
+.header-offcanvas .button:active,
+.header-offcanvas .button:hover {
+    background-color: transparent
+}
+.nav-main-button {
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    background-color: transparent
+}
+
+.offcanvas-links {
+  list-style-type: none;
+  padding-left: 0px;
+  font-family: OpenSansBold, OpenSans, colfax, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif;
+}
+
+.pushy.offcanvas-menu {
+  background: #fff;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link {
+  line-height: 24px;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link a {
+  color: #555555;
+}
+
+.pushy.offcanvas-menu .offcanvas-links .pushy-link a:hover {
+  color: #000000;
+}
+
+.basemap-selector-title, .basemap-selector-title:hover {
+  color: #555555 !important;
+  cursor: pointer;
+}
+
+.pushy-content .basemap-selector ul li {
+  list-style-type: none;
+}
+
+.basemap-selector {
+  cursor: pointer;
+}
+
+.basemap-selector span {
+  padding-left: 10px;
+}
+
+.legend-toggle {
+  display: none;
+}
+
+.minimized .legend-toggle {
+  padding: 0px;
+  cursor: pointer;
+  display: block;
+}
+
+.content .legend {
+  bottom: 25px;
+  left: 25px;
+  min-width: 100px;
+  max-height: 300px;
+}
+
+.content .legend .legend-header {
+  font-size: 15px;
+  color: #4B4B4B;
+  padding: 10px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.content .legend .legend-header .legend-toggle-single {
+  color: #000;
+  display: block;
+  top: -20px;
+  font-size: 20px;
+  right: -5px;
+}
+
+.content .legend .legend-body {
+  color: #4B4B4B;
+  padding: 0px 15px;
+  height: 92%;
+}
+
+.legend.minimized {
+  width: auto;
+  background: none;
+  box-shadow: none;
+}
+
+.content .legend .legend-header a:hover {
+  background: none;
+  color: black;
+}
+
+@media screen and (min-width: 736px) {
+  .desktop-sidebar-hidden {
+    visibility: hidden;
+    width: 0px !important;
+  }
+}
+
+
+/* Mobile-friendly rules that should only apply
+to single plugin mode */
+@media screen and (max-width: 736px) {
+
+  .sidebar {
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .sidebar-peeking {
+    height: 45%;
+  }
+
+  .sidebar-max {
+    height: 100%;
+  }
+
+  /* height of the toggle control */
+  .sidebar-min {
+    height: 23px;
+  }
+
+  /* Button to expand/contract content and map on mobile */
+  #mobile-content-toggle {
+    display: block;
+    text-align: center;
+    background: #4B4B4B;
+    box-shadow: 0 -3px 4px 0 rgba(0,0,0,0.5);
+    padding: 2px;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .content .map .map-tools {
+    top: 20px;
+    right: 10px;
+    opacity: 1;
+  }
+
+  .esriSimpleSlider {
+    display: none;
+  }
+
+  .map-peeking .mobile-full-map-toggle, .map-max .mobile-full-map-toggle {
+    display: block;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    z-index: 501;
+  }
+
+  .map-peeking .min-map-icon {
+    display: none;
+  }
+
+  .map-max .full-map-icon {
+    display: none;
+  }
+
+  .mobile-full-map-toggle > img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .map-peeking {
+    height: 55%;
+  }
+
+  .map-max {
+    height: calc(100% - 23px);
+  }
+
+  .map-min {
+    height: 0;
+  }
+
+  .nav-main-offcanvas {
+    position: fixed !important;
+    right: 0vw !important;
+  }
+
+  .map-legend-expand {
+    display: block;
+  }
+
+  .content .legend {
+    bottom: 55px;
+    left: 15px;
+    max-height: 220px;
+  }
+}
