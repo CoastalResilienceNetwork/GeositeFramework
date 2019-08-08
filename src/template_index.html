@@ -215,7 +215,9 @@
                         <div class="plugin-legends"></div>
                         <div class="layer-legends"></div>
                     </div>
-                    <div class="legend-toggle legend-expand"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
+                    {% if region.singlePluginMode is defined and region.singlePluginMode.active %}
+                        <div class="legend-toggle legend-expand"><img src="img/mapLegendIcon.svg" alt="Hide Legend" /></div>
+                    {% endif %}
                 </div>
                 <div class="subregion-tooltip"></div>
                 <div class="mobile-full-map-toggle"><img class="full-map-icon" src="img/fullMapIcon.svg" alt="Expand Map" /><img class="min-map-icon" src="img/minMapIcon.svg" alt="Shrink Map" /></div>
@@ -483,7 +485,8 @@
             <div class="popover-content">
                 <div class="row" id="permalink-dialog">
                   <label class="popover-section"><div class="h3 i18n" data-i18n="Permalink">Permalink</div>
-                    <input class="form-control code-like permalink-textbox" type="text" value="<%= shortUrl %>"/></label>
+                  <input class="form-control code-like permalink-textbox" type="text" value="<%= shortUrl %>"/> <button class="copy-to-clipboard button button-default">Copy</button></label>
+                    <span style="display: none" class="copy-success">Link copied to clipboard</span>
                 {% if region.singlePluginMode is not defined or not region.singlePluginMode.active %}
                   <label class="popover-section h3" data-i18n="Embed"><div class="h3">Embed</div></label>
                   <p>You can copy and paste the following code to embed this map on your website.</p><br>

@@ -1648,7 +1648,6 @@ header .nav-main {
 /* -----------------------------------------
    Legend
 ----------------------------------------- */
-
 .content .legend {
     color: #000;
     position: absolute;
@@ -1673,6 +1672,12 @@ header .nav-main {
 .content .legend.minimized {
     height: 0;
     min-height: 0;
+}
+.content .legend .legend-header {
+    padding: 10px;
+    background: #444;
+    color: #fff;
+    cursor: move;
 }
 .content .legend .legend-header a {
     float: right;
@@ -1700,56 +1705,16 @@ header .nav-main {
     height: 99%;
     width: 100%;
 }
-.map-legend-expand {
-    display: block;
-}
-.legend-toggle {
-    display: none;
-}
 
-.minimized .legend-toggle {
-    padding: 0px;
-    cursor: pointer;
-    display: block;
+.content .plugin-container-header a.plugin-off {
+    border-left: 1px solid #666;
 }
-
-.content .legend {
-    bottom: 55px;
-    left: 15px;
-    min-width: 100px;
-    max-height: 250px;
-}
-
-.content .legend .legend-header {
-    font-size: 15px;
-    color: #4B4B4B;
-    padding: 5px 10px;
-    background: #fff;
-    border-radius: 4px;
-}
-
-.content .legend .legend-header .legend-toggle {
-    color: #000;
-    display: block;
-    top: -12px;
-    right: -5px;
-}
-
-.content .legend .legend-body {
-    color: #4B4B4B;
-    padding: 0px 15px;
-}
-
-.legend.minimized {
-    width: auto;
-    background: none;
-    box-shadow: none;
-}
-
+.content .plugin-container-header a:hover,
 .content .legend .legend-header a:hover {
-    background: none;
-    color: black;
+    background: black;
+    color: white;
 }
+
 .layer-legends {
     overflow: hidden;
 }
@@ -2118,7 +2083,11 @@ body.x-body {
   width: auto;
 }
 #permalink-dialog input[type="text"], #permalink-dialog textarea {
-  width: 100%;
+  width: 75%;
+  padding: .5rem;
+}
+.copy-to-clipboard {
+    margin: 5px;
 }
 #iframe-embed {
   width: 100%;

@@ -88,7 +88,8 @@
         events: {
             'change .embed-size.width': function () { this.updateSize('width'); },
             'change .embed-size.height': function () { this.updateSize('height'); },
-            'click .show-long-permalink': 'toggleLongPermalink'
+            'click .show-long-permalink': 'toggleLongPermalink',
+            'click .copy-to-clipboard': 'copyLinkToClipboard'
         },
 
         render: function () {
@@ -153,6 +154,20 @@
             var $textbox = this.$el.find('#long-permalink-textbox');
             $textbox.toggle();
             this.selectText($textbox)
+        },
+
+        copyLinkToClipboard: function() {
+            /* Get the text field */
+            var copyText = this.$el.find(".permalink-textbox");
+
+            /* Select the text field */
+            copyText.select();
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            var copyMessage = this.$el.find(".copy-success");
+            copyMessage.show();
         },
 
         // Fancy DOM work to support iOS device "full text"
