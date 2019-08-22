@@ -11,7 +11,8 @@ require(['use!Geosite',
          'esri/layers/ArcGISTiledMapServiceLayer',
          'esri/geometry/Extent',
          'esri/SpatialReference',
-         'esri/dijit/Search'
+         'esri/dijit/Search',
+		 './js/azavea.util.js'
         ],
     function(N,
              Legend,
@@ -23,7 +24,8 @@ require(['use!Geosite',
              ArcGISTiledMapServiceLayer,
              Extent,
              SpatialReference,
-             Search) {
+             Search,
+             Azavea) {
     'use strict';
 
     function getSelectedBasemapLayer(model, esriMap) {
