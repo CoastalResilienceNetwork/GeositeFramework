@@ -111,7 +111,9 @@ require(['use!Geosite',
             'services.coastalresilience.org:6080',
             'dev.services2.coastalresilience.org',
             'services.coastalresilience.org',
-            'dev.services.coastalresilience.org'
+            'dev.services.coastalresilience.org',
+			'dev-services.coastalresilience.org',
+			'services2.coastalresilience.org'
         )
 
         createMap(view);
@@ -138,16 +140,20 @@ require(['use!Geosite',
         view.esriMap = esriMap;
         loadExtent(view);
         selectBasemap(view);
-
-        // don't include address search or scale bar in single plugin mode
+		
+        // don't include scale bar or address search in single plugin mode unless enableAddressSearch true
         if(!N.app.singlePluginMode) {
-            initSearch(view);
-
             var scalebar = new ScaleBar({
                 map: view.esriMap,
                 scalebarUnit: 'dual'
             });
+			
+			initSearch(view);
         }
+		
+		if (N.app.singlePluginMode && _.has(N.app.data.region.singlePluginMode, "enableAddressSearch") && N.app.data.region.singlePluginMode.enableAddressSearch) {
+			initSearch(view);
+		}
 
         var throttledSet = _.debounce(function() { view.model.set('extent', view.esriMap.extent) }, 1000);
         dojo.connect(view.esriMap, 'onExtentChange', function(newExtent) {

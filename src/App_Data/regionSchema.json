@@ -437,6 +437,10 @@
                 "pluginFolderName": {
                     "type": "string",
                     "required": true
+                },
+                "enableAddressSearch": {
+                    "type": "string",
+                    "required": false
                 }
             },
             "additionalProperties": false
