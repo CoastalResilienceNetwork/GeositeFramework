@@ -263,7 +263,8 @@
                     "required": false
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": false
         },
         "helpUrl": {
             "type": "string",
