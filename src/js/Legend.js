@@ -83,8 +83,10 @@ define(['use!Geosite',
 
         getLayerTemplate: function(legend, service, layer) {
             // Exclude layers from legend if they begin with an _
-            if (layer && layer.name[0] === '_'){ 
-                return null; 
+            if (legend){    
+                if (legend.layerName[0] === '_'){ 
+                    return null; 
+                }
             }
 
             // Not all layers have legends.
